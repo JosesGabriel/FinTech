@@ -44,7 +44,6 @@
                             label="First Name"
                             prepend-inner-icon="mdi-account"
                             required
-                            shaped
                             dark
                         ></v-text-field>
                         </v-col>
@@ -52,7 +51,6 @@
                         <v-text-field
                             label="Last Name"
                             required
-                            shaped
                             dark
                         ></v-text-field>
                         </v-col>
@@ -61,7 +59,6 @@
                         label="Username or Trading Name"
                         prepend-inner-icon="mdi-account"
                         required
-                        shaped
                         dark
                     ></v-text-field>
                     <v-text-field
@@ -69,7 +66,6 @@
                         prepend-inner-icon="mdi-at"
                         type="email"
                         required
-                        shaped
                         dark
                     ></v-text-field>
                     <v-text-field
@@ -77,7 +73,6 @@
                         type="password"
                         prepend-inner-icon="mdi-lock"
                         required
-                        shaped
                         dark
                     ></v-text-field>
                     <v-text-field
@@ -85,7 +80,6 @@
                         type="password"
                         prepend-inner-icon="mdi-lock"
                         required
-                        shaped
                         dark
                     ></v-text-field>
                     <v-btn class="mb-3" color="primary" block outlined rounded>
