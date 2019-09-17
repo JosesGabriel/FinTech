@@ -1,11 +1,11 @@
 <template>
     <v-toolbar
         dark
-        src="https://w.wallhaven.cc/full/eo/wallhaven-eoz9gl.jpg"
+        src="https://w.wallhaven.cc/full/lm/wallhaven-lmd95y.jpg"
         dense
         class="header__toolbar"
         >
-        <img src="logo.png" alt="" width="45" height="45" class="header__padding--left">
+        <img src="logo.png" alt="" width="45" height="45">
         <div class="searchBar__container">
             <v-text-field
                 label="Search"
@@ -16,7 +16,7 @@
                 outlined
             ></v-text-field>
         </div>
-        <div class="flex-grow-1"></div>
+        <v-spacer></v-spacer>
         <v-toolbar-items>
             <v-btn icon>
                 <v-icon>mdi-apps</v-icon>
@@ -30,10 +30,10 @@
                 </v-btn>
             </router-link>
         </v-toolbar-items>
-        <v-avatar size="36px" class="header__padding--right">
+        <v-avatar size="36px">
         <img
         alt="Avatar"
-        src="https://static.hiphopdx.com/2015/03/Screen-Shot-2015-03-26-at-10.43.59-AM.png"
+        src="test.jpg"
         >
         <v-icon
         ></v-icon>

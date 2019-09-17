@@ -1,5 +1,5 @@
 <template>
-    <v-card color="rgba(238, 238, 238, 0.15)" class="mb-3" light>
+    <v-card color="rgba(238, 238, 238)" class="mb-3" light>
         <v-card-text>
             <div class="body-2">Trending Stocks</div>
             <v-divider></v-divider>

@@ -1,9 +1,11 @@
 <template>
-    <v-container fluid class="socialWall__container">
+    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
         <v-row class="mb-6" no-gutters>
-            <Navbar/>
+            <v-col class="navbar__container hidden-xs-only" cols="3" sm="2" md="2" lg="3">
+              <Navbar/>
+            </v-col>
             <Newsfeed/>
-            <v-col class="px-1">
+            <v-col class="px-3 hidden-md-and-down" cols="3" sm="3" md="3">
                 <Trendingstocks/>
                 <Whotomingle/>
                 <Footersidebar/>
@@ -13,7 +15,7 @@
 </template>
 <style scoped>
     .socialWall__container {
-        max-width: 1120px;
+        /* max-width: 1120px; */
         margin-top: 40px;
     }
 </style>

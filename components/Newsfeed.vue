@@ -1,6 +1,6 @@
 <template>
-    <v-col cols="6">
-        <v-card class="mr-3 pa-4" light color="rgba(238,238,238,0.15)">
+    <v-col xs="12" sm="10" md="10" lg="6">
+        <v-card class="pa-4" light color="rgba(238,238,238)">
             <v-form>
                 <v-textarea
                 label="Hey Eazy, penny for your thoughts?"
@@ -16,7 +16,7 @@
                 </v-btn>
             </v-form>
         </v-card>
-        <v-card class="mr-3 mt-3 centerPanel__card" light color="rgba(238,238,238,0.15)" v-for="n in 4" :key="n">
+        <v-card class="mt-3 centerPanel__card" light color="rgba(238,238,238)" v-for="n in 4" :key="n">
             <v-list-item>
             <v-list-item-avatar class="mr-2">
                 <v-img src="https://www.wweek.com/resizer/b-HUCDEnkqwBjq7-YgAUCWWeaJg=/1200x0/filters:quality(100)/s3.amazonaws.com/wapopartners.com/wweek-wp/wp-content/uploads/2016/08/23150411/IceCube_JohnGarrison.png"></v-img>
@@ -28,7 +28,7 @@
             </v-list-item>
 
             <v-img
-            src="https://arbitrage.ph/wp-content/uploads/ultimatemember/12/stream_photo_f35dea505474fbd6320a67f0cc0bcdedd2f6b7c0.jpg"
+            src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
             height="350"
             ></v-img>
 

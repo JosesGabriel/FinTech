@@ -2,7 +2,7 @@
   <v-app>
     <v-content class="social__container">
       <rbHeader/>
-      <v-container>
+      <v-container :class="{'pa-0' : $vuetify.breakpoint.xsOnly}">
         <nuxt/>
       </v-container>
     </v-content>
