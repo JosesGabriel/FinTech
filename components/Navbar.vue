@@ -1,6 +1,5 @@
 <template>
-    <v-card class="navbar__card" light color="rgba(238, 238, 238)">
-        <v-navigation-drawer disable-resize-watcher mobile-break-point :mini-variant="$vuetify.breakpoint.mdAndDown" class="navbarDrawer__card" src="https://w.wallhaven.cc/full/5w/wallhaven-5w3721.jpg" dark>
+        <v-navigation-drawer fixed disable-resize-watcher mobile-break-point :mini-variant="$vuetify.breakpoint.mdAndDown" class="navbarDrawer__card" dark color="#1b1b1d">
         <v-list>
             <v-list-item>
                 <v-list-item-avatar>
@@ -115,11 +114,10 @@
             </v-list-item-group>
         </v-list>
         </v-navigation-drawer>
-    </v-card>   
 </template>
 <style scoped>
 .navbarDrawer__card {
-    background-color: rgba(238, 238, 238, 0.15);
+    background-color: #fbfcfe;
 }
 .navbar__card {
     position: fixed; 

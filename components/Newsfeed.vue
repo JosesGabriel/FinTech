@@ -1,6 +1,6 @@
 <template>
     <v-col xs="12" sm="10" md="10" lg="6">
-        <v-card class="pa-4" light color="rgba(238,238,238)">
+        <v-card class="pa-4" light outlined>
             <v-form>
                 <v-textarea
                 label="Hey Eazy, penny for your thoughts?"
@@ -16,13 +16,13 @@
                 </v-btn>
             </v-form>
         </v-card>
-        <v-card class="mt-3 centerPanel__card" light color="rgba(238,238,238)" v-for="n in 4" :key="n">
+        <v-card class="mt-3 centerPanel__card" light outlined v-for="n in 4" :key="n">
             <v-list-item>
             <v-list-item-avatar class="mr-2">
-                <v-img src="https://www.wweek.com/resizer/b-HUCDEnkqwBjq7-YgAUCWWeaJg=/1200x0/filters:quality(100)/s3.amazonaws.com/wapopartners.com/wweek-wp/wp-content/uploads/2016/08/23150411/IceCube_JohnGarrison.png"></v-img>
+                <v-img src="https://akns-images.eonline.com/eol_images/Entire_Site/201809/rs_600x600-180109101713-600.Margot-Robbie-Elle-Magazine-Kf.1918.png?fit=inside|900:auto&output-quality=90"></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-                <v-list-item-title class="body-2">Ice Cube</v-list-item-title>
+                <v-list-item-title class="body-2"><strong>Sven Mithreel</strong></v-list-item-title>
                 <v-list-item-subtitle class="caption">5 hours ago</v-list-item-subtitle>
             </v-list-item-content>
             </v-list-item>

@@ -1,5 +1,5 @@
 <template>
-    <v-card color="rgba(238, 238, 238, 0.15)" class="mb-3" light>
+    <v-card class="mb-3" light outlined>
         <v-card-text>
             <div class="body-2 text--white">Who To Mingle</div>
             <v-divider ></v-divider>

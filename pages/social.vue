@@ -15,7 +15,7 @@
 </template>
 <style scoped>
     .socialWall__container {
-        /* max-width: 1120px; */
+        max-width: 1080px;
         margin-top: 40px;
     }
 </style>

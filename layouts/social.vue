@@ -10,7 +10,7 @@
 </template>
 <style>
 .social__container {
-  background-color: #e9ebee;
+  background-color: #fcfbfe;
 }
 .header--rainbow {
   height: 4px;

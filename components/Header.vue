@@ -1,44 +1,51 @@
 <template>
     <v-toolbar
-        dark
-        src="https://w.wallhaven.cc/full/lm/wallhaven-lmd95y.jpg"
+        light
+        color="#fcfbfe"
         dense
         class="header__toolbar"
         >
-        <img src="logo.png" alt="" width="45" height="45">
-        <div class="searchBar__container">
-            <v-text-field
-                label="Search"
-                type="email"
-                prepend-inner-icon="mdi-magnify"
-                class="header__searchbar ml-3"
-                shaped
-                outlined
-            ></v-text-field>
-        </div>
-        <v-spacer></v-spacer>
-        <v-toolbar-items>
-            <v-btn icon>
-                <v-icon>mdi-apps</v-icon>
-            </v-btn>
-            <v-btn icon>
-                <v-icon>mdi-bell</v-icon>
-            </v-btn>
-            <router-link to="/login" class="social__router">
+        <div class="headerItems__wrapper" :class="{'headerItems__wrapper--margin-left' : !$vuetify.breakpoint.xsOnly}">
+            <img src="logo.png" alt="" width="45" height="45">
+            <v-divider vertical inset class="mx-2"></v-divider>
+            <v-toolbar-title>Arbitrage</v-toolbar-title>
+            <!-- <div class="searchBar__container hidden-md-only">
+                <v-text-field
+                    label="Search"
+                    type="email"
+                    prepend-inner-icon="mdi-magnify"
+                    class="header__searchbar ml-3"
+                    shaped
+                    outlined
+                ></v-text-field>
+            </div> -->
+            <v-spacer></v-spacer>
+            <v-toolbar-items>
                 <v-btn icon>
-                    <v-icon>mdi-scatter-plot</v-icon>
+                    <v-icon>mdi-magnify</v-icon>
                 </v-btn>
-            </router-link>
-        </v-toolbar-items>
-        <v-avatar size="36px">
-        <img
-        alt="Avatar"
-        src="test.jpg"
-        >
-        <v-icon
-        ></v-icon>
-        </v-avatar>
-        <div class="header--rainbow"></div>
+                <v-btn icon>
+                    <v-icon>mdi-apps</v-icon>
+                </v-btn>
+                <v-btn icon>
+                    <v-icon>mdi-bell</v-icon>
+                </v-btn>
+                <router-link to="/login" class="social__router">
+                    <v-btn icon>
+                        <v-icon>mdi-scatter-plot</v-icon>
+                    </v-btn>
+                </router-link>
+                <v-avatar size="38" class="pt-3">
+                <img
+                alt="Avatar"
+                src="test.jpg"
+                >
+                <v-icon
+                ></v-icon>
+                </v-avatar>
+            </v-toolbar-items>
+        </div>
+        <!-- <div class="header--rainbow px-0"></div> -->
     </v-toolbar>
 </template>
 <style>
@@ -71,5 +78,17 @@
     position: fixed;
     width: 100%;
     z-index: 1;
+}
+.headerItems__wrapper {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    z-index: 0;
+    width: 100%;
+    /* margin-left: 19vw; */
+    /* margin-right: 11vw; */
+}
+.headerItems__wrapper--margin-left {
+    margin-left: 19vw;
 }
 </style>
