@@ -1,33 +1,49 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center
-  >
-    <v-flex
-      xs12
-      sm8
-      md6
-    >
-      <div class="text-center">
-        <logo />
-        <v-img
-          src="/Arbitrage.png"
-          lazy-src="/Arbitrage.png"
-          max-width="181"
-          style="left: 50px;bottom: 157px;"
-        ></v-img>
-      </div>
-    </v-flex>
-  </v-layout>
+    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
+        <v-row class="mb-6" no-gutters>
+            <v-col class="navbar__container hidden-xs-only" cols="3" sm="2" md="2" lg="3">
+              <Navbar/>
+            </v-col>
+            <Newsfeed/>
+            <v-col class="px-3 hidden-md-and-down" cols="3" sm="3" md="3">
+                <Trendingstocks/>
+                <Whotomingle/>
+                <Footersidebar/>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
-
+<style scoped>
+    .socialWall__container {
+        max-width: 1080px;
+        margin-top: 40px;
+    }
+</style>
 <script>
-import Logo from '~/components/Logo.vue'
+import Navbar from '~/components/Navbar'
+import Newsfeed from '~/components/Newsfeed'
+import Trendingstocks from '~/components/Trendingstocks.vue'
+import Whotomingle from '~/components/Whotomingle.vue'
+import Footersidebar from '~/components/Footersidebar.vue'
 
 export default {
+  layout: 'main',
   components: {
-    Logo
+      Navbar,
+      Newsfeed,
+      Trendingstocks,
+      Whotomingle,
+      Footersidebar
+  },
+  data() {
+      return {
+          isOpen: true
+      }
+  },
+  methods: {
+    toggle: function(){
+        this.isOpen = !this.isOpen
+    }
   },
   head () {
     return {

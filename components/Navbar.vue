@@ -66,10 +66,12 @@
                     <v-icon color="#e01d61">mdi-alpha-v-circle-outline</v-icon>
                     </v-list-item-icon>
 
-                    <v-list-item-content>
-                    <v-list-item-title>Vyndue</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+                <router-link to="/vyndue" class="navbar__links">
+                    <v-list-item>
+                        <v-list-item-icon><v-icon color="#e01d61">mdi-alpha-v-circle-outline</v-icon></v-list-item-icon>
+                        <v-list-item-content><v-list-item-title>Vyndue</v-list-item-title></v-list-item-content>
+                    </v-list-item>
+                </router-link>
             </v-list-item-group>
 
             <v-list-item-group>
@@ -123,5 +125,9 @@
 }
 .navbar__card {
     position: fixed; 
+}
+.navbar__links {
+    color: white;
+    text-decoration: none;
 }
 </style>
