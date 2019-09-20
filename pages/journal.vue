@@ -4,11 +4,8 @@
             <v-col class="navbar__container hidden-xs-only" cols="3" sm="2" md="2" lg="3">
               <Navbar/>
             </v-col>
-            <Newsfeed/>
-            <v-col class="px-3 hidden-md-and-down" cols="3" sm="3" md="3">
-                <Trendingstocks/>
-                <Whotomingle/>
-                <Footersidebar/>
+            <v-col cols="9">
+                <JournalContent/>
             </v-col>
         </v-row>
     </v-container>
@@ -21,19 +18,13 @@
 </style>
 <script>
 import Navbar from '~/components/Navbar'
-import Newsfeed from '~/components/Newsfeed'
-import Trendingstocks from '~/components/Trendingstocks.vue'
-import Whotomingle from '~/components/Whotomingle.vue'
-import Footersidebar from '~/components/Footersidebar.vue'
+import JournalContent from '~/components/JournalContent'
 
 export default {
-  layout: 'social',
+  layout: 'main',
   components: {
       Navbar,
-      Newsfeed,
-      Trendingstocks,
-      Whotomingle,
-      Footersidebar
+      JournalContent
   },
   data() {
       return {
