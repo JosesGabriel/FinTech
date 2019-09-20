@@ -5,7 +5,8 @@
         dense
         class="header__toolbar"
         >
-        <div class="headerItems__wrapper" :class="{'headerItems__wrapper--margin-left' : !$vuetify.breakpoint.xsOnly}">
+        <div class="headerItems__wrapper">
+            <!-- :class="{'headerItems__wrapper--margin-left' : !$vuetify.breakpoint.xsOnly}" -->
             <img src="logo.png" alt="" width="45" height="45">
             <v-divider vertical inset class="mx-2"></v-divider>
             <v-toolbar-title>Arbitrage</v-toolbar-title>

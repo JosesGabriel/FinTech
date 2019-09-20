@@ -1,7 +1,7 @@
 <template>
     <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
         <v-row class="mb-6" no-gutters>
-            <v-col class="navbar__container hidden-xs-only" cols="3" sm="2" md="2" lg="3">
+            <v-col class="px-3 hidden-md-and-down" cols="3" sm="3" md="3">
               <Navbar/>
             </v-col>
             <Newsfeed/>
