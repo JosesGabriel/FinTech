@@ -1,21 +1,5 @@
 <template>
     <v-col class="pa-0">
-        <v-card class="pa-4" color="#142a46" dark outlined>
-            <v-form>
-                <v-textarea
-                label="Hey Eazy, penny for your thoughts?"
-                prepend-inner-icon="mdi-account"
-                rows="3"
-                row-height="25"
-                ></v-textarea>
-                <v-btn rounded outlined small dark>
-                    <v-icon color="yellow" left>mdi-image</v-icon> Photo
-                </v-btn>
-                <v-btn rounded outlined small right absolute color="#2481bc">
-                    Post
-                </v-btn>
-            </v-form>
-        </v-card>
         <v-card class="mt-3 centerPanel__card" color="#142b46" dark outlined v-for="n in 4" :key="n">
             <v-list-item>
             <v-list-item-avatar class="mr-2">
@@ -50,11 +34,11 @@
             </v-card-actions>
             <v-divider></v-divider>
             <v-card-actions>
-            <v-text-field
-                label="Write a comment..."
-                prepend-inner-icon="mdi-account"
-                class="postComment__field"
-            >
+                <v-text-field
+                    label="Write a comment..."
+                    prepend-inner-icon="mdi-account"
+                    class="postComment__field"
+                >
             </v-text-field>
             </v-card-actions>
         </v-card>

@@ -5,6 +5,7 @@
               <Navbar/>
             </v-col>
             <v-col cols="12" sm="12" md="6" lg="6">
+              <PostField/>
               <Newsfeed/>
             </v-col>
             <v-col class="px-3 hidden-xs-and-down" cols="3" sm="3" md="3">
@@ -27,6 +28,7 @@ import Newsfeed from '~/components/Newsfeed'
 import Trendingstocks from '~/components/Trendingstocks.vue'
 import Whotomingle from '~/components/Whotomingle.vue'
 import Footersidebar from '~/components/Footersidebar.vue'
+import PostField from '~/components/PostField.vue'
 import axios from '~/node_modules/axios'
 
 export default {
@@ -36,7 +38,8 @@ export default {
       Newsfeed,
       Trendingstocks,
       Whotomingle,
-      Footersidebar
+      Footersidebar,
+      PostField
   },
   data() {
       return {
