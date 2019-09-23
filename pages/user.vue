@@ -1,40 +1,42 @@
 <template>
-    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
-        <v-row class="mb-5" no-gutters>
-            <v-col class="navbar__container hidden-xs-only px-3" cols="3" sm="2" md="3" lg="3">
-              <Navbar/>
+    <v-container class="user__container pt-0" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
+        <v-row class="mb-6" no-gutters>
+            <v-col cols="12" sm="12" md="12" class="pb-3">
+                <Profile/>
             </v-col>
-            <v-col cols="12" sm="12" md="6" lg="6">
-              <Newsfeed/>
-            </v-col>
-            <v-col class="px-3 hidden-xs-and-down" cols="3" sm="3" md="3">
-                <Trendingstocks/>
-                <Whotomingle/>
+            <v-col class="pr-3 hidden-sm-and-down" cols="4" sm="4" md="4">
+                <Info/>
+                <Gallery/>
                 <Footersidebar/>
+            </v-col>
+            <v-col cols="12" xs="12" sm="12" md="8" lg="8">
+                <Newsfeed/>
             </v-col>
         </v-row>
     </v-container>
 </template>
 <style scoped>
-    .socialWall__container {
+    .user__container {
         max-width: 1080px;
         margin-top: 40px;
     }
 </style>
 <script>
+import Profile from '~/components/Profile'
 import Navbar from '~/components/Navbar'
 import Newsfeed from '~/components/Newsfeed'
-import Trendingstocks from '~/components/Trendingstocks.vue'
-import Whotomingle from '~/components/Whotomingle.vue'
-import Footersidebar from '~/components/Footersidebar.vue'
+import Info from '~/components/Info'
+import Gallery from '~/components/Gallery'
+import Footersidebar from '~/components/Footersidebar'
 
 export default {
   layout: 'main',
   components: {
+      Profile,
       Navbar,
       Newsfeed,
-      Trendingstocks,
-      Whotomingle,
+      Info,
+      Gallery,
       Footersidebar
   },
   data() {

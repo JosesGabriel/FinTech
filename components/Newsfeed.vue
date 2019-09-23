@@ -1,5 +1,5 @@
 <template>
-    <v-col xs="12" sm="10" md="6" lg="6">
+    <v-col class="pa-0">
         <v-card class="pa-4" light outlined>
             <v-form>
                 <v-textarea
@@ -19,7 +19,10 @@
         <v-card class="mt-3 centerPanel__card" light outlined v-for="n in 4" :key="n">
             <v-list-item>
             <v-list-item-avatar class="mr-2">
-                <v-img src="https://akns-images.eonline.com/eol_images/Entire_Site/201809/rs_600x600-180109101713-600.Margot-Robbie-Elle-Magazine-Kf.1918.png?fit=inside|900:auto&output-quality=90"></v-img>
+                <v-img 
+                :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
+                :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                ></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
                 <v-list-item-title class="body-2"><strong>Sven Mithreel</strong></v-list-item-title>
