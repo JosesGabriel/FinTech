@@ -31,7 +31,7 @@
                     ></v-checkbox>
 
                     
-                    <router-link to="/social" class="login__router">
+                    <router-link to="/" class="login__router">
                         <v-btn color="primary" block rounded outlined>
                             login
                         </v-btn>

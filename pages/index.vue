@@ -5,7 +5,7 @@
               <Navbar/>
             </v-col>
             <Newsfeed/>
-            <v-col class="px-3 hidden-xs-and-down" cols="3" sm="3" md="3">
+            <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
                 <Trendingstocks/>
                 <Whotomingle/>
                 <Footersidebar/>

@@ -1,7 +1,8 @@
 <template>
     <v-toolbar
         light
-        color="#fcfbfe"
+        color="#213f58"
+        dark
         dense
         class="header__toolbar"
         >
