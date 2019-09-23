@@ -4,11 +4,11 @@
             <v-col class="navbar__container hidden-xs-only px-3" cols="3" sm="2" md="3" lg="3">
               <Navbar/>
             </v-col>
-            <v-col cols="12" sm="12" md="6" lg="6">
+            <v-col xs="12" sm="10" md="6" lg="6">
               <PostField/>
               <Newsfeed/>
             </v-col>
-            <v-col class="px-3 hidden-xs-and-down" cols="3" sm="3" md="3">
+            <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
                 <Trendingstocks/>
                 <Whotomingle/>
                 <Footersidebar/>
