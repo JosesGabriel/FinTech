@@ -8,15 +8,15 @@
                 rows="3"
                 row-height="25"
                 ></v-textarea>
-                <v-btn rounded outlined small color="#1e3554">
-                    <v-icon left>mdi-image</v-icon> Photo
+                <v-btn rounded outlined small dark>
+                    <v-icon color="yellow" left>mdi-image</v-icon> Photo
                 </v-btn>
                 <v-btn rounded outlined small right absolute color="#2481bc">
                     Post
                 </v-btn>
             </v-form>
         </v-card>
-        <v-card class="mt-3 centerPanel__card" light outlined v-for="n in 4" :key="n">
+        <v-card class="mt-3 centerPanel__card" color="#142b46" dark outlined v-for="n in 4" :key="n">
             <v-list-item>
             <v-list-item-avatar class="mr-2">
                 <v-img 
@@ -46,8 +46,6 @@
             <v-divider></v-divider>
             <v-card-actions>
             <v-text-field
-                outlined
-                shaped
                 label="Write a comment..."
                 prepend-inner-icon="mdi-account"
                 class="postComment__field"

@@ -10,7 +10,8 @@
 </template>
 <style>
 .social__container {
-  background-color: #fcfbfe;
+  /* background-color: #fcfbfe; light mode color, add to vuex state soon */
+  background-color: #0c1f33;
 }
 .header--rainbow {
   height: 4px;
