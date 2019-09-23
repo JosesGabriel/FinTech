@@ -31,7 +31,12 @@
             src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
             height="350"
             ></v-img>
-
+            <v-list-item-content>
+                <span>Post ID: {{id}}</span>
+                <span>User ID: {{user_id}}</span>
+                <span>Post Content: {{content}}</span>
+                <span>API Response: {{message}}</span>
+            </v-list-item-content>
             <v-card-actions>
             <v-btn icon outlined fab x-small color="green">
                 <v-icon>mdi-cow</v-icon>
@@ -52,3 +57,36 @@
         </v-card>
     </v-col>
 </template>
+<script>
+import axios from '~/node_modules/axios'
+export default {
+  data() {
+      return {
+          id: null,
+          user_id: null,
+          content: null,
+          message: null
+
+      }
+  },
+  mounted() {
+    axios
+      .get('https://dev-api.arbitrage.ph/api/social/posts/33937358302875648')
+      .then(response => (
+          this.id = response.data.data.post.id,
+          this.user_id = response.data.data.post.user_id,
+          this.content = response.data.data.post.content,
+          this.message = response.data.message
+        ))
+  },
+  head () {
+    return {
+      title: 'Arbitrage',
+      meta: [
+        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+        { hid: 'description', name: 'description', content: 'My custom description' }
+      ]
+    }
+  }
+}
+</script>

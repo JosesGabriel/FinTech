@@ -1,5 +1,5 @@
 <template>
-    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
+    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}" dark>
         <v-row class="mb-5" no-gutters>
             <v-col class="navbar__container hidden-xs-only px-3" cols="3" sm="2" md="3" lg="3">
               <Navbar/>
@@ -25,6 +25,7 @@ import Newsfeed from '~/components/Newsfeed'
 import Trendingstocks from '~/components/Trendingstocks.vue'
 import Whotomingle from '~/components/Whotomingle.vue'
 import Footersidebar from '~/components/Footersidebar.vue'
+import axios from '~/node_modules/axios'
 
 export default {
   layout: 'main',
@@ -37,8 +38,13 @@ export default {
   },
   data() {
       return {
-          isOpen: true
+          isOpen: true,
       }
+  },
+  mounted() {
+    axios
+      .get('https://dev-api.arbitrage.ph/api/social/posts/33937358302875648')
+      .then(response => (this.info = response.data))
   },
   methods: {
     toggle: function(){
