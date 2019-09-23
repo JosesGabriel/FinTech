@@ -46,7 +46,7 @@
                 </v-avatar>
             </v-toolbar-items>
         </div>
-        <!-- <div class="header--rainbow px-0"></div> -->
+        <div class="header--rainbow px-0"></div>
     </v-toolbar>
 </template>
 <style>
