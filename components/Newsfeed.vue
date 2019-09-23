@@ -19,7 +19,7 @@
             height="350"
             ></v-img>
             <v-list-item-content>
-                <span>Post ID: {{id}}</span>
+                <span>Post ID: {{id}} test push</span>
                 <span>User ID: {{user_id}}</span>
                 <span>Post Content: {{content}}</span>
                 <span>API Response: {{message}}</span>
