@@ -4,15 +4,10 @@
             <v-col class="navbar__container hidden-xs-only px-3" cols="3" sm="2" md="3" lg="3">
               <Navbar/>
             </v-col>
-<<<<<<< HEAD
             <v-col cols="12" sm="12" md="6" lg="6">
               <Newsfeed/>
             </v-col>
             <v-col class="px-3 hidden-xs-and-down" cols="3" sm="3" md="3">
-=======
-            <Newsfeed/>
-            <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
->>>>>>> ac886a7ec415230731a22ae872a4be5d442f8a85
                 <Trendingstocks/>
                 <Whotomingle/>
                 <Footersidebar/>

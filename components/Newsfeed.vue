@@ -1,6 +1,6 @@
 <template>
     <v-col class="pa-0">
-        <v-card class="pa-4" light outlined>
+        <v-card class="pa-4" color="#142a46" dark outlined>
             <v-form>
                 <v-textarea
                 label="Hey Eazy, penny for your thoughts?"
