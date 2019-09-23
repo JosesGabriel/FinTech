@@ -86,8 +86,8 @@
     height: 48px;
     z-index: 0;
     width: 100%;
-    /* margin-left: 19vw; */
-    /* margin-right: 11vw; */
+    margin: 0 auto;
+    max-width: 1030px;
 }
 .headerItems__wrapper--margin-left {
     margin-left: 19vw;

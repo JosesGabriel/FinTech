@@ -1,5 +1,5 @@
 <template>
-    <v-col xs="12" sm="10" md="10" lg="6">
+    <v-col xs="12" sm="10" md="6" lg="6">
         <v-card class="pa-4" light outlined>
             <v-form>
                 <v-textarea

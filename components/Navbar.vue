@@ -1,5 +1,5 @@
 <template>
-    <v-card flat color="transparent">
+    <v-card class="navbar__card" max-width="240" flat color="transparent">
         <v-navigation-drawer disable-resize-watcher mobile-break-point :mini-variant="$vuetify.breakpoint.mdAndDown" class="navbarDrawer__card" dark color="#2480bb">
             <v-list>
                 <v-list-item>
@@ -107,7 +107,7 @@
     /* background-color: #fbfcfe; */
 }
 .navbar__card {
-    position: fixed; 
+    position: fixed;
 }
 .navbar__links {
     color: white;
