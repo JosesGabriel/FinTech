@@ -9,7 +9,7 @@
                 ></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-                <v-list-item-title class="body-2"><strong>Sven Mithreel</strong></v-list-item-title>
+                <v-list-item-title class="body-2"><strong>Ralph Tolipas</strong></v-list-item-title>
                 <v-list-item-subtitle class="caption">5 hours ago</v-list-item-subtitle>
             </v-list-item-content>
             </v-list-item>
@@ -53,7 +53,6 @@ export default {
           user_id: null,
           content: null,
           message: null
-
       }
   },
   mounted() {
