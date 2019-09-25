@@ -25,12 +25,14 @@
                 <span>API Response: {{message}}</span>
             </v-list-item-content>
             <v-card-actions>
-            <v-btn icon outlined fab x-small color="green">
+            <v-btn v-on:click="bullcounter()" v-bind:class="{ active: bullcounterac }" icon outlined fab x-small color="green">
                 <v-icon>mdi-cow</v-icon>
             </v-btn>
-            <v-btn icon outlined fab x-small color="red">
+            <span class="px-2">{{ bull }}</span>
+            <v-btn v-on:click="bearcounter()" v-bind:class="{ active: bearcounterac }" icon outlined fab x-small color="red">
                 <v-icon>mdi-paw</v-icon>
             </v-btn>
+            <span class="px-2">{{ bear }}</span>
             </v-card-actions>
             <v-divider></v-divider>
             <v-card-actions>
@@ -49,21 +51,39 @@ import axios from '~/node_modules/axios'
 export default {
   data() {
       return {
+          bullcounterac: false,
+          bearcounterac: false,
+          bull: 0,
+          bear: 0,
           id: null,
           user_id: null,
           content: null,
           message: null
       }
   },
+  methods: {
+      bullcounter: function(){
+        this.bull = 1
+        this.bear = 0
+        this.bearcounterac = false
+        
+    },
+      bearcounter: function(){
+        this.bear = 1
+        this.bull = 0
+        this.bearcounterac = true
+        this.bullcounterac = false
+    }
+  },
   mounted() {
     axios
-      .get('https://dev-api.arbitrage.ph/api/social/posts/33937358302875648')
-      .then(response => (
-          this.id = response.data.data.post.id,
-          this.user_id = response.data.data.post.user_id,
-          this.content = response.data.data.post.content,
-          this.message = response.data.message
-        ))
+        .get('https://dev-api.arbitrage.ph/api/social/posts/33937358302875648')
+        .then(response => (
+            this.id = response.data.data.post.id,
+            this.user_id = response.data.data.post.user_id,
+            this.content = response.data.data.post.content,
+            this.message = response.data.message
+            ))
   },
   head () {
     return {
