@@ -3,9 +3,11 @@
         <v-navigation-drawer disable-resize-watcher mobile-break-point :mini-variant="$vuetify.breakpoint.mdAndDown" class="navbarDrawer__card" dark color="transparent">
             <v-list>
                 <v-list-item>
-                    <v-list-item-avatar>
-                        <v-img src="test.jpg"></v-img>
-                    </v-list-item-avatar>
+                    <router-link to="/user">
+                        <v-list-item-avatar>
+                            <v-img src="test.jpg"></v-img>
+                        </v-list-item-avatar>
+                    </router-link>
 
                     <v-list-item-content>
                         <v-list-item-title class="caption"><strong>Eazy-E</strong></v-list-item-title>

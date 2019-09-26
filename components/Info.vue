@@ -1,9 +1,9 @@
 <template>
-    <v-card class="mb-4">
-        <v-list>
+    <v-card class="mb-4" dark>
+        <v-list color="#142a46">
             <v-list-item class="info__title">
                 <v-list-item-icon class="my-2 mr-2">
-                    <v-icon color="#2481bc">mdi-information-outline</v-icon>
+                    <v-icon color="primary">mdi-information-outline</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content class="py-1">
                     <v-list-item-title>Info</v-list-item-title>
@@ -27,7 +27,7 @@
             </v-list-item>
             <v-list-item>
                 <v-list-item-content>
-                    <v-btn rounded outlined small color="#2481bc">
+                    <v-btn rounded outlined small color="primary">
                         Edit Details
                     </v-btn>
                 </v-list-item-content>
@@ -40,7 +40,7 @@
             </v-list-item>
             <v-list-item>
                 <v-list-item-content>
-                    <v-btn rounded outlined small color="#2481bc">
+                    <v-btn rounded outlined small color="primary">
                         Edit Bio
                     </v-btn>
                 </v-list-item-content>
