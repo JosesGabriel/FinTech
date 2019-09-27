@@ -1,7 +1,10 @@
+
 import colors from 'vuetify/es5/util/colors'
 
+require('dotenv').config()
+
 export default {
-  mode: 'universal',
+  mode: 'spa',
   server: {
     port: 3002, // default: 3000
     host: '0.0.0.0', // default: localhost
@@ -47,6 +50,7 @@ export default {
   */
   modules: [
     '@nuxtjs/axios',
+    '@nuxtjs/dotenv'
   ],
 
   axios: {

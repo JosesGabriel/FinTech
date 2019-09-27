@@ -119,12 +119,15 @@ export default {
           content: null,
           message: null,
           sintementID: null,
-
         absolute: false,
         opacity: 0.46,
         overlay: false,
-        zIndex: 1
+        zIndex: 1,
       }
+  },
+  created(){
+      console.log('test');
+      console.log(process.env.dev_api);
   },
   methods: {
     if (bullactive = true) {
@@ -183,7 +186,7 @@ export default {
             console.log(error);
         })
     }
-  },
+  },    
   mounted() {
     axios
         .get('https://dev-api.arbitrage.ph/api/social/posts/34711650032553984')
