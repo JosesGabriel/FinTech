@@ -1,9 +1,11 @@
 <template>
     <v-container class="user__container pt-0" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
-        <v-row class="mb-6" no-gutters>
-            <v-col cols="12" sm="12" md="12" class="pb-3">
+        <v-row>
+            <v-col class="pt-0" cols="12" sm="12" md="12">
                 <Profile/>
             </v-col>
+        </v-row>
+        <v-row class="mb-6" no-gutters>
             <v-col class="pr-3 hidden-sm-and-down" cols="4" sm="4" md="4">
                 <Info/>
                 <Gallery/>

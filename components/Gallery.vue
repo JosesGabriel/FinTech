@@ -1,6 +1,6 @@
 <template>
-    <v-card>
-        <v-list>
+    <v-card dark>
+        <v-list color="#142a46">
         <v-list-item class="info__title">
             <v-list-item-icon class="my-2 mr-2">
                 <v-icon color="#dc8607">mdi-image-outline</v-icon>

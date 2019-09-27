@@ -5,7 +5,7 @@
               <Navbar/>
             </v-col>
             <v-col xs="12" sm="10" md="6" lg="6">
-              <PostField/>
+              <PostField class="mb-3"/>
               <Newsfeed/>
             </v-col>
             <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">

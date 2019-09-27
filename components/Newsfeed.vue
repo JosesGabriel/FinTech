@@ -1,6 +1,6 @@
 <template>
     <v-col class="pa-0">
-        <v-card class="mt-3 centerPanel__card" color="#142b46" dark outlined v-for="n in 4" :key="n">
+        <v-card class="centerPanel__card mb-3" color="#142b46" dark outlined v-for="n in 4" :key="n">
             <v-list-item>
             <v-list-item-avatar class="mr-2">
                 <v-img 
@@ -9,7 +9,7 @@
                 ></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-                <v-list-item-title class="body-2"><strong>Ralph Tolipas</strong></v-list-item-title>
+                <v-list-item-title class="body-2"><strong>Sven Mithreel</strong></v-list-item-title>
                 <v-list-item-subtitle class="caption">5 hours ago</v-list-item-subtitle>
             </v-list-item-content>
             </v-list-item>
