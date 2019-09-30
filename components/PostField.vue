@@ -19,7 +19,7 @@
                 :loading="postField__loading"
                 >{{ postFieldModel }}</v-textarea>
                 <div>
-                    <input type="file" @change="onFileChange" class="d-none" ref="postField__inputRef" accept=".jpg, .jpeg, .png, .mp4, .webm">
+                    <input type="file" @change="onInputFileChange" class="d-none" ref="postField__inputRef" accept=".jpg, .jpeg, .png, .mp4, .webm">
                     <div v-if="postField__previewImage" class="postField__preview pt-2">
                         <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
                             <v-icon color="white">mdi-close</v-icon>
@@ -27,7 +27,7 @@
                         <img :src="postField__previewImage" class="postField__previewImage" v-if="post__isImage"/>
                         <video controls :src="postField__previewImage" class="postField__previewImage" v-if="!post__isImage"/>
                     </div>
-                    <v-btn small dark @click="postField__imageUploadBtn" icon>
+                    <v-btn small dark @click="onClickImageUploadBtn" icon>
                         <v-icon color="primary">mdi-image-outline</v-icon>
                     </v-btn>
                     <v-btn rounded outlined small right absolute color="primary" :disabled="!postFieldModel" @click="postField__submit">
@@ -70,19 +70,19 @@
 export default {
     data() {
         return {
-            postField__alert: false,
-            postField__alertState: true,
+            postField__alertState: null,
             post__responseMsg: null,
             post__isImage: null,
             postFieldModel: null,
+            postField__previewImage: null, 
             postField__previewImage: null,
-            postField__loading: false
+            postField__loading: false,
+            postField__alert: false
         }
     },
     methods: {
-        postField__submit: function (event) {
+        postField__submit: function () {
             this.postField__loading = true;
-            let postImage = null;
             const formData = new FormData();
             formData.append('file', this.$refs.postField__inputRef.files[0]);
             if(this.$refs.postField__inputRef.files[0]) { //text + image
@@ -97,26 +97,16 @@ export default {
                     })
                     .then((response) => {
                         this.post__responseMsg = response.message;
-                        this.postField__alert = true;
-                        this.postFieldModel = '';
-                        this.postField__loading = false;
-                        this.removeImage();
+                        this.clearInputs('success');
                     })
                     .catch((error) => {
                         this.post__responseMsg = error.response.data.message;
-                        this.postField__alert = true;
-                        this.postFieldModel = '';
-                        this.postField__loading = false;
-                        this.postField__alertState = false;
+                        this.clearInputs('error');
                     });
                 })
                 .catch((error) => {
                     this.post__responseMsg = error.response.data.message;
-                    this.postField__alert = true;
-                    this.postField__loading = false;
-                    this.postField__alertState = false;
-                    this.postFieldModel = '';
-                    this.removeImage();
+                    this.clearInputs('error');
                 });
             } else { // can't reuse axios code above bc its asynchronous. Suggestions on how to improve r welcome
                 this.$axios.$post('https://dev-api.arbitrage.ph/api/social/posts', {
@@ -127,36 +117,26 @@ export default {
                 })
                 .then((response) => {
                     this.post__responseMsg = response.message;
-                    this.postField__alert = true;
-                    this.postFieldModel = '';
-                    this.postField__loading = false;
-                    this.removeImage();
+                    this.clearInputs('success');
                 })
                 .catch((error) => {
-                    this.postField__alertState = false;
                     this.post__responseMsg = error.response.data.message;
-                    this.postField__alert = true;
-                    this.postFieldModel = '';
-                    this.postField__loading = false;
+                    this.clearInputs('error');
                 });
             }
         },
-        postField__imageUploadBtn: function(e) {
-            const elem = this.$refs.postField__inputRef
-            elem.click()
+        onClickImageUploadBtn: function() { 
+            this.$refs.postField__inputRef.click(); // clicks actual input type file button. lisod i-style ang <input type="file">
         },
-        onFileChange(e) {
+        onInputFileChange: function(e) {
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length)
                 return;
             var filetype = (files[0].type).split("/")[0];
-            if(filetype == 'image')
-                this.post__isImage = true;
-            else
-                this.post__isImage = false;
+            filetype == 'image' ? this.post__isImage = true : this.post__isImage = false;
             this.createImage(files[0]);
         },
-        createImage(file) {
+        createImage: function(file) {
             var postField__previewImage = new Image();
             var reader = new FileReader();
             reader.onload = (e) => {
@@ -167,6 +147,13 @@ export default {
         removeImage: function() {
             this.postField__previewImage = '';
             this.$refs.postField__inputRef.value = '';
+        },
+        clearInputs: function(type) {
+            type == 'success' ? this.postField__alertState = true : this.postField__alertState = false;
+            this.postField__alert = true;
+            this.postFieldModel = '';
+            this.postField__loading = false;
+            this.removeImage();
         }
     }
 }
