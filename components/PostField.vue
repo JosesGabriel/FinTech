@@ -1,6 +1,6 @@
 <template>
     <v-card class="pa-4" color="#142a46" dark outlined>
-        <v-form>
+        <v-form enctype="multipart/form-data">
             <v-avatar size="38" class="postField__avatar">
                 <img
                 alt="Avatar"
@@ -19,10 +19,8 @@
                 :loading="postField__loading"
                 >{{ postFieldModel }}</v-textarea>
                 <div>
-                    <div v-if="!postField__previewImage">
-                        <input type="file" @change="onFileChange" class="d-none" ref="postField__inputRef" accept=".jpg, .jpeg, .png, .gif, .mp4, .webm">
-                    </div>
-                    <div v-else class="postField__preview pt-2">
+                    <input type="file" @change="onFileChange" class="d-none" ref="postField__inputRef" accept=".jpg, .jpeg, .png, .mp4, .webm">
+                    <div v-if="postField__previewImage" class="postField__preview pt-2">
                         <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
                             <v-icon color="white">mdi-close</v-icon>
                         </v-btn>
@@ -40,7 +38,7 @@
         </v-form>
         <v-snackbar
             v-model="postField__alert"
-            color="success"
+            :color="postField__alertState ? 'success' : 'error' "
             >
             {{ post__responseMsg }}
             <v-btn
@@ -69,11 +67,11 @@
 }
 </style>
 <script>
-import axios from '~/node_modules/axios'
 export default {
     data() {
         return {
             postField__alert: false,
+            postField__alertState: true,
             post__responseMsg: null,
             post__isImage: null,
             postFieldModel: null,
@@ -83,22 +81,65 @@ export default {
     },
     methods: {
         postField__submit: function (event) {
-            this.postField__loading = true
-            axios.post('https://dev-api.arbitrage.ph/api/social/posts', {
-                user_id: '76f0f772-0de8-47cb-944e-c903d810a7ca',
-                content: this.postFieldModel,
-                visibility: 'public',
-                status: 'active'
-            })
-            .then((response) => {
-                this.post__responseMsg = response.data.message;
-                this.postField__alert = true;
-                this.postFieldModel = '';
-                this.postField__loading = false;
-            })
-            .catch(function (error) {
-                console.log(error)
-            });
+            this.postField__loading = true;
+            let postImage = null;
+            const formData = new FormData();
+            formData.append('file', this.$refs.postField__inputRef.files[0]);
+            if(this.$refs.postField__inputRef.files[0]) { //text + image
+                this.$axios.$post('https://dev-api.arbitrage.ph/api/storage/upload',formData)
+                .then((response) => {
+                    this.$axios.$post('https://dev-api.arbitrage.ph/api/social/posts', {
+                        user_id: '76f0f772-0de8-47cb-944e-c903d810a7ca',
+                        content: this.postFieldModel,
+                        attachments: [response.data.file.url],
+                        visibility: 'public',
+                        status: 'active',
+                    })
+                    .then((response) => {
+                        this.post__responseMsg = response.message;
+                        this.postField__alert = true;
+                        this.postFieldModel = '';
+                        this.postField__loading = false;
+                        this.removeImage();
+                    })
+                    .catch((error) => {
+                        this.post__responseMsg = error.response.data.message;
+                        this.postField__alert = true;
+                        this.postFieldModel = '';
+                        this.postField__loading = false;
+                        this.postField__alertState = false;
+                    });
+                })
+                .catch((error) => {
+                    this.post__responseMsg = error.response.data.message;
+                    this.postField__alert = true;
+                    this.postField__loading = false;
+                    this.postField__alertState = false;
+                    this.postFieldModel = '';
+                    this.removeImage();
+                });
+            } else { // can't reuse axios code above bc its asynchronous. Suggestions on how to improve r welcome
+                this.$axios.$post('https://dev-api.arbitrage.ph/api/social/posts', {
+                    user_id: '76f0f772-0de8-47cb-944e-c903d810a7ca',
+                    content: this.postFieldModel,
+                    visibility: 'public',
+                    status: 'active',
+                })
+                .then((response) => {
+                    this.post__responseMsg = response.message;
+                    this.postField__alert = true;
+                    this.postFieldModel = '';
+                    this.postField__loading = false;
+                    this.removeImage();
+                })
+                .catch((error) => {
+                    this.postField__alertState = false;
+                    this.post__responseMsg = error.response.data.message;
+                    this.postField__alert = true;
+                    this.postFieldModel = '';
+                    this.postField__loading = false;
+                });
+            }
         },
         postField__imageUploadBtn: function(e) {
             const elem = this.$refs.postField__inputRef
@@ -123,12 +164,10 @@ export default {
             };
             reader.readAsDataURL(file);
         },
-        removeImage: function (e) {
+        removeImage: function() {
             this.postField__previewImage = '';
+            this.$refs.postField__inputRef.value = '';
         }
-    },
-    mounted() {
-        
     }
 }
 </script>
