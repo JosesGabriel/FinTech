@@ -1,208 +1,190 @@
 <template>
     <v-col class="pa-0">
-        <v-card class="centerPanel__card mb-3" color="#142b46" dark outlined v-for="n in 4" :key="n">
+        <v-card class="centerPanel__card mb-3" :color="dark_theme_color" dark outlined v-for="n in 4" :key="n">
+            <!-- Start of Post Header -->
             <v-list-item>
-            <v-list-item-avatar class="mr-2">
-                <v-img 
-                :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
-                ></v-img>
-            </v-list-item-avatar>
-            <v-list-item-content>
-                <v-list-item-title class="body-2"><strong>Sven Mithreel</strong></v-list-item-title>
-                <v-list-item-subtitle class="caption">5 hours ago</v-list-item-subtitle>
-            </v-list-item-content>
-            </v-list-item>
-        
-            <v-img
-            src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
-            height="350"
-            @click="overlay = !overlay"
-            ></v-img>
-            <v-list-item-content>
-                <span>Post ID: {{id}}</span>
-                <span>User ID: {{user_id}}</span>
-                <span>Post Content: {{content}}</span>
-                <span>API Response: {{message}}</span>
-            </v-list-item-content>
-            <v-overlay :absolute="absolute" :opacity="opacity" :value="overlay" :z-index="zIndex">
-                <v-container>
+                <v-list-item-avatar class="mr-2">
+                    <v-img :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"></v-img>
+                </v-list-item-avatar>
+                <v-list-item-content class="pa-0 ma-0">
                     <v-row>
-                        <v-col xs="12" sm="12" md="8" lg="8" style="background: #142b46">
-                            <v-img
-                            src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
-                            lazy-src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
-                            height="350"
-                            @click="overlay = false"
-                            ></v-img>
+                        <v-col>
+                            <v-list-item-title class="subtitle-2"><strong>Sven Mithreel</strong></v-list-item-title>
+                            <v-list-item-subtitle class="overline">5 hours ago</v-list-item-subtitle>
                         </v-col>
-                        <v-col xs="12" sm="12" md="4" lg="4" class="py-0" style="background: #142b46">
-                            <v-list-item class="px-0">
-                                <v-list-item-avatar class="mr-2">
-                                    <v-img 
-                                    :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                                    ></v-img>
-                                </v-list-item-avatar>
-                                <v-list-item-content>
-                                    <v-list-item-title class="body-2 ma-0"><strong>Ralph Tolipas</strong></v-list-item-title>
-                                    <v-list-item-subtitle class="caption">5 hours ago</v-list-item-subtitle>
-                                </v-list-item-content>
-                            </v-list-item>
-                            <v-list-item class="pa-0">
-                                <v-list-item-content class="font-weight-thin caption py-0">
-                                    <span>Post ID: {{id}}</span>
-                                    <span>User ID: {{user_id}}</span>
-                                    <span>Post Content: {{content}}</span>
-                                    <span>API Response: {{message}}</span>
-                                </v-list-item-content>
-                            </v-list-item>
-                            <v-card-actions class="px-0">
-                                <v-btn v-on:click="bullcounter()" :class="{ active: bullactive }" class="bull__button" v-bind:id="id" icon outlined fab x-small color="green">
-                                    <v-icon>mdi-cow</v-icon>
-                                </v-btn>
-                                <span class="px-2">{{ bull }}</span>
-                                <v-btn v-on:click="bearcounter()" v-bind:class="{ active: bearactive }" class="bear__button" v-bind:id="id" icon outlined fab x-small color="red">
-                                    <v-icon>mdi-paw</v-icon>
-                                </v-btn>
-                                <span class="px-2">{{ bear }}</span>
-                                <span class="px-2"></span>
-                            </v-card-actions>
-                            <v-card-actions class="pa-0">
-                                <v-list-item-avatar class="mr-2">
-                                    <v-img 
-                                    :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                                    ></v-img>
-                                </v-list-item-avatar>
-                                <v-text-field
-                                    label="Write a comment..."
-                                >
-                                </v-text-field>
-                            </v-card-actions>
+                        <v-col class="text-right">
+                        <!--
+                        <v-btn small fab class="mr-2" :color="dark_theme_color"> 
+                            <v-icon>mdi-more</v-icon>
+                        </v-btn>
+                        -->
                         </v-col>
                     </v-row>
-                </v-container>
-            </v-overlay>
-            <v-card-actions>
-            <v-btn v-on:click="bullcounter()" :class="{ active: bullactive }" class="bull__button" v-bind:id="id" icon outlined fab x-small color="green">
-                <v-icon>mdi-cow</v-icon>
-            </v-btn>
-            <span class="px-2">{{ bull }}</span>
-            <v-btn v-on:click="bearcounter()" v-bind:class="{ active: bearactive }" class="bear__button" v-bind:id="id" icon outlined fab x-small color="red">
-                <v-icon>mdi-paw</v-icon>
-            </v-btn>
-            <span class="px-2">{{ bear }}</span>
-            <span class="px-2"></span>
-            </v-card-actions>
+
+                </v-list-item-content>
+            </v-list-item>
+            <!-- End of Post Header -->
+        
+            <!-- Start of Post Body -->
+            <v-list-item class="pa-0 ma-0">
+                <v-list-item-content class="ma-0 pa-0">
+                    <span class="body-2 px-2 mb-2">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit fuga consectetur placeat id vero tenetur molestiae minus corrupti animi eveniet asperiores, quae incidunt ex saepe facilis numquam cupiditate perferendis excepturi.
+                    </span>
+                    <v-img
+                    src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
+                    height="300"
+                    ></v-img>
+                </v-list-item-content>
+            </v-list-item>
+            <!-- End of Post Body -->
+        
+            <!-- Start of Bull & Bear -->
+            <v-list-item class="pa-0 ma-0">
+                <v-list-item-content class="ma-0 pa-0">
+                    <v-card-actions>
+                    <v-btn icon outlined fab x-small color="green">
+                        <v-icon>mdi-cow</v-icon>
+                    </v-btn>
+                    <span class="px-2">{{ bullCounter }}</span>
+                    <v-btn icon outlined fab x-small color="red">
+                        <v-icon>mdi-paw</v-icon>
+                    </v-btn>
+                    <span class="px-2">{{ bearCounter }}</span>
+                    <v-spacer></v-spacer>
+                    <v-btn small outlined> 
+                        <span>23 Shares</span>
+                        <v-icon right>mdi-share-outline</v-icon>
+                    </v-btn>
+                    </v-card-actions>
+                </v-list-item-content>
+            </v-list-item>
+            <!-- End of Bull & Bear -->
+            
             <v-divider></v-divider>
-            <v-card-actions>
-                <v-text-field
-                    label="Write a comment..."
-                    prepend-inner-icon="mdi-account"
-                    class="postComment__field"
-                >
-                </v-text-field>
-            </v-card-actions>
+                    
+            <!-- Start of Comment -->
+            <v-list-item class="ma-0">
+                <v-list-item-avatar>
+                    <v-img :src="user.profile"></v-img>
+                </v-list-item-avatar>
+                <v-list-item-content class="pb-0 mb-0">
+                    <v-text-field
+                        label="Write a comment..."
+                        color="primary"
+                    >
+                    </v-text-field>
+                </v-list-item-content>
+            </v-list-item>
+            <!-- End of Comment -->
+
+            <v-divider></v-divider>
+
+            <!-- Start of Subcomment -->
+            <v-list-item>
+                <v-list-item-content class="pa-0 ma-0 mt-3">
+                    <!-- Start of Main Comment -->
+                    <v-list-item> 
+                        <v-list-item-avatar>
+                            <v-img position="top" :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"></v-img>
+                        </v-list-item-avatar>
+                        <v-list-item-content class="pa-0 ma-0">                            
+                            <v-container class="pa-0 body-2">                              
+                                <strong class="blue--text text--darken-2">Sven Mithreel</strong>
+                                <span>This is a Comment. Lorem Ipsum is simply dummy text of the printing and typesetting industry. </span>
+                            </v-container>
+                            <v-container  class="pa-0 ma-0">
+                                <v-btn icon outlined fab x-small color="green">
+                                    <v-icon>mdi-cow</v-icon>
+                                </v-btn>
+                                <span class="px-2">{{ bullCounter }}</span>
+                                <v-btn icon outlined fab x-small color="red">
+                                    <v-icon>mdi-paw</v-icon>
+                                </v-btn>
+                                <span class="px-2">{{ bearCounter }}</span>
+                                |
+                                <v-btn small depressed :color="dark_theme_color"> 
+                                    <span>Reply</span>
+                                    <v-icon right>mdi-reply-outline</v-icon>
+                                </v-btn>
+                                |
+                                <span class="px-2 overline">6 hours ago</span>
+                            </v-container>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <!-- End of Main Comment -->
+
+                    <!-- Start of Main Comment -->
+                    <v-list-item class="pa-0 ma-0 ml-12 mt-2"> 
+                        <v-list-item-avatar>
+                            <v-img src="https://66.media.tumblr.com/d6c116eb3990fddb869d916c64f18e5c/tumblr_phsox3GWrv1uwzkkgo1_400.jpg"></v-img>                        </v-list-item-avatar>
+                        <v-list-item-content class="pa-0 ma-0">                            
+                            <v-container class="py-0 pl-0 pr-12 body-2">                              
+                                <strong class="blue--text text--darken-2">Jenny Mtril</strong>
+                                <span>
+                                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.
+                                </span>
+                            </v-container>
+                            <v-container class="pa-0 ma-0">
+                                <v-btn icon outlined fab x-small color="green">
+                                    <v-icon>mdi-cow</v-icon>
+                                </v-btn>
+                                <span class="px-2">{{ bullCounter }}</span>
+                                <v-btn icon outlined fab x-small color="red">
+                                    <v-icon>mdi-paw</v-icon>
+                                </v-btn>
+                                <span class="px-2">{{ bearCounter }}</span>
+                                |
+                                <span class="px-2 overline">10 hours ago</span>
+                            </v-container>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <!-- End of Main Comment -->
+
+                    <!-- start of subreply -->
+                     <v-list-item class="ma-0 pa-0 ml-12 mt-2">    
+                        <v-list-item-avatar>
+                            <v-img :src="user.profile"></v-img>
+                        </v-list-item-avatar>
+                        <v-list-item-content class="pa-0 ma-0">
+                            <v-text-field
+                                label="Write a reply..."
+                                color="primary"
+                            >
+                            </v-text-field>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <!-- end of subreply -->
+
+                </v-list-item-content>
+            </v-list-item>
+            <!-- End of Subcomment -->
+
         </v-card>
     </v-col>
 </template>
 <script>
-import axios from '~/node_modules/axios'
 export default {
   data() {
       return {
-          bull: 0,
-          bear: 0,
-          bullactive: false,
-          bearactive: false,
-          id: null,
-          user_id: null,
-          content: null,
-          message: null,
-          sintementID: null,
-        absolute: false,
-        opacity: 0.46,
-        overlay: false,
-        zIndex: 1,
+        bullCounter: 9,
+        bearCounter: 2,
+        dark_theme_color: process.env.dark_theme_color,
+        user: {id:1232, name: 'Joses Gabriel Lu', profile: 'test.jpg' }
       }
   },
-  created(){
-      console.log('test');
-      console.log(process.env.dev_api);
-  },
   methods: {
-    if (bullactive = true) {
-    this.sintementID = this.id
-    axios
-        .post(`https://dev-api.arbitrage.ph/api/social/posts/${this.sentimentID}/unbull`, {
-            user_id: '76f0f772-0de8-47cb-944e-c903d810a7ca',
-        })
-        .then((response) => {
-            this.bull = 0
-            console.log(response)
-        })
-    },
-    bullcounter: function (event) {
-    this.sintementID = this.id
-    this.bullactive = true
-    this.bearactive = false
-    axios
-        .post(`https://dev-api.arbitrage.ph/api/social/posts/${this.sintementID}/bull`, {
-            user_id: '76f0f772-0de8-47cb-944e-c903d810a7ca',
-        })
-        .then((response) => {
-            this.bull = 1
-            this.bear = 0
-            console.log(response)
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-    },
-    if (bearactive = true) {
-    this.sintementID = this.id
-    axios
-        .post(`https://dev-api.arbitrage.ph/api/social/posts/${this.sintementID}/unbear`, {
-            user_id: '76f0f772-0de8-47cb-944e-c903d810a7ca',
-        })
-        .then((response) => {
-            this.bear = 0
-            console.log(response)
-        })
-    },
-    bearcounter: function (event) {
-    this.sintementID = this.id
-    this.bearactive = true
-    this.bullactive = false
-    axios
-        .post(`https://dev-api.arbitrage.ph/api/social/posts/${this.sintementID}/bear`, {
-            user_id: '76f0f772-0de8-47cb-944e-c903d810a7ca',
-        })
-        .then((response) => {
-            this.bear = 1
-            this.bull = 0
-            console.log(response)
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-    }
+   
   },    
-  mounted() {
-    axios
-        .get('https://dev-api.arbitrage.ph/api/social/posts/34711650032553984')
-        .then(response => (
-            this.id = response.data.data.post.id,
-            this.user_id = response.data.data.post.user_id,
-            this.content = response.data.data.post.content,
-            this.message = response.data.message
-            ))
+  created(){   
+      this.$axios.$get(`${process.env.api_url}/api/social/posts/search`)
+        .then(res => console.log(res))
   },
   head () {
     return {
-      title: 'Arbitrage',
+      title: 'Arbitrage | Social Page',
       meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
+        { hid: 'description', name: 'description', content: 'Arbitrage | Social Page' }
       ]
     }
   }
