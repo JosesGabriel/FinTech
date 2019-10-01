@@ -85,7 +85,7 @@
                 <v-list-item-content class="pa-0 ma-0 mt-3">
                     <!-- Start of Main Comment -->
                     <v-list-item> 
-                        <v-list-item-avatar>
+                        <v-list-item-avatar >
                             <v-img position="top" :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"></v-img>
                         </v-list-item-avatar>
                         <v-list-item-content class="pa-0 ma-0">                            
@@ -116,7 +116,7 @@
 
                     <!-- Start of Main Comment -->
                     <v-list-item class="pa-0 ma-0 ml-12 mt-2"> 
-                        <v-list-item-avatar>
+                        <v-list-item-avatar >
                             <v-img src="https://66.media.tumblr.com/d6c116eb3990fddb869d916c64f18e5c/tumblr_phsox3GWrv1uwzkkgo1_400.jpg"></v-img>                        </v-list-item-avatar>
                         <v-list-item-content class="pa-0 ma-0">                            
                             <v-container class="py-0 pl-0 pr-12 body-2">                              
@@ -170,15 +170,29 @@ export default {
         bullCounter: 9,
         bearCounter: 2,
         dark_theme_color: process.env.dark_theme_color,
-        user: {id:1232, name: 'Joses Gabriel Lu', profile: 'test.jpg' }
+        user: this.$store.getters['auth/user']
       }
   },
   methods: {
    
   },    
   created(){   
+      console.log('first')
+      // mutations
+      // this.$store.commit('auth/SET_USER', { user_id:1, fullname:'Joses Gabriel Lu', profile:'test.jpg' });
+      // actions
+      this.$store.dispatch('auth/setUser', { user_id:1, fullname:'Joses Gabriel Lu', profile:'test.jpg' } );
+
+      // standard axios 
       this.$axios.$get(`${process.env.api_url}/api/social/posts/search`)
         .then(res => console.log(res))
+  },
+  mounted(){
+      console.log('second');
+      // simple state
+      // console.log(this.$store.state.auth.user);
+      // getters
+      // console.log(this.$store.getters['auth/user']);
   },
   head () {
     return {
