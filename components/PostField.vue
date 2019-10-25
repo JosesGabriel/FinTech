@@ -19,13 +19,22 @@
                 :loading="postField__loading"
                 >{{ postFieldModel }}</v-textarea>
                 <div>
-                    <input type="file" @change="onInputFileChange" class="d-none" ref="postField__inputRef" accept=".jpg, .jpeg, .png, .mp4, .webm">
-                    <div v-if="postField__previewImage" class="postField__preview pt-2">
-                        <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
+                    <input type="file" class="d-none" multiple @change="onInputFileChange" ref="postField__inputRef" accept=".jpg, .jpeg, .png, .mp4, .webm">
+                    <div class="postField__preview pt-2">
+                        <!-- <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
                             <v-icon color="white">mdi-close</v-icon>
-                        </v-btn>
-                        <img :src="postField__previewImage" class="postField__previewImage" v-if="post__isImage"/>
-                        <video controls :src="postField__previewImage" class="postField__previewImage" v-if="!post__isImage"/>
+                        </v-btn> -->
+                        <!-- <img :src="postField__previewImage" class="postField__previewImage" v-if="post__isImage"/>
+                        <video controls :src="postField__previewImage" class="postField__previewImage" v-if="!post__isImage"/> -->
+                        <div class="postField__imageWrapper">
+                            <div class="postField__imageCard px-1" v-for="n in postField__imagesArray.length" :key="n" v-show="postField__imagesArray[n - 1] != ''">
+                                <v-btn @click="removeImage(n)" color="rgba(000,000,000,0.70)" fab x-small dark class="postField__imageWrapper--close-btn">
+                                    <v-icon color="white">mdi-close</v-icon>
+                                </v-btn>
+                                <video controls :src="postField__imagesArray[n - 1]" class="postField__imageWrapper--image" v-if="!post__isImage"/>
+                                <img :src="postField__imagesArray[n - 1]" class="postField__imageWrapper--image" v-else>
+                            </div>
+                        </div>
                     </div>
                     <v-btn small dark @click="onClickImageUploadBtn" icon>
                         <v-icon color="primary">mdi-image-outline</v-icon>
@@ -54,7 +63,7 @@
 <style>
 .postField__preview img, .postField__preview video {
     max-width: 100%;
-    max-height: 500px;
+    max-height: 120px;
 }
 .postField__avatar {
     position: absolute;
@@ -65,8 +74,27 @@
 .postField__previewImage {
     border-radius: 10px;
 }
+.postField__imageWrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+}
+.postField__imageCard {
+    flex: 0 0 auto;
+}
+.postField__imageWrapper--close-btn {
+    position: relative;
+    bottom: 96px;
+    right: 3px;
+    z-index: 1;
+}
+.postField__imageWrapper--image {
+    margin-left: -40px;
+}
 </style>
 <script>
+import Vue from 'vue'
 export default {
     data() {
         return {
@@ -74,10 +102,10 @@ export default {
             post__responseMsg: null,
             post__isImage: null,
             postFieldModel: null,
-            postField__previewImage: null, 
-            postField__previewImage: null,
+            postField__previewImage: [],
             postField__loading: false,
-            postField__alert: false
+            postField__alert: false,
+            postField__imagesArray: []
         }
     },
     methods: {
@@ -85,6 +113,7 @@ export default {
             this.postField__loading = true;
             const formData = new FormData();
             formData.append('file', this.$refs.postField__inputRef.files[0]);
+            console.log(this.$refs.postField__inputRef.files[0]);
             if(this.$refs.postField__inputRef.files[0]) { //text + image
                 this.$axios.$post('https://dev-api.arbitrage.ph/api/storage/upload',formData)
                 .then((response) => {
@@ -132,21 +161,22 @@ export default {
             var files = e.target.files || e.dataTransfer.files;
             if (!files.length)
                 return;
-            var filetype = (files[0].type).split("/")[0];
-            filetype == 'image' ? this.post__isImage = true : this.post__isImage = false;
-            this.createImage(files[0]);
+            for(var i = 0; i < files.length; i++) {
+                var filetype = (files[i].type).split("/")[0];
+                this.generateImagePreviews(files[i], filetype);
+            }
         },
-        createImage: function(file) {
-            var postField__previewImage = new Image();
+        generateImagePreviews: function(file, type) {
             var reader = new FileReader();
             reader.onload = (e) => {
-                this.postField__previewImage = e.target.result;
+                type == 'image' ? this.post__isImage = true : this.post__isImage = false;
+                console.log(this.post__isImage);
+                this.postField__imagesArray.push(e.target.result);
             };
             reader.readAsDataURL(file);
         },
-        removeImage: function() {
-            this.postField__previewImage = '';
-            this.$refs.postField__inputRef.value = '';
+        removeImage: function(closeId) {
+            this.$set(this.postField__imagesArray,closeId - 1, '');
         },
         clearInputs: function(type) {
             type == 'success' ? this.postField__alertState = true : this.postField__alertState = false;
