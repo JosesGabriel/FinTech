@@ -9,7 +9,7 @@
             <v-col class="pr-3 hidden-sm-and-down" cols="4" sm="4" md="4">
                 <Info/>
                 <Gallery/>
-                <Footersidebar/>
+                <FooterSidebar/>
             </v-col>
             <v-col cols="12" xs="12" sm="12" md="8" lg="8">
                 <Newsfeed/>
@@ -29,7 +29,7 @@ import Navbar from '~/components/Navbar'
 import Newsfeed from '~/components/Newsfeed'
 import Info from '~/components/Info'
 import Gallery from '~/components/Gallery'
-import Footersidebar from '~/components/Footersidebar'
+import FooterSidebar from '~/components/FooterSidebar'
 
 export default {
   layout: 'main',
@@ -39,7 +39,7 @@ export default {
       Newsfeed,
       Info,
       Gallery,
-      Footersidebar
+      FooterSidebar
   },
   data() {
       return {

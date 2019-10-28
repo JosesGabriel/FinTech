@@ -9,9 +9,9 @@
               <Newsfeed/>
             </v-col>
             <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
-                <Trendingstocks/>
-                <Whotomingle/>
-                <Footersidebar/>
+                <TrendingStocks/>
+                <WhoToMingle/>
+                <FooterSidebar/>
             </v-col>
         </v-row>
     </v-container>
@@ -25,9 +25,9 @@
 <script>
 import Navbar from '~/components/Navbar'
 import Newsfeed from '~/components/Newsfeed'
-import Trendingstocks from '~/components/Trendingstocks.vue'
-import Whotomingle from '~/components/Whotomingle.vue'
-import Footersidebar from '~/components/Footersidebar.vue'
+import TrendingStocks from '~/components/TrendingStocks.vue'
+import WhoToMingle from '~/components/WhoToMingle.vue'
+import FooterSidebar from '~/components/FooterSidebar.vue'
 import PostField from '~/components/PostField.vue'
 import axios from '~/node_modules/axios'
 
@@ -37,8 +37,8 @@ export default {
       Navbar,
       Newsfeed,
       Trendingstocks,
-      Whotomingle,
-      Footersidebar,
+      WhoTomingle,
+      FooterSidebar,
       PostField
   },
   data() {
