@@ -36,8 +36,8 @@ export default {
   components: {
       Navbar,
       Newsfeed,
-      Trendingstocks,
-      WhoTomingle,
+      TrendingStocks,
+      WhoToMingle,
       FooterSidebar,
       PostField
   },

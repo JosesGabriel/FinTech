@@ -1,8 +1,7 @@
 <template>
-    <div>
-        <h1>This is chart</h1>
+    <v-container class="mt-9">
         <TVChartContainer />
-    </div>
+    </v-container>
 </template>
 
 <script>
