@@ -6,8 +6,8 @@ require('dotenv').config()
 export default {
   mode: 'spa',
   server: {
-    port: 3002, // default: 3000
-    host: '0.0.0.0', // default: localhost
+    port: process.env.server_port, // default: 3000
+    host: process.env.server_host // default: localhost
   },
   /*
   ** Headers of the page
@@ -27,7 +27,7 @@ export default {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#fff' },
+  loading: { color: '#142b46' },
   /*
   ** Global CSS
   */
@@ -83,7 +83,13 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+   extend(config, ctx) {
+    config.node = {
+      console: false,
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty'
     }
+  },
   }
 }
