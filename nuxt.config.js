@@ -22,17 +22,6 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ],
-    script: [
-        {
-            src: "charting_library/charting_library.min.js"
-        },
-        {
-            src: "datafeeds/udf/dist/polyfills.js"
-        },
-        {
-            src: "datafeeds/udf/dist/bundle.js"
-        }
     ]
   },
   /*
@@ -94,7 +83,13 @@ export default {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+   extend(config, ctx) {
+    config.node = {
+      console: false,
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty'
     }
+  },
   }
 }

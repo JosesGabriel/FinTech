@@ -1,20 +1,19 @@
 <template>
     <div>
         <h1>This is chart</h1>
-        <!-- <TVChartContainer /> -->
+        <TVChartContainer />
     </div>
 </template>
 
 <script>
-// import TVChartContainer from "../components/chart/TVChartContainer";
+import TVChartContainer from "../components/chart/TVChartContainer";
 
 export default {
-    layout: "chart",
+    layout: "main",
     components: {
-    //     TVChartContainer
+         TVChartContainer
     }
 }
-
 
 </script>
 
