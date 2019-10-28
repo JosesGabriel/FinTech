@@ -6,7 +6,7 @@ require('dotenv').config()
 export default {
   mode: 'spa',
   server: {
-    port: 3002, // default: 3000
+    port: 3666, // default: 3000
     host: '0.0.0.0', // default: localhost
   },
   /*
@@ -22,6 +22,17 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+        {
+            src: "charting_library/charting_library.min.js"
+        },
+        {
+            src: "datafeeds/udf/dist/polyfills.js"
+        },
+        {
+            src: "datafeeds/udf/dist/bundle.js"
+        }
     ]
   },
   /*
