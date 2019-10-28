@@ -3,3 +3,13 @@
 #app {
     font-family: 'Karla', sans-serif;
 }
+#liveportfolio-table {
+    background: none;
+}
+#table_tr_port-cont:hover {
+    background: rgb(9, 26, 43);
+}
+#table_td_port-cont {
+    border: none;
+    cursor: pointer;
+}
