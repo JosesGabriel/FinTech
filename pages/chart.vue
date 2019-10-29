@@ -1,20 +1,16 @@
 <template>
-    <div>
-        <h1>This is chart</h1>
-       <tv-chart-container></tv-chart-container>
-    </div>
+    <v-content>
+        <tv-chart-container></tv-chart-container>
+    </v-content>
 </template>
 
 <script>
-// import TVChartContainer from "../components/chart/TVChartContainer";
-
 export default {
-    layout: "main",
+    layout: "chart",
     components: {
-        //  TVChartContainer
+
     }
 }
-
 </script>
 
 <style>

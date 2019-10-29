@@ -117,6 +117,6 @@ export default {
 
 <style scoped>
 .TVChartContainer {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 52px); 
 }
 </style>

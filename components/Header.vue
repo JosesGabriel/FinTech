@@ -51,7 +51,7 @@
         <div class="header--rainbow px-0"></div>
     </v-toolbar>
 </template>
-<style>
+<style scoped>
 .header__searchbar {
     margin-top: 20px !important;
     transform: scale(0.675);
