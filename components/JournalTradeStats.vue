@@ -95,18 +95,11 @@
             {   
               label: 'Data One',
               backgroundColor: [
-                '#008062',
-                '#008C6C',
-                '#009975',
-                '#00A67F',
-                '#00BF93',
-                '#00CC9C',
-                '#00D9A6',
-                '#00F2BA',
-                '#00FFC3',
+                '#48FFD5',
+                '#FF4848',
             ],
               borderColor: 'transparent',
-              data: [21, 37, 43, 28, 17, 25, 17, 25, 30]
+              data: [60,40]
             }
           ]
         }
