@@ -105,9 +105,7 @@
     </v-card>
 </template>
 <style scoped>
-.navbarDrawer__card {
-    /* background-color: #fbfcfe; */
-}
+
 .navbar__card {
     position: fixed;
 }
