@@ -38,7 +38,7 @@
                 <v-avatar size="38" class="pt-3">
                 <img
                 alt="Avatar"
-                src="test.jpg"
+                src="rock.jpg"
                 >
                 <v-icon
                 ></v-icon>
@@ -47,7 +47,7 @@
         </div>
     </v-toolbar>
 </template>
-<style>
+<style scoped>
 .header__searchbar {
     margin-top: 17px !important;
     transform: scale(0.6);

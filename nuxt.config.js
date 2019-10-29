@@ -22,7 +22,12 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    ],
+    script: [
+      { src: '/vendor/charting_library/charting_library.min.js', type: 'text/javascript'},
+      { src: '/vendor/datafeeds/udf/dist/polyfills.js', type: 'text/javascript'},
+      { src: '/vendor/datafeeds/udf/dist/bundle.js', type: 'text/javascript'},
+    ],
   },
   /*
   ** Customize the progress-bar color
@@ -38,6 +43,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~/plugins/tradingview', ssr: false },
   ],
   /*
   ** Nuxt.js dev-modules

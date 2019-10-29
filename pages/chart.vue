@@ -1,19 +1,16 @@
 <template>
-    <v-container class="mt-9">
-        <TVChartContainer />
-    </v-container>
+    <v-content>
+        <tv-chart-container></tv-chart-container>
+    </v-content>
 </template>
 
 <script>
-import TVChartContainer from "../components/chart/TVChartContainer";
-
 export default {
-    layout: "main",
+    layout: "chart",
     components: {
-         TVChartContainer
+
     }
 }
-
 </script>
 
 <style>
