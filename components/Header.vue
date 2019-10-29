@@ -19,7 +19,6 @@
                     rounded
                     solo
                     flat
-                    :dense="dense"
                     background-color="transparent"
                 ></v-text-field>
             </div>

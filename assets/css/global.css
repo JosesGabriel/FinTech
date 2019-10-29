@@ -16,3 +16,13 @@
 #table_head_tr_port-cont {
     border: none;
 }
+#table_tr_snap-cont:hover {
+    background: rgb(9, 26, 43);
+}
+#table_td_snap-cont {
+    border: none;
+    cursor: pointer;
+}
+#table_head_tr_snap-cont {
+    border: none;
+}
