@@ -39,7 +39,7 @@
                 <v-avatar size="38" class="pt-3">
                 <img
                 alt="Avatar"
-                src="rock.jpg"
+                src="test.jpg"
                 >
                 <v-icon
                 ></v-icon>
