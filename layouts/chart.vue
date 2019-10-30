@@ -1,30 +1,33 @@
 <template>
-  <v-app dark>    
-    <v-container>
-        <nuxt />
-    </v-container>
+  <v-app>
+        <Header />
+            <div class="chart_spacer"></div>
+            <v-content>
+                <nuxt />
+            </v-content>
   </v-app>
 </template>
 
-<style>
-
-</style>
-
 <script>
+import Header from "~/components/parts/Header";
+
 export default {
   data () {
     return {
       
     }
   },
-  head () {
-    return {
-      title: 'Arbitrage',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
-      ]
-    }
+  components: {
+      Header
   }
 }
 </script>
+    
+<style scoped>
+.content_app{
+    background-color: #213F58;
+}
+.chart_spacer{
+    height: 52px;
+}
+</style>

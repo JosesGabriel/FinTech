@@ -30,7 +30,7 @@
                 <td id="table_td_port-cont" class="text-right px-1 py-0">{{ item.Profit }}</td>
                 <td id="table_td_port-cont" class="text-right px-1 py-0">{{ item.Perf }}</td>
                 <td id="table_td_port-cont" class="text-right px-1 py-0">
-                    <v-menu top :offset-x="offset" >
+                    <v-menu top>
                         <template v-slot:activator="{ on }">
                         <v-btn
                             dark
@@ -45,17 +45,27 @@
                                 v-for="(item, i) in items"
                                 :key="i"
                                 headline
+                                background="#0c1f33"
                             >
                                 <v-list-item-title class="body-2">{{ item.title }}</v-list-item-title>
                             </v-list-item>
                         </v-list>
                     </v-menu>
                 </td>
-                
                 </tr>
             </tbody>
             </template>
         </v-simple-table>
+        <!-- <v-flex>                
+            <v-spacer></v-spacer>
+            <v-pagination
+            v-model="page"
+            :length="4"
+            circle
+            flat
+            elevation="0"
+            ></v-pagination>
+        </v-flex> -->
     </v-col>
 </template>
 <script>
@@ -113,6 +123,7 @@ export default {
             { title: 'Note' },
             { title: 'Delete' },
         ],
+        page: 1,
       }
     },
 }

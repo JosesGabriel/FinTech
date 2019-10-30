@@ -19,7 +19,6 @@
                     rounded
                     solo
                     flat
-                    :dense="dense"
                     background-color="transparent"
                 ></v-text-field>
             </div>
@@ -48,7 +47,7 @@
         </div>
     </v-toolbar>
 </template>
-<style>
+<style scoped>
 .header__searchbar {
     margin-top: 17px !important;
     transform: scale(0.6);
