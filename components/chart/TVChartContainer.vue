@@ -1,17 +1,87 @@
 <template>
-<div class="TVChartContainer" :id="containerId" />
+    <v-content>
+        <div :class="chartViewClass" :id="containerId" />
+    </v-content>
 </template>
 
 <script>
-
-function getLanguageFromURL() {
-  const regex = new RegExp('[\\?&]lang=([^&#]*)');
-  const results = regex.exec(window.location.search);
-  return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
-}
+import { mapGetters } from "vuex";
 
 export default {
   name: 'TVChartContainer',
+  data(){
+      return {
+          widget: null,
+          tvWidget: null, 
+          chartViewId: 0,
+          chartViewClass: 'chartViewClass_1'
+      }
+  },
+  computed: {
+     ...mapGetters({
+          ticker:"chart/getTicker",
+          table:"chart/getTable",
+          maximize_table:"chart/getTableMaximize",
+          fullscreen_table:"chart/getTableFullscreen"
+     }),
+     chartView: function(){
+        if(this.ticker && this.table){
+            //console.log('both open');
+            this.chartViewId = 1;
+            this.chartViewClass = 'chartViewClass_1';
+        }else if(!this.ticker && this.table){
+            //console.log('table only');
+            this.chartViewId = 2;
+            this.chartViewClass = 'chartViewClass_2';
+        }else if(this.ticker && !this.table){
+            //console.log('ticker only');
+            this.chartViewId = 3;
+            this.chartViewClass = 'chartViewClass_3';
+        }else if(!this.ticker && !this.table){
+            //console.log('both close');
+            this.chartViewId = 4;
+            this.chartViewClass = 'chartViewClass_4';
+        }
+
+        if(this.maximize_table){
+            switch (this.chartViewId) {
+                case 1:
+                    this.chartViewClass = 'chartViewClass_5';
+                break;
+
+                case 2:
+                    this.chartViewClass = 'chartViewClass_6';
+                break;
+            }
+        }
+
+        if(this.fullscreen_table){
+            switch (this.chartViewId) {
+                case 1:
+                    this.chartViewClass = 'chartViewClass_7';
+                break;
+
+                case 2:
+                    this.chartViewClass = 'chartViewClass_8';
+                break;
+            }
+        }
+     }
+  },
+  methods: {
+      widgetCreateButton: function(title, content, callback, options){
+        const button = this.widget.createButton(options);
+        button.setAttribute('title', title);
+        //button.classList.add('apply-common-tooltip');
+        button.addEventListener('click', callback);
+        button.innerHTML = content;
+      },
+      getLanguageFromURL: function() {
+        const regex = new RegExp('[\\?&]lang=([^&#]*)');
+        const results = regex.exec(window.location.search);
+        return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+      }
+  },
   props: {
     symbol: {
       default: 'AAPL',
@@ -61,8 +131,14 @@ export default {
       type: Object,
     }
   },
-  tvWidget: null,
   mounted() {
+    // listen to ticker toggle
+    this.$bus.$on('adjustChartView', (data) => {
+        this.chartView;
+        console.log(this.chartViewId);
+        console.log(this.chartViewClass);
+    })
+
     const widgetOptions = {
       symbol: this.symbol,
       // BEWARE: no trailing slash is expected in feed URL
@@ -71,7 +147,7 @@ export default {
       container_id: this.containerId,
       library_path: this.libraryPath,
 
-      locale: getLanguageFromURL() || 'en',
+      locale: this.getLanguageFromURL() || 'en',
       disabled_features: ['use_localstorage_for_settings'],
       enabled_features: ['study_templates'],
       charts_storage_url: this.chartsStorageUrl,
@@ -84,25 +160,26 @@ export default {
     };
 
     const tvWidget = new window.TradingView.widget(widgetOptions);
-    this.tvWidget = tvWidget;
+    this.widget = this.tvWidget = tvWidget;
 
     tvWidget.onChartReady(() => {
-      tvWidget.headerReady().then(() => {
-        const button = tvWidget.createButton();
+      tvWidget.headerReady().then(() => {  
+          
+          this.widgetCreateButton(
+              "Click to show a notification popup",
+              "Setting",
+              function(){
+                    tvWidget.showNoticeDialog({
+                        title: 'Notification',
+                        body: 'TradingView Charting Library API works correctly <button>Ticker</button>',
+                        callback: () => {
+                            // eslint-disable-next-line no-console
+                            console.log('Noticed!');
+                        }
+                    })
+              },
+          );
 
-        button.setAttribute('title', 'Click to show a notification popup');
-        button.classList.add('apply-common-tooltip');
-
-        button.addEventListener('click', () => tvWidget.showNoticeDialog({
-            title: 'Notification',
-            body: 'TradingView Charting Library API works correctly',
-            callback: () => {
-              // eslint-disable-next-line no-console
-              console.log('Noticed!');
-            },
-          }));
-
-        button.innerHTML = 'Check API';
       });
     });
   },
@@ -116,7 +193,42 @@ export default {
 </script>
 
 <style scoped>
-.TVChartContainer {
-  height: calc(100vh - 52px); 
+/* .TVChartContainer {
+  height: calc(100vh - 152px); 
+} */
+.chartViewClass_1{
+    /* both open */
+    height: calc(100vh - 152px);
 }
+.chartViewClass_2{
+    /* table only */
+    height: calc(100vh - 102px);
+}
+.chartViewClass_3{
+    /* ticker only */
+    height: calc(100vh - 102px);
+}
+.chartViewClass_4{
+    /* both close */
+    height: calc(100vh - 52px);
+}
+
+.chartViewClass_5{
+    /* maximize open ticker */
+    height: calc(100vh - 452px);
+}
+.chartViewClass_6{
+    /* maximize close ticker */
+    height: calc(100vh - 502px);
+}
+
+.chartViewClass_7{
+    /* maximize open ticker */
+    height: calc(100vh - 452px);
+}
+.chartViewClass_8{
+    /* maximize close ticker */
+    height: calc(100vh - 502px);
+}
+
 </style>

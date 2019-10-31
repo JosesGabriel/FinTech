@@ -6,13 +6,6 @@
 
 <script>
 export default {
-    layout: "chart",
-    components: {
-
-    }
+    layout: "chart"
 }
 </script>
-
-<style>
-
-</style>
