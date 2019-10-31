@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import ChartChart from '~/AllocationChart.js'
+  import ChartChart from '~/assets/js/journal/AllocationChart.js'
 
   export default {
     components: {
