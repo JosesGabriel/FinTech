@@ -1,17 +1,18 @@
 <template>
 <div class="container">
-    <v-card class="pa-4" color="#142a46" dark outlined>
+    
         Live Portfolio     
             <div class="vtbtn">
                 <v-btn text icon color="blue">
                     <v-icon>mdi-share</v-icon>
                 </v-btn>               
-                <v-btn text small>Trade</v-btn>
+                 <v-btn text small dark @click.stop="EnterTradeModal=true">Trade</v-btn>
+                 <TradeModal :visible="EnterTradeModal" @close="EnterTradeModal=false" />
                  <v-btn text icon color="pink">
                     <v-icon>mdi-autorenew</v-icon>
                 </v-btn>
             </div>
-          <v-simple-table class="vtable">
+          <v-simple-table dark class="vtable">
                 <template v-slot:default>
                 <thead>
                     <tr>
@@ -49,7 +50,7 @@
                 </template>
           </v-simple-table>
           Tradelogs
-            <v-simple-table class="tlogstable">
+            <v-simple-table dark class="tlogstable">
                 <template v-slot:default>
                     <thead>
                         <tr>
@@ -80,11 +81,11 @@
                     </tbody>
                 </template>
           </v-simple-table>
-    </v-card>
-    
 </div> 
 </template>
 <script>
+  import TradeModal from '~/components/TradeModal'
+
   export default {
     data () {
       return {
@@ -110,8 +111,13 @@
             perf: 159,
           },
         ],
+        tlogstable: [],
+        EnterTradeModal: false,
       }
     },
+    components: {
+        TradeModal
+    }
   }
 </script>
 <style scoped>
@@ -127,6 +133,10 @@
 .tlogs {
     margin-top: 10px;
     padding: 16px !important;
+}
+
+.container {
+    color: #d8d8d8;
 }
 
 </style>
