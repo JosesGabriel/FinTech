@@ -32,10 +32,10 @@
                     </v-btn>
                 </v-list-item-content>
             </v-list-item>
-            <v-divider :inset="inset"></v-divider>
+            <v-divider></v-divider>
             <v-list-item>
                 <v-list-item-content class="pb-0 pt-3 px-2">
-                    <v-text class="caption text-center">Add a short bio to tell people more about yourself.</v-text>
+                    <span class="caption text-center">Add a short bio to tell people more about yourself.</span>
                 </v-list-item-content>
             </v-list-item>
             <v-list-item>
@@ -48,6 +48,7 @@
         </v-list>
     </v-card>
 </template>
+
 <style scoped>
 .info__title {
     min-height: auto;

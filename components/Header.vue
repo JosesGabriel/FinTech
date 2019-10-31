@@ -1,7 +1,7 @@
 <template>
     <v-toolbar
         light
-        color="#213f58"
+        color="#0c1f33"
         dark
         dense
         class="header__toolbar"
@@ -10,23 +10,20 @@
             <router-link to="/">
                 <img src="logo.png" alt="" width="45" height="45">
             </router-link>
-            <v-divider vertical inset class="mx-2"></v-divider>
-            <v-toolbar-title class="hidden-xs-only">Arbitrage</v-toolbar-title>
-            <!-- <div class="searchBar__container hidden-md-only">
+            <div class="searchBar__container hidden-md-only">
                 <v-text-field
                     label="Search"
-                    type="email"
                     prepend-inner-icon="mdi-magnify"
-                    class="header__searchbar ml-3"
-                    shaped
+                    class="header__searchbar ml-3 headline"
                     outlined
+                    rounded
+                    solo
+                    flat
+                    background-color="transparent"
                 ></v-text-field>
-            </div> -->
+            </div>
             <v-spacer></v-spacer>
             <v-toolbar-items>
-                <v-btn icon>
-                    <v-icon>mdi-magnify</v-icon>
-                </v-btn>
                 <v-btn icon>
                     <v-icon>mdi-apps</v-icon>
                 </v-btn>
@@ -48,13 +45,12 @@
                 </v-avatar>
             </v-toolbar-items>
         </div>
-        <div class="header--rainbow px-0"></div>
     </v-toolbar>
 </template>
-<style>
+<style scoped>
 .header__searchbar {
-    margin-top: 20px !important;
-    transform: scale(0.675);
+    margin-top: 17px !important;
+    transform: scale(0.6);
     transform-origin: left;
 }
 .header__padding--left {
@@ -63,17 +59,9 @@
 .header__padding--right {
     margin-right: 150px;
 }
-.searchBar__container {
+/* .searchBar__container {
     width: 350px;
-}
-.header--rainbow {
-  position: absolute;
-  width: 100%;
-  bottom: -4px;
-  height: 4px;
-  margin-left: -16px;
-  background-image: linear-gradient(to right, #894b9d, #eb8023, #c2b819, #49ba6f, #2581bc);
-}
+} */
 .social__router {
     text-decoration: none;
 }
@@ -89,7 +77,7 @@
     z-index: 0;
     width: 100%;
     margin: 0 auto;
-    max-width: 1030px;
+    max-width: 1023px;
 }
 .headerItems__wrapper--margin-left {
     margin-left: 19vw;

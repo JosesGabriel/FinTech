@@ -1,10 +1,10 @@
 <template>
     <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
         <v-row class="mb-6" no-gutters>
-            <v-col class="px-3 hidden-md-and-down" cols="3" sm="3" md="3">
-              <Navbar/>
+            <v-col class="px-3 hidden-md-and-down" cols="1" sm="1" md="1">
+              <NavbarJournal/>
             </v-col>
-            <v-col cols="9">
+            <v-col cols="11">
                 <JournalContent/>
             </v-col>
         </v-row>
@@ -17,18 +17,18 @@
     }
 </style>
 <script>
-import Navbar from '~/components/Navbar'
+import NavbarJournal from '~/components/NavbarJournal'
 import JournalContent from '~/components/JournalContent'
 
 export default {
   layout: 'main',
   components: {
-      Navbar,
+      NavbarJournal,
       JournalContent
   },
   data() {
       return {
-          isOpen: true
+          isOpen: true,
       }
   },
   methods: {
