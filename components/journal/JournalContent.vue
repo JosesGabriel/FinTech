@@ -3,7 +3,7 @@
         <v-col cols="5" sm="5" md="5" class="pa-0">
             <v-tabs
             color="#48FFD5"
-            background-color="transparent"
+            background-color="#0c1f33"
             dark
             grow
             >
@@ -21,14 +21,16 @@
             <JournalMonthlyPerfomance/>
             <JournalTradeStats/>
         </v-row>
+            <!-- <ChartTesting/> -->
     </v-col>
 </template>
 <script>
-import JournalLivePortfolio from '~/components/JournalLivePortfolio'
-import JournalPortfolioSnapshot from '~/components/JournalPortfolioSnapshot'
-import JournalCurrentAllocation from '~/components/JournalCurrentAllocation'
-import JournalMonthlyPerfomance from '~/components/JournalMonthlyPerfomance'
-import JournalTradeStats from '~/components/JournalTradeStats'
+import JournalLivePortfolio from '~/components/journal/JournalLivePortfolio'
+import JournalPortfolioSnapshot from '~/components/journal/JournalPortfolioSnapshot'
+import JournalCurrentAllocation from '~/components/journal/JournalCurrentAllocation'
+import JournalMonthlyPerfomance from '~/components/journal/JournalMonthlyPerfomance'
+import JournalTradeStats from '~/components/journal/JournalTradeStats'
+// import ChartTesting from '~/components/journal/ChartTesting'
 
 export default {
   layout: 'main',
@@ -37,7 +39,8 @@ export default {
       JournalPortfolioSnapshot,
       JournalCurrentAllocation,
       JournalMonthlyPerfomance,
-      JournalTradeStats
+      JournalTradeStats,
+    //   ChartTesting
   }
 }
 </script>

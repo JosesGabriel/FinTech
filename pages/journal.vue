@@ -17,8 +17,8 @@
     }
 </style>
 <script>
-import NavbarJournal from '~/components/NavbarJournal'
-import JournalContent from '~/components/JournalContent'
+import NavbarJournal from '~/components/journal/NavbarJournal'
+import JournalContent from '~/components/journal/JournalContent'
 
 export default {
   layout: 'main',

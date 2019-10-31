@@ -5,21 +5,21 @@
         </v-card-title>
         <v-col class="pa-0" cols="12" sm="12" md="12">
             <div class="mp_chart-cont">
-                <chart-chart :chart-data="datacollection" :height="200"></chart-chart>
+                <chart :chart-data="datacollection" :height="305"></chart>
             </div>
         </v-col>
     </v-col>
 </template>
 <script>
-  import ChartChart from '~/MonthlyPerformance.js'
-
+  import Chart from '~/assets/js/journal/MonthlyPerformance.js'
+  
   export default {
     components: {
-      ChartChart
+      Chart
     },
     data () {
       return {
-        datacollection: {},
+        datacollection: null,
       }
     },
     mounted () {
@@ -37,6 +37,6 @@
             ]
         }
       },
-    }
+    },
   }
 </script>
