@@ -9,7 +9,7 @@
       </v-list-item>
       <GChart
        type="AreaChart"
-       :data="chartData0"
+       :data="chartData"
        :options="chartOptions"
        @ready="onChartReady"
       />
@@ -27,10 +27,10 @@
               <span class="float-right">₱1.30</span>
             </div>
         </v-card-actions>
-        <div class="arb_bar fullbar watchlistCard__percentbar">
-          <div class="arb_bar_green" style="width:46%">&nbsp;</div>
-          <div class="arb_bar_red" style="width:54%">&nbsp;</div>
-          <div class="arb_clear"></div>
+        <div class="watchlistCard__percentbar">
+          <div class="watchlistCard__bar watchlistCard__bar--green" style="width:46%"></div>
+          <div class="watchlistCard__bar watchlistCard__bar--red" style="width:54%"></div>
+          <!-- <v-btn @click="chartColor()">Hahah</v-btn> -->
         </div>
   </v-card>
 </template>
@@ -57,23 +57,19 @@
   position: absolute;
   bottom: 40px;
 }
-.arb_bar_green {
+.watchlistCard__bar {
   float: left;
-    background-color: #34AD9E;
-    color: #fff;
-    padding: 2px 0;
-    text-align: center;
-    line-height: 0;
-    border-radius: 5px 0 0 5px;
+  color: #fff;
+  padding: 2px 0;
+  text-align: center;
+  line-height: 0;
+  border-radius: 5px 0 0 5px;
 }
-.arb_bar_red {
-  float: left;
-    background-color: #F45532;
-    color: #fff;
-    padding: 2px 0;
-    text-align: center;
-    line-height: 0;
-    border-radius: 5px 0 0 5px;
+.watchlistCard__bar--green {
+  background-color: #34AD9E;
+}
+.watchlistCard__bar--red {
+  background-color: #F45532;
 }
 </style>
 <script>
@@ -84,7 +80,7 @@ export default {
     return {
       // Array will be automatically processed with visualization.arrayToDataTable function
       counter: 0,
-      chartData0: [
+      chartData: [
         ['', 'AXLM'],
         ['', 10],
         ['', 12],
@@ -99,65 +95,18 @@ export default {
         ['', 10],
         ['', 13]
       ],
-      chartData1: [
-        ['', 'IRC'],
-        ['', 10],
-        ['', 12],
-        ['', 14],
-        ['', 13],
-        ['', 9],
-        ['', 15],
-        ['', 10],
-        ['', 6],
-        ['', 7],
-        ['', 9],
-        ['', 10],
-        ['', 13]
-      ],
-      chartData2: [
-        ['', 'AAPL'],
-        ['', 10],
-        ['', 12],
-        ['', 14],
-        ['', 13],
-        ['', 9],
-        ['', 15],
-        ['', 10],
-        ['', 6],
-        ['', 7],
-        ['', 9],
-        ['', 10],
-        ['', 13]
-      ],
-      chartOptions: { 
-        hAxis: {
-        titleTextStyle: {color: '#607d8b'}, 
-        gridlines: { count:0}, 
-        textStyle: { color: '#b0bec5', fontName: 'Roboto', fontSize: '12', bold: true}
-      },
-      vAxis: {
-        minValue: 0, 
-        gridlines: {color:'#37474f', count:1}, 
-        baselineColor: 'transparent'
-      },
-      legend: {position: 'none', alignment: 'center', textStyle: {color:'#607d8b', fontName: 'Roboto', fontSize: '12'} },
-      colors: ["#48ffd5","#2196f3","#03a9f4","#00bcd4","#009688","#4caf50","#8bc34a","#cddc39"],
-      areaOpacity: 0.24,
-      lineWidth: 1,
-      backgroundColor: 'transparent',
-      chartArea: {
-        backgroundColor: "transparent",
-        width: '100%',
-        height: '50%'
-      },
-      pieSliceBorderColor: '#263238',
-      pieSliceTextStyle:  {color:'#607d8b' },
-      pieHole: 0.9,
-      bar: {groupWidth: "40" },
-      colorAxis: {colors: ["#3f51b5","#2196f3","#03a9f4","#00bcd4"] },
-      backgroundColor: 'transparent',
-      datalessRegionColor: '#37474f',
-      displayMode: 'regions'
+      chartOptions: {
+        vAxis: {
+          gridlines: {color:'#37474f', count:1}
+        },
+        colors: ["#48ffd5"],
+        areaOpacity: 0.2,
+        lineWidth: 1,
+        backgroundColor: 'transparent',
+        chartArea: {
+          width: '100%',
+          height: '50%'
+        }
       }
     }
   },
@@ -167,6 +116,14 @@ export default {
   methods: {
     onChartReady (chart, google) {
       this.chartsLib = google
+    },
+    chartColor (){
+      this.chartData = [
+        ['', 'AXLM'],
+        ['', 10],
+        ['', 6]
+      ];
+      this.chartOptions.colors = ['#F45532'];
     }
   }
 }
