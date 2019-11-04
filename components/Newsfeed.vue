@@ -78,6 +78,24 @@
             </v-list-item>
             <!-- End of Comment -->
 
+            <v-img
+            src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
+            height="350"
+            ></v-img>
+            <v-list-item-content>
+                <span>Post ID: {{id}} test push</span>
+                <span>User ID: {{user_id}}</span>
+                <span>Post Content: {{content}}</span>
+                <span>API Response: {{message}}</span>
+            </v-list-item-content>
+            <v-card-actions>
+            <v-btn icon outlined fab x-small color="green">
+                <v-icon>mdi-cow</v-icon>
+            </v-btn>
+            <v-btn icon outlined fab x-small color="red">
+                <v-icon>mdi-paw</v-icon>
+            </v-btn>
+            </v-card-actions>
             <v-divider></v-divider>
 
             <!-- Start of Subcomment -->
