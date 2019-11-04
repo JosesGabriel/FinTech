@@ -3,49 +3,58 @@
         light
         color="#0c1f33"
         dark
-        height="50"
+        height="54"
         class="header__toolbar"
         >
         <div class="headerItems__wrapper">
             <router-link to="/">
                 <img src="logo.png" alt="" width="45" height="45">
             </router-link>
-            <div class="searchBar__container hidden-md-only">
-                <v-text-field
-                    label="Search"
-                    prepend-inner-icon="mdi-magnify"
-                    class="header__searchbar ml-3 headline"
-                    outlined
-                    rounded
-                    solo
-                    flat
-                    background-color="transparent"
-                ></v-text-field>
-            </div>
+            
             <v-spacer></v-spacer>
-            <v-toolbar-items class="mb-3 pt-1">
-                <router-link to="/" class="social__router mr-7">
-                    <v-btn icon>
-                        <v-icon>mdi-apps</v-icon>
-                        <span class="header__btn--label">Power Tools</span>
+            <transition name="fade">
+                <div class="searchBar__container hidden-md-only" v-if="!searchButtonIsVisible">
+                    <v-text-field
+                        label="Search"
+                        prepend-inner-icon="mdi-magnify"
+                        class="header__searchbar ml-3 headline"
+                        outlined
+                        rounded
+                        solo
+                        flat
+                        background-color="transparent"
+                    ></v-text-field>
+                </div>
+            </transition>
+            <v-toolbar-items class="my-3">
+                <transition name="slide-fade">
+                    <router-link to="/" class="social__router" v-if="searchButtonIsVisible">
+                        <v-btn icon @click="toggleSearch()" ref="header__searchButton"> 
+                            <img src="/icon/header-icons/search.svg" width="20">
+                        </v-btn>
+                    </router-link>
+
+                </transition>
+                <router-link to="/" class="social__router">
+                    <v-btn icon> 
+                        <img src="/icon/header-icons/powertools.svg" width="20">
                     </v-btn>
                 </router-link>
                 <router-link to="/" class="social__router">
                     <v-btn icon>
-                        <v-icon>mdi-bell</v-icon>
-                        <span class="header__btn--label">Notifications</span>
+                        <img src="/icon/header-icons/notif.svg" width="20">
                     </v-btn>
                 </router-link>
-                <router-link to="/login" class="social__router mx-3">
+                <router-link to="/login" class="social__router">
                     <v-btn icon>
-                        <v-icon>mdi-scatter-plot</v-icon>
-                        <span class="header__btn--label">Vyndue</span>
+                        <img src="/icon/header-icons/vyndue.svg" width="20">
                     </v-btn>
                 </router-link>
-                <v-avatar size="38" class="pt-5">
+                <v-avatar size="38" class="pt-3">
                 <img
                 alt="Avatar"
-                src="https://picsum.photos/500/300?image=15"
+                src="test.jpg"
+                width="100%"
                 >
                 <v-icon
                 ></v-icon>
@@ -55,10 +64,20 @@
     </v-toolbar>
 </template>
 <style scoped>
+.fade-enter-active,.fade-leave-active {
+  transition: opacity .4s
+}
+.fade-enter,.fade-leave-active {
+  opacity: 0
+}
+.slide-fade-enter, .slide-fade-leave-to{
+   transform: translateX(10px);
+    opacity: 0;
+ }
 .header__searchbar {
     margin-top: 17px !important;
     transform: scale(0.6);
-    transform-origin: left;
+    transform-origin: right;
 }
 .header__padding--left {
     margin-left: 150px;
@@ -84,14 +103,28 @@
     z-index: 0;
     width: 100%;
     margin: 0 auto;
-    max-width: 1023px;
+    /* max-width: 1023px; */
 }
 .headerItems__wrapper--margin-left {
     margin-left: 19vw;
 }
 .header__btn--label {
     position: absolute;
-    top: 25px;
+    top: 30px;
     font-size: 0.6em;
 }
 </style>
+<script>
+export default {
+    data() {
+        return {
+            searchButtonIsVisible: true
+        }
+    },
+    methods: {
+        toggleSearch() {
+            this.searchButtonIsVisible ? this.searchButtonIsVisible = false : this.searchButtonIsVisible = true
+        }
+    }
+}
+</script>
