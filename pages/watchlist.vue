@@ -5,9 +5,9 @@
               <Navbar/>
             </v-col>
             <v-col xs="12" sm="10" md="6" lg="6">
-              <v-container fluid>
+              <v-container class="pt-0" fluid>
                 <v-row dense>
-                  <v-col cols='6' v-for="n in 4" :key="n">
+                  <v-col cols='6' v-for="n in 4" :key="n" class="pt-0">
                     <WatchCard/>
                   </v-col>
                 </v-row>

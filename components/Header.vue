@@ -23,7 +23,7 @@
                 ></v-text-field>
             </div>
             <v-spacer></v-spacer>
-            <v-toolbar-items class="mb-3">
+            <v-toolbar-items class="mb-3 pt-1">
                 <router-link to="/" class="social__router mr-7">
                     <v-btn icon>
                         <v-icon>mdi-apps</v-icon>
@@ -42,10 +42,10 @@
                         <span class="header__btn--label">Vyndue</span>
                     </v-btn>
                 </router-link>
-                <v-avatar size="38" class="pt-3">
+                <v-avatar size="38" class="pt-5">
                 <img
                 alt="Avatar"
-                src="test.jpg"
+                src="https://picsum.photos/500/300?image=15"
                 >
                 <v-icon
                 ></v-icon>

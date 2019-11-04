@@ -5,7 +5,7 @@
                 <v-list-item>
                     <router-link to="/user">
                         <v-list-item-avatar>
-                            <v-img src="test.jpg"></v-img>
+                            <v-img src="https://picsum.photos/500/300?image=15"></v-img>
                         </v-list-item-avatar>
                     </router-link>
 

@@ -197,9 +197,9 @@ export default {
   created(){   
       console.log('first')
       // mutations
-      // this.$store.commit('auth/SET_USER', { user_id:1, fullname:'Joses Gabriel Lu', profile:'test.jpg' });
+      // this.$store.commit('auth/SET_USER', { user_id:1, fullname:'Joses Gabriel Lu', profile:'https://picsum.photos/500/300?image=15' });
       // actions
-      this.$store.dispatch('auth/setUser', { user_id:1, fullname:'Joses Gabriel Lu', profile:'test.jpg' } );
+      this.$store.dispatch('auth/setUser', { user_id:1, fullname:'Joses Gabriel Lu', profile:'https://picsum.photos/500/300?image=15' } );
 
       // standard axios 
       this.$axios.$get(`${process.env.api_url}/api/social/posts/search`)

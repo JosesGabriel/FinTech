@@ -4,7 +4,7 @@
             <v-avatar size="38" class="postField__avatar">
                 <img
                 alt="Avatar"
-                src="test.jpg"
+                src="https://picsum.photos/500/300?image=15"
                 >
             </v-avatar>
             <div class="postField__textareaContainer">
