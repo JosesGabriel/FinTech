@@ -6,15 +6,15 @@ require('dotenv').config()
 export default {
   mode: 'spa',
   server: {
-    port: process.env.server_port, // default: 3000
-    host: process.env.server_host // default: localhost
+    port: process.env.SERVER_PORT, // default: 3000
+    host: process.env.SERVER_HOST // default: localhost
   },
   /*
   ** Headers of the page
   */
   head: {
-    titleTemplate: '%s - ' + process.env.app_title,
-    title: process.env.app_title || '',
+    titleTemplate: '%s - ' + process.env.APP_TITLE,
+    title: process.env.APP_TITLE || '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },

@@ -187,7 +187,7 @@ export default {
       return {
         bullCounter: 9,
         bearCounter: 2,
-        dark_theme_color: process.env.dark_theme_color,
+        dark_theme_color: process.env.DARK_THEME_COLOR,
         user: this.$store.getters['auth/user']
       }
   },
