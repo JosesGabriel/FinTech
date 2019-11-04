@@ -1,74 +1,73 @@
+import colors from "vuetify/es5/util/colors";
 
-import colors from 'vuetify/es5/util/colors'
-
-require('dotenv').config()
+require("dotenv").config();
 
 export default {
-  mode: 'spa',
+  mode: "spa",
   server: {
     port: process.env.SERVER_PORT, // default: 3000
     host: process.env.SERVER_HOST // default: localhost
   },
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
-    titleTemplate: '%s - ' + process.env.APP_TITLE,
-    title: process.env.APP_TITLE || '',
+    titleTemplate: "%s - " + process.env.APP_TITLE,
+    title: process.env.APP_TITLE || "",
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        hid: "description",
+        name: "description",
+        content: process.env.npm_package_description || ""
+      }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     script: [
-      { src: '/vendor/charting_library/charting_library.min.js', type: 'text/javascript'},
-      { src: '/vendor/datafeeds/udf/dist/polyfills.js', type: 'text/javascript'},
-      { src: '/vendor/datafeeds/udf/dist/bundle.js', type: 'text/javascript'},
-    ],
+      {
+        src: "/vendor/charting_library/charting_library.min.js",
+        type: "text/javascript"
+      },
+      {
+        src: "/vendor/datafeeds/udf/dist/polyfills.js",
+        type: "text/javascript"
+      },
+      { src: "/vendor/datafeeds/udf/dist/bundle.js", type: "text/javascript" }
+    ]
   },
   /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#142b46' },
+   ** Customize the progress-bar color
+   */
+  loading: { color: "#142b46" },
   /*
-  ** Global CSS
-  */
-  css: [
-    '@/assets/css/global.css'
-  ],
+   ** Global CSS
+   */
+  css: ["@/assets/css/global.css"],
   /*
-  ** Plugins to load before mounting the App
-  */
+   ** Plugins to load before mounting the App
+   */
   plugins: [
-    '~/plugins/bus',
-    { src: '~/plugins/tradingview', ssr: false },
+    "~/plugins/bus",
+    "~/plugins/repository",
+    { src: "~/plugins/tradingview", ssr: false }
   ],
   /*
-  ** Nuxt.js dev-modules
-  */
-  buildModules: [
-    '@nuxtjs/vuetify',
-  ],
+   ** Nuxt.js dev-modules
+   */
+  buildModules: ["@nuxtjs/vuetify"],
   /*
-  ** Nuxt.js modules
-  */
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/dotenv'
-  ],
+   ** Nuxt.js modules
+   */
+  modules: ["@nuxtjs/axios", "@nuxtjs/dotenv"],
 
-  axios: {
-
-  },
+  axios: {},
   /*
-  ** vuetify module configuration
-  ** https://github.com/nuxt-community/vuetify-module
-  */
+   ** vuetify module configuration
+   ** https://github.com/nuxt-community/vuetify-module
+   */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
     theme: {
       themes: {
         light: {
@@ -84,19 +83,19 @@ export default {
     }
   },
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
   build: {
     /*
-    ** You can extend webpack config here
-    */
-   extend(config, ctx) {
-    config.node = {
-      console: false,
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty'
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {
+      config.node = {
+        console: false,
+        fs: "empty",
+        net: "empty",
+        tls: "empty"
+      };
     }
-  },
   }
-}
+};

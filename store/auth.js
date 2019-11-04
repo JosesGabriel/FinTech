@@ -1,20 +1,19 @@
 export const state = () => ({
-    user: {},
+  user: {}
 });
 
 export const mutations = {
-    SET_USER (state, user){
-        state.user = user
-    }
-}
+  SET_USER(state, user) {
+    state.user = user;
+  }
+};
 
 export const actions = {
-    setUser ({ commit }, user){
-        commit('SET_USER', user)
-    }
-}
+  setUser({ commit }, user) {
+    commit("SET_USER", user);
+  }
+};
 
 export const getters = {
-    user: state => state.user
-}
-
+  user: state => state.user
+};

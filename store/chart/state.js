@@ -1,8 +1,8 @@
-export default () => ({  
-   ticker: true,
-   table: true,
-   tableMaximize: false,
-   tableFullscreen: false,
+export default () => ({
+  ticker: true,
+  table: true,
+  tableMaximize: false,
+  tableFullscreen: false,
 
-   sidebar: true
+  sidebar: true
 });
