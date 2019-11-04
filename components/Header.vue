@@ -3,7 +3,7 @@
         light
         color="#0c1f33"
         dark
-        dense
+        height="50"
         class="header__toolbar"
         >
         <div class="headerItems__wrapper">
@@ -23,22 +23,29 @@
                 ></v-text-field>
             </div>
             <v-spacer></v-spacer>
-            <v-toolbar-items>
-                <v-btn icon>
-                    <v-icon>mdi-apps</v-icon>
-                </v-btn>
-                <v-btn icon>
-                    <v-icon>mdi-bell</v-icon>
-                </v-btn>
-                <router-link to="/login" class="social__router">
+            <v-toolbar-items class="mb-3 pt-1">
+                <router-link to="/" class="social__router mr-7">
                     <v-btn icon>
-                        <v-icon>mdi-scatter-plot</v-icon>
+                        <v-icon>mdi-apps</v-icon>
+                        <span class="header__btn--label">Power Tools</span>
                     </v-btn>
                 </router-link>
-                <v-avatar size="38" class="pt-3">
+                <router-link to="/" class="social__router">
+                    <v-btn icon>
+                        <v-icon>mdi-bell</v-icon>
+                        <span class="header__btn--label">Notifications</span>
+                    </v-btn>
+                </router-link>
+                <router-link to="/login" class="social__router mx-3">
+                    <v-btn icon>
+                        <v-icon>mdi-scatter-plot</v-icon>
+                        <span class="header__btn--label">Vyndue</span>
+                    </v-btn>
+                </router-link>
+                <v-avatar size="38" class="pt-5">
                 <img
                 alt="Avatar"
-                src="test.jpg"
+                src="https://picsum.photos/500/300?image=15"
                 >
                 <v-icon
                 ></v-icon>
@@ -81,5 +88,10 @@
 }
 .headerItems__wrapper--margin-left {
     margin-left: 19vw;
+}
+.header__btn--label {
+    position: absolute;
+    top: 25px;
+    font-size: 0.6em;
 }
 </style>
