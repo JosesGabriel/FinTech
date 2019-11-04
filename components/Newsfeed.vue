@@ -54,39 +54,6 @@
       </v-list-item>
       <!-- End of Post Body -->
 
-      <<<<<<< HEAD
-      <!-- Start of Bull & Bear -->
-      <v-list-item class="pa-0 ma-0">
-        <v-list-item-content class="ma-0 pa-0">
-          <v-card-actions>
-            <v-btn icon outlined fab x-small color="green">
-              <v-icon>mdi-cow</v-icon>
-            </v-btn>
-            <span class="px-2">{{ bullCounter }}</span>
-            <v-btn icon outlined fab x-small color="red">
-              <v-icon>mdi-paw</v-icon>
-            </v-btn>
-            <span class="px-2">{{ bearCounter }}</span>
-            <v-spacer></v-spacer>
-            <v-btn small outlined>
-              <span>23 Shares</span>
-              <v-icon right>mdi-share-outline</v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-list-item-content>
-      </v-list-item>
-      <!-- End of Bull & Bear -->
-      =======
-      <v-img
-        src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
-        height="350"
-      ></v-img>
-      <v-list-item-content>
-        <span>Post ID: {{ id }} test push</span>
-        <span>User ID: {{ user_id }}</span>
-        <span>Post Content: {{ content }}</span>
-        <span>API Response: {{ message }}</span>
-      </v-list-item-content>
       <v-card-actions>
         <v-btn icon outlined fab x-small color="green">
           <v-icon>mdi-cow</v-icon>
@@ -95,9 +62,6 @@
           <v-icon>mdi-paw</v-icon>
         </v-btn>
       </v-card-actions>
-      <v-divider></v-divider>
-      >>>>>>> ed84311618e9e26fea3dd35c730b78c28b3d7261
-
       <v-divider></v-divider>
 
       <!-- Start of Comment -->
@@ -205,6 +169,7 @@
 </template>
 <script>
 export default {
+  name: "Newsfeed",
   data() {
     return {
       bullCounter: 9,
