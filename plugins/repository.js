@@ -1,6 +1,6 @@
 import createRepository from "~/api/repository";
-import chartRepository from "~/api/chartRepository";
-
+import stockRepository from "~/api/chart/stockRepository";
+import chartRepository from "~/api/chart/chartRepository";
 // import repository for case to case end point
 
 export default (ctx, inject) => {
@@ -12,10 +12,11 @@ export default (ctx, inject) => {
     social: {
       posts: initApiRepository("/social/posts")
     },
-    journal: {},
     chart: {
-      stocks: chartRepository(ctx.$axios)
+      stocks: stockRepository(ctx.$axios),
+      charts: chartRepository(ctx.$axios)
     },
+    journal: {},
     watcher: {},
     game: {}
   };

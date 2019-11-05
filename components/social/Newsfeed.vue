@@ -194,7 +194,13 @@ export default {
     });
   },
   mounted() {
-    console.log(this.$api.chart.stocks.index());
+    console.log("api");
+    console.log(this.$api);
+    const params = {
+      exchange: "PSE",
+      symbol: "TEL"
+    };
+    console.log(this.$api.chart.stocks.list(params));
 
     // standard axios
     /*
