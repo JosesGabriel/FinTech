@@ -5,10 +5,7 @@
         <nuxt />
       </v-container>
     </v-content>
-    <v-footer
-      app
-      color="transparent"
-    >
+    <v-footer app color="transparent">
       <span class="overline">Arbitrage &copy; 2019</span>
     </v-footer>
   </v-app>
@@ -24,19 +21,21 @@
 
 <script>
 export default {
-  data () {
-    return {
-      
-    }
+  data() {
+    return {};
   },
-  head () {
+  head() {
     return {
-      title: 'Arbitrage',
+      title: "Arbitrage",
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
+        {
+          hid: "description",
+          name: "description",
+          content: "My custom description"
+        }
       ]
-    }
+    };
   }
-}
+};
 </script>
