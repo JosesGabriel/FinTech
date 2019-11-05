@@ -67,8 +67,8 @@ export default {
     // listen to ticker toggle
     this.$bus.$on("adjustChartView", data => {
       this.chartView;
-      console.log(this.chartViewId);
-      console.log(this.chartViewClass);
+      //console.log(this.chartViewId);
+      //console.log(this.chartViewClass);
     });
 
     const widgetOptions = {
@@ -146,7 +146,7 @@ export default {
       type: String
     },
     containerId: {
-      default: "tv_chart_container",
+      default: "game_chart_container",
       type: String
     },
     datafeedUrl: {

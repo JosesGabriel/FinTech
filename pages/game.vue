@@ -1,11 +1,11 @@
 <template>
   <v-content>
-    <tv-chart-container></tv-chart-container>
+    <game-chart-container></game-chart-container>
   </v-content>
 </template>
 
 <script>
 export default {
-  layout: "chart"
+  layout: "game"
 };
 </script>

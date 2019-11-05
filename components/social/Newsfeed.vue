@@ -194,7 +194,16 @@ export default {
     });
   },
   mounted() {
+    console.log("api");
+    console.log(this.$api);
+    const params = {
+      exchange: "PSE",
+      symbol: "TEL"
+    };
+    console.log(this.$api.chart.stocks.list(params));
+
     // standard axios
+    /*
     const data = {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET
@@ -214,6 +223,7 @@ export default {
       console.log("new");
       console.log(res);
     });
+    */
   },
   methods: {},
   head() {

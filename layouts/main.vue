@@ -1,6 +1,9 @@
 <template>
   <v-app>
-    <v-content class="social__container">
+    <v-content
+      class="social__container"
+      :class="isLightMode == 1 ? 'lightMode' : ''"
+    >
       <rbHeader />
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
         <nuxt />
@@ -12,6 +15,9 @@
 .social__container {
   /* background-color: #fcfbfe; light mode color, add to vuex state soon */
   background-color: #00121E;
+}
+.lightMode {
+  background-color: #f2f2f2;
 }
 .header--rainbow {
   height: 4px;
@@ -31,6 +37,14 @@ import rbHeader from "~/components/Header";
 export default {
   components: {
     rbHeader
+  },
+  data() {
+    return {
+      isLightMode: 0
+    };
+  },
+  mounted() {
+    if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   }
 };
 </script>
