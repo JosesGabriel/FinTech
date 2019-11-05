@@ -1,21 +1,22 @@
 <template>
-    <v-col class="pa-0" cols="7" sm="7" md="7">
-        <v-card-title class="text-left justify-left px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
-            <h6 class="font-weight-regular subtitle-2" style="color:#fff;">MONTHLY PERFORMANCE</h6>
-            <v-spacer></v-spacer>
-            <router-link to="/" class="social__router">
+    <v-container class="pa-0">
+        <v-col class="pa-0" cols="12">
+            <v-card-title class="text-left justify-left mr-3 px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
+              <h6 class="font-weight-regular subtitle-2" style="color:#fff;">PERFORMANCE</h6>
+              <v-spacer></v-spacer>
+              <router-link to="/" class="social__router">
               <v-btn icon small> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
               </v-btn>
             </router-link>
-        </v-card-title>
-        <v-col class="pa-0" cols="12" sm="12" md="12">
-          <div id="chart">
-            <apexcharts type=bar height=300 width=90% :options="chartOptions" :series="series" />
-          </div>
+            </v-card-title>
         </v-col>
-    </v-col>
+        <div class="pt-3" id="chart">
+            <apexcharts type=bar height=300 :options="chartOptions" :series="series" />
+        </div>
+    </v-container>
 </template>
+
 <script>
   import VueApexCharts from 'vue-apexcharts'
   
@@ -27,27 +28,20 @@
       return {
         series: [{
           name: 'Loss',
-          data: [1,2,-3,-4,5,4,1,2,3,4,5,4]
+          data: [2,3,4,5,4]
         }],
         chartOptions: {
           colors: ['#00FFC3','#FF4848'],
           plotOptions: {
             bar: {
               horizontal: false,
-              columnWidth: '55%',
+              columnWidth: '35',
               endingShape: 'rounded',
               dropShadow: {
                   enabled: true,
                   left: 2,
                   top: 2,
                   opacity: 1
-              },
-              colors: {
-                ranges: [{
-                  from: -100,
-                  to: 0,
-                  color: '#F44336'
-                }]
               }
             },
           },
@@ -85,7 +79,7 @@
             borderColor: 'transparent',
           },
           xaxis: {
-            categories: ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            categories: ['Mon','Tue','Wed','Thu','Fri'],
             labels: {
               show: true,
               style: {
@@ -126,6 +120,19 @@
           fill: {
             opacity: 1
           },
+          title: {
+                text: 'By day of the week',
+                align: 'left',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: true,
+                style: {
+                    fontSize:  '14px',
+                    fontFamily: 'Karla',
+                    color:  '#b6b6b6'
+                },
+            },
           tooltip: {
             y: {
               show: false,

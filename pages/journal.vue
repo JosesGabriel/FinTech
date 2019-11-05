@@ -1,7 +1,7 @@
 <template>
-    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
+    <v-container class="index__container pt-0" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
         <v-row class="mb-6" no-gutters>
-            <v-col class="px-3 hidden-xs-and-down" cols="1" sm="1" md="1">
+            <v-col class="hidden-xs-and-down" cols="1" sm="1" md="1">
               <NavbarJournal/>
             </v-col>
             <v-col cols="11">
@@ -11,7 +11,7 @@
     </v-container>
 </template>
 <style scoped>
-    .socialWall__container {
+    .index__container {
         max-width: 1080px;
         margin-top: 40px;
     }

@@ -33,3 +33,22 @@
 .apexcharts-svg {
     /* overflow: visible !important; */
 }
+.v-window.v-item-group.theme--light.v-tabs-items {
+    background: none !important;
+}
+.v-slide-group__content.v-tabs-bar__content:before {
+    content: "";
+    width: 100%;
+    position: absolute;
+    bottom: -3px;
+    z-index: 1;
+    height: 4px;
+    background: #000;
+}
+.tab_menu-top:not(.v-tab--active):not(.v-tab--disabled) {
+    opacity: 1 !important;
+    color: #fff !important;
+}
+.navbarDrawer__card-journal .v-navigation-drawer__border {
+    background: #000 !important
+}

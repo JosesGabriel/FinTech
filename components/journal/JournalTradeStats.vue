@@ -1,31 +1,37 @@
 <template>
     <v-col class="pa-0 pl-10" cols="5" sm="5" md="5">
-        <v-card-title class="text-left justify-left px-0 py-3 pt-5">
-            <h6 class="font-weight-regular subtitle-2" style="color:#d8d8d8;">TRADE STATISTICS</h6>
+        <v-card-title class="text-left justify-left px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
+            <h6 class="font-weight-regular subtitle-2" style="color:#fff;">TRADE STATISTICS</h6>
+            <v-spacer></v-spacer>
+            <router-link to="/" class="social__router">
+              <v-btn icon small> 
+                  <img src="/icon/journal-icons/share-icon.svg" width="15">
+              </v-btn>
+            </router-link>
         </v-card-title>
         <v-row no-gutters>
-            <v-col class="pa-0" cols="12">
+            <v-col class="pa-0 pt-5" cols="12">
                 <div class="small">
-                    <apexcharts type=donut :options="chartOptions" :series="series"></apexcharts>
+                    <apexcharts type=donut height=245 :options="chartOptions" :series="series"></apexcharts>
                 </div>
             </v-col>
             <v-col class="pa-0" cols="12">
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
-                            <tr id="table_tr_snap-cont">
-                                <td id="table_td_snap-cont" class="px-1 py-1"><v-icon class="pr-1 caption" color="#00ffc3">mdi-circle</v-icon>Win</td>
-                                <td id="table_td_snap-cont" class="text-right px-1 py-1">{{ win }}</td>
+                            <tr>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#00ffc3">mdi-circle</v-icon>Win</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ win }}</td>
                                 
-                                <td id="table_td_snap-cont" class="px-1 py-1"><v-icon class="pr-1 caption" color="#FF4848">mdi-circle</v-icon>Loss</td>
-                                <td id="table_td_snap-cont" class="text-right px-1 py-1">{{ loss }}</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#FF4848">mdi-circle</v-icon>Loss</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ loss }}</td>
                             </tr>
-                            <tr id="table_tr_snap-cont">
-                                <td id="table_td_snap-cont" class="px-1 py-1">Total Trades</td>
-                                <td id="table_td_snap-cont" class="text-right px-1 py-1">{{ winlossresult }}</td>
+                            <tr>
+                                <td class="item_position-prop caption px-1 py-1">Total Trades</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ winlossresult }}</td>
                                 
-                                <td id="table_td_snap-cont" class="px-1 py-1">Win Rate</td>
-                                <td id="table_td_snap-cont" class="text-right px-1 py-1">{{ winrateresult }}%</td>
+                                <td class="item_position-prop caption px-1 py-1">Win Rate</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ winrateresult }}%</td>
                             </tr>
                         </tbody>
                     </template>
@@ -147,8 +153,15 @@
   }
 </script>
 
-<style>
-  .ts_chart-cont {
-    width: 100%;
-  }
+<style scoped>
+.ts_chart-cont {
+  width: 100%;
+}
+.theme--dark.v-data-table thead tr:last-child th,
+.theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
+  border: none;
+}
+.item_position-prop {
+  color: #b6b6b6
+}
 </style>

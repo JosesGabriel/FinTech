@@ -9,12 +9,12 @@
                     <template v-slot:default>
                         <tbody>
                             <tr id="table_tr_snap-cont">
-                                <td id="table_td_snap-cont" class="px-1 py-1"><v-icon class="pr-1 caption" color="#00ffc3">mdi-circle</v-icon>Winning Strategy</td>
-                                <td id="table_td_snap-cont" class="text-right px-1 py-1">Bottom Picking</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#00ffc3">mdi-circle</v-icon>Winning Strategy</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">Bottom Picking</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                                <td class="px-1 py-1"><v-icon class="pr-1 caption" color="#FF4848">mdi-circle</v-icon>Lossing Strategy</td>
-                                <td class="text-right px-1 py-1">Trend Following</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#FF4848">mdi-circle</v-icon>Lossing Strategy</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">Trend Following</td>
                             </tr>
                         </tbody>
                     </template>
@@ -126,3 +126,15 @@
     }
 }
 </script>
+<style scoped>
+.ts_chart-cont {
+  width: 100%;
+}
+.theme--dark.v-data-table thead tr:last-child th,
+.theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
+  border: none;
+}
+.item_position-prop {
+  color: #b6b6b6
+}
+</style>

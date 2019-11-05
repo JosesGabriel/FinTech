@@ -1,33 +1,49 @@
 <template>
-    <v-col class="pa-0">
-        <div id="chart">
-            <apexcharts type=bar height=200 :options="chartOptions" :series="series" />
-        </div>
-        <v-simple-table :dense="true" dark id="liveportfolio-table">
-            <template v-slot:default>
-            <thead>
-                <tr>
-                <th class="item_position-prop white--text caption text-left px-1">Strategy</th>
-                <th class="item_position-prop white--text caption text-right px-1">Trades</th>
-                <th class="item_position-prop white--text caption text-right px-1">Wins</th>
-                <th class="item_position-prop white--text caption text-right px-1">Losses</th>
-                <th class="item_position-prop white--text caption text-right px-1">Win Rate</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in strategy" :key="item.stocks" id="table_tr_port-cont">
-                <td class="item_position-prop caption px-1 py-1">{{ item.stats }}</td>
-                <td class="item_position-prop caption text-right px-1 py-0">{{ item.trades }}</td>
-                <td class="item_position-prop caption text-right px-1 py-0">{{ item.wins }}</td>
-                <td class="item_position-prop caption text-right px-1 py-0">{{ item.losses }}</td>
-                <td class="item_position-prop caption text-right px-1 py-0">{{ item.winrate }}</td>
-                
-                </tr>
-            </tbody>
-            </template>
-        </v-simple-table>
-    </v-col>
+    <v-row no-gutters>
+        <v-col cols="12">
+            <v-card-title class="text-left justify-left px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
+                <h6 class="font-weight-regular subtitle-2" style="color:#fff;">EMOTIONAL STATISTICS</h6>
+                <v-spacer></v-spacer>
+                <router-link to="/" class="social__router">
+                <v-btn icon small> 
+                    <img src="/icon/journal-icons/share-icon.svg" width="15">
+                </v-btn>
+                </router-link>
+            </v-card-title>
+        </v-col>
+        <v-col class="pa-0" cols="6" sm="6" md="6">
+            <div id="chart">
+                <apexcharts type=bar height=200 :options="chartOptions" :series="series" />
+            </div>
+        </v-col>
+        <v-col class="pa-0 pt-3" cols="6" sm="6" md="6">
+            <v-simple-table :dense="true" dark id="liveportfolio-table">
+                <template v-slot:default>
+                <thead>
+                    <tr>
+                    <th class="item_caption white--text text-left px-1">Emotions</th>
+                    <th class="item_caption white--text text-right px-1">Trade</th>
+                    <th class="item_caption white--text text-right px-1">Wins</th>
+                    <th class="item_caption white--text text-right px-1">Losses</th>
+                    <th class="item_caption white--text text-right px-1">Win Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in emo" :key="item.stats" id="table_tr_port-cont">
+                    <td class="item_position-prop caption px-1 py-2">{{ item.stats }}</td>
+                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.trades }}</td>
+                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.wins }}</td>
+                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.losses }}</td>
+                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.winrate }}</td>
+                    
+                    </tr>
+                </tbody>
+                </template>
+            </v-simple-table>
+        </v-col>
+    </v-row>
 </template>
+
 
 <script>
 
@@ -39,36 +55,24 @@ export default {
     },
     data () {
         return {
-            strategy: [
+            emo: [
                 {
-                stats: 'Bottom Picking',
-                trades: 10,
-                wins: 7,
-                losses: 3,
+                stats: 'Neutral',
+                trades: 1,
+                wins: 1,
+                losses: 0,
+                winrate: '100.00%',
+                },{
+                stats: 'Greedy',
+                trades: 0,
+                wins: 0,
+                losses: 0,
                 winrate: '70.00%',
                 },{
-                stats: 'Breakout Play',
-                trades: 10,
-                wins: 7,
-                losses: 3,
-                winrate: '70.00%',
-                },{
-                stats: 'Trend Following',
-                trades: 10,
-                wins: 7,
-                losses: 3,
-                winrate: '70.00%',
-                },{
-                stats: '1-2-3 Reversal',
-                trades: 10,
-                wins: 7,
-                losses: 3,
-                winrate: '70.00%',
-                },{
-                stats: 'First Hour Breakout',
-                trades: 10,
-                wins: 7,
-                losses: 3,
+                stats: 'Fearful',
+                trades: 0,
+                wins: 0,
+                losses: 0,
                 winrate: '70.00%',
                 }
             ],
@@ -83,7 +87,7 @@ export default {
                 plotOptions: {
                     bar: {
                         horizontal: true,
-                        barHeight: '50',
+                        barHeight: '40',
                         endingShape: 'rounded',
                         dropShadow: {
                             enabled: true,
@@ -114,7 +118,7 @@ export default {
                 },
                 grid: {
                     show: false,
-                    borderColor: '#b6b6b6',
+                    borderColor: '#17314B',
                     xaxis: {
                         lines: {
                             show: false
@@ -132,13 +136,13 @@ export default {
                 },
                 xaxis: {
                     show: true,
-                    categories: ['Bottom Picking', 'Breakout Play', 'Trend Following'],
+                    categories: ['Neutral', 'Greedy', 'Fearful'],
                     labels: {
                         show: false,
                         style: {
                             colors: '#b6b6b6',
                             fontSize: '12px',
-                            fontFamily: 'Karla',
+                            fontFamily: "'Karla'",
                             cssClass: 'apexcharts-xaxis-label',
                         }
                     },
@@ -162,7 +166,7 @@ export default {
                             fontFamily: 'Karla',
                             cssClass: 'apexcharts-yaxis-label',
                         },
-                        offsetX: 105,
+                        offsetX: 60,
                         offsetY: -20
                     },
                     axisTicks: {

@@ -11,7 +11,7 @@
 <style>
 .social__container {
   /* background-color: #fcfbfe; light mode color, add to vuex state soon */
-  background-color: #0c1f33;
+  background-color: #00121E;
 }
 .header--rainbow {
   height: 4px;

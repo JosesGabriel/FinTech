@@ -1,10 +1,12 @@
 <template>
     <v-toolbar
         light
-        color="#0c1f33"
+        color="#00121E"
         dark
         height="54"
         class="header__toolbar"
+        style="border-bottom: 1px solid #000"
+        elevation="0"
         >
         <div class="headerItems__wrapper">
             <router-link to="/">

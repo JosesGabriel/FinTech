@@ -1,23 +1,29 @@
 <template>
     <v-col class="pa-0" cols="8" sm="8" md="8">
-        <v-card-title class="text-left justify-left px-0 py-3 pt-5">
-            <h6 class="font-weight-regular subtitle-2" style="color:#d8d8d8;">CURRENT ALLOCATION</h6>
+        <v-card-title class="text-left justify-left mx-3 px-0 pb-2 pt-5" style="border-bottom: 1px solid #000">
+            <h6 class="font-weight-regular white--text subtitle-2" style="color:#fff;">CURRENT ALLOCATION</h6>
+            <v-spacer></v-spacer>
+            <router-link to="/" class="social__router">
+              <v-btn icon small> 
+                  <img src="/icon/journal-icons/share-icon.svg" width="15">
+              </v-btn>
+            </router-link>
         </v-card-title>
         <v-row no-gutters>
-            <v-col class="pa-0 px-5" cols="6" sm="6" md="6">
+            <v-col class="pa-0 pt-3 px-5" cols="6" sm="6" md="6">
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
                             <tr v-for="item in allodata" :key="item.stocks" id="table_tr_snap-cont">
                             <v-icon class="pa-1 caption" :style="{ 'color': item.bulletcolor}">mdi-circle</v-icon>
-                            <td id="table_td_snap-cont" class="px-1 py-1">{{ item.stocks }}</td>
-                            <td id="table_td_snap-cont" class="text-right px-1 py-1">{{ item.position }}</td>
+                            <td class="item_position-prop caption px-1 py-1">{{ item.stocks }}</td>
+                            <td class="item_position-prop caption text-right px-1 py-1">{{ item.position }}</td>
                             </tr>
                         </tbody>
                     </template>
                 </v-simple-table>
             </v-col>
-            <v-col class="pa-0" cols="6" sm="6" md="6">
+            <v-col class="pa-0 pt-5" cols="6" sm="6" md="6">
                 <div class="small">
                     <apexcharts width="280" height="280" type="donut" :options="chartOptions" :series="series"></apexcharts>
                 </div>
@@ -90,13 +96,6 @@
             show: false
           },
           chart: {
-            // dropShadow: {
-            //   enabled: true,
-            //   opacity: 0.1,
-            //   blur: 2,
-            //   left: 3,
-            //   top: 3
-            // },
           },
           stroke: {
             show: false,
@@ -134,7 +133,35 @@
           plotOptions: {
             pie: {
               donut: {
-                size: '55%'
+                size: '55%',
+                background: 'transparent',
+                labels: {
+                  show: true,
+                  name: {
+                    show: true,
+                    fontSize: '12px',
+                    fontFamily: 'Karla',
+                    color: "#d8d8d8",
+                    offsetY: -5
+                  },
+                  value: {
+                    show: true,
+                    fontSize: '12px',
+                    fontFamily: 'Karla',
+                    color: "#d8d8d8",
+                    offsetY: -5,
+                    formatter: function (val) {
+                      return val + ".00"
+                    }
+                  },
+                  total: {
+                    show: true,
+                    label: 'Total Allocation',
+                    fontSize: '12px',
+                    fontFamily: 'Karla',
+                    color: '#d8d8d8',
+                  }
+                }
               }
             }
           },
@@ -174,8 +201,15 @@
   }
 </script>
 
-<style>
+<style scoped>
   .small {
     width: 100%;
   }
+  .theme--dark.v-data-table thead tr:last-child th,
+  .theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
+    border: none;
+  }
+  .item_position-prop {
+    color: #b6b6b6
+}
 </style>
