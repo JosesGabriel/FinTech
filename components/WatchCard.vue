@@ -99,7 +99,7 @@ export default {
         vAxis: {
           gridlines: {color:'#37474f', count:1}
         },
-        colors: ["#48ffd5"],
+        colors: ["#fff"],
         areaOpacity: 0.2,
         lineWidth: 1,
         backgroundColor: 'transparent',

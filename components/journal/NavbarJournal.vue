@@ -1,6 +1,6 @@
 <template>
     <v-card class="navbar__card" flat color="#0c1f33">
-        <v-list nav dense rounded color="transparent">
+        <v-list nav dense rounded color="transparent" class="px-0">
             <v-list-item-group>
                 <router-link to="/user">
                     <v-list-item-avatar>

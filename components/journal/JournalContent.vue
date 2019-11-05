@@ -18,8 +18,15 @@
             <JournalCurrentAllocation/>
         </v-row>
         <v-row no-gutters>
+            <JournalEquityCurve/>
+        </v-row>
+        <v-row no-gutters>
             <JournalMonthlyPerfomance/>
             <JournalTradeStats/>
+        </v-row>
+        <JournalStrategyStats/>
+        <v-row no-gutters>
+            <!-- <JournalTopStocks/> -->
         </v-row>
             <!-- <ChartTesting/> -->
     </v-col>
@@ -30,6 +37,9 @@ import JournalPortfolioSnapshot from '~/components/journal/JournalPortfolioSnaps
 import JournalCurrentAllocation from '~/components/journal/JournalCurrentAllocation'
 import JournalMonthlyPerfomance from '~/components/journal/JournalMonthlyPerfomance'
 import JournalTradeStats from '~/components/journal/JournalTradeStats'
+import JournalEquityCurve from '~/components/journal/JournalEquityCurve'
+import JournalStrategyStats from '~/components/journal/JournalStrategyStats'
+// import JournalTopStocks from '~/components/journal/JournalTopStocks'
 // import ChartTesting from '~/components/journal/ChartTesting'
 
 export default {
@@ -40,6 +50,9 @@ export default {
       JournalCurrentAllocation,
       JournalMonthlyPerfomance,
       JournalTradeStats,
+      JournalEquityCurve,
+      JournalStrategyStats,
+    //   JournalTopStocks,
     //   ChartTesting
   }
 }

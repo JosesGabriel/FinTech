@@ -1,15 +1,15 @@
 <template>
-    <v-col class="pa-0 pl-10" cols="4" sm="4" md="4">
+    <v-col class="pa-0 pl-10" cols="5" sm="5" md="5">
         <v-card-title class="text-left justify-left px-0 py-3 pt-5">
             <h6 class="font-weight-regular subtitle-2" style="color:#d8d8d8;">TRADE STATISTICS</h6>
         </v-card-title>
         <v-row no-gutters>
-            <v-col class="pa-0">
-                <div class="ts_chart-cont">
-                    <chart-chart :chart-data="datacollection"></chart-chart>
+            <v-col class="pa-0" cols="12">
+                <div class="small">
+                    <apexcharts type=donut :options="chartOptions" :series="series"></apexcharts>
                 </div>
             </v-col>
-            <v-col class="pa-0">
+            <v-col class="pa-0" cols="12">
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
@@ -36,22 +36,105 @@
 </template>
 
 <script>
-  import ChartChart from '~/assets/js/journal/TradeStats.js'
+  import VueApexCharts from 'vue-apexcharts'
 
   export default {
     components: {
-      ChartChart
+      apexcharts: VueApexCharts,
     },
     data () {
-      return {
-        datacollection: {},
+        return {        
         win: 7,
         loss: 3,
         result: 3,
+        series: [7,3],
+        chartOptions: {
+          chart: {
+                dropShadow: {
+                    enabled: true,
+                    opacity: 0.1,
+                    blur: 2,
+                    left: 3,
+                    top: 3
+                },
+          },
+          labels: ['Win', 'Loss'],
+          colors: ['#00FFC3','#FF4848'],
+          legend: {
+            show: false
+          },
+          stroke: {
+            show: false,
+            curve: 'smooth',
+            lineCap: 'butt',
+            colors: undefined,
+            width: 1,
+            dashArray: 0, 
+          },
+          grid: {
+            padding: {
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0
+            }
+          },
+          value: {
+            show: false
+          },
+          responsive: [{
+            breakpoint: 450,
+            options: {
+              chart: {
+                width: 200
+              },
+              legend: {
+                position: 'left'
+              }
+            }
+          }],
+          dataLabels: {
+            enabled: false,
+          },
+          plotOptions: {
+            pie: {
+              donut: {
+                size: '55%'
+              }
+            }
+          },
+          tooltip: {
+            enabled: true,
+            enabledOnSeries: undefined,
+            shared: true,
+            followCursor: false,
+            intersect: false,
+            inverseOrder: false,
+            custom: undefined,
+            colors: '#00FFC3',
+            theme: true,
+            style: {
+              fontSize: '12px',
+              fontFamily: "'Karla', sans-serif",
+            },
+            fixed: {
+              enabled: false,
+              position: 'topRight',
+              offsetX: 0,
+              offsetY: 0,
+            },
+          },
+          dropShadow: {
+            enabled: false,
+            enabledOnSeries: undefined,
+            top: 0,
+            left: 0,
+            blur: 20,
+            color: '#fff',
+            opacity: 0.9
+          }
+        }
       }
-    },
-    mounted () {
-        this.fillData()
     },
     computed: {
         winlossresult: function() {
@@ -60,26 +143,6 @@
         winrateresult: function() {
             return ((this.win * 100) / this.result).toFixed(0)
         }
-    },
-    methods: {
-        fillData () {
-        this.datacollection = {
-            datasets: [
-                {   
-                    label: 'Data One',
-                    backgroundColor: [
-                        '#48FFD5',
-                        '#FF4848',
-                    ],
-                    borderColor: 'transparent',
-                    data: [60,40]
-                }
-                ]
-            }
-        }
-    },
-    options: {
-        
     }
   }
 </script>

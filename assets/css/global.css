@@ -26,3 +26,10 @@
 #table_head_tr_snap-cont {
     border: none;
 }
+.apexcharts-tooltip-series-group {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+.apexcharts-svg {
+    /* overflow: visible !important; */
+}

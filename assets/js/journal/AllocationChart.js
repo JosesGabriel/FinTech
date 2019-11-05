@@ -1,13 +1,21 @@
-import { Doughnut, mixins } from 'vue-chartjs'
-const { reactiveProp } = mixins
+import VueApexCharts from 'vue-apexcharts'
 
+Vue.component('apexchart', VueApexCharts)
 export default {
-  extends: Doughnut,
-  mixins: [reactiveProp],
-  props: ['options'],
-  mounted () {
-    // this.chartData is created in the mixin.
-    // If you want to pass options please create a local options object
-    this.renderChart(this.chartData, this.options)
+  data: function() {
+    return {
+      options: {
+        chart: {
+          id: 'vuechart-example'
+        },
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+        }
+      },
+      series: [{
+        name: 'series-1',
+        data: [30, 40, 45, 50, 49, 60, 70, 91]
+      }]
+    }
   }
 }

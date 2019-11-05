@@ -7,7 +7,6 @@ export default {
   data() {
       return {
           options: { //Chart.js options
-              cornerRadius: 20,
               scales: {
                   yAxes: [{
                       ticks: {

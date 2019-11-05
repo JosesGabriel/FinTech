@@ -1,12 +1,12 @@
 <template>
-  <line-chart :chart-data="datacollection"></line-chart>
+  <custom-bar :chart-data="datacollection"></custom-bar>
 </template>
 <script>
-import lineChart from "~/assets/js/journal/ChartTesting.js"
+import CustomBar from "~/assets/js/journal/ChartTesting.js"
 
 export default {
   components: {
-    lineChart
+    CustomBar
   },
   data() {
     return {
@@ -19,28 +19,14 @@ export default {
   methods: {
     fillData() {
       this.datacollection = {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December"
-        ],
+        labels: ["January", "February", "March", "April", "May", "June"],
         datasets: [
-          {
-            // label: "GitHub Commits",
-            backgroundColor: "#f87979",
-            data: [70, 20, 12, 39, 100, 40, 95, 80, 80, 20, 12, 101]
-          }
+            {
+                backgroundColor: "#00FFC3",
+                data: [60, 80, 81, 56, 55, 40]
+            }
         ]
-      };
+      }
     },
   }
 };
