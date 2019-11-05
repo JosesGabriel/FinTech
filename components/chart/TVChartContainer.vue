@@ -46,25 +46,22 @@ export default {
       if (this.maximize_table) {
         switch (this.chartViewId) {
           case 1:
+            this.chartViewId = 5;
             this.chartViewClass = "chartViewClass_5";
             break;
 
           case 2:
+            this.chartViewId = 6;
             this.chartViewClass = "chartViewClass_6";
             break;
         }
       }
 
-      if (this.fullscreen_table) {
-        switch (this.chartViewId) {
-          case 1:
-            this.chartViewClass = "chartViewClass_7";
-            break;
+      //   console.log(this.fullscreen_table);
 
-          case 2:
-            this.chartViewClass = "chartViewClass_8";
-            break;
-        }
+      if (this.fullscreen_table) {
+        this.chartViewId = 7;
+        this.chartViewClass = "chartViewClass_7";
       }
     }
   },
@@ -216,19 +213,15 @@ export default {
 
 .chartViewClass_5 {
   /* maximize open ticker */
-  height: calc(100vh - 452px);
+  height: calc(100vh - 502px);
 }
 .chartViewClass_6 {
   /* maximize close ticker */
-  height: calc(100vh - 502px);
+  height: calc(100vh - 452px);
 }
 
 .chartViewClass_7 {
-  /* maximize open ticker */
-  height: calc(100vh - 452px);
-}
-.chartViewClass_8 {
-  /* maximize close ticker */
-  height: calc(100vh - 502px);
+  /* maximize table */
+  height: 0;
 }
 </style>

@@ -31,7 +31,7 @@
               <v-content
                 v-show="table"
                 class="table__container"
-                :class="{ maximize: maximize }"
+                :class="tableStyle"
               >
                 <h1 align="center">Table</h1>
               </v-content>
@@ -44,23 +44,36 @@
           <v-btn color="pink" class="mr-1" dark @click="toggleTicker"
             >Ticker</v-btn
           >
-          <v-btn color="orange" class="mr-1" dark @click="toggleTable"
+          <v-btn
+            color="orange"
+            :disabled="fullscreen"
+            class="mr-1"
+            dark
+            @click="toggleTable"
             >Table</v-btn
           >
           <v-btn
             :disabled="!table"
             color="orange"
             class="mr-1"
-            @click="maximizeTable"
             dark
             fab
             small
+            @click="maximizeTable"
           >
             <v-icon>mdi-eject</v-icon>
           </v-btn>
-          <!-- <v-btn @click="fullscreenTable" :disabled="!table" color="orange" class="mr-1" dark fab small>
-                        <v-icon>mdi-fullscreen</v-icon>
-                    </v-btn> -->
+          <v-btn
+            :disabled="!table"
+            color="orange"
+            class="mr-1"
+            dark
+            fab
+            small
+            @click="fullscreenTable"
+          >
+            <v-icon>mdi-fullscreen</v-icon>
+          </v-btn>
           <v-btn color="blue" dark @click="toggleSidebar">Sidebar</v-btn>
         </div>
       </v-col>
@@ -101,6 +114,13 @@ export default {
     showSidebar: function() {
       return this.sidebar ? "col-9" : "col-12";
     },
+    tableStyle: function() {
+      return {
+        maximizeStyle: this.maximize,
+        fullscreen_tickeropen: this.ticker && this.fullscreen,
+        fullscreen_tickerclose: !this.ticker && this.fullscreen
+      };
+    },
     disableHideTable: function() {
       return this.maximize || this.fullscreen;
     }
@@ -126,6 +146,8 @@ export default {
     maximizeTable: function() {
       // table must be visible
       if (!this.table) return;
+      this.setTableFullscreen(false);
+
       const maximize = !this.maximize;
       this.setTableMaximize(maximize);
       this.$bus.$emit("adjustChartView");
@@ -133,6 +155,8 @@ export default {
     fullscreenTable: function() {
       // table must be visible
       if (!this.table) return;
+      this.setTableMaximize(false);
+
       const fullscreen = !this.fullscreen;
       this.setTableFullscreen(fullscreen);
       this.$bus.$emit("adjustChartView");
@@ -170,12 +194,18 @@ export default {
   height: 50px;
   background: orange;
 }
-.maximize {
+
+.maximizeStyle {
   height: 400px;
 }
-.fullscreen {
-  height: 400px;
+
+.fullscreen_tickeropen {
+  height: calc(100vh - 100px);
 }
+.fullscreen_tickerclose {
+  height: calc(100vh - 50px);
+}
+
 .spacer__content {
   height: 52px;
 }
