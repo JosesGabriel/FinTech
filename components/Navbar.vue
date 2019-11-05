@@ -5,7 +5,8 @@
       mobile-break-point
       :mini-variant="$vuetify.breakpoint.mdAndDown"
       class="navbarDrawer__card"
-      dark
+      :class="isLightMode == 1 ? 'lightMode' : ''"
+      :dark="darkText"
       color="transparent"
     >
       <v-list>
@@ -172,3 +173,25 @@
   text-decoration: none;
 }
 </style>
+<script>
+export default {
+  layout: "main",
+  data() {
+    return {
+      isLightMode: 0,
+      darkText: false
+    };
+  },
+  mounted() {
+    if (localStorage.currentMode) {
+      this.isLightMode = localStorage.currentMode;
+      localStorage.currentMode == 0
+        ? (this.darkText = true)
+        : (this.darkText = false);
+    } else {
+      localStorage.currentMode = 0;
+      this.darkText = true;
+    }
+  }
+};
+</script>

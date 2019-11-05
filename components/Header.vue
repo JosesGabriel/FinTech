@@ -1,10 +1,17 @@
 <template>
-  <v-toolbar light color="#0c1f33" dark height="54" class="header__toolbar">
+  <v-toolbar
+    :light="isLightMode == 1 ? true : false"
+    height="54"
+    class="header__toolbar"
+    :class="isLightMode == 1 ? 'lightMode' : ''"
+  >
     <div class="headerItems__wrapper">
       <router-link to="/">
         <img src="logo.png" alt="" width="45" height="45" />
       </router-link>
-
+      <v-btn icon @click="paletteSwitch()">
+        <v-icon color="yellow">mdi-theme-light-dark</v-icon>
+      </v-btn>
       <v-spacer></v-spacer>
       <transition name="fade">
         <div
@@ -93,6 +100,10 @@
   position: fixed;
   width: 100%;
   z-index: 100;
+  background-color: #0c1f33;
+}
+.lightMode {
+  background-color: #f2f2f2;
 }
 .headerItems__wrapper {
   display: flex;
@@ -101,7 +112,7 @@
   z-index: 0;
   width: 100%;
   margin: 0 auto;
-  /* max-width: 1023px; */
+  max-width: 1023px;
 }
 .headerItems__wrapper--margin-left {
   margin-left: 19vw;
@@ -116,14 +127,27 @@
 export default {
   data() {
     return {
-      searchButtonIsVisible: true
+      searchButtonIsVisible: true,
+      isLightMode: 0
     };
+  },
+  mounted() {
+    if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
     toggleSearch() {
       this.searchButtonIsVisible
         ? (this.searchButtonIsVisible = false)
         : (this.searchButtonIsVisible = true);
+    },
+    paletteSwitch() {
+      if (localStorage.currentMode && localStorage.currentMode == 0) {
+        localStorage.currentMode = 1;
+        this.isLightMode = 1;
+      } else {
+        localStorage.currentMode = 0;
+        this.isLightMode = 0;
+      }
     }
   }
 };
