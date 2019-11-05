@@ -31,14 +31,12 @@
         <v-list-item-group>
           <router-link to="/" class="navbar__links">
             <v-list-item>
-              <v-list-item-icon class="mr-4"
-                >
+              <v-list-item-icon class="mr-4">
                 <!-- <v-icon color="#dc8607"
                   >mdi-vector-square</v-icon
                 > -->
-                <img src="/icon/navbar-icons/social.svg" width="20">
-                </v-list-item-icon
-              >
+                <img src="/icon/navbar-icons/social.svg" width="20" />
+              </v-list-item-icon>
               <v-list-item-content
                 ><v-list-item-title
                   >Social Wall</v-list-item-title
@@ -52,9 +50,8 @@
                 <!-- <v-icon color="#bfb538"
                   >mdi-chart-bar</v-icon
                 > -->
-                <img src="/icon/navbar-icons/chart.svg" width="20">
-                </v-list-item-icon
-              >
+                <img src="/icon/navbar-icons/chart.svg" width="20" />
+              </v-list-item-icon>
               <v-list-item-content
                 ><v-list-item-title
                   >Interactive Chart</v-list-item-title
@@ -65,14 +62,10 @@
 
           <router-link to="/journal" class="navbar__links">
             <v-list-item>
-              <v-list-item-icon class="mr-4"
-                >
-                <v-icon color="#ababab"
-                  >mdi-library-books</v-icon
-                >
+              <v-list-item-icon class="mr-4">
+                <v-icon color="#ababab">mdi-library-books</v-icon>
                 <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
-                </v-list-item-icon
-              >
+              </v-list-item-icon>
               <v-list-item-content
                 ><v-list-item-title
                   >Trading Journal</v-list-item-title
@@ -110,14 +103,12 @@
 
           <router-link to="/vyndue" class="navbar__links">
             <v-list-item>
-              <v-list-item-icon class="mr-4"
-                >
+              <v-list-item-icon class="mr-4">
                 <!-- <v-icon color="#e01d61"
                   >mdi-alpha-v-circle-outline</v-icon
                 > -->
-                <img src="/icon/navbar-icons/vyndue.svg" width="20">
-                </v-list-item-icon
-              >
+                <img src="/icon/navbar-icons/vyndue.svg" width="20" />
+              </v-list-item-icon>
               <v-list-item-content
                 ><v-list-item-title
                   >Vyndue</v-list-item-title

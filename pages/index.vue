@@ -1,69 +1,83 @@
 <template>
-    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}" dark>
-        <v-row class="mb-5" no-gutters>
-            <v-col class="navbar__container hidden-xs-only px-3" cols="3" sm="2" md="3" lg="3">
-              <Navbar/>
-            </v-col>
-            <v-col xs="12" sm="10" md="6" lg="6">
-              <PostField class="mb-3"/>
-              <Newsfeed/>
-            </v-col>
-            <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
-                <TrendingStocks/>
-                <WhoToMingle/>
-                <FooterSidebar/>
-            </v-col>
-        </v-row>
-    </v-container>
+  <v-container
+    class="socialWall__container"
+    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+    dark
+  >
+    <v-row class="mb-5" no-gutters>
+      <v-col
+        class="navbar__container hidden-xs-only px-3"
+        cols="3"
+        sm="2"
+        md="3"
+        lg="3"
+      >
+        <Navbar />
+      </v-col>
+      <v-col xs="12" sm="10" md="6" lg="6">
+        <PostField class="mb-3" />
+        <Newsfeed />
+      </v-col>
+      <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
+        <TrendingStocks />
+        <WhoToMingle />
+        <FooterSidebar />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <style scoped>
-    .socialWall__container {
-        max-width: 1080px;
-        margin-top: 40px;
-    }
+.socialWall__container {
+  max-width: 1080px;
+  margin-top: 40px;
+}
 </style>
 <script>
-import Navbar from '~/components/Navbar'
-import Newsfeed from '~/components/Newsfeed'
-import TrendingStocks from '~/components/TrendingStocks.vue'
-import WhoToMingle from '~/components/WhoToMingle.vue'
-import FooterSidebar from '~/components/FooterSidebar.vue'
-import PostField from '~/components/PostField.vue'
-import axios from '~/node_modules/axios'
+import Navbar from "~/components/Navbar";
+import Newsfeed from "~/components/social/Newsfeed";
+import TrendingStocks from "~/components/TrendingStocks";
+import WhoToMingle from "~/components/WhoToMingle";
+import FooterSidebar from "~/components/FooterSidebar";
+import PostField from "~/components/social/PostField";
+import axios from "~/node_modules/axios";
 
 export default {
-  layout: 'main',
+  layout: "main",
   components: {
-      Navbar,
-      Newsfeed,
-      TrendingStocks,
-      WhoToMingle,
-      FooterSidebar,
-      PostField
+    Navbar,
+    Newsfeed,
+    TrendingStocks,
+    WhoToMingle,
+    FooterSidebar,
+    PostField
   },
   data() {
-      return {
-          isOpen: true,
-      }
+    return {
+      isOpen: true
+    };
   },
   mounted() {
     axios
-      .get('https://dev-api.arbitrage.ph/api/social/posts/33937358302875648')
-      .then(response => (this.info = response.data))
+      .get("https://dev-api.arbitrage.ph/api/social/posts/33937358302875648")
+      .then(response => (this.info = response.data));
   },
   methods: {
-    toggle: function(){
-        this.isOpen = !this.isOpen
+    toggle: function() {
+      this.isOpen = !this.isOpen;
     }
   },
-  head () {
+  head() {
     return {
-      title: 'Arbitrage',
+      title: "Arbitrage",
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
+        {
+          hid: "description",
+          name: "description",
+          content: "My custom description"
+        }
       ]
-    }
+    };
   }
-}
+};
 </script>
