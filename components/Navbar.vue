@@ -32,9 +32,12 @@
           <router-link to="/" class="navbar__links">
             <v-list-item>
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#dc8607"
+                >
+                <!-- <v-icon color="#dc8607"
                   >mdi-vector-square</v-icon
-                ></v-list-item-icon
+                > -->
+                <img src="/icon/navbar-icons/social.svg" width="20">
+                </v-list-item-icon
               >
               <v-list-item-content
                 ><v-list-item-title
@@ -45,10 +48,12 @@
           </router-link>
           <router-link to="/chart" class="navbar__links">
             <v-list-item>
-              <v-list-item-icon class="mr-4"
-                ><v-icon color="#bfb538"
+              <v-list-item-icon class="mr-4">
+                <!-- <v-icon color="#bfb538"
                   >mdi-chart-bar</v-icon
-                ></v-list-item-icon
+                > -->
+                <img src="/icon/navbar-icons/chart.svg" width="20">
+                </v-list-item-icon
               >
               <v-list-item-content
                 ><v-list-item-title
@@ -61,9 +66,12 @@
           <router-link to="/journal" class="navbar__links">
             <v-list-item>
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#367e45"
+                >
+                <v-icon color="#ababab"
                   >mdi-library-books</v-icon
-                ></v-list-item-icon
+                >
+                <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
+                </v-list-item-icon
               >
               <v-list-item-content
                 ><v-list-item-title
@@ -76,7 +84,7 @@
           <router-link to="/watchlist" class="navbar__links">
             <v-list-item>
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#1a71b8"
+                ><v-icon color="#ababab"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
@@ -90,7 +98,7 @@
           <router-link to="/game" class="navbar__links">
             <v-list-item>
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#9126a7">mdi-gamepad</v-icon></v-list-item-icon
+                ><v-icon color="#ababab">mdi-gamepad</v-icon></v-list-item-icon
               >
               <v-list-item-content
                 ><v-list-item-title
@@ -103,9 +111,12 @@
           <router-link to="/vyndue" class="navbar__links">
             <v-list-item>
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#e01d61"
+                >
+                <!-- <v-icon color="#e01d61"
                   >mdi-alpha-v-circle-outline</v-icon
-                ></v-list-item-icon
+                > -->
+                <img src="/icon/navbar-icons/vyndue.svg" width="20">
+                </v-list-item-icon
               >
               <v-list-item-content
                 ><v-list-item-title
