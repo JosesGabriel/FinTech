@@ -94,6 +94,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+// import Header from "~/components/parts/Header";
 import Header from "~/components/Header";
 
 export default {
