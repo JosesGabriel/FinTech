@@ -194,7 +194,10 @@ export default {
     });
   },
   mounted() {
+    console.log(this.$api.chart.stocks.index());
+
     // standard axios
+    /*
     const data = {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET
@@ -214,6 +217,7 @@ export default {
       console.log("new");
       console.log(res);
     });
+    */
   },
   methods: {},
   head() {
