@@ -49,6 +49,18 @@
     opacity: 1 !important;
     color: #fff !important;
 }
+.rtf_top-btn.v-btn--outlined:hover,
+.rtf_top-btn.v-btn--outlined:active,
+.rtf_top-btn.v-btn--outlined:focus {
+    background-color: #48ffd5;
+    border: 2px solid #48ffd5;
+    color: #00121E !important;
+    font-weight: 600 !important;
+}
+.rtf_top-btn.v-btn--outlined {
+    letter-spacing: 0.1px !important;
+}
+
 .navbarDrawer__card-journal .v-navigation-drawer__border {
     background: #000 !important
 }

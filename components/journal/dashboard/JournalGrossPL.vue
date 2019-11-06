@@ -1,35 +1,38 @@
 <template>
-    <v-col class="pa-0" cols="12" sm="12" md="12">
-        <v-card-title class="text-left justify-left px-0 pb-2 pt-5" style="border-bottom: 1px solid #000">
-            <h6 class="font-weight-regular subtitle-2" style="color:#fff;">EQUITY CURVE</h6>
-            <v-spacer></v-spacer>
-            <router-link to="/" class="social__router">
-              <v-btn icon small> 
-                  <img src="/icon/journal-icons/share-icon.svg" width="15">
-              </v-btn>
-            </router-link>
-        </v-card-title>
-        <v-col class="pa-0" cols="12" sm="12" md="12">
-            <div id="chart">
-                <apexcharts type=line height=300 :options="chartOptions" :series="series" />
-            </div>
+    <v-container class="pa-0">
+        <v-col class="pa-0" cols="12">
+            <v-card-title class="text-left justify-left ml-2 px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
+                <h6 class="font-weight-regular subtitle-2" style="color:#fff;">GROSS PROFIT AND LOSS</h6>
+                <v-spacer></v-spacer>
+                    <v-btn icon small @click.stop="showScheduleForm=true"> 
+                        <img src="/icon/journal-icons/share-icon.svg" width="15">
+                    </v-btn>
+            </v-card-title>
         </v-col>
-    </v-col>
+        <div class="pt-3" id="chart">
+            <apexcharts type=line height=300 :options="chartOptions" :series="series" />
+        </div>
+        <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    </v-container>
 </template>
+
 
 <script>
 
 import VueApexCharts from 'vue-apexcharts'
+import shareModal from '~/components/modals/share'
 
 export default {
     components: {
         apexcharts: VueApexCharts,
+        shareModal
     },
     data () {
         return {
+            showScheduleForm: false,
             series: [{
-                name: "Equity Curve",
-                data: [30000, 35000, 25000, 20000, 5000, 10000, 15000, 40000, 30000, 35000, 25000, 20000, 5000, 10000, 15000]
+                name: "Gross PL",
+                data: [30000, 35000, 25000, 20000, 5000, 10000, 15000, 40000, 30000, 35000, 25000, 20000, 5000, 10000, 15000, 13000]
             }],
             chartOptions: {
                 annotations: {
@@ -46,11 +49,22 @@ export default {
                     }
                     }]
                 },
+                plotOptions: {
+                    line: {
+                        colors: {
+                            ranges: [
+                                {
+                                    from: 0,
+                                    to: 50000,
+                                    color: '#FEB019'
+                                }
+                            ]
+                        },
+                        columnWidth: '80%',
+                    }
+                },
                 chart: {
                     height: 350,
-                    zoom: {
-                        enabled: false
-                    },
                     toolbar: {
                         show: false
                     },
@@ -61,6 +75,18 @@ export default {
                         left: 3,
                         top: 4
                     },
+                    line: {
+                        colors: {
+                            ranges: [
+                                {
+                                    from: 0,
+                                    to: 50000,
+                                    color: '#FEB019'
+                                }
+                            ]
+                        },
+                        columnWidth: '80%',
+                    }
                 },
                 colors: ['#00FFC3'],
                 dataLabels: {
@@ -93,7 +119,7 @@ export default {
                     },
                 },
                 xaxis: {
-                    categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'],
+                    categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16'],
                     labels: {
                         show: true,
                         style: {
@@ -139,6 +165,19 @@ export default {
                         color: '#17314B'
 
                     }
+                },
+                title: {
+                    text: 'Last 16 Trades',
+                    align: 'left',
+                    margin: 10,
+                    offsetX: 0,
+                    offsetY: 0,
+                    floating: true,
+                    style: {
+                        fontSize:  '14px',
+                        fontFamily: 'Karla',
+                        color:  '#b6b6b6'
+                    },
                 },
                 tooltip: {
                     followCursor: false,

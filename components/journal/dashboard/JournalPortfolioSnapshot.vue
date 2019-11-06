@@ -3,11 +3,9 @@
         <v-card-title class="text-left justify-left px-0 pb-2 pt-5">
             <h6 class="font-weight-regular white--text subtitle-2" style="color:#fff;">PORTFOLIO SNAPSHOT</h6>
             <v-spacer></v-spacer>
-            <router-link to="/" class="social__router">
-              <v-btn icon small> 
-                  <img src="/icon/journal-icons/share-icon.svg" width="15">
-              </v-btn>
-            </router-link>
+            <v-btn icon small @click.stop="showScheduleForm=true"> 
+                <img src="/icon/journal-icons/share-icon.svg" width="15">
+            </v-btn>
         </v-card-title>
         <v-col class="pa-0">
             <v-card color="#00121E" elevation="0" dark class="pb-2" style="border: 1px solid #000">
@@ -41,12 +39,19 @@
                 </v-simple-table>
             </v-card>
         </v-col>
+        <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
 </template>
 <script>
+import shareModal from '~/components/modals/share'
+
 export default {
+    components: {
+        shareModal
+    },
     data () {
       return {
+        showScheduleForm: false,
         tradingr: [
           {
             name: 'Starting Capital',

@@ -1,41 +1,43 @@
 <template>
     <v-container class="pa-0">
         <v-col class="pa-0" cols="12">
-            <v-card-title class="text-left justify-left mr-3 px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
-              <h6 class="font-weight-regular subtitle-2" style="color:#fff;">PERFORMANCE</h6>
+            <v-card-title class="text-left justify-left ml-2 px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
+              <h6 class="font-weight-regular subtitle-2" style="color:#fff;">BUY VALUE</h6>
               <v-spacer></v-spacer>
-              <router-link to="/" class="social__router">
-              <v-btn icon small> 
-                  <img src="/icon/journal-icons/share-icon.svg" width="15">
-              </v-btn>
-            </router-link>
+                  <v-btn icon small @click.stop="showScheduleForm=true"> 
+                      <img src="/icon/journal-icons/share-icon.svg" width="15">
+                  </v-btn>
             </v-card-title>
         </v-col>
         <div class="pt-3" id="chart">
             <apexcharts type=bar height=300 :options="chartOptions" :series="series" />
         </div>
+        <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-container>
 </template>
 
 <script>
   import VueApexCharts from 'vue-apexcharts'
+  import shareModal from '~/components/modals/share'
   
   export default {
     components: {
-      apexcharts: VueApexCharts
+      apexcharts: VueApexCharts,
+      shareModal
     },
     data () {
       return {
+        showScheduleForm: false,
         series: [{
           name: 'Loss',
-          data: [2,3,4,5,4]
+          data: [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,4]
         }],
         chartOptions: {
           colors: ['#00FFC3','#FF4848'],
           plotOptions: {
             bar: {
               horizontal: false,
-              columnWidth: '35',
+              columnWidth: '60%',
               endingShape: 'rounded',
               dropShadow: {
                   enabled: true,
@@ -79,7 +81,7 @@
             borderColor: 'transparent',
           },
           xaxis: {
-            categories: ['Mon','Tue','Wed','Thu','Fri'],
+            categories: ['1','','','4','','','','8','','','','12','','','','16'],
             labels: {
               show: true,
               style: {
@@ -121,7 +123,7 @@
             opacity: 1
           },
           title: {
-                text: 'By day of the week',
+                text: 'Last 16 Trades',
                 align: 'left',
                 margin: 10,
                 offsetX: 0,
