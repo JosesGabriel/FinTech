@@ -26,7 +26,7 @@
       </v-col>
       <v-col class="col-2 py-0"
         ><v-img
-          class="bull-circle"
+          class="bear-circle"
           width="30px"
           height="30px"
           src="/Icon/chart/bear-circle.svg"
