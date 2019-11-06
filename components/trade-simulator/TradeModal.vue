@@ -1,177 +1,176 @@
 <template>
 <v-dialog v-model="show" max-width="400px">
   <v-card dark class="card">
-    
-      <v-card-text class="header">
-      <v-card-actions class="header__btnBuySell">
-          <v-btn text class="v_btn" :class="buy_isclicked"  @click="order_btnbuy">Buy</v-btn>
-          <v-btn text class="v_btn" :class="sell_isclicked" @click="order_btnsell">Sell</v-btn>         
-      </v-card-actions>
-      
-        <div class="closeBtn">
-              <v-btn color="red" text icon @click.stop="show=false">
-                <v-icon size="15">mdi-close</v-icon>
-              </v-btn>
-        </div>
-      </v-card-text>
+    <v-container fluid class="vtModal__container">
+      <v-row>
+          <v-col>
+            <v-btn text class="v_btn" :class="buy_isclicked"  @click="order_btnbuy">Buy</v-btn>
+            <v-btn text class="v_btn" :class="sell_isclicked" @click="order_btnsell">Sell</v-btn>
+          </v-col>
+          <div class="vtModal__closeBtn">
+                <v-btn color="red" text icon @click.stop="show=false">
+                  <v-icon size="15">mdi-close</v-icon>
+                </v-btn>
+          </div>
+      </v-row>  
       <v-divider class="separator"></v-divider>
-  
-      <v-row align="center">
-          <v-col class="d-flex label_stock" cols="3" sm="3"> 
-            Stock
+      <v-row>
+          <v-col md="2" class="ml-3 pa-0 pl-3 label_stock">
+              Stock
+          </v-col>  
+          <v-col md="4" class="ml-0 pa-0">
+              <v-select
+                class="ma-0 pa-0 stockbtn"
+                :items="stock"
+                color="#48ffd5"
+                label="Stock"
+                dense
+                solo
+                flat
+              ></v-select>
+          </v-col>   
+      </v-row> 
+      <v-row>
+          <v-col md="4" class="ml-6 pa-0 pt-2" style="font-size:14px;">
+              Current Price:
           </v-col>
-         <v-col class="d-flex" cols="12" sm="6"> 
-           <v-select
-              class="pa-0 ma-0 stockbtn"
-              :items="stock"
-              color="#48ffd5"
-              label="Stock"
-              dense
-              solo
-              flat
-            ></v-select>
-         </v-col>
-         <v-col class="d-flex drp_stocks" cols="12" sm="6">
-            Banco De Oro
-         </v-col>
-         
-      </v-row>
-       <v-divider></v-divider>
-       
-      <v-row align="center">
-         <v-col class="d-flex" cols="12" sm="6" style="padding-top: 0px;">
-           STOCK DETAILS
-         </v-col>
-         <v-col class="d-flex" cols="12" sm="6">
-           
-         </v-col>
-      </v-row>
-      <v-row align="center">
-         <v-col class="d-flex" cols="12" sm="6" style="padding-bottom: 0px;">
-            <div class="details">
-                <p>Previous <span class="pdetails prev"></span></p>
-                <p>Low <span class="pdetails low" style="color: #e64c3c;"></span></p>
-                <p>52WKLow <span class="pdetails klow" style="color: #e64c3c;"></span></p>
-                <p>Volume <span class="pdetails vol"></span></p>
-                <p>Trades <span class="pdetails trade"></span></p>
+      </v-row> 
+       <v-divider class="stock_separator"></v-divider>
+       <v-row>
+          <v-col md="4" class="ml-3 pa-0 pt-2">
+              STOCK DETAILS
+          </v-col>
+      </v-row> 
+      <v-row>
+          <v-col md="5" class="ml-6 pa-0">
+            <div class="details ma-0 pa-0">
+                <p class="ma-0 pa-0">Previous <span class="pdetails prev"></span></p>
+                <p class="ma-0 pa-0">Low <span class="pdetails low" style="color: #e64c3c;"></span></p>
+                <p class="ma-0 pa-0">52WKLow <span class="pdetails klow" style="color: #e64c3c;"></span></p>
+                <p class="ma-0 pa-0">Volume <span class="pdetails vol"></span></p>
+                <p class="ma-0 pa-0">Trades <span class="pdetails trade"></span></p>
             </div>
-         </v-col>
-         <v-col class="d-flex" cols="12" sm="6" style="padding-bottom: 0px;">
-            <div class="details">
-                <p>Open <span class="pdetails open"></span></p>
-                <p>High <span class="pdetails high" style="color: #25ae5f"></span></p>
-                <p>52WKHigh <span class="pdetails khigh" style="color: #25ae5f"></span></p>
-                <p>Value <span class="pdetails val"></span></p>
-                <p>Average <span class="pdetails av"></span></p>
+          </v-col>
+           <v-col md="6" class="mr-2 pa-0">
+            <div class="details ml-6 pa-0">
+                <p class="ma-0 pa-0">Previous <span class="pdetails prev"></span></p>
+                <p class="ma-0 pa-0">Low <span class="pdetails low" style="color: #e64c3c;"></span></p>
+                <p class="ma-0 pa-0">52WKLow <span class="pdetails klow" style="color: #e64c3c;"></span></p>
+                <p class="ma-0 pa-0">Volume <span class="pdetails vol"></span></p>
+                <p class="ma-0 pa-0">Trades <span class="pdetails trade"></span></p>
             </div>
-         </v-col>
-      </v-row>
-      <v-row align="center">
-          <v-col class="d-flex" cols="12" sm="12" style="padding:0px;">
-              <v-card-text class="justify-center" style="text-align: center;padding-top: 0px; padding-bottom:5px;">Bid/Ask Bar</v-card-text>
           </v-col>
       </v-row>
-      <v-row align="center">
-        <div class="bidask_bar">
-          <v-col class="d-flex" cols="12" sm="12" style="padding:0px;">      
-              <div class="arb_bar_green" style="width:60%; height: 6px;"></div>
-              <div class="arb_bar_red" style="width:40%; height: 6px;"></div>     
+       <v-row>
+          <v-col md="12" class="ma-0 pa-0 pt-2 bidask_label">
+             Bid/Ask Bar
           </v-col>
-        </div>
+      </v-row> 
+      <v-row>
+          <div class="bidask_bar">
+            <v-col class="d-flex" cols="12" sm="12" style="padding:0px;">      
+                <div class="arb_bar_green" style="width:60%; height: 6px;"></div>
+                <div class="arb_bar_red" style="width:40%; height: 6px;"></div>     
+            </v-col>
+          </div>
       </v-row>
-      <v-row align="center">
-          <v-col class="d-flex" cols="12" sm="12" style="padding:0px;">
-              <v-card-text class="justify-center" style="text-align: center;padding-top: 0px; padding-bottom:5px;">Members Sentiments</v-card-text>
+       <v-row>
+          <v-col md="12" class="ma-0 pa-0 pt-2 bidask_label">
+             Members Sentiments
+          </v-col>
+      </v-row> 
+      <v-row>
+          <div class="mem_sents">
+            <v-col class="d-flex" cols="12" sm="12" style="padding:0px;">      
+                <div class="arb_bar_green" style="width:30%; height: 6px;"></div>
+                <div class="arb_bar_red" style="width:70%; height: 6px;"></div>     
+            </v-col>
+          </div>
+      </v-row>
+       <v-divider class="stock_separator"></v-divider>
+       <v-row style="margin-top: 10px;">
+          <v-col md="4" class="ml-3 pa-0">
+              TRADE DETAILS
+          </v-col>
+          <v-col md="4" class="mr-3 pa-0" style="font-size:14px; text-align:right;">
+              Available Funds:
+          </v-col>
+      </v-row> 
+      <v-row style="margin-top: 10px;">
+          <v-col md="2" class="ml-6 pa-0 pt-1" style="font-size:14px;color:  #48ffd5;">
+              Buy Price:
+          </v-col>
+          <v-col md="3" class="ma-0 pa-0 buyprice">
+              
+          </v-col>
+          <v-col md="2" class="ml-6 pa-0 pt-1" style="font-size:14px;color:  #48ffd5;">
+              Quantity
+          </v-col>
+          <v-col md="3" class="ma-0 pa-0 quantity">
+              
           </v-col>
       </v-row>
-      <v-row align="center">
-        <div class="mem_sents">
-          <v-col class="d-flex" cols="12" sm="12" style="padding:0px;">      
-              <div class="arb_bar_green" style="width:30%; height: 6px;"></div>
-              <div class="arb_bar_red" style="width:70%; height: 6px;"></div>     
+      <v-row>
+          <v-col md="9" class="ma-0 pa-0 pt-1 pr-3" style="font-size:14px; text-align:right;">
+              Total Cost:
           </v-col>
-        </div>
+          <v-col md="3" class="ma-0 pa-0 pt-1 totalcost" style="font-size:14px;">
+              1,000,000.00
+          </v-col>
       </v-row>
-       <v-divider></v-divider>
-      <v-row align="center">
-         <v-col class="d-flex tdetails" cols="12" sm="6">
-           TRADE DETAILS
-         </v-col>
-         <v-col class="d-flex" cols="12" sm="6">
-           
-         </v-col>
-      </v-row>
-      <v-row align="center">
-        <v-col cols="12" sm="6" md="3" style="padding-top:0px; padding-bottom: 0px;">
-          <v-text-field
-            v-model="buyprice"
-            label="Buy Price"
-            disabled
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="3" style="padding-top:0px;padding-bottom: 0px;">
-          <v-text-field
-            label="Quantity"
-            type="number"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="3" style="padding-top:0px;padding-bottom: 0px;">
-          <v-text-field
-            v-model="tcost"
-            label="Total Cost"
-            type="number"
-            disabled
-          ></v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="3" style="padding-top:0px;padding-bottom: 0px;">
-          <v-text-field
-            v-model="avfund"
-            label="Available Funds"
-            type="number"
-            disabled
-          ></v-text-field>
-        </v-col>
-      </v-row>
-       <v-divider></v-divider>
-      <div class="dtails">
-          <v-row align="center">
-              <v-col cols="12" sm="6" md="4" style="padding-top:0px;">
-                <v-select
-                    :items="strategy"
-                    label="Strategy"
-                    dense
-                  ></v-select>
-              </v-col>
-              <v-col cols="12" sm="6" md="4" style="padding-top:0px;">
-                <v-select
-                    :items="tradeplan"
-                    label="Trade Plan"
-                    dense
-                  ></v-select>
-              </v-col>
-              <v-col cols="12" sm="6" md="4" style="padding-top:0px;">
-                <v-select
-                    :items="emotion"
-                    label="Emotion"
-                    dense
-                  ></v-select>
-              </v-col>
-            </v-row>
-            <v-row align="center">
-              <v-col cols="12" sm="6" md="9" style="padding-top:0px;">
-                <v-textarea
+      <v-row style="margin-top: -10px;" class="trade_details">
+          <v-col md="5" class="ml-3 mt-0 pa-0">
+              <v-row>
+                  <v-col >
+                    <v-select
+                        class="select_strat"
+                        :items="strategy"
+                        label="Strategy"
+                        dense
+                        solo
+                      ></v-select>
+                  </v-col>
+              </v-row>
+              <v-row>
+                  <v-col cols="12" sm="6" md="12">
+                    <v-select
+                        class="select_tradeplan"
+                        :items="tradeplan"
+                        label="Trade Plan"
+                        dense
+                        solo
+                      ></v-select>
+                  </v-col>
+              </v-row>
+              <v-row>
+                  <v-col cols="12" sm="6" md="12">
+                    <v-select
+                        class="select_emotion"
+                        :items="emotion"
+                        label="Emotion"
+                        dense
+                        solo
+                      ></v-select>
+                  </v-col>  
+              </v-row>
+          </v-col>
+          <v-col md="6" class="ml-3 pa-0 mt-3">
+              <v-textarea
+                  class="notes"
+                  solo
+                  name="input-7-4"
                   label="Trading Notes"
-                  auto-grow
-                  outlined
-                  rows="1"
-                  row-height="15"
+                  background-color="black"
                 ></v-textarea>
-              </v-col>
-              <v-col cols="12" sm="6" md="3" style="padding-top:0px;">
-                <v-btn outlined rounded small color="warning">Confirm</v-btn>
-              </v-col>
-            </v-row>
-      </div>
+          </v-col>
+      </v-row> 
+      <v-row>
+          <v-col md="12" class="ma-0 mb-2 pb-1 pr-3 pt-0" style="text-align:right;">
+            <v-btn rounded outlined color="#48FFD5" dark class="text-capitalize mr-2" style="border-width: 2px" height="27">Confirm</v-btn>
+          </v-col>
+      </v-row>
+
+    </v-container>
   </v-card>
 </v-dialog>
 </template>
@@ -221,51 +220,64 @@ export default {
 }
 </script>
 <style>
-
-.v-dialog > .v-card > .v-card__text {
-    padding: 10px 20px 0px;
-}
 .theme--dark.v-card {
     background-color: #0c1f33;
     color: #FFFFFF;
 }
-.header__btnBuySell {
-  position: relative;
-  top: -10px;
-  margin-left: -13px;
+
+.vtModal__container {
+  padding: 0px 12px;
 }
-.header {
-  display: flex;
-  padding-top: 20px !important;
+
+.vtModal__closeBtn{
+  padding: 10px;
 }
-.closeBtn{
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 5px 10px;
+.v_btn {
+  text-transform: none;
+  font-size: 15px !important;
+  color:#48ffd5;
+  border-radius: unset;
 }
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    flex: 1 1 auto;
-    margin-right: 0px; 
-    margin-left: 0px; 
+.is-click{
+  border-bottom: 2px solid #48ffd5;
 }
-.drp_stocks { 
-  padding: 4px 0px;
+.is-not-click {
+  border-bottom: none;
 }
 .details {
-  line-height: 5px;
-  font-size: 15px;
-  margin-top: -15px;
-  margin-left: 10px;
-  padding-bottom: 0px;
+  font-size: 14px;
 }
+.buyprice, .quantity{
+  border-radius: unset;
+  background: black !important;
+}
+.separator {
+  position: relative;
+  top: -12px !important;
+  border-color: black !important;
+}
+
+.stock_separator{
+  border-color: black !important;
+}
+
+.label_stock {
+    color:  #48ffd5;
+    border: 2px solid #48ffd5;
+}
+.bidask_label {
+  text-align: center;
+}
+.stockbtn {
+  width: 100px;
+  border-radius: unset;
+}
+
 .bidask_bar {
   width: 100%;
   padding-left: 40px;
   padding-right: 40px;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 .arb_bar_green {
    background-color: #25ae5f;
@@ -277,61 +289,37 @@ export default {
   width: 100%;
   padding-left: 40px;
   padding-right: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
-.tdetails {
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
-.v-text-field {
-    margin-bottom: -10px;
-}
-.v_btn {
-  text-transform: none;
-  font-size: 15px !important;
-  color:#48ffd5;
+.select_strat, .select_tradeplan {
+  margin-bottom: -15px !important;
   border-radius: unset;
 }
 
-.is-click{
-  border-bottom: 2px solid #48ffd5;
-}
-.is-not-click {
-  border-bottom: none;
-}
-.separator {
-  position: inherit;
-  top: -18px !important;
-}
-.stockbtn {
-  width: 100px;
+.select_emotion, .notes {
   border-radius: unset;
-  position: absolute;
-  top: 70px;
-  left: 80px;
- 
-}
-.label_stock {
-    position: absolute;
-    top: 70px;
-    left: 14px;
-    color:  #48ffd5;
-    border: 2px solid #48ffd5;
-    padding: 2px 10px;
-    width: 70px;
-}
-.v-text-field.v-text-field--solo .v-input__control {
-    min-height: 30px !important;
-}
-
-.theme--dark.v-text-field--solo > .v-input__control > .v-input__slot {
-    background: #48ffd5;
-}
-.v-select__selection--comma{
-    color: black;
 }
 .v-text-field.v-text-field--enclosed .v-text-field__details {
     display: none;
+}
+.v-input__control {
+    min-height: 30px !important;
+}
+.v-input__slot {
+  margin-bottom: 0px !important;
+}
+v-text-field.v-text-field--enclosed .v-text-field__details, .v-text-field.v-text-field--enclosed > .v-input__control > .v-input__slot {
+    padding: 0 6px !important;
+    background: #48ffd5;
+}
+.theme--dark.v-select .v-select__selections {
+    color: #040404 !important;
+}
+.v-dialog:not(.v-dialog--fullscreen) {
+    max-height: 95%;
+}
+.theme--dark.v-label {
+    color: rgb(2, 2, 2);
 }
 
 </style>
