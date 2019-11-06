@@ -17,8 +17,8 @@
     }
 </style>
 <script>
-import vNavBar from '~/components/vNavBar'
-import VirtualContent from '~/components/VirtualContent'
+import vNavBar from '~/components/trade-simulator/vNavBar'
+import VirtualContent from '~/components/trade-simulator/VirtualContent'
 
 export default {
   layout: 'main',
