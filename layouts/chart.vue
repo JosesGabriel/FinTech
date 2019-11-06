@@ -85,7 +85,7 @@
           transition="slide-y-reverse-transition"
           class="sidebar__container col-3"
         >
-          <h1 align="center" class="mt-12">Side Bar</h1>
+          <Sidebar />
         </v-col>
       </v-slide-x-transition>
     </v-row>
@@ -95,10 +95,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Header from "~/components/Header";
+import Sidebar from "~/components/chart/Sidebar";
 
 export default {
   components: {
-    Header
+    Header,
+    Sidebar
   },
   data() {
     return {};
@@ -184,7 +186,8 @@ export default {
 .chart__container {
 }
 .sidebar__container {
-  background: skyblue;
+  /* background: skyblue; */
+  background: #0b1f33;
 }
 .ticker__container {
   height: 50px;

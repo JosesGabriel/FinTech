@@ -200,7 +200,7 @@ export default {
       exchange: "PSE",
       symbol: "TEL"
     };
-    console.log(this.$api.chart.stocks.list(params));
+    console.log(this.$api.socia.stocks.list(params));
 
     // standard axios
     /*
