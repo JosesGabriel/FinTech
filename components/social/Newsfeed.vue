@@ -195,12 +195,22 @@ export default {
   },
   mounted() {
     console.log("api");
-    console.log(this.$api);
-    const params = {
+    // console.log(this.$api);
+    const params1 = {
       exchange: "PSE",
       symbol: "TEL"
     };
-    console.log(this.$api.chart.stocks.list(params));
+    // console.log(this.$api.chart.stocks.list(params1));
+
+    const params2 = {
+      "symbol-id": 29235365118214144,
+      //   exchange: "PSE",
+      //   symbol: "BPI",
+      resolution: "1D",
+      limit: "1"
+    };
+
+    console.log(this.$api.chart.charts.latest(params2));
 
     // standard axios
     /*

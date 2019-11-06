@@ -18,6 +18,14 @@ export default $axios => ({
     return $axios.$get(
       `${baseURL}/history/intraday${query.length > 0 ? "?" + query : ""}`
     );
+  },
+
+  latest(params) {
+    let query = buildParams(params);
+    $axios.setToken(token, "Bearer");
+    return $axios.$get(
+      `${baseURL}/history/latest${query.length > 0 ? "?" + query : ""}`
+    );
   }
 });
 
