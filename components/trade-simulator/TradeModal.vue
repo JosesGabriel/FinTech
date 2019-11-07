@@ -5,7 +5,7 @@
       <v-row>
           <v-col>
             <v-btn text class="v_btn" :class="buy_isclicked"  @click="order_btnbuy">Buy</v-btn>
-            <v-btn text class="v_btn" :class="sell_isclicked" @click="order_btnsell">Sell</v-btn>
+            <v-btn text class="v_btn" :class="sell_isclicked" @click="order_btnsell()" >Sell</v-btn>
           </v-col>
           <div class="vtModal__closeBtn">
                 <v-btn color="red" text icon @click.stop="show=false">
@@ -22,6 +22,8 @@
               <v-select
                 class="ma-0 pa-0 stockbtn"
                 :items="stock"
+                item-text="stockCode"
+                item-value="stockID"
                 color="#48ffd5"
                 label="Stock"
                 dense
@@ -44,7 +46,7 @@
       <v-row>
           <v-col md="5" class="ml-6 pa-0">
             <div class="details ma-0 pa-0">
-                <p class="ma-0 pa-0">Previous <span class="pdetails prev"></span></p>
+                <p class="ma-0 pa-0">Previous <span class="pdetails prev">{{ stockdata.prev }}</span></p>
                 <p class="ma-0 pa-0">Low <span class="pdetails low" style="color: #e64c3c;"></span></p>
                 <p class="ma-0 pa-0">52WKLow <span class="pdetails klow" style="color: #e64c3c;"></span></p>
                 <p class="ma-0 pa-0">Volume <span class="pdetails vol"></span></p>
@@ -62,7 +64,7 @@
           </v-col>
       </v-row>
        <v-row>
-          <v-col md="12" class="ma-0 pa-0 pt-2 bidask_label">
+          <v-col md="12" class="ma-0 pa-0 bidask_label">
              Bid/Ask Bar
           </v-col>
       </v-row> 
@@ -192,16 +194,43 @@ export default {
     }
   },
   data: () => ({
-      stock: ['2GO','PHEN','ROCK','HLCM'],
+      stock: [],
+      stockdata: {
+        description: '', 
+        prev: 34,
+        low: 23,
+        WKLow: 23.34,
+        volume: '200K',
+        trades: 1968
+      },
       emotion: ['Neutral','Greedy','Fearful'],
       tradeplan: ['Day Trade','Swing Trade','Investment'],
       strategy: ['Bottom Picking','Breakout Play','Trend Following'],
       buyprice: 23.12,
       tcost: 1200.50,
       avfund: 98000.56,
+      //stocksDropdownModel: null,
       buy_isclicked: 'is-click',
       sell_isclicked: 'is-not-click',
     }),
+   mounted() {
+    const params = {};
+      this.$api.chart.stocks.list(params).then(
+        function(result) {
+          let stockListArrayRaw = Object.entries(result.data);
+          //console.log(stockListArrayRaw);
+          for (let i = 0; i < stockListArrayRaw.length; i++) {
+            let keyValuePair = {
+              stockCode: stockListArrayRaw[i][0],
+              stockID: stockListArrayRaw[i][1].id_str,
+              stockDescription: stockListArrayRaw[i][1].description
+            };
+            this.stock.push(keyValuePair);
+          }
+        }.bind(this)
+      );
+    },
+
   methods:{
      order_btnbuy(){
        if(this.buy_isclicked == 'is-not-click'){
@@ -214,7 +243,8 @@ export default {
          this.sell_isclicked = 'is-click';
          this.buy_isclicked = 'is-not-click';
        }
-     }
+     },
+    
   }
 
 }
