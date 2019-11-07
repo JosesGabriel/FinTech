@@ -56,21 +56,7 @@
               >
             </v-list-item>
           </router-link>
-
-          <router-link to="/virtual-trade" class="navbar__links">
-            <v-list-item>
-              <v-list-item-icon>
-                <img src="/icon/journal-icons/mdi-eye-plus-outline.svg" width="25">
-                </v-list-item-icon
-              >
-              <v-list-item-content
-                ><v-list-item-title
-                  >Virtual Trade</v-list-item-title
-                ></v-list-item-content
-              >
-            </v-list-item>
-          </router-link>
-
+          
           <router-link to="/journal" class="navbar__links">
             <v-list-item>
               <v-list-item-icon
@@ -83,6 +69,20 @@
               <v-list-item-content
                 ><v-list-item-title
                   >Trading Journal</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
+
+          <router-link to="/virtual-trade" class="navbar__links">
+            <v-list-item>
+              <v-list-item-icon>
+                <img src="/icon/journal-icons/mdi-eye-plus-outline.svg" width="25">
+                </v-list-item-icon
+              >
+              <v-list-item-content
+                ><v-list-item-title
+                  >Virtual Trade</v-list-item-title
                 ></v-list-item-content
               >
             </v-list-item>

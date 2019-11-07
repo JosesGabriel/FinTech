@@ -203,7 +203,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style>
 .theme--dark.v-data-table thead tr:last-child th,
 .theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
   border: none;
