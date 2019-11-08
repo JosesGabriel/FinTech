@@ -284,33 +284,34 @@ export default {
             name: result.data.symbol
           }
         ]);
-        // GET Current Price + Current Change from Stock History API
-        const params3 = {
-          exchange: "PSE",
-          symbol: this.stockSymbol
-        };
-        this.$api.chart.stocks.history(params3).then(
-          function(result) {
-            this.stockCurrentPrice = result.data.last;
-            this.stockCurrentChange = result.data.changepercentage.toFixed(2);
-            if (this.stockCurrentChange > 0) {
-              this.chartOptions = {
-                ...this.chartOptions,
-                ...{
-                  colors: ["#00FFC3"]
-                }
-              };
-            } else {
-              this.chartOptions = {
-                ...this.chartOptions,
-                ...{
-                  colors: ["#FF4848"]
-                }
-              };
+      }.bind(this)
+    );
+    // GET Current Price + Current Change from Stock History API
+    const params3 = {
+      // exchange: "PSE",
+      // symbol: this.stockSymbol
+      "symbol-id": this.data.stock_id
+    };
+    this.$api.chart.stocks.history(params3).then(
+      function(result) {
+        this.stockCurrentPrice = result.data.last;
+        this.stockCurrentChange = result.data.changepercentage.toFixed(2);
+        if (this.stockCurrentChange > 0) {
+          this.chartOptions = {
+            ...this.chartOptions,
+            ...{
+              colors: ["#00FFC3"]
             }
-            this.watchCardLoading = false;
-          }.bind(this)
-        );
+          };
+        } else {
+          this.chartOptions = {
+            ...this.chartOptions,
+            ...{
+              colors: ["#FF4848"]
+            }
+          };
+        }
+        this.watchCardLoading = false;
       }.bind(this)
     );
   },
