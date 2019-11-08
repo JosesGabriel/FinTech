@@ -8,7 +8,7 @@
       dark
       color="transparent"
     >
-      <v-list>
+      <v-list class="pt-10 mt-5">
         <v-list-item>
           <router-link to="/user">
             <v-list-item>
@@ -28,8 +28,21 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <v-list nav dense rounded>
+      <v-list nav dense flat rounded>
         <v-list-item-group>
+            <router-link to="/" class="navbar__links">
+            <v-list-item>
+              <v-list-item-icon>
+                <img src="/icon/navbar-icons/social.svg" width="25" />
+              </v-list-item-icon>
+              <v-list-item-content
+                ><v-list-item-title
+                  >Social Wall</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
+
           <router-link to="/chart" class="navbar__links">
             <v-list-item>
               <v-list-item-icon>
@@ -43,7 +56,7 @@
               >
             </v-list-item>
           </router-link>
-
+          
           <router-link to="/journal" class="navbar__links">
             <v-list-item>
               <v-list-item-icon
@@ -56,6 +69,20 @@
               <v-list-item-content
                 ><v-list-item-title
                   >Trading Journal</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
+
+          <router-link to="/virtual-trade" class="navbar__links">
+            <v-list-item>
+              <v-list-item-icon>
+                <img src="/icon/journal-icons/mdi-eye-plus-outline.svg" width="25">
+                </v-list-item-icon
+              >
+              <v-list-item-content
+                ><v-list-item-title
+                  >Virtual Trade</v-list-item-title
                 ></v-list-item-content
               >
             </v-list-item>
@@ -75,6 +102,7 @@
               >
             </v-list-item>
           </router-link>
+
           <router-link to="/game" class="navbar__links">
             <v-list-item>
               <v-list-item-icon
@@ -83,19 +111,6 @@
               <v-list-item-content
                 ><v-list-item-title
                   >Games</v-list-item-title
-                ></v-list-item-content
-              >
-            </v-list-item>
-          </router-link>
-
-          <router-link to="/vyndue" class="navbar__links">
-            <v-list-item>
-              <v-list-item-icon>
-                <img src="/icon/navbar-icons/vyndue.svg" width="20">
-                </v-list-item-icon>
-              <v-list-item-content
-                ><v-list-item-title
-                  >Vyndue</v-list-item-title
                 ></v-list-item-content
               >
             </v-list-item>

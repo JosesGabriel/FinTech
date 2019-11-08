@@ -3,11 +3,9 @@
         <v-card-title class="text-left justify-left mx-3 px-0 pb-2 pt-5" style="border-bottom: 1px solid #000">
             <h6 class="font-weight-regular white--text subtitle-2" style="color:#fff;">CURRENT ALLOCATION</h6>
             <v-spacer></v-spacer>
-            <router-link to="/" class="social__router">
-              <v-btn icon small> 
-                  <img src="/icon/journal-icons/share-icon.svg" width="15">
-              </v-btn>
-            </router-link>
+            <v-btn icon small @click.stop="showScheduleForm=true"> 
+                <img src="/icon/journal-icons/share-icon.svg" width="15">
+            </v-btn>
         </v-card-title>
         <v-row no-gutters>
             <v-col class="pa-0 pt-3 px-5" cols="6" sm="6" md="6">
@@ -29,18 +27,22 @@
                 </div>
             </v-col>
         </v-row>
+        <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
 </template>
 
 <script>
   import VueApexCharts from 'vue-apexcharts'
+  import shareModal from '~/components/modals/share'
 
   export default {
     components: {
       apexcharts: VueApexCharts,
+      shareModal
     },
     data () {
       return {
+        showScheduleForm: false,
         allodata: [
           {
             stocks: 'BDO',

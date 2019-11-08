@@ -15,9 +15,25 @@
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
         <v-container class="pt-0" fluid>
-          <v-row dense>
-            <v-col v-for="n in 4" :key="n" cols="6" class="pt-0">
-              <WatchCard />
+          <div v-if="loadingBar" class="text-center">
+            <v-progress-circular
+              :size="50"
+              color="primary"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+          <v-row>
+            <v-col cols="6">
+              <AddWatcherModal v-if="!loadingBar" />
+              <EditDeleteWatcherModal v-if="!loadingBar" class="mt-2" />
+            </v-col>
+            <v-col
+              v-for="(n, index) in watchListObject.length"
+              :key="n"
+              cols="6"
+              class="pt-0"
+            >
+              <WatchCard :key="renderChartKey" :data="watchListObject[index]" />
             </v-col>
           </v-row>
         </v-container>
@@ -41,6 +57,9 @@ import Navbar from "~/components/Navbar";
 import FooterSidebar from "~/components/FooterSidebar.vue";
 import TrendingStocks from "~/components/TrendingStocks.vue";
 import WatchCard from "~/components/watchers/WatchCard.vue";
+import AddWatcherModal from "~/components/watchers/AddWatcherModal.vue";
+import EditDeleteWatcherModal from "~/components/watchers/EditDeleteWatcherModal.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "main",
@@ -48,13 +67,52 @@ export default {
     Navbar,
     TrendingStocks,
     FooterSidebar,
-    WatchCard
+    WatchCard,
+    AddWatcherModal,
+    EditDeleteWatcherModal
   },
   data() {
     return {
       isOpen: true,
-      isDarkMode: 0
+      isDarkMode: 0,
+      watchListObject: "",
+      loadingBar: true,
+      componentKey: 0
     };
+  },
+  computed: {
+    ...mapGetters({
+      userWatchedStocks: "watchers/getUserWatchedStocks",
+      renderChartKey: "watchers/getRenderChartKey"
+    })
+  },
+  watch: {
+    renderChartKey: function() {
+      this.getUserWatchList();
+    }
+  },
+  mounted: function() {
+    // GET Data from User Watchlist
+    this.getUserWatchList();
+  },
+  methods: {
+    ...mapActions({
+      setUserWatchedStocks: "watchers/setUserWatchedStocks",
+      setRenderChartKey: "watchers/setRenderChartKey"
+    }),
+    getUserWatchList() {
+      let userData = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+      };
+      this.$axios
+        .$get("https://dev-api.arbitrage.ph/api/journal/watchlist", userData)
+        .then(response => {
+          this.watchListObject = response.data.watchlist;
+          this.setUserWatchedStocks(response.data.watchlist);
+          this.loadingBar = false;
+        });
+      this.componentKey++; //forces re-render
+    }
   },
   head() {
     return {
