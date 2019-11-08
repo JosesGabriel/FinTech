@@ -205,6 +205,7 @@ export default {
     },
 
     save() {
+      this.tableLoading = "primary";
       if (this.editedIndex > -1) {
         let params = {
           entry_price: this.editedItem.entry_price,
@@ -224,12 +225,12 @@ export default {
               this.watchList__alertState = true;
               this.setRenderChartKey(this.keyCounter);
               this.keyCounter++;
-              this.watchCardModalLoading = false;
             } else {
               this.watchList__alert = true;
               this.post__responseMsg = response.message;
               this.watchList__alertState = false;
             }
+            this.tableLoading = false;
           });
         Object.assign(this.userStockData[this.editedIndex], this.editedItem);
       }

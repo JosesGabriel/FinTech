@@ -13,7 +13,13 @@
         outlined
         fab
         small
-        :color="stockCurrentChange > 0 ? '#34ad9e' : '#f45532'"
+        :color="
+          stockCurrentChange > 0
+            ? '#34ad9e'
+            : stockCurrentChange < 0
+            ? '#f45532'
+            : 'yellow'
+        "
         class="mr-3"
         >{{ stockSymbol }}</v-btn
       >
@@ -27,7 +33,9 @@
             :class="
               stockCurrentChange > 0
                 ? 'watchlistCard__text--green'
-                : 'watchlistCard__text--red'
+                : stockCurrentChange < 0
+                ? 'watchlistCard__text--red'
+                : 'watchlistCard__text--yellow'
             "
             >{{ stockCurrentChange }}%</span
           ></v-list-item-subtitle
@@ -80,6 +88,9 @@
 }
 .watchlistCard__text--red {
   color: #ff4848;
+}
+.watchlistCard__text--yellow {
+  color: yellow;
 }
 .watchlistCard__items {
   margin-bottom: 10px;
@@ -264,9 +275,14 @@ export default {
     };
     this.$api.chart.charts.latest(params).then(
       function(result) {
+        let closePrice = result.data.c;
+        for (let i = 0; i < closePrice.length; i++) {
+          console.log(closePrice[i]);
+          closePrice[i] = parseInt(closePrice[i]).toFixed(2);
+        }
         this.$refs.closePriceChart.updateSeries([
           {
-            data: result.data.c
+            data: closePrice
           }
         ]);
       }.bind(this)
@@ -303,11 +319,18 @@ export default {
               colors: ["#00FFC3"]
             }
           };
-        } else {
+        } else if (this.stockCurrentChange < 0) {
           this.chartOptions = {
             ...this.chartOptions,
             ...{
               colors: ["#FF4848"]
+            }
+          };
+        } else {
+          this.chartOptions = {
+            ...this.chartOptions,
+            ...{
+              colors: ["#FFDD00"]
             }
           };
         }
