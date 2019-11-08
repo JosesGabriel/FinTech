@@ -29,9 +29,12 @@
               cols="6"
               class="pt-0"
             >
-              <WatchCard :data="watchListObject[index]" />
+              <WatchCard :key="renderChartKey" :data="watchListObject[index]" />
             </v-col>
-            <AddWatcherModal v-if="!loadingBar" />
+            <v-col cols="6">
+              <AddWatcherModal v-if="!loadingBar" />
+              <EditDeleteWatcherModal v-if="!loadingBar" class="mt-2" />
+            </v-col>
           </v-row>
         </v-container>
       </v-col>
@@ -55,6 +58,8 @@ import FooterSidebar from "~/components/FooterSidebar.vue";
 import TrendingStocks from "~/components/TrendingStocks.vue";
 import WatchCard from "~/components/watchers/WatchCard.vue";
 import AddWatcherModal from "~/components/watchers/AddWatcherModal.vue";
+import EditDeleteWatcherModal from "~/components/watchers/EditDeleteWatcherModal.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "main",
@@ -63,27 +68,51 @@ export default {
     TrendingStocks,
     FooterSidebar,
     WatchCard,
-    AddWatcherModal
+    AddWatcherModal,
+    EditDeleteWatcherModal
   },
   data() {
     return {
       isOpen: true,
       isDarkMode: 0,
       watchListObject: "",
-      loadingBar: true
+      loadingBar: true,
+      componentKey: 0
     };
   },
-  mounted() {
+  computed: {
+    ...mapGetters({
+      userWatchedStocks: "watchers/getUserWatchedStocks",
+      renderChartKey: "watchers/getRenderChartKey"
+    })
+  },
+  watch: {
+    renderChartKey: function() {
+      this.getUserWatchList();
+    }
+  },
+  mounted: function() {
     // GET Data from User Watchlist
-    let userData = {
-      user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-    };
-    this.$axios
-      .$get("https://dev-api.arbitrage.ph/api/journal/watchlist", userData)
-      .then(response => {
-        this.watchListObject = response.data.watchlists;
-        this.loadingBar = false;
-      });
+    this.getUserWatchList();
+  },
+  methods: {
+    ...mapActions({
+      setUserWatchedStocks: "watchers/setUserWatchedStocks",
+      setRenderChartKey: "watchers/setRenderChartKey"
+    }),
+    getUserWatchList() {
+      let userData = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+      };
+      this.$axios
+        .$get("https://dev-api.arbitrage.ph/api/journal/watchlist", userData)
+        .then(response => {
+          this.watchListObject = response.data.watchlists;
+          this.setUserWatchedStocks(response.data.watchlists);
+          this.loadingBar = false;
+        });
+      this.componentKey++; //forces re-render
+    }
   },
   head() {
     return {
