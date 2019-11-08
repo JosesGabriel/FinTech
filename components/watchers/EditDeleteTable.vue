@@ -1,64 +1,78 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="userStockData"
-    class="elevation-1"
-    style="background-color: transparent"
-    :loading="tableLoading"
-  >
-    <template v-slot:top>
-      <v-toolbar flat color="white">
-        <v-dialog v-model="dialog" max-width="500px">
-          <v-card>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.name"
-                      label="Dessert name"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.entry_price"
-                      label="entry_price"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.take_profit"
-                      label="take_profit (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.stop_loss"
-                      label="stop_loss (g)"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-    <template v-slot:item.action="{ item }">
-      <v-icon small class="mr-2" @click="editItem(item)">
-        mdi-pencil
-      </v-icon>
-      <v-icon small @click="deleteItem(item)">
-        mdi-delete
-      </v-icon>
-    </template>
-  </v-data-table>
+  <div>
+    <v-data-table
+      :headers="headers"
+      :items="userStockData"
+      class="elevation-1"
+      style="background-color: transparent"
+      :loading="tableLoading"
+    >
+      <template v-slot:top>
+        <v-toolbar flat color="white">
+          <v-dialog v-model="dialog" max-width="500px">
+            <v-card :loading="watchCardModalLoading">
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.stock_id"
+                        label="Stock"
+                        disabled
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.entry_price"
+                        label="Entry Price"
+                        prefix="₱"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.take_profit"
+                        label="Take Profit"
+                        prefix="₱"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.stop_loss"
+                        label="Stop Loss"
+                        prefix="₱"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:item.action="{ item }">
+        <v-icon small class="mr-2" @click="editItem(item)">
+          mdi-pencil
+        </v-icon>
+        <v-icon small @click="deleteItem(item)">
+          mdi-delete
+        </v-icon>
+      </template>
+    </v-data-table>
+    <v-snackbar
+      v-model="watchList__alert"
+      :color="watchList__alertState ? 'success' : 'error'"
+    >
+      {{ post__responseMsg }}
+      <v-btn color="white" text @click="watchList__alert = false">
+        Close
+      </v-btn>
+    </v-snackbar>
+  </div>
 </template>
 <style>
 header {
@@ -71,6 +85,10 @@ export default {
   data: () => ({
     dialog: false,
     tableLoading: true,
+    watchList__alert: false,
+    watchList__alertState: null,
+    post__responseMsg: "",
+    watchCardModalLoading: false,
     headers: [
       {
         text: "Stock",
@@ -84,25 +102,26 @@ export default {
       { text: "Actions", value: "action", sortable: false }
     ],
     userStockData: [],
-    yawa: [],
+    keyCounter: 1,
     editedIndex: -1,
     editedItem: {
       stock_id: "",
-      entry_price: 0,
-      take_profit: 0,
-      stop_loss: 0
+      entry_price: "",
+      take_profit: "",
+      stop_loss: ""
     },
     defaultItem: {
       stock_id: "",
-      entry_price: 0,
-      take_profit: 0,
-      stop_loss: 0
+      entry_price: "",
+      take_profit: "",
+      stop_loss: ""
     }
   }),
 
   computed: {
     ...mapGetters({
-      userWatchedStocks: "watchers/getUserWatchedStocks"
+      userWatchedStocks: "watchers/getUserWatchedStocks",
+      renderChartKey: "watchers/getRenderChartKey"
     }),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -117,7 +136,8 @@ export default {
 
   mounted() {
     // GET Data from User Watchlist
-    this.shemes = JSON.parse(JSON.stringify(this.userWatchedStocks));
+    // Converts stock symbol_id to stock code like; 123123123 = 'JFC'
+    this.shemes = JSON.parse(JSON.stringify(this.userWatchedStocks)); //removes vuex pointer and two way data binding
     this.userStockData = this.shemes;
     for (let i = 0; i < this.userStockData.length; i++) {
       //Just converts stock_id to stock symbol
@@ -136,7 +156,8 @@ export default {
 
   methods: {
     ...mapActions({
-      setUserWatchedStocks: "watchers/setUserWatchedStocks"
+      setUserWatchedStocks: "watchers/setUserWatchedStocks",
+      setRenderChartKey: "watchers/setRenderChartKey"
     }),
 
     editItem(item) {
@@ -146,9 +167,30 @@ export default {
     },
 
     deleteItem(item) {
+      this.watchCardModalLoading = "primary";
       const index = this.userStockData.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
+      if (confirm("Are you sure you want to delete this item?")) {
+        this.$axios
+          .$delete(
+            "https://dev-api.arbitrage.ph/api/journal/watchlist/" +
+              this.userWatchedStocks[index].id
+          )
+          .then(response => {
+            if (response.success) {
+              this.watchList__alert = true;
+              this.post__responseMsg = response.message;
+              this.watchList__alertState = true;
+              this.setRenderChartKey(this.keyCounter);
+              this.keyCounter++;
+              this.watchCardModalLoading = false;
+            } else {
+              this.watchList__alert = true;
+              this.post__responseMsg = response.message;
+              this.watchList__alertState = false;
+            }
+          });
         this.userStockData.splice(index, 1);
+      }
     },
 
     close() {
@@ -161,9 +203,32 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
+        let params = {
+          entry_price: this.editedItem.entry_price,
+          take_profit: this.editedItem.take_profit,
+          stop_loss: this.editedItem.stop_loss
+        };
+        this.$axios
+          .$put(
+            "https://dev-api.arbitrage.ph/api/journal/watchlist/" +
+              this.userWatchedStocks[this.editedIndex].id,
+            params
+          )
+          .then(response => {
+            if (response.success) {
+              this.watchList__alert = true;
+              this.post__responseMsg = response.message;
+              this.watchList__alertState = true;
+              this.setRenderChartKey(this.keyCounter);
+              this.keyCounter++;
+              this.watchCardModalLoading = false;
+            } else {
+              this.watchList__alert = true;
+              this.post__responseMsg = response.message;
+              this.watchList__alertState = false;
+            }
+          });
         Object.assign(this.userStockData[this.editedIndex], this.editedItem);
-      } else {
-        this.userStockData.push(this.editedItem);
       }
       this.close();
     }
