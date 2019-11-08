@@ -2,24 +2,14 @@
     <v-col class="pt-10 mt-5" cols="12" sm="12" md="12">
             <v-tabs
             color="#48FFD5"
-            background-color="#00121E"
+            background-color="transparent"
             dark
             >
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-1`">Dashboard</v-tab>
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-2`">Tradelogs</v-tab>
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-3`">Ledger</v-tab>
-                <!-- <v-spacer></v-spacer>
-                <v-col class="pa-0" cols="3" sm="3" md="3">
-                    <v-select
-                    :items="items"
-                    label="Primary Portfolio"
-                    filled
-                    dense
-                    class="ma-0 portfolio_selector-btn"
-                    height="15px"
-                    ></v-select>
-                </v-col> -->
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 1">
+                <!-- <v-spacer></v-spacer>-->
+                <v-tab-item color="#48FFD5" background-color="black" :value="'tab-' + 1">
                     <v-container class="pa-0">
                         <JournalLivePortfolio/>
                         <v-row no-gutters>
@@ -129,3 +119,63 @@ export default {
   }
 }
 </script>
+<style>
+.v-window.v-item-group.theme--light.v-tabs-items {
+    background: none;
+}
+.v-slide-group__content.v-tabs-bar__content:before {
+    content: "";
+    width: 100%;
+    position: absolute;
+    bottom: -3px;
+    z-index: 1;
+    height: 4px;
+    background: #000;
+}
+.rtf_top-btn.v-btn--outlined:hover,
+.rtf_top-btn.v-btn--outlined:active,
+.rtf_top-btn.v-btn--outlined:focus {
+    background-color: #48ffd5;
+    border: 2px solid #48ffd5;
+    color: #00121E !important;
+    font-weight: 600 !important;
+}
+.rtf_top-btn.v-btn--outlined {
+    letter-spacing: 0.1px !important;
+}
+
+.navbarDrawer__card-journal .v-navigation-drawer__border {
+    background: #000 !important
+}
+/* .tab_menu-top:not(.v-tab--active):not(.v-tab--disabled) {
+    opacity: 1 !important;
+    color: #fff !important;
+} */
+.apexcharts-tooltip-series-group {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+}
+.apexcharts-svg {
+    /* overflow: visible !important; */
+}
+#table_tr_port-cont:hover {
+    background: rgb(9, 26, 43);
+}
+#table_td_port-cont {
+    border: none;
+    cursor: pointer;
+}
+#table_head_tr_port-cont {
+    border: none;
+}
+#table_tr_snap-cont:hover {
+    background: rgb(9, 26, 43);
+}
+#table_td_snap-cont {
+    border: none;
+    cursor: pointer;
+}
+#table_head_tr_snap-cont {
+    border: none;
+}
+</style>
