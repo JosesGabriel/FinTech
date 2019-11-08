@@ -23,6 +23,10 @@
             ></v-progress-circular>
           </div>
           <v-row>
+            <v-col cols="6">
+              <AddWatcherModal v-if="!loadingBar" />
+              <EditDeleteWatcherModal v-if="!loadingBar" class="mt-2" />
+            </v-col>
             <v-col
               v-for="(n, index) in watchListObject.length"
               :key="n"
@@ -30,10 +34,6 @@
               class="pt-0"
             >
               <WatchCard :key="renderChartKey" :data="watchListObject[index]" />
-            </v-col>
-            <v-col cols="6">
-              <AddWatcherModal v-if="!loadingBar" />
-              <EditDeleteWatcherModal v-if="!loadingBar" class="mt-2" />
             </v-col>
           </v-row>
         </v-container>

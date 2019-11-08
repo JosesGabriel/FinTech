@@ -24,6 +24,7 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.entry_price"
+                        type="number"
                         label="Entry Price"
                         prefix="₱"
                       ></v-text-field>
@@ -31,6 +32,7 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.take_profit"
+                        type="number"
                         label="Take Profit"
                         prefix="₱"
                       ></v-text-field>
@@ -38,6 +40,7 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.stop_loss"
+                        type="number"
                         label="Stop Loss"
                         prefix="₱"
                       ></v-text-field>

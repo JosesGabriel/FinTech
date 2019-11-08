@@ -25,6 +25,7 @@
                   dark
                   standard-
                   color="primary"
+                  required
                 ></v-select>
               </v-col>
               <v-col cols="12">
@@ -34,6 +35,7 @@
                   prefix="₱"
                   dense
                   dark
+                  type="number"
                   color="primary"
                 ></v-text-field>
               </v-col>
@@ -44,6 +46,7 @@
                   prefix="₱"
                   dense
                   dark
+                  type="number"
                   color="success"
                 ></v-text-field>
               </v-col>
@@ -54,6 +57,7 @@
                   prefix="₱"
                   dense
                   dark
+                  type="number"
                   color="warning"
                 ></v-text-field>
               </v-col>
@@ -65,7 +69,13 @@
           <v-btn color="error darken-1" text @click="dialog = false"
             >Close</v-btn
           >
-          <v-btn color="blue darken-1" text @click="addWatch()">Save</v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            :disabled="saveButtonDisable"
+            @click="addWatch()"
+            >Save</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -94,12 +104,24 @@ export default {
     post__responseMsg: null,
     watchList__alert: false,
     watchList__alertState: null,
-    watchCardModalLoading: false
+    watchCardModalLoading: false,
+    saveButtonDisable: true
   }),
   computed: {
     ...mapGetters({
       renderChartKey: "watchers/getRenderChartKey"
     })
+  },
+  watch: {
+    entryPriceModel: function() {
+      this.fieldsWatch();
+    },
+    stopLossModel: function() {
+      this.fieldsWatch();
+    },
+    takeProfitModel: function() {
+      this.fieldsWatch();
+    }
   },
   mounted() {
     const params = {};
@@ -120,6 +142,17 @@ export default {
     ...mapActions({
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
+    fieldsWatch() {
+      if (
+        this.stocksDropdownModel &&
+        (this.entryPriceModel != "" ||
+          (this.stopLossModel != "" || this.takeProfitModel != ""))
+      ) {
+        this.saveButtonDisable = false;
+      } else {
+        this.saveButtonDisable = true;
+      }
+    },
     addWatch() {
       this.watchCardModalLoading = "primary";
       let params = {
