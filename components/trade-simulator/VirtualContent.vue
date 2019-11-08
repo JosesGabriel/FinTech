@@ -70,7 +70,7 @@
 
             <v-tabs
             color="#48FFD5"
-            background-color="#00121E"
+            background-color="transparent"
             dark
             >
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-1`">Live Portfolio</v-tab>
@@ -79,7 +79,7 @@
                 <v-tab-item
                     dark
                     color="#48FFD5"
-                    background-color="#0c1f33"
+                    background-color="black"
                     :value="'tab-' + 1"
                 >
                     <v-container class="pa-0">
@@ -113,7 +113,10 @@
     }
   }
 </script>
-<style scoped>
+<style>
+.v-window.v-item-group.theme--light.v-tabs-items {
+    background: none;
+}
 .vt_realized {
     border: 1px solid black;
 }
