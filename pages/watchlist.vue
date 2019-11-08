@@ -107,8 +107,8 @@ export default {
       this.$axios
         .$get("https://dev-api.arbitrage.ph/api/journal/watchlist", userData)
         .then(response => {
-          this.watchListObject = response.data.watchlists;
-          this.setUserWatchedStocks(response.data.watchlists);
+          this.watchListObject = response.data.watchlist;
+          this.setUserWatchedStocks(response.data.watchlist);
           this.loadingBar = false;
         });
       this.componentKey++; //forces re-render
