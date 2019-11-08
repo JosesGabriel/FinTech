@@ -277,7 +277,6 @@ export default {
       function(result) {
         let closePrice = result.data.c;
         for (let i = 0; i < closePrice.length; i++) {
-          console.log(closePrice[i]);
           closePrice[i] = parseInt(closePrice[i]).toFixed(2);
         }
         this.$refs.closePriceChart.updateSeries([
