@@ -111,7 +111,7 @@ export default {
                     borderColor: '#002633',
                     xaxis: {
                         lines: {
-                            show: true
+                            show: false
                         }
                     },   
                     yaxis: {

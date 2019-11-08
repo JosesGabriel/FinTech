@@ -14,22 +14,39 @@
                     <BuyTrade/>
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
+                    <SellTrade/>
                 </v-tab-item>
             </v-tabs>
             <!-- <v-card-actions>
             <v-btn color="primary" @click.stop="show=false">Close</v-btn>
             </v-card-actions> -->
+            <v-col class="pa-0" cols="12" sm="12" md="12">
+                <v-row no-gutters>
+                    <v-col class="pa-0" cols="6" sm="6" md="6" @click.stop="show=false">
+                        <v-card-title class="text-center justify-center px-5 py-5 confirmation_button-reset-ok">
+                            <h1 class="font-weight-regular body-1" style="color:#00FFC3;">Cancel</h1>
+                        </v-card-title>
+                    </v-col>
+                    <v-col class="pa-0" cols="6" sm="6" md="6" @click.stop="show=false">
+                        <v-card-title class="text-center justify-center px-5 py-5 confirmation_button-reset-not">
+                            <h1 class="font-weight-regular body-1" style="color:#00FFC3;">Confirm</h1>
+                        </v-card-title>
+                    </v-col>
+                </v-row>
+            </v-col>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
 import BuyTrade from '~/components/modals/buy'
+import SellTrade from '~/components/modals/sell'
 
 export default {
     props: ['visible'],
     components: {
-        BuyTrade
+        BuyTrade,
+        SellTrade
     },
     computed: {
         show: {

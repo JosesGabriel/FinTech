@@ -15,6 +15,7 @@
                     <JournalDeposit/>
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
+                    <JournalWithdraw/>
                 </v-tab-item>
             </v-tabs>
             <v-col class="pa-0 pt-3" cols="12" sm="12" md="12">
@@ -41,10 +42,12 @@
 
 <script>
 import JournalDeposit from '~/components/journal/dashboard/JournalDeposit'
+import JournalWithdraw from '~/components/journal/dashboard/JournalWithdraw'
 
 export default {
     components: {
-        JournalDeposit
+        JournalDeposit,
+        JournalWithdraw
     },
   props: ['visible'],
   computed: {

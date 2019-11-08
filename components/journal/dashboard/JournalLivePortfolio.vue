@@ -34,14 +34,14 @@
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Profit }}</td>
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Perf }}</td>
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">
-                    <v-menu top>
+                    <v-menu bottom left :offset-y="offsety">
                         <template v-slot:activator="{ on }">
                         <v-btn
                             dark
                             icon
                             v-on="on"
                         >
-                            <v-icon color="#B6B6B6">mdi-dots-horizontal</v-icon>
+                            <v-icon color="#B6B6B6" flat>mdi-dots-horizontal</v-icon>
                         </v-btn>
                         </template>
                         <v-list color="#123" dark class="pa-0">
@@ -98,6 +98,7 @@ export default {
       showResetForm: false,
       showFundsForm: false,
       showTradeForm: false,
+      offsety: true,
       desserts: [
         {
           stocks: 'BDO',

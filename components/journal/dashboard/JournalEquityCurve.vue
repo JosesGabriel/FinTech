@@ -79,13 +79,14 @@ export default {
                         blur: 5,
                         opacity: 1
                     },
+                    dashArray: 0,
                 },
                 grid: {
                     show: true,
                     borderColor: '#002633',
                     xaxis: {
                         lines: {
-                            show: true
+                            show: false
                         }
                     },   
                     yaxis: {
@@ -177,3 +178,9 @@ export default {
     }
 }
 </script>
+<style>
+    .apexcharts-xcrosshairs {
+        stroke-dasharray: 0;
+        stroke: #002532;
+    }
+</style>

@@ -12,30 +12,15 @@
         <!-- <v-card-title class="justify-end py-1">
             <h1 class="font-weight-bold balance_amount" style="color:#b6b6b6;"><span class="font-weight-light caption">PHP</span> 0.00</h1>
         </v-card-title> -->
-        <v-container class="py-0">
-            <v-row>
-                <v-col class="pa-0" cols="12" sm="12" md="12">
-                    <v-text-field
-                        placeholder="Enter Quantity"
-                        color="#fff"
-                        style="color: #fff"
-                        dark
-                        class="stock_selector enter_amount-deposit pa-0 pb-5 font-weight-bold headline white--text"
-                        v-model="quantity"
-                    ></v-text-field>
-                </v-col>
-            </v-row>
-        </v-container>
-        <v-col class="pa-0">
-            <span class="custom-dropdown big">
-                <v-select
-                :items="items"
-                label="Fund Source"
-                color="#00FFC3"
-                dense
+        <v-col class="pa-0" cols="12" sm="12" md="12">
+            <v-text-field
+                placeholder="Enter Quantity"
+                color="#fff"
+                style="color: #fff"
                 dark
-                ></v-select>
-            </span>
+                class="stock_selector enter_amount-deposit pa-0 pb-5 font-weight-bold headline white--text"
+                v-model="quantity"
+            ></v-text-field>
         </v-col>
     </v-container>
 </template>
@@ -50,7 +35,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
     .balance_amount {
         font-size: 23px
     }

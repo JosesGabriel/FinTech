@@ -145,24 +145,6 @@
                 </v-col>
             </v-row> 
             <p class="text-right ma-0 body-2" style="color:#b6b6b6">Total Cost: 0.00</span></p>
-
-            <v-row no-gutters class="px-0 py-2 pb-0">
-                <v-col md="6" class="pr-3 py-0">
-                    <div><v-select offset-y="true" class="stock_selector mb-2" :items="stock" background-color="black" label="Select Strategy" dense solo flat></v-select></div>
-                    <div><v-select offset-y="true" class="stock_selector mb-2" :items="stock" background-color="black" label="Select Trade Plan" dense solo flat></v-select></div>
-                    <div><v-select offset-y="true" class="stock_selector mb-2" :items="stock" background-color="black" label="Select Emotions" dense solo flat></v-select></div>
-                </v-col>
-                <v-col md="6" class="pl-0 py-0 justify-right d-flex align-center text-right">
-                    <v-textarea
-                        solo
-                        background-color="black"
-                        color="white"
-                        class="white--text trading_notes-textarea body-2"
-                        placeholder="Trading Notes"
-                        dark
-                    ></v-textarea>
-                </v-col>
-            </v-row> 
         </v-container>
     </v-container>
 </template>
@@ -189,7 +171,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style>
     .stock_selector .v-select__slot .v-label,
     .stock_selector .v-select__slot .v-icon {
         color: #00FFC3 !important;
@@ -207,8 +189,5 @@ export default {
     }
     .confirmation_message-confirm input {
         text-align: right;
-    }
-    .v-textarea.v-text-field--enclosed.v-text-field--single-line textarea {
-        margin: 0 !important
     }
 </style>
