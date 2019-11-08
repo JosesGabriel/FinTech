@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" persistent dark max-width="310px">
+    <v-dialog v-model="dialog" persistent dark max-width="320px">
       <template v-slot:activator="{ on }">
         <div class="text-center">
           <v-btn class="mx-2" fab dark large color="#132b46" v-on="on">
@@ -8,9 +8,9 @@
           </v-btn>
         </div>
       </template>
-      <v-card :loading="watchCardModalLoading">
+      <v-card :loading="watchCardModalLoading" color="#142b46">
         <v-card-title>
-          <span class="headline">New Stock To Watch</span>
+          <span class="headline font-weight-light">New Stock To Watch</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -18,31 +18,43 @@
               <v-col cols="12">
                 <v-select
                   v-model="stocksDropdownModel"
+                  label="Stock Code"
                   :items="stockList"
                   item-text="stockCode"
                   item-value="stockID"
+                  dark
                   standard-
+                  color="primary"
                 ></v-select>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="entryPriceModel"
                   label="Entry Price"
-                  hint="example of helper text only on focus"
+                  prefix="₱"
+                  dense
+                  dark
+                  color="primary"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="takeProfitModel"
                   label="Take Profit"
-                  hint="example of helper text only on focus"
+                  prefix="₱"
+                  dense
+                  dark
+                  color="success"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="stopLossModel"
                   label="Stop Loss"
-                  hint="example of helper text only on focus"
+                  prefix="₱"
+                  dense
+                  dark
+                  color="warning"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -50,7 +62,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false"
+          <v-btn color="error darken-1" text @click="dialog = false"
             >Close</v-btn
           >
           <v-btn color="blue darken-1" text @click="addWatch()">Save</v-btn>
@@ -69,19 +81,26 @@
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     dialog: false,
+    keyCounter: 1,
     stockList: [],
     stocksDropdownModel: null,
-    entryPriceModel: 0,
-    takeProfitModel: 0,
-    stopLossModel: 0,
+    entryPriceModel: "",
+    takeProfitModel: "",
+    stopLossModel: "",
     post__responseMsg: null,
     watchList__alert: false,
     watchList__alertState: null,
     watchCardModalLoading: false
   }),
+  computed: {
+    ...mapGetters({
+      renderChartKey: "watchers/getRenderChartKey"
+    })
+  },
   mounted() {
     const params = {};
     this.$api.chart.stocks.list(params).then(
@@ -98,6 +117,9 @@ export default {
     );
   },
   methods: {
+    ...mapActions({
+      setRenderChartKey: "watchers/setRenderChartKey"
+    }),
     addWatch() {
       this.watchCardModalLoading = "primary";
       let params = {
@@ -116,6 +138,9 @@ export default {
             this.post__responseMsg = response.message;
             this.watchList__alertState = true;
             this.dialog = false;
+            //This line sets vuex renderchartkey. Watchlist.vue watches this value, if it detects a change, chart is re-rendered
+            this.setRenderChartKey(this.keyCounter);
+            this.keyCounter++;
           } else {
             this.watchList__alert = true;
             this.post__responseMsg = response.message;
