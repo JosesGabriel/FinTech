@@ -1,6 +1,6 @@
 <template>
   <v-content class="template">
-    <v-row class="ma-0 ml-4 mt-1 mb-1">
+    <v-row class="ma-0 ml-4 mt-2 mb-3">
       <v-col class="col-3 pa-0">
         <!-- arrow -->
         <v-content class="arrow-icon">
@@ -10,14 +10,14 @@
 
       <v-col class="col-9 pa-0">
         <v-content>
-          <span class="font-weight-bold title">PHILIPPINE INFRA...</span>
+          <span class="head">PHILIPPINE INFRA...</span>
         </v-content>
-        <v-content>
-          <span class="headline">15.01</span>
-          <span class="subtitle-2 increase">-0.03(1.95%)</span>
+        <v-content class="price">
+          <span>15.01</span>
+          <span class="changeperc increase">-0.03(1.95%)</span>
         </v-content>
-        <v-content class="mt-0">
-          <span class="caption">Market Capitalization: 9.517B</span>
+        <v-content class="marcap">
+          <span class="">Market Capitalization: 9.517B</span>
         </v-content>
       </v-col>
     </v-row>
@@ -35,7 +35,6 @@ export default {
   font-size: x-small;
   color: #fff;
 }
-/*
 .arrow-icon {
   margin-top: -8px;
 }
@@ -57,7 +56,6 @@ export default {
   position: absolute;
   top: 48px;
 }
-*/
 .increase {
   color: #48ffd5;
 }
