@@ -11,7 +11,7 @@
               </v-btn>
             </router-link>
         </v-card-title>
-        <v-simple-table :dense="true" dark id="liveportfolio-table">
+        <v-simple-table :dense="true" dark id="liveportfolio-table" class="pl-10">
             <template v-slot:default>
             <thead>
                 <tr class="">
