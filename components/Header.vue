@@ -1,16 +1,16 @@
 <template>
   <v-toolbar
-    :light="isLightMode == 1 ? true : false"
-    height="54"
+    dense
     class="header__toolbar"
     :class="isLightMode == 1 ? 'lightMode' : ''"
+    :dark="isLightMode == 1 ? false : true"
   >
     <div class="headerItems__wrapper">
       <router-link to="/">
         <img src="logo.png" alt="" width="45" height="45" />
       </router-link>
       <v-btn icon @click="paletteSwitch()">
-        <v-icon color="yellow">mdi-theme-light-dark</v-icon>
+        <v-icon color="yellow">mdi-heart</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <transition name="fade">
@@ -30,38 +30,85 @@
           ></v-text-field>
         </div>
       </transition>
-      <v-toolbar-items class="my-3">
+      <v-toolbar-items class="mt-3" dark>
         <transition name="slide-fade">
           <router-link
             v-if="searchButtonIsVisible"
             to="/"
             class="social__router"
           >
-            <v-btn ref="header__searchButton" icon @click="toggleSearch()">
-              <img src="/icon/header-icons/search.svg" width="20" />
+            <v-btn
+              ref="header__searchButton"
+              class="header__button"
+              text
+              @click="toggleSearch()"
+            >
+              Search
             </v-btn>
           </router-link>
         </transition>
         <router-link to="/" class="social__router">
-          <v-btn icon>
-            <img src="/icon/header-icons/powertools.svg" width="20" />
+          <v-btn class="header__button" text>
+            Power Tools
           </v-btn>
         </router-link>
         <router-link to="/" class="social__router">
-          <v-btn icon>
-            <img src="/icon/header-icons/notif.svg" width="20" />
+          <v-btn class="header__button" text>
+            Notification
           </v-btn>
         </router-link>
-        <router-link to="/login" class="social__router">
-          <v-btn icon>
-            <img src="/icon/header-icons/vyndue.svg" width="20" />
+        <router-link to="/" class="social__router">
+          <v-btn class="header__button" text>
+            Vyndue
           </v-btn>
         </router-link>
-        <v-avatar size="38" class="pt-3">
-          <img alt="Avatar" src="test.jpg" width="100%" />
-          <v-icon></v-icon>
-        </v-avatar>
+        <router-link to="/" class="social__router">
+          <v-btn class="header__button" text>
+            Account
+          </v-btn>
+        </router-link>
       </v-toolbar-items>
+
+      <v-dialog v-model="registerDialogModel" max-width="350px">
+        <v-card>
+          <v-card-text>
+            <div class="title text-center pt-5" style="color: black;">
+              Join Arbitrage. It's free!
+            </div>
+            <div class="body-2 text-center">
+              Already have an account? <a>Log in</a>
+            </div>
+          </v-card-text>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field label="Full name" required></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Email address"></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Username" required></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Password" required></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+            <small>By signing up, you agree to the Terms and Conditions.</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="registerDialogModel = false"
+              >Sign Up</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </v-toolbar>
 </template>
@@ -95,12 +142,15 @@
 } */
 .social__router {
   text-decoration: none;
+  display: inline-flex;
+  height: 0;
 }
 .header__toolbar {
   position: fixed;
   width: 100%;
   z-index: 100;
-  background-color: #0c1f33;
+  background-color: #00121e;
+  border-bottom: 1px white;
 }
 .lightMode {
   background-color: #f2f2f2;
@@ -112,7 +162,7 @@
   z-index: 0;
   width: 100%;
   margin: 0 auto;
-  max-width: 1023px;
+  /* max-width: 1023px; */
 }
 .headerItems__wrapper--margin-left {
   margin-left: 19vw;
@@ -122,13 +172,22 @@
   top: 30px;
   font-size: 0.6em;
 }
+.header__avatar {
+  cursor: pointer;
+}
+.header__button {
+  text-transform: none;
+  font-weight: 600;
+  font-size: 0.75em;
+}
 </style>
 <script>
 export default {
   data() {
     return {
       searchButtonIsVisible: true,
-      isLightMode: 0
+      isLightMode: 0,
+      registerDialogModel: false
     };
   },
   mounted() {
