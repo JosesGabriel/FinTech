@@ -8,7 +8,10 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-1`">Dashboard</v-tab>
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-2`">Tradelogs</v-tab>
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-3`">Ledger</v-tab>
-                <!-- <v-spacer></v-spacer>-->
+                <v-spacer></v-spacer>
+                <v-col sm="6" md="2" class="pa-0">
+                    <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Stock" dense solo flat></v-select>
+                </v-col>
                 <v-tab-item color="#48FFD5" background-color="black" :value="'tab-' + 1">
                     <v-container class="pa-0">
                         <JournalLivePortfolio/>
@@ -114,7 +117,8 @@ export default {
   data () {
     return {
       tab: null,
-      tabs: 3
+      tabs: 3,
+      portfolio: ['Sample one','Sample two','Sample three','Sample four'],
     }
   }
 }
@@ -177,5 +181,25 @@ export default {
 }
 #table_head_tr_snap-cont {
     border: none;
+}
+.select_portfolio .v-label {
+    font-size: 14px;
+    font-weight: 600
+}
+.select_portfolio .v-select__selection--comma {
+    color: black;
+    font-size: 14px;
+    font-weight: 600
+}
+.select_portfolio .v-select__slot .v-label,
+.select_portfolio .v-select__slot .v-icon {
+    color: black !important;
+}
+.select_portfolio .v-input__slot {
+    margin: 0;
+}
+.select_portfolio .v-input__control {
+    min-height: auto !important;
+    border-radius: unset
 }
 </style>

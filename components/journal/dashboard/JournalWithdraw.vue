@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="pa-5">
         <v-card-title class="text-left justify-left px-0">
             <h1 class="font-weight-regular subtitle-1" style="color:#b6b6b6;">Your Balance</h1>
         </v-card-title>

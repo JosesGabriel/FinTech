@@ -43,6 +43,8 @@
     data () {
       return {
         showScheduleForm: false,
+        isLightMode: 0,
+        darkText: '#b6b6b6',
         allodata: [
           {
             stocks: 'BDO',
@@ -199,7 +201,16 @@
           }
         }
       }
-    }
+    },
+    mounted() {
+      if (localStorage.currentMode) {
+        this.isLightMode = localStorage.currentMode;
+        localStorage.currentMode == 0 ? (this.darkText = '#b6b6b6') : (this.darkText = '#000');
+      } else {
+        localStorage.currentMode = 0;
+        this.darkText = '#b6b6b6';
+      }
+    },
   }
 </script>
 

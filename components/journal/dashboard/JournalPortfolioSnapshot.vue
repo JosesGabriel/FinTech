@@ -8,7 +8,7 @@
             </v-btn>
         </v-card-title>
         <v-col class="pa-0">
-            <v-card color="#00121E" elevation="0" dark class="pb-2" style="border: 1px solid #000">
+            <v-card color="transparent" elevation="0" dark class="pb-2">
                 <v-card-title class="text-left justify-left py-2 px-3">
                     <h6 class="font-weight-regular caption text-capitalize" style="color:#fff;">Trading Result (PHP)</h6>
                 </v-card-title>

@@ -24,12 +24,12 @@
             <v-col class="pa-0 pt-3" cols="12" sm="12" md="12">
                 <v-row no-gutters>
                     <v-col class="pa-0" cols="5" sm="5" md="5" @click.stop="show=false">
-                        <v-card-title class="text-center justify-center px-5 py-5 confirmation_button-reset-ok">
+                        <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-ok">
                             <h1 class="font-weight-regular body-1" style="color:#00FFC3;">I THINK NOT</h1>
                         </v-card-title>
                     </v-col>
                     <v-col class="pa-0" cols="7" sm="7" md="7" @click.stop="show=false">
-                        <v-card-title class="text-center justify-center px-5 py-5 confirmation_button-reset-not">
+                        <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-not">
                             <h1 class="font-weight-regular body-1" style="color:#00FFC3;">I UNDERSTAND, DO IT</h1>
                         </v-card-title>
                     </v-col>
@@ -64,6 +64,7 @@ export default {
     .confirmation_message-reset input {
         text-align: center;
         letter-spacing: 2px;
+        text-transform: uppercase;
     }
     .confirmation_button-reset-ok,
     .confirmation_button-reset-not {

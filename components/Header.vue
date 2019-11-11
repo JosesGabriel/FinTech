@@ -1,6 +1,6 @@
 <template>
   <v-toolbar
-    :light="isLightMode == 1 ? true : false"
+    :dark="isLightMode == 1 ? true : false"
     height="54"
     class="header__toolbar"
     :class="isLightMode == 1 ? 'lightMode' : ''"
