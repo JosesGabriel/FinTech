@@ -5,54 +5,51 @@
     dark
     outlined
     shaped
-    max-height="320"
+    max-height="245"
     :loading="watchCardLoading"
   >
-    <v-list-item class="watchlistCard">
-      <v-btn
-        outlined
-        fab
-        small
-        :color="stockCurrentChange > 0 ? '#34ad9e' : '#f45532'"
-        class="mr-3"
-        >{{ stockSymbol }}</v-btn
-      >
-      <v-list-item-content>
-        <v-list-item-title class="caption"
-          ><strong>{{ stockDescription }}</strong></v-list-item-title
-        >
-        <v-list-item-subtitle class="overline"
-          >₱{{ stockCurrentPrice }} |
+    <apexcharts
+      ref="closePriceChart"
+      type="line"
+      height="150"
+      :options="chartOptions"
+      :series="series"
+    />
+    <v-card-actions class="watchlistCard__items caption">
+      <div>
+        <strong>{{ stockExchange }}: {{ stockSymbol }}</strong>
+        <span class="float-right">
+          ₱{{ stockCurrentPrice }} |
           <span
             :class="
               stockCurrentChange > 0
                 ? 'watchlistCard__text--green'
-                : 'watchlistCard__text--red'
+                : stockCurrentChange < 0
+                ? 'watchlistCard__text--red'
+                : 'watchlistCard__text--yellow'
             "
-            >{{ stockCurrentChange }}%</span
-          ></v-list-item-subtitle
-        >
-      </v-list-item-content>
-    </v-list-item>
-    <apexcharts
-      ref="closePriceChart"
-      type="area"
-      height="180"
-      :options="chartOptions"
-      :series="series"
-    />
-    <v-card-actions class="watchlistCard__items body-2 mt-3">
+          >
+            {{ stockCurrentChange }}%</span
+          >
+        </span>
+      </div>
       <div>
         <span>Entry Price: </span>
-        <span class="float-right">₱{{ data.entry_price }}</span>
+        <span class="float-right"
+          >₱{{ userWatchedStocks[data].entry_price }}</span
+        >
       </div>
       <div>
         <span>Take Profit: </span>
-        <span class="float-right">₱{{ data.take_profit }}</span>
+        <span class="float-right"
+          >₱{{ userWatchedStocks[data].take_profit }}</span
+        >
       </div>
       <div>
         <span>Stop Loss: </span>
-        <span class="float-right">₱{{ data.stop_loss }}</span>
+        <span class="float-right"
+          >₱{{ userWatchedStocks[data].stop_loss }}</span
+        >
       </div>
     </v-card-actions>
     <div class="watchlistCard__percentbar">
@@ -64,22 +61,25 @@
         class="watchlistCard__bar watchlistCard__bar--red"
         style="width:54%"
       ></div>
-      <!-- <v-btn @click="chartColor()">Hahah</v-btn> -->
     </div>
   </v-card>
 </template>
 <style>
-.watchlistCard {
-  /* position: absolute; */
+.watchlistCard__bar--green {
+  background-color: #48ffd5;
 }
+.watchlistCard__bar--red {
+  background-color: #ff4848;
+}
+.watchlistCard__text--green,
 .watchlistCard__header--percent {
-  color: #48ffd5;
-}
-.watchlistCard__text--green {
   color: #48ffd5;
 }
 .watchlistCard__text--red {
   color: #ff4848;
+}
+.watchlistCard__text--yellow {
+  color: yellow;
 }
 .watchlistCard__items {
   margin-bottom: 10px;
@@ -94,10 +94,6 @@
   position: relative;
   bottom: 5px;
 }
-.watchlistCard__itemsContainer {
-  position: absolute;
-  bottom: 40px;
-}
 .watchlistCard__bar {
   float: left;
   color: #fff;
@@ -106,15 +102,10 @@
   line-height: 0;
   border-radius: 5px 0 0 5px;
 }
-.watchlistCard__bar--green {
-  background-color: #34ad9e;
-}
-.watchlistCard__bar--red {
-  background-color: #f45532;
-}
 </style>
 <script>
 import VueApexCharts from "vue-apexcharts";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -124,9 +115,9 @@ export default {
   data: function() {
     return {
       stockSymbol: "",
-      stockDescription: "~",
       stockCurrentPrice: "",
       stockCurrentChange: "",
+      stockExchange: "",
       watchCardLoading: "primary",
       series: [
         {
@@ -136,7 +127,7 @@ export default {
       ],
       chartOptions: {
         chart: {
-          height: 180,
+          height: 160,
           zoom: {
             enabled: false
           },
@@ -168,7 +159,7 @@ export default {
           }
         },
         grid: {
-          show: true,
+          show: false,
           borderColor: "#17314B",
           xaxis: {
             lines: {
@@ -191,6 +182,9 @@ export default {
               fontFamily: "Karla",
               cssClass: "apexcharts-xaxis-label"
             }
+          },
+          axisBorder: {
+            show: false
           },
           tooltip: {
             enabled: false,
@@ -255,66 +249,90 @@ export default {
       }
     };
   },
-  mounted() {
-    // GET Closing Price from Stock History API
-    const params = {
-      "symbol-id": this.data.stock_id,
-      resolution: "1D",
-      limit: "10"
-    };
-    this.$api.chart.charts.latest(params).then(
-      function(result) {
-        this.$refs.closePriceChart.updateSeries([
-          {
-            data: result.data.c
-          }
-        ]);
-      }.bind(this)
-    );
-    // GET Stock Symbol + Stock Description from Stock Info API
-    const params2 = {
-      "symbol-id": this.data.stock_id
-    };
-    this.$api.chart.stocks.list(params2).then(
-      function(result) {
-        (this.stockSymbol = result.data.symbol),
-          (this.stockDescription = result.data.description);
-        this.$refs.closePriceChart.updateSeries([
-          {
-            name: result.data.symbol
-          }
-        ]);
-      }.bind(this)
-    );
-    // GET Current Price + Current Change from Stock History API
-    const params3 = {
-      // exchange: "PSE",
-      // symbol: this.stockSymbol
-      "symbol-id": this.data.stock_id
-    };
-    this.$api.chart.stocks.history(params3).then(
-      function(result) {
-        this.stockCurrentPrice = result.data.last;
-        this.stockCurrentChange = result.data.changepercentage.toFixed(2);
-        if (this.stockCurrentChange > 0) {
-          this.chartOptions = {
-            ...this.chartOptions,
-            ...{
-              colors: ["#00FFC3"]
-            }
-          };
-        } else {
-          this.chartOptions = {
-            ...this.chartOptions,
-            ...{
-              colors: ["#FF4848"]
-            }
-          };
-        }
-        this.watchCardLoading = false;
-      }.bind(this)
-    );
+  computed: {
+    ...mapGetters({
+      userWatchedStocks: "watchers/getUserWatchedStocks"
+    })
   },
-  methods: {}
+  watch: {
+    userWatchedStocks: function() {
+      this.watchCardMount();
+    }
+  },
+  mounted() {
+    this.watchCardMount();
+  },
+  methods: {
+    ...mapActions({
+      setUserWatchedStocks: "watchers/setUserWatchedStocks"
+    }),
+    watchCardMount() {
+      // GET Closing Price from Stock History API
+      const params = {
+        "symbol-id": this.userWatchedStocks[this.data].stock_id,
+        resolution: "1D",
+        limit: "10"
+      };
+      this.$api.chart.charts.latest(params).then(
+        function(result) {
+          this.$refs.closePriceChart.updateSeries([
+            {
+              data: result.data.c
+            }
+          ]);
+        }.bind(this)
+      );
+
+      // GET Stock Symbol + Stock Exchange from Stock Info API
+      const params2 = {
+        "symbol-id": this.userWatchedStocks[this.data].stock_id
+      };
+      this.$api.chart.stocks.list(params2).then(
+        function(result) {
+          this.stockExchange = result.data.exchange;
+          this.stockSymbol = result.data.symbol;
+          this.$refs.closePriceChart.updateSeries([
+            {
+              name: result.data.symbol
+            }
+          ]);
+        }.bind(this)
+      );
+
+      // GET Current Price + Current Change from Stock History API
+      const params3 = {
+        "symbol-id": this.userWatchedStocks[this.data].stock_id
+      };
+      this.$api.chart.stocks.history(params3).then(
+        function(result) {
+          this.stockCurrentPrice = result.data.last;
+          this.stockCurrentChange = result.data.changepercentage.toFixed(2);
+          if (this.stockCurrentChange > 0) {
+            this.chartOptions = {
+              ...this.chartOptions,
+              ...{
+                colors: ["#00FFC3"]
+              }
+            };
+          } else if (this.stockCurrentChange < 0) {
+            this.chartOptions = {
+              ...this.chartOptions,
+              ...{
+                colors: ["#FF4848"]
+              }
+            };
+          } else {
+            this.chartOptions = {
+              ...this.chartOptions,
+              ...{
+                colors: ["#FFDD00"]
+              }
+            };
+          }
+          this.watchCardLoading = false;
+        }.bind(this)
+      );
+    }
+  }
 };
 </script>

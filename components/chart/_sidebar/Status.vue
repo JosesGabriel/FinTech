@@ -38,8 +38,8 @@ export default {
   name: "Status",
   data() {
     return {
-      colLabel: "col-3 pa-0 caption",
-      colValue: "col-3 pa-0 caption white--text"
+      colLabel: "col-3 pa-0",
+      colValue: "col-3 pa-0 white--text"
     };
   }
 };
@@ -55,7 +55,6 @@ export default {
 .decrease {
   color: #ff4848 !important;
 }
-/*
 .row-content {
   height: 60px;
 }
@@ -84,5 +83,4 @@ export default {
   top: 44px;
   width: 100%;
 }
-*/
 </style>

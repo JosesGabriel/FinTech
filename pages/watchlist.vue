@@ -6,14 +6,14 @@
     <v-row class="mb-5" no-gutters>
       <v-col
         class="navbar__container hidden-xs-only px-3"
-        cols="3"
-        sm="2"
-        md="3"
-        lg="3"
+        cols="1"
+        sm="1"
+        md="1"
+        lg="1"
       >
-        <Navbar />
+        <Navbar :data="navbarMiniVariantSetter" />
       </v-col>
-      <v-col xs="12" sm="10" md="6" lg="6">
+      <v-col xs="11" sm="11" md="11" lg="11" class="pl-8">
         <v-container class="pt-0" fluid>
           <div v-if="loadingBar" class="text-center">
             <v-progress-circular
@@ -22,26 +22,23 @@
               indeterminate
             ></v-progress-circular>
           </div>
-          <v-row>
-            <v-col cols="6">
+          <div style="display: flex;justify-content: flex-end;" class="mb-2">
+            <div style="display: flex;">
               <AddWatcherModal v-if="!loadingBar" />
-              <EditDeleteWatcherModal v-if="!loadingBar" class="mt-2" />
-            </v-col>
+              <EditDeleteWatcherModal v-if="!loadingBar" />
+            </div>
+          </div>
+          <v-row>
             <v-col
               v-for="(n, index) in watchListObject.length"
               :key="n"
-              cols="6"
+              cols="3"
               class="pt-0"
             >
-              <WatchCard :key="renderChartKey" :data="watchListObject[index]" />
+              <WatchCard :data="index" />
             </v-col>
           </v-row>
         </v-container>
-      </v-col>
-      <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
-        <TrendingStocks />
-        <TrendingStocks />
-        <FooterSidebar />
       </v-col>
     </v-row>
   </v-container>
@@ -54,8 +51,6 @@
 </style>
 <script>
 import Navbar from "~/components/Navbar";
-import FooterSidebar from "~/components/FooterSidebar.vue";
-import TrendingStocks from "~/components/TrendingStocks.vue";
 import WatchCard from "~/components/watchers/WatchCard.vue";
 import AddWatcherModal from "~/components/watchers/AddWatcherModal.vue";
 import EditDeleteWatcherModal from "~/components/watchers/EditDeleteWatcherModal.vue";
@@ -65,8 +60,6 @@ export default {
   layout: "main",
   components: {
     Navbar,
-    TrendingStocks,
-    FooterSidebar,
     WatchCard,
     AddWatcherModal,
     EditDeleteWatcherModal
@@ -76,6 +69,7 @@ export default {
       isOpen: true,
       isDarkMode: 0,
       watchListObject: "",
+      navbarMiniVariantSetter: true,
       loadingBar: true,
       componentKey: 0
     };
@@ -107,8 +101,8 @@ export default {
       this.$axios
         .$get("https://dev-api.arbitrage.ph/api/journal/watchlist", userData)
         .then(response => {
-          this.watchListObject = response.data.watchlists;
-          this.setUserWatchedStocks(response.data.watchlists);
+          this.watchListObject = response.data.watchlist;
+          this.setUserWatchedStocks(response.data.watchlist);
           this.loadingBar = false;
         });
       this.componentKey++; //forces re-render

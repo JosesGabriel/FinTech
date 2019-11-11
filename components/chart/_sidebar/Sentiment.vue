@@ -1,10 +1,10 @@
 <template>
   <v-content class="template text-center">
-    <div class="caption">Members Sentiment</div>
+    <div class="header">Members Sentiment</div>
     <v-row class="ma-0 px-4">
       <v-col class="col-2 pa-0">
-        <v-content class="bull-circle float-right">
-          <v-img width="35px" height="35px" src="/Icon/chart/bull-circle.svg">
+        <v-content class="bull-circle ml-1">
+          <v-img width="30px" height="30px" src="/Icon/chart/bull-circle.svg">
           </v-img></v-content
       ></v-col>
       <v-col class="col-8 pa-0">
@@ -22,11 +22,11 @@
           </v-content>
         </v-content>
       </v-col>
-      <v-col class="col-2 pa-0 float-left">
+      <v-col class="col-2 pa-0">
         <v-content class="bear-circle">
           <v-img
-            width="35px"
-            height="35px"
+            width="30px"
+            height="30px"
             src="/Icon/chart/bear-circle.svg"
           ></v-img
         ></v-content>
@@ -48,10 +48,11 @@ export default {
 }
 .header {
   text-align: center;
+  font-size: 11px;
 }
 .progress {
   padding: 0px;
-  width: 90%;
+  width: 130px;
   margin-left: auto;
   margin-right: auto;
   font-size: 10px;

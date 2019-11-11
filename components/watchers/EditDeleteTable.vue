@@ -134,27 +134,14 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
+    },
+    userWatchedStocks() {
+      this.populateStockDropdown();
     }
   },
 
   mounted() {
-    // GET Data from User Watchlist
-    // Converts stock symbol_id to stock code like; 123123123 = 'JFC'
-    this.shemes = JSON.parse(JSON.stringify(this.userWatchedStocks)); //removes vuex pointer and two way data binding
-    this.userStockData = this.shemes;
-    for (let i = 0; i < this.userStockData.length; i++) {
-      //Just converts stock_id to stock symbol
-      //INEFFECIENT AS FUCKK; todo Refractor and improve
-      const params = {
-        "symbol-id": this.userStockData[i].stock_id
-      };
-      this.$api.chart.stocks.list(params).then(
-        function(result) {
-          this.userStockData[i].stock_id = result.data.symbol;
-          this.tableLoading = false;
-        }.bind(this)
-      );
-    }
+    this.populateStockDropdown();
   },
 
   methods: {
@@ -162,7 +149,25 @@ export default {
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
-
+    populateStockDropdown() {
+      // GET Data from User Watchlist
+      // Converts stock symbol_id to stock code like; 123123123 = 'JFC'
+      this.shemes = JSON.parse(JSON.stringify(this.userWatchedStocks)); //removes vuex pointer and two way data binding
+      this.userStockData = this.shemes;
+      for (let i = 0; i < this.userStockData.length; i++) {
+        //Just converts stock_id to stock symbol
+        //INEFFECIENT AS FUCKK; todo Refractor and improve
+        const params = {
+          "symbol-id": this.userStockData[i].stock_id
+        };
+        this.$api.chart.stocks.list(params).then(
+          function(result) {
+            this.userStockData[i].stock_id = result.data.symbol;
+            this.tableLoading = false;
+          }.bind(this)
+        );
+      }
+    },
     editItem(item) {
       this.editedIndex = this.userStockData.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -183,16 +188,17 @@ export default {
               this.watchList__alert = true;
               this.post__responseMsg = response.message;
               this.watchList__alertState = true;
-              this.setRenderChartKey(this.keyCounter);
-              this.keyCounter++;
               this.watchCardModalLoading = false;
+              this.keyCounter = this.renderChartKey;
+              this.keyCounter++;
+              this.setRenderChartKey(this.keyCounter);
+              this.userStockData.splice(index, 1);
             } else {
               this.watchList__alert = true;
               this.post__responseMsg = response.message;
               this.watchList__alertState = false;
             }
           });
-        this.userStockData.splice(index, 1);
       }
     },
 
@@ -205,6 +211,7 @@ export default {
     },
 
     save() {
+      this.tableLoading = "primary";
       if (this.editedIndex > -1) {
         let params = {
           entry_price: this.editedItem.entry_price,
@@ -222,14 +229,15 @@ export default {
               this.watchList__alert = true;
               this.post__responseMsg = response.message;
               this.watchList__alertState = true;
-              this.setRenderChartKey(this.keyCounter);
+              this.keyCounter = this.renderChartKey;
               this.keyCounter++;
-              this.watchCardModalLoading = false;
+              this.setRenderChartKey(this.keyCounter);
             } else {
               this.watchList__alert = true;
               this.post__responseMsg = response.message;
               this.watchList__alertState = false;
             }
+            this.tableLoading = false;
           });
         Object.assign(this.userStockData[this.editedIndex], this.editedItem);
       }

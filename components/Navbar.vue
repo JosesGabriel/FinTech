@@ -3,7 +3,7 @@
     <v-navigation-drawer
       disable-resize-watcher
       mobile-break-point
-      :mini-variant="$vuetify.breakpoint.mdAndDown"
+      :mini-variant="data ? true : $vuetify.breakpoint.mdAndDown"
       class="navbarDrawer__card"
       :class="isLightMode == 1 ? 'lightMode' : ''"
       :dark="darkText"
@@ -176,6 +176,7 @@
 <script>
 export default {
   layout: "main",
+  props: ["data"],
   data() {
     return {
       isLightMode: 0,

@@ -61,7 +61,7 @@
             small
             @click="maximizeTable"
           >
-            <v-icon>mdi-eject</v-icon>
+            <v-icon>eject</v-icon>
           </v-btn>
           <v-btn
             :disabled="!table"
@@ -72,7 +72,7 @@
             small
             @click="fullscreenTable"
           >
-            <v-icon>mdi-fullscreen</v-icon>
+            <v-icon>fullscreen</v-icon>
           </v-btn>
           <v-btn color="blue" dark @click="toggleSidebar">Sidebar</v-btn>
         </div>
@@ -211,5 +211,15 @@ export default {
 
 .spacer__content {
   height: 52px;
+}
+
+.col-3 {
+  flex: 0 0 23%;
+  max-width: 23%;
+}
+
+.col-9 {
+  flex: 0 0 77%;
+  max-width: 77%;
 }
 </style>

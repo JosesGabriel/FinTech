@@ -70,118 +70,124 @@
 </template>
 <script>
 //Dashboard tab
-import JournalLivePortfolio from '~/components/journal/dashboard/JournalLivePortfolio'
-import JournalPortfolioSnapshot from '~/components/journal/dashboard/JournalPortfolioSnapshot'
-import JournalCurrentAllocation from '~/components/journal/dashboard/JournalCurrentAllocation'
-import JournalMonthlyPerfomance from '~/components/journal/dashboard/JournalMonthlyPerfomance'
-import JournalTradeStats from '~/components/journal/dashboard/JournalTradeStats'
-import JournalEquityCurve from '~/components/journal/dashboard/JournalEquityCurve'
-import JournalStrategyStats from '~/components/journal/dashboard/JournalStrategyStats'
-import JournalTopStocks from '~/components/journal/dashboard/JournalTopStocks'
-import JournalEmotionalStats from '~/components/journal/dashboard/JournalEmotionalStats'
-import JournalExpenseReport from '~/components/journal/dashboard/JournalExpenseReport'
-import JournalBuyVolume from '~/components/journal/dashboard/JournalBuyVolume'
-import JournalBuyValue from '~/components/journal/dashboard/JournalBuyValue'
-import JournalPerformance from '~/components/journal/dashboard/JournalPerformance'
-import JournalGrossPL from '~/components/journal/dashboard/JournalGrossPL'
+import JournalLivePortfolio from "~/components/journal/dashboard/JournalLivePortfolio";
+import JournalPortfolioSnapshot from "~/components/journal/dashboard/JournalPortfolioSnapshot";
+import JournalCurrentAllocation from "~/components/journal/dashboard/JournalCurrentAllocation";
+import JournalMonthlyPerfomance from "~/components/journal/dashboard/JournalMonthlyPerfomance";
+import JournalTradeStats from "~/components/journal/dashboard/JournalTradeStats";
+import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
+import JournalStrategyStats from "~/components/journal/dashboard/JournalStrategyStats";
+import JournalTopStocks from "~/components/journal/dashboard/JournalTopStocks";
+import JournalEmotionalStats from "~/components/journal/dashboard/JournalEmotionalStats";
+import JournalExpenseReport from "~/components/journal/dashboard/JournalExpenseReport";
+import JournalBuyVolume from "~/components/journal/dashboard/JournalBuyVolume";
+import JournalBuyValue from "~/components/journal/dashboard/JournalBuyValue";
+import JournalPerformance from "~/components/journal/dashboard/JournalPerformance";
+import JournalGrossPL from "~/components/journal/dashboard/JournalGrossPL";
 
 //Ledger tab
-import TradelogsContent from '~/components/journal/tradelogs/contents'
+import TradelogsContent from "~/components/journal/tradelogs/contents";
 
 //Ledger tab
-import LedgerContent from '~/components/journal/ledger/LedgerContent'
+import LedgerContent from "~/components/journal/ledger/LedgerContent";
 
 export default {
-  layout: 'main',
+  layout: "main",
   components: {
-      //Dashboard tab
-      JournalLivePortfolio,
-      JournalPortfolioSnapshot,
-      JournalCurrentAllocation,
-      JournalMonthlyPerfomance,
-      JournalTradeStats,
-      JournalEquityCurve,
-      JournalStrategyStats,
-      JournalTopStocks,
-      JournalEmotionalStats,
-      JournalExpenseReport,
-      JournalBuyVolume,
-      JournalBuyValue,
-      JournalPerformance,
-      JournalGrossPL,
-      //Ledger tab
-      TradelogsContent,
-      //Ledger tab
-      LedgerContent
+    //Dashboard tab
+    JournalLivePortfolio,
+    JournalPortfolioSnapshot,
+    JournalCurrentAllocation,
+    JournalMonthlyPerfomance,
+    JournalTradeStats,
+    JournalEquityCurve,
+    JournalStrategyStats,
+    JournalTopStocks,
+    JournalEmotionalStats,
+    JournalExpenseReport,
+    JournalBuyVolume,
+    JournalBuyValue,
+    JournalPerformance,
+    JournalGrossPL,
+    //Ledger tab
+    TradelogsContent,
+    //Ledger tab
+    LedgerContent
   },
-  data () {
+  data() {
     return {
       tab: null,
+<<<<<<< HEAD
       tabs: 3,
       portfolio: ['Sample one','Sample two','Sample three','Sample four'],
     }
+=======
+      tabs: 3
+    };
+>>>>>>> 61b69f46f29c849e0fcfb5d6a13135b82dfe37f9
   }
-}
+};
 </script>
 <style>
 .v-window.v-item-group.theme--light.v-tabs-items {
-    background: none;
+  background: none;
 }
 .v-slide-group__content.v-tabs-bar__content:before {
-    content: "";
-    width: 100%;
-    position: absolute;
-    bottom: -3px;
-    z-index: 1;
-    height: 4px;
-    background: #000;
+  content: "";
+  width: 100%;
+  position: absolute;
+  bottom: -3px;
+  z-index: 1;
+  height: 4px;
+  background: #000;
 }
 .rtf_top-btn.v-btn--outlined:hover,
 .rtf_top-btn.v-btn--outlined:active,
 .rtf_top-btn.v-btn--outlined:focus {
-    background-color: #48ffd5;
-    border: 2px solid #48ffd5;
-    color: #00121E !important;
-    font-weight: 600 !important;
+  background-color: #48ffd5;
+  border: 2px solid #48ffd5;
+  color: #00121e !important;
+  font-weight: 600 !important;
 }
 .rtf_top-btn.v-btn--outlined {
-    letter-spacing: 0.1px !important;
+  letter-spacing: 0.1px !important;
 }
 
 .navbarDrawer__card-journal .v-navigation-drawer__border {
-    background: #000 !important
+  background: #000 !important;
 }
 /* .tab_menu-top:not(.v-tab--active):not(.v-tab--disabled) {
     opacity: 1 !important;
     color: #fff !important;
 } */
 .apexcharts-tooltip-series-group {
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.5) !important;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 .apexcharts-svg {
-    /* overflow: visible !important; */
+  /* overflow: visible !important; */
 }
 #table_tr_port-cont:hover {
-    background: rgb(9, 26, 43);
+  background: rgb(9, 26, 43);
 }
 #table_td_port-cont {
-    border: none;
-    cursor: pointer;
+  border: none;
+  cursor: pointer;
 }
 #table_head_tr_port-cont {
-    border: none;
+  border: none;
 }
 #table_tr_snap-cont:hover {
-    background: rgb(9, 26, 43);
+  background: rgb(9, 26, 43);
 }
 #table_td_snap-cont {
-    border: none;
-    cursor: pointer;
+  border: none;
+  cursor: pointer;
 }
 #table_head_tr_snap-cont {
-    border: none;
+  border: none;
 }
+<<<<<<< HEAD
 .select_portfolio .v-label {
     font-size: 14px;
     font-weight: 600
@@ -203,3 +209,6 @@ export default {
     border-radius: unset
 }
 </style>
+=======
+</style>
+>>>>>>> 61b69f46f29c849e0fcfb5d6a13135b82dfe37f9
