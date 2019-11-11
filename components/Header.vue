@@ -1,10 +1,9 @@
 <template>
   <v-toolbar
-    :dark="isLightMode == 1 ? true : false"
+    :dark="isLightMode == 1 ? true : true"
     height="54"
     class="header__toolbar"
     :class="isLightMode == 1 ? 'lightMode' : ''"
-    :dark="isLightMode == 1 ? false : true"
   >
     <div class="headerItems__wrapper">
       <router-link to="/">

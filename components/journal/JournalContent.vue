@@ -117,14 +117,9 @@ export default {
   data() {
     return {
       tab: null,
-<<<<<<< HEAD
       tabs: 3,
       portfolio: ['Sample one','Sample two','Sample three','Sample four'],
     }
-=======
-      tabs: 3
-    };
->>>>>>> 61b69f46f29c849e0fcfb5d6a13135b82dfe37f9
   }
 };
 </script>
@@ -187,7 +182,6 @@ export default {
 #table_head_tr_snap-cont {
   border: none;
 }
-<<<<<<< HEAD
 .select_portfolio .v-label {
     font-size: 14px;
     font-weight: 600
@@ -209,6 +203,3 @@ export default {
     border-radius: unset
 }
 </style>
-=======
-</style>
->>>>>>> 61b69f46f29c849e0fcfb5d6a13135b82dfe37f9
