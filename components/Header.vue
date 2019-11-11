@@ -10,7 +10,7 @@
         <img src="logo.png" alt="" width="45" height="45" />
       </router-link>
       <v-btn icon @click="paletteSwitch()">
-        <v-icon color="yellow">mdi-heart</v-icon>
+        <v-icon color="yellow">mdi-theme-light-dark</v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <transition name="fade">

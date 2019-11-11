@@ -85,7 +85,7 @@ export default {
           info: colors.purple,
           warning: colors.orange,
           error: colors.red,
-          success: colors.green
+          success: colors.teal.accent3
         },
         dark: {
           background: colors.blue.darken3
