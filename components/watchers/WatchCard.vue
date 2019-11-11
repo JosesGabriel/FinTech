@@ -1,7 +1,7 @@
 <template>
   <v-card
-    class="mb-1"
-    color="#142b46"
+    class="mb-1 watchCard"
+    color="#0c1a2b"
     dark
     outlined
     shaped
@@ -26,7 +26,7 @@
                 ? 'watchlistCard__text--green'
                 : stockCurrentChange < 0
                 ? 'watchlistCard__text--red'
-                : 'watchlistCard__text--yellow'
+                : 'watchlistCard__text--gray'
             "
           >
             {{ stockCurrentChange }}%</span
@@ -78,8 +78,8 @@
 .watchlistCard__text--red {
   color: #ff4848;
 }
-.watchlistCard__text--yellow {
-  color: yellow;
+.watchlistCard__text--gray {
+  color: gray;
 }
 .watchlistCard__items {
   margin-bottom: 10px;
@@ -325,7 +325,7 @@ export default {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#FFDD00"]
+                colors: ["#808080"]
               }
             };
           }
