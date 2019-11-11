@@ -1,25 +1,42 @@
 <template>
   <v-content>
-    <span class="caption ml-4 font-weight-bold white--text">All Stock</span>
-    <v-simple-table dense dark fixed-header height="300">
+    <v-content class="mt-1">
+      <span class="caption ml-4 font-weight-bold white--text">All Stock</span>
+    </v-content>
+    <v-simple-table
+      dense
+      dark
+      fixed-header
+      class="ml-4"
+      height="360"
+      style="background:#0b1f33"
+    >
       <thead>
         <tr>
-          <th :class="header">#</th>
-          <th :class="header">VOL</th>
-          <th :class="header">BID</th>
-          <th :class="header">ASK</th>
-          <th :class="header">VOL</th>
-          <th :class="header">#</th>
+          <th :class="header">SYMBOL</th>
+          <th :class="header" class="text-right">LAST</th>
+          <th :class="header" class="text-right">%CHANGE</th>
+          <th :class="header" class="text-right">VALUE</th>
+          <th :class="header" class="text-right">TRADES</th>
+          <th :class="header"></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in items" :key="item.id">
-          <td :class="column">{{ item.bidnum }}</td>
-          <td :class="column">{{ item.bidvol }}</td>
-          <td :class="column">{{ item.bid }}</td>
-          <td :class="column">{{ item.ask }}</td>
-          <td :class="column">{{ item.askvol }}</td>
-          <td :class="column">{{ item.asknum }}</td>
+          <td :class="column" style="width:20%">{{ item.symbol }}</td>
+          <td :class="column" style="width:15%" class="text-right">
+            <span class="decrease">{{ item.last }}</span>
+          </td>
+          <td :class="column" style="width:23%" class="text-right">
+            <span class="increase">{{ item.change }}</span>
+          </td>
+          <td :class="column" style="width:18%" class="text-right">
+            <span class="">{{ item.value }}</span>
+          </td>
+          <td :class="column" style="width:18%" class="text-right">
+            <span class="">{{ item.trades }}</span>
+          </td>
+          <td :class="column"></td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -31,134 +48,88 @@ export default {
   name: "AllStock",
   data() {
     return {
-      header: "text-left overline header white--text font-weight-bold",
-      column: "text-right overline column white--text",
+      header: "caption header white--text font-weight-bold",
+      column: "caption column white--text",
       items: [
         {
           id: 1,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
         },
         {
           id: 2,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
         },
         {
           id: 3,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
         },
         {
           id: 4,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
         },
         {
           id: 5,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
         },
         {
-          id: 11,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
+          id: 6,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
         },
         {
-          id: 211,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
+          id: 7,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
         },
         {
-          id: 311,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 411,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 511,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 5111,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 2111,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 3111,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 4111,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
+          id: 8,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
         }
       ]
     };
@@ -166,4 +137,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.v-data-table td,
+.v-data-table th {
+  padding: 0px 0px !important;
+}
+.v-data-table--dense td {
+  height: 20px;
+}
+</style>
