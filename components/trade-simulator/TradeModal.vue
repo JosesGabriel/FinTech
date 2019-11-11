@@ -10,6 +10,10 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" width="100" :href="`#funds-1`">Buy</v-tab>
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`">Sell</v-tab>
 
+                <v-col class="text-right caption pt-5">
+                    Market Status: <span>Open</span>
+                </v-col>
+
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 1">
                     <BuyTrade/>
                 </v-tab-item>

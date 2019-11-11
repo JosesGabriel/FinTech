@@ -1,21 +1,16 @@
 <template>
     <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
         <v-row class="mb-6" no-gutters>
-            <v-col class="px-3 hidden-md-and-down" cols="2" sm="3" md="3">
+            <v-col class="hidden-xs-and-down" cols="1" sm="1" md="1">
               <vNavBar/>
             </v-col>
-            <v-col cols="9">
+            <v-col cols="11">
                 <VirtualContent/>
             </v-col>
         </v-row>
     </v-container>
 </template>
-<style scoped>
-    .socialWall__container {
-        max-width: 1080px;
-        margin-top: 40px;
-    }
-</style>
+
 <script>
 import vNavBar from '~/components/trade-simulator/vNavBar'
 import VirtualContent from '~/components/trade-simulator/VirtualContent'
@@ -47,3 +42,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+    .socialWall__container {
+        max-width: 1080px;
+        margin-top: 40px;
+    }
+</style>

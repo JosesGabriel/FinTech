@@ -1,6 +1,16 @@
 <template>
     <v-col class="pa-0">
         <v-card-title class="text-left justify-left px-0 py-3 pt-5">
+            <v-col md="3" class="mx-0 ml-5 pa-0">
+              <v-text-field
+                class="mx-0 mr-3 pa-0 filter"
+                color="#00ffc3"
+                label="Filter"
+                solo
+                dense
+                prepend-inner-icon=""
+              ></v-text-field>
+            </v-col>
             <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Day</v-btn>
             <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Week</v-btn>
             <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Month</v-btn>
@@ -150,24 +160,6 @@ export default {
           MarketValue: '16,709.10',
           Profit: '661.90',
           Perf: '4.12',
-        },
-        {
-          stocks: 'HOME',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        },
-        {
-          stocks: 'DKS',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
         }
       ],
       items: [
@@ -179,11 +171,38 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 .theme--dark.v-data-table thead tr:last-child th,
 .theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
   border: none;
 }
+
+.theme--light.v-text-field--solo > .v-input__control > .v-input__slot {
+    background: #00121e;
+    border: 2px solid #00FFC3;
+}
+
+.filter > .v-input__control > .v-input__slot > .v-text-field__slot > .v-label {
+    color: #00ffc3;
+}
+
+.filter > .v-input__control > .v-input__slot > .v-text-field__slot > input {
+    color: #00ffc3;
+}
+
+.v-input input {
+    max-height: 26px;
+}
+
+.v-text-field.v-text-field--solo .v-input__control {
+    min-height: 13px;
+}
+.filter {
+  margin-bottom: none;
+  min-height: 13px;
+  border-radius: unset;
+}
+
 .item_position-prop {
   color: #b6b6b6
 }
