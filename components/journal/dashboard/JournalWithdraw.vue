@@ -1,5 +1,5 @@
 <template>
-    <v-container class="pa-5">
+    <v-container class="pa-0">
         <v-card-title class="text-left justify-left px-0">
             <h1 class="font-weight-regular subtitle-1" style="color:#b6b6b6;">Your Balance</h1>
         </v-card-title>
@@ -9,9 +9,6 @@
         <v-card-title class="text-left justify-left px-0">
             <h1 class="font-weight-regular subtitle-1" style="color:#b6b6b6;">Enter Amount</h1>
         </v-card-title>
-        <!-- <v-card-title class="justify-end py-1">
-            <h1 class="font-weight-bold balance_amount" style="color:#b6b6b6;"><span class="font-weight-light caption">PHP</span> 0.00</h1>
-        </v-card-title> -->
         <v-col class="pa-0" cols="12" sm="12" md="12">
             <v-text-field
                 placeholder="Enter Quantity"

@@ -81,7 +81,7 @@ export default {
           background: colors.grey.lighten5,
           primary: colors.blue,
           accent: colors.grey.darken3,
-          secondary: colors.blueGrey,
+          secondary: colors.grey.lighten1,
           info: colors.purple,
           warning: colors.orange,
           error: colors.red,

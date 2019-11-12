@@ -2,9 +2,11 @@
 <template>
     <v-dialog v-model="show" max-width="350px">
         <v-card color="#00121E">
+            <v-card-title class="text-left justify-left pa-3 px-5 success--text subtitle-1">FUND</v-card-title>
             <v-tabs
             color="#48FFD5"
             background-color="#00121E"
+            class="px-7"
             dark
             grow
             >
@@ -18,24 +20,25 @@
                     <JournalWithdraw/>
                 </v-tab-item>
             </v-tabs>
-            <v-col class="pa-0 pt-3" cols="12" sm="12" md="12">
-                <v-row no-gutters>
-                    <v-col class="pa-0" cols="6" sm="6" md="6" @click.stop="show=false">
-                        <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-ok">
-                            <h1 class="font-weight-regular body-1" style="color:#00FFC3;">Cancel</h1>
-                        </v-card-title>
-                    </v-col>
-                    <v-col class="pa-0" cols="6" sm="6" md="6" @click.stop="show=false">
-                        <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-not">
-                            <h1 class="font-weight-regular body-1" style="color:#00FFC3;">Confirm</h1>
-                        </v-card-title>
-                    </v-col>
-                </v-row>
-            </v-col>
-
-            <!-- <v-card-actions>
-            <v-btn color="primary" @click.stop="show=false">Close</v-btn>
-            </v-card-actions> -->
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="#48FFD5"
+                    class="text-capitalize"
+                    depressed
+                    light
+                    @click.stop="show=false"
+                    >Close</v-btn
+                >
+                <v-btn
+                    color="#48FFD5"
+                    class="text-capitalize"
+                    depressed
+                    light
+                    @click.stop="show=false"
+                    >Save</v-btn
+                >
+            </v-card-actions>
         </v-card>
     </v-dialog>
 </template>

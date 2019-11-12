@@ -9,9 +9,6 @@
                     </v-btn>
             </v-card-title>
         </v-col>
-        <!-- <div class="pt-3" id="chart">
-            <apexcharts type=line height=300 :options="chartOptions" :series="series" />
-        </div> -->
         <div class="pt-3" id="chart">
             <apexcharts type=bar height=300 :options="chartOptions" :series="series" />
         </div>
@@ -96,6 +93,9 @@ export default {
                   fontFamily: 'Karla',
                   cssClass: 'apexcharts-xaxis-label',
                 }
+              },
+              crosshairs: {
+                show: false,
               },
               lines: {
                   show: false

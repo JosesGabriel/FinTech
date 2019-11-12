@@ -4,7 +4,7 @@
             <h1 class="font-weight-regular subtitle-2" style="color:#fff;">OPEN POSITION/S (PHP)</h1>
             <v-spacer></v-spacer>
             <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
-            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeForm=true" style="border-width: 2px" height="23">Trade</v-btn>
+            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" style="border-width: 2px" height="23">Trade</v-btn>
             <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" style="border-width: 2px" height="23">Fund</v-btn>
 
               <v-btn icon small @click.stop="showScheduleForm=true"> 
@@ -76,28 +76,32 @@
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
         <reset-modal :visible="showResetForm" @close="showResetForm=false" />
         <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
-        <trade-modal :visible="showTradeForm" @close="showTradeForm=false" />
+        <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" />
+        <!-- <trade-modal :visible="showTradeForm" @close="showTradeForm=false" /> -->
     </v-col>
 </template>
 <script>
 import resetModal from '~/components/modals/reset'
 import shareModal from '~/components/modals/share'
 import fundsModal from '~/components/modals/fund'
-import tradeModal from '~/components/modals/trade'
+import tradeView from '~/components/modals/tradeView'
+// import tradeModal from '~/components/modals/tradeInput'
 
 export default {
   components: {
     shareModal,
     resetModal,
     fundsModal,
-    tradeModal
+    tradeView,
+    // tradeModal
   },
   data () {
     return {
       showScheduleForm: false,
       showResetForm: false,
       showFundsForm: false,
-      showTradeForm: false,
+      showTradeViewForm: false,
+      // showTradeForm: false,
       offsety: true,
       desserts: [
         {
@@ -147,7 +151,8 @@ export default {
         }
       ],
       items: [
-          { title: 'Note' },
+          { title: 'Trade Details' },
+          { title: 'Edit' },
           { title: 'Delete' },
       ],
       page: 1,

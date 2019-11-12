@@ -1,5 +1,5 @@
 <template>
-    <v-container class="pa-5">
+    <v-container class="pa-0">
         <v-card-title class="text-left justify-left px-0">
             <h1 class="font-weight-regular subtitle-1" style="color:#b6b6b6;">Your Balance</h1>
         </v-card-title>
@@ -75,13 +75,5 @@ export default {
     }
     .enter_amount-deposit.stock_selector input {
         text-align: right;
-    }
-    .enter_amount-deposit.v-text-field > .v-input__control > .v-input__slot:before,
-    .enter_amount-deposit.v-text-field > .v-input__control > .v-input__slot:before {
-        border-color: rgb(0, 0, 0);
-    }
-    .enter_amount-deposit-select.v-text-field > .v-input__control > .v-input__slot:before,
-    .enter_amount-deposit-select.v-text-field > .v-input__control > .v-input__slot:before {
-        border-color: rgb(0, 0, 0);
     }
 </style>

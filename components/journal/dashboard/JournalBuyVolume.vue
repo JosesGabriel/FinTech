@@ -91,6 +91,9 @@
                 cssClass: 'apexcharts-xaxis-label',
               }
             },
+            crosshairs: {
+              show: false,
+            },
             lines: {
                 show: false
             },
