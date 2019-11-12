@@ -3,7 +3,7 @@
     <div class="row leaderboard__header">
       <div class="col-12"><span>Leaderboard</span></div>
     </div>
-    <div v-for="n in 7" :key="n" class="row leaderboard__content">
+    <div v-for="n in 10" :key="n" class="row leaderboard__content">
       <div class="col-2 title pb-0">{{ n }}</div>
       <div class="col-2 px-0 pt-4 pb-0">
         <v-avatar class="profile" color="grey" size="34" tile>

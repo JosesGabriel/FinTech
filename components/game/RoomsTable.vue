@@ -3,7 +3,7 @@
     <v-data-table
       dark
       :headers="headers"
-      :items="desserts"
+      :items="items"
       :items-per-page="4"
       style="background-color: transparent"
       class="elevation-1"
@@ -12,7 +12,33 @@
       }"
     ></v-data-table>
     <div class="table__footer">
-      <v-btn small outlined color="success">Join Game</v-btn>
+      <v-btn small outlined color="success" @click.stop="dialog = true"
+        >Join Game</v-btn
+      >
+      <v-dialog v-model="dialog" max-width="290">
+        <v-card>
+          <v-card-title class="headline"
+            >Use Google's location service?</v-card-title
+          >
+
+          <v-card-text>
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are running.
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn color="green darken-1" text @click="dialog = false">
+              Disagree
+            </v-btn>
+
+            <v-btn color="green darken-1" text @click="dialog = false">
+              Agree
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-btn small outlined color="success">Create Game</v-btn>
     </div>
   </div>
@@ -79,7 +105,7 @@ export default {
           class: "tableHeader"
         }
       ],
-      desserts: [
+      items: [
         {
           name: "003",
           players: 159,
@@ -135,6 +161,14 @@ export default {
           time: 98,
           charts: 0,
           coinbet: "200"
+        },
+        {
+          name: "008",
+          players: 375,
+          market: "PSE",
+          time: 94,
+          charts: 0.0,
+          coinbet: "110"
         }
       ]
     };

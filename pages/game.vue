@@ -16,6 +16,7 @@
         <ChatClient />
       </v-col>
       <v-col cols="3" class="pt-0">
+        <AdCarousel class="mb-5" />
         <AdCarousel />
       </v-col>
     </v-row>
