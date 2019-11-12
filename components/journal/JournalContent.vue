@@ -10,7 +10,9 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-3`">Ledger</v-tab>
                 <v-spacer></v-spacer>
                 <v-col sm="6" md="2" class="pa-0">
-                    <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Stock" dense solo flat></v-select>
+                    <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Stock" dense solo flat>
+                        <option>asdanskdamsldasd</option>
+                    </v-select>
                 </v-col>
                 <v-tab-item color="#48FFD5" background-color="black" :value="'tab-' + 1">
                     <v-container class="pa-0">
@@ -201,5 +203,14 @@ export default {
 .select_portfolio .v-input__control {
     min-height: auto !important;
     border-radius: unset
+}
+.apexcharts-tooltip {
+    box-shadow: none;
+}
+span.apexcharts-tooltip-text-label {
+    display: none;
+}
+.apexcharts-xcrosshairs {
+    display: none;
 }
 </style>

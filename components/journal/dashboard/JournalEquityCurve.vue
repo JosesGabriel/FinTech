@@ -38,14 +38,14 @@ export default {
                     yaxis: [{
                     y: 30000,
                     borderColor: '#00FFC3',
-                    label: {
-                        borderColor: '#00FFC3',
-                        style: {
-                            color: '#fff',
-                            background: '#00FFC3',
-                        },
-                        text: 'Support',
-                    }
+                    // label: {
+                    //     borderColor: '#00FFC3',
+                    //     style: {
+                    //         color: '#fff',
+                    //         background: '#00FFC3',
+                    //     },
+                    //     text: 'Support',
+                    // }
                     }]
                 },
                 chart: {
@@ -146,7 +146,7 @@ export default {
                 tooltip: {
                     followCursor: false,
                     y: {
-                        show: false,
+                        show: true,
                         formatter: function (val) {
                             return val
                         }

@@ -1,7 +1,7 @@
 <template>
     <v-col class="pa-0">
         <div id="chart">
-            <apexcharts type=bar height=200 :options="chartOptions" :series="series" />
+            <apexcharts type=bar height=240 :options="chartOptions" :series="series" />
         </div>
         <v-simple-table :dense="true" dark id="liveportfolio-table">
             <template v-slot:default>
@@ -74,10 +74,10 @@ export default {
             ],
             series: [{
                 name: 'Win',
-                data: [44, 55, 41]
+                data: [44, 55, 41, 20]
             }, {
                 name: 'loss',
-                data: [53, 32, 33]
+                data: [53, 32, 33, 20]
             }],
             chartOptions: {
                 plotOptions: {
@@ -132,7 +132,7 @@ export default {
                 },
                 xaxis: {
                     show: true,
-                    categories: ['Bottom Picking', 'Breakout Play', 'Trend Following'],
+                    categories: ['Bottom Picking', 'Breakout Play', 'Trend Following', 'Others'],
                     labels: {
                         show: false,
                         style: {
@@ -163,7 +163,7 @@ export default {
                             cssClass: 'apexcharts-yaxis-label',
                         },
                         offsetX: 105,
-                        offsetY: -20
+                        offsetY: -17
                     },
                     axisTicks: {
                         show: false,

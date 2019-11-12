@@ -47,8 +47,8 @@
         darkText: '#b6b6b6',
         allodata: [
           {
-            stocks: 'BDO',
-            position: '10,000.00',
+            stocks: 'Cash',
+            position: '100,000,000.00',
             bulletcolor: '#00FFC3',
           },
           {
@@ -87,8 +87,8 @@
             bulletcolor: '#008062'
           },
           {
-            stocks: 'KPPI4',
-            position: '10,000.00',
+            stocks: 'Others',
+            position: '10,000,000.00',
             bulletcolor: '#008062'
           }
         ],

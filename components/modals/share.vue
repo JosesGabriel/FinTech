@@ -11,9 +11,9 @@
                         <img src="/icon/journal-icons/twitter.svg" width="25" />
                     </v-btn>
                 </router-link>
-                <router-link to="/" class="px-1">
+                <router-link to="/" class="px-1 routerlink_facebook-link">
                     <v-btn icon>
-                        <img src="/icon/journal-icons/facebook.svg" width="25" />
+                        <v-icon color="#B6B6B6" class="facebook_box-icon" flat>mdi-facebook-box</v-icon>
                     </v-btn>
                 </router-link>
                 <router-link to="/login" class="px-1">
@@ -119,5 +119,11 @@ export default {
 }
 .textfield_copy-code {
     padding: 6px 0;
+}
+.facebook_box-icon {
+    font-size: 31px;
+}
+.routerlink_facebook-link {
+    text-decoration: none;
 }
 </style>

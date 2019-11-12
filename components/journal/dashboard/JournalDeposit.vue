@@ -32,6 +32,7 @@
                 :items="items"
                 label="Fund Source"
                 color="#00FFC3"
+                item-color="success"
                 dense
                 dark
                 class="enter_amount-deposit-select"

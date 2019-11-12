@@ -6,7 +6,7 @@
                 <v-card-title class="pa-0 pb-1">
                     <!-- <h1 class="font-weight-regular body-2" style="color:#fff;">STOCK DETAILS</h1> -->
                     <v-col sm="6" md="6" class="pa-0">
-                        <v-select offset-y="true" class="stock_selector stock_selector-font-size" append-icon="mdi-chevron-down" :items="stock" background-color="black" label="Select Stock" dense solo flat></v-select>
+                        <v-select offset-y="true" class="stock_selector stock_selector-font-size" item-color="success" append-icon="mdi-chevron-down" :items="stock" v-model="GetSelectStock" background-color="black" label="Select Stock" dense solo flat></v-select>
                     </v-col>
                     <v-spacer></v-spacer>
                     <p class="text-right ma-0 body-1" style="color:#b6b6b6">14.07 <span class="caption">.09</span><span class="caption">(1.90%)</span></p>
@@ -98,7 +98,7 @@
                     <h1 class="font-weight-regular body-2" style="color:#fff;">TRADE DETAILS</h1>
                     <v-spacer></v-spacer>
                     <v-col sm="6" md="6" class="pa-0">
-                        <v-select offset-y="true" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size white--text" :items="stock" background-color="black" label="Portfolio" dense solo flat dark></v-select>
+                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size white--text" :items="stock" background-color="black" label="Portfolio" dense solo flat dark></v-select>
                     </v-col>
                 </v-card-title>
                 
@@ -158,9 +158,9 @@
                         <!-- <v-select :items="stock" label="Select Strategy" class="stock_selector stock_selector-font-size ma-0 pa-0" dark color="#00FFC3" dense></v-select>
                         <v-select :items="stock" label="Select Trade Plan" class="stock_selector stock_selector-font-size ma-0 pa-0" dark color="#00FFC3" dense></v-select>
                         <v-select :items="stock" label="Select Emotions" class="stock_selector stock_selector-font-size ma-0 pa-0" dark color="#00FFC3" dense></v-select> -->
-                        <div><v-select offset-y="true" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size mb-1" :items="stock" background-color="black" label="Strategy" dense solo flat></v-select></div>
-                        <div><v-select offset-y="true" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size mb-1" :items="stock" background-color="black" label="Trade Plan" dense solo flat></v-select></div>
-                        <div><v-select offset-y="true" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size" :items="stock" background-color="black" label="Emotions" dense solo flat></v-select></div>
+                        <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size mb-1" :items="stock" background-color="black" label="Strategy" dense solo flat></v-select></div>
+                        <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size mb-1" :items="stock" background-color="black" label="Trade Plan" dense solo flat></v-select></div>
+                        <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size" :items="stock" background-color="black" label="Emotions" dense solo flat></v-select></div>
                     </v-col>
                     <v-col md="6" class="pl-0 py-0 justify-right d-flex align-center text-right">
                         <v-textarea
@@ -197,7 +197,8 @@ export default {
             buyprice: '0.00',
             quantity: '0.00',
 
-            hideElement: true
+            hideElement: true,
+            GetSelectStock: '',
         }
     },
     computed: {
@@ -206,7 +207,9 @@ export default {
                 highnum: this.low > this.high,
                 lownum: this.low < this.high,
                 equalnum: this.low == this.high
-            }
+            },
+            console.log('asdasd')
+            console.log(this.GetSelectStock)
         }
     }
 }

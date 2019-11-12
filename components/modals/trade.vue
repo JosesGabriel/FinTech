@@ -95,6 +95,7 @@ export default {
     }
     .calendate-btn {
         margin-top: 6px;
+        margin-right: 6px;
     }
     .confirmation_button-trade-not {
         background: #00FFC3;

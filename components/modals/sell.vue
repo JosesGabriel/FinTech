@@ -5,7 +5,7 @@
                 <v-card-title class="pa-0 pb-1">
                     <!-- <h1 class="font-weight-regular body-2" style="color:#fff;">STOCK DETAILS</h1> -->
                     <v-col sm="6" md="6" class="pa-0">
-                        <v-select offset-y="true" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size" :items="stock" background-color="black" label="Select Stock" dense solo flat></v-select>
+                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="stock_selector stock_selector-font-size" :items="stock" background-color="black" label="Select Stock" dense solo flat></v-select>
                     </v-col>
                     <v-spacer></v-spacer>
                     <p class="text-right ma-0 body-1" style="color:#b6b6b6">14.07 <span class="caption">.09</span><span class="caption">(1.90%)</span></p>
@@ -97,7 +97,7 @@
                     <h1 class="font-weight-regular body-2" style="color:#fff;">TRADE DETAILS</h1>
                     <v-spacer></v-spacer>
                     <v-col sm="6" md="6" class="pa-0">
-                        <v-select offset-y="true" class="stock_selector stock_selector-font-size white--text" append-icon="mdi-chevron-down" :items="stock" background-color="black" label="Portfolio" dense solo flat dark></v-select>
+                        <v-select offset-y="true" item-color="success" class="stock_selector stock_selector-font-size white--text" append-icon="mdi-chevron-down" :items="stock" background-color="black" label="Portfolio" dense solo flat dark></v-select>
                     </v-col>
                 </v-card-title>
                 

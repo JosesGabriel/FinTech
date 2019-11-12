@@ -3,7 +3,7 @@
     <v-navigation-drawer
       disable-resize-watcher
       mobile-break-point
-      :mini-variant="$vuetify.breakpoint.lgAndDown"
+      :mini-variant="$vuetify.breakpoint.mdAndDown"
       class="navbarDrawer__card-journal"
       dark
       color="transparent"
