@@ -1,35 +1,30 @@
 <template>
     <v-container class="pa-0">
-        <v-row no-gutters  class="pa-3 pb-0">
+        <v-row no-gutters class="pa-3 pb-0">
             <v-col cols="12" sm="12" md="12">
-                <v-card-title class="pa-0 py-2">
-                    <h1 class="font-weight-regular caption" style="color:#fff;">TRADE DETAILS</h1>
-                    <v-spacer></v-spacer>
-                    <v-col sm="6" md="6" class="pa-0">
-                        <v-select offset-y="true" item-color="success" class="stock_selector stock_selector-font-size white--text" append-icon="mdi-chevron-down" :items="stock" background-color="black" label="Portfolio" dense solo flat dark></v-select>
-                    </v-col>
-                </v-card-title>
-                
                 <v-row no-gutters class="px-0 py-0">
-                    <v-col md="6" class="pr-3 py-0 justify-right d-flex align-center text-right">
+                    <v-col sm="12" md="12" class="pa-0">
+                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3" :items="portfolio" label="Portfolio" dense flat dark></v-select>
+                    </v-col>
+                    <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field
                             label="Buy Price"
                             placeholder="Enter Buy Price"
                             color="#00FFC3"
                             style="color: #00FFC3"
                             dark
-                            class="caption stock_selector quantity-input"
+                            class="caption buy_selector quantity-input py-3"
                             v-model="buyprice"
                         ></v-text-field>
                     </v-col>
-                    <v-col md="6" class="pl-1 py-0 justify-right d-flex align-center text-right">
+                    <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field
                             label="Quantity"
                             placeholder="Enter Quantity"
                             color="#00FFC3"
                             style="color: #00FFC3"
                             dark
-                            class="caption stock_selector buy_price-input"
+                            class="caption buy_selector buy_price-input py-3"
                             v-model="quantity"
                         ></v-text-field>
                     </v-col>
@@ -48,7 +43,7 @@
 export default {
     data() {
         return {
-            stock: ['2GO','PHEN','ROCK','HLCM'],
+            portfolio: ['Real Portfolio','Virtual Portfolio'],
             prev: '100,000,000.00',
             low: '0',
             wklow: '0',

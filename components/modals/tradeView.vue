@@ -172,15 +172,14 @@
                     <v-stepper-content step="3" class="pt-2">
                     <v-container>
                         <v-row no-gutters class="px-0 py-0">
-                            <v-col md="6" class="pr-3 py-0">
-                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="buy_selector stock_selector-font-size mb-1" :items="strategy" background-color="black" label="Strategy" dense solo flat></v-select></div>
-                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="buy_selector stock_selector-font-size mb-1" :items="tradeplan" background-color="black" label="Trade Plan" dense solo flat></v-select></div>
-                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="buy_selector stock_selector-font-size" :items="emotions" background-color="black" label="Emotions" dense solo flat></v-select></div>
+                            <v-col sm="12" md="12" class="pr-3 py-0">
+                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="strategy" label="Strategy" dense flat></v-select></div>
+                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="tradeplan" label="Trade Plan" dense flat></v-select></div>
+                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" :items="emotions" label="Emotions" dense flat></v-select></div>
                             </v-col>
                             <v-col md="6" class="pl-0 py-0 justify-right d-flex align-center text-right">
                                 <v-textarea
-                                    solo
-                                    background-color="black"
+                                    flat
                                     color="white"
                                     class="white--text trading_notes-textarea body-2"
                                     placeholder="Trading Notes"
@@ -193,7 +192,7 @@
                         <v-spacer></v-spacer>
                         <v-btn text @click="e1 = 2" class="text-capitalize">Back</v-btn>
                         <v-btn
-                            color="primary"
+                            color="success"
                             @click.stop="show=false"
                             class="text-capitalize"
                         >
