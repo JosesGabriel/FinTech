@@ -75,6 +75,20 @@
             </v-list-item>
           </router-link>
 
+          <router-link to="/trade-simulator" class="navbar__links">
+            <v-list-item>
+              <v-list-item-icon class="mr-4">
+                <img src="/icon/journal-icons/mdi-eye-plus-outline.svg" width="25">
+                </v-list-item-icon
+              >
+              <v-list-item-content
+                ><v-list-item-title
+                  >Virtual Trade</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
+
           <router-link to="/watchlist" class="navbar__links">
             <v-list-item>
               <v-list-item-icon class="mr-4"

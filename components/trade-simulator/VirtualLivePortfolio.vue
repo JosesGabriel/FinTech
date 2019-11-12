@@ -1,10 +1,14 @@
 <template>
     <v-col class="pa-0">
         <v-card-title class="text-left justify-left px-0 py-3 pt-5">
+            <h1 class="font-weight-regular subtitle-2" style="color:#fff;">
+              OPEN POSITION/S (PHP)
+            </h1>
             <v-spacer></v-spacer>
+            <v-btn rounded outlined color="#48FFD5" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Reset</v-btn>
             <v-btn rounded outlined color="#48FFD5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Trade</v-btn>
             <TradeModal :visible="EnterTradeModal" @close="EnterTradeModal=false" />
-            <v-btn rounded outlined color="#48FFD5" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Reset</v-btn>    
+                
             <router-link to="/" class="social__router">
               <v-btn icon small> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
