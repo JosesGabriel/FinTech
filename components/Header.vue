@@ -1,11 +1,14 @@
 <template>
   <v-toolbar
-    :dark="isLightMode == 1 ? true : true"
+    :dark="isLightMode == 1 ? false : true"
     height="54"
     class="header__toolbar"
-    :class="isLightMode == 1 ? 'lightMode' : ''"
+    :class="isLightMode == 1 ? 'lightMode' : 'darkMode'"
   >
-    <div class="headerItems__wrapper">
+    <div
+      class="headerItems__wrapper"
+      :class="isLightMode == 1 ? 'lightMode' : 'darkMode'"
+    >
       <router-link to="/">
         <img src="logo.png" alt="" width="45" height="45" />
       </router-link>
@@ -131,15 +134,6 @@
   transform: scale(0.6);
   transform-origin: right;
 }
-.header__padding--left {
-  margin-left: 150px;
-}
-.header__padding--right {
-  margin-right: 150px;
-}
-/* .searchBar__container {
-    width: 350px;
-} */
 .social__router {
   text-decoration: none;
   display: inline-flex;
@@ -155,6 +149,9 @@
 .lightMode {
   background-color: #f2f2f2;
 }
+.darkMode {
+  background-color: #00121e;
+}
 .headerItems__wrapper {
   display: flex;
   align-items: center;
@@ -163,14 +160,6 @@
   width: 100%;
   margin: 0 auto;
   /* max-width: 1023px; */
-}
-.headerItems__wrapper--margin-left {
-  margin-left: 19vw;
-}
-.header__btn--label {
-  position: absolute;
-  top: 30px;
-  font-size: 0.6em;
 }
 .header__avatar {
   cursor: pointer;

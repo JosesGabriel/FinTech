@@ -214,12 +214,12 @@ export default {
 }
 
 .col-3 {
-  flex: 0 0 23%;
-  max-width: 23%;
+  flex: 0 0 22%;
+  max-width: 22%;
 }
 
 .col-9 {
-  flex: 0 0 77%;
-  max-width: 77%;
+  flex: 0 0 78%;
+  max-width: 78%;
 }
 </style>

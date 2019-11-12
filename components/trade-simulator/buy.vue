@@ -2,7 +2,19 @@
     <v-container class="pa-0">
         <v-row no-gutters class="px-3 py-3">
             <v-col md="5" class="pl-0 py-0">
-                <v-select offset-y="true" class="stock_selector" :items="stock" background-color="black" label="Select Stock" dense solo flat></v-select>
+                <v-select 
+                    offset-y="true" 
+                    class="stock_selector" 
+                    v-model="stockValue"
+                    v-on:change="stockDetails"
+                    :items="stock" 
+                    item-text="stockCode"
+                    item-value="stockID"
+                    background-color="black" 
+                    label="Select Stock" 
+                    dense 
+                    solo 
+                    flat></v-select>
             </v-col>
             <v-spacer></v-spacer>
             <v-card-title class="pa-0 text-right" width="100%">
@@ -118,6 +130,7 @@
                             color="#00FFC3"
                             style="color: #00FFC3"
                             dark
+                            disabled
                             class="caption stock_selector"
                             v-model="buyprice"
                         ></v-text-field>
@@ -176,8 +189,8 @@
 export default {
     data() {
         return {
-            stock: ['2GO','PHEN','ROCK','HLCM'],
-            prev: '100,000,000.00',
+            stock: [],
+            prev: 0,
             low: '0',
             wklow: '0',
             volm: '100,000,000.00',
@@ -190,13 +203,46 @@ export default {
 
             buyprice: '0.00',
             quantity: '0.00',
+
+            stockValue: '',
         }
-    }
+    },
+     methods: {
+      stockDetails(selectObj) {
+        console.log(selectObj.prev);
+        this.stockValue = selectObj.stockCode;
+        this.prev = selectObj.prev;
+      }
+    },
+    mounted() {
+    const params = {};
+    this.$api.chart.stocks.history(params).then(
+      function(result) {
+        let stockListArrayRaw = Object.entries(result.data);
+        console.log(stockListArrayRaw);
+        for (let i = 0; i < stockListArrayRaw.length; i++) {
+          let keyValuePair = {
+            stockCode: stockListArrayRaw[i][1].symbol,
+            stockID: stockListArrayRaw[i][1].stockid,
+            details: {
+                stockCode: stockListArrayRaw[i][1].symbol,
+                stockID: stockListArrayRaw[i][1].stockid,
+                prev: stockListArrayRaw[i][1].close
+            }
+          };
+          this.stock.push(keyValuePair);
+        }
+      }.bind(this)
+    );
+  },
 }
 </script>
 <style>
     .v-text-field.v-text-field--enclosed .v-text-field__details {
         display: none;
+    }
+    .theme--light.v-select .v-select__selections {
+        color: #00FFC3;
     }
     .stock_selector .v-select__slot .v-label,
     .stock_selector .v-select__slot .v-icon {

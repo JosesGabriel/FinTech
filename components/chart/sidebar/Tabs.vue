@@ -7,7 +7,7 @@
         background-color="#0B1F33"
         grow
         dark
-        height="40"
+        height="35"
         icons-and-text
       >
         <v-tab v-for="item in items" :key="item.component">
@@ -22,7 +22,7 @@
         </v-tab>
 
         <v-tab-item v-for="item in items" :key="item.component">
-          <v-card dark height="360" color="#0B1F33" class="pa-0 ma-0">
+          <v-card dark color="#0B1F33" class="pa-0 ma-0 tab__height">
             <v-card-text class="pa-0 ma-0">
               <component :is="item.component" />
             </v-card-text>
@@ -69,4 +69,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.v-data-table--dense td {
+  height: 16px;
+}
+.tab__height {
+  height: calc(100vh - 368px);
+}
+</style>
