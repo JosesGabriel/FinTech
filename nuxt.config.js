@@ -68,20 +68,21 @@ export default {
    */
   vuetify: {
     customVariables: ["~/assets/variables.scss"],
-    // defaultAssets: { //breaks vuetify icons if added, use other method
+    // defaultAssets: {
+    //   //breaks vuetify icons if added, use other method
     //   font: true,
     //   icons: "md"
     // },
-    // icons: {
-    //   iconfont: "md"
-    // },
+    icons: {
+      iconfont: "md"
+    },
     theme: {
       themes: {
         light: {
           background: colors.grey.lighten5,
           primary: colors.blue,
           accent: colors.grey.darken3,
-          secondary: colors.blueGrey,
+          secondary: colors.grey.lighten1,
           info: colors.purple,
           warning: colors.orange,
           error: colors.red,

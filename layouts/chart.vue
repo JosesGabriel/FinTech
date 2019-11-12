@@ -9,7 +9,7 @@
           <v-col class="col-12">
             <v-slide-y-transition>
               <v-content v-show="ticker" class="ticker__container">
-                <h1 align="center">Ticker</h1>
+                <!-- <h1 align="center">Ticker</h1> -->
               </v-content>
             </v-slide-y-transition>
           </v-col>
@@ -33,7 +33,7 @@
                 class="table__container"
                 :class="tableStyle"
               >
-                <h1 align="center">Table</h1>
+                <!-- <h1 align="center">Table</h1> -->
               </v-content>
             </v-slide-y-reverse-transition>
           </v-col>
@@ -61,7 +61,7 @@
             small
             @click="maximizeTable"
           >
-            <v-icon>eject</v-icon>
+            <v-icon>mdi-eject</v-icon>
           </v-btn>
           <v-btn
             :disabled="!table"
@@ -72,7 +72,7 @@
             small
             @click="fullscreenTable"
           >
-            <v-icon>fullscreen</v-icon>
+            <v-icon>mdi-fullscreen</v-icon>
           </v-btn>
           <v-btn color="blue" dark @click="toggleSidebar">Sidebar</v-btn>
         </div>
@@ -187,15 +187,21 @@ export default {
 }
 .sidebar__container {
   /* background: skyblue; */
-  background: #0b1f33;
+  background: #00122e;
 }
 .ticker__container {
+  /* margin-top: auto;
+  margin-bottom: auto; */
   height: 50px;
-  background: pink;
+  color: #fff;
+  background: #00122e;
 }
 .table__container {
+  margin-top: auto;
+  margin-bottom: auto;
   height: 50px;
-  background: orange;
+  color: #fff;
+  background: #00122e;
 }
 
 .maximizeStyle {

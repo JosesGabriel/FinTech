@@ -9,7 +9,7 @@
         </v-card-title>
         <v-col class="pa-0" cols="12" sm="12" md="12">
           <div id="chart">
-            <apexcharts type=bar height=300 width=90% :options="chartOptions" :series="series" />
+            <apexcharts type=bar class="monthlyperf_chart" height=300 width=90% :options="chartOptions" :series="series" />
           </div>
         </v-col>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
@@ -96,6 +96,9 @@
                 fontFamily: 'Karla',
                 cssClass: 'apexcharts-xaxis-label',
               }
+            },
+            crosshairs: {
+              show: false,
             },
             lines: {
                 show: false

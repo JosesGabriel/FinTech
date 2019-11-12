@@ -8,8 +8,8 @@
       dark
       fixed-header
       class="ml-4"
-      height="360"
-      style="background:#0b1f33"
+      height="350"
+      style="background:#00122e"
     >
       <thead>
         <tr>
@@ -123,6 +123,126 @@ export default {
         },
         {
           id: 8,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 9,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 10,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 11,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 12,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 13,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 14,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 15,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 16,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 17,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 18,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 19,
+          symbol: "ICT",
+          last: "101.90",
+          last_status: 1,
+          change: 7.8,
+          change_status: 2,
+          value: "189M",
+          trades: "193"
+        },
+        {
+          id: 20,
           symbol: "ICT",
           last: "101.90",
           last_status: 1,
