@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <v-card style="height:280px" color="#0B1F33" elevation="12" dark>
+    <v-card style="height:280px" color="#00122e" elevation="12" dark>
       <v-card-text class="pa-0 py-3">
         <v-row class="ma-0">
           <v-col class="pa-0">
@@ -20,7 +20,7 @@
       </v-card-text>
     </v-card>
     <v-divider></v-divider>
-    <v-card color="#0B1F33">
+    <v-card color="#00122e">
       <v-card-text class="pa-0 ma-0">
         <Tabs />
       </v-card-text>

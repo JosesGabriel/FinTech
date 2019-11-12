@@ -4,7 +4,7 @@
       <v-tabs
         v-model="tab"
         color="#48ffd5"
-        background-color="#0B1F33"
+        background-color="#00122e"
         grow
         dark
         height="35"
@@ -22,7 +22,7 @@
         </v-tab>
 
         <v-tab-item v-for="item in items" :key="item.component">
-          <v-card dark color="#0B1F33" class="pa-0 ma-0 tab__height">
+          <v-card dark color="#00122e" class="pa-0 ma-0 tab__height">
             <v-card-text class="pa-0 ma-0">
               <component :is="item.component" />
             </v-card-text>
@@ -50,17 +50,17 @@ export default {
       items: [
         {
           icon: "bull-circle",
-          mdi: "attach_money",
+          mdi: "mdi-cash-usd-outline",
           component: "BidAsk"
         },
         {
           icon: "bear-circle",
-          mdi: "format_list_bulleted",
+          mdi: "mdi-format-list-bulleted-square",
           component: "AllStock"
         },
         {
           icon: "bull-circle",
-          mdi: "search",
+          mdi: "mdi-card-search-outline",
           component: "Watchlist"
         }
       ]
