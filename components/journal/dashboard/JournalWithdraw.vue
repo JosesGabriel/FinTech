@@ -1,24 +1,20 @@
 <template>
     <v-container class="pa-0">
-        <v-card-title class="text-left justify-left px-0">
-            <h1 class="font-weight-regular subtitle-1" style="color:#b6b6b6;">Your Balance</h1>
-        </v-card-title>
-        <v-card-title class="justify-end pa-0">
-            <h1 class="font-weight-bold balance_amount white--text"><span class="font-weight-light caption" style="color: #b6b6b6">PHP</span> 100,000,000.00</h1>
-        </v-card-title>
-        <v-card-title class="text-left justify-left px-0">
-            <h1 class="font-weight-regular subtitle-1" style="color:#b6b6b6;">Enter Amount</h1>
-        </v-card-title>
-        <v-col class="pa-0" cols="12" sm="12" md="12">
-            <v-text-field
-                placeholder="Enter Quantity"
-                color="#fff"
-                style="color: #fff"
-                dark
-                class="stock_selector enter_amount-deposit pa-0 pb-5 font-weight-bold headline white--text"
-                v-model="quantity"
-            ></v-text-field>
-        </v-col>
+        <div class="separator"></div>
+        <div class="py-3">
+            <p class="text-left ma-0 caption" style="color:#b6b6b6">Available Funds</p>
+            <v-spacer></v-spacer>
+            <p class="text-right ma-0 body-1 current_price-field white--text">300,000,000.00</p>
+        </div>
+        <v-text-field
+            label="Enter Amount"
+            color="#00FFC3"
+            style="color: #00FFC3"
+            dark
+            class="body-1 buy_selector quantity-input py-3"
+            v-model="widthrawAmount"
+            readonly
+        ></v-text-field>
     </v-container>
 </template>
 <script>
@@ -27,7 +23,8 @@ export default {
         return {
             zeroNumber: '0.00',
             items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
-            quantity: '0.00'
+            quantity: '0.00',
+            widthrawAmount: '0.00'
         }
     }
 }

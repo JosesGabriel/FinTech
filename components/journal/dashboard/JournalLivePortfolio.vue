@@ -34,27 +34,7 @@
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Profit }}</td>
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Perf }}</td>
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">
-                    <v-menu bottom left :offset-y="offsety">
-                        <template v-slot:activator="{ on }">
-                        <v-btn
-                            dark
-                            icon
-                            v-on="on"
-                        >
-                            <v-icon color="#B6B6B6" flat>mdi-dots-horizontal</v-icon>
-                        </v-btn>
-                        </template>
-                        <v-list color="#123" dark class="pa-0">
-                            <v-list-item
-                                v-for="(item, i) in items"
-                                :key="i"
-                                headline
-                                background="#0c1f33"
-                            >
-                                <v-list-item-title class="body-2">{{ item.title }}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
+                  <v-icon>mdi-dots-horizontal</v-icon>
                 </td>
                 </tr>
             </tbody>
@@ -77,7 +57,6 @@
         <reset-modal :visible="showResetForm" @close="showResetForm=false" />
         <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
         <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" />
-        <!-- <trade-modal :visible="showTradeForm" @close="showTradeForm=false" /> -->
     </v-col>
 </template>
 <script>
@@ -85,15 +64,13 @@ import resetModal from '~/components/modals/reset'
 import shareModal from '~/components/modals/share'
 import fundsModal from '~/components/modals/fund'
 import tradeView from '~/components/modals/tradeView'
-// import tradeModal from '~/components/modals/tradeInput'
 
 export default {
   components: {
     shareModal,
     resetModal,
     fundsModal,
-    tradeView,
-    // tradeModal
+    tradeView
   },
   data () {
     return {
@@ -101,8 +78,6 @@ export default {
       showResetForm: false,
       showFundsForm: false,
       showTradeViewForm: false,
-      // showTradeForm: false,
-      offsety: true,
       desserts: [
         {
           stocks: 'BDO',
@@ -149,11 +124,6 @@ export default {
           Profit: '661.90',
           Perf: '4.12',
         }
-      ],
-      items: [
-          { title: 'Trade Details' },
-          { title: 'Edit' },
-          { title: 'Delete' },
       ],
       page: 1,
     }

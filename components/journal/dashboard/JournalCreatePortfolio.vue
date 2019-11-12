@@ -31,9 +31,9 @@
             <v-card-actions class="pa-3">
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="#48FFD5"
+                    color="white"
                     class="text-capitalize"
-                    depressed
+                    text
                     light
                     @click.stop="show=false"
                     >Close</v-btn
@@ -72,7 +72,7 @@ export default {
         saveButtonDisable: true,     
         entryPriceModel: "",
         takeProfitModel: "",
-        stocksDropdownModel: null,
+        stocksDropdownModel: "",
     }),
     watch: {
         entryPriceModel: function() {
@@ -84,9 +84,9 @@ export default {
     },
     methods: {
         fieldsWatch() {
-            if ( this.stocksDropdownModel && (this.entryPriceModel != "" || this.takeProfitModel != "" )) {
+            if ( this.stocksDropdownModel != "" || this.entryPriceModel != "" || this.takeProfitModel != "" ) {
                 this.saveButtonDisable = false;
-            } else {
+                } else {
                 this.saveButtonDisable = true;
             }
         },

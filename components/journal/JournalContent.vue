@@ -25,6 +25,7 @@
                 </v-col>
                 <v-tab-item color="#48FFD5" background-color="black" :value="'tab-' + 1">
                     <v-container class="pa-0">
+                        <div class="separator"></div>
                         <JournalLivePortfolio/>
                         <v-row no-gutters>
                             <JournalPortfolioSnapshot/>
@@ -67,11 +68,13 @@
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2">
                     <v-container class="pa-0">
+                        <div class="separator"></div>
                         <TradelogsContent/>
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 3">
                     <v-container class="pa-0">
+                        <div class="separator"></div>
                         <LedgerContent/>
                     </v-container>
                 </v-tab-item>
@@ -145,7 +148,7 @@ export default {
     .v-window.v-item-group.theme--light.v-tabs-items {
     background: none;
     }
-    .v-slide-group__content.v-tabs-bar__content:before {
+    /* .v-slide-group__content.v-tabs-bar__content:before {
     content: "";
     width: 100%;
     position: absolute;
@@ -153,7 +156,7 @@ export default {
     z-index: 1;
     height: 4px;
     background: #000;
-    }
+    } */
     .rtf_top-btn.v-btn--outlined:hover,
     .rtf_top-btn.v-btn--outlined:active,
     .rtf_top-btn.v-btn--outlined:focus {

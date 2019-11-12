@@ -1,8 +1,8 @@
 
 <template>
-    <v-dialog v-model="show" max-width="350px">
+    <v-dialog v-model="show" max-width="320px">
         <v-card color="#00121E">
-            <v-card-title class="text-left justify-left pa-3 px-5 success--text subtitle-1">FUND</v-card-title>
+            <v-card-title class="text-left justify-left pa-3 px-5 success--text subtitle-1 font-weight-bold">FUND</v-card-title>
             <v-tabs
             color="#48FFD5"
             background-color="#00121E"
@@ -20,13 +20,12 @@
                     <JournalWithdraw/>
                 </v-tab-item>
             </v-tabs>
-            <v-card-actions>
+            <v-card-actions class="pa-5">
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="#48FFD5"
+                    color="white"
                     class="text-capitalize"
-                    depressed
-                    light
+                    text
                     @click.stop="show=false"
                     >Close</v-btn
                 >

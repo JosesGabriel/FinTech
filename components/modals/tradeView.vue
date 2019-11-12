@@ -1,46 +1,46 @@
 <template>
-    <v-dialog v-model="show" max-width="350px">
+    <v-dialog v-model="show" max-width="320px">
         <v-card color="#00121E">
-            <v-card-title class="text-left justify-left pa-5 pb-0 px-5 success--text subtitle-1">TRADE</v-card-title>
-            <v-stepper v-model="e1" dark style="background-color:transparent">
+            <v-card-title class="text-left justify-left pa-5 pb-0 px-5 success--text subtitle-1 font-weight-bold">TRADE</v-card-title>
+            <v-stepper v-model="e1" dark id="stepper_container">
                 <v-stepper-items>
                     <v-stepper-content step="1">
                         <!-- -----First View of Trade Modal----- -->
                         <v-container class="pa-5 pt-0 px-0">
                             <v-row no-gutters>
                                 <v-col cols="12" sm="12" md="12">
-                                    <v-card-title class="px-2 pa-0 text-right justify-end">
+                                    <v-card-title class="pa-0 text-right justify-end">
                                         <v-col sm="12" md="12" class="pa-0">
-                                            <v-select offset-y="true" item-color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stock" v-model="GetSelectStock" label="Select Stock" dense flat></v-select>
+                                            <v-select offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stock" v-model="GetSelectStock" label="Select Stock"></v-select>
                                         </v-col>
-                                        <h1 class="font-weight-regular caption" style="color:#fff;">STOCK DETAILS</h1>
-                                        <v-spacer></v-spacer>
-                                        <p class="text-right ma-0 body-1" style="color:#b6b6b6">14.07 <span class="caption">.09</span><span class="caption">(1.90%)</span></p>
                                     </v-card-title>
-                                    <v-row no-gutters class="px-2">
+                                        <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
+                                        <v-spacer></v-spacer>
+                                        <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">14.07 <span class="caption">.09</span><span class="caption">(1.90%)</span></p>
+                                    <v-row no-gutters class="mt-2">
                                         <v-col class="pa-0" cols="6" sm="6" md="6">
                                             <v-simple-table :dense="true" dark id="liveportfolio-table">
                                                 <template v-slot:default>
                                                     <tbody>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">Previous</td>
-                                                            <td class="item_position-prop caption text-right pa-0 px-1">{{ prev }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">Previous</td>
+                                                            <td class="item_position-prop body-2 text-right pa-0 px-1">{{ prev }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1" >Low</td>
-                                                            <td class="caption text-right pa-0 px-1" :class="valueStatusLow">{{ low }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1" >Low</td>
+                                                            <td class="body-2 text-right py-1 px-1" :class="valueStatusLow">{{ low }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">52WKLow</td>
-                                                            <td class="caption text-right pa-0 px-1">{{ wklow }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">52WKLow</td>
+                                                            <td class="body-2 text-right py-1 px-1">{{ wklow }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">Volume</td>
-                                                            <td class="item_position-prop caption text-right pa-0 px-1">{{ volm }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">Volume</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ volm }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">Trades</td>
-                                                            <td class="item_position-prop caption text-right pa-0 px-1">{{ trades }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">Trades</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ trades }}</td>
                                                         </tr>
                                                     </tbody>
                                                 </template>
@@ -51,24 +51,24 @@
                                                 <template v-slot:default>
                                                     <tbody>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">Open</td>
-                                                            <td class="item_position-prop caption text-right pa-0 px-1">{{ open }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">Open</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ open }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">High</td>
-                                                            <td class="item_position-prop caption text-right pa-0 px-1">{{ high }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">High</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ high }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">52WKHigh</td>
-                                                            <td class="item_position-prop caption text-right pa-0 px-1">{{ wkhigh }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">52WKHigh</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ wkhigh }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">Value</td>
-                                                            <td class="item_position-prop caption text-right pa-0 px-1">{{ vole }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">Value</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ vole }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop caption pa-1">Average</td>
-                                                            <td class="item_position-prop caption text-right pa-0 px-1">{{ ave }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1">Average</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ ave }}</td>
                                                         </tr>
                                                     </tbody>
                                                 </template>
@@ -105,9 +105,10 @@
                         <v-spacer></v-spacer>
                             <v-btn text @click.stop="show=false" class="text-capitalize">Close</v-btn>
                             <v-btn
-                                color="success"
+                                color="success ml-1"
                                 @click="e1 = 2"
-                                class="text-capitalize"
+                                class="text-capitalize black--text"
+                                light
                             >
                                 Continue
                             </v-btn>
@@ -147,10 +148,10 @@
                                     </v-date-picker>
                                     </v-dialog> -->
 
-                                    <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 1">
+                                    <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 1">
                                         <BuyTrade/>
                                     </v-tab-item>
-                                    <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
+                                    <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 2">
                                         <SellTrade/>
                                     </v-tab-item>
                                 </v-tabs>
@@ -162,7 +163,8 @@
                             <v-btn
                                 color="success"
                                 @click="e1 = 3"
-                                class="text-capitalize"
+                                class="text-capitalize black--text ml-1"
+                                light
                             >
                                 Continue
                             </v-btn>
@@ -170,35 +172,35 @@
                     </v-stepper-content>
             
                     <v-stepper-content step="3" class="pt-2">
-                    <v-container>
-                        <v-row no-gutters class="px-0 py-0">
-                            <v-col sm="12" md="12" class="pr-3 py-0">
-                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="strategy" label="Strategy" dense flat></v-select></div>
-                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="tradeplan" label="Trade Plan" dense flat></v-select></div>
-                                <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" :items="emotions" label="Emotions" dense flat></v-select></div>
-                            </v-col>
-                            <v-col md="6" class="pl-0 py-0 justify-right d-flex align-center text-right">
-                                <v-textarea
-                                    flat
-                                    color="white"
-                                    class="white--text trading_notes-textarea body-2"
-                                    placeholder="Trading Notes"
-                                    dark
-                                ></v-textarea>
-                            </v-col>
-                        </v-row> 
-                    </v-container>
-                    <v-row no-gutters>
-                        <v-spacer></v-spacer>
-                        <v-btn text @click="e1 = 2" class="text-capitalize">Back</v-btn>
-                        <v-btn
-                            color="success"
-                            @click.stop="show=false"
-                            class="text-capitalize"
-                        >
-                            Continue
-                        </v-btn>
-                    </v-row>
+                        <v-container class="pt-0">
+                            <v-row no-gutters class="px-0 py-0">
+                                <v-col sm="12" md="12">
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="strategy" label="Strategy" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="tradeplan" label="Trade Plan" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" :items="emotions" label="Emotions" dense flat></v-select></div>
+                                </v-col>
+                                <v-col cols="12" sm="12" md="12" class="pa-0 mt-3 justify-right d-flex align-center text-right">
+                                    <v-textarea
+                                        color="white"
+                                        class="white--text trading_notes-textarea body-2"
+                                        placeholder="Trading Notes"
+                                        filled
+                                    ></v-textarea>
+                                </v-col>
+                            </v-row> 
+                        </v-container>
+                        <v-row no-gutters>
+                            <v-spacer></v-spacer>
+                            <v-btn text @click="e1 = 2" class="text-capitalize">Back</v-btn>
+                            <v-btn
+                                color="success"
+                                @click.stop="show=false"
+                                class="text-capitalize black--text ml-1"
+                                light
+                            >
+                                Confirm
+                            </v-btn>
+                        </v-row>
                     </v-stepper-content>
                 </v-stepper-items>
                 </v-stepper>
@@ -233,6 +235,10 @@ import SellTrade from '~/components/modals/sell'
                 
                 hideElement: true,
                 GetSelectStock: '',
+
+                strategy: ['Bottom Picking','Breakout Play','Trend Following','1-2-3 Reversal'],
+                tradeplan: ['Day Trade','Swing Trade','Investments'],
+                emotions: ['Neutral','Greedy','Fearful'],
 
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
@@ -278,5 +284,12 @@ import SellTrade from '~/components/modals/sell'
     .calendate-btn {
         margin-top: 6px;
         margin-right: 6px;
+    }
+    .current_price-field {
+        border-bottom: 1px solid #b6b6b6;
+    }
+    #stepper_container {
+        box-shadow: none;
+        background-color: transparent;
     }
 </style>

@@ -5,7 +5,16 @@
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3" :items="portfolio" label="Portfolio" dense flat dark></v-select>
+                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Portfolio" dense flat dark></v-select>
+                        <v-text-field
+                            label="Available Funds"
+                            color="#00FFC3"
+                            style="color: #00FFC3"
+                            dark
+                            class="body-2 buy_selector quantity-input py-3"
+                            v-model="availableFunds"
+                            readonly
+                        ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field
@@ -14,7 +23,7 @@
                             color="#00FFC3"
                             style="color: #00FFC3"
                             dark
-                            class="caption buy_selector quantity-input py-3"
+                            class="body-2 buy_selector quantity-input py-3"
                             v-model="buyprice"
                         ></v-text-field>
                     </v-col>
@@ -25,16 +34,20 @@
                             color="#00FFC3"
                             style="color: #00FFC3"
                             dark
-                            class="caption buy_selector buy_price-input py-3"
+                            class="body-2 buy_selector buy_price-input py-3"
                             v-model="quantity"
                         ></v-text-field>
                     </v-col>
+                    <v-text-field
+                        label="Total Cost"
+                        color="#00FFC3"
+                        style="color: #00FFC3"
+                        dark
+                        class="body-2 buy_selector quantity-input py-3"
+                        v-model="totalCost"
+                        readonly
+                    ></v-text-field>
                 </v-row>
-                <v-card-title class="pa-0 py-2">
-                    <p class="text-right ma-0 caption" style="color:#b6b6b6">Available Funds: <span style="color:#b6b6b6">320.30M</span></p>
-                    <v-spacer></v-spacer>
-                    <p class="text-right ma-0 caption" style="color:#b6b6b6">Total Cost: <span style="color:#b6b6b6">0.00</span></p>
-                </v-card-title>
             </v-col>
         </v-row>
     </v-container>
@@ -46,10 +59,9 @@ export default {
         return {
             buyprice: '0.00',
             quantity: '0.00',
-            portfolio: ['Real Portfolio','Virtual Portfolio'],
-            strategy: ['Bottom Picking','Breakout Play','Trend Following','1-2-3 Reversal'],
-            tradeplan: ['Day Trade','Swing Trade','Investments'],
-            emotions: ['Neutral','Greedy','Fearful'],
+            availableFunds: '320,000,000.00',
+            totalCost: '320,000,000.00',
+            portfolio: ['Real Portfolio','Virtual Portfolio']
         }
     }
 }
