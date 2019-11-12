@@ -40,7 +40,9 @@
         <v-content>
           <v-row>
             <v-col class="col-5 text-right pa-0">
-              <span class="overline white--text font-weight-bold"
+              <span
+                :class="{ 'white--text font-weight-bold': toggleButton }"
+                class="overline"
                 >Top Five</span
               >
             </v-col>
@@ -50,18 +52,22 @@
                 color="#48ffd5"
                 class="icon__toggle"
                 @click="toggleBidAsk"
-                >toggle_off</v-icon
+                >mdi-toggle-switch-off-outline</v-icon
               >
               <v-icon
                 v-show="!toggleButton"
                 color="error"
                 class="icon__toggle"
                 @click="toggleBidAsk"
-                >toggle_on</v-icon
+                >mdi-toggle-switch-outline</v-icon
               >
             </v-col>
             <v-col class="col-5 text-left pa-0">
-              <span class="overline">Full Depth</span>
+              <span
+                :class="{ 'white--text font-weight-bold': !toggleButton }"
+                class="overline"
+                >Full Depth</span
+              >
             </v-col>
           </v-row>
         </v-content>
@@ -85,7 +91,9 @@
         <v-simple-table dense dark fixed-header height="110" class="mx-2">
           <thead>
             <tr>
-              <th :class="header">TIME</th>
+              <th class="pl-3 overline header white--text font-weight-bold">
+                TIME
+              </th>
               <th :class="header">VOL</th>
               <th :class="header">PRICE</th>
               <th :class="header">BUYER</th>
@@ -94,12 +102,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in items" :key="item.id">
-              <td :class="column" style="width:15%">{{ item.bidnum }}</td>
-              <td :class="column" style="width:20%">{{ item.bidvol }}</td>
-              <td :class="column" style="width:20%">{{ item.bid }}</td>
-              <td :class="column" style="width:20%">{{ item.ask }}</td>
-              <td :class="column" style="width:20%">{{ item.askvol }}</td>
+            <tr v-for="item in trades" :key="item.id">
+              <td :class="column" style="width:20%">{{ item.time }}</td>
+              <td :class="column" style="width:15%">{{ item.vol }}</td>
+              <td :class="column" style="width:18%">{{ item.price }}</td>
+              <td :class="column" class="font-weight-bold" style="width:18%">
+                {{ item.buyer }}
+              </td>
+              <td :class="column" class="font-weight-bold" style="width:20%">
+                {{ item.seller }}
+              </td>
               <td :class="column"></td>
             </tr>
           </tbody>
@@ -212,6 +224,56 @@ export default {
           askvol: 110,
           asknum: 1
         }
+      ],
+      trades: [
+        {
+          id: 1,
+          time: "11:46 AM",
+          vol: "500",
+          price: "8.00",
+          buyer: "COL",
+          seller: "NOMU"
+        },
+        {
+          id: 2,
+          time: "11:46 AM",
+          vol: "500",
+          price: "8.00",
+          buyer: "COL",
+          seller: "NOMU"
+        },
+        {
+          id: 3,
+          time: "11:46 AM",
+          vol: "500",
+          price: "8.00",
+          buyer: "COL",
+          seller: "NOMU"
+        },
+        {
+          id: 4,
+          time: "11:46 AM",
+          vol: "500",
+          price: "8.00",
+          buyer: "COL",
+          seller: "NOMU"
+        },
+        {
+          id: 5,
+          time: "11:46 AM",
+          vol: "500",
+          price: "8.00",
+          buyer: "COL",
+          seller: "NOMU"
+        },
+        {
+          id: 6,
+          time: "11:46 AM",
+          vol: "500",
+          price: "8.00",
+          buyer: "COL",
+          seller: "NOMU"
+        }
       ]
     };
   },
@@ -225,10 +287,10 @@ export default {
 
 <style>
 .header {
-  background: #0b1f33 !important;
+  background: #00122e !important;
 }
 .column {
-  background: #0b1f33 !important;
+  background: #00122e !important;
 }
 .theme--dark.v-data-table thead tr:last-child th,
 .theme--dark.v-data-table
