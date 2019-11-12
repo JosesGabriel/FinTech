@@ -22,7 +22,7 @@
   flex-direction: column-reverse;
   padding: 15px;
   overflow: auto;
-  height: 250px;
+  height: 410px;
   border-right: 1px solid black;
 }
 .message__list {

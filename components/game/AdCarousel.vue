@@ -2,14 +2,14 @@
   <v-carousel
     cycle
     interval="2000"
-    height="400"
+    height="250"
     hide-delimiter-background
     show-arrows-on-hover
   >
     <v-carousel-item v-for="(slide, i) in slides" :key="i">
       <v-sheet :color="colors[i]" height="100%">
         <v-row class="fill-height" align="center" justify="center">
-          <div class="display-3">{{ slide }}</div>
+          <div class="title-2 text-center">{{ slide }}</div>
         </v-row>
       </v-sheet>
     </v-carousel-item>
@@ -26,7 +26,7 @@ export default {
         "red lighten-1",
         "deep-purple accent-4"
       ],
-      slides: ["First", "Second", "Third", "Fourth", "Fifth"]
+      slides: [" 13th month ", "Second", "Third"]
     };
   }
 };
