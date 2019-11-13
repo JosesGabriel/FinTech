@@ -1,4 +1,5 @@
 <template>
+  <!-- hehhee -->
   <v-col class="pa-0 mt-3">
     <v-simple-table
       id="liveportfolio-table"

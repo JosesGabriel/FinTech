@@ -1,4 +1,5 @@
 <template>
+  <!-- Mestro Meny -->
   <v-col class="pa-0">
     <v-content class="content__btncontainer">
       <div id="div__btn">
@@ -150,7 +151,6 @@ export default {
       this.jockey = true;
       this.setTableFullscreen(this.table);
       this.$bus.$emit("adjustChartView");
-      console.log("test 2");
     },
     toggleSidebarBoard: function() {
       this.sidebarboard = !this.sidebarboard;
