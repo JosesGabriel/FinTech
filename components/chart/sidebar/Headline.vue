@@ -3,8 +3,13 @@
     <v-row class="ma-0 ml-4 mt-1 mb-1">
       <v-col class="col-3 pa-0">
         <!-- arrow -->
-        <v-content class="arrow-icon">
-          <v-img src="/Icon/chart/up-arrow.svg"></v-img>
+        <v-content>
+          <v-icon v-show="changetype == 1" size="80" class="arrow-icon increase"
+            >mdi-chevron-up</v-icon
+          >
+          <v-icon v-show="changetype == 2" size="80" class="arrow-icon decrease"
+            >mdi-chevron-down</v-icon
+          >
         </v-content>
       </v-col>
 
@@ -14,7 +19,14 @@
         </v-content>
         <v-content>
           <span class="headline">15.01</span>
-          <span class="subtitle-2 increase">-0.03(1.95%)</span>
+          <span
+            class="subtitle-2"
+            :class="[
+              { increase: changetype == 1 },
+              { decrease: changetype == 2 }
+            ]"
+            >-0.03(1.95%)</span
+          >
         </v-content>
         <v-content class="mt-0">
           <span class="caption">Market Capitalization: 9.517B</span>
@@ -26,7 +38,12 @@
 
 <script>
 export default {
-  name: "Headline"
+  name: "Headline",
+  data() {
+    return {
+      changetype: 1
+    };
+  }
 };
 </script>
 
@@ -35,10 +52,14 @@ export default {
   font-size: x-small;
   color: #fff;
 }
-/*
 .arrow-icon {
-  margin-top: -8px;
+  position: absolute;
+  right: 50%;
+  left: 50%;
+  top: -15px;
 }
+/*
+
 .head {
   font-size: 16px;
   position: absolute;

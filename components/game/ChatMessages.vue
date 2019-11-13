@@ -11,7 +11,7 @@
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .message {
   position: relative;
   bottom: 7px;
@@ -23,7 +23,6 @@
   padding: 15px;
   overflow: auto;
   height: 410px;
-  border-right: 1px solid black;
 }
 .message__list {
   align-self: flex-start;

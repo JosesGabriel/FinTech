@@ -5,7 +5,7 @@
         <UserProfileCard />
       </v-col>
       <v-col cols="9" class="pb-0">
-        <RoomsTable />
+        <LobbyTable />
       </v-col>
     </v-row>
     <v-row>
@@ -16,8 +16,13 @@
         <ChatClient />
       </v-col>
       <v-col cols="3" class="pt-0">
-        <AdCarousel class="mb-5" />
-        <AdCarousel />
+        <div v-if="!playerInLobby">
+          <AdCarousel class="mb-5" />
+          <AdCarousel />
+        </div>
+        <div v-if="playerInLobby">
+          <LobbySettings />
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -34,19 +39,34 @@
 </style>
 <script>
 import UserProfileCard from "~/components/game/UserProfileCard";
-import RoomsTable from "~/components/game/RoomsTable";
+import LobbyTable from "~/components/game/LobbyTable";
 import Leaderboard from "~/components/game/Leaderboard";
 import ChatClient from "~/components/game/ChatClient";
 import AdCarousel from "~/components/game/AdCarousel";
+import LobbySettings from "~/components/game/LobbySettings";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "main",
   components: {
     UserProfileCard,
-    RoomsTable,
+    LobbyTable,
     Leaderboard,
     ChatClient,
-    AdCarousel
+    AdCarousel,
+    LobbySettings
+  },
+  computed: {
+    ...mapGetters({
+      playerInLobby: "game/getPlayerInLobby",
+      playerIsHost: "game/getPlayerIsHost"
+    })
+  },
+  methods: {
+    ...mapActions({
+      setPlayerInLobby: "game/setPlayerInLobby",
+      setPlayerIsHost: "game/setPlayerIsHost"
+    })
   }
 };
 </script>

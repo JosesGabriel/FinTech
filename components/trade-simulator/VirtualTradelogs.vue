@@ -17,7 +17,8 @@
             <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Year</v-btn>
             <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
             <v-spacer></v-spacer>
-            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" style="border-width: 2px" height="23">Record</v-btn>
+            <!--<v-btn rounded outlined color="#48FFD5" @click.stop="EnterRecordModal=true"  dark class="rtf_top-btn text-capitalize mr-2" style="border-width: 2px" height="23">Record</v-btn>
+             <RecordModal :visible="EnterRecordModal" @close="EnterRecordModal=false" />-->
 
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -74,9 +75,9 @@
                 </td>
                 </tr>
                 <tr id="table_tr_port-cont">
-                <td class="font-regular caption item_position-prop text-right px-1 py-0" colspan="7">Total Profit/Loss as of October 31, 2019</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">58,121.95</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">58,121.95</td>
+                <td class="font-regular caption item_position-prop text-right px-1 py-0" colspan="7" style="color:white;">Total Profit/Loss as of October 31, 2019</td>
+                <td class="font-regular caption item_position-prop text-right px-1 py-0" style="color:#00ffc3;">58,121.95</td>
+                <td class="font-regular caption item_position-prop text-right px-1 py-0" style="color:#00ffc3;">58,121.95</td>
                 <td class="font-regular caption item_position-prop text-right px-1 py-0"></td>
                 </tr>
                 
@@ -119,7 +120,7 @@ import shareModal from '~/components/modals/share'
 
 export default {
   components: {
-    shareModal
+    shareModal,
   },
   data () {
     return {

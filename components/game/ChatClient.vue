@@ -8,8 +8,8 @@
       <div class="col-8">
         <ChatMessages />
       </div>
-      <div class="col-4">
-        <ChatMembers />
+      <div class="col-4 chatMembers__container">
+        <ChatMembers class="chatMembers" />
       </div>
     </div>
     <div class="row">
@@ -25,6 +25,10 @@
 }
 .client__header {
   background-color: black;
+}
+.chatMembers__container {
+  border-right: 1px solid black;
+  border-left: 1px solid black;
 }
 </style>
 <script>
