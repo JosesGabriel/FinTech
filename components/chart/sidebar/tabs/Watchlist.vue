@@ -7,16 +7,16 @@
           >mdi-plus-circle-outline</v-icon
         >
       </span>
-      <v-divider></v-divider>
+
       <v-content class="content__card-watchlist">
         <v-card
           v-for="(item, key) in items"
           :key="item.id"
           elevation="5"
-          color="#00122e"
-          class="card__watchlist"
+          color="#0c1a2b"
+          class="card__watchlist mb-1"
         >
-          <v-card-text class="pa-2 mt-1">
+          <v-card-text class="pa-0 px-2">
             <v-row class="ma-0">
               <!-- Container -->
               <v-col
@@ -25,44 +25,58 @@
                 :class="[columnStyle]"
               >
                 <v-row class="ma-0">
-                  <v-col class="col__title py-0 col-7 title white--text">
-                    <span
+                  <v-col
+                    class="col__title pa-0 col-6 title white--text"
+                    md="6"
+                    sm="12"
+                  >
+                    <v-btn
+                      small
+                      color="#0c1a2b"
                       class="span__title"
                       @dblclick="showRemoveButton(item)"
-                      >{{ item.title }}</span
+                      >{{ item.title }}</v-btn
                     >
                   </v-col>
-                  <v-col class="col__value py-0 col-5 text-right white--text">{{
-                    item.value
-                  }}</v-col>
+                  <v-col
+                    class="col__value pa-0 col-6 text-right white--text"
+                    md="6"
+                    sm="12"
+                  >
+                    <div class="div__value">{{ item.value }}</div>
+                  </v-col>
                 </v-row>
                 <v-row class="ma-0">
-                  <v-col class="col_description py-0 col-7 overline">{{
-                    item.description
-                  }}</v-col>
-                  <v-col class="col__volume py-0 col-5 text-right caption">
-                    <v-icon
-                      v-show="item.changetype == 1"
-                      class="float-left increase"
-                      right=""
-                      >mdi-chevron-up</v-icon
-                    >
-                    <span
-                      v-show="item.changetype == 1"
-                      class="float-right increase"
-                      >{{ item.volume }}</span
-                    >
-                    <v-icon
-                      v-show="item.changetype == 2"
-                      class="float-left decrease"
-                      right=""
-                      >mdi-chevron-down</v-icon
-                    >
-                    <span
-                      v-show="item.changetype == 2"
-                      class="float-right decrease"
-                      >{{ item.volume }}</span
-                    >
+                  <v-col
+                    class="col_description py-0 col-7 overline"
+                    md="6"
+                    sm="12"
+                  >
+                    <span>{{ item.description }}</span>
+                  </v-col>
+                  <v-col
+                    class="col__volume py-0 col-5 text-right caption"
+                    md="6"
+                    sm="12"
+                  >
+                    <v-content>
+                      <span
+                        ><v-icon v-show="item.changetype == 1" class="increase"
+                          >mdi-chevron-up</v-icon
+                        ><v-icon v-show="item.changetype == 2" class="decrease"
+                          >mdi-chevron-down</v-icon
+                        >
+                      </span>
+                      <span
+                        :class="[
+                          {
+                            increase: item.changetype == 1,
+                            decrease: item.changetype == 2
+                          }
+                        ]"
+                        >{{ item.volume }}</span
+                      >
+                    </v-content>
                   </v-col>
                 </v-row>
               </v-col>
@@ -98,7 +112,7 @@ export default {
           title: "JFC",
           description: "Jollibee Foods Corp.",
           value: "232.23",
-          volume: "-0.20(0.1%)",
+          volume: "-0.20(0.10%)",
           changetype: 2
         },
         {
@@ -114,7 +128,7 @@ export default {
           title: "IRC",
           description: "Infradev Holdings Inc.",
           value: "442.2",
-          volume: "-0.20(0.9%)",
+          volume: "-0.20(0.90%)",
           changetype: 2
         },
         {
@@ -164,7 +178,7 @@ export default {
   cursor: pointer;
 }
 .content__card-watchlist {
-  height: 360px;
+  height: calc(100vh - 400px);
   overflow-x: auto;
 }
 .card__watchlist {
@@ -176,7 +190,6 @@ export default {
 .col__title {
 }
 .col__value {
-  vertical-align: bottom;
 }
 .col_description {
 }
@@ -191,5 +204,10 @@ export default {
 .showColumnStyle {
   margin-top: auto;
   margin-bottom: auto;
+}
+.div__value {
+  line-height: 2;
+  margin-right: 14px;
+  margin-top: 10px;
 }
 </style>

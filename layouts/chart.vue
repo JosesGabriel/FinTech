@@ -33,6 +33,7 @@
                 class="table__container"
                 :class="tableStyle"
               >
+                <Footer />
                 <!-- <h1 align="center">Table</h1> -->
               </v-content>
             </v-slide-y-reverse-transition>
@@ -96,11 +97,13 @@
 import { mapActions, mapGetters } from "vuex";
 import Header from "~/components/Header";
 import Sidebar from "~/components/chart/Sidebar";
+import Footer from "~/components/chart/Footer";
 
 export default {
   components: {
     Header,
-    Sidebar
+    Sidebar,
+    Footer
   },
   data() {
     return {};
@@ -186,22 +189,19 @@ export default {
 .chart__container {
 }
 .sidebar__container {
-  /* background: skyblue; */
-  background: #00122e;
+  background: #00121e;
 }
 .ticker__container {
-  /* margin-top: auto;
-  margin-bottom: auto; */
   height: 50px;
   color: #fff;
-  background: #00122e;
+  background: #00121e;
 }
 .table__container {
   margin-top: auto;
   margin-bottom: auto;
   height: 50px;
   color: #fff;
-  background: #00122e;
+  background: #00121e;
 }
 
 .maximizeStyle {

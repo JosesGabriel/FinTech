@@ -1,7 +1,7 @@
 <template>
     <v-container class="px-5">
         <v-row no-gutters>
-        <div class="small mt-10 pt-5">
+        <div class="small mx-8 pt-10">
             <apexcharts height=270 type=donut :options="chartOptions" :series="series"></apexcharts>
         </div>
             <v-col class="pa-3" cols="12">

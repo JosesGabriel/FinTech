@@ -16,8 +16,8 @@
                     <template v-slot:default>
                         <tbody>
                             <tr v-for="item in tradingr" :key="item.name" id="table_tr_snap-cont">
-                            <td class="item_position-prop px-3 caption">{{ item.name }}</td>
-                            <td class="item_position-prop text-right px-3 caption">{{ item.value }}</td>
+                            <td class="item_position-prop px-3 py-1 caption">{{ item.name }}</td>
+                            <td class="item_position-prop text-right px-3 py-1 caption">{{ item.value }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -31,8 +31,8 @@
                     <template v-slot:default>
                         <tbody>
                             <tr v-for="item in tradingr" :key="item.name" id="table_tr_snap-cont">
-                            <td class="item_position-prop px-3 caption">{{ item.name }}</td>
-                            <td class="item_position-prop text-right px-3 caption">{{ item.value }}</td>
+                            <td class="item_position-prop px-3 py-1 caption">{{ item.name }}</td>
+                            <td class="item_position-prop text-right px-3 py-1 caption">{{ item.value }}</td>
                             </tr>
                         </tbody>
                     </template>
