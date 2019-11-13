@@ -4,7 +4,8 @@
       dark
       :headers="playerInLobby ? headersJoined : headers"
       :items="playerInLobby ? itemsJoined : items"
-      :items-per-page="4"
+      :items-per-page="10"
+      height="230px"
       style="background-color: transparent"
       class="elevation-1"
       :footer-props="{

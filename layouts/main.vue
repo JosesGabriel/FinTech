@@ -14,7 +14,7 @@
 <style>
 .social__container {
   /* background-color: #fcfbfe; light mode color, add to vuex state soon */
-  background-color: #00121E;
+  background-color: #00121e;
 }
 .lightMode {
   background-color: #f2f2f2;
@@ -29,6 +29,25 @@
     #49ba6f,
     #2581bc
   );
+}
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1de9b6;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1de9b6;
 }
 </style>
 

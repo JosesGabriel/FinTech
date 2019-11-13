@@ -1,70 +1,76 @@
 <template>
-  <v-card
-    class="mb-1 watchCard"
-    color="#0c1a2b"
-    dark
-    outlined
-    shaped
-    max-height="245"
-    :loading="watchCardLoading"
-  >
-    <apexcharts
-      ref="closePriceChart"
-      type="line"
-      height="150"
-      :options="chartOptions"
-      :series="series"
-    />
-    <v-card-actions class="watchlistCard__items caption">
-      <div>
-        <strong>{{ stockExchange }}: {{ stockSymbol }}</strong>
-        <span class="float-right">
-          ₱{{ stockCurrentPrice }} |
-          <span
-            :class="
-              stockCurrentChange > 0
-                ? 'watchlistCard__text--green'
-                : stockCurrentChange < 0
-                ? 'watchlistCard__text--red'
-                : 'watchlistCard__text--gray'
-            "
+  <v-hover v-slot:default="{ hover }" open-delay="200">
+    <v-card
+      class="mb-1 watchCard"
+      :class="!hover ? 'watchCard--unfocused' : ''"
+      color="#0c1a2b"
+      dark
+      outlined
+      shaped
+      max-height="245"
+      :loading="watchCardLoading"
+    >
+      <apexcharts
+        ref="closePriceChart"
+        type="line"
+        height="150"
+        :options="chartOptions"
+        :series="series"
+      />
+      <v-card-actions class="watchlistCard__items caption">
+        <div>
+          <strong>{{ stockExchange }}: {{ stockSymbol }}</strong>
+          <span class="float-right">
+            ₱{{ stockCurrentPrice }} |
+            <span
+              :class="
+                stockCurrentChange > 0
+                  ? 'watchlistCard__text--green'
+                  : stockCurrentChange < 0
+                  ? 'watchlistCard__text--red'
+                  : 'watchlistCard__text--gray'
+              "
+            >
+              {{ stockCurrentChange }}%</span
+            >
+          </span>
+        </div>
+        <div>
+          <span>Entry Price: </span>
+          <span class="float-right"
+            >₱{{ userWatchedStocks[data].entry_price }}</span
           >
-            {{ stockCurrentChange }}%</span
+        </div>
+        <div>
+          <span>Take Profit: </span>
+          <span class="float-right"
+            >₱{{ userWatchedStocks[data].take_profit }}</span
           >
-        </span>
+        </div>
+        <div>
+          <span>Stop Loss: </span>
+          <span class="float-right"
+            >₱{{ userWatchedStocks[data].stop_loss }}</span
+          >
+        </div>
+      </v-card-actions>
+      <div class="watchlistCard__percentbar">
+        <div
+          class="watchlistCard__bar watchlistCard__bar--green"
+          style="width:46%"
+        ></div>
+        <div
+          class="watchlistCard__bar watchlistCard__bar--red"
+          style="width:54%"
+        ></div>
       </div>
-      <div>
-        <span>Entry Price: </span>
-        <span class="float-right"
-          >₱{{ userWatchedStocks[data].entry_price }}</span
-        >
-      </div>
-      <div>
-        <span>Take Profit: </span>
-        <span class="float-right"
-          >₱{{ userWatchedStocks[data].take_profit }}</span
-        >
-      </div>
-      <div>
-        <span>Stop Loss: </span>
-        <span class="float-right"
-          >₱{{ userWatchedStocks[data].stop_loss }}</span
-        >
-      </div>
-    </v-card-actions>
-    <div class="watchlistCard__percentbar">
-      <div
-        class="watchlistCard__bar watchlistCard__bar--green"
-        style="width:46%"
-      ></div>
-      <div
-        class="watchlistCard__bar watchlistCard__bar--red"
-        style="width:54%"
-      ></div>
-    </div>
-  </v-card>
+    </v-card>
+  </v-hover>
 </template>
 <style>
+.watchCard--unfocused {
+  opacity: 0.5;
+}
 .watchlistCard__bar--green {
   background-color: #48ffd5;
 }
@@ -101,6 +107,9 @@
   text-align: center;
   line-height: 0;
   border-radius: 5px 0 0 5px;
+}
+.apexcharts-tooltip {
+  box-shadow: none;
 }
 </style>
 <script>
@@ -195,6 +204,17 @@ export default {
               fontFamily: "Karla"
             },
             theme: false
+          },
+          crosshairs: {
+            show: true,
+            width: 1,
+            position: "back",
+            opacity: 0.9,
+            stroke: {
+              color: "#152d4a",
+              width: 2,
+              dashArray: 0
+            }
           }
         },
         yaxis: {
