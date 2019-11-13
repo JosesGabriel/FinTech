@@ -3,7 +3,7 @@
     <v-card
       class="mb-1 watchCard"
       :class="!hover ? 'watchCard--unfocused' : ''"
-      color="#0c1a2b"
+      color="darkcard"
       dark
       outlined
       shaped
