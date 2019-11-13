@@ -150,6 +150,7 @@ export default {
       this.jockey = true;
       this.setTableFullscreen(this.table);
       this.$bus.$emit("adjustChartView");
+      console.log("test 2");
     },
     toggleSidebarBoard: function() {
       this.sidebarboard = !this.sidebarboard;
