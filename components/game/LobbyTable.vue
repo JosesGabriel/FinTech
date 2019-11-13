@@ -27,19 +27,11 @@
         >Create Game</v-btn
       >
       <v-dialog v-model="dialog" max-width="290">
-        <v-card dark>
-          <v-card-title class="headline">Card Title</v-card-title>
-
-          <v-card-text>
-            Card Text
-          </v-card-text>
-
+        <v-card dark color="#0c1a2b">
           <v-card-actions>
-            <v-spacer></v-spacer>
-
             <v-btn
-              color="green darken-1"
-              text
+              color="success"
+              outlined
               @click="
                 dialog = false;
                 joinLobby();
@@ -47,10 +39,10 @@
             >
               Single Player
             </v-btn>
-
+            <v-spacer></v-spacer>
             <v-btn
-              color="green darken-1"
-              text
+              color="success"
+              outlined
               @click="
                 dialog = false;
                 joinLobby();
