@@ -135,6 +135,7 @@ export default {
     toggleTools: function() {
       this.tools = !this.tools;
       // console.log(this.tools);
+      console.log("test");
     },
     toggleTable: function() {
       if (this.maximize == true) {
