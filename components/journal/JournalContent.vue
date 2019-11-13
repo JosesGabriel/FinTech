@@ -145,12 +145,14 @@ export default {
     return {
       tab: null,
       tabs: 3,
-      portfolio: ['Sample one','Sample two','Sample three','Sample four'],
+      portfolio: [],
       showCreatePortForm: false,
     }
   },
   mounted() {
-      console.log(this.portfolio)
+      if( this.portfolio == 0) {
+        this.showCreatePortForm = true
+      }
   }
 };
 </script>
@@ -160,6 +162,10 @@ export default {
     }
 </style>
 <style>
+    .theme--light.v-list {
+        background: #00121e;
+        border: 1px solid #00FFC3;
+    }
     .v-window.v-item-group.theme--light.v-tabs-items {
     background: none;
     }
