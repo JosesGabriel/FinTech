@@ -20,7 +20,7 @@
                 <v-select
                     v-model="stocksDropdownModel"
                     :items="portfolio"
-                    label="Fund Source"
+                    label="Type of Portfolio"
                     color="success"
                     item-color="success"
                     dense
