@@ -1,3 +1,3 @@
-export default {
-  getUserWatchedStocks
-};
+// export default {
+//   getUserWatchedStocks
+// };
