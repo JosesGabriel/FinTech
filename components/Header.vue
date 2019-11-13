@@ -5,17 +5,17 @@
     class="header__toolbar"
     :class="isLightMode == 1 ? 'lightMode' : 'darkMode'"
   >
-    <div
-      class="headerItems__wrapper"
-      :class="isLightMode == 1 ? 'lightMode' : 'darkMode'"
-    >
-      <router-link to="/">
-        <img src="logo.png" alt="" width="45" height="45" />
-      </router-link>
-      <v-btn icon @click="paletteSwitch()">
-        <v-icon color="yellow">mdi-theme-light-dark</v-icon>
-      </v-btn>
-      <v-spacer></v-spacer>
+    <v-toolbar-title
+      ><router-link to="/">
+        <img src="logo.png" alt="" width="45" height="45" /> </router-link
+    ></v-toolbar-title>
+
+    <v-btn icon @click="paletteSwitch()">
+      <v-icon color="yellow">mdi-theme-light-dark</v-icon>
+    </v-btn>
+    <v-spacer></v-spacer>
+
+    <v-toolbar-items class="mt-3" dark>
       <transition name="fade">
         <div
           v-if="!searchButtonIsVisible"
@@ -24,95 +24,87 @@
           <v-text-field
             label="Search"
             prepend-inner-icon="mdi-magnify"
-            class="header__searchbar ml-3 headline"
+            class="header__searchbar ml-3 mt-1 headline"
             outlined
             rounded
             solo
             flat
+            dense
             background-color="transparent"
           ></v-text-field>
         </div>
       </transition>
-      <v-toolbar-items class="mt-3" dark>
-        <transition name="slide-fade">
-          <router-link
-            v-if="searchButtonIsVisible"
-            to="/"
-            class="social__router"
+      <transition name="slide-fade">
+        <router-link v-if="searchButtonIsVisible" to="/" class="social__router">
+          <v-btn
+            ref="header__searchButton"
+            class="header__button"
+            text
+            @click="toggleSearch()"
           >
-            <v-btn
-              ref="header__searchButton"
-              class="header__button"
-              text
-              @click="toggleSearch()"
-            >
-              Search
-            </v-btn>
-          </router-link>
-        </transition>
-        <router-link to="/" class="social__router">
-          <v-btn class="header__button" text>
-            Power Tools
+            Search
           </v-btn>
         </router-link>
-        <router-link to="/" class="social__router">
-          <v-btn class="header__button" text>
-            Notification
-          </v-btn>
-        </router-link>
-        <router-link to="/" class="social__router">
-          <v-btn class="header__button" text>
-            Vyndue
-          </v-btn>
-        </router-link>
-        <router-link to="/" class="social__router">
-          <v-btn class="header__button" text>
-            Account
-          </v-btn>
-        </router-link>
-      </v-toolbar-items>
+      </transition>
+      <router-link to="/" class="social__router">
+        <v-btn class="header__button" text>
+          Power Tools
+        </v-btn>
+      </router-link>
+      <router-link to="/" class="social__router">
+        <v-btn class="header__button" text>
+          Notification
+        </v-btn>
+      </router-link>
+      <router-link to="/" class="social__router">
+        <v-btn class="header__button" text>
+          Vyndue
+        </v-btn>
+      </router-link>
+      <router-link to="/" class="social__router">
+        <v-btn class="header__button" text>
+          Account
+        </v-btn>
+      </router-link>
+    </v-toolbar-items>
 
-      <v-dialog v-model="registerDialogModel" max-width="350px">
-        <v-card>
-          <v-card-text>
-            <div class="title text-center pt-5" style="color: black;">
-              Join Arbitrage. It's free!
-            </div>
-            <div class="body-2 text-center">
-              Already have an account? <a>Log in</a>
-            </div>
-          </v-card-text>
-          <v-card-text>
-            <v-container>
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field label="Full name" required></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field label="Email address"></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field label="Username" required></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field label="Password" required></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-            <small>By signing up, you agree to the Terms and Conditions.</small>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="blue darken-1"
-              text
-              @click="registerDialogModel = false"
-              >Sign Up</v-btn
-            >
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+    <v-dialog v-model="registerDialogModel" max-width="350px">
+      <v-card>
+        <v-card-text>
+          <div class="title text-center pt-5" style="color: black;">
+            Join Arbitrage. It's free!
+          </div>
+          <div class="body-2 text-center">
+            Already have an account? <a>Log in</a>
+          </div>
+        </v-card-text>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field label="Full name" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Email address"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Username" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field label="Password" required></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>By signing up, you agree to the Terms and Conditions.</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="registerDialogModel = false"
+            >Sign Up</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-toolbar>
 </template>
 <style scoped>
@@ -130,9 +122,8 @@
   opacity: 0;
 }
 .header__searchbar {
-  margin-top: 17px !important;
   transform: scale(0.6);
-  transform-origin: right;
+  transform-origin: top right;
 }
 .social__router {
   text-decoration: none;
@@ -151,18 +142,6 @@
 }
 .darkMode {
   background-color: #00121e;
-}
-.headerItems__wrapper {
-  display: flex;
-  align-items: center;
-  height: 48px;
-  z-index: 0;
-  width: 100%;
-  margin: 0 auto;
-  /* max-width: 1023px; */
-}
-.header__avatar {
-  cursor: pointer;
 }
 .header__button {
   text-transform: none;
