@@ -13,7 +13,7 @@
                 </router-link>
                 <router-link to="/" class="px-1 routerlink_facebook-link">
                     <v-btn icon>
-                        <v-icon color="#B6B6B6" class="facebook_box-icon" flat>mdi-facebook-box</v-icon>
+                        <v-icon color="#B6B6B6" class="facebook_box-icon display-1" flat>mdi-facebook-box</v-icon>
                     </v-btn>
                 </router-link>
                 <router-link to="/login" class="px-1">

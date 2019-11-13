@@ -14,7 +14,7 @@
           >Manage</v-btn
         >
       </template>
-      <v-card color="#142b46" dark>
+      <v-card color="darkcard" dark>
         <v-card-title>
           <span class="headline font-weight-light"
             >Edit/Delete Watched Stock</span
