@@ -102,12 +102,13 @@
                     color="#48FFD5"
                     background-color="black"
                     :value="'tab-' + 1"
+                    style="background: #00121e;"
                 >
                     <v-container class="pa-0">
                         <VirtualLivePortfolio/>                
                     </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2">
+                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
                     <v-container class="pa-0">
                         <TradelogsContent/>
                     </v-container>
@@ -133,9 +134,11 @@
     }
   }
 </script>
-<style>
-.v-window.v-item-group.theme--light.v-tabs-items {
-    background: none;
+<style >
+.theme--dark.v-label {
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
 }
 .v-select__selection--comma {
     color: black;
@@ -150,10 +153,6 @@
 .theme--light.v-list {
     background: #00121e;
     border: 1px solid #00FFC3;
-}
-
-.v-list-item__title, .v-list-item__subtitle {
-    color:#00FFC3;
 }
 
 .v-slide-group__content.v-tabs-bar__content:before {
@@ -182,7 +181,8 @@
     color: black;
 }
 .vt_realized {
-    border: 1px solid black;
+   /* border: 1px solid black;*/
+    background: #0c1a2b73;
 }
 
 .vt_realized:hover {

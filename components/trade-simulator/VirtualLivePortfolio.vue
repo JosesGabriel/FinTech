@@ -5,7 +5,7 @@
               OPEN POSITION/S (PHP)
             </h1>
             <v-spacer></v-spacer>
-            <v-btn rounded outlined color="#48FFD5" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Reset</v-btn>
+            <v-btn rounded outlined color="#48FFD5" dark class="text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
             <v-btn rounded outlined color="#48FFD5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Trade</v-btn>
             <TradeModal :visible="EnterTradeModal" @close="EnterTradeModal=false" />
                 
@@ -37,6 +37,10 @@
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.MarketValue }}</td>
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Profit }}</td>
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Perf }}</td>
+                  <td class="font-regular caption item_position-prop text-right px-1 py-0 edit_icons">
+                    <v-icon color="#B6B6B6">mdi-pencil</v-icon>
+                    <v-icon color="#B6B6B6">mdi-delete</v-icon>
+                  </td>
                 <td class="font-regular caption item_position-prop text-right px-1 py-0">
                     <v-menu top>
                         <template v-slot:activator="{ on }">
@@ -97,6 +101,7 @@
 </template>
 <script>
 import TradeModal from '~/components/trade-simulator/TradeModal'
+import resetModal from '~/components/modals/reset'
 
 export default {
     data () {
@@ -154,10 +159,12 @@ export default {
         ],
         page: 1,
         EnterTradeModal: false,
+        showResetForm: false,
       }
     },
      components: {
-        TradeModal
+        TradeModal,
+        resetModal
     }
 }
 </script>
@@ -166,8 +173,15 @@ export default {
 .theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
   border: none;
 }
+.v-window.v-item-group.theme--light.v-tabs-items {
+    background: none;
+}
 .item_position-prop {
   color: #b6b6b6
+}
+
+.edit_icons {
+  display: none;
 }
 .pagination {
   display: inline-block;
