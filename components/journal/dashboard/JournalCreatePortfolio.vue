@@ -94,19 +94,6 @@ export default {
 }
 </script>
 <style>
-    .confirmation_button-reset-ok,
-    .confirmation_button-reset-not {
-        background: #00080E;
-    }
-    .confirmation_button-reset-ok:hover,
-    .confirmation_button-reset-not:hover {
-        background: #00FFC3;
-        cursor: pointer;
-    }
-    .confirmation_button-reset-ok:hover h1,
-    .confirmation_button-reset-not:hover h1 {
-        color: #00080E !important;
-    }
     .portfolio_type .v-select__slot .v-label,
     .portfolio_type .v-select__slot .v-icon {
         color: #00FFC3 !important;

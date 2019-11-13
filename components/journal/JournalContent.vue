@@ -10,7 +10,7 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-3`">Ledger</v-tab>
                 <v-spacer></v-spacer>
                 <v-col sm="3" md="2" class="pa-0">
-                    <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Stock" dense solo flat>
+                    <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Portfolio" dense solo flat>
                         <template v-slot:append-item>
                             <v-list-item
                             ripple
@@ -27,27 +27,35 @@
                     <v-container class="pa-0">
                         <div class="separator"></div>
                         <JournalLivePortfolio/>
+                        <div class="component_spacer"></div>
                         <v-row no-gutters>
                             <JournalPortfolioSnapshot/>
                             <JournalCurrentAllocation/>
                         </v-row>
+                        <div class="component_spacer"></div>
                         <v-row no-gutters>
                             <JournalEquityCurve/>
                         </v-row>
+                        <div class="component_spacer"></div>
                         <v-row no-gutters>
                             <JournalMonthlyPerfomance/>
                             <JournalTradeStats/>
                         </v-row>
+                        <div class="component_spacer"></div>
                         <JournalStrategyStats/>
+                        <div class="component_spacer"></div>
                         <v-row no-gutters>
                             <JournalTopStocks/>
                         </v-row>
+                        <div class="component_spacer"></div>
                         <v-row no-gutters>
                             <JournalEmotionalStats/>
                         </v-row>
+                        <div class="component_spacer"></div>
                         <v-row no-gutters>
                             <JournalExpenseReport/>
                         </v-row>
+                        <div class="component_spacer"></div>
                         <v-row no-gutters>
                             <v-col class="pa-0" cols="6" sm="6" md="6">
                                 <JournalBuyVolume/>
@@ -56,6 +64,7 @@
                                 <JournalBuyValue/>
                             </v-col>
                         </v-row>
+                        <div class="component_spacer"></div>
                         <v-row no-gutters>
                             <v-col class="pa-0" cols="4" sm="4" md="4">
                                 <JournalPerformance/>
@@ -64,6 +73,7 @@
                                 <JournalGrossPL/>
                             </v-col>
                         </v-row>
+                        <div class="component_spacer"></div>
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2">
@@ -135,16 +145,27 @@ export default {
     return {
       tab: null,
       tabs: 3,
-      portfolio: ['Sample one','Sample two','Sample three','Sample four'],
+      portfolio: [],
       showCreatePortForm: false,
     }
   },
   mounted() {
-      console.log(this.portfolio)
+      if( this.portfolio == 0) {
+        this.showCreatePortForm = true
+      }
   }
 };
 </script>
+<style scoped>
+    .component_spacer {
+        height: 50px;
+    }
+</style>
 <style>
+    .theme--light.v-list {
+        background: #00121e;
+        border: 1px solid #00FFC3;
+    }
     .v-window.v-item-group.theme--light.v-tabs-items {
     background: none;
     }

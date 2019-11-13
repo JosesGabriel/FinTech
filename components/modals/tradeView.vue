@@ -151,7 +151,7 @@
                                     <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 1">
                                         <BuyTrade/>
                                     </v-tab-item>
-                                    <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 2">
+                                    <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
                                         <SellTrade/>
                                     </v-tab-item>
                                 </v-tabs>
@@ -195,6 +195,7 @@
                             <v-btn
                                 color="success"
                                 @click.stop="show=false"
+                                @click="e1 = 1"
                                 class="text-capitalize black--text ml-1"
                                 light
                             >

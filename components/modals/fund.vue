@@ -13,7 +13,7 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#funds-1`">Deposit</v-tab>
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#funds-2`">Withdraw</v-tab>
 
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 1">
+                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" class="active-class" :value="'funds-' + 1">
                     <JournalDeposit/>
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
@@ -66,18 +66,3 @@ export default {
   }
 }
 </script>
-<style>
-    .confirmation_button-reset-ok,
-    .confirmation_button-reset-not {
-        background: #00080E;
-    }
-    .confirmation_button-reset-ok:hover,
-    .confirmation_button-reset-not:hover {
-        background: #00FFC3;
-        cursor: pointer;
-    }
-    .confirmation_button-reset-ok:hover h1,
-    .confirmation_button-reset-not:hover h1 {
-        color: #00080E !important;
-    }
-</style>

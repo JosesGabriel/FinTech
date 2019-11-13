@@ -8,8 +8,8 @@
       dark
       fixed-header
       class="ml-4"
-      height="350"
-      style="background:#00122e"
+      height="calc(100vh - 415px)"
+      style="background:#00121e"
     >
       <thead>
         <tr>
@@ -258,6 +258,9 @@ export default {
 </script>
 
 <style scoped>
+.theme--dark.v-data-table thead tr:last-child th {
+  border: none;
+}
 .v-data-table td,
 .v-data-table th {
   padding: 0px 0px !important;

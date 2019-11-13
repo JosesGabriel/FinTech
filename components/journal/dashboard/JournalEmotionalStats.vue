@@ -168,7 +168,7 @@ export default {
                             fontFamily: 'Karla',
                             cssClass: 'apexcharts-yaxis-label',
                         },
-                        offsetX: 60,
+                        offsetX: 57,
                         offsetY: -20
                     },
                     axisTicks: {

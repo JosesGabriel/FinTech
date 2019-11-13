@@ -189,22 +189,19 @@ export default {
 .chart__container {
 }
 .sidebar__container {
-  /* background: skyblue; */
-  background: #00122e;
+  background: #00121e;
 }
 .ticker__container {
-  /* margin-top: auto;
-  margin-bottom: auto; */
   height: 50px;
   color: #fff;
-  background: #00122e;
+  background: #00121e;
 }
 .table__container {
   margin-top: auto;
   margin-bottom: auto;
   height: 50px;
   color: #fff;
-  background: #00122e;
+  background: #00121e;
 }
 
 .maximizeStyle {

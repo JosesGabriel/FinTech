@@ -14,7 +14,7 @@
           >Add</v-btn
         >
       </template>
-      <v-card :loading="watchCardModalLoading" color="#142b46">
+      <v-card :loading="watchCardModalLoading" color="darkcard">
         <v-card-title>
           <span class="subtitle-1 font-weight-light" style="color: #1DE9B6"
             >Add Watchlist</span
