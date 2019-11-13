@@ -12,6 +12,16 @@
                 <v-col sm="3" md="2" class="pa-0">
                     <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Portfolio" dense solo flat>
                         <template v-slot:append-item>
+                            <v-list-item @click="" class="sumportfolio_real mt-1">
+                                <v-list-item-content>
+                                    <v-list-item-title>Sum of Real Portfolio</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item @click="">
+                                <v-list-item-content>
+                                    <v-list-item-title>Sum of Virtual Portfolio</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
                             <v-list-item
                             ripple
                             @click.stop="showCreatePortForm=true"
@@ -117,48 +127,53 @@ import TradelogsContent from "~/components/journal/tradelogs/contents";
 import LedgerContent from "~/components/journal/ledger/LedgerContent";
 import createModal from '~/components/journal/dashboard/JournalCreatePortfolio'
 
+// import { mapActions, mapGetters } from "vuex";
+
 export default {
-  layout: "main",
-  components: {
-    //Dashboard tab
-    JournalLivePortfolio,
-    JournalPortfolioSnapshot,
-    JournalCurrentAllocation,
-    JournalMonthlyPerfomance,
-    JournalTradeStats,
-    JournalEquityCurve,
-    JournalStrategyStats,
-    JournalTopStocks,
-    JournalEmotionalStats,
-    JournalExpenseReport,
-    JournalBuyVolume,
-    JournalBuyValue,
-    JournalPerformance,
-    JournalGrossPL,
-    //Ledger tab
-    TradelogsContent,
-    //Ledger tab
-    LedgerContent,
-    createModal
-  },
-  data() {
-    return {
-      tab: null,
-      tabs: 3,
-      portfolio: [],
-      showCreatePortForm: false,
+    layout: "main",
+    components: {
+        //Dashboard tab
+        JournalLivePortfolio,
+        JournalPortfolioSnapshot,
+        JournalCurrentAllocation,
+        JournalMonthlyPerfomance,
+        JournalTradeStats,
+        JournalEquityCurve,
+        JournalStrategyStats,
+        JournalTopStocks,
+        JournalEmotionalStats,
+        JournalExpenseReport,
+        JournalBuyVolume,
+        JournalBuyValue,
+        JournalPerformance,
+        JournalGrossPL,
+        //Ledger tab
+        TradelogsContent,
+        //Ledger tab
+        LedgerContent,
+        createModal
+    },
+    data() {
+        return {
+            tab: null,
+            tabs: 3,
+            portfolio: [],
+            showCreatePortForm: false,
+        }
+    },
+    mounted() {
+        if( this.portfolio == 0) {
+            this.showCreatePortForm = true
+        }
     }
-  },
-  mounted() {
-      if( this.portfolio == 0) {
-        this.showCreatePortForm = true
-      }
-  }
 };
 </script>
 <style scoped>
     .component_spacer {
         height: 50px;
+    }
+    .sumportfolio_real {
+        border-top: 1px solid;
     }
 </style>
 <style>

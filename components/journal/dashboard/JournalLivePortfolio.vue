@@ -216,7 +216,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.portfolioLogs)
+    // console.log(this.portfolioLogs)
   },
   methods: {
     menuLogsShow: function(item) {
