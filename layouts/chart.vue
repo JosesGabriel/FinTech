@@ -33,7 +33,7 @@
                 class="table__container"
                 :class="tableStyle"
               >
-                <Footer />
+                <Table />
                 <!-- <h1 align="center">Table</h1> -->
               </v-content>
             </v-slide-y-reverse-transition>
@@ -97,13 +97,13 @@
 import { mapActions, mapGetters } from "vuex";
 import Header from "~/components/Header";
 import Sidebar from "~/components/chart/Sidebar";
-import Footer from "~/components/chart/Footer";
+import Table from "~/components/chart/Table";
 
 export default {
   components: {
     Header,
     Sidebar,
-    Footer
+    Table
   },
   data() {
     return {};
