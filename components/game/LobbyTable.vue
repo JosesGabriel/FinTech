@@ -2,8 +2,8 @@
   <div>
     <v-data-table
       dark
-      :headers="headers"
-      :items="items"
+      :headers="playerInLobby ? headersJoined : headers"
+      :items="playerInLobby ? itemsJoined : items"
       :items-per-page="4"
       style="background-color: transparent"
       class="elevation-1"
@@ -12,34 +12,56 @@
       }"
     ></v-data-table>
     <div class="table__footer">
-      <v-btn small outlined color="success" @click.stop="dialog = true"
+      <v-btn
+        small
+        outlined
+        color="success"
+        @click="
+          joinLobby();
+          setPlayerIsHost(false);
+        "
         >Join Game</v-btn
       >
+
+      <v-btn small outlined color="success" @click.stop="dialog = true"
+        >Create Game</v-btn
+      >
       <v-dialog v-model="dialog" max-width="290">
-        <v-card>
-          <v-card-title class="headline"
-            >Use Google's location service?</v-card-title
-          >
+        <v-card dark>
+          <v-card-title class="headline">Card Title</v-card-title>
 
           <v-card-text>
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
+            Card Text
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
 
-            <v-btn color="green darken-1" text @click="dialog = false">
-              Disagree
+            <v-btn
+              color="green darken-1"
+              text
+              @click="
+                dialog = false;
+                joinLobby();
+              "
+            >
+              Single Player
             </v-btn>
 
-            <v-btn color="green darken-1" text @click="dialog = false">
-              Agree
+            <v-btn
+              color="green darken-1"
+              text
+              @click="
+                dialog = false;
+                joinLobby();
+                setPlayerIsHost(true);
+              "
+            >
+              Multiplayer
             </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-btn small outlined color="success">Create Game</v-btn>
     </div>
   </div>
 </template>
@@ -57,9 +79,11 @@
 }
 </style>
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      dialog: false,
       headers: [
         {
           text: "ROOM #",
@@ -170,8 +194,95 @@ export default {
           charts: 0.0,
           coinbet: "110"
         }
+      ],
+      headersJoined: [
+        {
+          text: "PLAYERS",
+          align: "center",
+          value: "playerName",
+          class: "tableHeader"
+        },
+        {
+          text: "RANK",
+          align: "center",
+          value: "rank",
+          class: "tableHeader"
+        },
+        {
+          text: "READY",
+          align: "center",
+          value: "ready",
+          class: "tableHeader"
+        }
+      ],
+      itemsJoined: [
+        {
+          playerName: "Orange",
+          rank: "1",
+          ready: "READY"
+        },
+        {
+          playerName: "Jeff_ology",
+          rank: "3",
+          ready: "READY"
+        },
+        {
+          playerName: "Kring-Krungchao",
+          rank: "4",
+          ready: "READY"
+        },
+        {
+          playerName: "Kureyri",
+          rank: "2",
+          ready: "READY"
+        },
+        {
+          playerName: "aimeumemura",
+          rank: "9",
+          ready: "READY"
+        },
+        {
+          playerName: "Red",
+          rank: "5",
+          ready: "READY"
+        },
+        {
+          playerName: "Fuschia",
+          rank: "8",
+          ready: ""
+        },
+        {
+          playerName: "Purple",
+          rank: "10",
+          ready: "READY"
+        },
+        {
+          playerName: "AliceBlue",
+          rank: "7",
+          ready: ""
+        },
+        {
+          playerName: "Psalm",
+          rank: "6",
+          ready: ""
+        }
       ]
     };
+  },
+  computed: {
+    ...mapGetters({
+      playerInLobby: "game/getPlayerInLobby",
+      playerIsHost: "game/getPlayerIsHost"
+    })
+  },
+  methods: {
+    ...mapActions({
+      setPlayerInLobby: "game/setPlayerInLobby",
+      setPlayerIsHost: "game/setPlayerIsHost"
+    }),
+    joinLobby() {
+      this.setPlayerInLobby(true);
+    }
   }
 };
 </script>

@@ -11,7 +11,26 @@
     </div>
   </div>
 </template>
-<style>
+<style scoped>
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1de9b6;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1de9b6;
+}
 .message {
   position: relative;
   bottom: 7px;
@@ -23,7 +42,6 @@
   padding: 15px;
   overflow: auto;
   height: 410px;
-  border-right: 1px solid black;
 }
 .message__list {
   align-self: flex-start;
