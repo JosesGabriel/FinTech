@@ -1,105 +1,78 @@
 <template>
     <v-col class="pa-0">
-        <v-card-title class="text-left justify-left px-0 py-3 pt-5">
-            <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Day</v-btn>
-            <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Week</v-btn>
-            <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Month</v-btn>
-            <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Year</v-btn>
-            <v-btn rounded small dark color="transparent" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
-            <v-spacer></v-spacer>
-            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" style="border-width: 2px" height="23">Record</v-btn>
+        <v-card-title class="text-left justify-center align-center px-0 py-3 pt-5">
+          <v-col class="pa-0 pr-3" cols="12" sm="3" md="3">
+            <v-text-field
+              v-model="search"
+              prepend-inner-icon="mdi-magnify"
+              label="Search"
+              outlined
+              dense
+              hide-details
+              dark
+              color="success"
+              class="tl_searchfields"
+            ></v-text-field>
+          </v-col>
+          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>
+          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Week</v-btn>
+          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
+          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
+          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" style="border-width: 2px" height="23">Record</v-btn>
 
-              <v-btn icon small @click.stop="showScheduleForm=true"> 
-                  <img src="/icon/journal-icons/share-icon.svg" width="15">
-              </v-btn>
+            <v-btn icon small @click.stop="showScheduleForm=true"> 
+                <img src="/icon/journal-icons/share-icon.svg" width="15">
+            </v-btn>
         </v-card-title>
-        <v-simple-table :dense="true" dark id="liveportfolio-table" class="pl-10">
-            <template v-slot:default>
-            <thead>
-                <tr class="">
-                <th class="font-regular caption white--text text-left px-1">Stocks</th>
-                <th class="font-regular caption white--text text-right px-1">Date</th>
-                <th class="font-regular caption white--text text-right px-1">Volume</th>
-                <th class="font-regular caption white--text text-right px-1">Ave. Price</th>
-                <th class="font-regular caption white--text text-right px-1">Buy Value</th>
-                <th class="font-regular caption white--text text-right px-1">Sell Price</th>
-                <th class="font-regular caption white--text text-right px-1">Sell Value</th>
-                <th class="font-regular caption white--text text-right px-1">Profit/Loss</th>
-                <th class="font-regular caption white--text text-right px-1">%</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in desserts" :key="item.stocks" id="table_tr_port-cont">
-                <td class="font-regular caption item_position-prop px-1 py-2">{{ item.stocks }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.AvgPrice }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.position }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.position }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.TotalCost }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.TotalCost }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.MarketValue }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Profit }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Perf }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">
-                    <v-menu top>
-                        <template v-slot:activator="{ on }">
-                        <v-btn
-                            dark
-                            icon
-                            v-on="on"
-                        >
-                            <v-icon color="#B6B6B6">mdi-dots-horizontal</v-icon>
-                        </v-btn>
-                        </template>
-                        <v-list color="#123" dark class="pa-0">
-                            <v-list-item
-                                v-for="(item, i) in items"
-                                :key="i"
-                                headline
-                                background="#0c1f33"
-                            >
-                                <v-list-item-title class="body-2">{{ item.title }}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </td>
-                </tr>
-                <tr id="table_tr_port-cont">
-                <td class="font-regular caption item_position-prop text-right px-1 py-0" colspan="7">Total Profit/Loss as of October 31, 2019</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">58,121.95</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">58,121.95</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0"></td>
-                </tr>
-                
-            </tbody>
-            </template>
-        </v-simple-table>
-        <v-card class="pt-7" color="transparent" flat tile>
-            <v-card class="d-flex justify-start" color="transparent" flat tile>
-                <v-card-title class="text-left justify-left pa-0">
-                    <h1 class="font-weight-regular caption" style="color:#fff;">Show Rows
-                    </h1>
-                    <select class="text-center justify-center font-weight-regular caption show_rows-cont px-3 ml-1">
-                        <option class="font-weight-bold caption show_rows-select" value="0">0</option>
-                        <option class="font-weight-bold caption show_rows-select" value="1">1</option>
-                        <option class="font-weight-bold caption show_rows-select" value="2">2</option>
-                        <option class="font-weight-bold caption show_rows-select" value="3">3</option>
-                        <option class="font-weight-bold caption show_rows-select" value="4">4</option>
-                        <option class="font-weight-bold caption show_rows-select" value="5">5</option>
-                    </select>
-                    <h1 class="font-weight-regular caption ml-1" style="color:#fff;">of 100
-                    </h1>
-                </v-card-title>
-                <v-spacer></v-spacer>
-                <div class="pagination">
-                    <a href="#" class="font-weight-bold caption active">1</a>
-                    <a href="#" class="font-weight-bold caption">2</a>
-                    <a href="#" class="font-weight-bold caption">3</a>
-                    <a href="#" class="font-weight-bold caption">4</a>
-                    <a href="#" class="font-weight-bold caption">5</a>
-                    <a href="#" class="font-weight-bold caption">6</a>
-                    <a href="#" class="font-weight-bold caption">&rsaquo;</a>
-                </div>
-            </v-card>
+        <v-data-table
+          :headers="headers"
+          :search="search"
+          :items="tradeLogs"
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          @page-count="pageCount = $event"
+          dark
+          class="data_table-container pl-10 secondary--text"
+        >
+        <template v-slot:item.action="{ item }">
+          <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
+            <v-btn small class="caption" text color="success">Trade Details</v-btn>
+            <v-btn small class="caption" text color="success">Edit</v-btn>
+            <v-btn small class="caption" text color="success">Delete</v-btn>
+          </div>
+          <v-icon
+            small
+            class="mr-2"
+            @mouseover="tradelogsmenuLogsShow(item)"
+          >
+            mdi-dots-horizontal
+          </v-icon>
+        </template>
+        </v-data-table>
+        <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
+          <v-card color="transparent" class="justify-center" elevation="0">
+            <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
+            <v-spacer></v-spacer>
+            <v-text-field
+              :value="itemsPerPage"
+              type="number"
+              min="5"
+              max="10"
+              @input="itemsPerPage = parseInt($event, 10)"
+              dark
+              class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
+              color="success"
+              dense
+            ></v-text-field>
+            <span class="pl-1">of {{ tradeLogs.length }}</span>
+            </v-card-title>
+          </v-card>
+          <v-card color="transparent" elevation="0">
+            <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
+          </v-card>
         </v-card>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
@@ -114,130 +87,159 @@ export default {
   data () {
     return {
       showScheduleForm: false,
-      desserts: [
-        {
-          stocks: 'BDO',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        },
-        {
-          stocks: 'HLCM',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        },
-        {
-          stocks: '2GO',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        },
-        {
-          stocks: 'KPPI',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        },
-        {
-          stocks: 'HOME',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        },
-        {
-          stocks: 'CML',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        },
-        {
-          stocks: 'DMC',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        },
-        {
-          stocks: 'DKS',
-          position: '10,000.00',
-          AvgPrice: '16.04',
-          TotalCost: '16,047.20',
-          MarketValue: '16,709.10',
-          Profit: '661.90',
-          Perf: '4.12',
-        }
+      itemsPerPage: 5,
+      search: '',
+      headers: [
+        { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
+        { text: 'Position', value: 'Position', align: 'right' },
+        { text: 'Avg. Price', value: 'AvgPrice', align: 'right' },
+        { text: 'Total Cost', value: 'TotalCost', align: 'right' },
+        { text: 'Market Value', value: 'MarketValue', align: 'right' },
+        { text: 'Profit', value: 'Profit', align: 'right' },
+        { text: 'Perf. (%)', value: 'Perf', align: 'right' },
+        { text: '', value: 'action', sortable: false, align: 'right' },
       ],
-      items: [
-          { title: 'Note' },
-          { title: 'Delete' },
+      tradeLogs: [
+        {
+          id: 1,
+          Stocks: 'Frozen Yogurt',
+          Position: 159,
+          AvgPrice: 6.0,
+          TotalCost: 24,
+          MarketValue: 4.0,
+          Profit: '1%',
+          Perf: '1%',
+        },
+        {
+          id: 2,
+          Stocks: 'Ice cream sandwich',
+          Position: 237,
+          AvgPrice: 9.0,
+          TotalCost: 37,
+          MarketValue: 4.3,
+          Profit: '1%',
+          Perf: '1%',
+        },
+        {
+          id: 3,
+          Stocks: 'Eclair',
+          Position: 262,
+          AvgPrice: 16.0,
+          TotalCost: 23,
+          MarketValue: 6.0,
+          Profit: '7%',
+          Perf: '7%',
+        },
+        {
+          id: 4,
+          Stocks: 'Cupcake',
+          Position: 305,
+          AvgPrice: 3.7,
+          TotalCost: 67,
+          MarketValue: 4.3,
+          Profit: '8%',
+          Perf: '8%',
+        },
+        {
+          id: 5,
+          Stocks: 'Gingerbread',
+          Position: 356,
+          AvgPrice: 16.0,
+          TotalCost: 49,
+          MarketValue: 3.9,
+          Profit: '16%',
+          Perf: '16%',
+        },
+        {
+          id: 6,
+          Stocks: 'Jelly bean',
+          Position: 375,
+          AvgPrice: 0.0,
+          TotalCost: 94,
+          MarketValue: 0.0,
+          Profit: '0%',
+          Perf: '0%',
+        },
+        {
+          id: 7,
+          Stocks: 'Lollipop',
+          Position: 392,
+          AvgPrice: 0.2,
+          TotalCost: 98,
+          MarketValue: 0,
+          Profit: '2%',
+          Perf: '2%',
+        },
+        {
+          id: 8,
+          Stocks: 'Honeycomb',
+          Position: 408,
+          AvgPrice: 3.2,
+          TotalCost: 87,
+          MarketValue: 6.5,
+          Profit: '45%',
+          Perf: '45%',
+        },
+        {
+          id: 9,
+          Stocks: 'Donut',
+          Position: 452,
+          AvgPrice: 25.0,
+          TotalCost: 51,
+          MarketValue: 4.9,
+          Profit: '22%',
+          Perf: '22%',
+        },
+        {
+          id: 10,
+          Stocks: 'KitKat',
+          Position: 518,
+          AvgPrice: 26.0,
+          TotalCost: 65,
+          MarketValue: 7,
+          Profit: '6%',
+          Perf: '6%',
+        },
       ],
       page: 1,
+      pageCount: 0,
+      menuShow: false
+    }
+  },
+  methods: {
+    tradelogsmenuLogsShow: function(item) {
+      let tl = document.getElementById(`tl_${item.id}`);
+
+      tl.style.display = "block";
+    },
+    tradelogsmenuLogsHide: function(item) {
+      let tl = document.getElementById(`tl_${item.id}`);
+
+      tl.style.display = "none";
     }
   }
 }
 </script>
+
 <style scoped>
-.theme--dark.v-data-table thead tr:last-child th,
-.theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
-  border: none;
-}
-.item_position-prop {
-  color: #b6b6b6
-}
-.pagination {
-  display: inline-block;
-}
-
-.pagination a {
-  color: #b6b6b6;
-  float: left;
-  width: 20px;
-  width: 20px;
-  text-align: center;
-  text-decoration: none;
-  transition: background-color .3s;
-  border-radius: 20px;
-}
-
-.pagination a.active {
-  background-color: #00FFC3;
-  color: #00121E;
-}
-
-.pagination a:hover:not(.active) {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 20px
-}
-.show_rows-select {
-    background: #00FFC3;
-    color: #00121E;
-}
-.show_rows-cont {
-    border: 2px solid #00FFC3;
-    color: #00FFC3;
-    outline-color: none !important;
-    height: 18px;
-    line-height: 1;
-}
+  .data_table-container {
+    background: transparent
+  }
+  .sidemenu_actions {
+    position: absolute;
+    width: auto;
+    right: 0;
+    background: #00121e;
+    border: 1px solid rgb(0, 255, 195);
+    border-radius: 4px;
+  }
+</style>
+<style>
+  .tl_searchfields .v-input__slot {
+    margin: 0;
+  }
+  .tl_searchfields {
+    transform: scale(0.7);
+    transform-origin: left;
+  }
 </style>

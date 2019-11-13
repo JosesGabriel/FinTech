@@ -25,7 +25,7 @@
                 <v-row no-gutters>
                     <v-col class="pa-0" cols="5" sm="5" md="5" @click.stop="show=false">
                         <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-ok">
-                            <h1 class="font-weight-regular body-1" style="color:#00FFC3;">I THINK NOT</h1>
+                            <h1 class="font-weight-regular body-1" style="color:#00080E;">I THINK NOT</h1>
                         </v-card-title>
                     </v-col>
                     <v-col class="pa-0" cols="7" sm="7" md="7" @click.stop="show=false">
@@ -66,11 +66,16 @@ export default {
         letter-spacing: 2px;
         text-transform: uppercase;
     }
-    .confirmation_button-reset-ok,
+    .confirmation_button-reset-ok {
+        background: #00FFC3;
+    }
     .confirmation_button-reset-not {
         background: #00080E;
     }
-    .confirmation_button-reset-ok:hover,
+    .confirmation_button-reset-ok:hover {
+        background: #00FFC3;
+        cursor: pointer;
+    }
     .confirmation_button-reset-not:hover {
         background: #00FFC3;
         cursor: pointer;
