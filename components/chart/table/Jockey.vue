@@ -13,7 +13,7 @@
         <v-simple-table dense dark height="300" class="pl-3" style="background-color:transparent;">
              
             <template v-slot:default>
-              <thead>
+              <thead style="">
                 <tr class="header">
                 <th class="font-regular white--text text-left px-1" style="border-bottom: 1px solid black; width:200px;"></th>
                 <th class="font-regular white--text text-left px-1"></th>
@@ -253,7 +253,7 @@
 
   .v-data-table thead th{
     top: 0px !important;
-    background: #00122e;
+    background: #00121e;
     position: sticky;
   }
 
