@@ -19,36 +19,6 @@
 .lightMode {
   background-color: #f2f2f2;
 }
-.header--rainbow {
-  height: 4px;
-  background-image: linear-gradient(
-    to right,
-    #894b9d,
-    #eb8023,
-    #c2b819,
-    #49ba6f,
-    #2581bc
-  );
-}
-/* width */
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #1de9b6;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #1de9b6;
-}
 </style>
 
 <script>

@@ -7,7 +7,7 @@
       :items-per-page="10"
       height="230px"
       style="background-color: transparent"
-      class="elevation-1"
+      class="elevation-1 lobbyTable"
       :footer-props="{
         disableItemsPerPage: true
       }"
