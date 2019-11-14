@@ -166,6 +166,7 @@
           dense
           outlined
           color="success"
+          @click="joinGame()"
           >Start Game</v-btn
         >
         <v-btn
@@ -174,6 +175,7 @@
           dense
           outlined
           color="success"
+          @click="joinGame()"
           >Ready</v-btn
         >
       </div>
@@ -201,16 +203,21 @@ export default {
   computed: {
     ...mapGetters({
       playerInLobby: "game/getPlayerInLobby",
-      playerIsHost: "game/getPlayerIsHost"
+      playerIsHost: "game/getPlayerIsHost",
+      playerInGame: "game/getPlayerInGame"
     })
   },
   methods: {
     ...mapActions({
       setPlayerInLobby: "game/setPlayerInLobby",
-      setPlayerIsHost: "game/setPlayerIsHost"
+      setPlayerIsHost: "game/setPlayerIsHost",
+      setPlayerInGame: "game/setPlayerInGame"
     }),
     leaveLobby() {
       this.setPlayerInLobby(false);
+    },
+    joinGame() {
+      this.setPlayerInGame(true);
     }
   }
 };

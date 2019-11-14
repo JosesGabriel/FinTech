@@ -1,71 +1,52 @@
 <template>
-  <v-container class="game__container">
-    <v-row>
-      <v-col cols="3">
-        <UserProfileCard />
-      </v-col>
-      <v-col cols="9" class="pb-0">
-        <LobbyTable />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="3" class="pt-0 leaderBoards__column">
-        <Leaderboard />
-      </v-col>
-      <v-col cols="6" class="pt-0">
-        <ChatClient />
-      </v-col>
-      <v-col cols="3" class="pt-0">
-        <div v-if="!playerInLobby">
-          <AdCarousel class="mb-5" />
-          <AdCarousel />
-        </div>
-        <div v-if="playerInLobby">
-          <LobbySettings />
-        </div>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div>
+    <GameLobby v-if="!playerInGame" class="gameLobby" />
+    <GameView v-if="playerInGame" />
+  </div>
 </template>
 <style>
-.game__container {
-  max-width: 1080px;
-  margin-top: 40px;
-}
 .leaderBoards__column {
   position: relative;
   bottom: 60px;
 }
+/* Custom Scrollbar */
+.gameLobby ::-webkit-scrollbar {
+  width: 5px;
+}
+.gameLobby ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+.gameLobby ::-webkit-scrollbar-thumb {
+  background: #1de9b6;
+  border-radius: 20px;
+}
+.gameLobby ::-webkit-scrollbar-thumb:hover {
+  background: #1de9b6;
+}
 </style>
 <script>
-import UserProfileCard from "~/components/game/UserProfileCard";
-import LobbyTable from "~/components/game/LobbyTable";
-import Leaderboard from "~/components/game/Leaderboard";
-import ChatClient from "~/components/game/ChatClient";
-import AdCarousel from "~/components/game/AdCarousel";
-import LobbySettings from "~/components/game/LobbySettings";
+import GameLobby from "~/components/game/GameLobby";
+import GameView from "~/components/game/GameView";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  layout: "main",
+  layout: "game",
   components: {
-    UserProfileCard,
-    LobbyTable,
-    Leaderboard,
-    ChatClient,
-    AdCarousel,
-    LobbySettings
+    GameLobby,
+    GameView
+  },
+  data() {
+    return {};
   },
   computed: {
     ...mapGetters({
-      playerInLobby: "game/getPlayerInLobby",
-      playerIsHost: "game/getPlayerIsHost"
+      playerInGame: "game/getPlayerInGame"
     })
   },
   methods: {
     ...mapActions({
-      setPlayerInLobby: "game/setPlayerInLobby",
-      setPlayerIsHost: "game/setPlayerIsHost"
+      setPlayerInGame: "game/setPlayerInGame"
     })
   }
 };

@@ -32,7 +32,7 @@
             class="bear-circle"
             width="35px"
             height="35px"
-            src="/Icon/chart/bear-circle.svg"
+            src="/icon/chart/bear-circle.svg"
             @click="bearCircle"
           ></v-img
         ></v-content>
