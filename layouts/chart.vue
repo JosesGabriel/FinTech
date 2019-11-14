@@ -1,4 +1,5 @@
 <template>
+  <!-- hello world -->
   <v-app>
     <Header />
     <div class="spacer__content"></div>
@@ -42,20 +43,20 @@
 
         <!-- toggle button -->
         <div id="button_adjustview">
-          <v-btn color="pink" class="mr-1" dark @click="toggleTicker"
+          <v-btn color="pink" class="mr-1 d-none" dark @click="toggleTicker"
             >Ticker</v-btn
           >
           <v-btn
-            color="orange"
+            color="orange d-none"
             :disabled="disableTable"
-            class="mr-1"
+            class="mr-1 d-none"
             dark
             @click="toggleTable"
             >Table</v-btn
           >
           <v-btn
             :disabled="!table"
-            color="orange"
+            color="orange d-none"
             class="mr-1"
             dark
             fab
@@ -66,7 +67,7 @@
           </v-btn>
           <v-btn
             :disabled="!table"
-            color="orange"
+            color="orange d-none"
             class="mr-1"
             dark
             fab
@@ -75,7 +76,9 @@
           >
             <v-icon>mdi-fullscreen</v-icon>
           </v-btn>
-          <v-btn color="blue" dark @click="toggleSidebar">Sidebar</v-btn>
+          <v-btn color="blue" class="d-none" dark @click="toggleSidebar"
+            >Sidebar</v-btn
+          >
         </div>
       </v-col>
 
