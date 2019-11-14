@@ -141,7 +141,8 @@
   background-color: #f2f2f2;
 }
 .darkMode {
-  background-color: #00121e;
+  /* TEMPORARY */
+  background-color: #00121e !important;
 }
 .header__button {
   text-transform: none;
