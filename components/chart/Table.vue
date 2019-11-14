@@ -6,7 +6,6 @@
         <div
           id="btn__ticker"
           :class="{ div__hide: !ticker }"
-          class="div__disable"
           @click="toggleTicker"
         ></div>
         <div
