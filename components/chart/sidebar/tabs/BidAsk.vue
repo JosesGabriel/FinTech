@@ -399,12 +399,12 @@ export default {
   tbody
   tr:not(:last-child)
   td:not(.v-data-table__mobile-row) {
-  border: none;
+  border: none !important;
 }
 .theme--dark.v-data-table.v-data-table--fixed-header thead th {
   /* background: #424242;
   box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.12); */
-  box-shadow: none;
+  box-shadow: none !important;
 }
 .increase {
   color: #48ffd5 !important;

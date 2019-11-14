@@ -1,6 +1,6 @@
 <template>
   <!-- hello world -->
-  <v-app>
+  <v-app id="chart_body">
     <Header />
     <div class="spacer__content"></div>
     <v-row no-gutters>
@@ -10,7 +10,7 @@
           <v-col class="col-12">
             <v-slide-y-transition>
               <v-content v-show="ticker" class="ticker__container">
-                <!-- <h1 align="center">Ticker</h1> -->
+                <Ticker />
               </v-content>
             </v-slide-y-transition>
           </v-col>
@@ -101,12 +101,14 @@ import { mapActions, mapGetters } from "vuex";
 import Header from "~/components/Header";
 import Sidebar from "~/components/chart/Sidebar";
 import Table from "~/components/chart/Table";
+import Ticker from "~/components/chart/Ticker";
 
 export default {
   components: {
     Header,
     Sidebar,
-    Table
+    Table,
+    Ticker
   },
   data() {
     return {};
@@ -181,7 +183,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+#chart_body {
+  background: #00121e !important;
+}
 #button_adjustview {
   position: absolute;
   width: 500px;
