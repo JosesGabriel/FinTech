@@ -170,6 +170,7 @@ export default {
                 this.portfolioList = result.meta.logs;
             }.bind(this)
         );
+        console.log(this.portfolioList)
         if( this.portfolio == 0) {
             this.showCreatePortForm = true
         }

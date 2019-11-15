@@ -35,7 +35,7 @@
         >
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
-            <v-btn small class="caption" text color="success">Trade Details</v-btn>
+            <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
             <v-btn small class="caption" text color="success">Delete</v-btn>
           </div>
@@ -111,7 +111,7 @@ export default {
       portfolioLogs: [
         {
           id: 1,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'BDO',
           Position: 159,
           AvgPrice: 6.0,
           TotalCost: 24,
@@ -121,7 +121,7 @@ export default {
         },
         {
           id: 2,
-          Stocks: 'Ice cream sandwich',
+          Stocks: 'KPPI',
           Position: 237,
           AvgPrice: 9.0,
           TotalCost: 37,
@@ -131,7 +131,7 @@ export default {
         },
         {
           id: 3,
-          Stocks: 'Eclair',
+          Stocks: '2GO',
           Position: 262,
           AvgPrice: 16.0,
           TotalCost: 23,
@@ -141,7 +141,7 @@ export default {
         },
         {
           id: 4,
-          Stocks: 'Cupcake',
+          Stocks: '8990P',
           Position: 305,
           AvgPrice: 3.7,
           TotalCost: 67,
@@ -151,7 +151,7 @@ export default {
         },
         {
           id: 5,
-          Stocks: 'Gingerbread',
+          Stocks: 'AB',
           Position: 356,
           AvgPrice: 16.0,
           TotalCost: 49,
@@ -161,7 +161,7 @@ export default {
         },
         {
           id: 6,
-          Stocks: 'Jelly bean',
+          Stocks: 'ABA',
           Position: 375,
           AvgPrice: 0.0,
           TotalCost: 94,
@@ -171,7 +171,7 @@ export default {
         },
         {
           id: 7,
-          Stocks: 'Lollipop',
+          Stocks: 'ABG',
           Position: 392,
           AvgPrice: 0.2,
           TotalCost: 98,
@@ -181,7 +181,7 @@ export default {
         },
         {
           id: 8,
-          Stocks: 'Honeycomb',
+          Stocks: 'ABS',
           Position: 408,
           AvgPrice: 3.2,
           TotalCost: 87,
@@ -191,7 +191,7 @@ export default {
         },
         {
           id: 9,
-          Stocks: 'Donut',
+          Stocks: 'ABSP',
           Position: 452,
           AvgPrice: 25.0,
           TotalCost: 51,
@@ -201,7 +201,7 @@ export default {
         },
         {
           id: 10,
-          Stocks: 'KitKat',
+          Stocks: 'AC',
           Position: 518,
           AvgPrice: 26.0,
           TotalCost: 65,

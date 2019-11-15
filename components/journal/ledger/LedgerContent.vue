@@ -38,7 +38,7 @@
         >
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions" :id="`lt_${item.id}`" @mouseover="ledgermenuLogsShow(item)" @mouseleave="ledgermenuLogsHide(item)">
-            <v-btn small class="caption" text color="success">Trade Details</v-btn>
+            <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
             <v-btn small class="caption" text color="success">Delete</v-btn>
           </div>
@@ -100,7 +100,7 @@ export default {
       ledgerContent: [
         {
           id: 1,
-          Count: 'Frozen Yogurt',
+          Count: 'BDO',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -109,7 +109,7 @@ export default {
         },
         {
           id: 2,
-          Count: 'Frozen Yogurt',
+          Count: '2GO',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -118,7 +118,7 @@ export default {
         },
         {
           id: 3,
-          Count: 'Frozen Yogurt',
+          Count: '8990P',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -127,7 +127,7 @@ export default {
         },
         {
           id: 4,
-          Count: 'Frozen Yogurt',
+          Count: 'AB',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -136,7 +136,7 @@ export default {
         },
         {
           id: 5,
-          Count: 'Frozen Yogurt',
+          Count: 'ABA',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -145,7 +145,7 @@ export default {
         },
         {
           id: 6,
-          Count: 'Frozen Yogurt',
+          Count: 'ABG',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -154,7 +154,7 @@ export default {
         },
         {
           id: 7,
-          Count: 'Frozen Yogurt',
+          Count: 'ABS',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -163,7 +163,7 @@ export default {
         },
         {
           id: 8,
-          Count: 'Frozen Yogurt',
+          Count: 'ABSP',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -172,7 +172,7 @@ export default {
         },
         {
           id: 9,
-          Count: 'Frozen Yogurt',
+          Count: 'AC',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,
@@ -181,7 +181,7 @@ export default {
         },
         {
           id: 10,
-          Count: 'Frozen Yogurt',
+          Count: 'ACE',
           Date: 159,
           Transaction: 6.0,
           Debit: 24,

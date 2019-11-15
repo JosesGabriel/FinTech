@@ -40,7 +40,7 @@
         >
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
-            <v-btn small class="caption" text color="success">Trade Details</v-btn>
+            <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
             <v-btn small class="caption" text color="success">Delete</v-btn>
           </div>
@@ -105,7 +105,7 @@ export default {
       tradeLogs: [
         {
           id: 1,
-          Stocks: 'Frozen Yogurt',
+          Stocks: '2GO',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -117,7 +117,7 @@ export default {
         },
         {
           id: 2,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'BDO',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -129,7 +129,7 @@ export default {
         },
         {
           id: 3,
-          Stocks: 'Frozen Yogurt',
+          Stocks: '8990P',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -141,7 +141,7 @@ export default {
         },
         {
           id: 4,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'AB',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -153,7 +153,7 @@ export default {
         },
         {
           id: 5,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'ABS',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -165,7 +165,7 @@ export default {
         },
         {
           id: 6,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'ABSP',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -177,7 +177,7 @@ export default {
         },
         {
           id: 7,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'AC',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -189,7 +189,7 @@ export default {
         },
         {
           id: 8,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'ACE',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -201,7 +201,7 @@ export default {
         },
         {
           id: 9,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'ACEPH',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
@@ -213,7 +213,7 @@ export default {
         },
         {
           id: 10,
-          Stocks: 'Frozen Yogurt',
+          Stocks: 'ACPB1',
           Date: 159,
           Volume: 6.0,
           AvePrice: 159,
