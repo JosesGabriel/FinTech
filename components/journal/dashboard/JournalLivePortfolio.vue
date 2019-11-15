@@ -34,7 +34,7 @@
           class="data_table-container pl-10 secondary--text"
         >
         <template v-slot:item.action="{ item }">
-          <div v-show="menuShow" class="sidemenu_actions" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
+          <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
             <v-btn small class="caption" text color="success">Trade Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
             <v-btn small class="caption" text color="success">Delete</v-btn>

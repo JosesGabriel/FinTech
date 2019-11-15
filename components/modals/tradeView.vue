@@ -11,7 +11,7 @@
                                 <v-col cols="12" sm="12" md="12">
                                     <v-card-title class="pa-0 text-right justify-end">
                                         <v-col sm="12" md="12" class="pa-0">
-                                            <v-select offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stock" v-model="GetSelectStock" label="Select Stock"></v-select>
+                                            <v-select offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stocklist" v-model="GetSelectStock" label="Select Stock"></v-select>
                                         </v-col>
                                     </v-card-title>
                                         <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
@@ -212,6 +212,8 @@
 
 import BuyTrade from '~/components/modals/buy'
 import SellTrade from '~/components/modals/sell'
+import { mapActions, mapGetters } from "vuex";
+
 
     export default {
         props: ['visible'],
@@ -222,7 +224,7 @@ import SellTrade from '~/components/modals/sell'
         data() {
             return {
                 e1: 1,
-                stock: ['2GO','PHEN','ROCK','HLCM'],
+                stocklist: [],
                 prev: '0',
                 low: 122,
                 wklow: 0,
@@ -247,6 +249,10 @@ import SellTrade from '~/components/modals/sell'
             }
         },
         computed: {
+            ...mapGetters({
+                userWatchedStocks: "watchers/getUserWatchedStocks",
+                renderChartKey: "watchers/getRenderChartKey"
+            }),
             show: {
                 get () {
                     return this.visible

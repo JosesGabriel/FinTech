@@ -10,7 +10,7 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-3`">Ledger</v-tab>
                 <v-spacer></v-spacer>
                 <v-col sm="3" md="2" class="pa-0">
-                    <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Portfolio" dense solo flat>
+                    <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolioList" item-text="name" item-value="id" background-color="#00FFC3" label="Select Portfolio" dense solo flat>
                         <template v-slot:append-item>
                             <v-list-item @click="" class="sumportfolio_real mt-1">
                                 <v-list-item-content>
@@ -157,11 +157,19 @@ export default {
         return {
             tab: null,
             tabs: 3,
-            portfolio: [],
+            portfolioList: [],
             showCreatePortForm: false,
         }
     },
     mounted() {
+        const params = {
+            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        };
+        this.$api.journal.portfolio.portfolio(params).then(
+            function(result) {
+                this.portfolioList = result.meta.logs;
+            }.bind(this)
+        );
         if( this.portfolio == 0) {
             this.showCreatePortForm = true
         }
