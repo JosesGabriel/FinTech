@@ -259,7 +259,7 @@ export default {
 
 <style scoped>
 .theme--dark.v-data-table thead tr:last-child th {
-  border: none;
+  border: none !important;
 }
 .v-data-table td,
 .v-data-table th {

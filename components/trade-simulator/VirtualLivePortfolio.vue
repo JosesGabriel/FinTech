@@ -7,150 +7,188 @@
             <v-spacer></v-spacer>
             <v-btn rounded outlined color="#48FFD5" dark class="text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
             <v-btn rounded outlined color="#48FFD5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Trade</v-btn>
-            <TradeModal :visible="EnterTradeModal" @close="EnterTradeModal=false" />
-                
-            <router-link to="/" class="social__router">
-              <v-btn icon small> 
+                     
+              <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
               </v-btn>
-            </router-link>
+              
         </v-card-title>
-        <v-simple-table :dense="true" dark id="liveportfolio-table" class="pl-10">
-            <template v-slot:default>
-            <thead>
-                <tr class="">
-                <th class="font-regular caption white--text text-left px-1">Stocks</th>
-                <th class="font-regular caption white--text text-right px-1">Position</th>
-                <th class="font-regular caption white--text text-right px-1">Avg. Price</th>
-                <th class="font-regular caption white--text text-right px-1">Total Cost</th>
-                <th class="font-regular caption white--text text-right px-1">Market Value</th>
-                <th class="font-regular caption white--text text-right px-1">Profit</th>
-                <th class="font-regular caption white--text text-right px-1">Perf.(%)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in desserts" :key="item.stocks" id="table_tr_port-cont">
-                <td class="font-regular caption item_position-prop px-1 py-2">{{ item.stocks }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.AvgPrice }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.position }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.TotalCost }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.MarketValue }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Profit }}</td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.Perf }}</td>
-                  <td class="font-regular caption item_position-prop text-right px-1 py-0 edit_icons">
-                    <v-icon color="#B6B6B6">mdi-pencil</v-icon>
-                    <v-icon color="#B6B6B6">mdi-delete</v-icon>
-                  </td>
-                <td class="font-regular caption item_position-prop text-right px-1 py-0">
-                    <v-menu top>
-                        <template v-slot:activator="{ on }">
-                        <v-btn
-                            dark
-                            icon
-                            v-on="on"
-                        >
-                            <v-icon color="#B6B6B6">mdi-dots-horizontal</v-icon>
-                        </v-btn>
-                        </template>
-                        <v-list color="#123" dark class="pa-0">
-                            <v-list-item
-                                v-for="(item, i) in items"
-                                :key="i"
-                                headline
-                                background="#0c1f33"
-                            >
-                                <v-list-item-title class="body-2">{{ item.title }}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                </td>
-                </tr>
-            </tbody>
+        <v-data-table
+              :headers="headers"
+              :items="portfolioLogs"
+              :page.sync="page"
+              :items-per-page="itemsPerPage"
+              hide-default-footer
+              @page-count="pageCount = $event"
+              dark
+              class="data_table-container pl-10 secondary--text"
+            >
+            <template v-slot:item.action="{ item }">
+                  <div v-show="menuShow" class="sidemenu_actions" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
+                    <v-btn small class="caption" text color="success">Trade Details</v-btn>
+                    <v-btn small class="caption" text color="success">Edit</v-btn>
+                    <v-btn small class="caption" text color="success">Delete</v-btn>
+                  </div>
+                  <v-icon
+                    small
+                    class="mr-2"
+                    @mouseover="menuLogsShow(item)"
+                  >
+                    mdi-dots-horizontal
+                  </v-icon>
             </template>
-        </v-simple-table>
-         <v-card class="pt-7" color="transparent" flat tile>
-            <v-card class="d-flex justify-start" color="transparent" flat tile>
-                <v-card-title class="text-left justify-left pa-0">
-                    <h1 class="font-weight-regular caption" style="color:#fff;">Show Rows
-                    </h1>
-                    <select class="text-center justify-center font-weight-regular caption show_rows-cont px-3 ml-1">
-                        <option class="font-weight-bold caption show_rows-select" value="0">0</option>
-                        <option class="font-weight-bold caption show_rows-select" value="1">1</option>
-                        <option class="font-weight-bold caption show_rows-select" value="2">2</option>
-                        <option class="font-weight-bold caption show_rows-select" value="3">3</option>
-                        <option class="font-weight-bold caption show_rows-select" value="4">4</option>
-                        <option class="font-weight-bold caption show_rows-select" value="5">5</option>
-                    </select>
-                    <h1 class="font-weight-regular caption ml-1" style="color:#fff;">of 100
-                    </h1>
-                </v-card-title>
-                <v-spacer></v-spacer>
-                <div class="pagination">
-                    <a href="#" class="font-weight-bold caption active">1</a>
-                    <a href="#" class="font-weight-bold caption">2</a>
-                    <a href="#" class="font-weight-bold caption">3</a>
-                    <a href="#" class="font-weight-bold caption">4</a>
-                    <a href="#" class="font-weight-bold caption">5</a>
-                    <a href="#" class="font-weight-bold caption">6</a>
-                    <a href="#" class="font-weight-bold caption">&rsaquo;</a>
-                </div>
+        </v-data-table>
+        <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
+            <v-card color="transparent" class="justify-center" elevation="0">
+                  <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
+                  <v-spacer></v-spacer>
+                  <v-text-field
+                    :value="itemsPerPage"
+                    type="number"
+                    min="5"
+                    max="10"
+                    @input="itemsPerPage = parseInt($event, 10)"
+                    dark
+                    class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
+                    color="success"
+                    dense
+                  ></v-text-field>
+                  <span class="pl-1">of {{ portfolioLogs.length }}</span>
+                  </v-card-title>
+                </v-card>
+                <v-card color="transparent" elevation="0">
+              <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
             </v-card>
         </v-card>
-      
+
+            <TradeModal :visible="EnterTradeModal" @close="EnterTradeModal=false" />
+            <reset-modal :visible="showResetForm" @close="showResetForm=false" />
+            <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
 </template>
 <script>
 import TradeModal from '~/components/trade-simulator/TradeModal'
 import resetModal from '~/components/modals/reset'
+import shareModal from '~/components/modals/share'
 
 export default {
     data () {
       return {
-        desserts: [
+        itemsPerPage: 5,
+        search: '',
+        page: 1,
+        pageCount: 0,
+        menuShow: false,
+        headers: [
+          { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
+          { text: 'Position', value: 'Position', align: 'right' },
+          { text: 'Avg. Price', value: 'AvgPrice', align: 'right' },
+          { text: 'Total Cost', value: 'TotalCost', align: 'right' },
+          { text: 'Market Value', value: 'MarketValue', align: 'right' },
+          { text: 'Profit', value: 'Profit', align: 'right' },
+          { text: 'Perf. (%)', value: 'Perf', align: 'right' },
+          { text: '', value: 'action', sortable: false, align: 'right' },
+        ],
+        portfolioLogs: [
           {
-            stocks: 'BDO',
-            position: '10,000.00',
-            AvgPrice: '16.04',
-            TotalCost: '16,047.20',
-            MarketValue: '16,709.10',
-            Profit: '661.90',
-            Perf: '4.12',
+            id: 1,
+            Stocks: 'BDO',
+            Position: 159,
+            AvgPrice: 6.0,
+            TotalCost: 24,
+            MarketValue: 4.0,
+            Profit: '1%',
+            Perf: '1%',
           },
           {
-            stocks: 'HLCM',
-            position: '10,000.00',
-            AvgPrice: '16.04',
-            TotalCost: '16,047.20',
-            MarketValue: '16,709.10',
-            Profit: '661.90',
-            Perf: '4.12',
+            id: 2,
+            Stocks: 'HLCM',
+            Position: 237,
+            AvgPrice: 9.0,
+            TotalCost: 37,
+            MarketValue: 4.3,
+            Profit: '1%',
+            Perf: '1%',
           },
           {
-            stocks: '2GO',
-            position: '10,000.00',
-            AvgPrice: '16.04',
-            TotalCost: '16,047.20',
-            MarketValue: '16,709.10',
-            Profit: '661.90',
-            Perf: '4.12',
+            id: 3,
+            Stocks: 'KPPI',
+            Position: 262,
+            AvgPrice: 16.0,
+            TotalCost: 23,
+            MarketValue: 6.0,
+            Profit: '7%',
+            Perf: '7%',
           },
           {
-            stocks: 'KPPI',
-            position: '10,000.00',
-            AvgPrice: '16.04',
-            TotalCost: '16,047.20',
-            MarketValue: '16,709.10',
-            Profit: '661.90',
-            Perf: '4.12',
+            id: 4,
+            Stocks: '2GO',
+            Position: 305,
+            AvgPrice: 3.7,
+            TotalCost: 67,
+            MarketValue: 4.3,
+            Profit: '8%',
+            Perf: '8%',
           },
           {
-            stocks: 'HOME',
-            position: '10,000.00',
-            AvgPrice: '16.04',
-            TotalCost: '16,047.20',
-            MarketValue: '16,709.10',
-            Profit: '661.90',
-            Perf: '4.12',
+            id: 5,
+            Stocks: 'ROCK',
+            Position: 356,
+            AvgPrice: 16.0,
+            TotalCost: 49,
+            MarketValue: 3.9,
+            Profit: '16%',
+            Perf: '16%',
+          },
+          {
+            id: 6,
+            Stocks: 'APL',
+            Position: 375,
+            AvgPrice: 0.0,
+            TotalCost: 94,
+            MarketValue: 0.0,
+            Profit: '0%',
+            Perf: '0%',
+          },
+          {
+            id: 7,
+            Stocks: 'IRC',
+            Position: 392,
+            AvgPrice: 0.2,
+            TotalCost: 98,
+            MarketValue: 0,
+            Profit: '2%',
+            Perf: '2%',
+          },
+          {
+            id: 8,
+            Stocks: 'APL',
+            Position: 408,
+            AvgPrice: 3.2,
+            TotalCost: 87,
+            MarketValue: 6.5,
+            Profit: '45%',
+            Perf: '45%',
+          },
+          {
+            id: 9,
+            Stocks: 'BDO',
+            Position: 452,
+            AvgPrice: 25.0,
+            TotalCost: 51,
+            MarketValue: 4.9,
+            Profit: '22%',
+            Perf: '22%',
+          },
+          {
+            id: 10,
+            Stocks: 'SUN',
+            Position: 518,
+            AvgPrice: 26.0,
+            TotalCost: 65,
+            MarketValue: 7,
+            Profit: '6%',
+            Perf: '6%',
           }
         ],
         items: [
@@ -160,15 +198,34 @@ export default {
         page: 1,
         EnterTradeModal: false,
         showResetForm: false,
+        showScheduleForm: false,
       }
     },
      components: {
         TradeModal,
-        resetModal
+        resetModal,
+        shareModal,
+    },
+    methods: {
+      menuLogsShow: function(item) {
+        let pl = document.getElementById(`pl_${item.id}`);
+
+        pl.style.display = "block";
+      },
+      menuLogsHide: function(item) {
+        let pl = document.getElementById(`pl_${item.id}`);
+
+        pl.style.display = "none";
+      }
     }
+
 }
 </script>
 <style scoped>
+.theme--dark.v-icon {
+    color: #fdfcfc;
+}
+
 .theme--dark.v-data-table thead tr:last-child th,
 .theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
   border: none;
@@ -178,6 +235,18 @@ export default {
 }
 .item_position-prop {
   color: #b6b6b6
+}
+
+.data_table-container {
+    background: transparent
+}
+.sidemenu_actions {
+  position: absolute;
+  width: auto;
+  right: 0;
+  background: #00121e;
+  border: 1px solid rgb(0, 255, 195);
+  border-radius: 4px;
 }
 
 .edit_icons {
@@ -218,4 +287,56 @@ export default {
     height: 18px;
     line-height: 1;
 }
+</style>
+<style>
+  .v-application .pl-4 {
+      height: 24px;
+  }
+.v-data-table.data_table-container .v-data-footer {
+    border: none;
+  }
+  .v-data-table.data_table-container td, .v-data-table.data_table-container th {
+    height: 36px;
+  }
+  .v-data-table.data_table-container tbody tr:hover:not(.v-data-table__expand-row) {
+    background: transparent
+  }
+  .show_rows {
+    border: 2px solid #00ffc3;
+    width: 45px;
+  }
+  .show_rows .v-input__control {
+    min-height: auto;
+  }
+  .show_rows .v-input__slot:before {
+    display: none;
+  }
+  .show_rows .v-input__slot {
+    margin: 0;
+  }
+  .show_rows .v-input__slot input {
+    padding: 0;
+  }
+.v-pagination.lp_data_table-pagination li .v-pagination__navigation {
+      background: transparent;
+      box-shadow: none;
+      margin: 0;
+      width: 10px;
+  }
+  .lp_data_table-pagination {
+    color: #00ffc3;
+  }
+  .v-pagination.lp_data_table-pagination .v-pagination__item--active {
+    color: #00FFC3;
+  }
+  .lp_data_table-pagination i.v-icon {
+    font-size: 11px
+  }
+  .v-pagination.lp_data_table-pagination .v-pagination__item {
+    background: none;
+    box-shadow: none;
+    margin: 0;
+    outline-color: transparent;
+  }
+
 </style>

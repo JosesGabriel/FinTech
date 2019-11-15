@@ -1,6 +1,5 @@
 <template>
-  <!-- hello world -->
-  <v-app id="chart_body">
+  <v-app>
     <Header />
     <div class="spacer__content"></div>
     <v-row no-gutters>
@@ -10,7 +9,7 @@
           <v-col class="col-12">
             <v-slide-y-transition>
               <v-content v-show="ticker" class="ticker__container">
-                <Ticker />
+                <h1 align="center">Ticker</h1>
               </v-content>
             </v-slide-y-transition>
           </v-col>
@@ -34,8 +33,7 @@
                 class="table__container"
                 :class="tableStyle"
               >
-                <Table />
-                <!-- <h1 align="center">Table</h1> -->
+                <h1 align="center">Table</h1>
               </v-content>
             </v-slide-y-reverse-transition>
           </v-col>
@@ -43,20 +41,20 @@
 
         <!-- toggle button -->
         <div id="button_adjustview">
-          <v-btn color="pink" class="mr-1 d-none" dark @click="toggleTicker"
+          <v-btn color="pink" class="mr-1" dark @click="toggleTicker"
             >Ticker</v-btn
           >
           <v-btn
-            color="orange d-none"
+            color="orange"
             :disabled="disableTable"
-            class="mr-1 d-none"
+            class="mr-1"
             dark
             @click="toggleTable"
             >Table</v-btn
           >
           <v-btn
             :disabled="!table"
-            color="orange d-none"
+            color="orange"
             class="mr-1"
             dark
             fab
@@ -67,7 +65,7 @@
           </v-btn>
           <v-btn
             :disabled="!table"
-            color="orange d-none"
+            color="orange"
             class="mr-1"
             dark
             fab
@@ -76,9 +74,7 @@
           >
             <v-icon>mdi-fullscreen</v-icon>
           </v-btn>
-          <v-btn color="blue" class="d-none" dark @click="toggleSidebar"
-            >Sidebar</v-btn
-          >
+          <v-btn color="blue" dark @click="toggleSidebar">Sidebar</v-btn>
         </div>
       </v-col>
 
@@ -89,7 +85,7 @@
           transition="slide-y-reverse-transition"
           class="sidebar__container col-3"
         >
-          <Sidebar />
+          <h1 align="center" class="mt-12">Side Bar</h1>
         </v-col>
       </v-slide-x-transition>
     </v-row>
@@ -98,17 +94,12 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+// import Header from "~/components/parts/Header";
 import Header from "~/components/Header";
-import Sidebar from "~/components/chart/Sidebar";
-import Table from "~/components/chart/Table";
-import Ticker from "~/components/chart/Ticker";
 
 export default {
   components: {
-    Header,
-    Sidebar,
-    Table,
-    Ticker
+    Header
   },
   data() {
     return {};
@@ -183,10 +174,7 @@ export default {
 };
 </script>
 
-<style>
-#chart_body {
-  background: #00121e !important;
-}
+<style scoped>
 #button_adjustview {
   position: absolute;
   width: 500px;
@@ -197,19 +185,15 @@ export default {
 .chart__container {
 }
 .sidebar__container {
-  background: #00121e;
+  background: skyblue;
 }
 .ticker__container {
   height: 50px;
-  color: #fff;
-  background: #00121e;
+  background: pink;
 }
 .table__container {
-  margin-top: auto;
-  margin-bottom: auto;
   height: 50px;
-  color: #fff;
-  background: #00121e;
+  background: orange;
 }
 
 .maximizeStyle {
@@ -225,15 +209,5 @@ export default {
 
 .spacer__content {
   height: 52px;
-}
-
-.col-3 {
-  flex: 0 0 22%;
-  max-width: 22%;
-}
-
-.col-9 {
-  flex: 0 0 78%;
-  max-width: 78%;
 }
 </style>

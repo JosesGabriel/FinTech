@@ -85,15 +85,17 @@
                
                 <v-row>
                     <v-col md="3" class="text-right caption px-2 ma-0" style="position:absolute; right:0; top: -5px; width: 180px;">
-                        <v-select 
-                            offset-y="true" 
-                            class="select_portfolio mt-2 black--text" 
-                            item-color="success" 
-                            append-icon="mdi-chevron-down" 
-                            :items="portfolio" 
-                            background-color="#00FFC3" 
-                            label="Virtual Portfolio" 
-                            dense solo flat>
+                        <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Portfolio" dense solo flat>
+                            <template v-slot:append-item>
+                                <v-list-item
+                                ripple
+                                @click.stop="showCreatePortForm=true"
+                                >
+                                    <v-list-item-content>
+                                        <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </template>
                         </v-select>
                     </v-col>
                 </v-row>
@@ -115,35 +117,40 @@
                 </v-tab-item>
             </v-tabs>
             <!-- <ChartTesting/> -->
+            <create-modal :visible="showCreatePortForm" @close="showCreatePortForm=false" />
     </v-col>
 
 </template>
 <script>
   import VirtualLivePortfolio from '~/components/trade-simulator/VirtualLivePortfolio'
   import TradelogsContent from '~/components/trade-simulator/VirtualTradelogs'
+  import createModal from '~/components/journal/dashboard/JournalCreatePortfolio'
 
   export default {
     data () {
       return {
-          portfolio: ['Primary Portfolio','Create Portfolio']
+          portfolio: ['Primary Portfolio'],
+          showCreatePortForm: false,
       }
+    },
+    mounted() {
+        if( this.portfolio == 0) {
+            this.showCreatePortForm = true
+        }
     },
     components: {
         VirtualLivePortfolio,
         TradelogsContent,
+        createModal,
     }
   }
 </script>
 <style >
-.theme--dark.v-label {
-    color: black;
-    font-size: 14px;
-    font-weight: 600;
+.v-select__slot .v-label, .v-select__slot .v-icon {
+    color: #00FFC3 !important;
 }
-.v-select__selection--comma {
-    color: black;
-    font-size: 14px;
-    font-weight: 600;
+.v-menu__content .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+    color: #00FFC3 !important;
 }
 .select_portfolio .v-select__slot .v-label, .select_portfolio .v-select__slot .v-icon {
     color: black !important;

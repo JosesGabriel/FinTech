@@ -22,7 +22,7 @@
   flex-direction: column-reverse;
   padding: 15px;
   overflow: auto;
-  height: 410px;
+  height: calc(100vh - 550px);
 }
 .message__list {
   align-self: flex-start;
