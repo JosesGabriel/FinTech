@@ -92,8 +92,8 @@ export default {
       search: '',
       headers: [
         { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
-        { text: 'Date', value: 'Date', align: 'right' },
-        { text: 'Volume', value: 'Volume', align: 'right' },
+        { text: 'Date', value: 'date', align: 'right' },
+        { text: 'Volume', value: 'amount', align: 'right' },
         { text: 'Ave. Price', value: 'AvePrice', align: 'right' },
         { text: 'Buy Value', value: 'BuyValue', align: 'right' },
         { text: 'Sell Price', value: 'SellPrice', align: 'right' },
@@ -102,132 +102,28 @@ export default {
         { text: 'Perf. (%)', value: 'Perf', align: 'right' },
         { text: '', value: 'action', sortable: false, align: 'right' },
       ],
-      tradeLogs: [
-        {
-          id: 1,
-          Stocks: '2GO',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 2,
-          Stocks: 'BDO',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 3,
-          Stocks: '8990P',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 4,
-          Stocks: 'AB',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 5,
-          Stocks: 'ABS',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 6,
-          Stocks: 'ABSP',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 7,
-          Stocks: 'AC',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 8,
-          Stocks: 'ACE',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 9,
-          Stocks: 'ACEPH',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 10,
-          Stocks: 'ACPB1',
-          Date: 159,
-          Volume: 6.0,
-          AvePrice: 159,
-          BuyValue: 6.0,
-          SellPrice: 24,
-          SellValue: 4.0,
-          ProfitLoss: '1%',
-          Perf: '1%',
-        },
-      ],
+      tradeLogs: [],
       page: 1,
       pageCount: 0,
-      menuShow: false
+      menuShow: false,
+
+      selectedProfile: null
     }
+  },
+  mounted() {
+    if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
+
+    const tradelogsparams = {
+      user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      fund: this.selectedProfile,
+    };
+    this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+      function(result) {
+          this.tradeLogs = result.meta.logs.meta;
+          console.log(result.meta.logs)
+      }.bind(this)
+    );
+
   },
   methods: {
     tradelogsmenuLogsShow: function(item) {
