@@ -40,7 +40,7 @@ export default $axios => ({
     let query = buildParams(params);
     $axios.setToken(token, "Bearer");
     return $axios.$get(
-      `${baseURL}/market-depth/latest/fulldepth${
+      `${baseURL}/market-depth/latest/full-depth${
         query.length > 0 ? "?" + query : ""
       }`
     );
