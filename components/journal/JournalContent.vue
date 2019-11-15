@@ -10,7 +10,24 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-3`">Ledger</v-tab>
                 <v-spacer></v-spacer>
                 <v-col sm="3" md="2" class="pa-0">
-                    <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolioList" item-text="name" item-value="id" background-color="#00FFC3" label="Select Portfolio" dense solo flat>
+                    <v-select
+                    offset-y="true"
+                    class="select_portfolio mt-2 black--text"
+                    item-color="success"
+                    append-icon="mdi-chevron-down"
+                    background-color="#00FFC3"
+                    label="Select Portfolio"
+                    dense
+                    solo
+                    flat
+                    :items="portfolioList"
+                    v-on:change="changePortfolio"
+                    v-model="portfolioDropdownModel"
+                    item-text="name"
+                    item-value="id"
+                    return-object
+                    persistent-hint
+                    >
                         <template v-slot:append-item>
                             <v-list-item @click="" class="sumportfolio_real mt-1">
                                 <v-list-item-content>
@@ -158,10 +175,13 @@ export default {
             tab: null,
             tabs: 3,
             portfolioList: [],
+            portfolioDropdownModel: null,
+            selectedProfile: null,
             showCreatePortForm: false,
         }
     },
     mounted() {
+        if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
         const params = {
             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         };
@@ -170,10 +190,34 @@ export default {
                 this.portfolioList = result.meta.logs;
             }.bind(this)
         );
-        console.log(this.portfolioList)
+        const openparams = {
+            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+            fund: this.selectedProfile,
+        };
+        this.$api.journal.portfolio.open(openparams).then(
+            function(result) {
+                // console.log(result)
+            }.bind(this)
+        );
         if( this.portfolio == 0) {
             this.showCreatePortForm = true
         }
+    },
+    methods: {
+        changePortfolio: function(){
+            localStorage.currentProfile = this.portfolioDropdownModel.id;
+            this.selectedProfile = this.portfolioDropdownModel.id;
+
+            const openparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: this.selectedProfile,
+            };
+            this.$api.journal.portfolio.open(openparams).then(
+                function(result) {
+                    // console.log(result)
+                }.bind(this)
+            );
+        },
     }
 };
 </script>

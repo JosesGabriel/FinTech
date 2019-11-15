@@ -142,6 +142,7 @@ export default {
 
   mounted() {
     this.populateStockDropdown();
+    console.log(this.userWatchedStocks)
   },
 
   methods: {

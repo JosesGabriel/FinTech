@@ -161,6 +161,7 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
     fieldsWatch() {
+      console.log(this.stocksDropdownModel)
       if (
         this.stocksDropdownModel &&
         (this.entryPriceModel != "" ||
