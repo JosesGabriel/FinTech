@@ -9,7 +9,8 @@
       style="background-color: transparent"
       class="elevation-1 lobbyTable"
       :footer-props="{
-        disableItemsPerPage: true
+        disableItemsPerPage: true,
+        disablePagination: true
       }"
     ></v-data-table>
     <div class="table__footer">
@@ -64,6 +65,10 @@
 }
 .v-data-footer__select {
   display: none;
+}
+.v-data-footer__icons-before,
+.v-data-footer__icons-after {
+  visibility: hidden;
 }
 .table__footer {
   position: relative;

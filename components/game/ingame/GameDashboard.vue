@@ -16,26 +16,26 @@
                       <span>4.17</span>
                     </div>
                     <div class="gameStats__wrapper">
-                      <span>Last</span>
+                      <span>High</span>
                       <span>4.17</span>
                     </div>
                     <div class="gameStats__wrapper">
-                      <span>Last</span>
+                      <span>Low</span>
                       <span>4.17</span>
                     </div>
                   </v-col>
                   <v-col cols="1"></v-col>
                   <v-col cols="5">
                     <div class="gameStats__wrapper">
-                      <span>Last</span>
+                      <span>Change</span>
+                      <span>0.02</span>
+                    </div>
+                    <div class="gameStats__wrapper">
+                      <span>Open</span>
                       <span>4.17</span>
                     </div>
                     <div class="gameStats__wrapper">
-                      <span>Last</span>
-                      <span>4.17</span>
-                    </div>
-                    <div class="gameStats__wrapper">
-                      <span>Last</span>
+                      <span>Volume</span>
                       <span>4.17</span>
                     </div>
                   </v-col>
@@ -46,7 +46,7 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-col class="pa-0" cols="2">
+      <v-col class="pa-0" cols="4">
         <v-container class="pa-0">
           <v-row>
             <v-col cols="12">
@@ -57,16 +57,16 @@
                 <v-row>
                   <v-col cols="12">
                     <div class="gameStats__wrapper">
-                      <span>Last</span>
-                      <span>4.17</span>
+                      <span>No. Of Shares</span>
+                      <span>400</span>
                     </div>
                     <div class="gameStats__wrapper">
-                      <span>Last</span>
-                      <span>4.17</span>
+                      <span>Ave. Price</span>
+                      <span>216.50</span>
                     </div>
                     <div class="gameStats__wrapper">
-                      <span>Last</span>
-                      <span>4.17</span>
+                      <span>P/L Unrealized (%)</span>
+                      <span>22.23%</span>
                     </div>
                   </v-col>
                 </v-row>
@@ -75,7 +75,7 @@
           </v-row>
         </v-container>
       </v-col>
-      <v-col cols="1"></v-col>
+      <!-- <v-col cols="1"></v-col> -->
       <v-col class="pa-0" cols="3">
         <GameController />
       </v-col>
@@ -86,6 +86,7 @@
 .gameStats__wrapper {
   display: flex;
   justify-content: space-between;
+  padding-top: 10px;
 }
 .thisTrade {
   border-right: 1px solid black;

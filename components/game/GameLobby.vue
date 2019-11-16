@@ -1,21 +1,27 @@
 <template>
   <v-container class="gameLobby__container">
     <v-row>
+      <v-col cols="9">
+        <v-container>
+          <v-row>
+            <v-col cols="4">
+              <UserProfileCard />
+            </v-col>
+            <v-col cols="8">
+              <LobbyTable />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="4" class="pt-0 leaderBoards__column">
+              <Leaderboard />
+            </v-col>
+            <v-col cols="8" class="pt-0">
+              <ChatClient />
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-col>
       <v-col cols="3">
-        <UserProfileCard />
-      </v-col>
-      <v-col cols="9" class="pb-0">
-        <LobbyTable />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="3" class="pt-0 leaderBoards__column">
-        <Leaderboard />
-      </v-col>
-      <v-col cols="6" class="pt-0">
-        <ChatClient />
-      </v-col>
-      <v-col cols="3" class="pt-0">
         <div v-if="!playerInLobby">
           <AdCarousel class="mb-5" />
           <AdCarousel />

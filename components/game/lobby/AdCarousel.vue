@@ -1,8 +1,9 @@
 <template>
   <v-carousel
+    class="pt-6"
     cycle
     interval="2000"
-    height="250"
+    height="300px"
     hide-delimiter-background
     show-arrows-on-hover
   >

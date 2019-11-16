@@ -8,8 +8,8 @@
         <v-btn x-large dark icon>
           <v-icon>mdi-play</v-icon>
         </v-btn>
-        <v-btn x-large dark icon>
-          <v-icon>mdi-fast-forward</v-icon>
+        <v-btn x-large @click="nextButton()" dark icon>
+          <v-icon>mdi-skip-next</v-icon>
         </v-btn>
       </v-col>
     </v-row>
@@ -28,7 +28,7 @@
     <v-row>
       <v-col cols="12" class="caption py-0 ">
         <span class="px-6">Total Cost:</span>
-        <span>Portfolio %:</span>
+        <span>Portfolio%:</span>
       </v-col>
     </v-row>
     <v-row>
@@ -70,6 +70,10 @@ export default {
     }),
     leaveGame() {
       this.setPlayerInGame(false);
+    },
+    nextButton() {
+      var audio = new Audio("sounds/ping.wav");
+      audio.play();
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-0">
+  <div class="container pt-6">
     <div class="row lobbySettings__header">
       <div class="col-12">
         <span>Settings</span>
