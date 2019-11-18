@@ -28,7 +28,7 @@
                                     </v-card-title>
                                         <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
                                         <v-spacer></v-spacer>
-                                        <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span class="caption">{{ change }}</span> <span class="caption">({{ cpercentage }}%)</span></p>
+                                        <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span :class="(change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral')" class="caption">{{ change }}</span> <span :class="(cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral')" class="caption">({{ cpercentage }}%)</span></p>
                                     <v-row no-gutters class="mt-2">
                                         <v-col class="pa-0" cols="6" sm="6" md="6">
                                             <v-simple-table :dense="true" dark id="liveportfolio-table">
@@ -205,6 +205,7 @@
 
 import BuyTrade from '~/components/trade-simulator/buy'
 import SellTrade from '~/components/trade-simulator/sell'
+import { mapActions, mapGetters } from "vuex";
 
     export default {
         props: ['visible'],
@@ -245,6 +246,10 @@ import SellTrade from '~/components/trade-simulator/sell'
             }
         },
         computed: {
+            ...mapGetters({
+            simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
+            simulatorBoardLot: "tradesimulator/getSimulatorBoardLot"
+            }),
             show: {
                 get () {
                     return this.visible
@@ -275,6 +280,10 @@ import SellTrade from '~/components/trade-simulator/sell'
                 );
             },
         methods: {
+            ...mapActions({
+                setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
+                setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot"
+            }),
             getDetails(selectObj) {
                 const params = {
                     'symbol-id': selectObj,
@@ -283,13 +292,13 @@ import SellTrade from '~/components/trade-simulator/sell'
                 function(result) {    
 
                     if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
-			            this.dboard = '1,000,000';
+			            this.dboard = 1000000;
 			        } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
-			            this.dboard = '100,000';
+			            this.dboard = 100000;
 			        } else if (result.data.last >= 0.05 && result.data.last <= 0.495) {
-			            this.dboard = '10,000';
+			            this.dboard = 10000;
 			        } else if (result.data.last >= 0.5 && result.data.last <= 4.99) {
-			            this.dboard = '1,000';
+			            this.dboard = 1000;
 			        } else if (result.data.last >= 5 && result.data.last <= 49.95) {
 			            this.dboard = 100;
 			        } else if (result.data.last >= 50 && result.data.last <= 999.5) {
@@ -297,7 +306,8 @@ import SellTrade from '~/components/trade-simulator/sell'
 			        } else if (result.data.last >= 1000) {
 			            this.dboard = 5;
 			        }
-
+                    this.setSimulatorBuyPrice(result.data.last);
+                    this.setSimulatorBoardLot(this.dboard);
                     this.cprice = result.data.last;
                     this.cpercentage = result.data.changepercentage.toFixed(2); 
                     this.change = result.data.change.toFixed(2);
@@ -307,8 +317,8 @@ import SellTrade from '~/components/trade-simulator/sell'
                     this.high = result.data.high.toFixed(2);
                     this.wklow = result.data.weekyearlow.toFixed(2);
                     this.wkhigh = result.data.weekyearhigh.toFixed(2);
-                    this.volm = result.data.volume;
-                    this.vole = result.data.value;
+                    this.volm = this.nFormatter(result.data.volume);
+                    this.vole = this.nFormatter(result.data.value);
                     this.trades = result.data.trades;
                     this.ave = result.data.average.toFixed(2);                 
                 }.bind(this)
@@ -316,11 +326,23 @@ import SellTrade from '~/components/trade-simulator/sell'
 
                 this.$api.chart.stocks.fulldepth(params).then(
                 function(result) {
-                    console.log(result.data);  
+                    //console.log(result.data);  
                     this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);                 
                 }.bind(this)
                 );
 
+            },
+             nFormatter(num) {
+                if (num >= 1000000000) {
+                    return (num / 1000000000).toFixed(2).replace(/\.0$/, '') + 'G';
+                }
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(2).replace(/\.0$/, '') + 'M';
+                }
+                if (num >= 1000) {
+                    return (num / 1000).toFixed(2).replace(/\.0$/, '') + 'K';
+                }
+                return num;
             },
         },
     }
@@ -350,5 +372,14 @@ import SellTrade from '~/components/trade-simulator/sell'
     #stepper_container {
         box-shadow: none;
         background-color: transparent;
+    }
+    .positive{
+    color: #00FFC3;
+    }
+    .negative{
+        color: #fe4949;
+    }
+    .neutral{
+        color: #f3d005;
     }
 </style>

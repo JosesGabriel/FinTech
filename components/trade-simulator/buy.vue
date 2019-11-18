@@ -24,7 +24,8 @@
                             style="color: #00FFC3"
                             dark
                             class="body-2 buy_selector quantity-input py-3"
-                            v-model="buyprice"
+                            readonly
+                            :value= this.simulatorBuyPrice
                         ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
@@ -33,22 +34,26 @@
                             placeholder="Enter Quantity"
                             color="#00FFC3"
                             style="color: #00FFC3"
+                            type=number
                             dark
                             class="body-2 buy_selector buy_price-input py-3"
                             v-model="quantity"
                         ></v-text-field>
                         <v-btn 
-                            @click="(quantity <= 0 || quantity < 10 ? 0 : quantity = parseInt(quantity) - 10)"
+                            @click="minusButton"
                             text 
                             icon 
                             color="primary"
                         ><v-icon>mdi-minus</v-icon></v-btn>
                         <v-btn 
-                            @click="quantity = parseInt(quantity) + 10"
+                            @click="addButton"
                             text 
                             icon 
                             color="primary"
                         ><v-icon>mdi-plus</v-icon></v-btn>
+                    </v-col>
+                    <v-col class="ma-0 pa-0" style="color: #90989d;position: absolute;font-size:12px; top:285px; left:203px;width: 95px;">
+                        BoardLot : <span>{{ this.simulatorBoardLot }}</span>
                     </v-col>
                     <v-text-field
                         label="Total Cost"
@@ -57,6 +62,7 @@
                         dark
                         class="body-2 buy_selector quantity-input py-3"
                         v-model="totalCost"
+                        :value = this.totalCost
                         readonly
                     ></v-text-field>
                 </v-row>
@@ -66,16 +72,46 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
     data() {
         return {
-            buyprice: '0.00',
             quantity: '0.00',
             availableFunds: '320,000,000.00',
-            totalCost: '320,000,000.00',
+            totalCost: 0,
             portfolio: ['Real Portfolio','Virtual Portfolio']
         }
-    }
+    },
+    computed: {
+    ...mapGetters({
+      simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
+      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot"
+    })
+  },
+    methods: {
+    ...mapActions({
+        setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
+        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot"
+    }),
+    addButton(){
+        this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
+        let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.totalCost = this.addcomma(add);
+    },
+    minusButton(){
+        this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));  
+        let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.totalCost = this.addcomma(min);
+    },
+    addcomma(n, sep, decimals) {
+	    sep = sep || "."; // Default to period as decimal separator
+	    decimals = decimals || 2; // Default to 2 decimals
+	    return n.toLocaleString().split(sep)[0]
+	        + sep
+	        + n.toFixed(2).split(sep)[1];
+	},
+  },
 }
 </script>
 <style>
