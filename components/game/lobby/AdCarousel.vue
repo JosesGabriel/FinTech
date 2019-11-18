@@ -1,6 +1,6 @@
 <template>
   <v-carousel
-    class="pt-6"
+    class="mt-6"
     cycle
     interval="2000"
     height="300px"

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-0">
+  <v-container class="py-0 pr-0 gameDashboard__wrapper">
     <v-row class="pl-3">
       <v-col class="pa-0" cols="5">
         <v-container class="pa-0">
@@ -76,7 +76,7 @@
         </v-container>
       </v-col>
       <!-- <v-col cols="1"></v-col> -->
-      <v-col class="pa-0" cols="3">
+      <v-col class="pa-0 ml-6 controller__wrapper" cols="3">
         <GameController />
       </v-col>
     </v-row>
@@ -90,6 +90,12 @@
 }
 .thisTrade {
   border-right: 1px solid black;
+}
+.controller__wrapper {
+  border-left: 2px solid #0c1a2b;
+}
+.gameDashboard__wrapper {
+  border-top: 2px solid #0c1a2b;
 }
 </style>
 <script>

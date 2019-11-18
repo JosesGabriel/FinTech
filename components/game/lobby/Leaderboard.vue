@@ -22,7 +22,7 @@
 </template>
 <style>
 .leaderboard__header {
-  background-color: black;
+  background-color: #0c1a2b;
   color: white;
   border-bottom: 2px solid #1de9b6;
 }
@@ -35,7 +35,7 @@
   flex-direction: column;
   padding: 15px;
   overflow: auto;
-  height: calc(100vh - 350px);
+  height: calc(100vh - 370px);
 }
 .message__list {
   align-self: flex-start;

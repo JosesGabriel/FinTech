@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="344" class="mx-auto profileCard" color="transparent" dark>
+  <v-card max-width="344" class="mx-auto profileCard" color="#00121e" dark>
     <v-list-item class="pa-0">
       <v-list-item-avatar color="grey" tile class="ma-0" size="65px">
         <v-img src="test.jpg"></v-img>
@@ -58,7 +58,7 @@
 <style>
 .profileCard__header {
   border-bottom: 2px solid #1de9b6;
-  background-color: black;
+  background-color: #0c1a2b;
 }
 .profileCard__header--username {
   border-right: 2px solid #1de9b6;

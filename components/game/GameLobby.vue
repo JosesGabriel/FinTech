@@ -5,15 +5,15 @@
         <v-container>
           <v-row>
             <v-col cols="4">
-              <UserProfileCard />
+              <UserProfileCard class="bordered__component" />
             </v-col>
             <v-col cols="8">
-              <LobbyTable />
+              <LobbyTable class="bordered__component" />
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="4" class="pt-0 leaderBoards__column">
-              <Leaderboard />
+              <Leaderboard class="bordered__component" />
             </v-col>
             <v-col cols="8" class="pt-0">
               <ChatClient />
@@ -27,7 +27,7 @@
           <AdCarousel />
         </div>
         <div v-if="playerInLobby">
-          <LobbySettings />
+          <LobbySettings class="bordered__component pt-0" />
         </div>
       </v-col>
     </v-row>
@@ -36,6 +36,9 @@
 <style>
 .gameLobby__container {
   margin-top: 40px;
+}
+.bordered__component {
+  border: 2px solid #0c1a2b;
 }
 </style>
 <script>

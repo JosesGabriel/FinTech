@@ -16,6 +16,6 @@
 </template>
 <style>
 .composer__container {
-  background-color: black;
+  background-color: #0c1a2b;
 }
 </style>

@@ -73,7 +73,7 @@
 </template>
 <style>
 .tableHeader {
-  background-color: black;
+  background-color: #0c1a2b;
 }
 .v-data-footer__select {
   display: none;
@@ -312,7 +312,7 @@ export default {
     },
     selectRoom(a) {
       if (!this.playerInLobby) {
-        alert(Object.values(a)[0]);
+        alert(Object.values(a));
       }
     }
   }

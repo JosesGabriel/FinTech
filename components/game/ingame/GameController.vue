@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0">
+  <v-container class="pl-4">
     <v-row>
       <v-col cols="12" class="text-center py-0">
         <v-btn x-large dark icon>
@@ -8,27 +8,9 @@
         <v-btn x-large dark icon>
           <v-icon>mdi-play</v-icon>
         </v-btn>
-        <v-btn x-large @click="nextButton()" dark icon>
+        <v-btn x-large dark icon @click="nextButton()">
           <v-icon>mdi-skip-next</v-icon>
         </v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12 py-0">
-        <v-text-field
-          class="numOfShares__textfield"
-          color="success"
-          hide-details
-          outlined
-          dark
-          placeholder="No. of shares"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" class="caption py-0 ">
-        <span class="px-6">Total Cost:</span>
-        <span>Portfolio%:</span>
       </v-col>
     </v-row>
     <v-row>
