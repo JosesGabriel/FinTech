@@ -1,9 +1,9 @@
 <template>
   <v-toolbar
     :dark="isLightMode == 1 ? false : true"
+    :color="isLightMode == 1 ? 'lightcard' : 'darkcard'"
     height="54"
     class="header__toolbar"
-    :class="isLightMode == 1 ? 'lightMode' : 'darkMode'"
   >
     <v-toolbar-title
       ><router-link to="/">
@@ -142,7 +142,7 @@
 }
 .darkMode {
   /* TEMPORARY */
-  background-color: #00121e !important;
+  background-color: #00121e;
 }
 .header__button {
   text-transform: none;

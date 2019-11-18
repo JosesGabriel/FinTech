@@ -3,9 +3,8 @@
     <v-card
       class="mb-1 watchCard"
       :class="!hover ? 'watchCard--unfocused' : ''"
-      color="darkcard"
-      dark
-      outlined
+      :color="isLightMode == 1 ? 'lightcard' : 'darkcard'"
+      :dark="isLightMode == 1 ? false : true"
       shaped
       max-height="245"
       :loading="watchCardLoading"
@@ -128,6 +127,7 @@ export default {
       stockCurrentChange: "",
       stockExchange: "",
       watchCardLoading: "primary",
+      isLightMode: 0,
       series: [
         {
           name: "series1",
@@ -281,6 +281,7 @@ export default {
   },
   mounted() {
     this.watchCardMount();
+    if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
     ...mapActions({

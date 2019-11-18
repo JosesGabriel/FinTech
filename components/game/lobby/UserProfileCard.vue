@@ -56,8 +56,6 @@
   </v-card>
 </template>
 <style>
-.profileCard {
-}
 .profileCard__header {
   border-bottom: 2px solid #1de9b6;
   background-color: black;
@@ -70,5 +68,14 @@
 }
 </style>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      isLightMode: 0
+    };
+  },
+  mounted() {
+    if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
+  }
+};
 </script>

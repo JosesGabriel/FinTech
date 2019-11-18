@@ -87,7 +87,8 @@ export default {
           warning: colors.orange,
           error: colors.red,
           success: colors.teal.accent3,
-          darkcard: "#0c1a2b"
+          darkcard: "#0c1a2b",
+          lightcard: "#f2f2f2"
         },
         dark: {
           background: colors.blue.darken3
