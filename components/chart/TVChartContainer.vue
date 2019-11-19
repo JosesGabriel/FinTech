@@ -67,8 +67,8 @@ export default {
     // listen to ticker toggle
     this.$bus.$on("adjustChartView", data => {
       this.chartView;
-      console.log(this.chartViewId);
-      console.log(this.chartViewClass);
+      //console.log(this.chartViewId);
+      //console.log(this.chartViewClass);
     });
 
     const widgetOptions = {

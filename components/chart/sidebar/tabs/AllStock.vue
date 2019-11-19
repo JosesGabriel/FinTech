@@ -1,5 +1,6 @@
 <template>
   <v-content>
+      <v-card class="pa-0 ma-0" color="#00121e" dark :loading="loading">  
     <v-content class="mt-1">
       <span class="caption ml-4 font-weight-bold white--text">All Stock</span>
     </v-content>
@@ -22,24 +23,29 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in items" :key="item.id">
-          <td :class="column" style="width:20%">{{ item.symbol }}</td>
-          <td :class="column" style="width:15%" class="text-right">
-            <span class="decrease">{{ item.last }}</span>
+        <tr v-for="item in stocks" :key="item.id">
+          <td :class="column" class="font-weight-bold" style="width:10%">{{ item.symbol }}</td>
+          <td :class="column" style="width:12%" class="text-right">
+            <span :class="[{ increase: item.change > 0 },{ decrease: item.change < 0 },{ neutral: item.change == 0 }]">
+                {{ item.last }}
+            </span>
+          </td>
+          <td :class="column" style="width:20%" class="text-right">
+            <span :class="[{ increase: item.change > 0 },{ decrease: item.change < 0 },{ neutral: item.change == 0 }]">
+                {{ item.change }}
+            </span>
           </td>
           <td :class="column" style="width:23%" class="text-right">
-            <span class="increase">{{ item.change }}</span>
+            <span class="">{{ formatPrice(item.value) }}</span>
           </td>
-          <td :class="column" style="width:18%" class="text-right">
-            <span class="">{{ item.value }}</span>
-          </td>
-          <td :class="column" style="width:18%" class="text-right">
-            <span class="">{{ item.trades }}</span>
+          <td :class="column" style="width:20%" class="text-right">
+            <span class="">{{ formatPrice(item.trades) }}</span>
           </td>
           <td :class="column"></td>
         </tr>
       </tbody>
     </v-simple-table>
+     </v-card>
   </v-content>
 </template>
 
@@ -48,211 +54,27 @@ export default {
   name: "AllStock",
   data() {
     return {
+      stocks: [],
+      loading: '#48FFD5',
       header: "caption header white--text font-weight-bold",
-      column: "caption column white--text",
-      items: [
-        {
-          id: 1,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 2,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 3,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 4,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 5,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 6,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 7,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 8,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 9,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 10,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 11,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 12,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 13,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 14,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 15,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 16,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 17,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 18,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 19,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        },
-        {
-          id: 20,
-          symbol: "ICT",
-          last: "101.90",
-          last_status: 1,
-          change: 7.8,
-          change_status: 2,
-          value: "189M",
-          trades: "193"
-        }
-      ]
+      column: "caption column white--text"
     };
+  },
+  mounted(){
+    this.$api.chart.stocks.history({
+      exchange: "PSE"
+    }).then(response => {
+     // console.log("all stock");
+     // console.log(response.data);
+      this.stocks = response.data;
+      this.loading = false;
+    });
+  },
+  methods:{
+      formatPrice(value) {
+        let val = (value/1).toFixed(2).replace(',', '.')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
   }
 };
 </script>
@@ -267,5 +89,8 @@ export default {
 }
 .v-data-table--dense td {
   height: 20px;
+}
+.neutral{
+  color: gold !important;
 }
 </style>
