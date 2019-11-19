@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-flex chatMembers__wrap">
     <ul v-for="n in 4" :key="n" class="pl-0">
       <li>
         <div>
@@ -15,5 +15,13 @@
 <style>
 ul {
   list-style-type: none;
+}
+.chatMembers__wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  overflow: auto;
+  height: calc(100vh - 600px);
 }
 </style>
