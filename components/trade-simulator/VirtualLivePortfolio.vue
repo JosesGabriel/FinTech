@@ -143,20 +143,12 @@ export default {
                   console.log(result.meta.open);
                     for(let i=0; i < result.meta.open.length; i++){ 
                         
-                        let stock_id = result.meta.open[i].stock_id;
-                        const stockid = {
-                            'symbol-id': stock_id,
-                        };
-                         this.$api.chart.stocks.history(stockid).then(
-                          function(results) { 
-                             this.symbol = results.data.symbol;                
-                          }.bind(this)
-                        );
-
+                      let stock_id = result.meta.open[i].stock_id;
+                        
                       let mvalue = result.meta.open[i].position * result.meta.open[i].average_price.toFixed(2);
                       let data = {
                         id: i,
-                        Stocks: this.symbol,
+                        Stocks: stock_id,
                         Position: result.meta.open[i].position,
                         AvgPrice: result.meta.open[i].average_price.toFixed(2),
                         TotalCost: this.addcomma(result.meta.open[i].total_value),
