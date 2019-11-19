@@ -17,7 +17,7 @@
                     dark
                     class="stock_selector pa-0 pb-5 font-weight-bold body-2 white--text"
                 ></v-text-field>
-                <v-select
+               <!-- <v-select
                     v-model="typePortfolioModel"
                     :items="portfolio"
                     label="Type of Portfolio"
@@ -26,7 +26,7 @@
                     dense
                     dark
                     append-icon="mdi-chevron-down"
-                ></v-select>
+                ></v-select>-->
             </v-container>
             <v-card-actions class="pa-3">
                 <v-spacer></v-spacer>
@@ -89,7 +89,7 @@ export default {
             this.fieldsWatch();
             const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             this.initialCapitalModel = result;
-            // console.log(parseInt(this.initialCapitalModel))
+            console.log(parseInt(this.initialCapitalModel))
         },
         typePortfolioModel: function() {
             this.fieldsWatch();
@@ -107,15 +107,16 @@ export default {
             }
         },
         createPortfolio: function(){
-            let convertedNumbers = parseInt(this.initialCapitalModel)
+            //let convertedNumbers = parseInt(this.initialCapitalModel)
             const createportfolioparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
                 currency_code: "PHP",
                 name: this.namePortfolioModel,
-                description: "My Portfolio",
-                type: this.typePortfolioModel,
-                balance: convertedNumbers
+                description: "My Virtual Portfolio",
+                type: "virtual",
+                balance: 100000
             };
+            console.log(createportfolioparams);
             this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
                 function(result) {
                     if (result.success) {
@@ -126,7 +127,10 @@ export default {
                 }.bind(this)
             );
         },
-    }
+    },
+     mounted() {
+                 
+    },
 }
 </script>
 <style>

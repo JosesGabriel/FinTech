@@ -85,7 +85,15 @@
                
                 <v-row>
                     <v-col md="3" class="text-right caption px-2 ma-0" style="position:absolute; right:0; top: -26px; width: 180px;">
-                        <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Portfolio" dense solo flat>
+                        <v-select offset-y="true" 
+                            class="select_portfolio mt-2 black--text" 
+                            item-color="success" 
+                            append-icon="mdi-chevron-down" 
+                            :items="portfolio" 
+                            background-color="#00FFC3" 
+                            label="Select Portfolio" 
+                            dense solo flat>
+
                             <template v-slot:append-item>
                                 <v-list-item
                                 ripple
@@ -125,24 +133,51 @@
   import VirtualLivePortfolio from '~/components/trade-simulator/VirtualLivePortfolio'
   import TradelogsContent from '~/components/trade-simulator/VirtualTradelogs'
   import createModal from '~/components/trade-simulator/VirtualCreatePortfolio'
+  import { mapActions, mapGetters } from "vuex";
 
   export default {
     data () {
       return {
-          portfolio: ['Primary Portfolio'],
+          portfolio: [],
           showCreatePortForm: false,
       }
     },
+     computed: {
+         ...mapGetters({
+            simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+        })
+    },
+    methods: {
+         ...mapActions({
+                setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+            }),
+    },
     mounted() {
-        if( this.portfolio == 0) {
-            this.showCreatePortForm = true
-        }
+        const portfolioparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+            };
+            this.$api.journal.portfolio.portfolio(portfolioparams).then(
+                function(result) {
+                    console.log(result.meta.logs);
+                    for(let i=0; i< result.meta.logs.length; i++){
+                        if(result.meta.logs[i].type == 'virtual'){
+                            //if(this.simulatorPortfolioID == null){
+                                this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                           // }
+                            this.portfolio.push(result.meta.logs[i].name);
+                        }
+                    }
+                   console.log(this.simulatorPortfolioID);
+                }.bind(this)
+            );
+
     },
     components: {
         VirtualLivePortfolio,
         TradelogsContent,
         createModal,
-    }
+    },
+   
   }
 </script>
 <style >

@@ -70,6 +70,7 @@
 import TradeModal from '~/components/trade-simulator/TradeModal'
 import resetModal from '~/components/modals/reset'
 import shareModal from '~/components/modals/share'
+import { mapActions, mapGetters } from "vuex";
 
 export default {
     data () {
@@ -79,6 +80,7 @@ export default {
         page: 1,
         pageCount: 0,
         menuShow: false,
+        symbol: '',
         headers: [
           { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
           { text: 'Position', value: 'Position', align: 'right' },
@@ -89,108 +91,7 @@ export default {
           { text: 'Perf. (%)', value: 'Perf', align: 'right' },
           { text: '', value: 'action', sortable: false, align: 'right' },
         ],
-        portfolioLogs: [
-          {
-            id: 1,
-            Stocks: 'BDO',
-            Position: 159,
-            AvgPrice: 6.0,
-            TotalCost: 24,
-            MarketValue: 4.0,
-            Profit: '1%',
-            Perf: '1%',
-          },
-          {
-            id: 2,
-            Stocks: 'HLCM',
-            Position: 237,
-            AvgPrice: 9.0,
-            TotalCost: 37,
-            MarketValue: 4.3,
-            Profit: '1%',
-            Perf: '1%',
-          },
-          {
-            id: 3,
-            Stocks: 'KPPI',
-            Position: 262,
-            AvgPrice: 16.0,
-            TotalCost: 23,
-            MarketValue: 6.0,
-            Profit: '7%',
-            Perf: '7%',
-          },
-          {
-            id: 4,
-            Stocks: '2GO',
-            Position: 305,
-            AvgPrice: 3.7,
-            TotalCost: 67,
-            MarketValue: 4.3,
-            Profit: '8%',
-            Perf: '8%',
-          },
-          {
-            id: 5,
-            Stocks: 'ROCK',
-            Position: 356,
-            AvgPrice: 16.0,
-            TotalCost: 49,
-            MarketValue: 3.9,
-            Profit: '16%',
-            Perf: '16%',
-          },
-          {
-            id: 6,
-            Stocks: 'APL',
-            Position: 375,
-            AvgPrice: 0.0,
-            TotalCost: 94,
-            MarketValue: 0.0,
-            Profit: '0%',
-            Perf: '0%',
-          },
-          {
-            id: 7,
-            Stocks: 'IRC',
-            Position: 392,
-            AvgPrice: 0.2,
-            TotalCost: 98,
-            MarketValue: 0,
-            Profit: '2%',
-            Perf: '2%',
-          },
-          {
-            id: 8,
-            Stocks: 'APL',
-            Position: 408,
-            AvgPrice: 3.2,
-            TotalCost: 87,
-            MarketValue: 6.5,
-            Profit: '45%',
-            Perf: '45%',
-          },
-          {
-            id: 9,
-            Stocks: 'BDO',
-            Position: 452,
-            AvgPrice: 25.0,
-            TotalCost: 51,
-            MarketValue: 4.9,
-            Profit: '22%',
-            Perf: '22%',
-          },
-          {
-            id: 10,
-            Stocks: 'SUN',
-            Position: 518,
-            AvgPrice: 26.0,
-            TotalCost: 65,
-            MarketValue: 7,
-            Profit: '6%',
-            Perf: '6%',
-          }
-        ],
+        portfolioLogs: [],
         items: [
             { title: 'Note' },
             { title: 'Delete' },
@@ -200,6 +101,7 @@ export default {
         showResetForm: false,
         showScheduleForm: false,
       }
+      
     },
      components: {
         TradeModal,
@@ -207,6 +109,7 @@ export default {
         shareModal,
     },
     methods: {
+      
       menuLogsShow: function(item) {
         let pl = document.getElementById(`pl_${item.id}`);
 
@@ -216,8 +119,56 @@ export default {
         let pl = document.getElementById(`pl_${item.id}`);
 
         pl.style.display = "none";
-      }
-    }
+      },
+       addcomma(n, sep, decimals) {
+          sep = sep || "."; // Default to period as decimal separator
+          decimals = decimals || 2; // Default to 2 decimals
+          return n.toLocaleString().split(sep)[0]
+              + sep
+              + n.toFixed(2).split(sep)[1];
+      },
+    },
+    computed: {
+            ...mapGetters({
+            simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+            }),
+    },
+     mounted() {
+                const params = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: 73287292558643200
+                };
+                this.$api.journal.portfolio.open(params).then(
+                function(result) {
+                  console.log(result.meta.open);
+                    for(let i=0; i < result.meta.open.length; i++){ 
+                        
+                        let stock_id = result.meta.open[i].stock_id;
+                        const stockid = {
+                            'symbol-id': stock_id,
+                        };
+                         this.$api.chart.stocks.history(stockid).then(
+                          function(results) { 
+                             this.symbol = results.data.symbol;                
+                          }.bind(this)
+                        );
+
+                      let mvalue = result.meta.open[i].position * result.meta.open[i].average_price.toFixed(2);
+                      let data = {
+                        id: i,
+                        Stocks: this.symbol,
+                        Position: result.meta.open[i].position,
+                        AvgPrice: result.meta.open[i].average_price.toFixed(2),
+                        TotalCost: this.addcomma(result.meta.open[i].total_value),
+                        MarketValue: this.addcomma(mvalue),
+                        Profit: '6%',
+                        Perf: '6%',
+                      }
+                      this.portfolioLogs.push(data);
+                    }       
+                }.bind(this)
+            );
+            },
 
 }
 </script>
