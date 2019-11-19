@@ -59,7 +59,29 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ["@nuxtjs/axios", "@nuxtjs/dotenv"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/dotenv", "@nuxtjs/auth"],
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: "/auth/login",
+            method: "post",
+            propertyName: "data.token.access_token"
+          },
+          user: {
+            url: "/users",
+            method: "get",
+            propertyName: false
+          },
+          logout: {
+            url: "/auth/logout",
+            method: "post"
+          }
+        }
+      }
+    }
+  },
 
   axios: {},
   /*
@@ -87,7 +109,8 @@ export default {
           warning: colors.orange,
           error: colors.red,
           success: colors.teal.accent3,
-          darkcard: "#0c1a2b"
+          darkcard: "#0c1a2b",
+          lightcard: "#f2f2f2"
         },
         dark: {
           background: colors.blue.darken3

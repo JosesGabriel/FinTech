@@ -4,7 +4,7 @@
       <v-col cols="8">
         <v-container>
           <v-row>
-            <v-col cols="12 pa-0">
+            <v-col cols="12 pa-0 chart__wrapper">
               <TVChart />
             </v-col>
           </v-row>

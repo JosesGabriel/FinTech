@@ -84,7 +84,7 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-2`">Tradelogs</v-tab>
                
                 <v-row>
-                    <v-col md="3" class="text-right caption px-2 ma-0" style="position:absolute; right:0; top: -5px; width: 180px;">
+                    <v-col md="3" class="text-right caption px-2 ma-0" style="position:absolute; right:0; top: -26px; width: 180px;">
                         <v-select offset-y="true" class="select_portfolio mt-2 black--text" item-color="success" append-icon="mdi-chevron-down" :items="portfolio" background-color="#00FFC3" label="Select Portfolio" dense solo flat>
                             <template v-slot:append-item>
                                 <v-list-item

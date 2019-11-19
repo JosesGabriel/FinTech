@@ -1,7 +1,7 @@
 <template>
-  <v-app>
+  <v-app class="game__container">
     <v-content
-      class="social__container"
+      class="game__container"
       :class="isLightMode == 1 ? 'lightMode' : ''"
     >
       <rbHeader />
@@ -15,7 +15,7 @@
 .maxwidth {
   max-width: 100%;
 }
-.social__container {
+.game__container {
   /* background-color: #fcfbfe; light mode color, add to vuex state soon */
   background-color: #00121e;
 }

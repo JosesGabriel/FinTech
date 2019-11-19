@@ -9,9 +9,22 @@
       style="background-color: transparent"
       class="elevation-1 lobbyTable"
       :footer-props="{
-        disableItemsPerPage: true
+        disableItemsPerPage: true,
+        disablePagination: true
       }"
-    ></v-data-table>
+    >
+      <template v-slot:item="props">
+        <tr @click="selectRoom(props.item)">
+          <td
+            v-for="n in Object.keys(props.item).length"
+            :key="n"
+            class="text-center"
+          >
+            {{ props.item[[Object.keys(props.item)[n - 1]]] }}
+          </td>
+        </tr>
+      </template>
+    </v-data-table>
     <div class="table__footer">
       <v-btn
         small
@@ -60,10 +73,14 @@
 </template>
 <style>
 .tableHeader {
-  background-color: black;
+  background-color: #0c1a2b;
 }
 .v-data-footer__select {
   display: none;
+}
+.v-data-footer__icons-before,
+.v-data-footer__icons-after {
+  visibility: hidden;
 }
 .table__footer {
   position: relative;
@@ -77,11 +94,12 @@ export default {
   data() {
     return {
       dialog: false,
+      itemKey: "",
       headers: [
         {
           text: "ROOM #",
           align: "center",
-          value: "name",
+          value: "roomName",
           class: "tableHeader"
         },
         {
@@ -112,80 +130,96 @@ export default {
         {
           text: "POT MONEY",
           align: "center",
-          value: "coinbet",
+          value: "potMoney",
           class: "tableHeader"
         },
         {
           text: "SETTING",
           align: "center",
-          value: "coinbet",
+          value: "setting",
           class: "tableHeader"
         }
       ],
       items: [
         {
-          name: "003",
+          roomName: "003",
           players: 159,
           market: "PSE",
           time: 24,
           charts: 4.0,
-          coinbet: "100"
+          coinbet: "100",
+          potMoney: "900",
+          setting: "Private"
         },
         {
-          name: "004",
+          roomName: "004",
           players: 237,
           market: "NYSE",
           time: 37,
           charts: 4.3,
-          coinbet: "1000"
+          coinbet: "1000",
+          potMoney: "900",
+          setting: "Private"
         },
         {
-          name: "005",
+          roomName: "005",
           players: 262,
           market: "NYSE",
           time: 23,
           charts: 6.0,
-          coinbet: "700"
+          coinbet: "700",
+          potMoney: "900",
+          setting: "Public"
         },
         {
-          name: "006",
+          roomName: "006",
           players: 305,
           market: "FOREX",
           time: 67,
           charts: 4.3,
-          coinbet: "180"
+          coinbet: "180",
+          potMoney: "900",
+          setting: "Public"
         },
         {
-          name: "007",
+          roomName: "007",
           players: 356,
           market: "CRYPTO",
           time: 49,
           charts: 3.9,
-          coinbet: "160"
+          coinbet: "160",
+          potMoney: "900",
+          setting: "Public"
         },
         {
-          name: "008",
+          roomName: "008",
           players: 375,
           market: "PSE",
           time: 94,
           charts: 0.0,
-          coinbet: "110"
+          coinbet: "110",
+          potMoney: "900",
+          setting: "Public"
         },
         {
-          name: "009",
+          roomName: "009",
           players: 392,
           market: "PSE",
           time: 98,
           charts: 0,
-          coinbet: "200"
+          coinbet: "200",
+          potMoney: "900",
+          setting: "Private"
         },
         {
-          name: "008",
+          roomName: "008",
           players: 375,
           market: "PSE",
           time: 94,
           charts: 0.0,
-          coinbet: "110"
+          coinbet: "110",
+          potMoney: "900",
+          setting: "Public"
         }
       ],
       headersJoined: [
@@ -275,6 +309,11 @@ export default {
     }),
     joinLobby() {
       this.setPlayerInLobby(true);
+    },
+    selectRoom(a) {
+      if (!this.playerInLobby) {
+        alert(Object.values(a));
+      }
     }
   }
 };

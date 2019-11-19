@@ -11,12 +11,24 @@
                                 <v-col cols="12" sm="12" md="12">
                                     <v-card-title class="pa-0 text-right justify-end">
                                         <v-col sm="12" md="12" class="pa-0">
-                                            <v-select offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stock" v-model="GetSelectStock" label="Select Stock"></v-select>
+                                            <v-select 
+                                                offset-y="true" 
+                                                item-color="success" 
+                                                color="success" 
+                                                class="pa-0 ma-0" 
+                                                append-icon="mdi-chevron-down" 
+                                                :items="stock" 
+                                                item-text="symbol"    
+                                                item-value="id_str"                                          
+                                                v-model="GetSelectStock" 
+                                                v-on:change="getDetails"
+                                                label="Select Stock"
+                                                ></v-select>
                                         </v-col>
                                     </v-card-title>
                                         <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
                                         <v-spacer></v-spacer>
-                                        <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">14.07 <span class="caption">.09</span><span class="caption">(1.90%)</span></p>
+                                        <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span :class="(change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral')" class="caption">{{ change }}</span> <span :class="(cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral')" class="caption">({{ cpercentage }}%)</span></p>
                                     <v-row no-gutters class="mt-2">
                                         <v-col class="pa-0" cols="6" sm="6" md="6">
                                             <v-simple-table :dense="true" dark id="liveportfolio-table">
@@ -81,7 +93,7 @@
                                         </v-card-title>
                                     
                                         <v-progress-linear
-                                            value="70"
+                                            :value="bidask"
                                             background-color="#F44336"
                                             color="#00FFC3"
                                             height="5px"
@@ -127,26 +139,7 @@
                                 >
                                     <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" width="100" :href="`#funds-1`">Buy</v-tab>
                                     <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`">Sell</v-tab>
-<!--                                     
-                                    <v-dialog
-                                        ref="dialog"
-                                        v-model="modal"
-                                        :return-value.sync="date"
-                                        persistent
-                                        width="290px"
-                                    >
-                                    <template v-slot:activator="{ on }">
-                                        <v-btn v-on="on" text class="calendate-btn" color="#00FFC3">
-                                            <span class="text-capitalize">Date: </span>
-                                            <v-card-text class="pa-0" v-html="date"></v-card-text>
-                                        </v-btn>
-                                    </template>
-                                    <v-date-picker v-model="date" color="#00121e" dark scrollable>
-                                        <v-spacer></v-spacer>
-                                        <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-                                        <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
-                                    </v-date-picker>
-                                    </v-dialog> -->
+
 
                                     <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 1">
                                         <BuyTrade/>
@@ -210,8 +203,9 @@
 </template>
 <script>
 
-import BuyTrade from '~/components/modals/buy'
-import SellTrade from '~/components/modals/sell'
+import BuyTrade from '~/components/trade-simulator/buy'
+import SellTrade from '~/components/trade-simulator/sell'
+import { mapActions, mapGetters } from "vuex";
 
     export default {
         props: ['visible'],
@@ -222,7 +216,12 @@ import SellTrade from '~/components/modals/sell'
         data() {
             return {
                 e1: 1,
-                stock: ['2GO','PHEN','ROCK','HLCM'],
+                cprice: 0,
+                cpercentage: 0,
+                change: 0,
+                bidask: 0,
+                dboard: 0,
+                stock: [],
                 prev: '0',
                 low: 122,
                 wklow: 0,
@@ -247,6 +246,10 @@ import SellTrade from '~/components/modals/sell'
             }
         },
         computed: {
+            ...mapGetters({
+            simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
+            simulatorBoardLot: "tradesimulator/getSimulatorBoardLot"
+            }),
             show: {
                 get () {
                     return this.visible
@@ -264,7 +267,84 @@ import SellTrade from '~/components/modals/sell'
                     equalnum: this.low == this.high
                 }
             }
-        }
+        },
+        mounted() {
+                const params = {
+                exchange: "PSE",
+                status: "active"
+                };
+                this.$api.chart.stocks.list(params).then(
+                function(result) {
+                    this.stock = result.data;                   
+                }.bind(this)
+                );
+            },
+        methods: {
+            ...mapActions({
+                setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
+                setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot"
+            }),
+            getDetails(selectObj) {
+                const params = {
+                    'symbol-id': selectObj,
+                };          
+                this.$api.chart.stocks.history(params).then(
+                function(result) {    
+
+                    if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
+			            this.dboard = 1000000;
+			        } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
+			            this.dboard = 100000;
+			        } else if (result.data.last >= 0.05 && result.data.last <= 0.495) {
+			            this.dboard = 10000;
+			        } else if (result.data.last >= 0.5 && result.data.last <= 4.99) {
+			            this.dboard = 1000;
+			        } else if (result.data.last >= 5 && result.data.last <= 49.95) {
+			            this.dboard = 100;
+			        } else if (result.data.last >= 50 && result.data.last <= 999.5) {
+			            this.dboard = 10;
+			        } else if (result.data.last >= 1000) {
+			            this.dboard = 5;
+			        }
+                    this.setSimulatorBuyPrice(result.data.last);
+                    this.setSimulatorBoardLot(this.dboard);
+                    this.cprice = result.data.last;
+                    this.cpercentage = result.data.changepercentage.toFixed(2); 
+                    this.change = result.data.change.toFixed(2);
+                    this.prev = result.data.close.toFixed(2);
+                    this.open = result.data.open.toFixed(2);
+                    this.low = result.data.low.toFixed(2);
+                    this.high = result.data.high.toFixed(2);
+                    this.wklow = result.data.weekyearlow.toFixed(2);
+                    this.wkhigh = result.data.weekyearhigh.toFixed(2);
+                    this.volm = this.nFormatter(result.data.volume);
+                    this.vole = this.nFormatter(result.data.value);
+                    this.trades = result.data.trades;
+                    this.ave = result.data.average.toFixed(2);                 
+                }.bind(this)
+                );
+
+                this.$api.chart.stocks.fulldepth(params).then(
+                function(result) {
+                    //console.log(result.data);  
+                    this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);                 
+                }.bind(this)
+                );
+
+            },
+             nFormatter(num) {
+                if (num >= 1000000000) {
+                    return (num / 1000000000).toFixed(2).replace(/\.0$/, '') + 'G';
+                }
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(2).replace(/\.0$/, '') + 'M';
+                }
+                if (num >= 1000) {
+                    return (num / 1000).toFixed(2).replace(/\.0$/, '') + 'K';
+                }
+                return num;
+            },
+        },
     }
 </script>
 <style>
@@ -292,5 +372,14 @@ import SellTrade from '~/components/modals/sell'
     #stepper_container {
         box-shadow: none;
         background-color: transparent;
+    }
+    .positive{
+    color: #00FFC3;
+    }
+    .negative{
+        color: #fe4949;
+    }
+    .neutral{
+        color: #f3d005;
     }
 </style>

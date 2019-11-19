@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-0">
+  <div class="container mt-6">
     <div class="row lobbySettings__header">
       <div class="col-12">
         <span>Settings</span>
@@ -184,7 +184,7 @@
 </template>
 <style>
 .lobbySettings__header {
-  background-color: black;
+  background-color: #0c1a2b;
 }
 .lobbySettings__select {
   transform: scale(0.8);

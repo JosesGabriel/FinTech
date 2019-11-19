@@ -1,6 +1,6 @@
 <template>
   <v-container class="py-0">
-    <v-row>
+    <v-row class="rankTable__row">
       <v-col cols="12" class="py-0">
         <v-simple-table dark class="rankingTable rankingTable--color" dense>
           <template v-slot:default>
@@ -28,6 +28,10 @@
 </template>
 <style>
 .rankingTable {
+}
+.rankTable__row {
+  border: 2px solid #0c1a2b;
+  border-top: 0px;
 }
 .rankingTable.rankingTable--color {
   background-color: transparent;

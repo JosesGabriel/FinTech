@@ -5,13 +5,7 @@
     dark
   >
     <v-row class="mb-5" no-gutters>
-      <v-col
-        class="navbar__container hidden-xs-only px-3"
-        cols="3"
-        sm="2"
-        md="3"
-        lg="3"
-      >
+      <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar />
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
