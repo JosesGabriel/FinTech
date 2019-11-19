@@ -13,5 +13,14 @@ export default {
   },
   async setSidebar({ commit }, data) {
     await commit("SET_SIDEBAR", data);
+  },
+  async setSymbolID({ commit }, data) {
+    await commit("SET_SYMBOLID", data);
+  },
+  async setStock({ commit }, data) {
+    await commit("SET_STOCK", data);
+  },
+  async setBidask({ commit }, data) {
+    await commit("SET_BIDASK", data);
   }
 };

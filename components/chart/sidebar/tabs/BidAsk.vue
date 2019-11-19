@@ -1,7 +1,7 @@
 <template>
   <v-content>
     <!-- bid and ask -->
-    <v-card color="#00121e" style="height:190px">
+    <v-card color="#00121e" :loading="loading_bidask" style="height:190px">
       <v-row class="py-0">
         <v-col class="py-0 mt-1">
           <span class="caption ml-4 font-weight-bold white--text"
@@ -28,14 +28,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in items" :key="item.id">
-                  <td :class="column" style="width:10%">{{ item.bidnum }}</td>
-                  <td :class="column" style="width:18%">{{ item.bidvol }}</td>
-                  <td :class="column" style="width:15%">{{ item.bid }}</td>
-                  <td :class="column" style="width:20%">{{ item.ask }}</td>
-                  <td :class="column" style="width:18%">{{ item.askvol }}</td>
-                  <td :class="column" style="width:10%">{{ item.asknum }}</td>
+                <span class="d-none">{{ (ctr = 0) }}</span>
+                <tr v-for="item in asks" :key="item.id">
+                  <td :class="column" style="width:10%">
+                    {{ bids[ctr].count }}
+                  </td>
+                  <td :class="column" style="width:18%">
+                    {{ bids[ctr].volume }}
+                  </td>
+                  <td :class="column" style="width:15%">
+                    {{ bids[ctr].price }}
+                  </td>
+                  <td :class="column" style="width:20%">{{ item.price }}</td>
+                  <td :class="column" style="width:18%">{{ item.volume }}</td>
+                  <td :class="column" style="width:10%">{{ item.count }}</td>
                   <td :class="column"></td>
+                  <span class="d-none">{{ ctr++ }}</span>
                 </tr>
               </tbody>
             </v-simple-table>
@@ -74,9 +82,10 @@
           </v-content>
           <v-content class="px-12">
             <v-progress-linear
+              :indeterminate="progbar.loading"
+              :value="progbar.value"
               background-color="error"
               color="#48FFD5"
-              value="50"
               height="5"
             ></v-progress-linear>
           </v-content>
@@ -85,7 +94,11 @@
     </v-card>
 
     <!-- time and trades -->
-    <v-card color="#00121e" class="card__timetrade">
+    <v-card
+      color="#00121e"
+      :loading="loading_timetrades"
+      class="card__timetrade"
+    >
       <v-row class="py-0">
         <v-col class="py-0 mt-3">
           <span class="caption ml-4 font-weight-bold white--text"
@@ -101,7 +114,7 @@
           >
             <thead>
               <tr>
-                <th class="pl-3 overline header white--text font-weight-bold">
+                <th class="overline header white--text font-weight-bold">
                   TIME
                 </th>
                 <th :class="header">VOL</th>
@@ -113,13 +126,17 @@
             </thead>
             <tbody>
               <tr v-for="item in trades" :key="item.id">
-                <td :class="column" style="width:20%">{{ item.time }}</td>
-                <td :class="column" style="width:15%">{{ item.vol }}</td>
-                <td :class="column" style="width:18%">{{ item.price }}</td>
-                <td :class="column" class="font-weight-bold" style="width:18%">
+                <td class="overline column white--text" style="width:30%">{{ new Date(item.timestamp).toLocaleTimeString() }}</td>
+                <td :class="column" style="width:15%">
+                  {{ formatPrice(item.executed_price) }}
+                </td>
+                <td :class="column" style="width:10%">
+                  {{ formatPrice(item.executed_volume) }}
+                </td>
+                <td :class="column" class="font-weight-bold" style="width:10%">
                   {{ item.buyer }}
                 </td>
-                <td :class="column" class="font-weight-bold" style="width:20%">
+                <td :class="column" class="font-weight-bold" style="width:10%">
                   {{ item.seller }}
                 </td>
                 <td :class="column"></td>
@@ -135,8 +152,8 @@
             <v-progress-linear
               background-color="error"
               color="#48FFD5"
-              value="50"
               height="5"
+              value="50"
             ></v-progress-linear>
           </v-content>
         </v-col>
@@ -146,243 +163,97 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "BidAsk",
   data() {
     return {
+      loading_bidask: "#48FFD5",
+      loading_timetrades: "#48FFD5",
       toggleButton: false,
       header: "text-right overline header white--text font-weight-bold",
       column: "text-right overline column white--text",
-      items: [
-        {
-          id: 1,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 2,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 3,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 4,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 5,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 41,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 51,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 412,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        },
-        {
-          id: 512,
-          bidnum: 1,
-          bidvol: 100,
-          bid: 7.8,
-          ask: 8.0,
-          askvol: 110,
-          asknum: 1
-        }
-      ],
-      trades: [
-        {
-          id: 1,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 2,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 3,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 4,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 5,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 6,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 11,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 21,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 31,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 41,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 51,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 61,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 12,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 22,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 32,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 42,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 52,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        },
-        {
-          id: 62,
-          time: "11:46 AM",
-          vol: "500",
-          price: "8.00",
-          buyer: "COL",
-          seller: "NOMU"
-        }
-      ]
+      count: 0,
+      trades: [],
+      asks: [],
+      bids: [],
+      progbar: {
+          loading: true,
+          value: 100
+      },
+      topdepth: [],
+      fulldepth: []
     };
+  },
+  computed: {
+    ...mapGetters({
+      symbolid: "chart/symbolid",
+      bidask: "chart/bidask"
+    })
+  },
+  watch:{
+      toggleButton(value){
+          if(value == true){
+            this.progbar.value = this.fulldepth;
+          }else{
+            this.progbar.value = this.topdepth;
+          }
+      }
+  },
+  methods: {
+    ...mapActions({
+      setBidask: "chart/setBidask"
+    }),
+    formatPrice(value) {
+        let val = (value/1).toFixed(2).replace(',', '.')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+  },
+  mounted() {
+    // Bidask
+    this.$api.chart.stocks
+      .bidask({
+        "symbol-id": this.symbolid,
+        "filter-by-last": true,
+        limit: 10
+      })
+      .then(response => {
+        this.asks = Object.values(response.data.asks);
+        this.bids = Object.values(response.data.bids);
+        const bidask = {
+          asks: this.asks,
+          bids: this.bids
+        };
+        this.setBidask(bidask);
+        this.loading_bidask = false;
+      });
+    // Time Trade
+    this.$api.chart.stocks
+      .trades({
+        "symbol-id": this.symbolid,
+        sort: "DESC",
+        broker: true
+      })
+      .then(response => {
+        this.trades = response.data;
+        //console.log(this.trades);
+        this.loading_timetrades = false;
+      });
+
+    const params = {
+      "symbol-id": this.symbolid,
+       entry: 5
+    };
+    // Top Depth
+    this.$api.chart.stocks.topdepth(params).then(response => {
+      this.topdepth = parseFloat(response.data.bid_total_percent).toFixed(2);
+      this.progbar.value = this.topdepth;
+      this.progbar.loading = false;
+    });
+    // Full Depth
+    this.$api.chart.stocks.fulldepth(params).then(response => {
+      this.fulldepth = parseFloat(response.data.bid_total_percent).toFixed(2);
+    });
   }
 };
 </script>

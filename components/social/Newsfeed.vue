@@ -67,7 +67,7 @@
       <!-- Start of Comment -->
       <v-list-item class="ma-0">
         <v-list-item-avatar>
-          <v-img :src="user.profile"></v-img>
+          <v-img></v-img>
         </v-list-item-avatar>
         <v-list-item-content class="pb-0 mb-0">
           <v-text-field label="Write a comment..." color="primary">
@@ -153,7 +153,7 @@
           <!-- start of subreply -->
           <v-list-item class="ma-0 pa-0 ml-12 mt-2">
             <v-list-item-avatar>
-              <v-img :src="user.profile"></v-img>
+              <v-img></v-img>
             </v-list-item-avatar>
             <v-list-item-content class="pa-0 ma-0">
               <v-text-field label="Write a reply..." color="primary">
@@ -187,11 +187,11 @@ export default {
     // console.log(this.$store.state.auth.user);
     // getters
     // console.log(this.$store.getters['auth/user']);
-    this.$store.dispatch("auth/setUser", {
-      user_id: 1,
-      fullname: "Joses Gabriel Lu",
-      profile: "test.jpg"
-    });
+    // this.$store.dispatch("auth/setUser", {
+    //   user_id: 1,
+    //   fullname: "Joses Gabriel Lu",
+    //   profile: "test.jpg"
+    // });
   },
   mounted() {
     console.log("api");

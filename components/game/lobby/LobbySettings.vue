@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-6">
+  <div class="container mt-6 d-flex lobbySettings__wrap">
     <div class="row lobbySettings__header">
       <div class="col-12">
         <span>Settings</span>
@@ -189,6 +189,14 @@
 .lobbySettings__select {
   transform: scale(0.8);
   transform-origin: left;
+}
+.lobbySettings__wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  overflow: auto;
+  height: calc(100vh - 136px);
 }
 </style>
 <script>

@@ -26,7 +26,7 @@ export default $axios => ({
     );
   },
 
-  bidask(params) {
+   bidask(params) {
     let query = buildParams(params);
     $axios.setToken(token, "Bearer");
     return $axios.$get(
@@ -50,7 +50,7 @@ export default $axios => ({
     let query = buildParams(params);
     $axios.setToken(token, "Bearer");
     return $axios.$get(
-      `${baseURL}/market-depth/latest/topdepth${
+      `${baseURL}/market-depth/latest/top-depth${
         query.length > 0 ? "?" + query : ""
       }`
     );

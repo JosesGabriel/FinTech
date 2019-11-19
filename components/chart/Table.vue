@@ -16,7 +16,7 @@
         ></div>
         <div
           id="btn__table"
-          :class="[{ div__hide: !table }, { div__disable: !jockey } ]"
+          :class="[{ div__hide: !table }, { div__disable: !jockey }]"
           @click="toggleTable"
         ></div>
         <div id="btn__sidebar"></div>
@@ -80,7 +80,7 @@
         background-color="#00121e"
         :value="'tab-' + 2"
       >
-       <v-container class="pa-0"> </v-container>
+        <v-container class="pa-0"> </v-container>
       </v-tab-item>
       <v-tab-item
         dark
@@ -106,7 +106,7 @@ import { mapActions } from "vuex";
 import Jockey from "~/components/chart/Jockey";
 export default {
   components: {
-    Jockey,
+    Jockey
   },
   data() {
     return {
@@ -116,7 +116,7 @@ export default {
       tools: true,
       maximize: false,
       fullscreen: false,
-      jockey: false,
+      jockey: false
     };
   },
   methods: {
@@ -190,7 +190,7 @@ export default {
 }
 #div__btn {
   height: 45px;
-  width: 60px;
+  width: 50px;
   margin-top: -10px;
 }
 #btn__ticker {

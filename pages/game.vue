@@ -6,8 +6,8 @@
 </template>
 <style>
 .leaderBoards__column {
-  position: relative;
-  bottom: 60px;
+  /* position: relative;
+  bottom: 60px; */
 }
 /* Custom Scrollbar */
 .gameGlobal ::-webkit-scrollbar {

@@ -2,12 +2,34 @@
   <v-card class="pa-4" color="#142a46" dark outlined>
     <v-form enctype="multipart/form-data">
       <v-avatar size="38" class="postField__avatar">
-        <img alt="Avatar" src="test.jpg" />
+        <img
+          alt="Avatar"
+          :src="
+            $auth.loggedIn ? $auth.user.data.user.profile_image : 'default.png'
+          "
+        />
       </v-avatar>
       <div class="postField__textareaContainer">
         <v-textarea
+          v-if="$auth.loggedIn"
           v-model="postFieldModel"
-          label="Hey Eazy, penny for your thoughts?"
+          :label="
+            'Hey ' +
+              $auth.user.data.user.username +
+              ', penny for your thoughts?'
+          "
+          class="pt-0"
+          rows="3"
+          row-height="25"
+          color="primary"
+          required
+          :loading="postField__loading"
+          >{{ postFieldModel }}</v-textarea
+        >
+        <v-textarea
+          v-else
+          v-model="postFieldModel"
+          label="Hey Guest, penny for your thoughts?"
           class="pt-0"
           rows="3"
           row-height="25"

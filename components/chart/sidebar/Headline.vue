@@ -15,21 +15,23 @@
 
       <v-col class="col-9 pa-0">
         <v-content>
-          <span class="font-weight-bold title">PHILIPPINE INFRA...</span>
+          <span class="font-weight-bold title">{{ displaytitle }}</span>
         </v-content>
         <v-content>
-          <span class="headline">15.01</span>
+          <span class="headline">{{ stock.last }}</span>
           <span
             class="subtitle-2"
             :class="[
               { increase: changetype == 1 },
               { decrease: changetype == 2 }
             ]"
-            >-0.03(1.95%)</span
+            >{{ stock.change }}({{ stock.changepercentage }})</span
           >
         </v-content>
         <v-content class="mt-0">
-          <span class="caption">Market Capitalization: 9.517B</span>
+          <span class="caption"
+            >Market Capitalization: {{ stock.marketcap }}</span
+          >
         </v-content>
       </v-col>
     </v-row>
@@ -37,12 +39,31 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Headline",
-  data() {
-    return {
-      changetype: 1
-    };
+  computed: {
+    ...mapGetters({
+      stock: "chart/stock"
+    }),
+    displaytitle() {
+      if (this.stock.description == undefined) {
+        return "";
+      }
+      let str = this.stock.description;
+      return str.length > 16 ? str.substring(0, 16) + "..." : str;
+    },
+    changetype() {
+      let value = this.stock.change;
+      if (value > 0) {
+        return 1;
+      } else if (value < 0) {
+        return 2;
+      } else {
+        return 0;
+      }
+    }
   }
 };
 </script>
@@ -58,31 +79,13 @@ export default {
   left: 50%;
   top: -15px;
 }
-/*
-
-.head {
-  font-size: 16px;
-  position: absolute;
-  top: 4px;
-}
-.price {
-  position: absolute;
-  top: 30px;
-  font-size: 26px;
-}
-.changeperc {
-  font-size: 14px;
-}
-.marcap {
-  padding: 0px;
-  position: absolute;
-  top: 48px;
-}
-*/
 .increase {
-  color: #48ffd5;
+  color: #48ffd5 !important;
 }
 .decrease {
-  color: #ff4848;
+  color: #ff4848 !important;
+}
+.neutral{
+  color: gold !important;
 }
 </style>
