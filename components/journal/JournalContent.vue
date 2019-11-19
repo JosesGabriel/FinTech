@@ -17,16 +17,18 @@
                     append-icon="mdi-chevron-down"
                     background-color="#00FFC3"
                     label="Select Portfolio"
+                    color="grey"
                     dense
                     solo
                     flat
-                    :items="portfolioList"
+                    dark
+                    :items="portfolioListPush"
                     v-on:change="changePortfolio"
                     v-model="portfolioDropdownModel"
                     item-text="name"
                     item-value="id"
                     return-object
-                    persistent-hint
+                    :menu-props="{closeOnContentClick: true}"
                     >
                         <template v-slot:append-item>
                             <v-list-item @click="" class="sumportfolio_real mt-1">
@@ -144,7 +146,7 @@ import TradelogsContent from "~/components/journal/tradelogs/contents";
 import LedgerContent from "~/components/journal/ledger/LedgerContent";
 import createModal from '~/components/journal/dashboard/JournalCreatePortfolio'
 
-// import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
     layout: "main",
@@ -174,22 +176,16 @@ export default {
         return {
             tab: null,
             tabs: 3,
-            portfolioList: [],
+            portfolioListPush: [],
             portfolioDropdownModel: null,
             selectedProfile: null,
             showCreatePortForm: false,
+            componentKey: 0,
+            showSelect: false
         }
     },
     mounted() {
         if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
-        const params = {
-            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        };
-        this.$api.journal.portfolio.portfolio(params).then(
-            function(result) {
-                this.portfolioList = result.meta.logs;
-            }.bind(this)
-        );
         const openparams = {
             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
             fund: this.selectedProfile,
@@ -201,24 +197,85 @@ export default {
         );
         if( this.portfolio == 0) {
             this.showCreatePortForm = true
-        }
+        };
+        this.getUserPortfolioList();
+        // console.log(this.defaultPortfolioId)
+        // console.log(this.userPortfolio)
     },
     methods: {
+        ...mapActions({
+            setUserPortfolio: "journal/setUserPortfolio",
+            setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+            setDefaultPortfolioId: "journal/setDefaultPortfolioId",
+        }),
         changePortfolio: function(){
-            localStorage.currentProfile = this.portfolioDropdownModel.id;
-            this.selectedProfile = this.portfolioDropdownModel.id;
-
             const openparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
                 fund: this.selectedProfile,
             };
             this.$api.journal.portfolio.open(openparams).then(
                 function(result) {
-                    // console.log(result)
+                    if(result.success) {
+                        this.keyCreateCounter = this.renderPortfolioKey;
+                        this.keyCreateCounter++;
+                        this.setRenderPortfolioKey(this.keyCreateCounter);
+                        
+                        this.selectedProfile = this.portfolioDropdownModel.id;
+                        this.setDefaultPortfolioId(this.selectedProfile);
+                    }
                 }.bind(this)
             );
         },
-    }
+        getUserPortfolioList() {
+            const params = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+            };
+            this.$api.journal.portfolio.portfolio(params).then(
+                function(result) {
+                    this.portfolioList = result.meta.logs;
+                    this.portfolioList = this.portfolioList.reverse();
+                    this.setUserPortfolio(result.meta.logs);
+                    this.setDefaultPortfolioId(this.portfolioList[0].id);
+                    this.portfolioListPush = []
+                    if(this.portfolioList.length != 0) {
+                        this.portfolioListPush.push({header: 'Real Portfolio'});
+                        const toFindReal = "Real Portfolio" // what we want to count
+                        for (let i = 0; i < this.portfolioList.length; i++ ) {
+                            let portfolioListPush1 = this.portfolioList[i]
+                            if (portfolioListPush1.type === toFindReal) {
+                                this.portfolioListPush.push(portfolioListPush1);
+                            }
+                        }
+                    }
+                    if(this.portfolioList.length != 0) {
+                        
+                        this.portfolioListPush.push({ divider: true });
+                        this.portfolioListPush.push({header: 'Virtual Portfolio'});
+                        const toFindVirtual = "Virtual Portfolio" // what we want to count
+                        for (let i = 0; i < this.portfolioList.length; i++ ) {
+                            let portfolioListPush2 = this.portfolioList[i]
+                            if (portfolioListPush2.type === toFindVirtual) {
+                                this.portfolioListPush.push(portfolioListPush2);
+                            }
+                        }
+                    }
+                }.bind(this)
+            );
+            this.componentKey++;
+        }
+    },
+    computed: {
+        ...mapGetters({
+            userPortfolio: "journal/getUserPortfolio",
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+            renderPortfolioKey: "journal/getRenderPortfolioKey"
+        })
+    },
+    watch: {
+        renderPortfolioKey: function() {
+            this.getUserPortfolioList();
+        }
+    },
 };
 </script>
 <style scoped>
@@ -317,5 +374,14 @@ export default {
     }
     span.apexcharts-tooltip-text-label {
         display: none;
+    }
+
+    .v-subheader.theme--light {
+        color: #b6b6b6;
+        font-weight: 600;
+        padding-left: 16px;
+    }
+    .theme--light.v-divider {
+        border-color: rgb(0, 215, 164);
     }
 </style>

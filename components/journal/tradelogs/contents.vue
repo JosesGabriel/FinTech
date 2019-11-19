@@ -38,6 +38,12 @@
           dark
           class="data_table-container pl-10 secondary--text"
         >
+        <template v-slot:item.date="{ item }" >{{ item.meta.date.substring(0,8) }}</template>
+        <template v-slot:item.stock_id="{ item }" >{{ item.meta.stock_id }}</template>
+        <template v-slot:item.average_price="{ item }" >{{ item.meta.average_price }}</template>
+        <!-- <template v-slot:item.buy_value="{ item }" >{{ item.amount  item.meta.average_price }}</template> -->
+        <template v-slot:item.sell_price="{ item }" >{{ item.meta.sell_price }}</template>
+        <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template>
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
@@ -91,13 +97,13 @@ export default {
       itemsPerPage: 5,
       search: '',
       headers: [
-        { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
+        { text: 'Stocks', value: 'stock_id', align: 'left', sortable: false },
         { text: 'Date', value: 'date', align: 'right' },
         { text: 'Volume', value: 'amount', align: 'right' },
-        { text: 'Ave. Price', value: 'AvePrice', align: 'right' },
-        { text: 'Buy Value', value: 'BuyValue', align: 'right' },
-        { text: 'Sell Price', value: 'SellPrice', align: 'right' },
-        { text: 'Sell Value', value: 'SellValue', align: 'right' },
+        { text: 'Ave. Price', value: 'average_price', align: 'right' },
+        { text: 'Buy Value', value: 'buy_value', align: 'right' },
+        { text: 'Sell Price', value: 'sell_price', align: 'right' },
+        { text: 'Sell Value', value: 'total_value', align: 'right' },
         { text: 'Profit/Loss', value: 'ProfitLoss', align: 'right' },
         { text: 'Perf. (%)', value: 'Perf', align: 'right' },
         { text: '', value: 'action', sortable: false, align: 'right' },
@@ -119,11 +125,10 @@ export default {
     };
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
-          this.tradeLogs = result.meta.logs.meta;
-          console.log(result.meta.logs)
+          this.tradeLogs = result.meta.logs;
+          console.log(result)
       }.bind(this)
-    );
-
+    )
   },
   methods: {
     tradelogsmenuLogsShow: function(item) {
@@ -135,6 +140,10 @@ export default {
       let tl = document.getElementById(`tl_${item.id}`);
 
       tl.style.display = "none";
+    },
+    formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', '.')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     }
   }
 }

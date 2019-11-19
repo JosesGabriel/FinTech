@@ -1,8 +1,11 @@
 export default {
-  SET_USERWATCHEDSTOCKS(state, data) {
-    state.userWatchedStocks = data;
+  SET_USERPORTFOLIO(state, data) {
+    state.userPortfolio = data;
   },
-  SET_RENDERCHARTKEY(state, data) {
-    state.renderChartKey = data;
-  }
+  SET_RENDERPORTFOLIOKEY(state, data) {
+    state.renderPortfolioKey = data;
+  },
+  SET_DEFAULTPORTFOLIOID(state, data) {
+    state.defaultPortfolioId = data;
+  },
 };

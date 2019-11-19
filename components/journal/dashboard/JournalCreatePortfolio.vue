@@ -5,20 +5,20 @@
             <v-container class="px-8">
                 <v-card-title class="text-left justify-left px-0 secondary--text body-2">Enter Portfolio Name</v-card-title>
                 <v-text-field
-                    v-model="takeProfitModel"
+                    v-model="namePortfolioModel"
                     color="success"
                     dark
                     class="stock_selector pa-0 pb-5 font-weight-bold body-2 white--text"
                 ></v-text-field>
                 <v-card-title class="text-left justify-left px-0 secondary--text body-2">Initial Capital</v-card-title>
                 <v-text-field
-                    v-model="entryPriceModel"
+                    v-model="initialCapitalModel"
                     color="success"
                     dark
                     class="stock_selector pa-0 pb-5 font-weight-bold body-2 white--text"
                 ></v-text-field>
                 <v-select
-                    v-model="stocksDropdownModel"
+                    v-model="typePortfolioModel"
                     :items="portfolio"
                     label="Type of Portfolio"
                     color="success"
@@ -45,6 +45,7 @@
                     light
                     :disabled="saveButtonDisable"
                     @click.stop="show=false"
+                    @click="createPortfolio()"
                     >Save</v-btn
                 >
             </v-card-actions>
@@ -53,42 +54,77 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
     props: ['visible'],
     computed: {
+        ...mapGetters({
+            renderPortfolioKey: "journal/getRenderPortfolioKey"
+        }),
         show: {
-        get () {
-            return this.visible
-        },
-        set (value) {
-            if (!value) {
-            this.$emit('close')
+            get () {
+                return this.visible
+            },
+            set (value) {
+                if (!value) {
+                this.$emit('close')
+                }
             }
-        }
         },
     },
     data: () => ({
         portfolio: ['Real Portfolio','Virtual Portfolio'],
         saveButtonDisable: true,     
-        entryPriceModel: "",
-        takeProfitModel: "",
-        stocksDropdownModel: "",
+        namePortfolioModel: "",
+        initialCapitalModel: null,
+        typePortfolioModel: null,
+        keyCreateCounter: 2
     }),
     watch: {
-        entryPriceModel: function() {
+        namePortfolioModel: function() {
             this.fieldsWatch();
         },
-        takeProfitModel: function() {
+        initialCapitalModel: function(newValue) {
+            this.fieldsWatch();
+            const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            this.initialCapitalModel = result;
+            // console.log(parseInt(this.initialCapitalModel))
+        },
+        typePortfolioModel: function() {
             this.fieldsWatch();
         }
     },
     methods: {
+        ...mapActions({
+            setRenderPortfolioKey: "journal/setRenderPortfolioKey"
+        }),
         fieldsWatch() {
-            if ( this.stocksDropdownModel != "" || this.entryPriceModel != "" || this.takeProfitModel != "" ) {
+            if ( this.typePortfolioModel != "" || this.initialCapital != "" || this.namePortfolioModel != "" ) {
                 this.saveButtonDisable = false;
                 } else {
                 this.saveButtonDisable = true;
             }
+        },
+        createPortfolio: function(){
+            let convertedNumbers = parseInt(this.initialCapitalModel)
+            const createportfolioparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                currency_code: "PHP",
+                name: this.namePortfolioModel,
+                description: "My Portfolio",
+                type: this.typePortfolioModel,
+                balance: convertedNumbers
+            };
+            this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
+                function(result) {
+                    if (result.success) {
+                        this.keyCreateCounter = this.renderPortfolioKey;
+                        this.keyCreateCounter++;
+                        this.setRenderPortfolioKey(this.keyCreateCounter);
+                    }
+                }.bind(this)
+            );
         },
     }
 }

@@ -33,6 +33,9 @@
           dark
           class="data_table-container pl-10 secondary--text"
         >
+        <template v-slot:item.average_price="{ item }" >{{ formatPrice(item.average_price) }}</template>
+        <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template>
+        <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template>
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
@@ -82,6 +85,8 @@ import shareModal from '~/components/modals/share'
 import fundsModal from '~/components/modals/fund'
 import tradeView from '~/components/modals/tradeView'
 
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   components: {
     shareModal,
@@ -99,124 +104,26 @@ export default {
       itemsPerPage: 5,
       search: '',
       headers: [
-        { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
-        { text: 'Position', value: 'Position', align: 'right' },
-        { text: 'Avg. Price', value: 'AvgPrice', align: 'right' },
-        { text: 'Total Cost', value: 'TotalCost', align: 'right' },
+        { text: 'Stocks', value: 'stock_id', align: 'left', sortable: false },
+        { text: 'Position', value: 'position', align: 'right' },
+        { text: 'Avg. Price', value: 'average_price', align: 'right' },
+        { text: 'Total Cost', value: 'total_value', align: 'right' },
         { text: 'Market Value', value: 'MarketValue', align: 'right' },
         { text: 'Profit', value: 'Profit', align: 'right' },
         { text: 'Perf. (%)', value: 'Perf', align: 'right' },
         { text: '', value: 'action', sortable: false, align: 'right' },
       ],
-      portfolioLogs: [
-        {
-          id: 1,
-          Stocks: 'BDO',
-          Position: 159,
-          AvgPrice: 6.0,
-          TotalCost: 24,
-          MarketValue: 4.0,
-          Profit: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 2,
-          Stocks: 'KPPI',
-          Position: 237,
-          AvgPrice: 9.0,
-          TotalCost: 37,
-          MarketValue: 4.3,
-          Profit: '1%',
-          Perf: '1%',
-        },
-        {
-          id: 3,
-          Stocks: '2GO',
-          Position: 262,
-          AvgPrice: 16.0,
-          TotalCost: 23,
-          MarketValue: 6.0,
-          Profit: '7%',
-          Perf: '7%',
-        },
-        {
-          id: 4,
-          Stocks: '8990P',
-          Position: 305,
-          AvgPrice: 3.7,
-          TotalCost: 67,
-          MarketValue: 4.3,
-          Profit: '8%',
-          Perf: '8%',
-        },
-        {
-          id: 5,
-          Stocks: 'AB',
-          Position: 356,
-          AvgPrice: 16.0,
-          TotalCost: 49,
-          MarketValue: 3.9,
-          Profit: '16%',
-          Perf: '16%',
-        },
-        {
-          id: 6,
-          Stocks: 'ABA',
-          Position: 375,
-          AvgPrice: 0.0,
-          TotalCost: 94,
-          MarketValue: 0.0,
-          Profit: '0%',
-          Perf: '0%',
-        },
-        {
-          id: 7,
-          Stocks: 'ABG',
-          Position: 392,
-          AvgPrice: 0.2,
-          TotalCost: 98,
-          MarketValue: 0,
-          Profit: '2%',
-          Perf: '2%',
-        },
-        {
-          id: 8,
-          Stocks: 'ABS',
-          Position: 408,
-          AvgPrice: 3.2,
-          TotalCost: 87,
-          MarketValue: 6.5,
-          Profit: '45%',
-          Perf: '45%',
-        },
-        {
-          id: 9,
-          Stocks: 'ABSP',
-          Position: 452,
-          AvgPrice: 25.0,
-          TotalCost: 51,
-          MarketValue: 4.9,
-          Profit: '22%',
-          Perf: '22%',
-        },
-        {
-          id: 10,
-          Stocks: 'AC',
-          Position: 518,
-          AvgPrice: 26.0,
-          TotalCost: 65,
-          MarketValue: 7,
-          Profit: '6%',
-          Perf: '6%',
-        },
-      ],
+      portfolioLogs: [],
       page: 1,
       pageCount: 0,
-      menuShow: false
+      menuShow: false,
+      componentKeys: 0
     }
   },
   mounted() {
-    // console.log(this.portfolioLogs)
+    this.getOpenPositions();
+    // console.log(this.defaultPortfolioId);
+    // console.log(this.renderPortfolioKey);
   },
   methods: {
     menuLogsShow: function(item) {
@@ -228,6 +135,44 @@ export default {
       let pl = document.getElementById(`pl_${item.id}`);
 
       pl.style.display = "none";
+    },
+    formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', '.')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    },
+    getOpenPositions() {
+      const openparams = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: this.defaultPortfolioId,
+      };
+      this.$api.journal.portfolio.open(openparams).then(
+        function(result) {
+          this.portfolioLogs = result.meta.open;
+          for (let i = 0; i < this.portfolioLogs.length; i++) {
+            const params = {
+              "symbol-id": this.portfolioLogs[i].stock_id
+            };
+            this.$api.chart.stocks.list(params).then(
+              function(result) {
+                // console.log(result)
+                this.portfolioLogs[i].stock_id = result.data.symbol;
+              }.bind(this)
+            );
+            this.componentKeys++;
+          }
+        }.bind(this)
+      );
+    }
+  },
+  computed: {
+    ...mapGetters({
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey"
+    })
+  },
+  watch: {
+    renderPortfolioKey: function() {
+      this.getOpenPositions();
     }
   }
 }
