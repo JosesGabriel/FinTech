@@ -220,6 +220,7 @@ export default {
                         this.keyCreateCounter++;
                         this.setRenderPortfolioKey(this.keyCreateCounter);
                         
+                        // console.log(this.portfolioDropdownModel)
                         this.selectedProfile = this.portfolioDropdownModel.id;
                         this.setDefaultPortfolioId(this.selectedProfile);
                     }
@@ -235,7 +236,7 @@ export default {
                     this.portfolioList = result.meta.logs;
                     this.portfolioList = this.portfolioList.reverse();
                     this.setUserPortfolio(result.meta.logs);
-                    this.setDefaultPortfolioId(this.portfolioList[0].id);
+                    // this.setDefaultPortfolioId(this.portfolioList[0].id);
                     this.portfolioListPush = []
                     if(this.portfolioList.length != 0) {
                         this.portfolioListPush.push({header: 'Real Portfolio'});
