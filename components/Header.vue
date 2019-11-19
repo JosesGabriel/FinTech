@@ -63,14 +63,12 @@
       </router-link>
       <a class="social__router">
         <v-btn class="header__button" text @click="registerDialogModel = true">
-          {{ $auth.loggedIn ? true : "Account" }}
+          {{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}
         </v-btn>
       </a>
     </v-toolbar-items>
 
-    <v-dialog v-model="registerDialogModel" max-width="360px">
-      <LoginRegister />
-    </v-dialog>
+    <LoginRegister v-model="registerDialogModel" />
   </v-toolbar>
 </template>
 <style scoped>

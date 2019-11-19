@@ -70,13 +70,14 @@ export default {
             propertyName: "data.token.access_token"
           },
           user: {
-            url: "/users",
+            url: "/auth/user",
             method: "get",
             propertyName: false
           },
           logout: {
             url: "/auth/logout",
-            method: "post"
+            method: "post",
+            propertyName: false
           }
         }
       }

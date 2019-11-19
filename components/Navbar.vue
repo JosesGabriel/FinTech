@@ -13,16 +13,32 @@
         <v-list-item>
           <router-link to="/user">
             <v-list-item-avatar>
-              <v-img src="test.jpg"></v-img>
+              <v-img
+                :src="
+                  $auth.loggedIn
+                    ? $auth.user.data.user.profile_image
+                    : 'default.png'
+                "
+              ></v-img>
             </v-list-item-avatar>
           </router-link>
 
           <v-list-item-content>
             <v-list-item-title class="caption"
-              ><strong>Eazy-E</strong></v-list-item-title
-            >
+              ><strong>
+                {{
+                  $auth.loggedIn
+                    ? $auth.user.data.user.first_name +
+                      " " +
+                      $auth.user.data.user.last_name
+                    : "Guest"
+                }}
+              </strong>
+            </v-list-item-title>
             <v-list-item-subtitle class="overline"
-              >@cruisindown</v-list-item-subtitle
+              >@{{
+                $auth.loggedIn ? $auth.user.data.user.username : "Guest"
+              }}</v-list-item-subtitle
             >
           </v-list-item-content>
         </v-list-item>
@@ -33,9 +49,6 @@
           <router-link to="/" class="navbar__links">
             <v-list-item>
               <v-list-item-icon class="mr-4">
-                <!-- <v-icon color="#dc8607"
-                  >mdi-vector-square</v-icon
-                > -->
                 <img src="/icon/navbar-icons/social.svg" width="20" />
               </v-list-item-icon>
               <v-list-item-content
