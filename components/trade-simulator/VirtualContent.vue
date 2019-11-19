@@ -124,7 +124,7 @@
 <script>
   import VirtualLivePortfolio from '~/components/trade-simulator/VirtualLivePortfolio'
   import TradelogsContent from '~/components/trade-simulator/VirtualTradelogs'
-  import createModal from '~/components/journal/dashboard/JournalCreatePortfolio'
+  import createModal from '~/components/trade-simulator/VirtualCreatePortfolio'
 
   export default {
     data () {
