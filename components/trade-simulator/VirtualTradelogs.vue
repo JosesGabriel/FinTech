@@ -75,25 +75,25 @@
           </v-card>
         </v-card>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
-        <RecordModal :visible="EnterRecordModal" @close="EnterRecordModal=false" />
+       
     </v-col>
 </template>
 <script>
 import shareModal from '~/components/modals/share'
-import RecordModal from '~/components/trade-simulator/RecordModal'
+//import RecordModal from '~/components/trade-simulator/RecordModal'
 export default {
   components: {
     shareModal,
-    RecordModal
   },
-  data () {
+  data: function() {
     return {
       showScheduleForm: false,
-      EnterRecordModal: false,
       itemsPerPage: 5,
+      stockSymbol: [],
+      stock_symbol: "",
       search: '',
       headers: [
-        { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
+        { text: 'Stocks', value: 'Stocks' , align: 'left', sortable: false },
         { text: 'Date', value: 'date', align: 'right' },
         { text: 'Volume', value: 'amount', align: 'right' },
         { text: 'Ave. Price', value: 'AvePrice', align: 'right' },
@@ -108,21 +108,42 @@ export default {
       page: 1,
       pageCount: 0,
       menuShow: false,
-
-      selectedProfile: null
+      selectedProfile: null,
+      componentKeys: 0
     }
   },
   mounted() {
-    if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
+    //if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
 
     const tradelogsparams = {
       user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      fund: this.selectedProfile,
+      fund: 73287292558643200
     };
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
-          this.tradeLogs = result.meta.logs.meta;
-          console.log(result.meta.logs)
+          //this.tradeLogs = result.meta.logs.meta;
+          for(let i = 0; i < result.meta.logs.length; i++){
+            let date = result.meta.logs[i].meta.date.split(' ')[0];
+            let bvalue = parseFloat(result.meta.logs[i].meta.average_price) * parseFloat(result.meta.logs[i].amount);
+            let sellvalue = parseFloat(result.meta.logs[i].meta.sell_price) * parseFloat(result.meta.logs[i].amount);
+            let ploss = sellvalue - bvalue;
+            let perc = (ploss / bvalue) * 100;
+           
+            this.stockSymbol.push(result.meta.logs[i].meta.stock_id);   
+            let tlogs = {
+                  Stocks: this.stock_symbol,
+                  date: date,
+                  amount: result.meta.logs[i].amount,
+                  AvePrice: result.meta.logs[i].meta.average_price,
+                  BuyValue: this.addcomma(bvalue),
+                  SellPrice: result.meta.logs[i].meta.sell_price,
+                  SellValue: this.addcomma(sellvalue),
+                  ProfitLoss: ploss.toFixed(2),
+                  Perf: perc.toFixed(2) + '%',
+                }
+              this.tradeLogs.push(tlogs);
+            }
+            console.log(this.stockSymbol.length);
       }.bind(this)
     );
 
@@ -130,15 +151,34 @@ export default {
   methods: {
     tradelogsmenuLogsShow: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
-
       tl.style.display = "block";
     },
     tradelogsmenuLogsHide: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
-
       tl.style.display = "none";
-    }
-  }
+    },
+    addcomma(n, sep, decimals) {
+          sep = sep || "."; // Default to period as decimal separator
+          decimals = decimals || 2; // Default to 2 decimals
+          return n.toLocaleString().split(sep)[0]
+              + sep
+              + n.toFixed(2).split(sep)[1];
+      },
+  /* stocksymbol(){
+            for(let i=0; i< this.stockSymbol.length; i++){
+                const params2 = {
+                  "symbol-id": this.stockSymbol[i]
+                };
+                this.$api.chart.stocks.list(params2).then(
+                  function(result) {      
+                    this.stock_symbol = result.data.symbol;
+                    console.log(this.stock_symbol);
+                  }.bind(this)
+                );
+          }
+    }*/
+
+  },
 }
 </script>
 

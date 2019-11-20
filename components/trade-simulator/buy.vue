@@ -32,9 +32,9 @@
                         <v-text-field
                             label="Quantity"
                             placeholder="Enter Quantity"
+                            v-on:keyup="keypress"
                             color="#00FFC3"
                             style="color: #00FFC3"
-                            type=number
                             dark
                             class="body-2 buy_selector buy_price-input py-3"
                             v-model="quantity"
@@ -119,13 +119,13 @@ export default {
     addButton(){
         this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
         let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
-        this.setSimulatorPositions(this.quantity);
+        this.setSimulatorPositions('buy-'+this.quantity);
         this.totalCost = this.addcomma(add);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));  
         let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
-        this.setSimulatorPositions(this.quantity);
+        this.setSimulatorPositions('buy-'+this.quantity);
         this.totalCost = this.addcomma(min);
     },
     addcomma(n, sep, decimals) {
@@ -134,7 +134,12 @@ export default {
 	    return n.toLocaleString().split(sep)[0]
 	        + sep
 	        + n.toFixed(2).split(sep)[1];
-	},
+    },
+    keypress: function(){
+        let press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('buy-'+this.quantity);
+        this.totalCost = this.addcomma(press);
+    }
   },
 }
 </script>

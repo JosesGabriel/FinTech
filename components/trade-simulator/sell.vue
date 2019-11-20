@@ -71,22 +71,26 @@ export default {
     computed: {
     ...mapGetters({
       simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
-      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot"
+      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
+      simulatorPositions: "tradesimulator/getSimulatorPositions"
     })
   },
     methods: {
     ...mapActions({
         setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
-        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot"
+        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
+        setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
     addButton(){
         this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
         let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('sell-'+this.quantity);
         this.totalCost = this.addcomma(add);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));
         let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('sell-'+this.quantity);
         this.totalCost = this.addcomma(min);
     },
     addcomma(n, sep, decimals) {

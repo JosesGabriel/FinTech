@@ -234,6 +234,7 @@ import { mapActions, mapGetters } from "vuex";
                 wkhigh: '0',
                 vole: '0',
                 ave: '0',
+                port: [],
                 
                 hideElement: true,
                 GetSelectStock: '',
@@ -278,14 +279,31 @@ import { mapActions, mapGetters } from "vuex";
         },
         mounted() {
                 const params = {
-                exchange: "PSE",
-                status: "active"
+                    exchange: "PSE",
+                    status: "active"
+                    };
+                    this.$api.chart.stocks.list(params).then(
+                    function(result) {
+                        this.stock = result.data;                   
+                    }.bind(this)
+                    );
+
+                const port_params = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: 73287292558643200
                 };
-                this.$api.chart.stocks.list(params).then(
-                function(result) {
-                    this.stock = result.data;                   
-                }.bind(this)
-                );
+                    this.$api.journal.portfolio.open(port_params).then(
+                         function(result) {
+                              for(let i=0; i < result.meta.open.length; i++){
+                                let __port = {
+                                  id: result.meta.open[i].stock_id,
+                                  avprice: result.meta.open[i].average_price,
+                                }
+                                  this.port.push(__port);
+                              }
+                         }.bind(this)
+                    );
+               
             },
         methods: {
             ...mapActions({
@@ -293,6 +311,13 @@ import { mapActions, mapGetters } from "vuex";
                 setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
                 setSimulatorPositions: "tradesimulator/setSimulatorPositions"
             }),
+            addcomma(n, sep, decimals) {
+                sep = sep || "."; // Default to period as decimal separator
+                decimals = decimals || 2; // Default to 2 decimals
+                return n.toLocaleString().split(sep)[0]
+                    + sep
+                    + n.toFixed(2).split(sep)[1];
+            },
             confirm() {
                 const fund_id = this.simulatorPortfolioID;
                 const stock_id = this.stock_id;
@@ -303,28 +328,69 @@ import { mapActions, mapGetters } from "vuex";
                                 [d.getHours(),
                                 d.getMinutes(),
                                 d.getSeconds()].join(':');
-                const buyparams = {
-                    user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                    position: this.simulatorPositions,
-                    stock_price: this.cprice,
-                    transaction_meta: {
-                        strategy: this.selectedstrategy,
-                        plan: this.selectedtradeplan,
-                        emotion: this.selectedemotions,
-                        notes: this.notes,
-                        date: dformat
-                    }
-                }
-                this.$axios
+
+                let str = this.simulatorPositions.split('-');
+                let positions = parseFloat(str[1]);
+                let avprice = 0;
+
+                if(str[0] == 'sell'){
+                    this.port.map(function (data) {
+                        if (data.id == stock_id) {
+                            avprice = data.avprice;
+                            return;
+                        } 
+                    });
+
+                        if(avprice != 0){
+                            const sellparams = {
+                                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                                position: positions,
+                                stock_price: this.cprice,
+                                transaction_meta: {
+                                    strategy: this.selectedstrategy,
+                                    average_price: avprice.toFixed(2),
+                                    plan: this.selectedtradeplan,
+                                    emotion: this.selectedemotions,
+                                    notes: this.notes,
+                                    date: dformat
+                                }
+                            }
+                        console.log(sellparams);
+                            this.$axios
+                            .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+ fund_id + "/sell/" + stock_id, sellparams)
+                            .then(response => {      
+                                if (response.success) {
+                                    console.log('sell success');
+                                }
+                            });
+                        }else {
+                            console.log('unable to sell');
+                        }
+                }else {            
+                        const buyparams = {
+                            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                            position: positions,
+                            stock_price: this.cprice,
+                            transaction_meta: {
+                                strategy: this.selectedstrategy,
+                                plan: this.selectedtradeplan,
+                                emotion: this.selectedemotions,
+                                notes: this.notes,
+                                date: dformat
+                            }
+                        }      
+                        this.$axios
                         .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+ fund_id + "/buy/" + stock_id, buyparams)
                         .then(response => {      
                             if (response.success) {
-                                console.log('success');
+                                console.log('buy success');
                             }
-                        });
+                        });     
+                }
+
             },
             getDetails(selectObj) {
-                console.log(selectObj);
+                
                 const params = {
                     'symbol-id': selectObj,
                 };          

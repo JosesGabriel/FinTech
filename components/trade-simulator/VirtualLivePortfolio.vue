@@ -134,27 +134,43 @@ export default {
             }),
     },
      mounted() {
+                
                 const params = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
                 fund: 73287292558643200
                 };
                 this.$api.journal.portfolio.open(params).then(
                 function(result) {
-                  console.log(result.meta.open);
+                    console.log(result);
                     for(let i=0; i < result.meta.open.length; i++){ 
-                        
-                      let stock_id = result.meta.open[i].stock_id;
-                        
-                      let mvalue = result.meta.open[i].position * result.meta.open[i].average_price.toFixed(2);
+
+                      const stock_id = {
+                        'symbol-id':result.meta.open[i].stock_id,
+                      }
+                      let num = result.meta.open[i].stock_id.length;
+                      if(num == 17){
+                          this.$api.chart.stocks.history(stock_id).then(
+                          function(results) {
+                            this.symbol = results.data.symbol;  
+                            console.log(this.symbol);            
+                          }.bind(this)
+                          );
+                      }       
+
+                      let mvalue = result.meta.open[i].position * parseFloat(result.meta.open[i].metas.buy_price).toFixed(2);
+                      let profit = mvalue - parseFloat(result.meta.open[i].total_value);
+                      let tcost = result.meta.open[i].position * result.meta.open[i].average_price;
+                      let perf = (profit / tcost) * 100;
+
                       let data = {
                         id: i,
-                        Stocks: stock_id,
+                        Stocks: this.symbol,
                         Position: result.meta.open[i].position,
                         AvgPrice: result.meta.open[i].average_price.toFixed(2),
-                        TotalCost: this.addcomma(result.meta.open[i].total_value),
+                        TotalCost: this.addcomma(tcost),
                         MarketValue: this.addcomma(mvalue),
-                        Profit: '6%',
-                        Perf: '6%',
+                        Profit: profit.toFixed(2),
+                        Perf: perf.toFixed(2) + '%',
                       }
                       this.portfolioLogs.push(data);
                     }       
