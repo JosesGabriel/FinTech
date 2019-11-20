@@ -100,7 +100,7 @@ export default {
         user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
       };
       this.$axios
-        .$get(process.env.WATCHLIST_API_URL, userData)
+        .$get(process.env.DEV_API_URL + "/journal/watchlist", userData)
         .then(response => {
           this.watchListObject = response.data.watchlist;
           this.setUserWatchedStocks(response.data.watchlist);

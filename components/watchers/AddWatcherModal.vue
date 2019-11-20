@@ -188,7 +188,7 @@ export default {
           stop_loss: this.stopLossModel
         };
         this.$axios
-          .$post(process.env.WATCHLIST_API_URL, params)
+          .$post(process.env.DEV_API_URL + "/journal/watchlist", params)
           .then(response => {
             this.watchCardModalLoading = false;
             if (response.success) {

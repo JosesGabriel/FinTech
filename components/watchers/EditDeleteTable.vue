@@ -180,7 +180,9 @@ export default {
       if (confirm("Are you sure you want to delete this item?")) {
         this.$axios
           .$delete(
-            process.env.WATCHLIST_API_URL + this.userWatchedStocks[index].id
+            process.env.DEV_API_URL +
+              "/journal/watchlist/" +
+              this.userWatchedStocks[index].id
           )
           .then(response => {
             if (response.success) {
@@ -219,7 +221,8 @@ export default {
         };
         this.$axios
           .$put(
-            process.env.WATCHLIST_API_URL +
+            process.env.DEV_API_URL +
+              "/journal/watchlist/" +
               this.userWatchedStocks[this.editedIndex].id,
             params
           )
