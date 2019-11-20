@@ -14,7 +14,7 @@
   width: 5px;
 }
 .gameGlobal ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
   border-radius: 10px;
 }
 .gameGlobal ::-webkit-scrollbar-thumb {
