@@ -142,7 +142,6 @@ export default {
 
   mounted() {
     this.populateStockDropdown();
-    console.log(this.userWatchedStocks)
   },
 
   methods: {
@@ -181,8 +180,7 @@ export default {
       if (confirm("Are you sure you want to delete this item?")) {
         this.$axios
           .$delete(
-            "https://dev-api.arbitrage.ph/api/journal/watchlist/" +
-              this.userWatchedStocks[index].id
+            process.env.WATCHLIST_API_URL + this.userWatchedStocks[index].id
           )
           .then(response => {
             if (response.success) {
@@ -221,7 +219,7 @@ export default {
         };
         this.$axios
           .$put(
-            "https://dev-api.arbitrage.ph/api/journal/watchlist/" +
+            process.env.WATCHLIST_API_URL +
               this.userWatchedStocks[this.editedIndex].id,
             params
           )

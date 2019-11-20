@@ -95,11 +95,12 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
     getUserWatchList() {
+      //Params won't be needed in the future, user token only
       let userData = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+        user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
       };
       this.$axios
-        .$get("https://dev-api.arbitrage.ph/api/journal/watchlist", userData)
+        .$get(process.env.WATCHLIST_API_URL, userData)
         .then(response => {
           this.watchListObject = response.data.watchlist;
           this.setUserWatchedStocks(response.data.watchlist);
