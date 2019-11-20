@@ -67,79 +67,96 @@
             :color="isLightMode == 1 ? 'lightcard' : 'darkcard'"
             :loading="registerLoading"
           >
-            <v-card-text>
-              <div class="title text-center pt-5">
-                Join Arbitrage. It's free!
-              </div>
-              <div class="body-2 text-center">
-                Already have an account? <a>Log in</a>
-              </div>
-            </v-card-text>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="firstName"
-                      label="First name"
-                      color="primary"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="lastName"
-                      label="Last name"
-                      color="primary"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="emailAddress"
-                      label="Email address"
-                      color="primary"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="userName"
-                      label="Username"
-                      color="primary"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="password"
-                      label="Password"
-                      color="primary"
-                      type="password"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="confirmPassword"
-                      label="Confirm Password"
-                      color="primary"
-                      required
-                      type="password"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <small
-                >By signing up, you agree to the Terms and Conditions.</small
-              >
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="signUp()"
-                >Sign Up</v-btn
-              >
-            </v-card-actions>
+            <v-form
+              ref="register__form"
+              v-model="register__model"
+              @submit.prevent="signUp()"
+            >
+              <v-card-text>
+                <div class="title text-center pt-5">
+                  Join Arbitrage. It's free!
+                </div>
+                <div class="body-2 text-center">
+                  Already have an account? <a>Log in</a>
+                </div>
+              </v-card-text>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="firstName"
+                        :rules="nameRules"
+                        label="First name"
+                        color="primary"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="lastName"
+                        :rules="nameRules"
+                        label="Last name"
+                        color="primary"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="emailAddress"
+                        :rules="emailRules"
+                        type="email"
+                        label="Email address"
+                        color="primary"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        v-model="userName"
+                        :rules="usernameRules"
+                        label="Username"
+                        color="primary"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="password"
+                        :rules="passwordRules"
+                        label="Password"
+                        color="primary"
+                        type="password"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-text-field
+                        v-model="confirmPassword"
+                        :rules="confirmPasswordRules"
+                        label="Confirm Password"
+                        color="primary"
+                        required
+                        type="password"
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <small
+                  >By signing up, you agree to the Terms and Conditions.</small
+                >
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  type="submit"
+                  :disabled="!register__model"
+                  >Sign Up</v-btn
+                >
+              </v-card-actions>
+            </v-form>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
@@ -160,12 +177,30 @@ export default {
   },
   data() {
     return {
+      register__model: false,
       firstName: "",
       lastName: "",
       emailAddress: "",
       userName: "",
       password: "",
       confirmPassword: "",
+      nameRules: [v => !!v || "Name is required"],
+      emailRules: [
+        v => !!v || "E-mail is required",
+        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+      ],
+      usernameRules: [
+        v => !!v || "Username is required",
+        v => (v && v.length >= 5) || "Username must be atleast 5 characters"
+      ],
+      passwordRules: [
+        v => !!v || "Password is required",
+        v => (v && v.length >= 8) || "Password must be atleast 8 characters"
+      ],
+      confirmPasswordRules: [
+        v => !!v || "Confirm Password is required",
+        v => (v && v === this.confirmPassword) || "Passwords do not moatch"
+      ],
       card__loader: false,
       login__username: "josesgabriellu@gmail.com",
       login__password: "123123123",
@@ -186,6 +221,10 @@ export default {
       set(value) {
         this.$emit("input", value);
       }
+    },
+    passwordConfirmationRule() {
+      return () =>
+        this.password === this.confirmPassword || "Password must match";
     }
   },
   mounted() {
@@ -221,15 +260,19 @@ export default {
           this.registerLoading = false;
           if (response.success) {
             this.showAlert(true, response.message);
+            setTimeout(
+              function() {
+                this.show = false;
+              }.bind(this),
+              3000
+            );
           } else {
             this.showAlert(false, response.message);
           }
-          this.clearFields();
           this.registerLoading = false;
         })
-        .catch(response => {
-          this.clearFields();
-          this.showAlert(false, response.message);
+        .catch(error => {
+          this.showAlert(false, error.response.data.message);
           this.registerLoading = false;
         });
     },

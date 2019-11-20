@@ -22,6 +22,6 @@ ul {
   flex-direction: column;
   padding: 15px;
   overflow: auto;
-  height: calc(100vh - 600px);
+  height: calc(100vh - 650px);
 }
 </style>

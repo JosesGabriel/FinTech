@@ -4,7 +4,7 @@
       <v-col class="pa-0" cols="5">
         <v-container class="pa-0">
           <v-row>
-            <v-col cols="12">
+            <v-col cols="12 pb-0">
               <v-container class="pa-0">
                 <span class="heading font-weight-bold text-uppercase"
                   >Stock Information</span
@@ -13,22 +13,22 @@
                   <v-col cols="5">
                     <div class="gameStats__wrapper">
                       <span>Last</span>
-                      <span>4.17</span>
+                      <span>34.17</span>
                     </div>
                     <div class="gameStats__wrapper">
                       <span>High</span>
-                      <span>4.17</span>
+                      <span>44.17</span>
                     </div>
                     <div class="gameStats__wrapper">
                       <span>Low</span>
-                      <span>4.17</span>
+                      <span>44.17</span>
                     </div>
                   </v-col>
-                  <v-col cols="1"></v-col>
-                  <v-col cols="5">
+                  <!-- <v-col cols="1"></v-col> -->
+                  <v-col cols="6 pr-6">
                     <div class="gameStats__wrapper">
                       <span>Change</span>
-                      <span>0.02</span>
+                      <span>22.12</span>
                     </div>
                     <div class="gameStats__wrapper">
                       <span>Open</span>
@@ -39,18 +39,19 @@
                       <span>4.17</span>
                     </div>
                   </v-col>
-                  <v-col cols="1"></v-col>
+                  <!-- <v-col cols="1"></v-col> -->
                 </v-row>
               </v-container>
             </v-col>
           </v-row>
         </v-container>
       </v-col>
+      <!-- <v-col cols="1"><v-divider dark vertical/></v-col> -->
       <v-col class="pa-0" cols="4">
         <v-container class="pa-0">
           <v-row>
-            <v-col cols="12">
-              <v-container class="pa-0">
+            <v-col cols="12 pb-0 thisTrade__wrapper">
+              <v-container class="pa-0 pl-5">
                 <span class="heading font-weight-bold text-uppercase"
                   >This Trade</span
                 >
@@ -86,7 +87,7 @@
 .gameStats__wrapper {
   display: flex;
   justify-content: space-between;
-  padding-top: 10px;
+  padding-top: 5px;
 }
 .thisTrade {
   border-right: 1px solid black;
@@ -96,6 +97,9 @@
 }
 .gameDashboard__wrapper {
   border-top: 2px solid #0c1a2b;
+}
+.thisTrade__wrapper {
+  border-left: 2px solid #0c1a2b;
 }
 </style>
 <script>

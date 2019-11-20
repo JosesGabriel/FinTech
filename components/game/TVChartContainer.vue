@@ -212,7 +212,7 @@ export default {
 } */
 .chartViewClass_1 {
   /* both open */
-  height: calc(100vh - 250px);
+  height: calc(100vh - 203px);
 }
 .chartViewClass_2 {
   /* table only */

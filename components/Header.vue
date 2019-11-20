@@ -57,15 +57,24 @@
         </v-btn>
       </router-link>
       <router-link to="/" class="social__router">
-        <v-btn class="header__button" text @click="$auth.logout()">
+        <v-btn class="header__button" text>
           Vyndue
         </v-btn>
       </router-link>
       <a class="social__router">
-        <v-btn class="header__button" text @click="registerDialogModel = true">
+        <v-btn
+          class="header__button"
+          text
+          @click="
+            $auth.loggedIn
+              ? (showDropdown = !showDropdown)
+              : (registerDialogModel = true)
+          "
+        >
           {{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}
         </v-btn>
       </a>
+      <HeaderDropdown v-if="showDropdown && $auth.loggedIn" />
     </v-toolbar-items>
 
     <LoginRegister v-model="registerDialogModel" />
@@ -105,7 +114,6 @@
   background-color: #f2f2f2;
 }
 .darkMode {
-  /* TEMPORARY */
   background-color: #00121e;
 }
 .header__button {
@@ -116,16 +124,19 @@
 </style>
 <script>
 import LoginRegister from "~/components/LoginRegister";
+import HeaderDropdown from "~/components/HeaderDropdown";
 export default {
   components: {
-    LoginRegister
+    LoginRegister,
+    HeaderDropdown
   },
   data() {
     return {
       searchButtonIsVisible: true,
       isLightMode: 0,
       registerDialogModel: false,
-      tab: null
+      tab: null,
+      showDropdown: false
     };
   },
   mounted() {
