@@ -15,22 +15,29 @@
 
       <v-col class="col-9 pa-0">
         <v-content>
-          <span class="font-weight-bold title">{{ displaytitle }}</span>
+          <span class="font-weight-bold title">{{
+            $globalMethod.limitDisplayString(stock.description, 16, true)
+          }}</span>
         </v-content>
         <v-content>
-          <span class="headline">{{ stock.last }}</span>
+          <span class="headline">{{ stock.last | numeral("0,0.00") }}</span>
           <span
             class="subtitle-2"
             :class="[
               { increase: changetype == 1 },
               { decrease: changetype == 2 }
             ]"
-            >{{ stock.change }}({{ stock.changepercentage }})</span
+            >{{ stock.change | numeral("0.00") }}% ({{
+              stock.changepercentage | numeral("0.00")
+            }}%)</span
           >
         </v-content>
         <v-content class="mt-0">
           <span class="caption"
-            >Market Capitalization: {{ stock.marketcap }}</span
+            >Market Capitalization:
+            <span class="text-uppercase font-weight-bold">{{
+              stock.marketcap | numeral("0.000a")
+            }}</span></span
           >
         </v-content>
       </v-col>
@@ -47,13 +54,6 @@ export default {
     ...mapGetters({
       stock: "chart/stock"
     }),
-    displaytitle() {
-      if (this.stock.description == undefined) {
-        return "";
-      }
-      let str = this.stock.description;
-      return str.length > 16 ? str.substring(0, 16) + "..." : str;
-    },
     changetype() {
       let value = this.stock.change;
       if (value > 0) {
@@ -85,7 +85,7 @@ export default {
 .decrease {
   color: #ff4848 !important;
 }
-.neutral{
+.neutral {
   color: gold !important;
 }
 </style>

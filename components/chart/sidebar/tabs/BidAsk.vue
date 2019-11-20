@@ -31,17 +31,23 @@
                 <span class="d-none">{{ (ctr = 0) }}</span>
                 <tr v-for="item in asks" :key="item.id">
                   <td :class="column" style="width:10%">
-                    {{ bids[ctr].count }}
+                    {{ bids[ctr].count | numeral("0,0") }}
+                  </td>
+                  <td :class="column" class="text-uppercase" style="width:15%">
+                    {{ bids[ctr].volume | numeral("0.0a") }}
+                  </td>
+                  <td :class="column" class="text-uppercase" style="width:18%">
+                    {{ bids[ctr].price | numeral("0,0.00") }}
                   </td>
                   <td :class="column" style="width:18%">
-                    {{ bids[ctr].volume }}
+                    {{ item.price | numeral("0,0.00") }}
                   </td>
-                  <td :class="column" style="width:15%">
-                    {{ bids[ctr].price }}
+                  <td :class="column" style="width:18%">
+                    {{ item.volume | numeral("0.0a") }}
                   </td>
-                  <td :class="column" style="width:20%">{{ item.price }}</td>
-                  <td :class="column" style="width:18%">{{ item.volume }}</td>
-                  <td :class="column" style="width:10%">{{ item.count }}</td>
+                  <td :class="column" style="width:10%">
+                    {{ item.count | numeral("0,0") }}
+                  </td>
                   <td :class="column"></td>
                   <span class="d-none">{{ ctr++ }}</span>
                 </tr>
@@ -110,34 +116,46 @@
             fixed-header
             style="background:#00121e"
             height="calc(100vh - 650px)"
-            class="mx-2"
+            class="ml-4"
           >
             <thead>
               <tr>
-                <th class="overline header white--text font-weight-bold">
+                <th class="pl-2 overline header white--text font-weight-bold">
                   TIME
                 </th>
                 <th :class="header">VOL</th>
                 <th :class="header">PRICE</th>
-                <th :class="header">BUYER</th>
-                <th :class="header">SELLER</th>
+                <th class="pl-3 overline header white--text font-weight-bold">
+                  BUYER
+                </th>
+                <th class="pl-2 overline header white--text font-weight-bold">
+                  SELLER
+                </th>
                 <th :class="header"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in trades" :key="item.id">
-                <td class="overline column white--text" style="width:30%">{{ new Date(item.timestamp).toLocaleTimeString() }}</td>
-                <td :class="column" style="width:15%">
-                  {{ formatPrice(item.executed_price) }}
+                <td class="pl-2 overline column white--text" style="width:20%;">
+                  {{ $moment(item.timestamp).format("hh:mm A") }}
                 </td>
-                <td :class="column" style="width:10%">
-                  {{ formatPrice(item.executed_volume) }}
+                <td :class="column" class="text-uppercase" style="width:12%;">
+                  {{ item.executed_volume | numeral("0.0a") }}
                 </td>
-                <td :class="column" class="font-weight-bold" style="width:10%">
-                  {{ item.buyer }}
+                <td :class="column" style="width:19%;">
+                  {{ item.executed_price | | numeral('0,0.00') }}
                 </td>
-                <td :class="column" class="font-weight-bold" style="width:10%">
-                  {{ item.seller }}
+                <td
+                  class="pl-4 overline column white--text font-weight-bold"
+                  style="width:20%;"
+                >
+                  {{ $globalMethod.limitDisplayString(item.buyer, 6) }}
+                </td>
+                <td
+                  class="pl-4 overline column white--text font-weight-bold"
+                  style="width:20%;"
+                >
+                  {{ $globalMethod.limitDisplayString(item.seller, 6) }}
                 </td>
                 <td :class="column"></td>
               </tr>
@@ -173,13 +191,12 @@ export default {
       toggleButton: false,
       header: "text-right overline header white--text font-weight-bold",
       column: "text-right overline column white--text",
-      count: 0,
       trades: [],
       asks: [],
       bids: [],
       progbar: {
-          loading: true,
-          value: 100
+        loading: true,
+        value: 100
       },
       topdepth: [],
       fulldepth: []
@@ -191,23 +208,19 @@ export default {
       bidask: "chart/bidask"
     })
   },
-  watch:{
-      toggleButton(value){
-          if(value == true){
-            this.progbar.value = this.fulldepth;
-          }else{
-            this.progbar.value = this.topdepth;
-          }
+  watch: {
+    toggleButton(value) {
+      if (value == true) {
+        this.progbar.value = this.fulldepth;
+      } else {
+        this.progbar.value = this.topdepth;
       }
+    }
   },
   methods: {
     ...mapActions({
       setBidask: "chart/setBidask"
-    }),
-    formatPrice(value) {
-        let val = (value/1).toFixed(2).replace(',', '.')
-        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    }
+    })
   },
   mounted() {
     // Bidask
@@ -242,7 +255,7 @@ export default {
 
     const params = {
       "symbol-id": this.symbolid,
-       entry: 5
+      entry: 5
     };
     // Top Depth
     this.$api.chart.stocks.topdepth(params).then(response => {
