@@ -19,6 +19,9 @@
 .lightMode {
   background-color: #f2f2f2;
 }
+.transparent__bg {
+  background-color: transparent !important;
+}
 </style>
 
 <script>

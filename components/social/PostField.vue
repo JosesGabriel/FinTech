@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-4" color="#142a46" dark outlined>
+  <v-card class="pa-4 transparent__bg" color="#142a46" dark outlined>
     <v-form enctype="multipart/form-data">
       <v-avatar size="38" class="postField__avatar">
         <img

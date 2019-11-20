@@ -11,7 +11,7 @@
         md="1"
         lg="1"
       >
-        <Navbar :data="navbarMiniVariantSetter" />
+        <Navbar :data="navbarMiniVariantSetter" active="watchlist" />
       </v-col>
       <v-col xs="11" sm="11" md="11" lg="11" class="pl-8">
         <v-container class="pt-0" fluid>
