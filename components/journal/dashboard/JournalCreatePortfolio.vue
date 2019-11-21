@@ -27,6 +27,8 @@
         <v-select
           v-model="typePortfolioModel"
           :items="portfolio"
+          item-text="type"
+          item-value="value"
           label="Type of Portfolio"
           color="success"
           item-color="success"
@@ -81,13 +83,17 @@ export default {
     }
   },
   data: () => ({
-    portfolio: ["Real Portfolio", "Virtual Portfolio"],
+    portfolio: [{type: "Real Portfolio",value: "real"}, {type: "Virtual Portfolio",value: "virtual"}],
+    portfolioModel: "",
     saveButtonDisable: true,
     namePortfolioModel: "",
     initialCapitalModel: null,
     typePortfolioModel: null,
     keyCreateCounter: 2
   }),
+  mounted() {
+    // console.log(this.portfolio)
+  },
   watch: {
     namePortfolioModel: function() {
       this.fieldsWatch();
@@ -110,8 +116,8 @@ export default {
     }),
     fieldsWatch() {
       if (
-        this.typePortfolioModel != "" ||
-        this.initialCapital != "" ||
+        this.typePortfolioModel != "" &&
+        this.initialCapital != "" &&
         this.namePortfolioModel != ""
       ) {
         this.saveButtonDisable = false;
@@ -120,14 +126,14 @@ export default {
       }
     },
     createPortfolio: function() {
-      let convertedNumbers = parseInt(this.initialCapitalModel);
+      let convertedNumbers = this.initialCapitalModel.replace(/,/g, "");
       const createportfolioparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         currency_code: "PHP",
         name: this.namePortfolioModel,
         description: "My Portfolio",
         type: this.typePortfolioModel,
-        balance: convertedNumbers
+        balance: parseInt(convertedNumbers)
       };
       this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
         function(result) {

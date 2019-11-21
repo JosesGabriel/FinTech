@@ -1,6 +1,7 @@
 require("dotenv").config();
 
-const baseURL = process.env.JOURNAL_API_URL + "/journal";
+const baseURL = process.env.API_URL + "/journal";
+const baseChartURL = process.env.CHART_API_URL + "/stocks";
 const token = process.env.CHART_CLIENT_SECRET;
 
 export default $axios => ({
@@ -17,9 +18,18 @@ export default $axios => ({
         return $axios.$get(`${baseURL}/portfolio/logs${query.length > 0 ? "?" + query : ""}`);
     },
     createportfolio(createportfolioparams) {
-        $axios.setToken(token, "Bearer");
         return $axios.$post(`${baseURL}/funds`, createportfolioparams);
-    }
+    },
+    history(historyparams) {
+        let query = buildParams(historyparams);
+        $axios.setToken(token, "Bearer");
+        return $axios.$get(
+            `${baseChartURL}/history/latest${query.length > 0 ? "?" + query : ""}`
+        );
+    },
+    deposit(depositparams) {
+        return $axios.$post(`${baseURL}/funds`, depositparams);
+    },
 });
 
 function buildParams(args) {
@@ -28,6 +38,8 @@ function buildParams(args) {
     let openparams = "";
     let tradelogsparams = "";
     let createportfolioparams = "";
+    let historyparams = "";
+    let depositparams = "";
     if (args != undefined) {
       for (const [key, value] of Object.entries(args)) {
         bld.push(`${key}=${value}`);
@@ -36,6 +48,8 @@ function buildParams(args) {
       openparams = bld.join("&");
       tradelogsparams = bld.join("&");
       createportfolioparams = bld.join("&");
+      historyparams = bld.join("&");
+      depositparams = bld.join("&");
     }
-    return params, openparams, tradelogsparams, createportfolioparams;
-  }
+    return params, openparams, tradelogsparams, createportfolioparams, historyparams, depositparams;
+}

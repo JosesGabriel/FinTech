@@ -12,7 +12,7 @@
                 <v-col sm="3" md="2" class="pa-0">
                     <v-select
                     offset-y="true"
-                    class="select_portfolio mt-2 black--text"
+                    class="select_portfolio mt-2 success--text"
                     item-color="success"
                     append-icon="mdi-chevron-down"
                     background-color="#00FFC3"
@@ -21,7 +21,7 @@
                     dense
                     solo
                     flat
-                    dark
+                    light
                     :items="portfolioListPush"
                     v-on:change="changePortfolio"
                     v-model="portfolioDropdownModel"
@@ -192,7 +192,6 @@ export default {
         };
         this.$api.journal.portfolio.open(openparams).then(
             function(result) {
-                // console.log(result)
             }.bind(this)
         );
         if( this.portfolio == 0) {
@@ -220,7 +219,6 @@ export default {
                         this.keyCreateCounter++;
                         this.setRenderPortfolioKey(this.keyCreateCounter);
                         
-                        // console.log(this.portfolioDropdownModel)
                         this.selectedProfile = this.portfolioDropdownModel.id;
                         this.setDefaultPortfolioId(this.selectedProfile);
                     }
@@ -240,7 +238,7 @@ export default {
                     this.portfolioListPush = []
                     if(this.portfolioList.length != 0) {
                         this.portfolioListPush.push({header: 'Real Portfolio'});
-                        const toFindReal = "Real Portfolio" // what we want to count
+                        const toFindReal = "real" // what we want to count
                         for (let i = 0; i < this.portfolioList.length; i++ ) {
                             let portfolioListPush1 = this.portfolioList[i]
                             if (portfolioListPush1.type === toFindReal) {
@@ -252,7 +250,7 @@ export default {
                         
                         this.portfolioListPush.push({ divider: true });
                         this.portfolioListPush.push({header: 'Virtual Portfolio'});
-                        const toFindVirtual = "Virtual Portfolio" // what we want to count
+                        const toFindVirtual = "virtual" // what we want to count
                         for (let i = 0; i < this.portfolioList.length; i++ ) {
                             let portfolioListPush2 = this.portfolioList[i]
                             if (portfolioListPush2.type === toFindVirtual) {
@@ -288,6 +286,9 @@ export default {
     }
 </style>
 <style>
+    /* .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+        color: #00FFC3;
+    } */
     .theme--light.v-list {
         background: #00121e;
         border: 1px solid #00FFC3;
