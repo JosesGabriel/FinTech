@@ -183,7 +183,7 @@ export default {
       //endregion perma static
 
       //region default
-      debug: true,
+      debug: false,
       symbol: this.symbol,
       datafeed: Datafeed,
       interval: this.interval,
