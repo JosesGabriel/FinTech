@@ -13,6 +13,7 @@ const HISTORY_URL = `${BASE_URL}/tradingview/history`;
 const RESOLVE_URL = `${BASE_URL}/tradingview/symbols`;
 const SEARCH_URL = `${BASE_URL}/tradingview/search`;
 const SERVER_TIME_URL = `${BASE_URL}/tradingview/time`;
+const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${TOKEN}`;
 
@@ -92,7 +93,7 @@ export default {
 		).then(response => {
 			const data = response.data.data;
 			const nodata = data.s === 'no_data';
-			
+
 			if (data.s !== 'ok' && ! nodata) {
 				onErrorCallback(data.s);
 			}
@@ -142,9 +143,31 @@ export default {
 		//optional
 		console.log('=====getMarks running')
 	},
-	getTimeScaleMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {
-		//optional
-		console.log('=====getTimeScaleMarks running')
+	getTimescaleMarks: (symbolInfo, from, to, onDataCallback, resolution) => {
+		const params = {
+			symbol: symbolInfo.name,
+			exchange: symbolInfo.exchange,
+			from: moment.unix(from).format('YYYY-MM-DD'),
+			to: moment.unix(to).format('YYYY-MM-DD'),
+			resolution: '1D',
+		};
+
+		//check for 1m resolution
+		if (resolution != 'D') {
+			params.resolution = '1m'
+		}
+
+		//get tradingview history
+		axios.get(
+			TIMESCALE_MARKS_TIME_URL,
+			{
+				params: params
+			}
+		).then(({data}) => {
+			onDataCallback(data.data)
+		}).catch(error => {
+			onDataCallback([])
+		  });
 	},
 	getServerTime: cb => {
 		setTimeout(() => {
