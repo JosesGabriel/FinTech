@@ -23,12 +23,13 @@
       <div class="searchBar__container hidden-md-only">
         <v-text-field
           label="Search"
-          class="header__searchbar ml-3 mt-2 headline"
+          class="header__searchbar ml-3 mt-1 headline"
           placeholder="Search"
+          full-width
           solo
           flat
           dense
-          background-color="rgb(37,37,48)"
+          background-color="darkcard"
         ></v-text-field>
       </div>
       <router-link to="/" class="social__router">
@@ -66,19 +67,6 @@
   </v-toolbar>
 </template>
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.4s;
-}
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-}
-.slide-fade-enter,
-.slide-fade-leave-to {
-  transform: translateX(10px);
-  opacity: 0;
-}
 .header__searchbar {
   transform: scale(0.5);
   transform-origin: top right;

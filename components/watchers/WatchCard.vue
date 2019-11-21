@@ -298,7 +298,7 @@ export default {
         function(result) {
           this.$refs.closePriceChart.updateSeries([
             {
-              data: result.data.c
+              data: result.data.c.reverse()
             }
           ]);
         }.bind(this)
