@@ -24,6 +24,7 @@
                             placeholder="Enter Quantity"
                             color="#00FFC3"
                             style="color: #00FFC3"
+                            v-on:keyup="keypress"
                             type=number
                             dark
                             class="caption buy_selector buy_price-input py-3"
@@ -42,7 +43,7 @@
                             color="primary"
                         ><v-icon>mdi-plus</v-icon></v-btn>
                     </v-col>
-                    <v-col class="ma-0 pa-0" style="color: #90989d;position: absolute;font-size:12px; top:265px; left:211px;width: 95px;">
+                    <v-col class="ma-0 pa-0" style="color: #90989d;position: absolute;font-size:12px; top:265px; left:180px;width: 95px;">
                         BoardLot : <span>{{ this.simulatorBoardLot }}</span>
                     </v-col>
                 </v-row>
@@ -71,22 +72,26 @@ export default {
     computed: {
     ...mapGetters({
       simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
-      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot"
+      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
+      simulatorPositions: "tradesimulator/getSimulatorPositions"
     })
   },
     methods: {
     ...mapActions({
         setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
-        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot"
+        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
+        setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
     addButton(){
         this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
         let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('sell-'+this.quantity);
         this.totalCost = this.addcomma(add);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));
         let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('sell-'+this.quantity);
         this.totalCost = this.addcomma(min);
     },
     addcomma(n, sep, decimals) {
@@ -95,7 +100,12 @@ export default {
 	    return n.toLocaleString().split(sep)[0]
 	        + sep
 	        + n.toFixed(2).split(sep)[1];
-	},
+    },
+    keypress: function(){
+        let press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('sell-'+this.quantity);
+        this.totalCost = this.addcomma(press);
+    },
   },
 }
 </script>

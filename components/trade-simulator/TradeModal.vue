@@ -140,7 +140,6 @@
                                     <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" width="100" :href="`#funds-1`">Buy</v-tab>
                                     <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`">Sell</v-tab>
 
-
                                     <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 1">
                                         <BuyTrade/>
                                     </v-tab-item>
@@ -203,7 +202,6 @@
     </v-dialog>
 </template>
 <script>
-
 import BuyTrade from '~/components/trade-simulator/buy'
 import SellTrade from '~/components/trade-simulator/sell'
 import { mapActions, mapGetters } from "vuex";
@@ -234,6 +232,7 @@ import { mapActions, mapGetters } from "vuex";
                 wkhigh: '0',
                 vole: '0',
                 ave: '0',
+                port: [],
                 
                 hideElement: true,
                 GetSelectStock: '',
@@ -278,23 +277,50 @@ import { mapActions, mapGetters } from "vuex";
         },
         mounted() {
                 const params = {
-                exchange: "PSE",
-                status: "active"
+                    exchange: "PSE",
+                    status: "active"
+                    };
+                    this.$api.chart.stocks.list(params).then(
+                    function(result) {
+                        this.stock = result.data;                   
+                    }.bind(this)
+                    );
+
+                const port_params = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: 73287292558643200
                 };
-                this.$api.chart.stocks.list(params).then(
-                function(result) {
-                    this.stock = result.data;                   
-                }.bind(this)
-                );
+                    this.$api.journal.portfolio.open(port_params).then( 
+                         function(result) {
+                              for(let i=0; i < result.meta.open.length; i++){
+                                let __port = {
+                                  id: result.meta.open[i].stock_id,
+                                  avprice: result.meta.open[i].average_price,
+                                }
+                                  this.port.push(__port);
+                              }
+                         }.bind(this)
+                    );
+               
             },
         methods: {
             ...mapActions({
                 setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
                 setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
-                setSimulatorPositions: "tradesimulator/setSimulatorPositions"
+                setSimulatorPositions: "tradesimulator/setSimulatorPositions",
+                setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
             }),
+           
+            addcomma(n, sep, decimals) {
+                sep = sep || "."; // Default to period as decimal separator
+                decimals = decimals || 2; // Default to 2 decimals
+                return n.toLocaleString().split(sep)[0]
+                    + sep
+                    + n.toFixed(2).split(sep)[1];
+            },
+            //----Confirm Buy/Sell Button----------
             confirm() {
-                const fund_id = this.simulatorPortfolioID;
+                let fund_id = 73287292558643200;
                 const stock_id = this.stock_id;
                 let d = new Date,
                     dformat = [d.getMonth()+1,
@@ -302,29 +328,75 @@ import { mapActions, mapGetters } from "vuex";
                                 d.getFullYear()].join('/')+' '+
                                 [d.getHours(),
                                 d.getMinutes(),
-                                d.getSeconds()].join(':');
-                const buyparams = {
-                    user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                    position: this.simulatorPositions,
-                    stock_price: this.cprice,
-                    transaction_meta: {
-                        strategy: this.selectedstrategy,
-                        plan: this.selectedtradeplan,
-                        emotion: this.selectedemotions,
-                        notes: this.notes,
-                        date: dformat
-                    }
-                }
-                this.$axios
-                        .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+ fund_id + "/buy/" + stock_id, buyparams)
+                                d.getSeconds()].join(':'); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
+
+                let str = this.simulatorPositions.split('-');
+                let positions = parseFloat(str[1]);
+                let avprice = 0;
+                    // if Sell is selected
+                if(str[0] == 'sell'){
+
+                    // search selected stocks in Live Portfolio
+                    this.port.map(function (data) { 
+                        if (data.id == stock_id) {
+                            avprice = data.avprice;
+                            return;
+                        } 
+                    });
+
+                        if(avprice != 0){ // if selected stock exist in Live Portfolio
+                            const sellparams = {
+                                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                                position: positions,
+                                stock_price: this.cprice,
+                                transaction_meta: {
+                                    strategy: this.selectedstrategy,
+                                    average_price: avprice.toFixed(2),
+                                    plan: this.selectedtradeplan,
+                                    emotion: this.selectedemotions,
+                                    notes: this.notes,
+                                    date: dformat
+                                }
+                            }
+                        console.log(sellparams);
+                            this.$axios
+                            .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ fund_id + "/sell/" + stock_id, sellparams)
+                            .then(response => {      
+                                if (response.success) {
+                                    console.log('sell success');
+                                    this.setSimulatorPortfolioID('');
+                                }
+                            });
+                        }else { // if selected stock is not in the list
+                            console.log('unable to sell');
+                        }
+                }else {  // if Buy is selected          
+                        const buyparams = {
+                            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                            position: positions,
+                            stock_price: this.cprice,
+                            transaction_meta: {
+                                strategy: this.selectedstrategy,
+                                plan: this.selectedtradeplan,
+                                emotion: this.selectedemotions,
+                                notes: this.notes,
+                                date: dformat
+                            }
+                        }      
+
+                        this.$axios
+                        .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ fund_id + "/buy/" + stock_id, buyparams)
                         .then(response => {      
                             if (response.success) {
-                                console.log('success');
+                                console.log(response.message);
+                                this.setSimulatorPortfolioID('');
                             }
-                        });
+                        });     
+                }
+
             },
             getDetails(selectObj) {
-                console.log(selectObj);
+                    console.log('stock -d '+selectObj);
                 const params = {
                     'symbol-id': selectObj,
                 };          
@@ -366,6 +438,7 @@ import { mapActions, mapGetters } from "vuex";
                 }.bind(this)
                 );
 
+               
                 this.$api.chart.stocks.fulldepth(params).then(
                 function(result) {
                     //console.log(result.data);  
