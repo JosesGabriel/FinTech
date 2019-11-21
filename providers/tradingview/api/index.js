@@ -1,7 +1,7 @@
 require("dotenv").config();
 
-import historyProvider from "./historyProvider"
 import axios from 'axios';
+import moment from 'moment';
 
 //BASE CONSTANTS
 const BASE_URL = process.env.CHART_API_URL + "/charts";
@@ -9,8 +9,10 @@ const TOKEN = process.env.CHART_CLIENT_SECRET;
 
 //URL LIST
 const CONFIG_URL = `${BASE_URL}/tradingview/config`;
+const HISTORY_URL = `${BASE_URL}/tradingview/history`;
 const RESOLVE_URL = `${BASE_URL}/tradingview/symbols`;
 const SEARCH_URL = `${BASE_URL}/tradingview/search`;
+const SERVER_TIME_URL = `${BASE_URL}/tradingview/time`;
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${TOKEN}`;
 
@@ -62,25 +64,63 @@ export default {
 				}
 			).then(({data}) => {
 				onSymbolResolvedCallback(data.data)
-			})	
+			}).catch(error => {
+				onResolveErrorCallback({})
+			  });
 		}, 0)
 	},
 	getBars: function(symbolInfo, resolution, from, to, onHistoryCallback, onErrorCallback, firstDataRequest) {
-		console.log('=====getBars running')
-		// console.log('function args',arguments)
-		// console.log(`Requesting bars between ${new Date(from * 1000).toISOString()} and ${new Date(to * 1000).toISOString()}`)
-		historyProvider.getBars(symbolInfo, resolution, from, to, firstDataRequest)
-		.then(bars => {
-			if (bars.length) {
-				onHistoryCallback(bars, {noData: false})
-			} else {
-				onHistoryCallback(bars, {noData: true})
-			}
-		}).catch(err => {
-			console.log({err})
-			onErrorCallback(err)
-		})
+		const params = {
+			symbol: symbolInfo.name,
+			exchange: symbolInfo.exchange,
+			from: moment.unix(from).format('YYYY-MM-DD'),
+			to: moment.unix(to).format('YYYY-MM-DD'),
+			resolution: '1D',
+		};
 
+		//check for 1m resolution
+		if (resolution != 'D') {
+			params.resolution = '1m'
+		}
+
+		//get tradingview history
+		axios.get(
+			HISTORY_URL,
+			{
+				params: params
+			}
+		).then(response => {
+			const data = response.data.data;
+			const nodata = data.s === 'no_data';
+			
+			if (data.s !== 'ok' && ! nodata) {
+				onErrorCallback(data.s);
+			}
+			var bars = [];
+			var barsCount = nodata ? 0 : data.t.length;
+			var volumePresent = typeof data.v != 'undefined';
+			for (var i = 0; i < barsCount; i++) {
+				var barValue = {
+					time: 	data.t[i] * 1000,
+					close: 	parseFloat(data.c[i]),
+					open: 	parseFloat(data.o[i]),
+					high: 	parseFloat(data.h[i]),
+					low: 	parseFloat(data.l[i]),
+				};
+				if (volumePresent) {
+					barValue.volume = parseFloat(data.v[i]);
+					barValue.foreign = parseFloat(data.v[i]);
+				}
+				bars.push(barValue);
+			}
+			var meta = { noData: nodata };
+			if (nodata && data.nb) {
+				meta.nextTime = data.nb;
+			}
+			onHistoryCallback(bars, meta);
+		}).catch(error => {
+			onErrorCallback([])
+		  });
 	},
 	subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscribeUID, onResetCacheNeededCallback) => {
 		console.log('=====subscribeBars runnning')
@@ -89,11 +129,14 @@ export default {
 		console.log('=====unsubscribeBars running')
 	},
 	calculateHistoryDepth: (resolution, resolutionBack, intervalBack) => {
-		//optional
-		console.log('=====calculateHistoryDepth running')
-		// while optional, this makes sure we request 24 hours of minute data at a time
-		// CryptoCompare's minute data endpoint will throw an error if we request data beyond 7 days in the past, and return no data
-		return resolution < 60 ? {resolutionBack: 'D', intervalBack: '1'} : undefined
+		if (parseInt(resolution) > 0) {
+			resolutionBack = 'M';
+			intervalBack = 1;
+		}
+		return {
+			resolutionBack: resolutionBack,
+			intervalBack: intervalBack,
+		};
 	},
 	getMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {
 		//optional
@@ -104,6 +147,14 @@ export default {
 		console.log('=====getTimeScaleMarks running')
 	},
 	getServerTime: cb => {
-		console.log('=====getServerTime running')
+		setTimeout(() => {
+			//get tradingview config			
+			axios.get(
+				SERVER_TIME_URL,
+			).then(({data}) => {
+				//write to callback
+				cb(data.data.time)
+			});
+		}, 0)
 	}
 }
