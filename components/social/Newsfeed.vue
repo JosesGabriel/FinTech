@@ -3,8 +3,7 @@
     <v-card
       v-for="n in 4"
       :key="n"
-      class="centerPanel__card mb-3"
-      :color="dark_theme_color"
+      class="centerPanel__card mb-3 transparent__bg"
       dark
       outlined
     >

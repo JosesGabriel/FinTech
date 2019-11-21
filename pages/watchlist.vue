@@ -11,7 +11,7 @@
         md="1"
         lg="1"
       >
-        <Navbar :data="navbarMiniVariantSetter" />
+        <Navbar :data="navbarMiniVariantSetter" active="watchlist" />
       </v-col>
       <v-col xs="11" sm="11" md="11" lg="11" class="pl-8">
         <v-container class="pt-0" fluid>
@@ -95,11 +95,12 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
     getUserWatchList() {
+      //Params won't be needed in the future, user token only
       let userData = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+        user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
       };
       this.$axios
-        .$get("https://dev-api.arbitrage.ph/api/journal/watchlist", userData)
+        .$get(process.env.DEV_API_URL + "/journal/watchlist", userData)
         .then(response => {
           this.watchListObject = response.data.watchlist;
           this.setUserWatchedStocks(response.data.watchlist);

@@ -50,12 +50,18 @@ export default {
   plugins: [
     "~/plugins/bus",
     "~/plugins/repository",
-    { src: "~/plugins/tradingview", ssr: false }
+    "~/plugins/global-method",
+    "~/plugins/numeral",
+    { src: "~/plugins/tradingview", ssr: false },
+    { src: "~/plugins/vue-numeral-filter", ssr: false }
   ],
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: ["@nuxtjs/vuetify"],
+  buildModules: ["@nuxtjs/vuetify", "@nuxtjs/moment"],
+  //   moment: {
+  //     locales: ["ph"]
+  //   },
   /*
    ** Nuxt.js modules
    */
