@@ -2,7 +2,7 @@
   <v-container class="gameView__container pa-0">
     <v-row>
       <v-col cols="8 py-0">
-        <v-container>
+        <v-container class="pb-0">
           <v-row>
             <v-col cols="12 pa-0 chart__wrapper">
               <TVChart />
@@ -16,14 +16,14 @@
         </v-container>
       </v-col>
       <v-col cols="4" class="pl-0">
-        <v-container>
+        <v-container class="pa-0">
           <v-row>
             <GameVariables />
           </v-row>
           <v-row>
             <RankingTable />
           </v-row>
-          <v-row>
+          <v-row class="pt-2">
             <ChatClient />
           </v-row>
         </v-container>

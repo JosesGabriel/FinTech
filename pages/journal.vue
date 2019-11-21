@@ -5,7 +5,7 @@
   >
     <v-row class="mb-6" no-gutters>
       <v-col class="hidden-xs-and-down" cols="1" sm="1" md="1">
-        <NavbarJournal :data="navbarMiniVariantSetter" />
+        <NavbarJournal :data="navbarMiniVariantSetter" active="journal" />
       </v-col>
       <v-col cols="11">
         <JournalContent />
@@ -33,7 +33,7 @@ export default {
     return {
       isOpen: true,
       navbarMiniVariantSetter: true
-    }
+    };
   },
   methods: {
     toggle: function() {

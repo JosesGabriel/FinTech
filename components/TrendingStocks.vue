@@ -1,43 +1,30 @@
 <template>
-    <v-card class="mb-3" color="#142b46" dark outlined >
-        <v-card-text>
-            <div class="body-2">Trending Stocks</div>
-            <v-divider></v-divider>
-            <v-list class="mt-1 trendingstocks__list">
-                <v-list-item class="px-0">
-                    <v-btn outlined fab small color="#d84038" class="mr-3">JFC</v-btn>
-                    <v-list-item-content>
-                        <v-list-item-title class="caption"><strong>Jollibee Foods Corporation</strong></v-list-item-title>
-                        <v-list-item-subtitle class="overline">13 Hits</v-list-item-subtitle>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item class="px-0">
-                    <v-btn outlined fab small color="#902457" class="mr-3">NIKL</v-btn>
-                    <v-list-item-content>
-                        <v-list-item-title class="caption"><strong>Nickel Asia Corporation</strong></v-list-item-title>
-                        <v-list-item-subtitle class="overline">9 Hits</v-list-item-subtitle>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item class="px-0">
-                    <v-btn outlined fab small color="#732990" class="mr-3">IRC</v-btn>
-                    <v-list-item-content>
-                        <v-list-item-title class="caption"><strong>Philippine Infradev Housing</strong></v-list-item-title>
-                        <v-list-item-subtitle class="overline">7 Hits</v-list-item-subtitle>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item class="px-0">
-                    <v-btn outlined fab small color="#35489b" class="mr-3">VUL</v-btn>
-                    <v-list-item-content>
-                        <v-list-item-title class="caption"><strong>Vulcan Industrial & Mining</strong></v-list-item-title>
-                        <v-list-item-subtitle class="overline">3 Hits</v-list-item-subtitle>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
-        </v-card-text>
-    </v-card>
+  <v-card class="mb-3" color="transparent" dark outlined>
+    <v-card-text class="pa-0 pl-2">
+      <div class="body-2 font-weight-black">Trending Stocks</div>
+      <v-divider></v-divider>
+      <v-list class="mt-1 transparent">
+        <v-list-item class="px-0">
+          <v-list-item-content class="pt-0">
+            <div v-for="n in 4" :key="n" class="pb-3">
+              <v-list-item-title class="body-2 d-flex justify-space-between"
+                ><span><strong>DNL</strong></span
+                ><span>1.06</span></v-list-item-title
+              >
+              <v-list-item-subtitle
+                class="overline d-flex justify-space-between"
+                ><span>D&L Industries</span
+                ><span style="color: rgb(72,255,213)"
+                  >+2.91%</span
+                ></v-list-item-subtitle
+              >
+            </div>
+          </v-list-item-content>
+        </v-list-item>
+        <router-link to="/login" class="caption" style="text-decoration: none;">
+          Show more
+        </router-link>
+      </v-list>
+    </v-card-text>
+  </v-card>
 </template>
-<style scoped>
-    .trendingstocks__list {
-        background-color: transparent;
-    }
-</style>

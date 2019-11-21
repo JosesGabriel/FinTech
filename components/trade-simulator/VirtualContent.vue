@@ -209,7 +209,6 @@
 .positive{
     color: #00FFC3;
 }
-
 .negative{
     color: #fe4949;
 }

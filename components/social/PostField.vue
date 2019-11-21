@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-4" color="#142a46" dark outlined>
+  <v-card class="pa-4 transparent__bg" color="#142a46" dark outlined>
     <v-form enctype="multipart/form-data">
       <v-avatar size="38" class="postField__avatar">
         <img
@@ -65,7 +65,7 @@
                   fab
                   x-small
                   dark
-                  class="postField__imageWrapper--close-btn"
+                  class="postField__imageWrapper--closebtn"
                   @click="removeImage(n)"
                 >
                   <v-icon color="white">mdi-close</v-icon>
@@ -84,8 +84,20 @@
               </div>
             </div>
           </div>
-          <v-btn small dark icon @click="onClickImageUploadBtn">
-            <v-icon color="primary">mdi-image-outline</v-icon>
+          <v-btn class="mr-6" small dark icon @click="onClickImageUploadBtn">
+            <v-icon color="success">mdi-image-outline</v-icon>Photo
+          </v-btn>
+          <v-btn
+            class="ml-3 mr-6"
+            small
+            dark
+            icon
+            @click="onClickImageUploadBtn"
+          >
+            <v-icon color="success">mdi-video</v-icon>Video
+          </v-btn>
+          <v-btn class="ml-2" small dark icon @click="onClickImageUploadBtn">
+            <v-icon color="success">mdi-poll-box</v-icon>Polls
           </v-btn>
           <v-btn
             rounded
@@ -137,7 +149,7 @@
 .postField__imageCard {
   flex: 0 0 auto;
 }
-.postField__imageWrapper--close-btn {
+.postField__imageWrapper--closebtn {
   position: relative;
   bottom: 96px;
   right: 3px;

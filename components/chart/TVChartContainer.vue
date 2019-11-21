@@ -105,7 +105,7 @@ export default {
         "scalesProperties.showStudyPlotLabels": true
       },
       toolbar_bg: "#00121e",
-      custom_css_url: "~/components/chart/tradingview.css",
+      custom_css_url: "tradingview.css",
       theme: "Dark"
     };
 
