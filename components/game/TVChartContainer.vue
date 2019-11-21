@@ -105,7 +105,7 @@ export default {
         "scalesProperties.showStudyPlotLabels": true
       },
       toolbar_bg: "#00121e",
-      custom_css_url: "~/components/chart/tradingview.css",
+      custom_css_url: "tradingview.css",
       theme: "Dark"
     };
 
@@ -212,7 +212,7 @@ export default {
 } */
 .chartViewClass_1 {
   /* both open */
-  height: calc(100vh - 250px);
+  height: calc(100vh - 203px);
 }
 .chartViewClass_2 {
   /* table only */

@@ -9,8 +9,8 @@
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field
-                            label="Buy Price"
-                            placeholder="Enter Buy Price"
+                            label="Sell Price"
+                            placeholder="Enter Sell Price"
                             color="#00FFC3"
                             style="color: #00FFC3"
                             dark

@@ -1,53 +1,38 @@
 <template>
   <v-toolbar
     :dark="isLightMode == 1 ? false : true"
-    :color="isLightMode == 1 ? 'lightcard' : 'darkcard'"
+    :color="isLightMode == 1 ? 'lightcard' : '#00121e'"
+    flat
     height="54"
     class="header__toolbar"
   >
     <v-toolbar-title
       ><router-link to="/">
-        <img src="logo.png" alt="" width="45" height="45" /> </router-link
+        <img
+          class="pl-2 pt-1"
+          src="logo-dark.svg"
+          alt=""
+          width="85"
+          height="85"
+        /> </router-link
     ></v-toolbar-title>
 
-    <v-btn icon @click="paletteSwitch()">
-      <v-icon color="yellow">mdi-theme-light-dark</v-icon>
-    </v-btn>
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mt-3" dark>
-      <transition name="fade">
-        <div
-          v-if="!searchButtonIsVisible"
-          class="searchBar__container hidden-md-only"
-        >
-          <v-text-field
-            label="Search"
-            prepend-inner-icon="mdi-magnify"
-            class="header__searchbar ml-3 mt-1 headline"
-            outlined
-            rounded
-            solo
-            flat
-            dense
-            background-color="transparent"
-          ></v-text-field>
-        </div>
-      </transition>
-      <transition name="slide-fade">
-        <router-link v-if="searchButtonIsVisible" to="/" class="social__router">
-          <v-btn
-            ref="header__searchButton"
-            class="header__button"
-            text
-            @click="toggleSearch()"
-          >
-            Search
-          </v-btn>
-        </router-link>
-      </transition>
+      <div class="searchBar__container hidden-md-only">
+        <v-text-field
+          label="Search"
+          class="header__searchbar ml-3 mt-2 headline"
+          placeholder="Search"
+          solo
+          flat
+          dense
+          background-color="rgb(37,37,48)"
+        ></v-text-field>
+      </div>
       <router-link to="/" class="social__router">
-        <v-btn class="header__button" text>
+        <v-btn class="header__button" text @click="paletteSwitch()">
           Power Tools
         </v-btn>
       </router-link>
@@ -57,20 +42,27 @@
         </v-btn>
       </router-link>
       <router-link to="/" class="social__router">
-        <v-btn class="header__button" text @click="$auth.logout()">
+        <v-btn class="header__button" text>
           Vyndue
         </v-btn>
       </router-link>
       <a class="social__router">
-        <v-btn class="header__button" text @click="registerDialogModel = true">
-          {{ $auth.loggedIn ? true : "Account" }}
+        <v-btn
+          class="header__button"
+          text
+          @click="
+            $auth.loggedIn
+              ? (showDropdown = !showDropdown)
+              : (registerDialogModel = true)
+          "
+        >
+          {{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}
         </v-btn>
       </a>
+      <HeaderDropdown v-if="showDropdown && $auth.loggedIn" />
     </v-toolbar-items>
 
-    <v-dialog v-model="registerDialogModel" max-width="360px">
-      <LoginRegister />
-    </v-dialog>
+    <LoginRegister v-model="registerDialogModel" />
   </v-toolbar>
 </template>
 <style scoped>
@@ -88,7 +80,7 @@
   opacity: 0;
 }
 .header__searchbar {
-  transform: scale(0.6);
+  transform: scale(0.5);
   transform-origin: top right;
 }
 .social__router {
@@ -107,7 +99,6 @@
   background-color: #f2f2f2;
 }
 .darkMode {
-  /* TEMPORARY */
   background-color: #00121e;
 }
 .header__button {
@@ -118,16 +109,19 @@
 </style>
 <script>
 import LoginRegister from "~/components/LoginRegister";
+import HeaderDropdown from "~/components/HeaderDropdown";
 export default {
   components: {
-    LoginRegister
+    LoginRegister,
+    HeaderDropdown
   },
   data() {
     return {
       searchButtonIsVisible: true,
       isLightMode: 0,
       registerDialogModel: false,
-      tab: null
+      tab: null,
+      showDropdown: false
     };
   },
   mounted() {

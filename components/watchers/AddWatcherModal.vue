@@ -161,7 +161,6 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
     fieldsWatch() {
-      console.log(this.stocksDropdownModel)
       if (
         this.stocksDropdownModel &&
         (this.entryPriceModel != "" ||
@@ -182,14 +181,14 @@ export default {
       }
       if (!stockExists) {
         let params = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+          user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000",
           stock_id: this.stocksDropdownModel,
           entry_price: this.entryPriceModel,
           take_profit: this.takeProfitModel,
           stop_loss: this.stopLossModel
         };
         this.$axios
-          .$post("https://dev-api.arbitrage.ph/api/journal/watchlist", params)
+          .$post(process.env.DEV_API_URL + "/journal/watchlist", params)
           .then(response => {
             this.watchCardModalLoading = false;
             if (response.success) {

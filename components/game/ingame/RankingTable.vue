@@ -1,7 +1,7 @@
 <template>
   <v-container class="py-0">
     <v-row class="rankTable__row">
-      <v-col cols="12" class="py-0">
+      <v-col cols="12" class="">
         <v-simple-table dark class="rankingTable rankingTable--color" dense>
           <template v-slot:default>
             <thead class="text-center">

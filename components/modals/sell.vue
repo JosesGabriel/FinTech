@@ -8,26 +8,10 @@
                         <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3" :items="portfolio" label="Portfolio" dense flat dark></v-select>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
-                        <v-text-field
-                            label="Buy Price"
-                            placeholder="Enter Buy Price"
-                            color="#00FFC3"
-                            style="color: #00FFC3"
-                            dark
-                            class="caption buy_selector quantity-input py-3"
-                            v-model="buyprice"
-                        ></v-text-field>
+                        <v-text-field label="Buy Price" placeholder="Enter Buy Price" color="#00FFC3" style="color: #00FFC3" dark class="caption buy_selector quantity-input py-3" v-model="buyprice"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
-                        <v-text-field
-                            label="Quantity"
-                            placeholder="Enter Quantity"
-                            color="#00FFC3"
-                            style="color: #00FFC3"
-                            dark
-                            class="caption buy_selector buy_price-input py-3"
-                            v-model="quantity"
-                        ></v-text-field>
+                        <v-text-field label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="caption buy_selector buy_price-input py-3" v-model="quantity"></v-text-field>
                     </v-col>
                 </v-row>
                 <v-card-title class="pa-0 py-2">

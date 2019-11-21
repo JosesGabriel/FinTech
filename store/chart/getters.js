@@ -14,5 +14,17 @@ export default {
 
   getSidebar(state) {
     return state.sidebar;
+  },
+
+  symbolid: state => {
+    return state.symbolid;
+  },
+
+  stock: state => {
+    return state.stock;
+  },
+
+  bidask: state => {
+    return state.bidask;
   }
 };

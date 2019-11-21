@@ -15,7 +15,7 @@
             <v-col cols="4" class="pt-0 leaderBoards__column">
               <Leaderboard class="bordered__component" />
             </v-col>
-            <v-col cols="8" class="pt-0">
+            <v-col cols="8" class="py-0">
               <ChatClient />
             </v-col>
           </v-row>

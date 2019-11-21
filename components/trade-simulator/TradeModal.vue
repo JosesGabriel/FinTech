@@ -168,14 +168,15 @@
                         <v-container class="pt-0">
                             <v-row no-gutters class="px-0 py-0">
                                 <v-col sm="12" md="12">
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="strategy" label="Strategy" dense flat></v-select></div>
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="tradeplan" label="Trade Plan" dense flat></v-select></div>
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" :items="emotions" label="Emotions" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="strategy" v-model="selectedstrategy" label="Strategy" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="tradeplan" v-model="selectedtradeplan" label="Trade Plan" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" :items="emotions" v-model="selectedemotions" label="Emotions" dense flat></v-select></div>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12" class="pa-0 mt-3 justify-right d-flex align-center text-right">
                                     <v-textarea
                                         color="white"
                                         class="white--text trading_notes-textarea body-2"
+                                        v-model="notes"
                                         placeholder="Trading Notes"
                                         filled
                                     ></v-textarea>
@@ -188,7 +189,7 @@
                             <v-btn
                                 color="success"
                                 @click.stop="show=false"
-                                @click="e1 = 1"
+                                @click="confirm"
                                 class="text-capitalize black--text ml-1"
                                 light
                             >
@@ -221,6 +222,7 @@ import { mapActions, mapGetters } from "vuex";
                 change: 0,
                 bidask: 0,
                 dboard: 0,
+                stock_id: 0,
                 stock: [],
                 prev: '0',
                 low: 122,
@@ -236,9 +238,13 @@ import { mapActions, mapGetters } from "vuex";
                 hideElement: true,
                 GetSelectStock: '',
 
+                selectedstrategy: '',
+                selectedtradeplan: '',
+                selectedemotions: '',
                 strategy: ['Bottom Picking','Breakout Play','Trend Following','1-2-3 Reversal'],
                 tradeplan: ['Day Trade','Swing Trade','Investments'],
                 emotions: ['Neutral','Greedy','Fearful'],
+                notes: '',
 
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
@@ -248,7 +254,9 @@ import { mapActions, mapGetters } from "vuex";
         computed: {
             ...mapGetters({
             simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
-            simulatorBoardLot: "tradesimulator/getSimulatorBoardLot"
+            simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
+            simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+            simulatorPositions: "tradesimulator/getSimulatorPositions"
             }),
             show: {
                 get () {
@@ -282,15 +290,47 @@ import { mapActions, mapGetters } from "vuex";
         methods: {
             ...mapActions({
                 setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
-                setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot"
+                setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
+                setSimulatorPositions: "tradesimulator/setSimulatorPositions"
             }),
+            confirm() {
+                const fund_id = this.simulatorPortfolioID;
+                const stock_id = this.stock_id;
+                let d = new Date,
+                    dformat = [d.getMonth()+1,
+                                d.getDate(),
+                                d.getFullYear()].join('/')+' '+
+                                [d.getHours(),
+                                d.getMinutes(),
+                                d.getSeconds()].join(':');
+                const buyparams = {
+                    user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                    position: this.simulatorPositions,
+                    stock_price: this.cprice,
+                    transaction_meta: {
+                        strategy: this.selectedstrategy,
+                        plan: this.selectedtradeplan,
+                        emotion: this.selectedemotions,
+                        notes: this.notes,
+                        date: dformat
+                    }
+                }
+                this.$axios
+                        .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+ fund_id + "/buy/" + stock_id, buyparams)
+                        .then(response => {      
+                            if (response.success) {
+                                console.log('success');
+                            }
+                        });
+            },
             getDetails(selectObj) {
+                console.log(selectObj);
                 const params = {
                     'symbol-id': selectObj,
                 };          
                 this.$api.chart.stocks.history(params).then(
                 function(result) {    
-
+                    console.log(result);
                     if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
 			            this.dboard = 1000000;
 			        } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
@@ -305,9 +345,11 @@ import { mapActions, mapGetters } from "vuex";
 			            this.dboard = 10;
 			        } else if (result.data.last >= 1000) {
 			            this.dboard = 5;
-			        }
+                    }
                     this.setSimulatorBuyPrice(result.data.last);
                     this.setSimulatorBoardLot(this.dboard);
+                    //this.stock_id = result.data.stockidstr;
+                    this.stock_id = selectObj;
                     this.cprice = result.data.last;
                     this.cpercentage = result.data.changepercentage.toFixed(2); 
                     this.change = result.data.change.toFixed(2);

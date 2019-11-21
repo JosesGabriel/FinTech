@@ -34,6 +34,7 @@
                       small
                       color="#0c1a2b"
                       class="span__title"
+                      @click="selectStock(item)"
                       @dblclick="showRemoveButton(item)"
                       >{{ item.title }}</v-btn
                     >
@@ -43,7 +44,9 @@
                     md="6"
                     sm="12"
                   >
-                    <div class="div__value">{{ item.value }}</div>
+                    <div class="div__value">
+                      {{ item.value | numeral("0,0.00") }}
+                    </div>
                   </v-col>
                 </v-row>
                 <v-row class="ma-0">
@@ -52,7 +55,13 @@
                     md="6"
                     sm="12"
                   >
-                    <span>{{ item.description }}</span>
+                    <span>{{
+                      $globalMethod.limitDisplayString(
+                        item.description,
+                        15,
+                        true
+                      )
+                    }}</span>
                   </v-col>
                   <v-col
                     class="col__volume py-0 col-5 text-right caption"
@@ -168,6 +177,16 @@ export default {
     },
     addWatchlist: function() {
       // console.log("add new watchlist");
+      //this.$router.push("/watchlist");
+      let routeData = this.$router.resolve({
+        name: "watchlist"
+        //query: { data: "someData" }
+      });
+      window.open(routeData.href, "_blank");
+    },
+    selectStock: stock => {
+      console.log("stock selected");
+      console.log(stock);
     }
   }
 };

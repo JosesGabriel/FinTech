@@ -78,7 +78,7 @@ export default {
     data() {
         return {
             quantity: '0.00',
-            availableFunds: '320,000,000.00',
+            availableFunds: '0.00',
             totalCost: 0,
             portfolio: ['Real Portfolio','Virtual Portfolio']
         }
@@ -86,22 +86,46 @@ export default {
     computed: {
     ...mapGetters({
       simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
-      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot"
+      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
+      simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+      simulatorPositions: "tradesimulator/getSimulatorPositions"
     })
   },
+    mounted() {
+        const portfolioparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+            };
+            this.$api.journal.portfolio.portfolio(portfolioparams).then(
+                function(result) {
+                    console.log(result.meta.logs);
+                    for(let i=0; i< result.meta.logs.length; i++){
+                        if(result.meta.logs[i].id == this.simulatorPortfolioID){
+                            let avfunds = parseFloat(result.meta.logs[i].balance);    
+                            this.availableFunds = this.addcomma(avfunds);
+                        }
+                    }
+                  
+                }.bind(this)
+            );
+
+    },
     methods: {
     ...mapActions({
         setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
-        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot"
+        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
+        setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+        setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
     addButton(){
         this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
         let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(add);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));  
         let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(min);
     },
     addcomma(n, sep, decimals) {

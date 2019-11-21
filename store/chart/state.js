@@ -3,6 +3,9 @@ export default () => ({
   table: true,
   tableMaximize: false,
   tableFullscreen: false,
+  sidebar: true,
 
-  sidebar: true
+  symbolid: 0,
+  stock: {},
+  bidask: {},
 });

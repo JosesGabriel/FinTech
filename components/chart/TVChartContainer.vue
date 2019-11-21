@@ -29,7 +29,7 @@ export default {
       type: String
     },
     custom_css_url: {
-      default: "~/components/chart/tradingview.css",
+      default: "tradingview.css",
       type: String
     },
     libraryPath: {
@@ -132,8 +132,8 @@ export default {
     // listen to ticker toggle
     this.$bus.$on("adjustChartView", data => {
       this.chartView;
-      console.log(this.chartViewId);
-      console.log(this.chartViewClass);
+      //console.log(this.chartViewId);
+      //console.log(this.chartViewClass);
     });
 
     //! BEWARE: no trailing slash is expected in feed URL
