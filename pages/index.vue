@@ -15,6 +15,8 @@
       <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
         <TrendingStocks />
         <WhoToMingle />
+        <MiniWatchlist />
+        <Bulletin />
         <!-- <FooterSidebar /> -->
       </v-col>
     </v-row>
@@ -33,6 +35,8 @@ import TrendingStocks from "~/components/TrendingStocks";
 import WhoToMingle from "~/components/WhoToMingle";
 import FooterSidebar from "~/components/FooterSidebar";
 import PostField from "~/components/social/PostField";
+import MiniWatchlist from "~/components/MiniWatchlist";
+import Bulletin from "~/components/Bulletin";
 import axios from "~/node_modules/axios";
 
 export default {
@@ -42,6 +46,8 @@ export default {
     Newsfeed,
     TrendingStocks,
     WhoToMingle,
+    MiniWatchlist,
+    Bulletin,
     FooterSidebar,
     PostField
   },

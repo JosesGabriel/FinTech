@@ -21,7 +21,10 @@
                 ><strong>Sven Mithreel</strong></v-list-item-title
               >
               <v-list-item-subtitle class="overline"
-                >5 hours ago</v-list-item-subtitle
+                >5hrs <v-icon class="overline mt-0">mdi-earth</v-icon
+                ><span style="color: #00ffc3;">
+                  Bullish</span
+                ></v-list-item-subtitle
               >
             </v-col>
             <v-col class="text-right">
@@ -54,10 +57,10 @@
       <!-- End of Post Body -->
 
       <v-card-actions>
-        <v-btn icon outlined fab x-small color="green">
-          <v-icon>mdi-cow</v-icon>
+        <v-btn icon outlined fab x-small color="success">
+          <img src="/icon/bullish.svg" width="15" />
         </v-btn>
-        <v-btn icon outlined fab x-small color="red">
+        <v-btn icon outlined fab x-small color="error">
           <v-icon>mdi-paw</v-icon>
         </v-btn>
       </v-card-actions>
@@ -97,8 +100,8 @@
                 </span>
               </v-container>
               <v-container class="pa-0 ma-0">
-                <v-btn icon outlined fab x-small color="green">
-                  <v-icon>mdi-cow</v-icon>
+                <v-btn icon outlined fab x-small color="success">
+                  <img src="/icon/bullish.svg" width="15" />
                 </v-btn>
                 <span class="px-2">{{ bullCounter }}</span>
                 <v-btn icon outlined fab x-small color="red">
@@ -134,8 +137,8 @@
                 </span>
               </v-container>
               <v-container class="pa-0 ma-0">
-                <v-btn icon outlined fab x-small color="green">
-                  <v-icon>mdi-cow</v-icon>
+                <v-btn icon outlined fab x-small color="success">
+                  <img src="/icon/bullish.svg" width="15" />
                 </v-btn>
                 <span class="px-2">{{ bullCounter }}</span>
                 <v-btn icon outlined fab x-small color="red">

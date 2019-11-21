@@ -8,6 +8,7 @@
       :class="isLightMode == 1 ? 'lightMode' : ''"
       :dark="darkText"
       color="transparent"
+      floating
     >
       <v-list>
         <v-list-item>
@@ -43,7 +44,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <v-divider></v-divider>
       <v-list nav dense rounded>
         <v-list-item-group>
           <router-link to="/" class="navbar__links">
