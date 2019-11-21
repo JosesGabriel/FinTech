@@ -1,8 +1,8 @@
 <template>
   <v-content>
     <v-card
+      id="card__container"
       :loading="loading"
-      style="height:280px"
       color="#00121e"
       elevation="12"
       dark
@@ -79,11 +79,19 @@ export default {
 
     // all stock
     this.$api.chart.stocks.list().then(response => {
-     // console.log(response);
+      // console.log(response);
     });
-
   }
 };
 </script>
 
-<style></style>
+<style>
+#card__container {
+  height: 280px;
+}
+@media (max-width: 1280px) {
+  #card__container {
+    height: 230px;
+  }
+}
+</style>

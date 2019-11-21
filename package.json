@@ -23,7 +23,9 @@
     "request-promise": "^4.2.4",
     "sass-loader": "^8.0.0",
     "vue-apexcharts": "^1.5.1",
-    "vue-numeral-filter": "^1.1.1"
+    "vue-numeral-filter": "^1.1.1",
+    "vue-resize-text": "^0.1.0",
+    "vue-screen-size": "^1.0.0"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0",

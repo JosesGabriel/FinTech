@@ -14,13 +14,15 @@
       </v-col>
 
       <v-col class="col-9 pa-0">
-        <v-content>
+        <v-content class="content__title">
           <span class="font-weight-bold title">{{
             $globalMethod.limitDisplayString(stock.description, 16, true)
           }}</span>
         </v-content>
-        <v-content>
-          <span class="headline">{{ stock.last | numeral("0,0.00") }}</span>
+        <v-content class="content__headline">
+          <span class="headline ma-0">{{
+            stock.last | numeral("0,0.00")
+          }}</span>
           <span
             class="subtitle-2"
             :class="[
@@ -73,6 +75,9 @@ export default {
   font-size: x-small;
   color: #fff;
 }
+.row {
+  line-height: 1.6 !important;
+}
 .arrow-icon {
   position: absolute;
   right: 50%;
@@ -85,7 +90,26 @@ export default {
 .decrease {
   color: #ff4848 !important;
 }
-.neutral {
-  color: gold !important;
+@media (max-width: 1800px) {
+  .template {
+    font-size: calc(9px + 0.1vw) !important;
+  }
+}
+@media (max-width: 1280px) {
+  .title {
+    font-size: calc(18px - 0.2vw) !important;
+  }
+  .headline {
+    font-size: calc(24px - 0.2vw) !important;
+  }
+  .subtitle-2 {
+    font-size: calc(14px - 0.2vw) !important;
+  }
+  .content__title {
+    height: 25px !important;
+  }
+  .content__headline {
+    height: 25px !important;
+  }
 }
 </style>
