@@ -3,8 +3,14 @@ require("dotenv").config();
 import historyProvider from "./historyProvider"
 import axios from 'axios';
 
+//BASE CONSTANTS
 const BASE_URL = process.env.CHART_API_URL + "/charts";
 const TOKEN = process.env.CHART_CLIENT_SECRET;
+
+//URL LIST
+const CONFIG_URL = `${BASE_URL}/tradingview/config`;
+const RESOLVE_URL = `${BASE_URL}/tradingview/symbols`;
+const SEARCH_URL = `${BASE_URL}/tradingview/search`;
 
 axios.defaults.headers.common['Authorization'] = `Bearer ${TOKEN}`;
 
@@ -13,7 +19,7 @@ export default {
 		setTimeout(() => {
 			//get tradingview config			
 			axios.get(
-				`${BASE_URL}/tradingview/config`
+				CONFIG_URL,
 			).then(({data}) => {
 				//write to callback
 				cb(data.data)
@@ -30,7 +36,7 @@ export default {
 
 		//get tradingview search
 		axios.get(
-			`${BASE_URL}/tradingview/search`,
+			SEARCH_URL,
 			{
 				params: params
 			}
@@ -41,39 +47,23 @@ export default {
 		  });
 	},
 	resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
-		// expects a symbolInfo object in response
-		console.log('======resolveSymbol running')
-		// console.log('resolveSymbol:',{symbolName})
-		var split_data = symbolName.split(/[:/]/)
-		// console.log({split_data})
-		var symbol_stub = {
-			name: symbolName,
-			description: '',
-			type: 'crypto',
-			session: '24x7',
-			timezone: 'Etc/UTC',
-			ticker: symbolName,
-			exchange: split_data[0],
-			minmov: 1,
-			pricescale: 100000000,
-			has_intraday: true,
-			intraday_multipliers: ['1', '60'],
-			supported_resolution:  supportedResolutions,
-			volume_precision: 8,
-			data_status: 'streaming',
+		const SPLIT_DATA = symbolName.split(/[:/]/)
+		const params = {
+			symbol: SPLIT_DATA[1],
+			exchange: SPLIT_DATA[0]
 		}
 
-		if (split_data[2].match(/USD|EUR|JPY|AUD|GBP|KRW|CNY/)) {
-			symbol_stub.pricescale = 100
-		}
 		setTimeout(function() {
-			onSymbolResolvedCallback(symbol_stub)
-			console.log('Resolving that symbol....', symbol_stub)
+			//get tradingview resolve
+			axios.get(
+				RESOLVE_URL,
+				{
+					params: params
+				}
+			).then(({data}) => {
+				onSymbolResolvedCallback(data.data)
+			})	
 		}, 0)
-		
-		
-		// onResolveErrorCallback('Not feeling it today')
-
 	},
 	getBars: function(symbolInfo, resolution, from, to, onHistoryCallback, onErrorCallback, firstDataRequest) {
 		console.log('=====getBars running')
