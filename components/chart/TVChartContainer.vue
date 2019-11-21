@@ -163,6 +163,9 @@ export default {
       enabled_features: ['narrow_chart_enabled','study_templates','keep_left_toolbar_visible_on_small_screens'],
       toolbar_bg: "#00121e",
       time_frames: [
+          { text: "50y", resolution: "D" },
+          { text: "20y", resolution: "D" },
+          { text: "10y", resolution: "D" },
           { text: "5y", resolution: "D" },
           { text: "4y", resolution: "D" },
           { text: "3y", resolution: "D" },
