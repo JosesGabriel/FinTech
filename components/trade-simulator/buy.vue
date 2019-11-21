@@ -52,7 +52,7 @@
                             color="primary"
                         ><v-icon>mdi-plus</v-icon></v-btn>
                     </v-col>
-                    <v-col class="ma-0 pa-0" style="color: #90989d;position: absolute;font-size:12px; top:285px; left:203px;width: 95px;">
+                    <v-col class="ma-0 pa-0" style="color: #90989d;position: absolute;font-size:12px; top:285px; left:180px;width: 95px;">
                         BoardLot : <span>{{ this.simulatorBoardLot }}</span>
                     </v-col>
                     <v-text-field
