@@ -1,31 +1,37 @@
 <template>
   <v-content>
-    <v-card class="pa-0 ma-0" color="#00121e" dark :loading="loading">
-      <v-content class="mt-1">
-        <span class="caption ml-4 font-weight-bold white--text">All Stock</span>
-      </v-content>
+    <div class="sub__title">All Stock</div>
+    <v-card
+      color="#00121e"
+      :loading="loading"
+      style="height: calc(100vh - 315px)"
+    >
       <v-simple-table
         dense
         dark
         fixed-header
         class="ml-4"
-        height="calc(100vh - 395px)"
+        height="calc(100vh - 315px)"
         style="background:#00121e"
       >
         <thead>
           <tr>
-            <th :class="header">SYMBOL</th>
-            <th :class="header" class="text-right">LAST</th>
-            <th :class="header" class="text-right">%CHANGE</th>
-            <th :class="header" class="text-right">VALUE</th>
-            <th :class="header" class="text-right">TRADES</th>
-            <th :class="header"></th>
+            <th class="caption header white--text font-weight-bold">SYMBOL</th>
+            <th class="caption header white--text font-weight-bold text-right">
+              LAST
+            </th>
+            <th class="caption header white--text font-weight-bold text-right">%CHANGE</th>
+            <th class="caption header white--text font-weight-bold text-right">VALUE</th>
+            <th class="caption header white--text font-weight-bold text-right">TRADES</th>
+            <th class="caption header white--text font-weight-bold"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in stocks" :key="item.id">
-            <td :class="column" style="width:10%">{{ item.symbol }}</td>
-            <td :class="column" style="width:12%" class="text-right">
+            <td class="column white--text" style="width:40px">
+              {{ item.symbol }}
+            </td>
+            <td class="column white--text text-right" style="width:35px">
               <span
                 :class="[
                   { increase: item.change > 0 },
@@ -36,7 +42,7 @@
                 {{ item.last | numeral("0.0a") }}
               </span>
             </td>
-            <td :class="column" style="width:20%" class="text-right">
+            <td class="column white--text text-right" style="width:40px">
               <span
                 :class="[
                   { increase: item.change > 0 },
@@ -47,15 +53,15 @@
                 {{ item.change | numeral("0,0.00") }}
               </span>
             </td>
-            <td :class="column" style="width:23%" class="text-right">
+            <td class="column white--text text-right" style="width:60px">
               <span class="text-uppercase">{{
                 item.value | numeral("0.000a")
               }}</span>
             </td>
-            <td :class="column" style="width:20%" class="text-right">
+            <td class="column white--text text-right" style="width:50px">
               <span class="">{{ item.trades | numeral("0,0") }}</span>
             </td>
-            <td :class="column"></td>
+            <td class="column white--text"></td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -69,9 +75,7 @@ export default {
   data() {
     return {
       stocks: [],
-      loading: "#48FFD5",
-      header: "caption header white--text font-weight-bold",
-      column: "caption column white--text"
+      loading: "#48FFD5"
     };
   },
   mounted() {
@@ -90,6 +94,14 @@ export default {
 </script>
 
 <style scoped>
+.header {
+  background: #00121e !important;
+  font-size: 10px !important;
+}
+.column {
+  background: #00121e !important;
+  font-size: 10px !important;
+}
 .theme--dark.v-data-table thead tr:last-child th {
   border: none !important;
 }
@@ -101,6 +113,12 @@ export default {
   height: 20px;
 }
 .neutral {
-  color: gold !important;
+  color: #dddddd !important;
+}
+.increase {
+  color: #48ffd5 !important;
+}
+.decrease {
+  color: #ff4848 !important;
 }
 </style>

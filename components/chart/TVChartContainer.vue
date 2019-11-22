@@ -78,10 +78,9 @@ export default {
       interval: this.interval,
       container_id: this.containerId,
       library_path: this.libraryPath,
-
       locale: this.getLanguageFromURL() || "en",
       disabled_features: ["use_localstorage_for_settings"],
-      //   enabled_features: ["study_templates"],
+      // enabled_features: ["study_templates"],
       studies: ["ACCD@tv-basicstudies", "AROON@tv-basicstudies"],
       charts_storage_url: this.chartsStorageUrl,
       charts_storage_api_version: this.chartsStorageApiVersion,

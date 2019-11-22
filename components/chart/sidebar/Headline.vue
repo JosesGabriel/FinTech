@@ -1,49 +1,45 @@
 <template>
   <v-content class="template">
-    <v-row class="ma-0 ml-4 mt-1 mb-1">
-      <v-col class="col-3 pa-0">
-        <!-- arrow -->
+    <div id="headline">
+      <div class="headline__arrow">
         <v-content>
-          <v-icon v-show="changetype == 1" size="80" class="arrow-icon increase"
+          <v-icon v-show="changetype == 1" size="60" class="arrow-icon increase"
             >mdi-chevron-up</v-icon
           >
-          <v-icon v-show="changetype == 2" size="80" class="arrow-icon decrease"
+          <v-icon v-show="changetype == 2" size="60" class="arrow-icon decrease"
             >mdi-chevron-down</v-icon
           >
         </v-content>
-      </v-col>
-
-      <v-col class="col-9 pa-0">
-        <v-content class="content__title">
-          <span class="font-weight-bold title">{{
+      </div>
+      <div class="headline_description">
+        <div class="hcontainer_top">
+          <span class="htitle">{{
             $globalMethod.limitDisplayString(stock.description, 16, true)
           }}</span>
-        </v-content>
-        <v-content class="content__headline">
-          <span class="headline ma-0">{{
-            stock.last | numeral("0,0.00")
-          }}</span>
+        </div>
+        <div class="hcontainer_mid">
+          <span class="hlast">{{ stock.last | numeral("0,0.00") }}</span>
           <span
-            class="subtitle-2"
+            class="hchange"
             :class="[
               { increase: changetype == 1 },
               { decrease: changetype == 2 }
             ]"
-            >{{ stock.change | numeral("0.00") }}% ({{
+            >{{ stock.change | numeral("0.00") }}%({{
               stock.changepercentage | numeral("0.00")
             }}%)</span
           >
-        </v-content>
-        <v-content class="mt-0">
-          <span class="caption"
+        </div>
+        <div class="hcontainer_bot">
+          <span class="hmarcap"
             >Market Capitalization:
-            <span class="text-uppercase font-weight-bold">{{
+            <span class="hmarcap text-uppercase font-weight-bold">{{
               stock.marketcap | numeral("0.000a")
             }}</span></span
           >
-        </v-content>
-      </v-col>
-    </v-row>
+        </div>
+      </div>
+    </div>
   </v-content>
 </template>
 
@@ -71,18 +67,40 @@ export default {
 </script>
 
 <style scoped>
+div {
+  margin: 0;
+  padding: 0;
+}
+.htitle {
+  font-size: 16px;
+}
+.hlast {
+  font-size: 22px;
+}
+.hchange {
+  font-size: 14px;
+}
+.hmarcap {
+  font-size: 11px;
+}
 .template {
-  font-size: x-small;
+  /* font-size: x-small; */
   color: #fff;
 }
-.row {
-  line-height: 1.6 !important;
+.hcontainer_top {
+  margin-top: 2px;
+}
+.hcontainer_mid {
+  margin-top: -7px;
+}
+.hcontainer_bot {
+  margin-top: -10px;
 }
 .arrow-icon {
   position: absolute;
-  right: 50%;
-  left: 50%;
-  top: -15px;
+  right: 40%;
+  left: 60%;
+  top: -5px;
 }
 .increase {
   color: #48ffd5 !important;
@@ -90,26 +108,16 @@ export default {
 .decrease {
   color: #ff4848 !important;
 }
-@media (max-width: 1800px) {
-  .template {
-    font-size: calc(9px + 0.1vw) !important;
-  }
+#headline {
+  display: flex;
+  /* height: 70px; */
 }
-@media (max-width: 1280px) {
-  .title {
-    font-size: calc(18px - 0.2vw) !important;
-  }
-  .headline {
-    font-size: calc(24px - 0.2vw) !important;
-  }
-  .subtitle-2 {
-    font-size: calc(14px - 0.2vw) !important;
-  }
-  .content__title {
-    height: 25px !important;
-  }
-  .content__headline {
-    height: 25px !important;
-  }
+.headline__arrow {
+  flex: 0 0 60px;
+  /* background: red; */
+}
+.headline_description {
+  flex: 0 0 210px;
+  /* background: blue; */
 }
 </style>

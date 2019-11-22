@@ -3,9 +3,9 @@
   <v-app id="chart_body">
     <Header />
     <div class="spacer__content"></div>
-    <div class="content__main">
-      <div class="content__left">
-        <!-- main -->
+    <v-row no-gutters>
+      <v-col :class="showSidebar">
+        <!-- ticker -->
         <v-row no-gutters>
           <v-col class="col-12">
             <v-slide-y-transition>
@@ -40,16 +40,59 @@
             </v-slide-y-reverse-transition>
           </v-col>
         </v-row>
-      </div>
-      <div
-        v-show="sidebar"
-        transition="slide-y-reverse-transition"
-        class="content__right"
-      >
-        <!-- sidebar -->
-        <Sidebar />
-      </div>
-    </div>
+
+        <!-- toggle button -->
+        <div id="button_adjustview">
+          <v-btn color="pink" class="mr-1 d-none" dark @click="toggleTicker"
+            >Ticker</v-btn
+          >
+          <v-btn
+            color="orange d-none"
+            :disabled="disableTable"
+            class="mr-1 d-none"
+            dark
+            @click="toggleTable"
+            >Table</v-btn
+          >
+          <v-btn
+            :disabled="!table"
+            color="orange d-none"
+            class="mr-1"
+            dark
+            fab
+            small
+            @click="maximizeTable"
+          >
+            <v-icon>mdi-eject</v-icon>
+          </v-btn>
+          <v-btn
+            :disabled="!table"
+            color="orange d-none"
+            class="mr-1"
+            dark
+            fab
+            small
+            @click="fullscreenTable"
+          >
+            <v-icon>mdi-fullscreen</v-icon>
+          </v-btn>
+          <v-btn color="blue" class="d-none" dark @click="toggleSidebar"
+            >Sidebar</v-btn
+          >
+        </div>
+      </v-col>
+
+      <!-- sidebar -->
+      <v-slide-x-transition>
+        <v-col
+          v-show="sidebar"
+          transition="slide-y-reverse-transition"
+          class="sidebar__container col-3"
+        >
+          <Sidebar />
+        </v-col>
+      </v-slide-x-transition>
+    </v-row>
   </v-app>
 </template>
 
@@ -78,6 +121,9 @@ export default {
       maximize: "chart/getTableMaximize",
       fullscreen: "chart/getTableFullscreen"
     }),
+    showSidebar: function() {
+      return this.sidebar ? "col-9" : "col-12";
+    },
     tableStyle: function() {
       return {
         maximizeStyle: this.maximize,
@@ -176,17 +222,18 @@ export default {
 .fullscreen_tickerclose {
   height: calc(100vh - 50px);
 }
+
 .spacer__content {
   height: 52px;
 }
-.content__main {
-  display: flex;
-  height: calc(100vh - 52px);
+
+.col-3 {
+  flex: 0 0 22%;
+  max-width: 22%;
 }
-.content__left {
-  flex: 1;
-}
-.content__right {
-  flex: 0 0 250px;
+
+.col-9 {
+  flex: 0 0 78%;
+  max-width: 78%;
 }
 </style>

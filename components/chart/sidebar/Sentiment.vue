@@ -1,43 +1,36 @@
 <template>
-  <v-content class="template text-center">
-    <div class="caption">Members Sentiment</div>
-    <v-row class="ma-0 px-4">
-      <v-col class="col-2 pa-0">
-        <v-content class="float-right">
-          <v-img
-            class="bull-circle"
-            src="/icon/chart/bull-circle.svg"
-            @click="bullCircle"
-          >
-          </v-img></v-content
-      ></v-col>
-      <v-col class="col-8 pa-0">
-        <v-content class="progress">
-          <v-progress-linear
-            background-color="error"
-            color="#48FFD5"
-            value="70"
-            height="5"
-            class="mt-3"
-          ></v-progress-linear>
-          <v-content>
-            <span class="float-left">70.00%</span>
-            <span class="float-right">30.00%</span>
-          </v-content>
+  <v-content class="template">
+    <div id="sentiment__caption">Members Sentiment</div>
+    <div id="sentiment__container">
+      <div id="bull__container">
+        <v-img
+          class="bull-circle"
+          src="/icon/chart/bull-circle.svg"
+          @click="bullCircle"
+        >
+        </v-img>
+      </div>
+      <div id="prgbr__container">
+        <v-progress-linear
+          background-color="error"
+          color="#48FFD5"
+          value="70"
+          height="5"
+          class="mt-3"
+        ></v-progress-linear>
+        <v-content>
+          <span class="float-left percentage">70.00%</span>
+          <span class="float-right percentage">30.00%</span>
         </v-content>
-      </v-col>
-      <v-col class="col-2 pa-0 float-left">
-        <v-content class="float-left">
-          <v-img
-            class="bear-circle"
-            width="35px"
-            height="35px"
-            src="/icon/chart/bear-circle.svg"
-            @click="bearCircle"
-          ></v-img
-        ></v-content>
-      </v-col>
-    </v-row>
+      </div>
+      <div id="bear__container">
+        <v-img
+          class="bear-circle"
+          src="/icon/chart/bear-circle.svg"
+          @click="bearCircle"
+        ></v-img>
+      </div>
+    </div>
   </v-content>
 </template>
 
@@ -57,7 +50,6 @@ export default {
 
 <style scoped>
 .template {
-  font-size: xx-small;
   color: #fff;
 }
 .header {
@@ -72,8 +64,39 @@ export default {
 }
 .bull-circle {
   cursor: pointer;
+  height: 30px;
+  width: 30px;
+  margin-left: 20px;
 }
 .bear-circle {
   cursor: pointer;
+  height: 30px;
+  width: 30px;
+}
+#sentiment__container {
+  display: flex;
+}
+#bull__container {
+  flex: 0 0 50px;
+  /* background: red; */
+}
+#bear__container {
+  flex: 0 0 50px;
+  /* background: blue; */
+}
+#prgbr__container {
+  flex: 0 0 170px;
+  /* background: green; */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+#sentiment__caption {
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 11px;
+}
+.percentage {
+  font-size: 8px;
 }
 </style>
