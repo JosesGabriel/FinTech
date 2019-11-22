@@ -139,7 +139,7 @@
                                 grow
                                 >
                                     <v-tab color="#fff" key='buy' class="tab_menu-top text-capitalize subtitle-1 px-0" width="100" :href="`#funds-1`">Buy</v-tab>
-                                    <v-tab :disabled="disabled" color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`">Sell</v-tab>
+                                    <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`">Sell</v-tab>
 
                                     <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 1">
                                         <BuyTrade/>
@@ -248,7 +248,7 @@ import { mapActions, mapGetters } from "vuex";
                 date: new Date().toISOString().substr(0, 10),
                 menu: false,
                 modal: false,
-                disabled: true,
+                disabled: false,
             }
         },
         computed: {
@@ -316,15 +316,15 @@ import { mapActions, mapGetters } from "vuex";
                 setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
                 setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell"
             }),
-            isDisabled(dataID) {
+            /*isDisabled(dataID) {
                  this.port.map((data) => { 
                         if (data.id == dataID) {
-                            this.disabled = false;  
-                            console.log('sadasd')          
+                            this.disabled = false; 
+                            console.log('sell');          
                         }
                     });
                 //return this.selected.length < 1; // or === 0   
-            },
+            },*/
            
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
@@ -351,12 +351,12 @@ import { mapActions, mapGetters } from "vuex";
                     let str = this.simulatorPositions.split('-');
                     let positions = parseFloat(str[1]);
                     let avprice = 0;
-               
+
                     // if Sell is selected
                 if(str[0] == 'sell'){
 
                     // search selected stocks in Live Portfolio
-                    this.port.map(function (data) { 
+                    this.port.map((data) => { 
                         if (data.id == stock_id) {
                             avprice = data.avprice;
                             return;
@@ -419,6 +419,7 @@ import { mapActions, mapGetters } from "vuex";
             getDetails(selectObj) {
                 this.selectedTab = 'buy';
                 this.disabled = true;
+                //this.isDisabled(selectObj);
                 const params = {
                     'symbol-id': selectObj,
                 };          
@@ -460,7 +461,12 @@ import { mapActions, mapGetters } from "vuex";
                 }.bind(this)
                 );
 
-                this.isDisabled(selectObj);
+                 this.port.map((data) => { 
+                        if (data.id == selectObj) {
+                            this.disabled = false; 
+                            console.log('sell');          
+                        }
+                    });
 
                 this.$api.chart.stocks.fulldepth(params).then(
                 function(result) {
