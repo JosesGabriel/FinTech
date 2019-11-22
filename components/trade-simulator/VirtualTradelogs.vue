@@ -37,11 +37,14 @@
           dark
           class="data_table-container pl-10 secondary--text"
         >
+        <template v-slot:item.ProfitLoss="{ item }"><span :class="(item.ProfitLoss > 0 ? 'positive' : item.ProfitLoss < 0 ? 'negative' : '')">{{ item.ProfitLoss }}</span></template>
+        <template v-slot:item.Perf="{ item }"><span :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
+
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" text color="success">Delete</v-btn>
+            <v-btn small class="caption" v-model="item" item-value="item" v-on:click="deleteLogs(item.action)" text color="success">Delete</v-btn>
           </div>
           <v-icon
             small
@@ -67,7 +70,7 @@
               color="success"
               dense
             ></v-text-field>
-            <span class="pl-1">of {{  }}</span>
+            <span class="pl-1">of {{ tradeLogs.length }}</span>
             </v-card-title>
           </v-card>
           <v-card color="transparent" elevation="0">
@@ -75,25 +78,24 @@
           </v-card>
         </v-card>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
-        <RecordModal :visible="EnterRecordModal" @close="EnterRecordModal=false" />
+       
     </v-col>
 </template>
 <script>
 import shareModal from '~/components/modals/share'
-import RecordModal from '~/components/trade-simulator/RecordModal'
+import { mapActions, mapGetters } from "vuex";
+//import RecordModal from '~/components/trade-simulator/RecordModal'
 export default {
   components: {
     shareModal,
-    RecordModal
   },
-  data () {
+  data: function() {
     return {
       showScheduleForm: false,
-      EnterRecordModal: false,
       itemsPerPage: 5,
       search: '',
       headers: [
-        { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
+        { text: 'Stocks', value: 'stock_id' , align: 'left', sortable: false },
         { text: 'Date', value: 'date', align: 'right' },
         { text: 'Volume', value: 'amount', align: 'right' },
         { text: 'Ave. Price', value: 'AvePrice', align: 'right' },
@@ -108,37 +110,96 @@ export default {
       page: 1,
       pageCount: 0,
       menuShow: false,
-
-      selectedProfile: null
+      selectedProfile: null,
+      componentKeys: 0
     }
   },
+   computed: {
+      ...mapGetters({
+      simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+      }),
+    },
   mounted() {
-    if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
-
-    const tradelogsparams = {
+     if(this.simulatorPortfolioID != 0 ?  this.getTradeLogs() : ''); 
+  },
+  watch: {
+      simulatorPortfolioID: function () {
+          this.getTradeLogs();
+      }
+  },
+  methods: {
+     ...mapActions({      
+            setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+    }),
+    getTradeLogs(){
+      const tradelogsparams = {
       user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      fund: this.selectedProfile,
+      fund: this.simulatorPortfolioID
     };
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
-          this.tradeLogs = result.meta.logs.meta;
-          console.log(result.meta.logs)
+        console.log(result);
+          this.tradeLogs = result.meta.logs;       
+          for(let i = 0; i < result.meta.logs.length; i++){       
+            const params = {
+                    "symbol-id": this.tradeLogs[i].meta.stock_id
+                  };
+                  this.$api.chart.stocks.list(params).then(
+                    function(result) {
+                      this.tradeLogs[i].stock_id = result.data.symbol;
+                    }.bind(this)
+                  );
+            let date = result.meta.logs[i].meta.date.split(' ')[0];
+            let bvalue = parseFloat(result.meta.logs[i].meta.average_price) * parseFloat(result.meta.logs[i].amount);
+            let sellvalue = parseFloat(result.meta.logs[i].meta.sell_price) * parseFloat(result.meta.logs[i].amount);
+            let ploss = sellvalue - bvalue;
+            let perc = (ploss / bvalue) * 100;
+
+            this.tradeLogs[i].date = date;
+            this.tradeLogs[i].amount = result.meta.logs[i].amount;
+            this.tradeLogs[i].AvePrice = result.meta.logs[i].meta.average_price;
+            this.tradeLogs[i].BuyValue = bvalue.toFixed(2);
+            this.tradeLogs[i].SellPrice = result.meta.logs[i].meta.sell_price;
+            this.tradeLogs[i].SellValue = sellvalue.toFixed(2);
+            this.tradeLogs[i].ProfitLoss = ploss.toFixed(2);
+            this.tradeLogs[i].Perf = perc.toFixed(2);
+            this.tradeLogs[i].action = result.meta.logs[i].id;
+
+          }
       }.bind(this)
     );
 
-  },
-  methods: {
+    },
+    deleteLogs: function(item){
+        const params ={
+          user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        }
+        this.$axios
+        .$post(process.env.JOURNAL_API_URL + "/journal/funds/tradelog/delete/"+ item , params)
+        .then(response => {      
+            if (response.success) {
+                console.log('delete success');
+                this.getTradeLogs();
+            }
+        });
+    },
     tradelogsmenuLogsShow: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
-
       tl.style.display = "block";
     },
     tradelogsmenuLogsHide: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
-
       tl.style.display = "none";
-    }
-  }
+    },
+    addcomma(n, sep, decimals) {
+          sep = sep || "."; // Default to period as decimal separator
+          decimals = decimals || 2; // Default to 2 decimals
+          return n.toLocaleString().split(sep)[0]
+              + sep
+              + n.toFixed(2).split(sep)[1];
+      },
+ 
+  },
 }
 </script>
 
@@ -153,6 +214,12 @@ export default {
     background: #00121e;
     border: 1px solid rgb(0, 255, 195);
     border-radius: 4px;
+  }
+   .positive{
+    color: #00FFC3;
+}
+  .negative{
+      color: #fe4949;
   }
 </style>
 <style>

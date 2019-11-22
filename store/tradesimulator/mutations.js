@@ -11,7 +11,7 @@ export default {
     SET_SIMULATORPOSITIONS(state, data) {
       state.simulatorPositions = data;
     },
-    /*SET_SIMULATORSTOCKID(state, data) {
-      state.simulatorStockID = data;
-    }*/
+    SET_SIMULATORCONFIRMEDBUYSELL(state, data) {
+      state.simulatorConfirmedBuySell = data;
+    }
   };

@@ -11,8 +11,8 @@ export default {
     async setSimulatorPositions({ commit }, data) {
       await commit("SET_SIMULATORPOSITIONS", data);
     },
-   /* async setSimulatorStockID({ commit }, data) {
-      await commit("SET_SIMULATORSTOCKID", data);
-    }*/
+    async setSimulatorConfirmedBuySell({ commit }, data) {
+      await commit("SET_SIMULATORCONFIRMEDBUYSELL", data);
+    }
   };
   

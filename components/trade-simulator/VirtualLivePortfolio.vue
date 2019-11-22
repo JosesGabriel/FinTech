@@ -23,11 +23,13 @@
               dark
               class="data_table-container pl-10 secondary--text"
             >
+            <template v-slot:item.Profit="{ item }"><span :class="(item.Profit > 0 ? 'positive' : item.Profit < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
+            <template v-slot:item.Perf="{ item }"><span :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
             <template v-slot:item.action="{ item }">
                   <div v-show="menuShow" class="sidemenu_actions" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
                     <v-btn small class="caption" text color="success">Details</v-btn>
                     <v-btn small class="caption" text color="success">Edit</v-btn>
-                    <v-btn small class="caption" text color="success">Delete</v-btn>
+                    <v-btn small class="caption" v-model="item" item-value="item" v-on:click="deleteLive(item.action)" text color="success">Delete</v-btn>
                   </div>
                   <v-icon
                     small
@@ -80,9 +82,8 @@ export default {
         page: 1,
         pageCount: 0,
         menuShow: false,
-        symbol: '',
         headers: [
-          { text: 'Stocks', value: 'Stocks', align: 'left', sortable: false },
+          { text: 'Stocks', value: 'stock_id', align: 'left', sortable: false },
           { text: 'Position', value: 'Position', align: 'right' },
           { text: 'Avg. Price', value: 'AvgPrice', align: 'right' },
           { text: 'Total Cost', value: 'TotalCost', align: 'right' },
@@ -96,7 +97,6 @@ export default {
             { title: 'Note' },
             { title: 'Delete' },
         ],
-        page: 1,
         EnterTradeModal: false,
         showResetForm: false,
         showScheduleForm: false,
@@ -108,8 +108,72 @@ export default {
         resetModal,
         shareModal,
     },
+    watch: {
+      simulatorConfirmedBuySell: function () {
+        this.getOpenPositions();
+      },
+      simulatorPortfolioID: function () {
+        this.getOpenPositions();
+      }
+    },
     methods: {
-      
+          ...mapActions({      
+            setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+            setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell",
+        }),
+          getOpenPositions() {
+            //this.setSimulatorPortfolioID('74329357480497152');
+            console.log(this.simulatorPortfolioID);
+            const openparams2 = {
+              user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+              fund: this.simulatorPortfolioID,
+            };
+            console.log(openparams2);
+            this.$api.journal.portfolio.open(openparams2).then(
+              function(result) {
+                this.portfolioLogs = result.meta.open;
+                for (let i = 0; i < this.portfolioLogs.length; i++) {
+                  const params = {
+                    "symbol-id": this.portfolioLogs[i].stock_id
+                  };
+                  this.$api.chart.stocks.list(params).then(
+                    function(result) {
+                      this.portfolioLogs[i].stock_id = result.data.symbol;
+                    }.bind(this)
+                  );
+                  let mvalue = result.meta.open[i].position * parseFloat(result.meta.open[i].metas.buy_price).toFixed(2);
+                  let profit = parseFloat(mvalue) - parseFloat(result.meta.open[i].total_value);
+                  let tcost = result.meta.open[i].position * result.meta.open[i].average_price;
+                  let perf = (profit / tcost) * 100;
+
+                  this.portfolioLogs[i].Position = result.meta.open[i].position;
+                  this.portfolioLogs[i].AvgPrice = result.meta.open[i].average_price.toFixed(2);
+                  this.portfolioLogs[i].TotalCost = this.addcomma(tcost);
+                  this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
+                  this.portfolioLogs[i].Profit = profit.toFixed(2);
+                  this.portfolioLogs[i].Perf = perf.toFixed(2);
+                  this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
+                }
+              }.bind(this)
+            );
+      },
+      deleteLive: function (item) {
+        console.log('delete-' + item);
+          const params ={
+                user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+              }
+            if(confirm("Do you really want to delete?")){
+                  this.$axios
+                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/74329357480497152/delete/" + item, params)
+                  .then(response => {      
+                      if (response.success) {
+                          console.log('delete success');
+                          this.getOpenPositions();
+                      }
+                  });
+            }
+
+      },
       menuLogsShow: function(item) {
         let pl = document.getElementById(`pl_${item.id}`);
 
@@ -131,44 +195,12 @@ export default {
     computed: {
             ...mapGetters({
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+            simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
             }),
     },
      mounted() {
-                const params = {
-                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                fund: 73287292558643200
-                };
-                this.$api.journal.portfolio.open(params).then(
-                function(result) {
-                  console.log(result.meta.open);
-                    for(let i=0; i < result.meta.open.length; i++){ 
-                        
-                        let stock_id = result.meta.open[i].stock_id;
-                        const stockid = {
-                            'symbol-id': stock_id,
-                        };
-                         this.$api.chart.stocks.history(stockid).then(
-                          function(results) { 
-                             this.symbol = results.data.symbol;                
-                          }.bind(this)
-                        );
-
-                      let mvalue = result.meta.open[i].position * result.meta.open[i].average_price.toFixed(2);
-                      let data = {
-                        id: i,
-                        Stocks: this.symbol,
-                        Position: result.meta.open[i].position,
-                        AvgPrice: result.meta.open[i].average_price.toFixed(2),
-                        TotalCost: this.addcomma(result.meta.open[i].total_value),
-                        MarketValue: this.addcomma(mvalue),
-                        Profit: '6%',
-                        Perf: '6%',
-                      }
-                      this.portfolioLogs.push(data);
-                    }       
-                }.bind(this)
-            );
-            },
+       if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');        
+      },
 
 }
 </script>
@@ -288,6 +320,12 @@ export default {
     box-shadow: none;
     margin: 0;
     outline-color: transparent;
+  }
+  .positive{
+    color: #00FFC3;
+}
+  .negative{
+      color: #fe4949;
   }
 
 </style>

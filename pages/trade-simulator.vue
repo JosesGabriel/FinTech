@@ -2,7 +2,7 @@
     <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
         <v-row class="mb-6" no-gutters>
             <v-col class="hidden-xs-and-down" cols="1" sm="1" md="1">
-              <vNavBar/>
+              <NavBar :data="navbarMiniVariantSetter" active="virtualtrade"/>
             </v-col>
             <v-col cols="11">
                 <VirtualContent/>
@@ -12,18 +12,19 @@
 </template>
 
 <script>
-import vNavBar from '~/components/trade-simulator/vNavBar'
+import NavBar from '~/components/Navbar'
 import VirtualContent from '~/components/trade-simulator/VirtualContent'
 
 export default {
   layout: 'main',
   components: {
-      vNavBar,
+      NavBar,
       VirtualContent
   },
   data() {
       return {
-          isOpen: true
+          isOpen: true,
+          navbarMiniVariantSetter: true,
       }
   },
   methods: {

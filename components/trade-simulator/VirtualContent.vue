@@ -88,17 +88,20 @@
                         <v-select offset-y="true" 
                             class="select_portfolio mt-2 black--text" 
                             item-color="success" 
-                            append-icon="mdi-chevron-down" 
+                            append-icon="mdi-chevron-down"
+                            item-text="name" 
+                            item-value="id"
                             :items="portfolio" 
                             background-color="#00FFC3" 
                             label="Select Portfolio" 
+                            v-on:change="getOpenPosition"
                             dense solo flat>
-
+                            
                             <template v-slot:append-item>
                                 <v-list-item
                                 ripple
                                 @click.stop="showCreatePortForm=true"
-                                >
+                                >   
                                     <v-list-item-content>
                                         <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
                                     </v-list-item-content>
@@ -151,6 +154,9 @@
          ...mapActions({
                 setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
             }),
+            getOpenPosition (selectObj) {
+                this.setSimulatorPortfolioID(selectObj);
+            }
     },
     mounted() {
         const portfolioparams = {
@@ -158,18 +164,43 @@
             };
             this.$api.journal.portfolio.portfolio(portfolioparams).then(
                 function(result) {
-                    console.log(result.meta.logs);
+                   
+                    let defaultPort = false;
                     for(let i=0; i< result.meta.logs.length; i++){
-                        if(result.meta.logs[i].type == 'virtual'){
-                            //if(this.simulatorPortfolioID == null){
+                        if(result.meta.logs[i].type == 'VirtualPort'){
+                            let portfolio_params = {
+                                name: result.meta.logs[i].name,
+                                id: result.meta.logs[i].id
+                            };     
+                            this.portfolio.push(portfolio_params);
+                            if(result.meta.logs[i].name == 'Default Virtual Portfolio'){
                                 this.setSimulatorPortfolioID(result.meta.logs[i].id);
-                           // }
-                            this.portfolio.push(result.meta.logs[i].name);
+                                defaultPort = true;
+                            }
                         }
+                        
                     }
-                   console.log(this.simulatorPortfolioID);
+                    if(!defaultPort){
+                        console.log('no default port');
+                        const createportfolioparams = {
+                                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                                currency_code: "PHP",
+                                name: 'Default Virtual Portfolio',
+                                description: "My Virtual Portfolio",
+                                type: "VirtualPort",
+                                balance: 100000
+                            };
+                        this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
+                        function(result) {
+                            if (result.success) {
+                                console.log('default portfolio created..');
+                            }
+                        }.bind(this)
+                        );
+                    }
+                  
                 }.bind(this)
-            );
+            ); 
 
     },
     components: {
@@ -209,7 +240,6 @@
 .positive{
     color: #00FFC3;
 }
-
 .negative{
     color: #fe4949;
 }
