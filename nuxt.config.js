@@ -52,6 +52,7 @@ export default {
     "~/plugins/repository",
     "~/plugins/global-method",
     "~/plugins/numeral",
+    "~/plugins/vue-screen-size",
     { src: "~/plugins/tradingview", ssr: false },
     { src: "~/plugins/vue-numeral-filter", ssr: false }
   ],

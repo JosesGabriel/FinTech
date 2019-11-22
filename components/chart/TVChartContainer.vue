@@ -6,18 +6,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Datafeed from "~/providers/tradingview/api"
+import Datafeed from "~/providers/tradingview/api";
 
 export default {
   name: "TVChartContainer",
-  data() {
-    return {
-      widget: null,
-      tvWidget: null,
-      chartViewId: 0,
-      chartViewClass: "chartViewClass_1"
-    };
-  },
   props: {
     //region url
      datafeedUrl: {
@@ -81,6 +73,14 @@ export default {
       default: "Dark",
       type: String
     }
+  },
+  data() {
+    return {
+      widget: null,
+      tvWidget: null,
+      chartViewId: 0,
+      chartViewClass: "chartViewClass_1"
+    };
   },
   computed: {
     ...mapGetters({
@@ -154,31 +154,35 @@ export default {
         "scalesProperties.showStudyPlotLabels": true
       },
       studies_overrides: {
-          "volume.show ma": true,
+        "volume.show ma": true
       },
       //endregion overrides
-      
+
       //region perma static
-      disabled_features: ['link_to_tradingview'],
-      enabled_features: ['narrow_chart_enabled','study_templates','keep_left_toolbar_visible_on_small_screens'],
+      disabled_features: ["link_to_tradingview"],
+      enabled_features: [
+        "narrow_chart_enabled",
+        "study_templates",
+        "keep_left_toolbar_visible_on_small_screens"
+      ],
       toolbar_bg: "#00121e",
       time_frames: [
-          { text: "50y", resolution: "D" },
-          { text: "20y", resolution: "D" },
-          { text: "10y", resolution: "D" },
-          { text: "5y", resolution: "D" },
-          { text: "4y", resolution: "D" },
-          { text: "3y", resolution: "D" },
-          { text: "2y", resolution: "D" },
-          { text: "1y", resolution: "D" },
-          { text: "6m", resolution: "D" },
-          { text: "3m", resolution: "D" },
-          { text: "2m", resolution: "D" },
-          { text: "1m", resolution: "D" },
-          { text: "1w", resolution: "30" },
-          { text: "3d", resolution: "15" },
-          { text: "1d", resolution: "5" }
-        ],
+        { text: "50y", resolution: "D" },
+        { text: "20y", resolution: "D" },
+        { text: "10y", resolution: "D" },
+        { text: "5y", resolution: "D" },
+        { text: "4y", resolution: "D" },
+        { text: "3y", resolution: "D" },
+        { text: "2y", resolution: "D" },
+        { text: "1y", resolution: "D" },
+        { text: "6m", resolution: "D" },
+        { text: "3m", resolution: "D" },
+        { text: "2m", resolution: "D" },
+        { text: "1m", resolution: "D" },
+        { text: "1w", resolution: "30" },
+        { text: "3d", resolution: "15" },
+        { text: "1d", resolution: "5" }
+      ],
       symbol_search_request_delay: 300,
       //endregion perma static
 
@@ -199,7 +203,7 @@ export default {
       studies_overrides: this.studiesOverrides,
       custom_css_url: this.custom_css_url,
       timezone: this.timezone,
-      theme: this.theme,
+      theme: this.theme
       //endregion default
     };
 
@@ -247,7 +251,7 @@ export default {
         ? null
         : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
-  },
+  }
 };
 </script>
 
