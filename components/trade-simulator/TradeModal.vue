@@ -256,7 +256,8 @@ import { mapActions, mapGetters } from "vuex";
             simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
             simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
-            simulatorPositions: "tradesimulator/getSimulatorPositions"
+            simulatorPositions: "tradesimulator/getSimulatorPositions",
+            simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
             }),
 
             show: {
@@ -278,6 +279,7 @@ import { mapActions, mapGetters } from "vuex";
             },
         },
         mounted() {
+                console.log('Fund ids = ' + this.simulatorPortfolioID);
                 const params = {
                     exchange: "PSE",
                     status: "active"
@@ -290,8 +292,9 @@ import { mapActions, mapGetters } from "vuex";
 
                 const port_params = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                fund: '74329357480497152'
+                fund: this.simulatorPortfolioID,
                 };
+                if(this.simulatorPortfolioID != 0){
                     this.$api.journal.portfolio.open(port_params).then( 
                          function(result) {
                               for(let i=0; i < result.meta.open.length; i++){
@@ -303,19 +306,21 @@ import { mapActions, mapGetters } from "vuex";
                               }
                          }.bind(this)
                     );
-               
+                }
             },
         methods: {
             ...mapActions({
                 setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
                 setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
                 setSimulatorPositions: "tradesimulator/setSimulatorPositions",
-                setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
+                setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+                setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell"
             }),
             isDisabled(dataID) {
                  this.port.map((data) => { 
                         if (data.id == dataID) {
-                            this.disabled = false;                
+                            this.disabled = false;  
+                            console.log('sadasd')          
                         }
                     });
                 //return this.selected.length < 1; // or === 0   
@@ -330,8 +335,10 @@ import { mapActions, mapGetters } from "vuex";
             },
             //----Confirm Buy/Sell Button----------
             confirm() {
+
+                console.log('confirm - ' +this.simulatorPortfolioID);
                 const stock_id = this.stock_id;
-                let fund_id = '74329357480497152';
+                let fund_id = this.simulatorPortfolioID;
                 let d = new Date,
                     dformat = [d.getMonth()+1,
                                 d.getDate(),
@@ -376,7 +383,7 @@ import { mapActions, mapGetters } from "vuex";
                             .then(response => {      
                                 if (response.success) {
                                     console.log('sell success');
-                                    this.setSimulatorPortfolioID('');
+                                    this.setSimulatorConfirmedBuySell('sell');
                                 }
                             });
                         }else { // if selected stock is not in the list
@@ -395,15 +402,14 @@ import { mapActions, mapGetters } from "vuex";
                                 date: dformat
                             }
                         }      
-                         console.log('fund-id = '+this.simulatorPortfolioID);
                         this.$axios
                         .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ fund_id + "/buy/" + stock_id, buyparams)
                         .then(response => {      
                             if (response.success) {
                                 console.log(response.message);
-                                this.setSimulatorPortfolioID('');
+                                this.setSimulatorConfirmedBuySell('bull');
                             }
-                        });     
+                        });    
                 }
             }else {
                 console.log('please enter quantity');
