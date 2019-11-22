@@ -8,4 +8,7 @@ export default {
     getDefaultPortfolioId(state) {
         return state.defaultPortfolioId;
     },
+    getSelectedPortfolio(state) {
+        return state.selectedPortfolio;
+    },
 };

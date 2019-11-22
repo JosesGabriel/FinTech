@@ -2,28 +2,14 @@
   <v-content>
     <v-card
       :loading="loading"
-      style="height:280px"
+      style="height:200px"
       color="#00121e"
       elevation="12"
       dark
     >
-      <v-card-text class="pa-0 py-3">
-        <v-row class="ma-0">
-          <v-col class="pa-0">
-            <Headline />
-          </v-col>
-        </v-row>
-        <v-row class="ma-0">
-          <v-col class="pa-0">
-            <Status />
-          </v-col>
-        </v-row>
-        <v-row class="ma-0">
-          <v-col class="pa-0">
-            <Sentiment />
-          </v-col>
-        </v-row>
-      </v-card-text>
+      <Headline />
+      <Status />
+      <Sentiment />
     </v-card>
     <v-divider></v-divider>
     <Tabs />
@@ -79,9 +65,8 @@ export default {
 
     // all stock
     this.$api.chart.stocks.list().then(response => {
-     // console.log(response);
+      // console.log(response);
     });
-
   }
 };
 </script>

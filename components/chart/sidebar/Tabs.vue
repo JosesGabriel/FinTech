@@ -8,13 +8,12 @@
         grow
         dark
         height="35"
-        icons-and-text
       >
         <v-tab v-for="item in items" :key="item.component">
           <v-icon>{{ item.icon }}</v-icon>
         </v-tab>
         <v-tab-item v-for="item in items" :key="item.component">
-          <v-card dark color="#00121e" class="pa-0 ma-0 tab__height">
+          <v-card dark :color="color" class="pa-0 ma-0 tab__height">
             <v-card-text class="pa-0 ma-0">
               <component :is="item.component" />
             </v-card-text>
@@ -37,6 +36,7 @@ export default {
   },
   data() {
     return {
+      color: "#00121e",
       tab: null,
       items: [
         {
@@ -62,7 +62,6 @@ export default {
   height: 16px;
 }
 .tab__height {
-  height: calc(100vh - 369px);
-  background: #00121e;
+  height: calc(100vh - 290px);
 }
 </style>

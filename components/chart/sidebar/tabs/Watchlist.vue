@@ -58,7 +58,7 @@
                     <span>{{
                       $globalMethod.limitDisplayString(
                         item.description,
-                        15,
+                        10,
                         true
                       )
                     }}</span>
@@ -153,20 +153,19 @@ export default {
   },
   methods: {
     showRemoveButton: function(item) {
-      this.showColumn = !this.showColumn;
-      let watch = document.getElementById(`watch_${item.id}`);
-      let show = document.getElementById(`show_${item.id}`);
-
-      if (this.showColumn) {
-        watch.classList.remove("col-12");
-        watch.classList.add("col-11");
-        watch.classList.add("watchColumnStyle");
-        show.style.display = "block";
-      } else {
-        watch.classList.add("col-12");
-        watch.classList.remove("watchColumnStyle");
-        show.style.display = "none";
-      }
+      //   this.showColumn = !this.showColumn;
+      //   let watch = document.getElementById(`watch_${item.id}`);
+      //   let show = document.getElementById(`show_${item.id}`);
+      //   if (this.showColumn) {
+      //     watch.classList.remove("col-12");
+      //     watch.classList.add("col-11");
+      //     watch.classList.add("watchColumnStyle");
+      //     show.style.display = "block";
+      //   } else {
+      //     watch.classList.add("col-12");
+      //     watch.classList.remove("watchColumnStyle");
+      //     show.style.display = "none";
+      //   }
     },
     confirmRemove: function(item) {
       if (confirm("Are you sure to remove this stock?")) {
@@ -197,7 +196,7 @@ export default {
   cursor: pointer;
 }
 .content__card-watchlist {
-  height: calc(100vh - 400px);
+  height: calc(100vh - 315px);
   overflow-x: auto;
 }
 .card__watchlist {
@@ -228,5 +227,11 @@ export default {
   line-height: 2;
   margin-right: 14px;
   margin-top: 10px;
+}
+.increase {
+  color: #48ffd5 !important;
+}
+.decrease {
+  color: #ff4848 !important;
 }
 </style>

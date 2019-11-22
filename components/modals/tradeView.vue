@@ -33,7 +33,7 @@
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters>
                 <v-col cols="12" sm="12" md="12">
-                  <v-select v-model="GetSelectStock" :disabled="noSelectedPortfolioModel" offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stocklist" item-text="symbol" item-value="id_str" label="Select Stock" @change="getStockDetails" ></v-select>
+                  <v-select v-model="GetSelectStock" offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stocklist" item-text="symbol" item-value="id_str" label="Select Stock" @change="getStockDetails" ></v-select>
                   <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
                   <v-spacer></v-spacer>
                   <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span class="caption" :class=" change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral' " >{{ change }}</span>
@@ -144,8 +144,8 @@
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters>
                 <v-tabs color="#48FFD5" background-color="#00121E" dark grow>
-                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" width="100" :href="`#funds-1`" @click="showSellbtn = !showSellbtn, showBuybtn = !showBuybtn">Buy</v-tab>
-                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`" :disabled="ifstockExist" @click="showSellbtn = !showSellbtn, showBuybtn = !showBuybtn">Sell</v-tab>
+                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-1`" @click="showSellbtn = showSellbtn, showBuybtn = showBuybtn">Buy</v-tab>
+                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`" @click="showSellbtn = !showSellbtn, showBuybtn = !showBuybtn">Sell</v-tab>
                   <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 1">
                     <v-container class="pa-0">
                       <div class="separator"></div>
@@ -153,8 +153,24 @@
                         <v-col cols="12" sm="12" md="12">
                           <v-row no-gutters class="px-0 py-0">
                             <v-col sm="12" md="12" class="pa-0">
-                              <v-text-field v-model="portfolioDropdownModel" label="Current Portfolio" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
-                              <v-text-field v-model="availableFundsModel" label="Available Funds" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly ></v-text-field>
+                              <v-row no-gutters>
+                              <!-- <v-text-field v-model="portfolioDropdownModel" label="Current Portfolio" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field> -->
+                              <!-- <v-text-field v-model="availableFundsModel" label="Available Funds" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly ></v-text-field> -->
+                                <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFundsModel) }}</v-card-title>
+                              </v-row>
+                              <v-select
+                              :items="selectPortfolioModel"
+                              v-model="portfolioDropdownModel"
+                              item-text="name"
+                              item-value="id"
+                              @change="whereToSave"
+                              label="Fund Source"
+                              color="#00FFC3"
+                              item-color="success"
+                              dense
+                              dark
+                              class="enter_amount-deposit-select ma-0"
+                              ></v-select>
                             </v-col>
                             <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
                               <v-text-field v-model="priceModel" label="Buy Price" placeholder="Enter Buy Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
@@ -174,15 +190,28 @@
                       <div class="separator"></div>
                       <v-row no-gutters class="pa-3 pb-0">
                         <v-col sm="12" md="12" class="pa-0">
-                          <v-text-field v-model="portfolioDropdownModel" label="Current Portfolio" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
-                          <v-col cols="12" sm="12" md="12" class="pa-0 justify-right d-flex align-center text-right" >
-                            <v-text-field v-model="availableFundsModel" label="Available Funds" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3 pr-1" readonly ></v-text-field>
-                            <!-- <v-text-field v-model="boardLotModel" label="Board Lot" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3 pl-1" readonly ></v-text-field> -->
-                          </v-col>
+                          <v-row no-gutters>
+                          <!-- <v-text-field v-model="portfolioDropdownModel" label="Current Portfolio" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field> -->
+                          <!-- <v-text-field v-model="availableFundsModel" label="Available Funds" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly ></v-text-field> -->
+                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFundsModel) }}</v-card-title>
+                          </v-row>
+                          <v-select
+                          :items="selectPortfolioModel"
+                          v-model="portfolioDropdownModel"
+                          item-text="name"
+                          item-value="id"
+                          @change="whereToSave"
+                          label="Fund Source"
+                          color="#00FFC3"
+                          item-color="success"
+                          dense
+                          dark
+                          class="enter_amount-deposit-select ma-0"
+                          ></v-select>
                           <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
                           <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number" type="number" min="1" :max="boardLotModel" step="10"></v-text-field>
                         </v-col>
-                        <v-text-field v-model="totalCostModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
+                        <v-text-field v-model="totalCostSellModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
                         <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar>
                       </v-row>
                   </v-container>
@@ -319,6 +348,7 @@ export default {
       menu: false,
       modal: false,
 
+      selectPortfolioModel: [],
       portfolioDropdownModel: null,
       portfolioDropdownModelId: null,
       selectedProfile: null,
@@ -331,6 +361,7 @@ export default {
       quantityModel: 0,
       quantitySellModel: 0,
       totalCostModel: 0,
+      totalCostSellModel: 0,
 
       strategySellModel: null,
       tradeplanSellModel: null,
@@ -341,12 +372,9 @@ export default {
       continueButtonDisable: true,
       continueBuyButtonDisable: true,
       confirmSellButtonDisable: true,
-      noSelectedPortfolioModel: true,
 
       showBuybtn: true,
       showSellbtn: false,
-
-      ifstockExist: true,
 
       snackbar: false,
       snackbarSell: false,
@@ -358,6 +386,7 @@ export default {
   computed: {
     ...mapGetters({
       defaultPortfolioId: "journal/getDefaultPortfolioId",
+      userPortfolio: "journal/getUserPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey"
     }),
     show: {
@@ -443,7 +472,7 @@ export default {
         }
       };
       this.$axios
-        .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/buy/"+this.GetSelectStock,params)
+        .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.portfolioDropdownModel+"/buy/"+this.GetSelectStock,params)
         .then(response => {
           if (response.success) {
             
@@ -563,6 +592,7 @@ export default {
           this.vole = this.nFormatter(result.data.value);
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
+          // console.log(this.stockSymbolGet)
         }.bind(this)
       );
       const openparams = {
@@ -579,8 +609,9 @@ export default {
             };
             this.$api.chart.stocks.list(params).then(
               function(result) {
-              let stockIdExist = this.portfolioLogs[i]
+                let stockIdExist = this.portfolioLogs[i]
                 if(result.data.symbol == this.stockSymbolGet.symbol && stockIdExist.stock_id == result.data.id) {
+                // console.log(this.portfolioLogs[i])
                   this.boardLotModel = this.portfolioLogs[i].position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   this.average_price = this.portfolioLogs[i].average_price
                   this.strategySellModel = this.portfolioLogs[i].metas.strategy
@@ -588,7 +619,6 @@ export default {
                   this.emotionsSellModel = this.portfolioLogs[i].emotion
                   this.notesSellModel = this.portfolioLogs[i].notes
                   this.dateSellModel = this.dateModel;
-                  this.ifstockExist = false
                 }
               }.bind(this)
             );
@@ -604,13 +634,13 @@ export default {
     },
     nFormatter(num) {
       if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(0).replace(/\.0$/, "") + "G";
+        return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "G";
       }
       if (num >= 1000000) {
-        return (num / 1000000).toFixed(0).replace(/\.0$/, "") + "M";
+        return (num / 1000000).toFixed(2).replace(/\.0$/, "") + "M";
       }
       if (num >= 1000) {
-        return (num / 1000).toFixed(0).replace(/\.0$/, "") + "K";
+        return (num / 1000).toFixed(2).replace(/\.0$/, "") + "K";
       }
       return num;
     },
@@ -620,26 +650,39 @@ export default {
       };
       this.$api.journal.portfolio.portfolio(params).then(
           function(result) {
-            
-            let toFindReal = this.defaultPortfolioId;
-            for (let i = 0; i < result.meta.logs.length; i++ ) {
-              let portfolioListPush1 = result.meta.logs[i]
-              if (portfolioListPush1.id === toFindReal) {
-                this.portfolioDropdownModel = portfolioListPush1.name
-                this.portfolioDropdownModelId = portfolioListPush1.id
-                this.availableFundsModel = parseInt(portfolioListPush1.balance).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              this.portfolioList = result.meta.logs;
+              this.portfolioList = this.portfolioList.reverse();
+              this.selectPortfolioModel = []
+              if(this.portfolioList.length != 0) {
+                this.selectPortfolioModel.push({header: 'Real Portfolio'});
+                const toFindReal = "real" // what we want to count
+                for (let i = 0; i < this.portfolioList.length; i++ ) {
+                    let portfolioListPush1 = this.portfolioList[i]
+                    if (portfolioListPush1.type === toFindReal) {
+                      this.selectPortfolioModel.push(portfolioListPush1);
+                    }
+                }
               }
-            }
-            // disable this if no selected portfolio
-            if(this.defaultPortfolioId != null) {
-              this.noSelectedPortfolioModel = false;
-            } else {
-              this.noSelectedPortfolioModel = true;
-            }
           }.bind(this)
       );
       this.componentKey++;
-      
+    },
+    whereToSave() {
+      for (let i = 0; i < this.userPortfolio.length; i++ ) {
+          let portfolioListPush1 = this.userPortfolio[i]
+          if (portfolioListPush1.id === this.portfolioDropdownModel) {
+            // console.log(portfolioListPush1);
+            this.availableFundsModel = parseInt(portfolioListPush1.balance)
+            this.portfolioDropdownModel = portfolioListPush1.id
+            this.keyCreateCounter = this.renderPortfolioKey;
+            this.keyCreateCounter++;
+            this.setRenderPortfolioKey(this.keyCreateCounter);
+            
+            this.setDefaultPortfolioId(portfolioListPush1.id)
+          }
+      }
+      // console.log("this one",parseInt(this.availableFundsModel))
+      // console.log(this.userPortfolio)
     },
     selectWatch() {
       if (this.typePortfolioModel != null) {
@@ -658,7 +701,7 @@ export default {
         this.continueBuyButtonDisable = true;
         this.snackbar = true;
       } else {
-        if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0) {
+        if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0 || this.portfolioDropdownModel == null) {
           this.continueBuyButtonDisable = true;
         } else {
           this.continueBuyButtonDisable = false;
@@ -666,16 +709,12 @@ export default {
       }
     },
     priceSellWatch() {
-      let boardLotModel1 = this.boardLotModel.replace(/,/g, "");
-      if(parseInt(this.quantitySellModel) > boardLotModel1){
+      console.log(this.portfolioDropdownModel)
+      this.totalCostSellModel = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel.replace(/,/g, ""))
+      if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0 || this.portfolioDropdownModel == null){
         this.confirmSellButtonDisable = true;
-        this.snackbarSell = true;
-      } else {
-        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
-          this.confirmSellButtonDisable = true;
-        }else {
-          this.confirmSellButtonDisable = false;
-        }
+      }else {
+        this.confirmSellButtonDisable = false;
       }
     },
     quantityWatch() {
@@ -688,7 +727,7 @@ export default {
         this.continueBuyButtonDisable = true;
         this.snackbar = true;
       } else {
-        if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0) {
+        if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0 || this.portfolioDropdownModel == null) {
           this.continueBuyButtonDisable = true;
         } else {
           this.continueBuyButtonDisable = false;
@@ -696,19 +735,19 @@ export default {
       }
     },
     quantitySellWatch() {
-      let boardLotModel1 = this.boardLotModel.replace(/,/g, "");
-      if(parseInt(this.quantitySellModel) > parseInt(boardLotModel1)){
+      console.log(this.portfolioDropdownModel)
+      this.totalCostSellModel = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel.replace(/,/g, ""))
+      if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel.replace(/,/g, ""))){
         this.confirmSellButtonDisable = true;
         this.snackbarSell = true;
       } else {
-        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
+        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0 || this.portfolioDropdownModel == null){
           this.confirmSellButtonDisable = true;
         }else {
           this.confirmSellButtonDisable = false;
         }
       }
     },
-      
     dateWatch() {
       var today = new Date();
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
