@@ -236,6 +236,7 @@ import { mapActions, mapGetters } from "vuex";
                 port: [],
                 GetSelectStock: '',
                 selectedTab: null,
+                avprice: 0,
 
                 selectedstrategy: '',
                 selectedtradeplan: '',
@@ -290,23 +291,6 @@ import { mapActions, mapGetters } from "vuex";
                     }.bind(this)
                     );
 
-                const port_params = {
-                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                fund: this.simulatorPortfolioID,
-                };
-                if(this.simulatorPortfolioID != 0){
-                    this.$api.journal.portfolio.open(port_params).then( 
-                         function(result) {
-                              for(let i=0; i < result.meta.open.length; i++){
-                                let __port = {
-                                  id: result.meta.open[i].stock_id,
-                                  avprice: result.meta.open[i].average_price,
-                                }
-                                  this.port.push(__port);
-                              }
-                         }.bind(this)
-                    );
-                }
             },
         methods: {
             ...mapActions({
@@ -316,6 +300,30 @@ import { mapActions, mapGetters } from "vuex";
                 setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
                 setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell"
             }),
+            stockSearch(stock_id){
+                const port_params = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: this.simulatorPortfolioID,
+                };
+                if(this.simulatorPortfolioID != 0){
+                    this.$api.journal.portfolio.open(port_params).then( 
+                         function(result) {
+                              for(let i=0; i < result.meta.open.length; i++){
+                                  if(stock_id == result.meta.open[i].stock_id ){
+                                      this.avprice = result.meta.open[i].average_price;
+                                      console.log(this.avprice);
+                                  }
+                                //let __port = {
+                                  //id: result.meta.open[i].stock_id,
+                                  //avprice: result.meta.open[i].average_price,
+                                //}
+                                 // this.port.push(__port);
+                              }
+                         }.bind(this)
+                    );
+
+                }
+            },
             /*isDisabled(dataID) {
                  this.port.map((data) => { 
                         if (data.id == dataID) {
@@ -350,27 +358,29 @@ import { mapActions, mapGetters } from "vuex";
                 if(this.simulatorPositions){
                     let str = this.simulatorPositions.split('-');
                     let positions = parseFloat(str[1]);
-                    let avprice = 0;
+                    //let avprice = 0;
 
                     // if Sell is selected
                 if(str[0] == 'sell'){
-
+                    
+                    
                     // search selected stocks in Live Portfolio
-                    this.port.map((data) => { 
+                    this.port.filter(function(data) { 
+                        console.log(data);
                         if (data.id == stock_id) {
-                            avprice = data.avprice;
+                            //avprice = data.avprice;
                             return;
                         } 
                     });
-
-                        if(avprice != 0){ // if selected stock exist in Live Portfolio
+                        console.log(this.avprice);
+                        if(this.avprice != 0){ // if selected stock exist in Live Portfolio
                             const sellparams = {
                                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
                                 position: positions,
                                 stock_price: this.cprice,
                                 transaction_meta: {
                                     strategy: this.selectedstrategy,
-                                    average_price: avprice.toFixed(2),
+                                    average_price: this.avprice.toFixed(2),
                                     plan: this.selectedtradeplan,
                                     emotion: this.selectedemotions,
                                     notes: this.notes,
@@ -419,6 +429,7 @@ import { mapActions, mapGetters } from "vuex";
             getDetails(selectObj) {
                 this.selectedTab = 'buy';
                 this.disabled = true;
+                this.stockSearch(selectObj);
                 //this.isDisabled(selectObj);
                 const params = {
                     'symbol-id': selectObj,
