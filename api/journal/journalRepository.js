@@ -28,7 +28,7 @@ export default $axios => ({
         );
     },
     deposit(depositparams) {
-        return $axios.$post(`${baseURL}/funds`, depositparams);
+        return $axios.$post(`${baseURL}/funds/`, depositparams);
     },
 });
 

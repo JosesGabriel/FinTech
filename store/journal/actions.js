@@ -9,5 +9,9 @@ export default {
   // Set Portfolio ID global on load
   async setDefaultPortfolioId({ commit }, data) {
     await commit("SET_DEFAULTPORTFOLIOID", data);
-  }
+  },
+  // Set Selected Portfolio global on change
+  async setSelectedPortfolio({ commit }, data) {
+    await commit("SET_SELECTEDPORTFOLIO", data);
+  },
 };
