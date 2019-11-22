@@ -1,3 +1,14 @@
+/**
+ *	The tradinview API contains the list of 
+	methods, including request to and from the server.
+
+	By default, the base URL of the API is connected to
+	the data-api /charts, and the tradingview configurations
+	are injected and modelled with respect to the orignal UDF queries.
+
+	//TODO: dependency injection for the constant API routes
+ */
+
 require("dotenv").config();
 
 import axios from 'axios';
@@ -18,6 +29,7 @@ const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 axios.defaults.headers.common['Authorization'] = `Bearer ${TOKEN}`;
 
 export default {
+	//onready is executed when the chart components are loaded and ready.
 	onReady: cb => {
 		setTimeout(() => {
 			//get tradingview config			
@@ -29,6 +41,7 @@ export default {
 			});
 		}, 0)
 	},
+	//searchsymbols is fired when the user inputs to the tradingview search bar
 	searchSymbols: (userInput, exchange, symbolType, onResultReadyCallback) => {
 		const params = {
 			query: userInput,
@@ -49,6 +62,7 @@ export default {
 			onResultReadyCallback([])
 		  });
 	},
+	//resolvesymbol is fired when the user clicks the symbol from search bar
 	resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
 		const SPLIT_DATA = symbolName.split(/[:/]/)
 		const params = {
@@ -70,6 +84,7 @@ export default {
 			  });
 		}, 0)
 	},
+	//getbars is loaded when the resolvesymbol is executed
 	getBars: function(symbolInfo, resolution, from, to, onHistoryCallback, onErrorCallback, firstDataRequest) {
 		const params = {
 			symbol: symbolInfo.name,
@@ -123,12 +138,15 @@ export default {
 			onErrorCallback([])
 		  });
 	},
+	//subscribebars is TODO hihi
 	subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscribeUID, onResetCacheNeededCallback) => {
 		console.log('=====subscribeBars runnning')
 	},
+	//unsubscribebars is TODO hihi
 	unsubscribeBars: subscriberUID => {
 		console.log('=====unsubscribeBars running')
 	},
+	//calculatehistorydepth is fired and related during resolvesymbol event
 	calculateHistoryDepth: (resolution, resolutionBack, intervalBack) => {
 		if (parseInt(resolution) > 0) {
 			resolutionBack = 'M';
@@ -139,10 +157,12 @@ export default {
 			intervalBack: intervalBack,
 		};
 	},
+	//getmarks is executed as a request for custom plots in charting area
 	getMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {
 		//optional
 		console.log('=====getMarks running')
 	},
+	//gettimescalemarks is executed as a request for events and displasyed in volume area
 	getTimescaleMarks: (symbolInfo, from, to, onDataCallback, resolution) => {
 		const params = {
 			symbol: symbolInfo.name,
@@ -169,15 +189,14 @@ export default {
 			onDataCallback([])
 		  });
 	},
+	//gerservertime is executed with onready event and used for time synchornization
 	getServerTime: cb => {
-		setTimeout(() => {
-			//get tradingview config			
-			axios.get(
-				SERVER_TIME_URL,
-			).then(({data}) => {
-				//write to callback
-				cb(data.data.time)
-			});
-		}, 0)
+		//get tradingview config			
+		axios.get(
+			SERVER_TIME_URL,
+		).then(({data}) => {
+			//write to callback
+			cb(data.data.time)
+		});
 	}
 }
