@@ -179,8 +179,8 @@
                             <v-text-field v-model="availableFundsModel" label="Available Funds" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3 pr-1" readonly ></v-text-field>
                             <!-- <v-text-field v-model="boardLotModel" label="Board Lot" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3 pl-1" readonly ></v-text-field> -->
                           </v-col>
-                          <v-text-field v-model="priceModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
-                          <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number" type="number" min="1" :max="boardLotModel" step="10"></v-text-field>
+                          <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
+                          <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number" type="number" min="1" :max="boardLotModel" step="10"></v-text-field>
                         </v-col>
                         <v-text-field v-model="totalCostModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
                         <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar>
@@ -327,7 +327,9 @@ export default {
       boardLotModel: 0,
       average_price: 0,
       priceModel: "0.00",
+      priceSellModel: "0.00",
       quantityModel: 0,
+      quantitySellModel: 0,
       totalCostModel: 0,
 
       strategySellModel: null,
@@ -383,8 +385,18 @@ export default {
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.priceModel = result;
     },
+    priceSellModel: function(newValue) {
+      this.priceSellWatch();
+      const result = newValue
+        .replace(/\D/g, "")
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.priceSellModel = result;
+    },
     quantityModel: function() {
       this.quantityWatch();
+    },
+    quantitySellModel: function() {
+      this.quantitySellWatch();
     },
     date: function() {
       this.dateWatch();
@@ -468,8 +480,8 @@ export default {
         });
     },
     sellListArray: function() {
-      let priceModel1 = this.priceModel.replace(/,/g, "");
-      let quantityModel1 = this.quantityModel.replace(/,/g, "");
+      let priceModel1 = this.priceSellModel.replace(/,/g, "");
+      let quantityModel1 = this.quantitySellModel.replace(/,/g, "");
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseInt(quantityModel1),
@@ -492,13 +504,8 @@ export default {
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
             this.GetSelectStock = "";
-            this.priceModel = "0.00";
-            this.quantityModel = "0";
-            this.strategyModel = "";
-            this.tradeplanModel = "";
-            this.emotionsModel = "";
-            this.notesModel = "";
-            this.buyTransactionArray = [];
+            this.priceSellModel = "0.00";
+            this.quantitySellModel = "0";
             this.dateModel = new Date();
             this.e1 = 1;
 
@@ -650,24 +657,22 @@ export default {
       let qwerty1 = this.availableFundsModel.replace(/,/g, "")
       if(parseInt(qwerty) >= parseInt(qwerty1)){
         this.continueBuyButtonDisable = true;
-        // this.confirmSellButtonDisable = true;
         this.snackbar = true;
       } else {
         if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0) {
           this.continueBuyButtonDisable = true;
-          // this.confirmSellButtonDisable = true;
         } else {
           this.continueBuyButtonDisable = false;
-          // this.confirmSellButtonDisable = false;
         }
       }
-
+    },
+    priceSellWatch() {
       let boardLotModel1 = this.boardLotModel.replace(/,/g, "");
-      if(parseInt(this.quantityModel) > parseInt(boardLotModel1)){
+      if(parseInt(this.quantitySellModel) > boardLotModel1){
         this.confirmSellButtonDisable = true;
         this.snackbarSell = true;
       } else {
-        if(this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0){
+        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
           this.confirmSellButtonDisable = true;
         }else {
           this.confirmSellButtonDisable = false;
@@ -690,19 +695,21 @@ export default {
           this.continueBuyButtonDisable = false;
         }
       }
-      
+    },
+    quantitySellWatch() {
       let boardLotModel1 = this.boardLotModel.replace(/,/g, "");
-      if(parseInt(this.quantityModel) > parseInt(boardLotModel1)){
+      if(parseInt(this.quantitySellModel) > parseInt(boardLotModel1)){
         this.confirmSellButtonDisable = true;
         this.snackbarSell = true;
       } else {
-        if(this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0){
+        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
           this.confirmSellButtonDisable = true;
         }else {
           this.confirmSellButtonDisable = false;
         }
       }
     },
+      
     dateWatch() {
       var today = new Date();
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
