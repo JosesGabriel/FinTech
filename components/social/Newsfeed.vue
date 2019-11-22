@@ -61,7 +61,7 @@
           <img src="/icon/bullish.svg" width="15" />
         </v-btn>
         <v-btn icon outlined fab x-small color="error">
-          <v-icon>mdi-paw</v-icon>
+          <img src="/icon/bearish.svg" width="15" />
         </v-btn>
       </v-card-actions>
       <v-divider></v-divider>
@@ -105,7 +105,7 @@
                 </v-btn>
                 <span class="px-2">{{ bullCounter }}</span>
                 <v-btn icon outlined fab x-small color="red">
-                  <v-icon>mdi-paw</v-icon>
+                  <img src="/icon/bearish.svg" width="15" />
                 </v-btn>
                 <span class="px-2">{{ bearCounter }}</span>
                 |
@@ -142,7 +142,7 @@
                 </v-btn>
                 <span class="px-2">{{ bullCounter }}</span>
                 <v-btn icon outlined fab x-small color="red">
-                  <v-icon>mdi-paw</v-icon>
+                  <img src="/icon/bearish.svg" width="15" />
                 </v-btn>
                 <span class="px-2">{{ bearCounter }}</span>
                 |

@@ -28,9 +28,11 @@
             />
           </div>
           <div>
-            <span>{{
-              stockData[index] ? stockData[index].currentPrice : ""
-            }}</span>
+            <span
+              >₱{{
+                stockData[index] ? stockData[index].currentPrice : ""
+              }}</span
+            >
             <span
               :class="
                 stockData[index].change > 0

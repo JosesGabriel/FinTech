@@ -8,4 +8,7 @@ export default {
   SET_DEFAULTPORTFOLIOID(state, data) {
     state.defaultPortfolioId = data;
   },
+  SET_SELECTEDPORTFOLIO(state, data) {
+    state.selectedPortfolio = data;
+  },
 };

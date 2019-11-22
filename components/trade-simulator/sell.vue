@@ -5,7 +5,7 @@
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3" :items="portfolio" label="Portfolio" dense flat dark></v-select>
+                        <v-select offset-y="true" v-model="item" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3" :items="portfolio" label="Portfolio" dense flat dark></v-select>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field
@@ -24,6 +24,7 @@
                             placeholder="Enter Quantity"
                             color="#00FFC3"
                             style="color: #00FFC3"
+                            v-on:keyup="keypress"
                             type=number
                             dark
                             class="caption buy_selector buy_price-input py-3"
@@ -42,12 +43,12 @@
                             color="primary"
                         ><v-icon>mdi-plus</v-icon></v-btn>
                     </v-col>
-                    <v-col class="ma-0 pa-0" style="color: #90989d;position: absolute;font-size:12px; top:265px; left:211px;width: 95px;">
+                    <v-col class="ma-0 pa-0" style="color: #90989d;position: absolute;font-size:12px; top:265px; left:180px;width: 95px;">
                         BoardLot : <span>{{ this.simulatorBoardLot }}</span>
                     </v-col>
                 </v-row>
                 <v-card-title class="pa-0 py-2">
-                    <p class="text-right ma-0 caption" style="color:#b6b6b6">Available Funds: <span style="color:#b6b6b6">320.30M</span></p>
+                    <p class="text-right ma-0 caption" style="color:#b6b6b6">Available Funds: <span style="color:#b6b6b6">{{ this.availableFunds }}</span></p>
                     <v-spacer></v-spacer>
                     <p class="text-right ma-0 caption" style="color:#b6b6b6">Total Cost: <span style="color:#b6b6b6">{{ this.totalCost }}</span></p>
                 </v-card-title>
@@ -65,28 +66,57 @@ export default {
             quantity: '0.00',
             availableFunds: '320,000,000.00',
             totalCost: 0,
-            portfolio: ['Real Portfolio','Virtual Portfolio']
+            portfolio: [],
+            item: '',
         }
     },
     computed: {
     ...mapGetters({
       simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
-      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot"
+      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
+      simulatorPositions: "tradesimulator/getSimulatorPositions"
     })
   },
+   mounted() {
+        const portfolioparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+            };
+            this.$api.journal.portfolio.portfolio(portfolioparams).then(
+                function(result) {
+                    console.log(result.meta.logs);
+                    for(let i=0; i< result.meta.logs.length; i++){
+                        if(result.meta.logs[i].name == 'Default Virtual Portfolio'){
+                            let avfunds = parseFloat(result.meta.logs[i].balance);    
+                            this.availableFunds = this.addcomma(avfunds);
+                            this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                        }
+                        if(result.meta.logs[i].type == 'VirtualPort'){                     
+                            this.portfolio.push(result.meta.logs[i].name);
+                        }
+
+                    }
+                  
+                }.bind(this)
+            );
+
+    },
     methods: {
     ...mapActions({
         setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
-        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot"
+        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
+        setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+        setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
     addButton(){
         this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
         let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('sell-'+this.quantity);
         this.totalCost = this.addcomma(add);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));
         let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('sell-'+this.quantity);
         this.totalCost = this.addcomma(min);
     },
     addcomma(n, sep, decimals) {
@@ -95,7 +125,30 @@ export default {
 	    return n.toLocaleString().split(sep)[0]
 	        + sep
 	        + n.toFixed(2).split(sep)[1];
-	},
+    },
+    keypress: function(){
+        let press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.setSimulatorPositions('sell-'+this.quantity);
+        this.totalCost = this.addcomma(press);
+    },
+    getBalance: function(item){
+        console.log(item);
+                const portfolioparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+            };
+            this.$api.journal.portfolio.portfolio(portfolioparams).then(
+                function(result) {
+                    console.log(result.meta.logs);
+                    for(let i=0; i< result.meta.logs.length; i++){
+                        if(result.meta.logs[i].name == item){
+                            this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                            let avfunds = parseFloat(result.meta.logs[i].balance);    
+                            this.availableFunds = this.addcomma(avfunds);                  
+                        }
+                    }                
+                }.bind(this)
+            );       
+    }
   },
 }
 </script>

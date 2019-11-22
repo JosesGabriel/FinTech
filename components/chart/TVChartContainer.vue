@@ -6,9 +6,74 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Datafeed from "~/providers/tradingview/api";
 
 export default {
   name: "TVChartContainer",
+  props: {
+    //region url
+     datafeedUrl: {
+      default: "https://demo_feed.tradingview.com",
+      type: String
+    },
+     chartsStorageUrl: {
+      default: "https://saveload.tradingview.com",
+      type: String
+    },
+    custom_css_url: {
+      default: "tradingview.css",
+      type: String
+    },
+    libraryPath: {
+      default: "/vendor/charting_library/",
+      type: String
+    },
+    //endregion url
+
+    symbol: {
+      default: "PSE:PSEI",
+      type: String
+    },
+    interval: {
+      default: "D",
+      type: String
+    },
+    containerId: {
+      default: "tv_chart_container",
+      type: String
+    },
+    chartsStorageApiVersion: {
+      default: "1.1",
+      type: String
+    },
+    clientId: {
+      default: "arbitrage.ph",
+      type: String
+    },
+    userId: {
+      default: "public_user_id",
+      type: String
+    },
+    fullscreen: {
+      default: false,
+      type: Boolean
+    },
+    autosize: {
+      default: true,
+      type: Boolean
+    },
+    studiesOverrides: {
+      type: Object
+    },
+    timezone: {
+      default: "Asia/Hong_Kong",
+      type: String
+    },
+    theme: {
+      default: "Dark",
+      type: String
+    }
+  },
   data() {
     return {
       widget: null,
@@ -71,24 +136,9 @@ export default {
       //console.log(this.chartViewClass);
     });
 
+    //! BEWARE: no trailing slash is expected in feed URL
     const widgetOptions = {
-      symbol: this.symbol,
-      // BEWARE: no trailing slash is expected in feed URL
-      datafeed: new window.Datafeeds.UDFCompatibleDatafeed(this.datafeedUrl),
-      interval: this.interval,
-      container_id: this.containerId,
-      library_path: this.libraryPath,
-      locale: this.getLanguageFromURL() || "en",
-      disabled_features: ["use_localstorage_for_settings"],
-      // enabled_features: ["study_templates"],
-      studies: ["ACCD@tv-basicstudies", "AROON@tv-basicstudies"],
-      charts_storage_url: this.chartsStorageUrl,
-      charts_storage_api_version: this.chartsStorageApiVersion,
-      client_id: this.clientId,
-      user_id: this.userId,
-      fullscreen: this.fullscreen,
-      autosize: this.autosize,
-      studies_overrides: this.studiesOverrides,
+      //region overrides
       overrides: {
         "paneProperties.background": "#00121e",
         "paneProperties.gridProperties.color": "#bdc3c7",
@@ -103,9 +153,58 @@ export default {
         "mainSeriesProperties.showCountdown": true,
         "scalesProperties.showStudyPlotLabels": true
       },
+      studies_overrides: {
+        "volume.show ma": true
+      },
+      //endregion overrides
+
+      //region perma static
+      disabled_features: ["link_to_tradingview"],
+      enabled_features: [
+        "narrow_chart_enabled",
+        "study_templates",
+        "keep_left_toolbar_visible_on_small_screens"
+      ],
       toolbar_bg: "#00121e",
-      custom_css_url: "tradingview.css",
-      theme: "Dark"
+      time_frames: [
+        { text: "50y", resolution: "D" },
+        { text: "20y", resolution: "D" },
+        { text: "10y", resolution: "D" },
+        { text: "5y", resolution: "D" },
+        { text: "4y", resolution: "D" },
+        { text: "3y", resolution: "D" },
+        { text: "2y", resolution: "D" },
+        { text: "1y", resolution: "D" },
+        { text: "6m", resolution: "D" },
+        { text: "3m", resolution: "D" },
+        { text: "2m", resolution: "D" },
+        { text: "1m", resolution: "D" },
+        { text: "1w", resolution: "30" },
+        { text: "3d", resolution: "15" },
+        { text: "1d", resolution: "5" }
+      ],
+      symbol_search_request_delay: 300,
+      //endregion perma static
+
+      //region default
+      debug: false,
+      symbol: this.symbol,
+      datafeed: Datafeed,
+      interval: this.interval,
+      container_id: this.containerId,
+      library_path: this.libraryPath,
+      locale: this.getLanguageFromURL() || "en",
+      charts_storage_url: this.chartsStorageUrl,
+      charts_storage_api_version: this.chartsStorageApiVersion,
+      client_id: this.clientId,
+      user_id: this.userId,
+      fullscreen: this.fullscreen,
+      autosize: this.autosize,
+      studies_overrides: this.studiesOverrides,
+      custom_css_url: this.custom_css_url,
+      timezone: this.timezone,
+      theme: this.theme
+      //endregion default
     };
 
     const tvWidget = new window.TradingView.widget(widgetOptions);
@@ -138,68 +237,19 @@ export default {
     }
   },
   methods: {
-    widgetCreateButton: function(title, content, callback, options) {
+    widgetCreateButton(title, content, callback, options) {
       const button = this.widget.createButton(options);
       button.setAttribute("title", title);
       //button.classList.add('apply-common-tooltip');
       button.addEventListener("click", callback);
       button.innerHTML = content;
     },
-    getLanguageFromURL: function() {
+    getLanguageFromURL() {
       const regex = new RegExp("[\\?&]lang=([^&#]*)");
       const results = regex.exec(window.location.search);
       return results === null
         ? null
         : decodeURIComponent(results[1].replace(/\+/g, " "));
-    }
-  },
-  props: {
-    symbol: {
-      default: "AAPL",
-      type: String
-    },
-    interval: {
-      default: "D",
-      type: String
-    },
-    containerId: {
-      default: "tv_chart_container",
-      type: String
-    },
-    datafeedUrl: {
-      default: "https://demo_feed.tradingview.com",
-      type: String
-    },
-    libraryPath: {
-      default: "/vendor/charting_library/",
-      type: String
-    },
-    chartsStorageUrl: {
-      default: "https://saveload.tradingview.com",
-      type: String
-    },
-    chartsStorageApiVersion: {
-      default: "1.1",
-      type: String
-    },
-    clientId: {
-      default: "tradingview.com",
-      type: String
-    },
-    userId: {
-      default: "public_user_id",
-      type: String
-    },
-    fullscreen: {
-      default: false,
-      type: Boolean
-    },
-    autosize: {
-      default: true,
-      type: Boolean
-    },
-    studiesOverrides: {
-      type: Object
     }
   }
 };

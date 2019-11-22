@@ -163,16 +163,19 @@
           <v-list-item-icon>
             <v-list-item-title class="caption">Power Tools</v-list-item-title>
           </v-list-item-icon>
-          <v-list-item>
+          <v-list-item @click.stop="buySellDialog = true">
             <v-list-item-icon class="mr-4">
               <v-icon color="#ababab">mdi-calculator</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>Buy/Sell Calculators</v-list-item-title>
+              <v-list-item-title>Buy/Sell Calculator</v-list-item-title>
             </v-list-item-content>
+            <v-dialog v-model="buySellDialog" max-width="290">
+              <BuySellCalculator />
+            </v-dialog>
           </v-list-item>
-          <v-list-item>
+          <v-list-item @click.stop="varDialog = true">
             <v-list-item-icon class="mr-4">
               <v-icon color="#ababab">mdi-page-layout-header-footer</v-icon>
             </v-list-item-icon>
@@ -180,8 +183,11 @@
             <v-list-item-content>
               <v-list-item-title>VAR Calculator</v-list-item-title>
             </v-list-item-content>
+            <v-dialog v-model="varDialog" max-width="440">
+              <VARCalculator />
+            </v-dialog>
           </v-list-item>
-          <v-list-item>
+          <v-list-item @click.stop="averagePriceDialog = true">
             <v-list-item-icon class="mr-4">
               <v-icon color="#ababab">mdi-tag-text-outline</v-icon>
             </v-list-item-icon>
@@ -189,6 +195,9 @@
             <v-list-item-content>
               <v-list-item-title>Average Price Calculator</v-list-item-title>
             </v-list-item-content>
+            <v-dialog v-model="averagePriceDialog" max-width="290">
+              <AveragePriceCalculator />
+            </v-dialog>
           </v-list-item>
           <v-list-item>
             <v-list-item-icon class="mr-4">
@@ -220,7 +229,15 @@
 }
 </style>
 <script>
+import BuySellCalculator from "~/components/calculators/BuySellCalculator";
+import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
+import VARCalculator from "~/components/calculators/VARCalculator";
 export default {
+  components: {
+    BuySellCalculator,
+    AveragePriceCalculator,
+    VARCalculator
+  },
   layout: "main",
   props: {
     data: {
@@ -233,6 +250,9 @@ export default {
   },
   data() {
     return {
+      buySellDialog: false,
+      averagePriceDialog: false,
+      varDialog: false,
       isLightMode: 0,
       darkText: false,
       powerToolsToggle: false
