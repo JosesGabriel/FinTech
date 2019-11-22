@@ -198,8 +198,6 @@ export default {
             this.showCreatePortForm = true
         };
         this.getUserPortfolioList();
-        // console.log(this.defaultPortfolioId)
-        // console.log(this.userPortfolio)
     },
     methods: {
         ...mapActions({

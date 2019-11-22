@@ -136,8 +136,6 @@ export default {
   },
   mounted() {
     this.getOpenPositions();
-    // console.log(this.defaultPortfolioId);
-    // console.log(this.renderPortfolioKey);
   },
   methods: {
     menuLogsShow: function(item) {
@@ -166,7 +164,6 @@ export default {
           
 
           for (let i = 0; i < this.portfolioLogs.length; i++) {
-            console.log(this.portfolioLogs[i].stock_id)
             const params = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };

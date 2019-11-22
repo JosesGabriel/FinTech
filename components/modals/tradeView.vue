@@ -533,7 +533,6 @@ export default {
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
-          // console.log(result.data.symbol)
           this.stockSymbolGet = result.data;
           
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
