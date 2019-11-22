@@ -44,7 +44,7 @@
           <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" v-on:click="deleteLogs" text color="success">Delete</v-btn>
+            <v-btn small class="caption" v-model="item" item-value="item" v-on:click="deleteLogs(item.action)" text color="success">Delete</v-btn>
           </div>
           <v-icon
             small
@@ -115,12 +115,12 @@ export default {
     }
   },
    computed: {
-            ...mapGetters({
-            simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
-            }),
+      ...mapGetters({
+      simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+      }),
     },
   mounted() {
-    this.getTradeLogs();
+     if(this.simulatorPortfolioID != 0 ?  this.getTradeLogs() : ''); 
   },
   watch: {
       simulatorPortfolioID: function () {
@@ -134,10 +134,11 @@ export default {
     getTradeLogs(){
       const tradelogsparams = {
       user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      fund: 73287292558643200
+      fund: this.simulatorPortfolioID
     };
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
+        console.log(result);
           this.tradeLogs = result.meta.logs;       
           for(let i = 0; i < result.meta.logs.length; i++){       
             const params = {
@@ -162,18 +163,19 @@ export default {
             this.tradeLogs[i].SellValue = sellvalue.toFixed(2);
             this.tradeLogs[i].ProfitLoss = ploss.toFixed(2);
             this.tradeLogs[i].Perf = perc.toFixed(2);
+            this.tradeLogs[i].action = result.meta.logs[i].id;
 
           }
       }.bind(this)
     );
 
     },
-    deleteLogs: function(){
+    deleteLogs: function(item){
         const params ={
           user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         }
         this.$axios
-        .$post(process.env.JOURNAL_API_URL + "/journal/funds/tradelog/delete/"+ '73287292558643200' , params)
+        .$post(process.env.JOURNAL_API_URL + "/journal/funds/tradelog/delete/"+ item , params)
         .then(response => {      
             if (response.success) {
                 console.log('delete success');

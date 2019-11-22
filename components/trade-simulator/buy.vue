@@ -5,7 +5,7 @@
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Portfolio" dense flat dark></v-select>
+                        <v-select offset-y="true" v-model="item" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Portfolio" dense flat dark></v-select>
                         <v-text-field
                             label="Available Funds"
                             color="#00FFC3"
@@ -80,7 +80,9 @@ export default {
             quantity: '0.00',
             availableFunds: '0.00',
             totalCost: 0,
-            portfolio: ['Real Portfolio','Virtual Portfolio']
+            portfolio: [],
+            item: '',
+            fund_id: ''
         }
     },
     computed: {
@@ -99,10 +101,18 @@ export default {
                 function(result) {
                     console.log(result.meta.logs);
                     for(let i=0; i< result.meta.logs.length; i++){
-                        if(result.meta.logs[i].id == this.simulatorPortfolioID){
+                        if(result.meta.logs[i].name == 'Default Virtual Portfolio'){
                             let avfunds = parseFloat(result.meta.logs[i].balance);    
                             this.availableFunds = this.addcomma(avfunds);
+                            this.setSimulatorPortfolioID(result.meta.logs[i].id);
                         }
+                        if(result.meta.logs[i].type == 'VirtualPort'){
+                            //if(this.simulatorPortfolioID == null){
+                                //this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                           // }                     
+                            this.portfolio.push(result.meta.logs[i].name);
+                        }
+
                     }
                   
                 }.bind(this)
@@ -139,6 +149,27 @@ export default {
         let press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
         this.setSimulatorPositions('buy-'+this.quantity);
         this.totalCost = this.addcomma(press);
+    },
+    getBalance: function(item){
+        console.log(item);
+                const portfolioparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+            };
+            this.$api.journal.portfolio.portfolio(portfolioparams).then(
+                function(result) {
+                    console.log(result.meta.logs);
+                    for(let i=0; i< result.meta.logs.length; i++){
+                        if(result.meta.logs[i].name == item){
+                            this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                            let avfunds = parseFloat(result.meta.logs[i].balance);    
+                            this.availableFunds = this.addcomma(avfunds);
+                            //this.fund_id = result.meta.logs[i].id;                     
+                        }
+                    }                
+                }.bind(this)
+            );
+           
+            console.log('Portfolio ID - ' + this.simulatorPortfolioID); 
     }
   },
 }

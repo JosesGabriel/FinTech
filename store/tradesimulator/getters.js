@@ -11,8 +11,8 @@ export default {
     getSimulatorPositions(state) {
       return state.simulatorPositions;
     },
-   /* getSimulatorStockID(state) {
-      return state.simulatorStockID;
-    }*/
+    getSimulatorConfirmedBuySell(state) {
+      return state.simulatorConfirmedBuySell;
+    }
   };
   

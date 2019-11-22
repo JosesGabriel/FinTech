@@ -109,6 +109,9 @@ export default {
         shareModal,
     },
     watch: {
+      simulatorConfirmedBuySell: function () {
+        this.getOpenPositions();
+      },
       simulatorPortfolioID: function () {
         this.getOpenPositions();
       }
@@ -116,14 +119,17 @@ export default {
     methods: {
           ...mapActions({      
             setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+            setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell",
         }),
           getOpenPositions() {
-            this.setSimulatorPortfolioID(73287292558643200);
-            const openparams = {
+            //this.setSimulatorPortfolioID('74329357480497152');
+            console.log(this.simulatorPortfolioID);
+            const openparams2 = {
               user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-              fund: 73287292558643200,
+              fund: this.simulatorPortfolioID,
             };
-            this.$api.journal.portfolio.open(openparams).then(
+            console.log(openparams2);
+            this.$api.journal.portfolio.open(openparams2).then(
               function(result) {
                 this.portfolioLogs = result.meta.open;
                 for (let i = 0; i < this.portfolioLogs.length; i++) {
@@ -158,7 +164,7 @@ export default {
               }
             if(confirm("Do you really want to delete?")){
                   this.$axios
-                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/73287292558643200/delete/" + item, params)
+                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/74329357480497152/delete/" + item, params)
                   .then(response => {      
                       if (response.success) {
                           console.log('delete success');
@@ -189,10 +195,11 @@ export default {
     computed: {
             ...mapGetters({
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+            simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
             }),
     },
      mounted() {
-        this.getOpenPositions();        
+       if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');        
       },
 
 }
