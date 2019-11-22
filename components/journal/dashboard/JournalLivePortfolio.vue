@@ -5,24 +5,12 @@
             <v-spacer></v-spacer>
             <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
             <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" style="border-width: 2px" height="23">Trade</v-btn>
-            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" style="border-width: 2px" height="23">Fund</v-btn>
+            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" style="border-width: 2px" height="23">Fund</v-btn>
 
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
               </v-btn>
         </v-card-title>
-        <!-- <v-card-title class="pa-0">
-          <v-text-field
-            v-model="search"
-            prepend-icon="mdi-magnify"
-            class="pa-0"
-            color="success"
-            label="Search"
-            hide-details
-            dark
-          ></v-text-field>
-          <v-spacer></v-spacer>
-        </v-card-title> -->
         <v-data-table
           :headers="headers"
           :page.sync="page"
@@ -111,6 +99,7 @@ export default {
       showTradeViewForm: false,
 
       ifVirtualShow: false,
+      fundsShow: false,
       snackbar: false,
       timeoutNotification: 10000,
       
@@ -206,9 +195,11 @@ export default {
               if (portfolioListPush1.id === toFindReal) {
                 if(portfolioListPush1.type != "real") {
                   this.ifVirtualShow = true
+                  this.fundsShow = true
                   this.snackbar = true
                 } else {
                   this.ifVirtualShow = false
+                  this.fundsShow = false
                   this.snackbar = false
                 }
               }

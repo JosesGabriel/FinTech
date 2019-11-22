@@ -204,8 +204,10 @@ export default {
             setUserPortfolio: "journal/setUserPortfolio",
             setRenderPortfolioKey: "journal/setRenderPortfolioKey",
             setDefaultPortfolioId: "journal/setDefaultPortfolioId",
+            setSelectedPortfolio: "journal/setSelectedPortfolio",
         }),
         changePortfolio: function(){
+            
             const openparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
                 fund: this.selectedProfile,
@@ -219,11 +221,27 @@ export default {
                         
                         this.selectedProfile = this.portfolioDropdownModel.id;
                         this.setDefaultPortfolioId(this.selectedProfile);
+                        // console.log(this.portfolioDropdownModel.id)
+                            // const params = {
+                            //     user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                            // };
+                            // this.$api.journal.portfolio.portfolio(params).then(
+                            //     function(result) {
+                            //         let toFindReal = this.selectedProfile;
+                            //         for (let i = 0; i < result.meta.logs.length; i++ ) {
+                            //             let portfolioListPush1 = result.meta.logs[i]
+                            //             if (portfolioListPush1.id === toFindReal) {
+                            //                 this.setSelectedPortfolio(portfolioListPush1)
+                            //             }
+                            //         }
+                            //     }
+                            // );
                     }
                 }.bind(this)
             );
         },
         getUserPortfolioList() {
+            this.portfolioDropdownModel = this.defaultPortfolioId
             const params = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
             };
@@ -265,7 +283,8 @@ export default {
         ...mapGetters({
             userPortfolio: "journal/getUserPortfolio",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
-            renderPortfolioKey: "journal/getRenderPortfolioKey"
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            selectedPortfolio: "journal/getSelectedPortfolio"
         })
     },
     watch: {
