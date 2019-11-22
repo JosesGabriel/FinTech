@@ -13,8 +13,8 @@
         </v-card-title>
         <v-data-table
           :headers="headers"
-          :page.sync="page"
           :items="portfolioLogsStock"
+          :page.sync="page"
           :items-per-page="itemsPerPage"
           hide-default-footer
           @page-count="pageCount = $event"
@@ -31,7 +31,7 @@
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" text color="success">Delete</v-btn>
+            <v-btn small class="caption" v-model="item" item-value="item" v-on:click="deleteLive(item.action)" text color="success">Delete</v-btn>
           </div>
           <v-icon
             small
@@ -127,6 +127,9 @@ export default {
     this.getOpenPositions();
   },
   methods: {
+    ...mapActions({
+        setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+    }),
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
 
@@ -134,8 +137,24 @@ export default {
     },
     menuLogsHide: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
-
+      
       pl.style.display = "none";
+    },
+    deleteLive: function(item) {
+      const deleteLogs ={
+        user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      }
+      this.$axios
+      .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.defaultPortfolioId +"/delete/" + item, deleteLogs)
+      .then(response => {      
+          if (response.success) {
+              console.log(response.success);
+              
+              this.keyCreateCounter = this.renderPortfolioKey;
+              this.keyCreateCounter++;
+              this.setRenderPortfolioKey(this.keyCreateCounter);
+          }
+      });
     },
     formatPrice(value) {
         let val = (value/1).toFixed(2).replace('.', '.')
@@ -153,6 +172,7 @@ export default {
           
 
           for (let i = 0; i < this.portfolioLogs.length; i++) {
+            this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             const params = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };
@@ -236,6 +256,9 @@ export default {
   }
 </style>
 <style>
+  .data_table-container i.v-icon.v-data-table-header__icon.mdi.mdi-arrow-up {
+      float: left;
+  }
   .v-data-table.data_table-container .v-data-footer {
     border: none;
   }
