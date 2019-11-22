@@ -134,10 +134,11 @@ export default {
     getTradeLogs(){
       const tradelogsparams = {
       user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      fund: 73287292558643200
+      fund: '74329357480497152'
     };
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
+        console.log(result);
           this.tradeLogs = result.meta.logs;       
           for(let i = 0; i < result.meta.logs.length; i++){       
             const params = {
