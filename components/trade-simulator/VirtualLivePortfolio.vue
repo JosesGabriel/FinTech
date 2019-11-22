@@ -164,7 +164,7 @@ export default {
               }
             if(confirm("Do you really want to delete?")){
                   this.$axios
-                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/74329357480497152/delete/" + item, params)
+                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/delete/" + item, params)
                   .then(response => {      
                       if (response.success) {
                           console.log('delete success');
