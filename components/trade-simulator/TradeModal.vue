@@ -370,7 +370,7 @@ import { mapActions, mapGetters } from "vuex";
                                     date: dformat
                                 }
                             }
-                        console.log(sellparams);
+                        console.log('fund-id = '+this.simulatorPortfolioID);
                             this.$axios
                             .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ fund_id + "/sell/" + stock_id, sellparams)
                             .then(response => {      
@@ -395,7 +395,7 @@ import { mapActions, mapGetters } from "vuex";
                                 date: dformat
                             }
                         }      
-                        console.log(fund_id);
+                         console.log('fund-id = '+this.simulatorPortfolioID);
                         this.$axios
                         .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ fund_id + "/buy/" + stock_id, buyparams)
                         .then(response => {      

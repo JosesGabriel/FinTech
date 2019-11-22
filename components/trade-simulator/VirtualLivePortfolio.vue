@@ -118,6 +118,7 @@ export default {
             setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
         }),
           getOpenPositions() {
+            this.setSimulatorPortfolioID('74329357480497152');
             const openparams2 = {
               user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
               fund: '74329357480497152',
@@ -158,7 +159,7 @@ export default {
               }
             if(confirm("Do you really want to delete?")){
                   this.$axios
-                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/73287292558643200/delete/" + item, params)
+                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/74329357480497152/delete/" + item, params)
                   .then(response => {      
                       if (response.success) {
                           console.log('delete success');
