@@ -139,6 +139,7 @@
               </v-btn>
             </v-row>
           </v-stepper-content>
+          
           <v-stepper-content step="2" class="pt-2">
             <!-- -----Second View of Trade Modal----- -->
             <v-container class="pa-5 pt-0 px-0">
@@ -154,8 +155,6 @@
                           <v-row no-gutters class="px-0 py-0">
                             <v-col sm="12" md="12" class="pa-0">
                               <v-row no-gutters>
-                              <!-- <v-text-field v-model="portfolioDropdownModel" label="Current Portfolio" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field> -->
-                              <!-- <v-text-field v-model="availableFundsModel" label="Available Funds" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly ></v-text-field> -->
                                 <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFundsModel) }}</v-card-title>
                               </v-row>
                               <v-select
@@ -177,6 +176,21 @@
                             </v-col>
                             <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
                               <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
+                              <v-btn 
+                                  @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= 100"
+                                  text 
+                                  icon 
+                                  color="success"
+                              ><v-icon>mdi-chevron-down</v-icon></v-btn>
+                              <v-btn 
+                                  @click="quantityModel += 100"
+                                  text 
+                                  icon 
+                                  color="success"
+                              ><v-icon>mdi-chevron-up</v-icon></v-btn>
+                            </v-col>
+                            <v-col cols="12" sm="12" md="12" class="justify-end d-flex">
+                            <v-card-title class="caption pa-0 secondary--text">Board lot: {{ boardLotModel }}</v-card-title>
                             </v-col>
                             <v-text-field v-model="totalCostModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
                             <v-snackbar v-model="snackbar" :timeout="snackbarTimeout">Insufficient funds<v-btn color="blue" text @click="snackbar = false">Close</v-btn></v-snackbar>
@@ -191,8 +205,6 @@
                       <v-row no-gutters class="pa-3 pb-0">
                         <v-col sm="12" md="12" class="pa-0">
                           <v-row no-gutters>
-                          <!-- <v-text-field v-model="portfolioDropdownModel" label="Current Portfolio" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field> -->
-                          <!-- <v-text-field v-model="availableFundsModel" label="Available Funds" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly ></v-text-field> -->
                             <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFundsModel) }}</v-card-title>
                           </v-row>
                           <v-select
@@ -209,7 +221,21 @@
                           class="enter_amount-deposit-select ma-0"
                           ></v-select>
                           <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
-                          <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number" type="number" min="1" :max="boardLotModel" step="10"></v-text-field>
+                        </v-col>
+                        <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
+                          <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
+                          <v-btn 
+                            @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= 100"
+                            text 
+                            icon 
+                            color="success"
+                          ><v-icon>mdi-chevron-down</v-icon></v-btn>
+                          <v-btn 
+                            @click="quantitySellModel += 100"
+                            text 
+                            icon 
+                            color="success"
+                          ><v-icon>mdi-chevron-up</v-icon></v-btn>
                         </v-col>
                         <v-text-field v-model="totalCostSellModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
                         <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar>
@@ -458,10 +484,9 @@ export default {
     }),
     buyListArray: function() {
       let priceModel1 = this.priceModel.replace(/,/g, "");
-      let quantityModel1 = this.quantityModel.replace(/,/g, "");
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        position: parseInt(quantityModel1),
+        position: parseInt(this.quantityModel),
         stock_price: parseInt(priceModel1),
         transaction_meta : {
           strategy: this.strategyModel,
@@ -509,12 +534,10 @@ export default {
         });
     },
     sellListArray: function() {
-      let priceModel1 = this.priceSellModel.replace(/,/g, "");
-      let quantityModel1 = this.quantitySellModel.replace(/,/g, "");
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        position: parseInt(quantityModel1),
-        stock_price: parseInt(priceModel1),
+        position: parseInt(quantityModel.replace(/,/g, "")),
+        stock_price: parseInt(priceModel1.replace(/,/g, "")),
         transaction_meta : {
           strategy : this.strategySellModel,
           average_price : parseInt(this.average_price),
@@ -671,7 +694,7 @@ export default {
       for (let i = 0; i < this.userPortfolio.length; i++ ) {
           let portfolioListPush1 = this.userPortfolio[i]
           if (portfolioListPush1.id === this.portfolioDropdownModel) {
-            // console.log(portfolioListPush1);
+            console.log(portfolioListPush1);
             this.availableFundsModel = parseInt(portfolioListPush1.balance)
             this.portfolioDropdownModel = portfolioListPush1.id
             this.keyCreateCounter = this.renderPortfolioKey;
@@ -685,6 +708,7 @@ export default {
       // console.log(this.userPortfolio)
     },
     selectWatch() {
+      this.GetSelectStock
       if (this.typePortfolioModel != null) {
         this.continueButtonDisable = true;
       } else {
