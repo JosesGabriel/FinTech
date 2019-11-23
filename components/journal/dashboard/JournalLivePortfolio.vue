@@ -26,7 +26,6 @@
         <template v-slot:item.market_value="{ item }" >{{ formatPrice(item.market_value) }}</template>
         <template v-slot:item.profit="{ item }" ><span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.profit) }}</span></template>
         <template v-slot:item.perf_percentage="{ item }" ><span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.perf_percentage) }}%</span></template>
-        
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
