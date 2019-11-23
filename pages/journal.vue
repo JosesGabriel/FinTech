@@ -25,6 +25,7 @@ import JournalContent from "~/components/journal/JournalContent";
 
 export default {
   layout: "main",
+  middleware: ["auth"],
   components: {
     NavbarJournal,
     JournalContent

@@ -1,16 +1,8 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center
-  >
-    <v-flex
-      xs12
-      sm8
-      md6
-    >
+  <v-layout column justify-center align-center>
+    <v-flex xs12 sm8 md6>
       <div class="text-center">
-        <logo />
+        <Logo />
         <v-img
           src="/Arbitrage.png"
           lazy-src="/Arbitrage.png"
@@ -23,20 +15,25 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import Logo from "~/components/Logo.vue";
 
 export default {
   components: {
     Logo
   },
-  head () {
+  middleware: ["auth"],
+  head() {
     return {
-      title: 'Arbitrage',
+      title: "Arbitrage",
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
+        {
+          hid: "description",
+          name: "description",
+          content: "My custom description"
+        }
       ]
-    }
+    };
   }
-}
+};
 </script>

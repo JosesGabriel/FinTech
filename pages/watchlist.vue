@@ -58,6 +58,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "main",
+  middleware: ["auth"],
   components: {
     Navbar,
     WatchCard,

@@ -88,6 +88,11 @@ export default {
           }
         }
       }
+    },
+    redirect: {
+      login: "/login",
+      home: "/",
+      logout: "/login"
     }
   },
 
