@@ -5,7 +5,6 @@
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" v-model="item" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3" :items="portfolio" label="Portfolio" dense flat dark></v-select>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field
@@ -131,24 +130,7 @@ export default {
         this.setSimulatorPositions('sell-'+this.quantity);
         this.totalCost = this.addcomma(press);
     },
-    getBalance: function(item){
-        console.log(item);
-                const portfolioparams = {
-                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-            };
-            this.$api.journal.portfolio.portfolio(portfolioparams).then(
-                function(result) {
-                    console.log(result.meta.logs);
-                    for(let i=0; i< result.meta.logs.length; i++){
-                        if(result.meta.logs[i].name == item){
-                            this.setSimulatorPortfolioID(result.meta.logs[i].id);
-                            let avfunds = parseFloat(result.meta.logs[i].balance);    
-                            this.availableFunds = this.addcomma(avfunds);                  
-                        }
-                    }                
-                }.bind(this)
-            );       
-    }
+    
   },
 }
 </script>

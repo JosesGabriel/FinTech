@@ -62,9 +62,6 @@ export default {
       default: true,
       type: Boolean
     },
-    studiesOverrides: {
-      type: Object
-    },
     timezone: {
       default: "Asia/Hong_Kong",
       type: String
@@ -200,7 +197,6 @@ export default {
       user_id: this.userId,
       fullscreen: this.fullscreen,
       autosize: this.autosize,
-      studies_overrides: this.studiesOverrides,
       custom_css_url: this.custom_css_url,
       timezone: this.timezone,
       theme: this.theme
