@@ -70,7 +70,7 @@
 </style>
 <script>
 import VueApexCharts from "vue-apexcharts";
-
+import { mapGetters } from "vuex";
 export default {
   components: {
     apexcharts: VueApexCharts
@@ -223,9 +223,13 @@ export default {
       }
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      renderChartKey: "watchers/getRenderChartKey"
+    })
+  },
   watch: {
-    userWatchedStocks: function() {
+    renderChartKey: function() {
       this.watchCardMount();
     }
   },

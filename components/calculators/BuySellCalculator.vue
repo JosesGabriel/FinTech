@@ -6,7 +6,6 @@
         <v-col cols="12"
           ><v-text-field
             v-model="shares"
-            type="number"
             label="Number of Shares"
             dense
             hide-details
@@ -29,27 +28,27 @@
           </div>
           <div class="d-flex justify-space-between px-2">
             <span>Fees:</span>
-            <span>₱{{ buyFeesTotal.toFixed(2) }}</span>
+            <span>₱{{ buyFeesTotal }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">Commission:</span>
-            <span>₱{{ buyCommission.toFixed(2) }}</span>
+            <span>₱{{ buyCommission }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">Value Added Tax:</span>
-            <span>₱{{ buyVAT.toFixed(2) }}</span>
+            <span>₱{{ buyVAT }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">Transfer Fee:</span>
-            <span>₱{{ buyTransferFee.toFixed(2) }}</span>
+            <span>₱{{ buyTransferFee }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">SCCP:</span>
-            <span>₱{{ buySCCP.toFixed(2) }}</span>
+            <span>₱{{ buySCCP }}</span>
           </div>
           <div class="d-flex justify-space-between px-2">
             <span>Buy Total:</span>
-            <span>₱{{ buyTotal.toFixed(2) }}</span>
+            <span>₱{{ buyTotal }}</span>
           </div>
         </v-col>
         <v-col cols="12"
@@ -68,31 +67,31 @@
           </div>
           <div class="d-flex justify-space-between px-2">
             <span>Fees:</span>
-            <span>₱{{ sellFeesTotal.toFixed(2) }}</span>
+            <span>₱{{ sellFeesTotal }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">Commission:</span>
-            <span>₱{{ sellCommission.toFixed(2) }}</span>
+            <span>₱{{ sellCommission }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">Value Added Tax:</span>
-            <span>₱{{ sellVAT.toFixed(2) }}</span>
+            <span>₱{{ sellVAT }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">Transfer Fee:</span>
-            <span>₱{{ sellTransferFee.toFixed(2) }}</span>
+            <span>₱{{ sellTransferFee }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">SCCP:</span>
-            <span>₱{{ sellSCCP.toFixed(2) }}</span>
+            <span>₱{{ sellSCCP }}</span>
           </div>
           <div class="d-flex justify-space-between pr-2 pl-4">
             <span class="overline">Sales Tax:</span>
-            <span>₱{{ sellSalesTax.toFixed(2) }}</span>
+            <span>₱{{ sellSalesTax }}</span>
           </div>
           <div class="d-flex justify-space-between px-2">
             <span>Sell Total:</span>
-            <span>₱{{ sellTotal.toFixed(2) }}</span>
+            <span>₱{{ sellTotal }}</span>
           </div>
           <v-divider class="my-3"></v-divider>
           <div class="d-flex justify-space-between px-2">
@@ -125,6 +124,7 @@
 }
 </style>
 <script>
+var numeral = require("numeral");
 export default {
   data() {
     return {
@@ -162,9 +162,14 @@ export default {
     }
   },
   methods: {
+    parseNumber(num) {
+      return RegExp.Replace(num, "[^0-9.]", "");
+    },
     calculate() {
-      this.buyValue = Math.round(this.shares * this.buyPrice);
-
+      this.buyValue = numeral(Math.round(this.shares * this.buyPrice)).format(
+        "0,0"
+      );
+      console.log(this.buyValue);
       /* Buy Fees */
       let buyCommissionCheck = this.buyValue * 0.0025;
       if (buyCommissionCheck <= 20) {
@@ -204,9 +209,8 @@ export default {
         this.sellSCCP +
         this.sellSalesTax;
       this.sellTotal = this.sellValue - this.sellFeesTotal;
-      this.netProfit = (this.sellTotal - this.buyTotal).toFixed(2);
-      this.netProfitPercentage =
-        ((this.netProfit / this.buyTotal) * 100).toFixed(2) + "%";
+      this.netProfit = this.sellTotal - this.buyTotal;
+      this.netProfitPercentage = (this.netProfit / this.buyTotal) * 100 + "%";
 
       //Color net profit
       //   if (this.buyTotal > this.sellTotal) {

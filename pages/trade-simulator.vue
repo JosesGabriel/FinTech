@@ -1,52 +1,60 @@
 <template>
-    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}">
-        <v-row class="mb-6" no-gutters>
-            <v-col class="hidden-xs-and-down" cols="1" sm="1" md="1">
-              <NavBar :data="navbarMiniVariantSetter" active="virtualtrade"/>
-            </v-col>
-            <v-col cols="11">
-                <VirtualContent/>
-            </v-col>
-        </v-row>
-    </v-container>
+  <v-container
+    class="socialWall__container"
+    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+  >
+    <v-row class="mb-6" no-gutters>
+      <v-col class="hidden-xs-and-down" cols="1" sm="1" md="1">
+        <NavBar :data="navbarMiniVariantSetter" active="virtualtrade" />
+      </v-col>
+      <v-col cols="11">
+        <VirtualContent />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import NavBar from '~/components/Navbar'
-import VirtualContent from '~/components/trade-simulator/VirtualContent'
+import NavBar from "~/components/Navbar";
+import VirtualContent from "~/components/trade-simulator/VirtualContent";
 
 export default {
-  layout: 'main',
+  layout: "main",
+  middleware: ["auth"],
   components: {
-      NavBar,
-      VirtualContent
+    NavBar,
+    VirtualContent
   },
   data() {
-      return {
-          isOpen: true,
-          navbarMiniVariantSetter: true,
-      }
+    return {
+      isOpen: true,
+      navbarMiniVariantSetter: true
+    };
   },
   methods: {
-    toggle: function(){
-        this.isOpen = !this.isOpen
+    toggle: function() {
+      this.isOpen = !this.isOpen;
     }
   },
-  head () {
+  head() {
     return {
-      title: 'Arbitrage',
+      title: "Arbitrage",
       meta: [
         // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
+        {
+          hid: "description",
+          name: "description",
+          content: "My custom description"
+        }
       ]
-    }
+    };
   }
-}
+};
 </script>
 
 <style scoped>
-    .socialWall__container {
-        max-width: 1080px;
-        margin-top: 40px;
-    }
+.socialWall__container {
+  max-width: 1080px;
+  margin-top: 40px;
+}
 </style>
