@@ -2,11 +2,24 @@
     <v-dialog v-model="show" max-width="320px">
         <v-card color="#00121E">
             <v-card-title class="text-left justify-left pa-5 pb-0 px-5 success--text subtitle-1 font-weight-bold">TRADE</v-card-title>
-            <v-stepper v-model="e1" dark id="stepper_container">
-                <v-stepper-items>
-                    <v-stepper-content step="1">
+            <v-stepper v-model="e1" dark id="stepper_container" >
+                <v-stepper-items >
+                    <v-stepper-content step="1" class="mt-0 pt-0">
                         <!-- -----First View of Trade Modal----- -->
                         <v-container class="pa-5 pt-0 px-0">
+                            <v-row no-gutters class="mb-5">
+                                <v-col md="6" class="ma-0 pa-0">
+                                    <div class="pa-0 ma-0">
+                                        <v-btn class="text-capitalize" :class="(buySelected ? 'selected' : '')" depressed text tile width= "100%" @click="btnBuy" color="#B6B6B6">Buy</v-btn>
+                                    </div>
+                                </v-col>
+                                <v-col md="6" class="ma-0 pa-0">
+                                    <div class="pa-0 ma-0">
+                                        <v-btn class="text-capitalize" :class="(sellSelected ? 'selected' : '')" depressed text tile width= "100%" @click="btnSell" color="#B6B6B6">Sell</v-btn>
+                                    </div>    
+                                </v-col>
+                            </v-row>
+
                             <v-row no-gutters>
                                 <v-col cols="12" sm="12" md="12">
                                     <v-card-title class="pa-0 text-right justify-end">
@@ -19,7 +32,7 @@
                                                 append-icon="mdi-chevron-down" 
                                                 :items="stock" 
                                                 item-text="symbol"    
-                                                item-value="id_str"                                          
+                                                :item-value="(this.sellSelected ? 'stockidstr' : 'id_str')"                                          
                                                 v-model="GetSelectStock" 
                                                 v-on:change="getDetails"
                                                 label="Select Stock"
@@ -130,24 +143,8 @@
                     <v-stepper-content step="2" class="pt-2">
                         <!-- -----Second View of Trade Modal----- -->
                         <v-container class="pa-5 pt-0 px-0">
-                            <v-row no-gutters>
-                                <v-tabs
-                                color="#48FFD5"
-                                background-color="#00121E"
-                                dark
-                                v-model="selectedTab"
-                                grow
-                                >
-                                    <v-tab color="#fff" key='buy' class="tab_menu-top text-capitalize subtitle-1 px-0" width="100" :href="`#funds-1`">Buy</v-tab>
-                                    <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`">Sell</v-tab>
-
-                                    <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 1">
-                                        <BuyTrade/>
-                                    </v-tab-item>
-                                    <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
-                                        <SellTrade/>
-                                    </v-tab-item>
-                                </v-tabs>
+                           <v-row no-gutters>
+                                <BuyTrade/>
                             </v-row>
                         </v-container>
                         <v-row no-gutters>
@@ -155,11 +152,11 @@
                             <v-btn text @click="e1 = 1" class="text-capitalize">Back</v-btn>
                             <v-btn
                                 color="success"
-                                @click="e1 = 3"
+                                @click="nextStep"
                                 class="text-capitalize black--text ml-1"
                                 light
                             >
-                                Continue
+                                {{ (this.simulatorConfirmedBuySell == 'sell' ? 'Confirm' : 'Continue') }}
                             </v-btn>
                         </v-row>
                     </v-stepper-content>
@@ -168,16 +165,16 @@
                         <v-container class="pt-0">
                             <v-row no-gutters class="px-0 py-0">
                                 <v-col sm="12" md="12">
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="strategy" v-model="selectedstrategy" label="Strategy" dense flat></v-select></div>
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="tradeplan" v-model="selectedtradeplan" label="Trade Plan" dense flat></v-select></div>
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" :items="emotions" v-model="selectedemotions" label="Emotions" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="strategy" v-model="selectedstrategy" label="Enter Strategy" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="tradeplan" v-model="selectedtradeplan" label="Enter Trade Plan" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" :items="emotions" v-model="selectedemotions" label="Enter Emotions" dense flat></v-select></div>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12" class="pa-0 mt-3 justify-right d-flex align-center text-right">
                                     <v-textarea
                                         color="white"
                                         class="white--text trading_notes-textarea body-2"
                                         v-model="notes"
-                                        placeholder="Trading Notes"
+                                        placeholder="Enter Notes"
                                         filled
                                     ></v-textarea>
                                 </v-col>
@@ -204,14 +201,13 @@
 </template>
 <script>
 import BuyTrade from '~/components/trade-simulator/buy'
-import SellTrade from '~/components/trade-simulator/sell'
+//import SellTrade from '~/components/trade-simulator/sell'
 import { mapActions, mapGetters } from "vuex";
 
     export default {
         props: ['visible'],
         components: {
             BuyTrade,
-            SellTrade
         },
         data() {
             return {
@@ -219,7 +215,7 @@ import { mapActions, mapGetters } from "vuex";
                 cprice: 0,
                 cpercentage: 0,
                 change: 0,
-                bidask: 0,
+                bidask: 50,
                 dboard: 0,
                 stock_id: 0,
                 stock: [],
@@ -250,6 +246,8 @@ import { mapActions, mapGetters } from "vuex";
                 menu: false,
                 modal: false,
                 disabled: false,
+                sellSelected: false,
+                buySelected: true,
             }
         },
         computed: {
@@ -280,7 +278,7 @@ import { mapActions, mapGetters } from "vuex";
             },
         },
         mounted() {
-                console.log('Fund ids = ' + this.simulatorPortfolioID);
+                console.log('Fund id = ' + this.simulatorPortfolioID);
                 const params = {
                     exchange: "PSE",
                     status: "active"
@@ -300,40 +298,59 @@ import { mapActions, mapGetters } from "vuex";
                 setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
                 setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell"
             }),
-            stockSearch(stock_id){
-                const port_params = {
-                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                fund: this.simulatorPortfolioID,
-                };
-                if(this.simulatorPortfolioID != 0){
-                    this.$api.journal.portfolio.open(port_params).then( 
-                         function(result) {
-                              for(let i=0; i < result.meta.open.length; i++){
-                                  if(stock_id == result.meta.open[i].stock_id ){
-                                      this.avprice = result.meta.open[i].average_price;
-                                      console.log(this.avprice);
-                                  }
-                                //let __port = {
-                                  //id: result.meta.open[i].stock_id,
-                                  //avprice: result.meta.open[i].average_price,
-                                //}
-                                 // this.port.push(__port);
-                              }
-                         }.bind(this)
-                    );
-
+            nextStep(){
+                if(this.sellSelected){
+                    this.show = false;
+                    this.confirm();
+                }else{
+                this.e1 = 3;
                 }
             },
-            /*isDisabled(dataID) {
-                 this.port.map((data) => { 
-                        if (data.id == dataID) {
-                            this.disabled = false; 
-                            console.log('sell');          
-                        }
-                    });
-                //return this.selected.length < 1; // or === 0   
-            },*/
-           
+            btnBuy(){
+                console.log('buy');
+                this.setSimulatorConfirmedBuySell('buy');
+                console.log('Fund-id ' +this.simulatorPortfolioID);
+                this.buySelected = true;
+                this.sellSelected = false;
+                this.stock = [];
+                const params = {
+                    exchange: "PSE",
+                    status: "active"
+                    };
+                    this.$api.chart.stocks.list(params).then(
+                    function(result) {
+                        this.stock = result.data;                   
+                    }.bind(this)
+                    );
+            },
+            btnSell(){
+                console.log('sell');
+                this.setSimulatorConfirmedBuySell('sell');
+                this.sellSelected = true;
+                this.buySelected = false;
+                this.stock = [];
+                const openparams = {
+                        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                        fund: this.simulatorPortfolioID,
+                        };
+                        this.$api.journal.portfolio.open(openparams).then(
+                            function(result) {
+                                console.log(result);
+                                for(let i = 0; i < result.meta.open.length; i ++){
+                                    const params = {
+                                         'symbol-id': result.meta.open[i].stock_id
+                                    };
+                                    this.$api.chart.stocks.history(params).then(
+                                    function(result) {
+                                            this.stock.push(result.data);                     
+                                    }.bind(this)
+                                    );
+                                }
+                        }.bind(this)
+                    );
+
+            },
+                       
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
                 decimals = decimals || 2; // Default to 2 decimals
@@ -343,7 +360,6 @@ import { mapActions, mapGetters } from "vuex";
             },
             //----Confirm Buy/Sell Button----------
             confirm() {
-
                 console.log('confirm - ' +this.simulatorPortfolioID);
                 const stock_id = this.stock_id;
                 let fund_id = this.simulatorPortfolioID;
@@ -355,28 +371,17 @@ import { mapActions, mapGetters } from "vuex";
                                 d.getMinutes(),
                                 d.getSeconds()].join(':'); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
 
-                if(this.simulatorPositions){
-                    let str = this.simulatorPositions.split('-');
-                    let positions = parseFloat(str[1]);
-                    //let avprice = 0;
+                if(this.simulatorPositions != 0){
 
                     // if Sell is selected
-                if(str[0] == 'sell'){
+                if(this.sellSelected){
+                     console.log('sell confirmed - ' + this.avprice);
                     
-                    
-                    // search selected stocks in Live Portfolio
-                    this.port.filter(function(data) { 
-                        console.log(data);
-                        if (data.id == stock_id) {
-                            //avprice = data.avprice;
-                            return;
-                        } 
-                    });
-                        console.log(this.avprice);
+                       
                         if(this.avprice != 0){ // if selected stock exist in Live Portfolio
                             const sellparams = {
                                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                                position: positions,
+                                position: this.simulatorPositions,
                                 stock_price: this.cprice,
                                 transaction_meta: {
                                     strategy: this.selectedstrategy,
@@ -399,10 +404,11 @@ import { mapActions, mapGetters } from "vuex";
                         }else { // if selected stock is not in the list
                             console.log('unable to sell');
                         }
-                }else {  // if Buy is selected          
-                        const buyparams = {
+                }else {  // if Buy is selected      
+                
+                       const buyparams = {
                             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                            position: positions,
+                            position: this.simulatorPositions,
                             stock_price: this.cprice,
                             transaction_meta: {
                                 strategy: this.selectedstrategy,
@@ -412,12 +418,13 @@ import { mapActions, mapGetters } from "vuex";
                                 date: dformat
                             }
                         }      
+                        
                         this.$axios
                         .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ fund_id + "/buy/" + stock_id, buyparams)
                         .then(response => {      
                             if (response.success) {
                                 console.log(response.message);
-                                this.setSimulatorConfirmedBuySell('bull');
+                                this.setSimulatorConfirmedBuySell('');
                             }
                         });    
                 }
@@ -427,10 +434,7 @@ import { mapActions, mapGetters } from "vuex";
 
             },
             getDetails(selectObj) {
-                this.selectedTab = 'buy';
-                this.disabled = true;
-                this.stockSearch(selectObj);
-                //this.isDisabled(selectObj);
+                
                 const params = {
                     'symbol-id': selectObj,
                 };          
@@ -452,9 +456,28 @@ import { mapActions, mapGetters } from "vuex";
 			        } else if (result.data.last >= 1000) {
 			            this.dboard = 5;
                     }
+
+                    if(this.sellSelected){
+                        const sellparams = {
+                        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                        fund: this.simulatorPortfolioID,
+                        };
+                        this.$api.journal.portfolio.open(sellparams).then(
+                            function(results) {
+                                for(let i = 0; i < results.meta.open.length; i ++){
+                                    if(selectObj == results.meta.open[i].stock_id){
+                                        this.volm = this.nFormatter(results.meta.open[i].position);
+                                        this.avprice = results.meta.open[i].average_price;
+                                    }
+                                }
+                        }.bind(this)
+                        );
+                    }else {
+                        this.volm = this.nFormatter(result.data.volume);
+                    }
+                    
                     this.setSimulatorBuyPrice(result.data.last);
                     this.setSimulatorBoardLot(this.dboard);
-                    //this.stock_id = result.data.stockidstr;
                     this.stock_id = selectObj;
                     this.cprice = result.data.last;
                     this.cpercentage = result.data.changepercentage.toFixed(2); 
@@ -465,19 +488,12 @@ import { mapActions, mapGetters } from "vuex";
                     this.high = result.data.high.toFixed(2);
                     this.wklow = result.data.weekyearlow.toFixed(2);
                     this.wkhigh = result.data.weekyearhigh.toFixed(2);
-                    this.volm = this.nFormatter(result.data.volume);
+                    //this.volm = this.nFormatter(volume);
                     this.vole = this.nFormatter(result.data.value);
                     this.trades = result.data.trades;
                     this.ave = result.data.average.toFixed(2);                 
                 }.bind(this)
                 );
-
-                 this.port.map((data) => { 
-                        if (data.id == selectObj) {
-                            this.disabled = false; 
-                            console.log('sell');          
-                        }
-                    });
 
                 this.$api.chart.stocks.fulldepth(params).then(
                 function(result) {
@@ -531,10 +547,15 @@ import { mapActions, mapGetters } from "vuex";
     .positive{
     color: #00FFC3;
     }
+    .selected {
+        border-bottom: 1px solid;
+        color: #48FFD5 !important;
+    }
+    .nonselected {
+        border-bottom: none;
+    }
     .negative{
         color: #fe4949;
     }
-    .neutral{
-        color: #f3d005;
-    }
+    
 </style>
