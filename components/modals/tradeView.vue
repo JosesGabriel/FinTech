@@ -408,24 +408,24 @@ export default {
       this.selectWatch();
     },
     priceModel: function(newValue) {
-      this.priceWatch();
+      this.buyWatch();
       const result = newValue
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.priceModel = result;
     },
     priceSellModel: function(newValue) {
-      this.priceSellWatch();
+      this.sellWatch();
       const result = newValue
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.priceSellModel = result;
     },
     quantityModel: function() {
-      this.quantityWatch();
+      this.buyWatch();
     },
     quantitySellModel: function() {
-      this.quantitySellWatch();
+      this.sellWatch();
     },
     date: function() {
       this.dateWatch();
@@ -634,7 +634,7 @@ export default {
     },
     nFormatter(num) {
       if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "G";
+        return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "B";
       }
       if (num >= 1000000) {
         return (num / 1000000).toFixed(2).replace(/\.0$/, "") + "M";
@@ -691,58 +691,31 @@ export default {
         this.continueButtonDisable = false;
       }
     },
-    priceWatch() {
-      let replacedPriceModel = this.priceModel.replace(/,/g, "")
-      let result = parseInt(replacedPriceModel) * parseInt(this.quantityModel)
-      this.totalCostModel = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      let qwerty = this.totalCostModel.replace(/,/g, "")
-      let qwerty1 = this.availableFundsModel.replace(/,/g, "")
-      if(parseInt(qwerty) >= parseInt(qwerty1)){
+    buyWatch() {
+      let buyResult = parseInt(this.priceModel.replace(/,/g, "")) * parseInt(this.quantityModel)
+      this.totalCostModel = buyResult.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      if(parseInt(this.totalCostModel.replace(/,/g, "")) >= parseInt(this.availableFundsModel)){
         this.continueBuyButtonDisable = true;
         this.snackbar = true;
       } else {
         if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0 || this.portfolioDropdownModel == null) {
           this.continueBuyButtonDisable = true;
+          this.totalCostModel = 0
         } else {
           this.continueBuyButtonDisable = false;
         }
       }
     },
-    priceSellWatch() {
-      console.log(this.portfolioDropdownModel)
-      this.totalCostSellModel = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel.replace(/,/g, ""))
-      if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0 || this.portfolioDropdownModel == null){
-        this.confirmSellButtonDisable = true;
-      }else {
-        this.confirmSellButtonDisable = false;
-      }
-    },
-    quantityWatch() {
-      let replacedPriceModel = this.priceModel.replace(/,/g, "")
-      let result = parseInt(replacedPriceModel) * parseInt(this.quantityModel)
-      this.totalCostModel = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      let qwerty = this.totalCostModel.replace(/,/g, "")
-      let qwerty1 = this.availableFundsModel.replace(/,/g, "")
-      if(parseInt(qwerty) >= parseInt(qwerty1)){
-        this.continueBuyButtonDisable = true;
-        this.snackbar = true;
-      } else {
-        if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0 || this.portfolioDropdownModel == null) {
-          this.continueBuyButtonDisable = true;
-        } else {
-          this.continueBuyButtonDisable = false;
-        }
-      }
-    },
-    quantitySellWatch() {
-      console.log(this.portfolioDropdownModel)
-      this.totalCostSellModel = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel.replace(/,/g, ""))
-      if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel.replace(/,/g, ""))){
+    sellWatch() {
+      let sellResult = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel.replace(/,/g, ""))
+      this.totalCostSellModel = sellResult.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)){
         this.confirmSellButtonDisable = true;
         this.snackbarSell = true;
       } else {
         if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0 || this.portfolioDropdownModel == null){
           this.confirmSellButtonDisable = true;
+          this.totalCostSellModel = 0
         }else {
           this.confirmSellButtonDisable = false;
         }
