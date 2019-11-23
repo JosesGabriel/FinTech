@@ -65,7 +65,7 @@
           <router-link to="/chart" class="navbar__links">
             <v-list-item
               :class="active == 'chart' ? 'v-list-item--active' : ''"
-              :color="active == 'social' ? 'success' : ''"
+              :color="active == 'chart' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
                 <!-- <v-icon color="#bfb538"
@@ -84,7 +84,7 @@
           <router-link to="/journal" class="navbar__links">
             <v-list-item
               :class="active == 'journal' ? 'v-list-item--active' : ''"
-              :color="active == 'social' ? 'success' : ''"
+              :color="active == 'journal' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
                 <v-icon color="#ababab">mdi-library-books</v-icon>
@@ -101,7 +101,7 @@
           <router-link to="/trade-simulator" class="navbar__links">
             <v-list-item
               :class="active == 'virtualtrade' ? 'v-list-item--active' : ''"
-              :color="active == 'social' ? 'success' : ''"
+              :color="active == 'virtualtrade' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
                 <img
@@ -120,7 +120,7 @@
           <router-link to="/game" class="navbar__links">
             <v-list-item
               :class="active == 'game' ? 'v-list-item--active' : ''"
-              :color="active == 'social' ? 'success' : ''"
+              :color="active == 'game' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
                 ><v-icon color="#ababab">mdi-gamepad</v-icon></v-list-item-icon
@@ -135,7 +135,7 @@
           <router-link to="/watchlist" class="navbar__links">
             <v-list-item
               :class="active == 'watchlist' ? 'v-list-item--active' : ''"
-              :color="active == 'social' ? 'success' : ''"
+              :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
                 ><v-icon color="#ababab"
@@ -183,8 +183,8 @@
             <v-list-item-content>
               <v-list-item-title>VAR Calculator</v-list-item-title>
             </v-list-item-content>
-            <v-dialog v-model="varDialog" max-width="440">
-              <VARCalculator />
+            <v-dialog v-model="varDialog" max-width="280">
+              <VARCalculator :data="varDialog" />
             </v-dialog>
           </v-list-item>
           <v-list-item @click.stop="averagePriceDialog = true">
