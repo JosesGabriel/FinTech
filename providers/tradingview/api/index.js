@@ -26,6 +26,10 @@ const SEARCH_URL = `${BASE_URL}/tradingview/search`;
 const SERVER_TIME_URL = `${BASE_URL}/tradingview/time`;
 const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 
+var symbolInfoObj = {
+	exchange: ''
+}
+
 axios.defaults.headers.common['Authorization'] = `Bearer ${TOKEN}`;
 
 export default {
@@ -43,6 +47,9 @@ export default {
 	},
 	//searchsymbols is fired when the user inputs to the tradingview search bar
 	searchSymbols: (userInput, exchange, symbolType, onResultReadyCallback) => {
+		//assign exchange to global symbol info
+		symbolInfoObj.exchange = exchange
+	
 		const params = {
 			query: userInput,
 			exchange: exchange,
@@ -64,10 +71,28 @@ export default {
 	},
 	//resolvesymbol is fired when the user clicks the symbol from search bar
 	resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
-		const SPLIT_DATA = symbolName.split(/[:/]/)
+		let symbol, exchange;
+
+		//check if reolveSymbol is triggered by "enter" key
+		if (symbolName.indexOf(":") == -1){
+			symbol = symbolName
+			exchange = symbolInfoObj.exchange
+
+			//check if symbol is empty for all change, if yes, set default to PSE
+			if (exchange.length == 0) {
+				exchange = 'PSE'
+			}
+		} else {
+			const SPLIT_DATA = symbolName.split(/[:/]/)
+
+			symbol = SPLIT_DATA[1]
+			exchange = SPLIT_DATA[0]
+		}
+
+		//structure the get params
 		const params = {
-			symbol: SPLIT_DATA[1],
-			exchange: SPLIT_DATA[0]
+			symbol: symbol,
+			exchange: exchange
 		}
 
 		setTimeout(function() {
