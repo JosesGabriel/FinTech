@@ -1,166 +1,4 @@
 <template>
-  <!-- <v-card color="darkcard" dark>
-    <v-card-title class="title-2 pb-0 text--green"
-      >Value At Risk (VAR) Calculator</v-card-title
-    >
-    <v-container class="pt-0">
-      <v-row>
-        <v-col cols="12">
-          <div>Enter Stock Details</div>
-          <v-select
-            v-model="stocksDropdownModel"
-            label="Stock Code"
-            :items="stockList"
-            item-text="symbol"
-            item-value="id_str"
-            append-icon="mdi-chevron-down"
-            class="pl-0"
-            dark
-            hide-details
-            color="success"
-            required
-          ></v-select>
-          <v-text-field
-            v-model="currentPrice"
-            type="number"
-            label="Current Price"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-
-          <div class="pt-3">Portfolio Planning</div>
-          <v-text-field
-            v-model="portfolioSize"
-            type="number"
-            label="Portfolio Size"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="portfolioAllocation"
-            type="number"
-            label="Portfolio Allocation"
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="positionSize"
-            type="number"
-            label="Position Size"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-
-          <div class="pt-3">Position Sizing & RRR</div>
-          <v-text-field
-            v-model="boardLot"
-            type="number"
-            label="Board Lot"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="sharesToBuy"
-            type="number"
-            label="No of Shares to Buy"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="riskRewardRatio"
-            type="number"
-            label="Risk to Reward Ratio"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <div>Trade Planning</div>
-          <v-text-field
-            v-model="identifiedEntryPrice"
-            type="number"
-            label="Identified Entry Price"
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="riskTolerance"
-            type="number"
-            label="Risk Tolerance"
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="targetProfit"
-            type="number"
-            label="Target Profit"
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="takeProfitPrice"
-            type="number"
-            label="Take Profit Price"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="stoplossPrice"
-            type="number"
-            label="Stoploss Price"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="valueAtRisk"
-            type="number"
-            label="Value at Risk"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="upside"
-            type="number"
-            label="Upside"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-card> -->
   <v-card color="darkcard" dark :loading="loader">
     <v-card-title class="pl-2">
       <span class="subtitle-1 font-weight-light" style="color: #1DE9B6"
@@ -198,6 +36,7 @@
               v-model="identifiedEntryPrice"
               type="number"
               label="Buy Price"
+              prefix="₱"
               dense
               hide-details
               color="success"
@@ -208,6 +47,7 @@
               v-model="riskTolerance"
               type="number"
               label="Risk Tolerance"
+              prefix="₱"
               dense
               hide-details
               color="success"
@@ -218,6 +58,7 @@
               v-model="targetProfit"
               type="number"
               label="Target Profit"
+              prefix="₱"
               dense
               hide-details
               color="success"
@@ -309,6 +150,7 @@
 }
 </style>
 <script>
+let numeral = require("numeral");
 import { mapGetters, mapActions } from "vuex";
 export default {
   props: ["data"],
@@ -416,14 +258,15 @@ export default {
       let takeProfitPriceTotal2 =
         Number(this.identifiedEntryPrice) + Number(takeProfitPriceTotal1);
 
-      this.takeProfitPrice = takeProfitPriceTotal2.toFixed(2);
+      let takeProfitPrice = takeProfitPriceTotal2;
+      this.takeProfitPrice = numeral(takeProfitPriceTotal2).format("0,0.00");
 
       let stoplossPriceTotal1 = Number(this.riskTolerance) / 100;
 
       let stoplossPricepricetot2 =
         Number(this.identifiedEntryPrice) - Number(stoplossPriceTotal1);
 
-      this.stoplossPrice = stoplossPricepricetot2;
+      this.stoplossPrice = numeral(stoplossPricepricetot2).format("0,0.00");
 
       let valueAtRisk1 = Number(this.riskTolerance) / 100;
 
@@ -436,41 +279,32 @@ export default {
       this.upside = upsideTotal;
 
       /* POSITION SIZING & RRR */
-      this.identifiedEntryPrice = parseFloat(this.identifiedEntryPrice);
+      let identifiedEntryPrice = parseFloat(this.identifiedEntryPrice);
+      this.identifiedEntryPrice = numeral(identifiedEntryPrice).format(
+        "0,0.00"
+      );
 
       let boardLotGetVal;
 
-      if (
-        this.identifiedEntryPrice >= 0.0001 &&
-        this.identifiedEntryPrice <= 0.0099
-      ) {
+      if (identifiedEntryPrice >= 0.0001 && identifiedEntryPrice <= 0.0099) {
         boardLotGetVal = 1000000;
       } else if (
-        this.identifiedEntryPrice >= 0.01 &&
-        this.identifiedEntryPrice <= 0.049
+        identifiedEntryPrice >= 0.01 &&
+        identifiedEntryPrice <= 0.049
       ) {
         boardLotGetVal = 100000;
       } else if (
-        this.identifiedEntryPrice >= 0.05 &&
-        this.identifiedEntryPrice <= 0.495
+        identifiedEntryPrice >= 0.05 &&
+        identifiedEntryPrice <= 0.495
       ) {
         boardLotGetVal = 10000;
-      } else if (
-        this.identifiedEntryPrice >= 0.5 &&
-        this.identifiedEntryPrice <= 4.99
-      ) {
+      } else if (identifiedEntryPrice >= 0.5 && identifiedEntryPrice <= 4.99) {
         boardLotGetVal = 1000;
-      } else if (
-        this.identifiedEntryPrice >= 5 &&
-        this.identifiedEntryPrice <= 49.95
-      ) {
+      } else if (identifiedEntryPrice >= 5 && identifiedEntryPrice <= 49.95) {
         boardLotGetVal = 100;
-      } else if (
-        this.identifiedEntryPrice >= 50 &&
-        this.identifiedEntryPrice <= 999.5
-      ) {
+      } else if (identifiedEntryPrice >= 50 && identifiedEntryPrice <= 999.5) {
         boardLotGetVal = 10;
-      } else if (this.identifiedEntryPrice >= 1000) {
+      } else if (identifiedEntryPrice >= 1000) {
         boardLotGetVal = 5;
       }
 
@@ -479,13 +313,13 @@ export default {
       let sharesTotal1 = Number(positionSizeMin) / Number(boardLotGetVal);
 
       let sharesTotal2 = Math.round(
-        Number(sharesTotal1) / Number(this.identifiedEntryPrice)
+        Number(sharesTotal1) / Number(identifiedEntryPrice)
       );
 
       sharesTotal2 = Number.isNaN(sharesTotal2) ? 0 : sharesTotal2;
 
       var blots = parseFloat(boardLotGetVal);
-      var sharestobuy = Math.floor(positionSizeMin / this.identifiedEntryPrice);
+      var sharestobuy = Math.floor(positionSizeMin / identifiedEntryPrice);
 
       var slotmultiplier = Math.floor(sharestobuy / blots);
       var finalstocks = blots * slotmultiplier;
@@ -507,7 +341,7 @@ export default {
       this.resultPage = true;
 
       ///////JOSES
-      let buyValue = Math.round(this.sharesToBuy * this.identifiedEntryPrice);
+      let buyValue = Math.round(this.sharesToBuy * identifiedEntryPrice);
       let buyCommission, buyVAT, buyTransferFee, buySCCP, buyFeesTotal;
       /* Buy Fees */
       let buyCommissionCheck = buyValue * 0.0025;
@@ -523,8 +357,7 @@ export default {
       /* Buy Totals */
       buyFeesTotal = buyCommission + buyVAT + buyTransferFee + buySCCP;
 
-      this.totalCost =
-        this.identifiedEntryPrice * this.sharesToBuy + buyFeesTotal;
+      this.totalCost = identifiedEntryPrice * this.sharesToBuy + buyFeesTotal;
     },
     addToWatchlist() {
       this.loader = "primary";
