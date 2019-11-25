@@ -32,7 +32,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in trades" :key="item.id">
+          <tr v-for="item in trades" class="tr_custom" :key="item.id">
             <td class="pl-2 column white--text" style="width:55px;">
               {{ $moment(item.timestamp).format("hh:mm A") }}
             </td>
@@ -93,6 +93,9 @@ export default {
 </script>
 
 <style>
+.tr_custom {
+  line-height: 0.1rem !important;
+}
 .header {
   background: #00121e !important;
   font-size: 10px !important;
