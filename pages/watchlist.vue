@@ -70,8 +70,7 @@ export default {
       isDarkMode: 0,
       watchListObject: "",
       navbarMiniVariantSetter: true,
-      loadingBar: true,
-      componentKey: 0
+      loadingBar: true
     };
   },
   computed: {
@@ -96,17 +95,18 @@ export default {
     }),
     getUserWatchList() {
       //Params won't be needed in the future, user token only
+
+      // let userData = {};
       let userData = {
         user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
       };
-      this.$axios
-        .$get(process.env.DEV_API_URL + "/journal/watchlist", userData)
-        .then(response => {
+      this.$api.watchlist.watchlists.index(userData).then(
+        function(response) {
           this.watchListObject = response.data.watchlist;
           this.setUserWatchedStocks(response.data.watchlist);
           this.loadingBar = false;
-        });
-      this.componentKey++; //forces re-render
+        }.bind(this)
+      );
     }
   },
   head() {
