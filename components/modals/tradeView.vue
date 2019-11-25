@@ -163,7 +163,7 @@
                               item-text="name"
                               item-value="id"
                               @change="whereToSave"
-                              label="Fund Source"
+                              label="Select Portfolio"
                               color="#00FFC3"
                               item-color="success"
                               dense
@@ -204,16 +204,13 @@
                       <div class="separator"></div>
                       <v-row no-gutters class="pa-3 pb-0">
                         <v-col sm="12" md="12" class="pa-0">
-                          <v-row no-gutters>
-                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFundsModel) }}</v-card-title>
-                          </v-row>
                           <v-select
                           :items="selectPortfolioModel"
                           v-model="portfolioDropdownModel"
                           item-text="name"
                           item-value="id"
                           @change="whereToSave"
-                          label="Fund Source"
+                          label="Select Portfolio"
                           color="#00FFC3"
                           item-color="success"
                           dense
@@ -231,7 +228,7 @@
                             color="success"
                           ><v-icon>mdi-chevron-down</v-icon></v-btn>
                           <v-btn 
-                            @click="quantitySellModel += 100"
+                            @click="quantitySellModel + 100"
                             text 
                             icon 
                             color="success"
@@ -268,7 +265,7 @@
                       append-icon="mdi-chevron-down"
                       class="mb-1"
                       :items="strategy"
-                      label="Strategy"
+                      label="Select Strategy"
                       dense
                       flat
                     ></v-select>
@@ -281,7 +278,7 @@
                       append-icon="mdi-chevron-down"
                       class="mb-1"
                       :items="tradeplan"
-                      label="Trade Plan"
+                      label="Select Trade Plan"
                       dense
                       flat
                     ></v-select>
@@ -293,7 +290,7 @@
                       item-color="success"
                       append-icon="mdi-chevron-down"
                       :items="emotions"
-                      label="Emotions"
+                      label="Select Emotions"
                       dense
                       flat
                     ></v-select>
@@ -309,7 +306,7 @@
                     color="white"
                     class="white--text trading_notes-textarea body-2"
                     v-model="notesModel"
-                    placeholder="Trading Notes"
+                    placeholder="Enter Notes"
                     filled
                   ></v-textarea>
                 </v-col>
@@ -347,7 +344,7 @@ export default {
       cprice: "0.00",
       change: "0.00",
       cpercentage: "0.00",
-      bidask: 0,
+      bidask: 50,
       dboard: 0,
       stocklist: [],
       prev: 0,
@@ -435,16 +432,12 @@ export default {
     },
     priceModel: function(newValue) {
       this.buyWatch();
-      const result = newValue
-        .replace(/\D/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      const result = newValue.replace(/(\d{3})(?=(\d)+(?!\d{3}))/g, '$1,');
       this.priceModel = result;
     },
     priceSellModel: function(newValue) {
       this.sellWatch();
-      const result = newValue
-        .replace(/\D/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      const result = newValue.replace(/(\d{3})(?=(\d)+(?!\d{3}))/g, '$1,');
       this.priceSellModel = result;
     },
     quantityModel: function() {
@@ -637,6 +630,7 @@ export default {
                 // console.log(this.portfolioLogs[i])
                   this.boardLotModel = this.portfolioLogs[i].position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   this.average_price = this.portfolioLogs[i].average_price
+                  this.quantitySellModel = this.portfolioLogs[i].position
                   this.strategySellModel = this.portfolioLogs[i].metas.strategy
                   this.tradeplanSellModel = this.portfolioLogs[i].metas.plan
                   this.emotionsSellModel = this.portfolioLogs[i].emotion

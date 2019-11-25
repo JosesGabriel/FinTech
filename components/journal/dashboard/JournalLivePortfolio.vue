@@ -160,6 +160,9 @@ export default {
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     },
     getOpenPositions() {
+      
+    console.log(this.renderPortfolioKey)
+    console.log(this.defaultPortfolioId)
       this.portfolioLogsStock = []
       const openparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
@@ -168,8 +171,6 @@ export default {
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
           this.portfolioLogs = result.meta.open;
-          
-
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             const params = {
