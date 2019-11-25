@@ -17,6 +17,7 @@
     "@nuxtjs/moment": "^1.4.0",
     "apexcharts": "^3.10.1",
     "cross-env": "^5.2.0",
+    "matrix-js-sdk": "^2.4.4-rc.1",
     "node-sass": "^4.13.0",
     "nuxt": "^2.4.0",
     "request": "^2.88.0",
