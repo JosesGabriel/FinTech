@@ -202,8 +202,8 @@ export default {
         v => (v && v === this.confirmPassword) || "Passwords do not moatch"
       ],
       card__loader: false,
-      login__username: "josesgabriellu@gmail.com",
-      login__password: "123123123",
+      login__username: "",
+      login__password: "",
       registerLoading: false,
       alert: false,
       alertState: false,

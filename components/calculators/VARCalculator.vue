@@ -1,173 +1,166 @@
 <template>
-  <v-card color="darkcard" dark>
-    <v-card-title class="title-2 pb-0"
-      >Value At Risk (VAR) Calculator</v-card-title
+  <v-card color="darkcard" dark :loading="loader">
+    <v-card-title class="pl-2">
+      <span class="subtitle-1 font-weight-light" style="color: #1DE9B6"
+        >VAR Calculator</span
+      >
+    </v-card-title>
+    <v-card-text class="pa-1">
+      <v-container>
+        <v-row v-if="!resultPage">
+          <v-col cols="12" class="d-flex justify-space-between">
+            <span>Total Equity:</span>
+            <span>100,000.00</span>
+          </v-col>
+          <v-col cols="12" class="d-flex justify-space-between">
+            <span>Available Funds:</span>
+            <span>60,000.00</span>
+          </v-col>
+          <v-col cols="12">
+            <v-select
+              v-model="stocksDropdownModel"
+              label="Select Stock"
+              :items="stockList"
+              item-text="symbol"
+              item-value="id_str"
+              append-icon="mdi-chevron-down"
+              class="pl-0"
+              dark
+              hide-details
+              color="success"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="12"
+            ><v-text-field
+              v-model="identifiedEntryPrice"
+              type="number"
+              label="Buy Price"
+              prefix="₱"
+              dense
+              hide-details
+              color="success"
+            ></v-text-field
+          ></v-col>
+          <v-col cols="12"
+            ><v-text-field
+              v-model="riskTolerance"
+              type="number"
+              label="Risk Tolerance"
+              prefix="₱"
+              dense
+              hide-details
+              color="success"
+            ></v-text-field
+          ></v-col>
+          <v-col cols="12"
+            ><v-text-field
+              v-model="targetProfit"
+              type="number"
+              label="Target Profit"
+              prefix="₱"
+              dense
+              hide-details
+              color="success"
+            ></v-text-field
+          ></v-col>
+        </v-row>
+        <v-row v-if="resultPage">
+          <v-col cols="12">
+            <span class="body-2 font-weight-light" style="color: #1DE9B6"
+              >Your results</span
+            >
+          </v-col>
+          <v-col cols="12" class="d-flex justify-space-between">
+            <span>No. of Shares to buy</span>
+            <span>{{ sharesToBuy }}</span>
+          </v-col>
+          <v-col cols="12" class="d-flex justify-space-between">
+            <span>Total cost:</span>
+            <span>{{ totalCost }}</span>
+          </v-col>
+          <v-col cols="12" class="d-flex justify-space-between">
+            <span>Entry Price:</span>
+            <span>{{ identifiedEntryPrice }}</span>
+          </v-col>
+          <v-col cols="12" class="d-flex justify-space-between">
+            <span>Take Profit:</span>
+            <span>{{ takeProfitPrice }}</span>
+          </v-col>
+          <v-col cols="12" class="d-flex justify-space-between">
+            <span>Stoploss:</span>
+            <span>{{ stoplossPrice }}</span>
+          </v-col>
+          <v-col cols="12" class="d-flex justify-space-between">
+            <span>Risk to reward ratio:</span>
+            <span>{{ riskRewardRatio }}</span>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <!-- <v-btn
+        class="addWatch__button"
+        depressed
+        color="transparent"
+        @click="dialog = false"
+        >Close</v-btn
+      > -->
+      <v-btn
+        v-if="!resultPage"
+        class="addWatch__button"
+        color="#48FFD5"
+        light
+        depressed
+        :disabled="nextButtonDisable"
+        @click="calculate()"
+        >Continue</v-btn
+      >
+      <v-btn
+        v-else
+        class="addWatch__button"
+        color="#48FFD5"
+        light
+        depressed
+        @click="addToWatchlist()"
+        >Add to Watchlist</v-btn
+      >
+    </v-card-actions>
+    <v-snackbar
+      v-model="watchList__alert"
+      :color="watchList__alertState ? 'success' : 'error'"
     >
-    <v-container class="pt-0">
-      <v-row>
-        <v-col cols="6">
-          <div>Enter Stock Details</div>
-          <v-select
-            v-model="stocksDropdownModel"
-            label="Stock Code"
-            :items="stockList"
-            item-text="symbol"
-            item-value="id_str"
-            append-icon="mdi-chevron-down"
-            class="pl-0"
-            dark
-            hide-details
-            color="success"
-            required
-          ></v-select>
-          <v-text-field
-            v-model="currentPrice"
-            type="number"
-            label="Current Price"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-
-          <div class="pt-3">Portfolio Planning</div>
-          <v-text-field
-            v-model="portfolioSize"
-            type="number"
-            label="Portfolio Size"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="portfolioAllocation"
-            type="number"
-            label="Portfolio Allocation"
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="positionSize"
-            type="number"
-            label="Position Size"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-
-          <div class="pt-3">Position Sizing & RRR</div>
-          <v-text-field
-            v-model="boardLot"
-            type="number"
-            label="Board Lot"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="sharesToBuy"
-            type="number"
-            label="No of Shares to Buy"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="riskRewardRatio"
-            type="number"
-            label="Risk to Reward Ratio"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="6">
-          <div>Trade Planning</div>
-          <v-text-field
-            v-model="identifiedEntryPrice"
-            type="number"
-            label="Identified Entry Price"
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="riskTolerance"
-            type="number"
-            label="Risk Tolerance"
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="targetProfit"
-            type="number"
-            label="Target Profit"
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="takeProfitPrice"
-            type="number"
-            label="Take Profit Price"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="stoplossPrice"
-            type="number"
-            label="Stoploss Price"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="valueAtRisk"
-            type="number"
-            label="Value at Risk"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-          <v-text-field
-            v-model="upside"
-            type="number"
-            label="Upside"
-            append-icon="mdi-lock"
-            disabled
-            dense
-            hide-details
-            color="success"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-    </v-container>
+      {{ post__responseMsg }}
+      <v-btn color="white" text @click="watchList__alert = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-card>
 </template>
+<style>
+.text--green {
+  color: #48ffd5;
+}
+.text--red {
+  color: #ff4848;
+}
+.text--gray {
+  color: gray;
+}
+</style>
 <script>
+let numeral = require("numeral");
+import { mapGetters, mapActions } from "vuex";
 export default {
+  props: ["data"],
   data() {
     return {
+      loader: false,
+      post__responseMsg: null,
+      watchList__alert: false,
+      watchList__alertState: null,
+      nextButtonDisable: true,
       stocksDropdownModel: null,
       stockList: [],
       upside: 0,
@@ -183,8 +176,15 @@ export default {
       positionSize: 0,
       portfolioAllocation: 0,
       portfolioSize: 0,
-      currentPrice: 0
+      currentPrice: 0,
+      totalCost: 0,
+      resultPage: false
     };
+  },
+  computed: {
+    ...mapGetters({
+      renderChartKey: "watchers/getRenderChartKey"
+    })
   },
   watch: {
     stocksDropdownModel: function(e) {
@@ -198,21 +198,19 @@ export default {
           this.currentPrice = result.data.last;
         }.bind(this)
       );
+      this.fieldsCheck();
     },
-    currentPrice: function() {
-      this.calculate();
+    data: function(e) {
+      this.resultPage = false;
     },
-    portfolioAllocation: function() {
-      this.calculate();
+    identifiedEntryPrice: function(e) {
+      this.fieldsCheck();
     },
-    identifiedEntryPrice: function() {
-      this.calculate();
+    riskTolerance: function(e) {
+      this.fieldsCheck();
     },
-    riskTolerance: function() {
-      this.calculate();
-    },
-    targetProfit: function() {
-      this.calculate();
+    targetProfit: function(e) {
+      this.fieldsCheck();
     }
   },
   mounted() {
@@ -227,6 +225,21 @@ export default {
     );
   },
   methods: {
+    ...mapActions({
+      setRenderChartKey: "watchers/setRenderChartKey"
+    }),
+    fieldsCheck() {
+      if (
+        this.identifiedEntryPrice != "" &&
+        this.riskTolerance != "" &&
+        this.targetProfit != "" &&
+        this.stocksDropdownModel != null
+      ) {
+        this.nextButtonDisable = false;
+      } else {
+        this.nextButtonDisable = true;
+      }
+    },
     calculate() {
       /* PORTFOLIO PLANNING */
 
@@ -245,14 +258,15 @@ export default {
       let takeProfitPriceTotal2 =
         Number(this.identifiedEntryPrice) + Number(takeProfitPriceTotal1);
 
-      this.takeProfitPrice = takeProfitPriceTotal2.toFixed(2);
+      let takeProfitPrice = takeProfitPriceTotal2;
+      this.takeProfitPrice = numeral(takeProfitPriceTotal2).format("0,0.00");
 
       let stoplossPriceTotal1 = Number(this.riskTolerance) / 100;
 
       let stoplossPricepricetot2 =
         Number(this.identifiedEntryPrice) - Number(stoplossPriceTotal1);
 
-      this.stoplossPrice = stoplossPricepricetot2;
+      this.stoplossPrice = numeral(stoplossPricepricetot2).format("0,0.00");
 
       let valueAtRisk1 = Number(this.riskTolerance) / 100;
 
@@ -265,41 +279,32 @@ export default {
       this.upside = upsideTotal;
 
       /* POSITION SIZING & RRR */
-      this.identifiedEntryPrice = parseFloat(this.identifiedEntryPrice);
+      let identifiedEntryPrice = parseFloat(this.identifiedEntryPrice);
+      this.identifiedEntryPrice = numeral(identifiedEntryPrice).format(
+        "0,0.00"
+      );
 
       let boardLotGetVal;
 
-      if (
-        this.identifiedEntryPrice >= 0.0001 &&
-        this.identifiedEntryPrice <= 0.0099
-      ) {
+      if (identifiedEntryPrice >= 0.0001 && identifiedEntryPrice <= 0.0099) {
         boardLotGetVal = 1000000;
       } else if (
-        this.identifiedEntryPrice >= 0.01 &&
-        this.identifiedEntryPrice <= 0.049
+        identifiedEntryPrice >= 0.01 &&
+        identifiedEntryPrice <= 0.049
       ) {
         boardLotGetVal = 100000;
       } else if (
-        this.identifiedEntryPrice >= 0.05 &&
-        this.identifiedEntryPrice <= 0.495
+        identifiedEntryPrice >= 0.05 &&
+        identifiedEntryPrice <= 0.495
       ) {
         boardLotGetVal = 10000;
-      } else if (
-        this.identifiedEntryPrice >= 0.5 &&
-        this.identifiedEntryPrice <= 4.99
-      ) {
+      } else if (identifiedEntryPrice >= 0.5 && identifiedEntryPrice <= 4.99) {
         boardLotGetVal = 1000;
-      } else if (
-        this.identifiedEntryPrice >= 5 &&
-        this.identifiedEntryPrice <= 49.95
-      ) {
+      } else if (identifiedEntryPrice >= 5 && identifiedEntryPrice <= 49.95) {
         boardLotGetVal = 100;
-      } else if (
-        this.identifiedEntryPrice >= 50 &&
-        this.identifiedEntryPrice <= 999.5
-      ) {
+      } else if (identifiedEntryPrice >= 50 && identifiedEntryPrice <= 999.5) {
         boardLotGetVal = 10;
-      } else if (this.identifiedEntryPrice >= 1000) {
+      } else if (identifiedEntryPrice >= 1000) {
         boardLotGetVal = 5;
       }
 
@@ -308,13 +313,13 @@ export default {
       let sharesTotal1 = Number(positionSizeMin) / Number(boardLotGetVal);
 
       let sharesTotal2 = Math.round(
-        Number(sharesTotal1) / Number(this.identifiedEntryPrice)
+        Number(sharesTotal1) / Number(identifiedEntryPrice)
       );
 
       sharesTotal2 = Number.isNaN(sharesTotal2) ? 0 : sharesTotal2;
 
       var blots = parseFloat(boardLotGetVal);
-      var sharestobuy = Math.floor(positionSizeMin / this.identifiedEntryPrice);
+      var sharestobuy = Math.floor(positionSizeMin / identifiedEntryPrice);
 
       var slotmultiplier = Math.floor(sharestobuy / blots);
       var finalstocks = blots * slotmultiplier;
@@ -332,6 +337,66 @@ export default {
           ? 0
           : riskToRewardFormat;
       this.riskRewardRatio = riskToRewardFormat;
+
+      this.resultPage = true;
+
+      ///////JOSES
+      let buyValue = Math.round(this.sharesToBuy * identifiedEntryPrice);
+      let buyCommission, buyVAT, buyTransferFee, buySCCP, buyFeesTotal;
+      /* Buy Fees */
+      let buyCommissionCheck = buyValue * 0.0025;
+      if (buyCommissionCheck <= 20) {
+        buyCommission = 20;
+      } else {
+        buyCommission = buyValue * 0.0025;
+      }
+      buyVAT = buyCommission * 0.12;
+      buyTransferFee = buyValue * 0.00005;
+      buySCCP = buyValue * 0.0001;
+
+      /* Buy Totals */
+      buyFeesTotal = buyCommission + buyVAT + buyTransferFee + buySCCP;
+
+      this.totalCost = identifiedEntryPrice * this.sharesToBuy + buyFeesTotal;
+    },
+    addToWatchlist() {
+      this.loader = "primary";
+      let params = {
+        user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000",
+        stock_id: this.stocksDropdownModel,
+        entry_price: this.identifiedEntryPrice,
+        take_profit: this.takeProfitPrice,
+        stop_loss: this.stoplossPrice
+      };
+      this.$axios
+        .$post(process.env.DEV_API_URL + "/journal/watchlist", params)
+        .then(response => {
+          this.watchCardModalLoading = false;
+          if (response.success) {
+            this.showAlert(true, response.message);
+            let keyCounter = this.renderChartKey;
+            keyCounter++;
+            this.setRenderChartKey(keyCounter);
+            this.clearFields();
+          }
+          this.loader = false;
+        })
+        .catch(err => {
+          this.showAlert(false, "Watchlist already exists.");
+          this.loader = false;
+          this.clearFields();
+        });
+    },
+    showAlert(state, message) {
+      this.watchList__alert = true;
+      this.post__responseMsg = message;
+      this.watchList__alertState = state;
+    },
+    clearFields() {
+      this.stocksDropdownModel = "";
+      this.identifiedEntryPrice = "";
+      this.riskTolerance = "";
+      this.targetProfit = "";
     }
   }
 };

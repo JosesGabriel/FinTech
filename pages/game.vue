@@ -32,6 +32,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "game",
+  middleware: ["auth"],
   components: {
     GameLobby,
     GameView

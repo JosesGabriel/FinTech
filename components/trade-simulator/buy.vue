@@ -1,13 +1,14 @@
 <template>
     <v-container class="pa-0">
-        <div class="separator"></div>
+        <!--<div class="separator"></div>-->
         <v-row no-gutters class="pa-3 pb-0">
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" v-model="item" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Portfolio" dense flat dark></v-select>
+                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Portfolio" dense flat dark></v-select>
                         <v-text-field
                             label="Available Funds"
+                            :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')"
                             color="#00FFC3"
                             style="color: #00FFC3"
                             dark
@@ -18,8 +19,8 @@
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field
-                            label="Buy Price"
-                            placeholder="Enter Buy Price"
+                            :label="(this.simulatorConfirmedBuySell == 'sell' ? 'Sell Price' : 'Buy Price')"
+                            :placeholder="(this.simulatorConfirmedBuySell == 'sell' ? 'Enter Sell Price' : 'Enter Buy Price')"
                             color="#00FFC3"
                             style="color: #00FFC3"
                             dark
@@ -56,7 +57,7 @@
                         BoardLot : <span>{{ this.simulatorBoardLot }}</span>
                     </v-col>
                     <v-text-field
-                        label="Total Cost"
+                        :label="(this.simulatorConfirmedBuySell == 'sell' ? 'Market Value' : 'Total Cost')"
                         color="#00FFC3"
                         style="color: #00FFC3"
                         dark
@@ -66,6 +67,7 @@
                         readonly
                     ></v-text-field>
                 </v-row>
+                
             </v-col>
         </v-row>
     </v-container>
@@ -90,7 +92,8 @@ export default {
       simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
       simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
-      simulatorPositions: "tradesimulator/getSimulatorPositions"
+      simulatorPositions: "tradesimulator/getSimulatorPositions",
+      simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell"
     })
   },
     mounted() {
@@ -106,10 +109,7 @@ export default {
                             this.availableFunds = this.addcomma(avfunds);
                             this.setSimulatorPortfolioID(result.meta.logs[i].id);
                         }
-                        if(result.meta.logs[i].type == 'VirtualPort'){
-                            //if(this.simulatorPortfolioID == null){
-                                //this.setSimulatorPortfolioID(result.meta.logs[i].id);
-                           // }                     
+                        if(result.meta.logs[i].type == 'VirtualPort'){                    
                             this.portfolio.push(result.meta.logs[i].name);
                         }
 
@@ -129,13 +129,15 @@ export default {
     addButton(){
         this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
         let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
-        this.setSimulatorPositions('buy-'+this.quantity);
+        //this.setSimulatorPositions('buy-'+this.quantity);
+        this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(add);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));  
         let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
-        this.setSimulatorPositions('buy-'+this.quantity);
+        //this.setSimulatorPositions('buy-'+this.quantity);
+        this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(min);
     },
     addcomma(n, sep, decimals) {
@@ -147,7 +149,8 @@ export default {
     },
     keypress: function(){
         let press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
-        this.setSimulatorPositions('buy-'+this.quantity);
+        //this.setSimulatorPositions('buy-'+this.quantity);
+        this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(press);
     },
     getBalance: function(item){
@@ -174,7 +177,10 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
+    .no_display{
+        display: none;
+    }
     .highnum{
         color: #00FFC3;
     }

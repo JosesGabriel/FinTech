@@ -6,8 +6,8 @@
         <v-col cols="12"
           ><v-text-field
             v-model="totalCost"
-            type="number"
             label="Total Cost"
+            prefix="₱"
             hide-details
             disabled
             filled
@@ -16,7 +16,6 @@
         <v-col cols="12"
           ><v-text-field
             v-model="totalPosition"
-            type="number"
             label="Total Position"
             hide-details
             disabled
@@ -26,8 +25,8 @@
         <v-col cols="12"
           ><v-text-field
             v-model="averagePrice"
-            type="number"
             label="Average Price"
+            prefix="₱"
             hide-details
             disabled
             filled
@@ -65,7 +64,6 @@
         <v-col cols="6">
           <v-text-field
             v-model="position[n - 1]"
-            type="number"
             label="Position"
             filled
             hide-details
@@ -75,7 +73,6 @@
         <v-col cols="6">
           <v-text-field
             v-model="positionPrice[n - 1]"
-            type="number"
             label="Price"
             filled
             hide-details
@@ -87,6 +84,7 @@
   </v-card>
 </template>
 <script>
+let numeral = require("numeral");
 export default {
   data() {
     return {
@@ -101,14 +99,21 @@ export default {
     };
   },
   methods: {
+    parseNumber(num) {
+      if (Number.isInteger(num)) return num;
+      else {
+        num = num.replace(/[^0-9.]+/g, "");
+        return parseFloat(num);
+      }
+    },
     calculate() {
       let totalCost = 0;
       let totalPrice = 0;
       let totalVolume = 0;
       let costFee = 0;
       for (let i = 0; i < this.positionKey; i++) {
-        let dposition = this.position[i];
-        let dprice = this.positionPrice[i];
+        let dposition = this.parseNumber(this.position[i]);
+        let dprice = this.parseNumber(this.positionPrice[i]);
         if (dposition > 0 && dprice > 0) {
           totalVolume += parseFloat(dposition);
           totalPrice += parseFloat(dprice);
@@ -118,9 +123,9 @@ export default {
         }
       }
       let finalCost = costFee / totalVolume;
-      this.totalCost = costFee.toFixed(2);
-      this.totalPosition = totalVolume.toFixed(2);
-      this.averagePrice = finalCost.toFixed(2);
+      this.totalCost = numeral(costFee).format("0,0.00");
+      this.totalPosition = numeral(totalVolume).format("0,0");
+      this.averagePrice = numeral(finalCost).format("0,0.00");
     },
     getFee(marketvalue) {
       let totalfee = 0;
@@ -130,7 +135,7 @@ export default {
       let transfer = marketvalue * 0.00005;
       let sccp = marketvalue * 0.0001;
       totalfee = commission + tax + transfer + sccp;
-      return totalfee.toFixed(2);
+      return totalfee;
     },
     clear() {
       this.positionKey = 1;

@@ -70,7 +70,7 @@
 </template>
 <script>
 import TradeModal from '~/components/trade-simulator/TradeModal'
-import resetModal from '~/components/modals/reset'
+import resetModal from '~/components/trade-simulator/reset'
 import shareModal from '~/components/modals/share'
 import { mapActions, mapGetters } from "vuex";
 
@@ -201,7 +201,6 @@ export default {
      mounted() {
        if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');        
       },
-
 }
 </script>
 <style scoped>
