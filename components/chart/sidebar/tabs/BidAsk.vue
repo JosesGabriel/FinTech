@@ -2,7 +2,12 @@
   <v-content>
     <div class="sub__title">Bid and Ask</div>
     <!-- bid and ask -->
-    <v-card color="#00121e" :loading="loading" style="height:105px;">
+    <v-card
+      color="#00121e"
+      class="pl-1 pr-5"
+      :loading="loading"
+      style="height:105px;"
+    >
       <v-simple-table
         dense
         dark
@@ -134,8 +139,8 @@ export default {
 </script>
 
 <style>
-.custom_table tr{
-    height: 5px !important;
+.custom_table tr {
+  height: 5px !important;
 }
 .header {
   background: #00121e !important;

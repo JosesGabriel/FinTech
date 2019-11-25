@@ -4,7 +4,7 @@
       color="#00121e"
       :loading="loading"
       style="height: calc(100vh - 490px)"
-      class="card__timetrade"
+      class="card__timetrade pl-1 pr-6"
     >
       <v-simple-table
         dense

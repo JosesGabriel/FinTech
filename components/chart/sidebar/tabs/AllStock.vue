@@ -4,13 +4,13 @@
     <v-card
       color="#00121e"
       :loading="loading"
+      class="pl-3 pr-5"
       style="height: calc(100vh - 315px)"
     >
       <v-simple-table
         dense
         dark
         fixed-header
-        class="ml-4"
         height="calc(100vh - 315px)"
         style="background:#00121e"
       >
@@ -20,9 +20,15 @@
             <th class="caption header white--text font-weight-bold text-right">
               LAST
             </th>
-            <th class="caption header white--text font-weight-bold text-right">%CHANGE</th>
-            <th class="caption header white--text font-weight-bold text-right">VALUE</th>
-            <th class="caption header white--text font-weight-bold text-right">TRADES</th>
+            <th class="caption header white--text font-weight-bold text-right">
+              %CHANGE
+            </th>
+            <th class="caption header white--text font-weight-bold text-right">
+              VALUE
+            </th>
+            <th class="caption header white--text font-weight-bold text-right">
+              TRADES
+            </th>
             <th class="caption header white--text font-weight-bold"></th>
           </tr>
         </thead>
@@ -58,7 +64,7 @@
                 item.value | numeral("0.000a")
               }}</span>
             </td>
-            <td class="column white--text text-right" style="width:50px">
+            <td class="column white--text text-right" style="width:45px">
               <span class="">{{ item.trades | numeral("0,0") }}</span>
             </td>
             <td class="column white--text"></td>

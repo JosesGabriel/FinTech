@@ -140,6 +140,7 @@ export default {
 <style>
 #chart_body {
   background: #00121e !important;
+  font-family: 'Karla', sans-serif !important;
 }
 #button_adjustview {
   position: absolute;

@@ -86,6 +86,7 @@ div {
 .template {
   /* font-size: x-small; */
   color: #fff;
+  /* font-family: 'Karla', sans-serif !important; */
 }
 .hcontainer_top {
   margin-top: 2px;

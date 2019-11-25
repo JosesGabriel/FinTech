@@ -148,6 +148,8 @@ export default {
   width: 136px;
   font-size: 10px;
   line-height: 11px;
+  padding-left:5px;
+  padding-right:5px;
 }
 .tleft__label {
   padding: 0;
@@ -166,11 +168,12 @@ export default {
   width: 136px;
   font-size: 10px;
   line-height: 11px;
+  padding-right:10px;
 }
 .tright__label {
   padding: 0;
   text-transform: uppercase;
-  padding-left: 10px;
+  padding-left: 5px;
   color: #bbb !important;
 }
 .tright__column {
