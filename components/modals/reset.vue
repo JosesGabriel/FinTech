@@ -13,6 +13,7 @@
                         <v-text-field
                             label="Solo"
                             placeholder="HELL YEAH"
+                            v-model="confirmResetModel"
                             solo
                             dark
                             class="align-center justify-center headline font-weight-regular text-center white--text confirmation_message-reset"
@@ -28,7 +29,7 @@
                             <h1 class="font-weight-regular body-1" style="color:#00080E;">I THINK NOT</h1>
                         </v-card-title>
                     </v-col>
-                    <v-col class="pa-0" cols="7" sm="7" md="7" @click.stop="show=false">
+                    <v-col class="pa-0" cols="7" sm="7" md="7" @click.stop="show=false" @click="resetNow">
                         <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-not">
                             <h1 class="font-weight-regular body-1" style="color:#00FFC3;">I UNDERSTAND, DO IT</h1>
                         </v-card-title>
@@ -44,6 +45,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   props: ['visible'],
   computed: {
@@ -56,6 +59,34 @@ export default {
           this.$emit('close')
         }
       }
+    },
+    ...mapGetters({
+        defaultPortfolioId: "journal/getDefaultPortfolioId",
+        renderPortfolioKey: "journal/getRenderPortfolioKey"
+    }),
+  },
+  data() {
+    return {
+        confirmResetModel: null
+    }
+  },
+  mounted() {
+      console.log(this.defaultPortfolioId)
+  },
+  methods: {
+    resetNow() {
+        if(this.confirmResetModel == "HELL YEAH" || this.defaultPortfolioId != null) {
+            const resetparams  = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+            };
+            this.$axios
+            .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/reset",resetparams)
+            .then(response => {
+                if (response.success) {
+                    console.log(response)
+                }
+            });
+        }
     }
   }
 }
