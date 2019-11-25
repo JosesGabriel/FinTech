@@ -2,7 +2,35 @@
   <!-- Mestro Meny -->
   <v-col class="pa-0">
     <v-content class="content__btncontainer">
-      <div id="div__btn">
+      <v-btn
+        small
+        icon
+        :color="ticker ? '#48FFD5' : '#BBB'"
+        title="Ticker"
+        @click="toggleTicker"
+      >
+        <v-icon class="icon-flipped-y">mdi-dock-bottom</v-icon>
+      </v-btn>
+      <v-btn
+        small
+        icon
+        :class="[{ div__disable: !jockey }]"
+        :color="!table && jockey ? '#48FFD5' : '#BBB'"
+        title="Maximize Table"
+        @click="toggleTable"
+      >
+        <v-icon>mdi-window-maximize</v-icon>
+      </v-btn>
+      <v-btn
+        small
+        icon
+        :color="sidebarboard ? '#48FFD5' : '#BBB'"
+        title="Sidebar"
+        @click="toggleSidebarBoard"
+      >
+        <v-icon>mdi-dock-right</v-icon>
+      </v-btn>
+      <!-- <div id="div__btn">
         <div
           id="btn__ticker"
           :class="{ div__hide: !ticker }"
@@ -25,16 +53,10 @@
           :class="{ div__hide: !sidebarboard }"
           @click="toggleSidebarBoard"
         ></div>
-      </div>
+      </div> -->
     </v-content>
 
-    <v-tabs
-      height="35"
-      color="#48FFD5"
-      background-color="#00121e"
-      dark
-      class="mt-3"
-    >
+    <v-tabs height="30" color="#48FFD5" background-color="#00121e" dark>
       <v-tab
         :disabled="fullscreen"
         color="#fff"
@@ -44,7 +66,6 @@
         >Jockey</v-tab
       >
       <v-tab
-        disabled
         color="#fff"
         class="tab_menu-top text-capitalize subtitle-1"
         :href="`#tab-2`"
@@ -55,14 +76,7 @@
         color="#fff"
         class="tab_menu-top text-capitalize subtitle-1"
         :href="`#tab-3`"
-        >VirtualTrade</v-tab
-      >
-      <v-tab
-        disabled
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-4`"
-        >RealTrade</v-tab
+        >Trade</v-tab
       >
 
       <v-tab-item
@@ -87,14 +101,6 @@
         color="#48FFD5"
         background-color="#00121e"
         :value="'tab-' + 3"
-      >
-        <v-container class="pa-0"> </v-container>
-      </v-tab-item>
-      <v-tab-item
-        dark
-        color="#48FFD5"
-        background-color="#00121e"
-        :value="'tab-' + 4"
       >
         <v-container class="pa-0"> </v-container>
       </v-tab-item>
@@ -175,16 +181,35 @@ export default {
   padding: 0px;
   position: absolute;
   right: 0;
+  height: 30px;
+  z-index: 1;
+  width: 150px;
   margin-right: 5px;
-  z-index: 9999999;
+  /* background: red; */
+  text-align: right;
+}
+.icon-flipped-x {
+  -o-transform: scaleX(-1);
+  -moz-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  -ms-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+.icon-flipped-y {
+  -o-transform: scaleY(-1);
+  -moz-transform: scaleY(-1);
+  -webkit-transform: scaleY(-1);
+  -ms-transform: scaleY(-1);
+  transform: scaleY(-1);
 }
 .div__hide {
-  background: #ddd !important;
+  /* background: #ddd !important; */
+  color: #bbb;
   /* background: #0c1a2b !important;
   border: #48ffd5 1px solid !important; */
 }
 .div__disable {
-  background: #37474f !important;
+  /* background: #37474f !important; */
   cursor: not-allowed !important;
   pointer-events: none;
 }

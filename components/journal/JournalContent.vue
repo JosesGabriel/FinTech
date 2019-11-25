@@ -185,18 +185,7 @@ export default {
         }
     },
     mounted() {
-        if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
-        const openparams = {
-            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-            fund: this.selectedProfile,
-        };
-        this.$api.journal.portfolio.open(openparams).then(
-            function(result) {
-            }.bind(this)
-        );
-        if( this.portfolio == 0) {
-            this.showCreatePortForm = true
-        };
+        // if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
         this.getUserPortfolioList();
     },
     methods: {
@@ -206,36 +195,20 @@ export default {
             setDefaultPortfolioId: "journal/setDefaultPortfolioId",
             setSelectedPortfolio: "journal/setSelectedPortfolio",
         }),
-        changePortfolio: function(){
-            
+        changePortfolio(){
+            // console.log(this.portfolioDropdownModel)
             const openparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                fund: this.selectedProfile,
+                fund: this.defaultPortfolioId,
             };
             this.$api.journal.portfolio.open(openparams).then(
                 function(result) {
                     if(result.success) {
+                        // console.log(result.success)
                         this.keyCreateCounter = this.renderPortfolioKey;
                         this.keyCreateCounter++;
                         this.setRenderPortfolioKey(this.keyCreateCounter);
-                        
-                        this.selectedProfile = this.portfolioDropdownModel.id;
-                        this.setDefaultPortfolioId(this.selectedProfile);
-                        // console.log(this.portfolioDropdownModel.id)
-                            // const params = {
-                            //     user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                            // };
-                            // this.$api.journal.portfolio.portfolio(params).then(
-                            //     function(result) {
-                            //         let toFindReal = this.selectedProfile;
-                            //         for (let i = 0; i < result.meta.logs.length; i++ ) {
-                            //             let portfolioListPush1 = result.meta.logs[i]
-                            //             if (portfolioListPush1.id === toFindReal) {
-                            //                 this.setSelectedPortfolio(portfolioListPush1)
-                            //             }
-                            //         }
-                            //     }
-                            // );
+                        this.setDefaultPortfolioId(result.success.id);
                     }
                 }.bind(this)
             );
@@ -247,19 +220,42 @@ export default {
             };
             this.$api.journal.portfolio.portfolio(params).then(
                 function(result) {
+                    
+                    console.log(this.portfolioList)
                     this.portfolioList = result.meta.logs;
                     this.portfolioList = this.portfolioList.reverse();
                     this.setUserPortfolio(result.meta.logs);
-                    // this.setDefaultPortfolioId(this.portfolioList[0].id);
                     this.portfolioListPush = []
                     if(this.portfolioList.length != 0) {
                         this.portfolioListPush.push({header: 'Real Portfolio'});
                         const toFindReal = "real" // what we want to count
+                        let defaultPort = false;
                         for (let i = 0; i < this.portfolioList.length; i++ ) {
                             let portfolioListPush1 = this.portfolioList[i]
                             if (portfolioListPush1.type === toFindReal) {
                                 this.portfolioListPush.push(portfolioListPush1);
                             }
+                            if(result.meta.logs[i].name == 'My Portfolio'){
+                                this.setDefaultPortfolioId(result.meta.logs[i].id);
+                                defaultPort = true;
+                            }
+                        }
+                        if(!defaultPort){
+                            const createportfolioparams = {
+                                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                                currency_code: "PHP",
+                                name: 'My Portfolio',
+                                description: "My First Portfolio",
+                                type: "real",
+                                balance: 1000000
+                            };
+                            this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
+                                function(result) {
+                                    if (result.success) {
+                                        console.log('default portfolio created..');
+                                    }
+                                }.bind(this)
+                            );
                         }
                     }
                     if(this.portfolioList.length != 0) {
@@ -289,6 +285,9 @@ export default {
     },
     watch: {
         renderPortfolioKey: function() {
+            this.getUserPortfolioList();
+        },
+        portfolioDropdownModel() {
             this.getUserPortfolioList();
         }
     },

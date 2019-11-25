@@ -129,8 +129,8 @@ export default {
     // listen to ticker toggle
     this.$bus.$on("adjustChartView", data => {
       this.chartView;
-      //console.log(this.chartViewId);
-      //console.log(this.chartViewClass);
+      console.log(this.chartViewId);
+      console.log(this.chartViewClass);
     });
 
     //! BEWARE: no trailing slash is expected in feed URL
@@ -208,7 +208,7 @@ export default {
 
     tvWidget.onChartReady(() => {
       tvWidget.headerReady().then(() => {
-        this.widgetCreateButton(
+        /*this.widgetCreateButton(
           "Click to show a notification popup",
           "Setting",
           function() {
@@ -222,7 +222,7 @@ export default {
               }
             });
           }
-        );
+        );*/
       });
     });
   },
@@ -257,11 +257,11 @@ export default {
 } */
 .chartViewClass_1 {
   /* both open */
-  height: calc(100vh - 152px);
+  height: calc(100vh - 132px);
 }
 .chartViewClass_2 {
   /* table only */
-  height: calc(100vh - 102px);
+  height: calc(100vh - 82px);
 }
 .chartViewClass_3 {
   /* ticker only */

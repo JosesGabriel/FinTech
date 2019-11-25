@@ -4,13 +4,14 @@
     <v-card
       color="#00121e"
       :loading="loading"
+      class="pl-3 pr-5"
       style="height: calc(100vh - 315px)"
+      flat
     >
       <v-simple-table
         dense
         dark
         fixed-header
-        class="ml-4"
         height="calc(100vh - 315px)"
         style="background:#00121e"
       >
@@ -20,14 +21,20 @@
             <th class="caption header white--text font-weight-bold text-right">
               LAST
             </th>
-            <th class="caption header white--text font-weight-bold text-right">%CHANGE</th>
-            <th class="caption header white--text font-weight-bold text-right">VALUE</th>
-            <th class="caption header white--text font-weight-bold text-right">TRADES</th>
+            <th class="caption header white--text font-weight-bold text-right">
+              %CHANGE
+            </th>
+            <th class="caption header white--text font-weight-bold text-right">
+              VALUE
+            </th>
+            <th class="caption header white--text font-weight-bold text-right">
+              TRADES
+            </th>
             <th class="caption header white--text font-weight-bold"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in stocks" :key="item.id">
+          <tr v-for="item in stocks" class="tr_custom" :key="item.id">
             <td class="column white--text" style="width:40px">
               {{ item.symbol }}
             </td>
@@ -58,10 +65,10 @@
                 item.value | numeral("0.000a")
               }}</span>
             </td>
-            <td class="column white--text text-right" style="width:50px">
+            <td class="column white--text text-right" style="width:45px">
               <span class="">{{ item.trades | numeral("0,0") }}</span>
             </td>
-            <td class="column white--text"></td>
+            <td class="column white--text" style="width:25px"></td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -94,6 +101,9 @@ export default {
 </script>
 
 <style scoped>
+.tr_custom {
+  line-height: 0.1rem !important;
+}
 .header {
   background: #00121e !important;
   font-size: 10px !important;
@@ -104,6 +114,9 @@ export default {
 }
 .theme--dark.v-data-table thead tr:last-child th {
   border: none !important;
+}
+.v-card__text {
+  line-height: 0.375rem !important;
 }
 .v-data-table td,
 .v-data-table th {

@@ -20,7 +20,6 @@ import VirtualContent from "~/components/trade-simulator/VirtualContent";
 
 export default {
   layout: "main",
-  middleware: ["auth"],
   components: {
     NavBar,
     VirtualContent

@@ -6,7 +6,6 @@
 
 <script>
 export default {
-  layout: "chart",
-  middleware: ["auth"]
+  layout: "chart"
 };
 </script>

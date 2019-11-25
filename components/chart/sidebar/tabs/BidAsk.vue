@@ -2,7 +2,13 @@
   <v-content>
     <div class="sub__title">Bid and Ask</div>
     <!-- bid and ask -->
-    <v-card color="#00121e" :loading="loading" style="height:105px;">
+    <v-card
+      color="#00121e"
+      class="pl-1 pr-5"
+      :loading="loading"
+      style="height:105px;"
+      flat
+    >
       <v-simple-table
         dense
         dark
@@ -36,7 +42,7 @@
         </thead>
         <tbody>
           <span class="d-none">{{ (ctr = 0) }}</span>
-          <tr v-for="item in asks" :key="item.id">
+          <tr v-for="item in asks" class="tr_custom" :key="item.id">
             <td class="text-right column white--text" style="width:30px">
               {{ bids[ctr].count | numeral("0,0") }}
             </td>
@@ -134,8 +140,14 @@ export default {
 </script>
 
 <style>
-.custom_table tr{
-    height: 5px !important;
+/* html {
+  font-size: 11px !important;
+} */
+.tr_custom {
+  line-height: 0.1rem !important;
+}
+.custom_table tr {
+  height: 5px !important;
 }
 .header {
   background: #00121e !important;
