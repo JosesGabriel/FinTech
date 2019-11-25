@@ -167,7 +167,7 @@
                    
                     let defaultPort = false;
                     for(let i=0; i< result.meta.logs.length; i++){
-                        if(result.meta.logs[i].type == 'VirtualPort'){
+                        if(result.meta.logs[i].type == 'virtual'){
                             let portfolio_params = {
                                 name: result.meta.logs[i].name,
                                 id: result.meta.logs[i].id
@@ -187,7 +187,7 @@
                                 currency_code: "PHP",
                                 name: 'Default Virtual Portfolio',
                                 description: "My Virtual Portfolio",
-                                type: "VirtualPort",
+                                type: "virtual",
                                 balance: 100000
                             };
                         this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
