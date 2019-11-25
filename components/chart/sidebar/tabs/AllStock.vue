@@ -67,7 +67,7 @@
             <td class="column white--text text-right" style="width:45px">
               <span class="">{{ item.trades | numeral("0,0") }}</span>
             </td>
-            <td class="column white--text"></td>
+            <td class="column white--text" style="width:15px"></td>
           </tr>
         </tbody>
       </v-simple-table>
