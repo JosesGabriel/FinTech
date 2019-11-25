@@ -17,7 +17,6 @@
               :headers="headers"
               :items="portfolioLogs"
               :page.sync="page"
-              :items-per-page="itemsPerPage"
               hide-default-footer
               @page-count="pageCount = $event"
               dark
@@ -27,9 +26,9 @@
             <template v-slot:item.Perf="{ item }"><span :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
             <template v-slot:item.action="{ item }">
                   <div v-show="menuShow" class="sidemenu_actions" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
-                    <v-btn small class="caption" text color="success">Details</v-btn>
-                    <v-btn small class="caption" text color="success">Edit</v-btn>
-                    <v-btn small class="caption" v-model="item" item-value="item" v-on:click="deleteLive(item.action)" text color="success">Delete</v-btn>
+                    <v-btn small class="caption" @click.stop="showEditForm=true" v-on:click="details(item.action, 'details')" text color="success">Details</v-btn>
+                    <v-btn small class="caption" v-on:click="details(item.action, 'edit')" @click.stop="showEditForm=true" text color="success">Edit</v-btn>
+                    <v-btn small class="caption" v-on:click="deleteLive(item.action)" text color="success">Delete</v-btn>
                   </div>
                   <v-icon
                     small
@@ -40,7 +39,13 @@
                   </v-icon>
             </template>
         </v-data-table>
-        <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
+        <v-row>
+          <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
+          Total Profit/Loss as of {{ this.date }}: <span class="ml-3" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
+          <span class="ml-3" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
+          </v-col>
+        </v-row>
+       <!-- <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
             <v-card color="transparent" class="justify-center" elevation="0">
                   <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
                   <v-spacer></v-spacer>
@@ -61,7 +66,54 @@
                 <v-card color="transparent" elevation="0">
               <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
             </v-card>
-        </v-card>
+        </v-card>-->
+                  <v-dialog
+                      v-model="showEditForm"
+                      max-width="290"
+                      dark
+                      style="background:#142b46;"
+                    >
+                      <v-card color="#00121E">
+                        <v-card-title>{{ (this.editDetails == 'edit' ? 'Edit' : 'Trade Details') }}</v-card-title>
+                        <v-card-text>
+                        <v-col sm="12" md="12" class="my-0">
+                            <div><v-select offset-y="true" :readonly="(this.editDetails == 'edit' ? false : true)" item-color="success" :append-icon="(this.editDetails == 'edit' ? 'mdi-chevron-down' : '')" class="mb-1" :items="strategy" v-model="selectedstrategy" :label="(this.editDetails == 'edit' ? 'Enter Strategy' : 'Strategy')" dense flat></v-select></div>
+                            <div><v-select offset-y="true" :readonly="(this.editDetails == 'edit' ? false : true)" item-color="success" :append-icon="(this.editDetails == 'edit' ? 'mdi-chevron-down' : '')" class="mb-1" :items="tradeplan" v-model="selectedtradeplan" :label="(this.editDetails == 'edit' ? 'Enter Trade Plan' : 'Trade Plan')" dense flat></v-select></div>
+                            <div><v-select offset-y="true" :readonly="(this.editDetails == 'edit' ? false : true)" item-color="success" :append-icon="(this.editDetails == 'edit' ? 'mdi-chevron-down' : '')" :items="emotions" v-model="selectedemotions" :label="(this.editDetails == 'edit' ? 'Enter Emotions' : 'Emotions')" dense flat></v-select></div>
+                        </v-col>
+                        <v-col cols="12" sm="12" md="12" class="pa-0 mt-3 justify-right d-flex align-center text-right">
+                                    <v-textarea
+                                        color="white"
+                                        class="white--text trading_notes-textarea body-2"
+                                        v-model="notes"
+                                        :readonly="(this.editDetails == 'edit' ? false : true)"
+                                        :placeholder="(this.editDetails == 'edit' ? 'Enter Notes' : 'Notes')"
+                                        filled
+                                    ></v-textarea>
+                                </v-col>
+                        </v-card-text>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="green darken-1"
+                            text
+                            @click="showEditForm = false"                       
+                          >
+                           {{ (this.editDetails == 'edit' ? 'Cancel' : 'Close') }}
+                          </v-btn>
+
+                          <v-btn
+                            color="green darken-1"
+                            text
+                            @click="editLive"
+                            :class="(this.editDetails == 'edit' ? '' : 'nodisplay')"
+                          >
+                            Save
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
 
             <TradeModal :visible="EnterTradeModal" @close="EnterTradeModal=false" />
             <reset-modal :visible="showResetForm" @close="showResetForm=false" />
@@ -93,13 +145,27 @@ export default {
           { text: '', value: 'action', sortable: false, align: 'right' },
         ],
         portfolioLogs: [],
+        openposition: [],
         items: [
             { title: 'Note' },
             { title: 'Delete' },
         ],
         EnterTradeModal: false,
         showResetForm: false,
+        showEditForm: false,
         showScheduleForm: false,
+        strategy: ['Bottom Picking','Breakout Play','Trend Following','1-2-3 Reversal'],
+        tradeplan: ['Day Trade','Swing Trade','Investments'],
+        emotions: ['Neutral','Greedy','Fearful'],
+        notes: '',
+        selectedstrategy: '',
+        selectedtradeplan: '',
+        selectedemotions: '',
+        edit_id: '',
+        editDetails: '',
+        totalProfitLoss: 0,
+        totalPerf: 0,
+        date: new Date().toISOString().substr(0, 10),
       }
       
     },
@@ -109,7 +175,7 @@ export default {
         shareModal,
     },
     watch: {
-      simulatorConfirmedBuySell: function () {
+      simulatorOpenPosition: function () {
         this.getOpenPositions();
       },
       simulatorPortfolioID: function () {
@@ -119,6 +185,7 @@ export default {
     methods: {
           ...mapActions({      
             setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+            setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
             setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell",
         }),
           getOpenPositions() {
@@ -128,11 +195,14 @@ export default {
               user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
               fund: this.simulatorPortfolioID,
             };
-            console.log(openparams2);
+            this.totalProfitLoss = 0;
+            this.totalPerf = 0;
             this.$api.journal.portfolio.open(openparams2).then(
               function(result) {
+                console.log(result);
                 this.portfolioLogs = result.meta.open;
                 for (let i = 0; i < this.portfolioLogs.length; i++) {
+                  this.openposition[i] = this.portfolioLogs[i].stock_id;
                   const params = {
                     "symbol-id": this.portfolioLogs[i].stock_id
                   };
@@ -145,26 +215,35 @@ export default {
                   let profit = parseFloat(mvalue) - parseFloat(result.meta.open[i].total_value);
                   let tcost = result.meta.open[i].position * result.meta.open[i].average_price;
                   let perf = (profit / tcost) * 100;
-
+                  this.totalProfitLoss = parseFloat(this.totalProfitLoss) + parseFloat(profit);
+                  this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perf);
                   this.portfolioLogs[i].Position = result.meta.open[i].position;
                   this.portfolioLogs[i].AvgPrice = result.meta.open[i].average_price.toFixed(2);
                   this.portfolioLogs[i].TotalCost = this.addcomma(tcost);
                   this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
                   this.portfolioLogs[i].Profit = profit.toFixed(2);
                   this.portfolioLogs[i].Perf = perf.toFixed(2);
-                  this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
-                }
+                  this.portfolioLogs[i].action = {
+                      id: this.portfolioLogs[i].stock_id,
+                      strategy: result.meta.open[i].metas.strategy,
+                      tradeplan: result.meta.open[i].metas.plan,
+                      emotion: result.meta.open[i].metas.emotion,
+                      notes: result.meta.open[i].metas.notes
+                    }
+                }  
+                 this.setSimulatorOpenPosition(this.openposition);
               }.bind(this)
-            );
+            );   
       },
       deleteLive: function (item) {
+         
         console.log('delete-' + item);
           const params ={
                 user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
               }
             if(confirm("Do you really want to delete?")){
                   this.$axios
-                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/delete/" + item, params)
+                  .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/delete/" + item.id, params)
                   .then(response => {      
                       if (response.success) {
                           console.log('delete success');
@@ -172,6 +251,34 @@ export default {
                       }
                   });
             }
+
+      },
+      details: function (item, edit) {     
+        //console.log('details->' + edit);  
+        this.editDetails = edit;
+        this.selectedstrategy = item.strategy;
+        this.selectedtradeplan = item.tradeplan;
+        this.selectedemotions = item.emotion;
+        this.notes = item.notes;
+        this.edit_id = item.id;
+      },
+      editLive: function() {
+        console.log('edit live');
+        const editparams = {
+          strategy: this.selectedstrategy,
+          plan: this.selectedtradeplan,
+          emotion: this.selectedemotions,
+          notes: this.notes
+        }
+          this.$axios
+          .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/update/" + this.edit_id, editparams)
+          .then(response => {      
+              if (response.success) {
+                  console.log('update success');
+                  this.showEditForm = false;
+                  this.getOpenPositions();
+              }
+          });
 
       },
       menuLogsShow: function(item) {
@@ -196,10 +303,11 @@ export default {
             ...mapGetters({
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
             simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
+            simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
             }),
     },
      mounted() {
-       if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');        
+       if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');   
       },
 }
 </script>
@@ -325,6 +433,9 @@ export default {
 }
   .negative{
       color: #fe4949;
+  }
+  .nodisplay{
+    display: none;
   }
 
 </style>

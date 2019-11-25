@@ -36,8 +36,9 @@
                             v-on:keyup="keypress"
                             color="#00FFC3"
                             style="color: #00FFC3"
+                            flat
                             dark
-                            class="body-2 buy_selector buy_price-input py-3"
+                            class="body-2 buy_selector buy_price-input py-3 pb-0"
                             v-model="quantity"
                         ></v-text-field>
                         <v-btn 
@@ -53,7 +54,7 @@
                             color="primary"
                         ><v-icon>mdi-plus</v-icon></v-btn>
                     </v-col>
-                    <v-col class="ma-0 pa-0" style="color: #90989d;position: absolute;font-size:12px; top:285px; left:180px;width: 95px;">
+                    <v-col class="ma-0 pa-0 boardlot" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')">
                         BoardLot : <span>{{ this.simulatorBoardLot }}</span>
                     </v-col>
                     <v-text-field
@@ -109,7 +110,7 @@ export default {
                             this.availableFunds = this.addcomma(avfunds);
                             this.setSimulatorPortfolioID(result.meta.logs[i].id);
                         }
-                        if(result.meta.logs[i].type == 'VirtualPort'){                    
+                        if(result.meta.logs[i].type == 'virtual'){                    
                             this.portfolio.push(result.meta.logs[i].name);
                         }
 
@@ -221,5 +222,18 @@ export default {
     .buy_price-input input,
     .quantity-input input {
         text-align: right
+    }
+    .boardlot {
+        color: rgb(144, 152, 157);
+        position: absolute;
+        font-size: 12px;
+        left: 180px;
+        width: 95px;
+    }
+    .boardlotsell {
+        top: 155px;
+    }
+    .boardlotbuy {
+        top: 306px;
     }
 </style>

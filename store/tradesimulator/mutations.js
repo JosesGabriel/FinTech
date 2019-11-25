@@ -1,4 +1,7 @@
 export default {
+    SET_SIMULATOROPENPOSITION(state, data) {
+      state.simulatorOpenPosition = data;
+    },
     SET_SIMULATORBUYPRICE(state, data) {
       state.simulatorBuyPrice = data;
     },
