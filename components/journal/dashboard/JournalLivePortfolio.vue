@@ -128,6 +128,7 @@ export default {
   methods: {
     ...mapActions({
         setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+        setOpenPosition: "journal/setOpenPosition",
     }),
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
@@ -147,7 +148,6 @@ export default {
       .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.defaultPortfolioId +"/delete/" + item, deleteLogs)
       .then(response => {      
           if (response.success) {
-              console.log(response.success);
               
               this.keyCreateCounter = this.renderPortfolioKey;
               this.keyCreateCounter++;
@@ -160,9 +160,6 @@ export default {
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     },
     getOpenPositions() {
-      
-    console.log(this.renderPortfolioKey)
-    console.log(this.defaultPortfolioId)
       this.portfolioLogsStock = []
       const openparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
@@ -170,17 +167,10 @@ export default {
       };
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
+          // console.log(result.meta)
           this.portfolioLogs = result.meta.open;
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
-            const params = {
-              "symbol-id": this.portfolioLogs[i].stock_id
-            };
-            this.$api.chart.stocks.list(params).then(
-              function(result) {
-                this.portfolioLogs[i].stock_id = result.data.symbol;
-              }.bind(this)
-            );
             const historyparams  = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };
@@ -190,41 +180,21 @@ export default {
                 
                 let market_value = {market_value: 0}
                 let profit = {profit: 0}
-                let perf_percentage = {perf_percentage: 0}
+                let perf_percentage = {perf_percentage: 0, id_str: null}
                 this.portfolioLogs[i] = {...this.portfolioLogs[i],...portfolioLogsfinal,...market_value,...profit,...perf_percentage}
                 this.portfolioLogs[i].market_value = this.portfolioLogs[i].last * this.portfolioLogs[i].position
                 this.portfolioLogs[i].profit = this.portfolioLogs[i].market_value - this.portfolioLogs[i].total_value
                 this.portfolioLogs[i].perf_percentage = this.portfolioLogs[i].profit / this.portfolioLogs[i].total_value * 100
-
+                this.portfolioLogs[i].stock_id = result.data.symbol
+                this.portfolioLogs[i].id_str = result.data.stockidstr
                 this.portfolioLogsStock.push(this.portfolioLogs[i])
                 // this.portfolioLogsStock
+                
+                this.setOpenPosition(this.portfolioLogs)
               }.bind(this)
             );
           }
         }.bind(this)
-      );
-      const params = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      };
-      this.$api.journal.portfolio.portfolio(params).then(
-          function(result) {
-            
-            let toFindReal = this.defaultPortfolioId;
-            for (let i = 0; i < result.meta.logs.length; i++ ) {
-              let portfolioListPush1 = result.meta.logs[i]
-              if (portfolioListPush1.id === toFindReal) {
-                if(portfolioListPush1.type != "real") {
-                  this.ifVirtualShow = true
-                  this.fundsShow = true
-                  this.snackbar = true
-                } else {
-                  this.ifVirtualShow = false
-                  this.fundsShow = false
-                  this.snackbar = false
-                }
-              }
-            }
-          }.bind(this)
       );
       this.componentKeys++;
     }
@@ -232,6 +202,7 @@ export default {
   computed: {
     ...mapGetters({
       defaultPortfolioId: "journal/getDefaultPortfolioId",
+      userPortfolio: "journal/getUserPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey"
     })
   },

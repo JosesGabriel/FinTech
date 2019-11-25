@@ -16,11 +16,9 @@
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" class="active-class" :value="'funds-' + 1">
                     <v-container class="pa-0">
                       <div class="separator"></div>
-                      <div class="py-3">
-                          <p class="text-left ma-0 caption" style="color:#b6b6b6">Available Funds</p>
-                          <v-spacer></v-spacer>
-                          <p class="text-right ma-0 body-1 current_price-field white--text">{{ availableFunds }}</p>
-                      </div>
+                        <v-row no-gutters>
+                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFunds) }}</v-card-title>
+                        </v-row>
                       <v-text-field
                           label="Enter Amount"
                           color="#00FFC3"
@@ -50,11 +48,9 @@
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
                     <v-container class="pa-0">
                       <div class="separator"></div>
-                      <div class="py-3">
-                          <p class="text-left ma-0 caption" style="color:#b6b6b6">Available Funds</p>
-                          <v-spacer></v-spacer>
-                          <p class="text-right ma-0 body-1 current_price-field white--text">300,000,000.00</p>
-                      </div>
+                        <v-row no-gutters>
+                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFunds) }}</v-card-title>
+                        </v-row>
                       <v-text-field
                           label="Enter Amount"
                           color="#00FFC3"
@@ -132,7 +128,7 @@ export default {
       availableFunds: 0,
       withrawAmount: "0.00",
       // data for deposit
-      items: [{funds_source: "deviden_income", name: "Dividend Income"}, {funds_source: "deposit", name: "Fresh Funds"}],
+      items: [{funds_source: "dividend_income", name: "Dividend Income"}, {funds_source: "deposit", name: "Fresh Funds"}],
       quantity: '0.00',
       enterAmount: '0.00',
       fundSourceModel: null,
@@ -145,15 +141,21 @@ export default {
       timeoutNotification: 10000,
     }
   },
+  mounted() {
+    this.availableFunds = parseFloat(this.selectedPortfolio.balance);
+  },
   methods: {
     renderPortfolioKey1() {
         // console.log(this.selectedPortfolio)
-        this.availableFunds = this.selectedPortfolio.balance;
+        this.availableFunds = parseFloat(this.selectedPortfolio.balance);
+        console.log(this.selectedPortfolio)
+        console.log(this.renderPortfolioKey)
     },
     depositNow() {
+        console.log(parseFloat(this.enterAmount.replace(/,/g, "")),this.fundSourceModel)
         const depositparams  = {
             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-            total_value: parseInt(this.enterAmount.replace(/,/g, "")),
+            total_value: parseFloat(this.enterAmount.replace(/,/g, "")),
             action: this.fundSourceModel
         };
         this.$axios
@@ -197,6 +199,18 @@ export default {
         } else {
             this.disableWithdrawButtonSave = true
         }
+    },
+    nFormatter(num) {
+      if (num >= 1000000000) {
+        return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "B";
+      }
+      if (num >= 1000000) {
+        return (num / 1000000).toFixed(2).replace(/\.0$/, "") + "M";
+      }
+      if (num >= 1000) {
+        return (num / 1000).toFixed(2).replace(/\.0$/, "") + "K";
+      }
+      return num;
     },
   },
   watch: {

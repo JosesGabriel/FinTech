@@ -27,12 +27,16 @@
         </v-card-title>
       <v-stepper id="stepper_container" v-model="e1" dark>
         <v-stepper-items>
-          <v-stepper-content step="1">
-            <!-- -----First View of Trade Modal----- -->
-            
+          <!-- -----First View of Trade Modal----- -->
+          <v-stepper-content step="1" class="pt-0">
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters>
-                <v-col cols="12" sm="12" md="12">
+                
+                <v-tabs color="#48FFD5" background-color="#00121E" dark grow>
+                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" @click="toBuy">Buy</v-tab>
+                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" @click="toSell">Sell</v-tab>
+                </v-tabs>
+                <v-col cols="12" sm="12" md="12" class="pt-3">
                   <v-select v-model="GetSelectStock" offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stocklist" item-text="symbol" item-value="id_str" label="Select Stock" @change="getStockDetails" ></v-select>
                   <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
                   <v-spacer></v-spacer>
@@ -134,7 +138,10 @@
             <v-row no-gutters>
               <v-spacer></v-spacer>
               <v-btn text class="text-capitalize" @click.stop="show = false">Close</v-btn>
-              <v-btn color="success ml-1" class="text-capitalize black--text" :disabled="continueButtonDisable" light @click="e1 = 2">
+              <v-btn color="success ml-1" class="text-capitalize black--text buy" :disabled="continueButtonDisable" v-show="continuebuyBtn" light @click="e1 = 2">
+                Continue
+              </v-btn>
+              <v-btn color="success ml-1" class="text-capitalize black--text sell" :disabled="continueButtonDisable" v-show="continuesellBtn" light @click="e1 = 4">
                 Continue
               </v-btn>
             </v-row>
@@ -143,103 +150,48 @@
           <v-stepper-content step="2" class="pt-2">
             <!-- -----Second View of Trade Modal----- -->
             <v-container class="pa-5 pt-0 px-0">
-              <v-row no-gutters>
-                <v-tabs color="#48FFD5" background-color="#00121E" dark grow>
-                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-1`" @click="showSellbtn = showSellbtn, showBuybtn = showBuybtn">Buy</v-tab>
-                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" :href="`#funds-2`" @click="showSellbtn = !showSellbtn, showBuybtn = !showBuybtn">Sell</v-tab>
-                  <v-tab-item dark color="#48FFD5" class="active-class" background-color="#0c1f33" :value="'funds-' + 1">
-                    <v-container class="pa-0">
-                      <div class="separator"></div>
-                      <v-row no-gutters class="pa-3 pb-0">
-                        <v-col cols="12" sm="12" md="12">
-                          <v-row no-gutters class="px-0 py-0">
-                            <v-col sm="12" md="12" class="pa-0">
-                              <v-row no-gutters>
-                                <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFundsModel) }}</v-card-title>
-                              </v-row>
-                              <v-select
-                              :items="selectPortfolioModel"
-                              v-model="portfolioDropdownModel"
-                              item-text="name"
-                              item-value="id"
-                              @change="whereToSave"
-                              label="Select Portfolio"
-                              color="#00FFC3"
-                              item-color="success"
-                              dense
-                              dark
-                              class="enter_amount-deposit-select ma-0"
-                              ></v-select>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
-                              <v-text-field v-model="priceModel" label="Buy Price" placeholder="Enter Buy Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
-                              <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
-                              <v-btn 
-                                  @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= 100"
-                                  text 
-                                  icon 
-                                  color="success"
-                              ><v-icon>mdi-chevron-down</v-icon></v-btn>
-                              <v-btn 
-                                  @click="quantityModel += 100"
-                                  text 
-                                  icon 
-                                  color="success"
-                              ><v-icon>mdi-chevron-up</v-icon></v-btn>
-                            </v-col>
-                            <v-col cols="12" sm="12" md="12" class="justify-end d-flex">
-                            <v-card-title class="caption pa-0 secondary--text">Board lot: {{ boardLotModel }}</v-card-title>
-                            </v-col>
-                            <v-text-field v-model="totalCostModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
-                            <v-snackbar v-model="snackbar" :timeout="snackbarTimeout">Insufficient funds<v-btn color="blue" text @click="snackbar = false">Close</v-btn></v-snackbar>
-                          </v-row>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-tab-item>
-                  <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
-                    <v-container class="pa-0">
-                      <div class="separator"></div>
-                      <v-row no-gutters class="pa-3 pb-0">
-                        <v-col sm="12" md="12" class="pa-0">
-                          <v-select
-                          :items="selectPortfolioModel"
-                          v-model="portfolioDropdownModel"
-                          item-text="name"
-                          item-value="id"
-                          @change="whereToSave"
-                          label="Select Portfolio"
-                          color="#00FFC3"
-                          item-color="success"
-                          dense
-                          dark
-                          class="enter_amount-deposit-select ma-0"
-                          ></v-select>
-                          <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
-                        </v-col>
-                        <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
-                          <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
-                          <v-btn 
-                            @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= 100"
-                            text 
-                            icon 
-                            color="success"
-                          ><v-icon>mdi-chevron-down</v-icon></v-btn>
-                          <v-btn 
-                            @click="quantitySellModel + 100"
-                            text 
-                            icon 
-                            color="success"
-                          ><v-icon>mdi-chevron-up</v-icon></v-btn>
-                        </v-col>
-                        <v-text-field v-model="totalCostSellModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
-                        <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar>
-                      </v-row>
-                  </v-container>
-                  </v-tab-item>
-                </v-tabs>
+              <v-row no-gutters class="px-0 py-0">
+                <v-col sm="12" md="12" class="pa-0">
+                  <v-row no-gutters>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFundsModel) }}</v-card-title>
+                  </v-row>
+                  <v-select
+                  :items="selectPortfolioModel"
+                  v-model="portfolioDropdownModel"
+                  item-text="name"
+                  item-value="id"
+                  @change="whereToSave"
+                  label="Select Portfolio"
+                  color="#00FFC3"
+                  item-color="success"
+                  dense
+                  dark
+                  class="enter_amount-deposit-select ma-0"
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
+                  <v-text-field v-model="priceModel" label="Buy Price" placeholder="Enter Buy Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
+                  <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
+                  <v-btn 
+                      @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= 100"
+                      text 
+                      icon 
+                      color="success"
+                  ><v-icon>mdi-chevron-down</v-icon></v-btn>
+                  <v-btn 
+                      @click="quantityModel += 100"
+                      text 
+                      icon 
+                      color="success"
+                  ><v-icon>mdi-chevron-up</v-icon></v-btn>
+                </v-col>
+                <v-col cols="12" sm="12" md="12" class="justify-end d-flex">
+                <v-card-title class="caption pa-0 secondary--text">Board lot: {{ boardLotModel }}</v-card-title>
+                </v-col>
+                <v-text-field v-model="totalCostModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
+                <!-- <v-snackbar v-model="snackbar" :timeout="snackbarTimeout">Insufficient funds<v-btn color="blue" text @click="snackbar = false">Close</v-btn></v-snackbar> -->
               </v-row>
             </v-container>
             <v-row no-gutters>
@@ -247,9 +199,6 @@
               <v-btn text class="text-capitalize" @click="e1 = 1">Back</v-btn>
               <v-btn color="success" v-show="showBuybtn" class="text-capitalize black--text ml-1" :disabled="continueBuyButtonDisable" light @click="e1 = 3">
                 Continue
-              </v-btn>
-              <v-btn color="success" v-show="showSellbtn" class="text-capitalize black--text ml-1" :disabled="confirmSellButtonDisable" light @click="sellListArray" @click.stop="show = false">
-                Confirm
               </v-btn>
             </v-row>
           </v-stepper-content>
@@ -326,6 +275,46 @@
               </v-btn>
             </v-row>
           </v-stepper-content>
+          <v-stepper-content step="4" class="pt-2">
+            <v-container class="pa-0">
+              <v-row no-gutters class="pa-3 pb-0">
+                <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
+                <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
+                  <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
+                  <v-btn 
+                    @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= 100"
+                    text 
+                    icon 
+                    color="success"
+                  ><v-icon>mdi-chevron-down</v-icon></v-btn>
+                  <v-btn 
+                    @click="quantitySellModel += 100"
+                    text 
+                    icon 
+                    color="success"
+                  ><v-icon>mdi-chevron-up</v-icon></v-btn>
+                </v-col>
+                <v-col cols="12" sm="12" md="12" class="justify-end d-flex">
+                <v-card-title class="caption pa-0 secondary--text">Board lot: {{ boardLotModel }}</v-card-title>
+                </v-col>
+                <v-text-field v-model="totalCostSellModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
+                <!-- <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar> -->
+              </v-row>
+            </v-container>
+            <v-row no-gutters>
+              <v-spacer></v-spacer>
+              <v-btn text class="text-capitalize" @click="e1 = 1">Back</v-btn>
+              <v-btn
+                color="success"
+                class="text-capitalize black--text ml-1"
+                light
+                @click.stop="show = false"
+                @click="sellListArray"
+              >
+                Confirm
+              </v-btn>
+            </v-row>
+          </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
     </v-card>
@@ -374,14 +363,13 @@ export default {
       selectPortfolioModel: [],
       portfolioDropdownModel: null,
       portfolioDropdownModelId: null,
-      selectedProfile: null,
       
       availableFundsModel: "0.00",
       boardLotModel: 0,
       average_price: 0,
       priceModel: "0.00",
       priceSellModel: "0.00",
-      quantityModel: 0,
+      quantityModel: 0.00,
       quantitySellModel: 0,
       totalCostModel: 0,
       totalCostSellModel: 0,
@@ -395,7 +383,10 @@ export default {
       continueButtonDisable: true,
       continueBuyButtonDisable: true,
       confirmSellButtonDisable: true,
-
+      
+      continuesellBtn: false,
+      continuebuyBtn: true,
+      
       showBuybtn: true,
       showSellbtn: false,
 
@@ -404,13 +395,16 @@ export default {
       snackbarGo: false,
       snackbarNotGo: false,
       snackbarTimeout: 2000,
+      stocklistBuy: [],
+      quantityModel: null,
     };
   },
   computed: {
     ...mapGetters({
       defaultPortfolioId: "journal/getDefaultPortfolioId",
       userPortfolio: "journal/getUserPortfolio",
-      renderPortfolioKey: "journal/getRenderPortfolioKey"
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      openPosition: "journal/getOpenPosition"
     }),
     show: {
       get() {
@@ -432,12 +426,12 @@ export default {
     },
     priceModel: function(newValue) {
       this.buyWatch();
-      const result = newValue.replace(/(\d{3})(?=(\d)+(?!\d{3}))/g, '$1,');
+      const result = parseFloat(newValue);
       this.priceModel = result;
     },
     priceSellModel: function(newValue) {
       this.sellWatch();
-      const result = newValue.replace(/(\d{3})(?=(\d)+(?!\d{3}))/g, '$1,');
+      const result = parseFloat(newValue);
       this.priceSellModel = result;
     },
     quantityModel: function() {
@@ -451,7 +445,6 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
     const params = {
       exchange: "PSE",
       status: "active"
@@ -459,6 +452,7 @@ export default {
     this.$api.chart.stocks.list(params).then(
       function(result) {
         this.stocklist = result.data;
+        this.stocklistBuy = result.data;
       }.bind(this)
     );
     var today = new Date();
@@ -469,6 +463,13 @@ export default {
     this.dateModel = dateTime
 
     this.getUserPortfolio();
+    
+    // if(this.openPosition != null) {
+    //   console.log(this.openPosition)
+    //   this.showSellTab = false
+    // } else {
+    //   this.showSellTab = true
+    // }
   },
   methods: {
     ...mapActions({
@@ -476,11 +477,10 @@ export default {
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
     buyListArray: function() {
-      let priceModel1 = this.priceModel.replace(/,/g, "");
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseInt(this.quantityModel),
-        stock_price: parseInt(priceModel1),
+        stock_price: parseInt(this.priceModel),
         transaction_meta : {
           strategy: this.strategyModel,
           plan: this.tradeplanModel,
@@ -497,7 +497,7 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-
+            this.setDefaultPortfolioId(this.portfolioDropdownModel);
             this.GetSelectStock = "";
             this.priceModel = "0.00";
             this.quantityModel = "0";
@@ -529,8 +529,8 @@ export default {
     sellListArray: function() {
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        position: parseInt(quantityModel.replace(/,/g, "")),
-        stock_price: parseInt(priceModel1.replace(/,/g, "")),
+        position: parseInt(this.quantitySellModel),
+        stock_price: parseInt(this.priceSellModel),
         transaction_meta : {
           strategy : this.strategySellModel,
           average_price : parseInt(this.average_price),
@@ -548,6 +548,7 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
+            this.setDefaultPortfolioId(this.portfolioDropdownModel);
             this.GetSelectStock = "";
             this.priceSellModel = "0.00";
             this.quantitySellModel = "0";
@@ -571,6 +572,16 @@ export default {
             this.ave = 0;
           }
         });
+    },
+    toBuy() {
+      this.stocklist = this.stocklistBuy
+      this.continuesellBtn = false
+      this.continuebuyBtn = true
+    },
+    toSell() {
+      this.stocklist = this.openPosition
+      this.continuebuyBtn = false
+      this.continuesellBtn = true
     },
     getStockDetails(Obj) {
       const params = {
@@ -608,41 +619,25 @@ export default {
           this.vole = this.nFormatter(result.data.value);
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
-          // console.log(this.stockSymbolGet)
-        }.bind(this)
-      );
-      const openparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        fund: this.defaultPortfolioId,
-      };
-      this.$api.journal.portfolio.open(openparams).then(
-        function(result) {
-          this.portfolioLogs = result.meta.open;
-          
-          for (let i = 0; i < this.portfolioLogs.length; i++) {
-            const params = {
-              "symbol-id": this.portfolioLogs[i].stock_id
-            };
-            this.$api.chart.stocks.list(params).then(
-              function(result) {
-                let stockIdExist = this.portfolioLogs[i]
-                if(result.data.symbol == this.stockSymbolGet.symbol && stockIdExist.stock_id == result.data.id) {
-                // console.log(this.portfolioLogs[i])
-                  this.boardLotModel = this.portfolioLogs[i].position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  this.average_price = this.portfolioLogs[i].average_price
-                  this.quantitySellModel = this.portfolioLogs[i].position
-                  this.strategySellModel = this.portfolioLogs[i].metas.strategy
-                  this.tradeplanSellModel = this.portfolioLogs[i].metas.plan
-                  this.emotionsSellModel = this.portfolioLogs[i].emotion
-                  this.notesSellModel = this.portfolioLogs[i].notes
-                  this.dateSellModel = this.dateModel;
-                }
-              }.bind(this)
-            );
+          this.priceModel = result.data.last;
+
+          if(this.openPosition != null){
+            for (let i = 0; i < this.openPosition.length; i++) {
+              let findOpenPosition = this.openPosition[i]
+              if(parseInt(findOpenPosition.stockid) == this.stockSymbolGet.stockid){
+                console.log(findOpenPosition)
+                this.quantityModel = findOpenPosition.position
+                this.priceSellModel = findOpenPosition.last
+                this.quantitySellModel = findOpenPosition.position
+                this.boardLotModel = findOpenPosition.position
+              }
+            }
+          } else {
+            this.quantitySellModel = 0
+            this.quantityModel = 0
           }
         }.bind(this)
       );
-
       this.$api.chart.stocks.fulldepth(params).then(
         function(result) {
           this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);
@@ -698,8 +693,6 @@ export default {
             this.setDefaultPortfolioId(portfolioListPush1.id)
           }
       }
-      // console.log("this one",parseInt(this.availableFundsModel))
-      // console.log(this.userPortfolio)
     },
     selectWatch() {
       this.GetSelectStock
@@ -709,10 +702,20 @@ export default {
         this.continueButtonDisable = false;
       }
     },
-    buyWatch() {
-      let buyResult = parseInt(this.priceModel.replace(/,/g, "")) * parseInt(this.quantityModel)
-      this.totalCostModel = buyResult.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      if(parseInt(this.totalCostModel.replace(/,/g, "")) >= parseInt(this.availableFundsModel)){
+    buyWatch(newValue) {
+      let buyResult = parseFloat(this.priceModel) * parseFloat(this.quantityModel)
+      let dpartcommission = buyResult * 0.0025;
+      let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+      // TAX
+      let dtax = dcommission * 0.12;
+      // Transfer Fee
+      let dtransferfee = buyResult * 0.00005;
+      // SCCP
+      let dsccp = buyResult * 0.0001;
+      let dall = buyResult + dcommission + dtax + dtransferfee + dsccp;
+      this.totalCostModel = dall.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      if(parseInt(this.totalCostModel) >= parseInt(this.availableFundsModel)){
         this.continueBuyButtonDisable = true;
         this.snackbar = true;
       } else {
@@ -724,8 +727,8 @@ export default {
         }
       }
     },
-    sellWatch() {
-      let sellResult = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel.replace(/,/g, ""))
+    sellWatch(newValue) {
+      let sellResult = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel)
       this.totalCostSellModel = sellResult.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)){
         this.confirmSellButtonDisable = true;

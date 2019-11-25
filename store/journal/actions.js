@@ -14,4 +14,8 @@ export default {
   async setSelectedPortfolio({ commit }, data) {
     await commit("SET_SELECTEDPORTFOLIO", data);
   },
+  // Set Selected Portfolio global on change
+  async setOpenPosition({ commit }, data) {
+    await commit("SET_OPENPOSITION", data);
+  },
 };
