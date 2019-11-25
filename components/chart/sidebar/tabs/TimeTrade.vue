@@ -5,6 +5,7 @@
       :loading="loading"
       style="height: calc(100vh - 490px)"
       class="card__timetrade pl-1 pr-2"
+      flat
     >
       <v-simple-table
         dense

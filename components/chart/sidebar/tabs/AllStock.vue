@@ -6,6 +6,7 @@
       :loading="loading"
       class="pl-3 pr-5"
       style="height: calc(100vh - 315px)"
+      flat
     >
       <v-simple-table
         dense

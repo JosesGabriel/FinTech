@@ -7,6 +7,7 @@
       class="pl-1 pr-5"
       :loading="loading"
       style="height:105px;"
+      flat
     >
       <v-simple-table
         dense

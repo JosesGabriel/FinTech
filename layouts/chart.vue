@@ -35,7 +35,7 @@
                 :class="tableStyle"
               >
                 <Table />
-                <!-- <h1 align="center">Table</h1> -->
+                <!-- <h3 align="center">Table</h3> -->
               </v-content>
             </v-slide-y-reverse-transition>
           </v-col>
@@ -160,17 +160,15 @@ export default {
   background: #00121e;
 }
 .table__container {
-  margin-top: auto;
-  margin-bottom: auto;
-  height: 50px;
+  /* margin-top: auto;
+  margin-bottom: auto; */
+  height: 30px;
   color: #fff;
   background: #00121e;
 }
-
 .maximizeStyle {
-  height: 400px;
+  height: 300px;
 }
-
 .fullscreen_tickeropen {
   height: calc(100vh - 100px);
 }
