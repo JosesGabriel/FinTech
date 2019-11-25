@@ -88,6 +88,15 @@ export default {
       //   //     this.loadingBar = false;
       //   //   });
       // }
+
+      // client
+      //         .login("m.login.password", {
+      //           user: "@lerroux:im.arbitrage.ph",
+      //           password: "angelus69"
+      //         })
+      //         .then(response => {
+      //           myToken = response.access_token;
+      //         });
     }
   }
 };
