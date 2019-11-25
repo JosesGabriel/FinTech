@@ -183,7 +183,7 @@
             <v-list-item-content>
               <v-list-item-title>VAR Calculator</v-list-item-title>
             </v-list-item-content>
-            <v-dialog v-model="varDialog" max-width="280">
+            <v-dialog v-model="varDialog" max-width="320">
               <VARCalculator :data="varDialog" />
             </v-dialog>
           </v-list-item>

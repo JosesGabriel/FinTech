@@ -1,4 +1,5 @@
 export default () => ({
+    simulatorOpenPosition: [],
     simulatorBuyPrice: 0,
     simulatorBoardLot: 0,
     simulatorPortfolioID: 0,

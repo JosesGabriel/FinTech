@@ -35,7 +35,6 @@ import FooterSidebar from "~/components/FooterSidebar";
 
 export default {
   layout: "main",
-  middleware: ["auth"],
   components: {
     Profile,
     Newsfeed,

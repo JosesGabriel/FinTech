@@ -4,7 +4,8 @@
       color="#00121e"
       :loading="loading"
       style="height: calc(100vh - 490px)"
-      class="card__timetrade"
+      class="card__timetrade pl-1 pr-2"
+      flat
     >
       <v-simple-table
         dense
@@ -32,15 +33,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in trades" :key="item.id">
+          <tr v-for="item in trades" class="tr_custom" :key="item.id">
             <td class="pl-2 column white--text" style="width:55px;">
               {{ $moment(item.timestamp).format("hh:mm A") }}
             </td>
-            <td class="column white--text text-right" style="width:48px;">
+            <td class="column white--text text-right" style="width:35px;">
               {{ item.executed_volume | numeral("0.0a") }}
             </td>
-            <td class="column white--text text-right" style="width:50px;">
-              {{ item.executed_price | | numeral('0,0.00') }}
+            <td class="column white--text text-right" style="width:45px;">
+              {{ item.executed_price | numeral('0,0.00') }}
             </td>
             <td class="pl-2 column white--text" style="width:50px;">
               {{ $globalMethod.limitDisplayString(item.buyer, 6) }}
@@ -48,7 +49,10 @@
             <td class="pl-2 column white--text" style="width:50px;">
               {{ $globalMethod.limitDisplayString(item.seller, 6) }}
             </td>
-            <td class="column white--text font-weight-bold"></td>
+            <td
+              class="column white--text font-weight-bold"
+              style="width:10px;"
+            ></td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -90,6 +94,9 @@ export default {
 </script>
 
 <style>
+.tr_custom {
+  line-height: 0.1rem !important;
+}
 .header {
   background: #00121e !important;
   font-size: 10px !important;

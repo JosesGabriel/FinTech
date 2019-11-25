@@ -1,22 +1,24 @@
 <template>
-  <v-card color="darkcard" dark :loading="loader">
+  <v-card color="darkcard" dark :loading="loader" class="px-2">
     <v-card-title class="pl-2">
-      <span class="subtitle-1 font-weight-light" style="color: #1DE9B6"
-        >VAR Calculator</span
+      <span
+        class="subtitle-1 font-weight-black py-0 pl-2"
+        style="color: #1DE9B6"
+        >VAR CALCULATOR</span
       >
     </v-card-title>
     <v-card-text class="pa-1">
-      <v-container>
+      <v-container class="py-0">
         <v-row v-if="!resultPage">
-          <v-col cols="12" class="d-flex justify-space-between">
+          <v-col cols="12" class="d-flex justify-space-between py-0">
             <span>Total Equity:</span>
             <span>100,000.00</span>
           </v-col>
-          <v-col cols="12" class="d-flex justify-space-between">
+          <v-col cols="12" class="d-flex justify-space-between py-1">
             <span>Available Funds:</span>
             <span>60,000.00</span>
           </v-col>
-          <v-col cols="12">
+          <v-col cols="12 pt-4">
             <v-select
               v-model="stocksDropdownModel"
               label="Select Stock"
@@ -46,7 +48,7 @@
             ><v-text-field
               v-model="riskTolerance"
               type="number"
-              label="Risk Tolerance"
+              label="Risk Tolerance (%)"
               prefix="₱"
               dense
               hide-details
@@ -57,7 +59,7 @@
             ><v-text-field
               v-model="targetProfit"
               type="number"
-              label="Target Profit"
+              label="Target Profit (%)"
               prefix="₱"
               dense
               hide-details
@@ -98,7 +100,7 @@
         </v-row>
       </v-container>
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions class="pt-6 mt-6">
       <v-spacer></v-spacer>
       <!-- <v-btn
         class="addWatch__button"
