@@ -141,6 +141,7 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
+            this.setDefaultPortfolioId(result.data.fund.id);
           }
         }.bind(this)
       );

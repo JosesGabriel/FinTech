@@ -11,4 +11,7 @@ export default {
     getSelectedPortfolio(state) {
         return state.selectedPortfolio;
     },
+    getOpenPosition(state) {
+        return state.openPosition;
+    },
 };

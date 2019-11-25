@@ -11,4 +11,7 @@ export default {
   SET_SELECTEDPORTFOLIO(state, data) {
     state.selectedPortfolio = data;
   },
+  SET_OPENPOSITION(state, data) {
+    state.openPosition = data;
+  },
 };
