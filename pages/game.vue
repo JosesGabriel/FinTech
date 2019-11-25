@@ -32,7 +32,6 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "game",
-  middleware: ["auth"],
   components: {
     GameLobby,
     GameView
@@ -45,10 +44,51 @@ export default {
       playerInGame: "game/getPlayerInGame"
     })
   },
+  beforeMount: function() {
+    // this.$axios
+    //   .$get("https://dev-game-api.arbitrage.ph" + "/api/series/", params)
+    //   .then(response => {
+    //     this.watchListObject = response.data.watchlist;
+    //     this.setUserWatchedStocks(response.data.watchlist);
+    //     this.loadingBar = false;
+    //   });
+  },
   methods: {
     ...mapActions({
       setPlayerInGame: "game/setPlayerInGame"
-    })
+    }),
+    checkPlayerAccount() {
+      let playerHasAccount;
+      const params = {
+        user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
+      };
+      this.$axios
+        .$get(process.env.DEV_API_URL + "/api/game/players/", params)
+        .then(response => {
+          if (response.success) {
+            playerHasAccount = true;
+            console.log(playerHasAccount);
+          }
+        })
+        .catch(e => {
+          playerHasAccount = false;
+          console.log(playerHasAccount);
+        });
+
+      // if (!this.$auth.loggedIn) {
+      // } else {
+      //   // const params = {
+      //   //   user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
+      //   // };
+      //   // this.$axios
+      //   //   .$get(process.env.DEV_API_URL + "/api/game/players/", params)
+      //   //   .then(response => {
+      //   //     this.watchListObject = response.data.watchlist;
+      //   //     this.setUserWatchedStocks(response.data.watchlist);
+      //   //     this.loadingBar = false;
+      //   //   });
+      // }
+    }
   }
 };
 </script>

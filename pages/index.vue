@@ -41,7 +41,6 @@ import axios from "~/node_modules/axios";
 
 export default {
   layout: "main",
-  middleware: ["auth"],
   components: {
     Navbar,
     Newsfeed,

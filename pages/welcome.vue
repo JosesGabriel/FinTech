@@ -21,7 +21,6 @@ export default {
   components: {
     Logo
   },
-  middleware: ["auth"],
   head() {
     return {
       title: "Arbitrage",
