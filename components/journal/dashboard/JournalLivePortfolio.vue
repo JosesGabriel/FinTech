@@ -167,8 +167,8 @@ export default {
       };
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
-          // console.log(result.meta)
           this.portfolioLogs = result.meta.open;
+          console.log(this.portfolioLogs)
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             const historyparams  = {
@@ -190,7 +190,7 @@ export default {
                 this.portfolioLogsStock.push(this.portfolioLogs[i])
                 // this.portfolioLogsStock
                 
-                this.setOpenPosition(this.portfolioLogs)
+                this.setOpenPosition(this.portfolioLogsStock)
               }.bind(this)
             );
           }
