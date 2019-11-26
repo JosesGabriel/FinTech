@@ -27,7 +27,11 @@
         <template v-slot:item="props">
           <tr>
             <td class="column white--text" style="width:40px;">
-              {{ props.item.symbol }}
+              <span
+                class="span__symbol"
+                @click="setSymbolID(props.item.stockidstr)"
+                >{{ props.item.symbol }}</span
+              >
             </td>
             <td class="column text-right" style="width:35px">
               <span
@@ -68,6 +72,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "AllStock",
   data() {
@@ -102,10 +108,18 @@ export default {
         this.stocks = response.data;
         this.loading = false;
       });
+  },
+  methods: {
+    ...mapActions({
+      setSymbolID: "chart/setSymbolID"
+    })
   }
 };
 </script>
 <style>
+.span__symbol {
+  cursor: pointer;
+}
 .data_table-container i.v-icon.v-data-table-header__icon.mdi.mdi-arrow-up {
   display: none;
 }

@@ -9,69 +9,82 @@
       style="height:105px;"
       flat
     >
-      <v-simple-table
-        dense
-        dark
-        fixed-header
-        style="background:#00121e"
-        height="105px"
-        class="custom_table"
-      >
-        <thead>
-          <tr>
-            <th class="text-right header white--text font-weight-bold">
-              #
-            </th>
-            <th class="text-right header white--text font-weight-bold">
-              VOL
-            </th>
-            <th class="text-right header white--text font-weight-bold">
-              BID
-            </th>
-            <th class="text-right header white--text font-weight-bold">
-              ASK
-            </th>
-            <th class="text-right header white--text font-weight-bold">
-              VOL
-            </th>
-            <th class="text-right header white--text font-weight-bold">
-              #
-            </th>
-            <th class="header"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <span class="d-none">{{ (ctr = 0) }}</span>
-          <tr v-for="item in asks" class="tr_custom" :key="item.id">
-            <td class="text-right column" style="width:30px">
-              {{ bids[ctr].count | numeral("0,0") }}
-            </td>
-            <td
-              class="text-right column text-uppercase"
-              style="width:40px"
-            >
-              {{ bids[ctr].volume | numeral("0.0a") }}
-            </td>
-            <td
-              class="text-right column text-uppercase"
-              style="width:50px"
-            >
-              {{ bids[ctr].price | numeral("0,0.00") }}
-            </td>
-            <td class="text-right column" style="width:60px">
-              {{ item.price | numeral("0,0.00") }}
-            </td>
-            <td class="text-right column" style="width:40px">
-              {{ item.volume | numeral("0.0a") }}
-            </td>
-            <td class="text-right column" style="width:20px">
-              {{ item.count | numeral("0,0") }}
-            </td>
-            <td class="column" style="width:10px"></td>
-            <span class="d-none">{{ ctr++ }}</span>
-          </tr>
-        </tbody>
-      </v-simple-table>
+      <div id="div__bidask">
+        <div id="div__bid">
+          <v-simple-table
+            dense
+            dark
+            fixed-header
+            style="background:#00121e"
+            height="105px"
+            class="custom_table"
+          >
+            <thead>
+              <tr>
+                <th class="header pr-1">
+                  #
+                </th>
+                <th class="header pr-1">
+                  VOL
+                </th>
+                <th class="header pr-4">
+                  BID
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in bids" :key="item.id" class="tr_custom">
+                <td class="column pr-1" style="width:30px;">
+                  {{ item.price | numeral("0,0.00") }}
+                </td>
+                <td class="column pr-1" style="width:30px;">
+                  {{ item.volume | numeral("0.0a") }}
+                </td>
+                <td class="column pr-4" style="width:30px;">
+                  {{ item.count | numeral("0,0") }}
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </div>
+        <div id="div__ask">
+          <v-simple-table
+            dense
+            dark
+            fixed-header
+            style="background:#00121e"
+            height="105px"
+            class="custom_table"
+          >
+            <thead>
+              <tr>
+                <th class="header pr-1">
+                  ASK
+                </th>
+                <th class="header pr-1">
+                  VOL
+                </th>
+                <th class="header pr-4">
+                  #
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in asks" :key="item.id" class="tr_custom">
+                <td class="column pr-1" style="width:30px;">
+                  {{ item.price | numeral("0,0.00") }}
+                </td>
+                <td class="column pr-1" style="width:30px;">
+                  {{ item.volume | numeral("0.0a") }}
+                </td>
+                <td class="column pr-4" style="width:30px;">
+                  {{ item.count | numeral("0,0") }}
+                </td>
+              </tr>
+            </tbody>
+          </v-simple-table>
+        </div>
+      </div>
     </v-card>
     <!-- depthbar -->
     <DepthBar />
@@ -109,32 +122,47 @@ export default {
   computed: {
     ...mapGetters({
       symbolid: "chart/symbolid",
+      index: "chart/index",
       bidask: "chart/bidask"
     })
+  },
+  watch: {
+    symbolid(symid) {
+      this.initBidask(symid);
+      this.asks = [];
+      this.bids = [];
+    }
   },
   methods: {
     ...mapActions({
       setBidask: "chart/setBidask"
-    })
+    }),
+    initBidask: function(symid) {
+      this.loading = "#48FFD5";
+      this.$api.chart.stocks
+        .bidask({
+          "symbol-id": symid,
+          "filter-by-last": true,
+          limit: 10
+        })
+        .then(response => {
+          this.asks = Object.values(response.data.asks);
+          this.bids = Object.values(response.data.bids);
+          const bidask = {
+            asks: this.asks,
+            bids: this.bids
+          };
+          // console.log(bidask);
+          this.setBidask(bidask);
+          this.loading = null;
+        })
+        .catch(error => {
+          // console.log(error);
+        });
+    }
   },
   mounted() {
-    // Bidask
-    this.$api.chart.stocks
-      .bidask({
-        "symbol-id": this.symbolid,
-        "filter-by-last": true,
-        limit: 10
-      })
-      .then(response => {
-        this.asks = Object.values(response.data.asks);
-        this.bids = Object.values(response.data.bids);
-        const bidask = {
-          asks: this.asks,
-          bids: this.bids
-        };
-        this.setBidask(bidask);
-        this.loading = false;
-      });
+    this.initBidask(this.symbolid);
   }
 };
 </script>
@@ -143,6 +171,19 @@ export default {
 /* html {
   font-size: 11px !important;
 } */
+#div__bidask {
+  display: flex;
+  height: 100%;
+  margin-left: 7px;
+}
+#div__bid {
+  flex: 0 0 120px;
+  background: blue;
+}
+#div__ask {
+  flex: 0 0 120px;
+  background: red;
+}
 .tr_custom {
   line-height: 0.1rem !important;
 }
@@ -152,11 +193,14 @@ export default {
 .header {
   background: #00121e !important;
   font-size: 10px !important;
+  color: #fff !important;
+  text-align: right !important;
 }
 .column {
   background: #00121e !important;
   font-size: 10px !important;
   color: #bbb;
+  text-align: right;
 }
 /*  {
   font-size: 8px !important;

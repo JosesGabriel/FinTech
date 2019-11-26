@@ -62,7 +62,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      symbolid: "chart/symbolid"
+      symbolid: "chart/symbolid",
+      index: "chart/index"
     })
   },
   watch: {
@@ -72,23 +73,59 @@ export default {
       } else {
         this.progbar.value = this.topdepth;
       }
+    },
+    symbolid(symid) {
+      this.initDepthbar(symid);
     }
   },
   mounted() {
-    const params = {
-      "symbol-id": this.symbolid,
-      entry: 5
-    };
-    // Top Depth
-    this.$api.chart.stocks.topdepth(params).then(response => {
-      this.topdepth = parseFloat(response.data.bid_total_percent).toFixed(2);
-      this.progbar.value = this.topdepth;
-      this.progbar.loading = false;
-    });
-    // Full Depth
-    this.$api.chart.stocks.fulldepth(params).then(response => {
-      this.fulldepth = parseFloat(response.data.bid_total_percent).toFixed(2);
-    });
+    this.initDepthbar(this.symbolid);
+  },
+  methods: {
+    initDepthbar: function(symid) {
+      this.progbar.loading = true;
+      this.progbar.value = 100;
+      const params = {
+        "symbol-id": symid,
+        entry: 5
+      };
+      // Top Depth
+      this.$api.chart.stocks
+        .topdepth(params)
+        .then(response => {
+          this.topdepth = parseFloat(response.data.bid_total_percent).toFixed(
+            2
+          );
+          if (this.toggleButton === false) {
+            this.progbar.value = this.topdepth;
+            this.progbar.loading = false;
+          }
+        })
+        .catch(error => {
+          if (this.toggleButton === false) {
+            //console.log(error.response);
+            //console.log(error.response.data.message);
+          }
+        });
+      // Full Depth
+      this.$api.chart.stocks
+        .fulldepth(params)
+        .then(response => {
+          this.fulldepth = parseFloat(response.data.bid_total_percent).toFixed(
+            2
+          );
+          if (this.toggleButton === true) {
+            this.progbar.value = this.fulldepth;
+            this.progbar.loading = false;
+          }
+        })
+        .catch(error => {
+          if (this.toggleButton === true) {
+            //console.log(error.response);
+            //console.log(error.response.data.message);
+          }
+        });
+    }
   }
 };
 </script>

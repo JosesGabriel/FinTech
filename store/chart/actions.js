@@ -22,5 +22,11 @@ export default {
   },
   async setBidask({ commit }, data) {
     await commit("SET_BIDASK", data);
+  },
+  async setIndex({ commit }, data) {
+    await commit("SET_INDEX", data);
+  },
+  async setTabsSidebar({ commit }, data) {
+    await commit("SET_TABS_SIDEBAR", data);
   }
 };
