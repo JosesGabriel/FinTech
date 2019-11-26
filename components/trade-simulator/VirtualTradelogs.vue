@@ -126,6 +126,7 @@ export default {
    computed: {
       ...mapGetters({
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+      simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
       }),
     },
   mounted() {
@@ -133,12 +134,16 @@ export default {
   },
   watch: {
       simulatorPortfolioID: function () {
-          this.getTradeLogs();
-      }
+        this.getTradeLogs();
+      },
+      simulatorOpenPosition: function () {
+        this.getTradeLogs();
+      },
   },
   methods: {
      ...mapActions({      
             setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+            setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
     }),
     getTradeLogs(){
       const tradelogsparams = {
