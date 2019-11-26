@@ -18,10 +18,10 @@
                     <v-card-text class="pa-0" v-html="date"></v-card-text>
                 </v-btn>
             </template>
-            <v-date-picker v-model="date" color="#00121e" dark scrollable>
+            <v-date-picker v-model="date" color="#00121e" dark class="datepicker-container" scrollable>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+                <v-btn text color="success" @click="modal = false">Cancel</v-btn>
+                <v-btn text color="success" @click="$refs.dialog.save(date)">OK</v-btn>
             </v-date-picker>
             </v-dialog>
         </v-card-title>
@@ -160,6 +160,7 @@
                   v-model="portfolioDropdownModel"
                   item-text="name"
                   item-value="id"
+                  append-icon="mdi-chevron-down"
                   @change="whereToSave"
                   label="Select Portfolio"
                   color="#00FFC3"
@@ -282,7 +283,7 @@
                 <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
                   <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
                   <v-btn 
-                    @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= 100"
+                    @click="quantitySellModel -= 100"
                     text 
                     icon 
                     color="success"
@@ -548,7 +549,7 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setDefaultPortfolioId(this.portfolioDropdownModel);
+            this.setDefaultPortfolioId(this.defaultPortfolioId);
             this.GetSelectStock = "";
             this.priceSellModel = "0.00";
             this.quantitySellModel = "0";
@@ -728,13 +729,25 @@ export default {
       }
     },
     sellWatch(newValue) {
-      let sellResult = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel)
-      this.totalCostSellModel = sellResult.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      let sellResult = parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel)
+      let dpartcommission = sellResult * 0.0025;
+      let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+      // TAX
+      let dtax = dcommission * 0.12;
+      // Transfer Fee
+      let dtransferfee = sellResult * 0.00005;
+      // SCCP
+      let dsccp = sellResult * 0.0001;
+      let dsell = sellResult * 0.006;
+      let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+      let result = sellResult - dall;
+      this.totalCostSellModel = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+
       if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)){
         this.confirmSellButtonDisable = true;
         this.snackbarSell = true;
       } else {
-        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0 || this.portfolioDropdownModel == null){
+        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
           this.confirmSellButtonDisable = true;
           this.totalCostSellModel = 0
         }else {
@@ -820,5 +833,12 @@ export default {
   height: 20px;
   opacity: 1;
   background: #123;
+}
+/* datepicker */
+.datepicker-container.v-card, .datepicker-container .v-picker__body {
+  background: #00121e;
+}
+.datepicker-container .v-date-picker-title__date {
+  color: #00ffc3
 }
 </style>
