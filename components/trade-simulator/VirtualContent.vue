@@ -89,7 +89,6 @@
                             class="select_portfolio mt-2 black--text" 
                             item-color="success" 
                             append-icon="mdi-chevron-down"
-                            v-model="this.default_port"
                             item-text="name" 
                             item-value="id"
                             :items="portfolio" 
@@ -144,7 +143,7 @@
       return {
           portfolio: [],
           showCreatePortForm: false,
-          default_port: '',
+          default_port: '0',
       }
     },
      computed: {
