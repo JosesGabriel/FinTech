@@ -600,19 +600,19 @@ export default {
           this.stockSymbolGet = result.data;
           
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
-            this.dboard = 1000000;
+            this.boardLotModel = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
-            this.dboard = 100000;
+            this.boardLotModel = 100000;
           } else if (result.data.last >= 0.05 && result.data.last <= 0.495) {
-            this.dboard = 10000;
+            this.boardLotModel = 10000;
           } else if (result.data.last >= 0.5 && result.data.last <= 4.99) {
-            this.dboard = 1000;
+            this.boardLotModel = 1000;
           } else if (result.data.last >= 5 && result.data.last <= 49.95) {
-            this.dboard = 100;
+            this.boardLotModel = 100;
           } else if (result.data.last >= 50 && result.data.last <= 999.5) {
-            this.dboard = 10;
+            this.boardLotModel = 10;
           } else if (result.data.last >= 1000) {
-            this.dboard = 5;
+            this.boardLotModel = 5;
           }
           this.cprice = result.data.last;
           this.cpercentage = result.data.changepercentage.toFixed(2);
@@ -634,10 +634,9 @@ export default {
               let findOpenPosition = this.openPosition[i]
               if(parseInt(findOpenPosition.stockid) == this.stockSymbolGet.stockid){
                 console.log(findOpenPosition)
-                this.quantityModel = findOpenPosition.position
                 this.priceSellModel = findOpenPosition.last
                 this.quantitySellModel = findOpenPosition.position
-                this.boardLotModel = findOpenPosition.position
+                this.quantityModel = 0
               }
             }
           } else {
