@@ -104,14 +104,15 @@ export default {
             this.$api.journal.portfolio.portfolio(portfolioparams).then(
                 function(result) {
                     console.log(result.meta.logs);
-                    for(let i=0; i< result.meta.logs.length; i++){
-                        if(result.meta.logs[i].name == 'Default Virtual Portfolio'){
-                            let avfunds = parseFloat(result.meta.logs[i].balance);    
-                            this.availableFunds = this.addcomma(avfunds);
-                            this.setSimulatorPortfolioID(result.meta.logs[i].id);
-                        }
-                        if(result.meta.logs[i].type == 'virtual'){                    
+                    for(let i=0; i< result.meta.logs.length; i++){              
+                        if(result.meta.logs[i].type == 'virtual' && result.meta.logs[i].name != 'Default Virtual Portfolio'){                    
                             this.portfolio.push(result.meta.logs[i].name);
+                             if(result.meta.logs[i].name == 'My Virtual Portfolio'){
+                                let avfunds = parseFloat(result.meta.logs[i].balance);    
+                                this.availableFunds = this.addcomma(avfunds);
+                                this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                                this.item = result.meta.logs[i].id;
+                            }
                         }
 
                     }

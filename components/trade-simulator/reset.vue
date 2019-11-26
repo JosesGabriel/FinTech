@@ -67,7 +67,7 @@ export default {
   methods: {
       ...mapActions({      
             setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
-            setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell",
+            setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
         }),
       resetLive(){
           console.log(this.simulatorPortfolioID + ' - reset');
@@ -78,8 +78,7 @@ export default {
             .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID + "/reset/", resetparams)
             .then(response => {      
                 if (response.success) {
-                    console.log(this.simulatorConfirmedBuySell);
-                    this.setSimulatorConfirmedBuySell('');
+                    this.setSimulatorOpenPosition('');
                     console.log('reset success');
                 }
             });
