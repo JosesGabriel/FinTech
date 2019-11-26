@@ -71,9 +71,13 @@ export default {
     }
   },
   mounted() {
-      console.log(this.defaultPortfolioId)
+    //   console.log(this.defaultPortfolioId)
   },
   methods: {
+    ...mapActions({
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
+    }),
     resetNow() {
         if(this.confirmResetModel == "HELL YEAH" || this.defaultPortfolioId != null) {
             const resetparams  = {
@@ -83,7 +87,9 @@ export default {
             .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/reset",resetparams)
             .then(response => {
                 if (response.success) {
-                    console.log(response)
+                    this.keyCreateCounter = this.renderPortfolioKey;
+                    this.keyCreateCounter++;
+                    this.setRenderPortfolioKey(this.keyCreateCounter);
                 }
             });
         }

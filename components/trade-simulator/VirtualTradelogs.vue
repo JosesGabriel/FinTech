@@ -44,7 +44,7 @@
           <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" v-model="item" item-value="item" v-on:click="deleteLogs(item.action)" text color="success">Delete</v-btn>
+            <v-btn small class="caption" v-on:click="deleteLogs(item.action)" text color="success">Delete</v-btn>
           </div>
           <v-icon
             small
@@ -55,6 +55,12 @@
           </v-icon>
         </template>
         </v-data-table>
+        <v-row>
+          <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
+          Total Profit/Loss as of {{ this.date }}: <span class="ml-3" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
+          <span class="ml-3" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
+          </v-col>
+        </v-row>
         <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
           <v-card color="transparent" class="justify-center" elevation="0">
             <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
@@ -111,12 +117,16 @@ export default {
       pageCount: 0,
       menuShow: false,
       selectedProfile: null,
-      componentKeys: 0
+      componentKeys: 0,
+      totalProfitLoss: 0,
+      totalPerf: 0,
+      date: new Date().toISOString().substr(0, 10),
     }
   },
    computed: {
       ...mapGetters({
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+      simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
       }),
     },
   mounted() {
@@ -124,18 +134,24 @@ export default {
   },
   watch: {
       simulatorPortfolioID: function () {
-          this.getTradeLogs();
-      }
+        this.getTradeLogs();
+      },
+      simulatorOpenPosition: function () {
+        this.getTradeLogs();
+      },
   },
   methods: {
      ...mapActions({      
             setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+            setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
     }),
     getTradeLogs(){
       const tradelogsparams = {
       user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
       fund: this.simulatorPortfolioID
     };
+    this.totalProfitLoss = 0;
+    this.totalPerf = 0;
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
         console.log(result);
@@ -154,7 +170,8 @@ export default {
             let sellvalue = parseFloat(result.meta.logs[i].meta.sell_price) * parseFloat(result.meta.logs[i].amount);
             let ploss = sellvalue - bvalue;
             let perc = (ploss / bvalue) * 100;
-
+            this.totalProfitLoss = parseFloat(this.totalProfitLoss) + parseFloat(ploss);
+            this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perc);
             this.tradeLogs[i].date = date;
             this.tradeLogs[i].amount = result.meta.logs[i].amount;
             this.tradeLogs[i].AvePrice = result.meta.logs[i].meta.average_price;
@@ -174,14 +191,16 @@ export default {
         const params ={
           user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         }
-        this.$axios
-        .$post(process.env.JOURNAL_API_URL + "/journal/funds/tradelog/delete/"+ item , params)
-        .then(response => {      
-            if (response.success) {
-                console.log('delete success');
-                this.getTradeLogs();
-            }
-        });
+        if(confirm("Do you really want to delete?")){
+            this.$axios
+            .$post(process.env.JOURNAL_API_URL + "/journal/funds/tradelog/delete/"+ item , params)
+            .then(response => {      
+                if (response.success) {
+                    console.log('delete success');
+                    this.getTradeLogs();
+                }
+            });
+        }
     },
     tradelogsmenuLogsShow: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);

@@ -256,6 +256,7 @@ import { mapActions, mapGetters } from "vuex";
             simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
             simulatorPositions: "tradesimulator/getSimulatorPositions",
+            simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
             simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
             }),
 
@@ -296,7 +297,8 @@ import { mapActions, mapGetters } from "vuex";
                 setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
                 setSimulatorPositions: "tradesimulator/setSimulatorPositions",
                 setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
-                setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell"
+                setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
+                setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell",
             }),
             nextStep(){
                 if(this.sellSelected){
@@ -324,30 +326,21 @@ import { mapActions, mapGetters } from "vuex";
                     );
             },
             btnSell(){
-                console.log('sell');
+                //console.log('sell - open positions -' + this.simulatorOpenPosition.length);
                 this.setSimulatorConfirmedBuySell('sell');
                 this.sellSelected = true;
                 this.buySelected = false;
                 this.stock = [];
-                const openparams = {
-                        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                        fund: this.simulatorPortfolioID,
-                        };
-                        this.$api.journal.portfolio.open(openparams).then(
-                            function(result) {
-                                console.log(result);
-                                for(let i = 0; i < result.meta.open.length; i ++){
-                                    const params = {
-                                         'symbol-id': result.meta.open[i].stock_id
-                                    };
-                                    this.$api.chart.stocks.history(params).then(
+                for(let i = 0; i < this.simulatorOpenPosition.length; i ++){
+                    const params = {
+                            'symbol-id':this.simulatorOpenPosition[i]
+                    };
+                    this.$api.chart.stocks.history(params).then(
                                     function(result) {
                                             this.stock.push(result.data);                     
                                     }.bind(this)
                                     );
-                                }
-                        }.bind(this)
-                    );
+                }
 
             },
                        
@@ -398,7 +391,9 @@ import { mapActions, mapGetters } from "vuex";
                             .then(response => {      
                                 if (response.success) {
                                     console.log('sell success');
-                                    this.setSimulatorConfirmedBuySell('sell');
+                                    //this.setSimulatorConfirmedBuySell('sell');
+                                    this.setSimulatorOpenPosition('');
+                                     this.e1 = 1;
                                 }
                             });
                         }else { // if selected stock is not in the list
@@ -424,7 +419,8 @@ import { mapActions, mapGetters } from "vuex";
                         .then(response => {      
                             if (response.success) {
                                 console.log(response.message);
-                                this.setSimulatorConfirmedBuySell('');
+                                 this.setSimulatorOpenPosition('');
+                                 this.e1 = 1;
                             }
                         });    
                 }

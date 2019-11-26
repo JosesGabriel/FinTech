@@ -43,28 +43,28 @@
         <tbody>
           <span class="d-none">{{ (ctr = 0) }}</span>
           <tr v-for="item in asks" class="tr_custom" :key="item.id">
-            <td class="text-right column white--text" style="width:30px">
+            <td class="text-right column" style="width:30px">
               {{ bids[ctr].count | numeral("0,0") }}
             </td>
             <td
-              class="text-right column white--text text-uppercase"
+              class="text-right column text-uppercase"
               style="width:40px"
             >
               {{ bids[ctr].volume | numeral("0.0a") }}
             </td>
             <td
-              class="text-right column white--text text-uppercase"
+              class="text-right column text-uppercase"
               style="width:50px"
             >
               {{ bids[ctr].price | numeral("0,0.00") }}
             </td>
-            <td class="text-right column white--text" style="width:60px">
+            <td class="text-right column" style="width:60px">
               {{ item.price | numeral("0,0.00") }}
             </td>
-            <td class="text-right column white--text" style="width:40px">
+            <td class="text-right column" style="width:40px">
               {{ item.volume | numeral("0.0a") }}
             </td>
-            <td class="text-right column white--text" style="width:20px">
+            <td class="text-right column" style="width:20px">
               {{ item.count | numeral("0,0") }}
             </td>
             <td class="column" style="width:10px"></td>
@@ -156,6 +156,7 @@ export default {
 .column {
   background: #00121e !important;
   font-size: 10px !important;
+  color: #bbb;
 }
 /*  {
   font-size: 8px !important;

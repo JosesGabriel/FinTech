@@ -1,4 +1,7 @@
 export default {
+    getSimulatorOpenPosition(state) {
+      return state.simulatorOpenPosition;
+    },
     getSimulatorBuyPrice(state) {
       return state.simulatorBuyPrice;
     },

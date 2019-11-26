@@ -113,7 +113,7 @@ export default {
                 currency_code: "PHP",
                 name: this.namePortfolioModel,
                 description: "My Virtual Portfolio",
-                type: "VirtualPort",
+                type: "virtual",
                 balance: 100000
             };
             console.log(createportfolioparams);
