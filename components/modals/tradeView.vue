@@ -633,7 +633,6 @@ export default {
             for (let i = 0; i < this.openPosition.length; i++) {
               let findOpenPosition = this.openPosition[i]
               if(parseInt(findOpenPosition.stockid) == this.stockSymbolGet.stockid){
-                console.log(findOpenPosition)
                 this.priceSellModel = findOpenPosition.last
                 this.quantitySellModel = findOpenPosition.position
                 this.quantityModel = 0
@@ -690,7 +689,6 @@ export default {
       for (let i = 0; i < this.userPortfolio.length; i++ ) {
           let portfolioListPush1 = this.userPortfolio[i]
           if (portfolioListPush1.id === this.portfolioDropdownModel) {
-            console.log(portfolioListPush1);
             this.availableFundsModel = parseInt(portfolioListPush1.balance)
             this.portfolioDropdownModel = portfolioListPush1.id
             this.keyCreateCounter = this.renderPortfolioKey;

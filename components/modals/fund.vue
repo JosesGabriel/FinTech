@@ -146,10 +146,7 @@ export default {
   },
   methods: {
     renderPortfolioKey1() {
-        // console.log(this.selectedPortfolio)
         this.availableFunds = parseFloat(this.selectedPortfolio.balance);
-        console.log(this.selectedPortfolio)
-        console.log(this.renderPortfolioKey)
     },
     depositNow() {
         console.log(parseFloat(this.enterAmount.replace(/,/g, "")),this.fundSourceModel)
