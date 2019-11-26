@@ -185,30 +185,30 @@ export default {
         }
     },
     mounted() {
-        // if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
         this.getUserPortfolioList();
     },
     methods: {
         ...mapActions({
             setUserPortfolio: "journal/setUserPortfolio",
-            setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-            setDefaultPortfolioId: "journal/setDefaultPortfolioId",
             setSelectedPortfolio: "journal/setSelectedPortfolio",
+            setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+            setDefaultPortfolioId: "journal/setDefaultPortfolioId"
         }),
-        changePortfolio(){
-            // console.log(this.portfolioDropdownModel)
+        changePortfolio(obj){
+            // console.log("Selected portfolio ID" + this.portfolioDropdownModel.id)
+            this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
             const openparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                fund: this.defaultPortfolioId,
+                fund: this.portfolioDropdownModel.id
             };
             this.$api.journal.portfolio.open(openparams).then(
                 function(result) {
                     if(result.success) {
-                        // console.log(result.success)
                         this.keyCreateCounter = this.renderPortfolioKey;
                         this.keyCreateCounter++;
                         this.setRenderPortfolioKey(this.keyCreateCounter);
-                        this.setDefaultPortfolioId(result.success.id);
+                        this.setSelectedPortfolio(obj);
+                        // console.log(obj)
                     }
                 }.bind(this)
             );
@@ -221,7 +221,6 @@ export default {
             this.$api.journal.portfolio.portfolio(params).then(
                 function(result) {
                     
-                    console.log(this.portfolioList)
                     this.portfolioList = result.meta.logs;
                     this.portfolioList = this.portfolioList.reverse();
                     this.setUserPortfolio(result.meta.logs);
@@ -235,28 +234,27 @@ export default {
                             if (portfolioListPush1.type === toFindReal) {
                                 this.portfolioListPush.push(portfolioListPush1);
                             }
-                            if(result.meta.logs[i].name == 'My Portfolio'){
-                                this.setDefaultPortfolioId(result.meta.logs[i].id);
-                                defaultPort = true;
-                            }
+                            // if(portfolioListPush1.id == 75386709415694336){
+                            //     this.setDefaultPortfolioId(portfolioListPush1.id);
+                            //     console.log(result.meta.logs[i].id, "test")
+                            //     defaultPort = true;
+                            // }
                         }
-                        if(!defaultPort){
-                            const createportfolioparams = {
-                                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                                currency_code: "PHP",
-                                name: 'My Portfolio',
-                                description: "My First Portfolio",
-                                type: "real",
-                                balance: 1000000
-                            };
-                            this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
-                                function(result) {
-                                    if (result.success) {
-                                        console.log('default portfolio created..');
-                                    }
-                                }.bind(this)
-                            );
-                        }
+                        // if(!defaultPort){
+                        //     const createportfolioparams = {
+                        //         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                        //         currency_code: "PHP",
+                        //         name: 'My Portfolio',
+                        //         description: "My First Portfolio",
+                        //         type: "real",
+                        //         balance: 1000000
+                        //     };
+                        //     this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
+                        //         function(result) {
+                        //             this.setDefaultPortfolioId(result.data.fund.id);
+                        //         }.bind(this)
+                        //     );
+                        // }
                     }
                     if(this.portfolioList.length != 0) {
                         
@@ -279,8 +277,7 @@ export default {
         ...mapGetters({
             userPortfolio: "journal/getUserPortfolio",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
-            renderPortfolioKey: "journal/getRenderPortfolioKey",
-            selectedPortfolio: "journal/getSelectedPortfolio"
+            renderPortfolioKey: "journal/getRenderPortfolioKey"
         })
     },
     watch: {
@@ -289,6 +286,7 @@ export default {
         },
         portfolioDropdownModel() {
             this.getUserPortfolioList();
+            // this.setDefaultPortfolioId(75386709415694336);
         }
     },
 };
@@ -300,6 +298,7 @@ export default {
     .sumportfolio_real {
         border-top: 1px solid;
     }
+    
 </style>
 <style>
     /* .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
@@ -312,15 +311,20 @@ export default {
     .v-window.v-item-group.theme--light.v-tabs-items {
     background: none;
     }
-    /* .v-slide-group__content.v-tabs-bar__content:before {
-    content: "";
-    width: 100%;
-    position: absolute;
-    bottom: -3px;
-    z-index: 1;
-    height: 4px;
-    background: #000;
-    } */
+    .v-menu__content ::-webkit-scrollbar {
+        width: 5px;
+    }
+    .v-menu__content ::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 10px;
+    }
+    .v-menu__content ::-webkit-scrollbar-thumb {
+        background: #1de9b6;
+        border-radius: 20px;
+    }
+    .v-menu__content ::-webkit-scrollbar-thumb:hover {
+        background: #1de9b6;
+    }
     .rtf_top-btn.v-btn--outlined:hover,
     .rtf_top-btn.v-btn--outlined:active,
     .rtf_top-btn.v-btn--outlined:focus {

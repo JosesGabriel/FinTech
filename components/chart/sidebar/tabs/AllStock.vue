@@ -8,70 +8,61 @@
       style="height: calc(100vh - 315px)"
       flat
     >
-      <v-simple-table
+      <v-data-table
+        :headers="headers"
+        :items="stocks"
+        class="data_table-container"
         dense
         dark
         fixed-header
+        calculate-widths
+        disable-pagination
+        hide-default-footer
         height="calc(100vh - 315px)"
         style="background:#00121e"
       >
-        <thead>
+        <!-- <template #item.symbol="{item}">
+            SYM
+        </template> -->
+        <template v-slot:item="props">
           <tr>
-            <th class="caption header white--text font-weight-bold">SYMBOL</th>
-            <th class="caption header white--text font-weight-bold text-right">
-              LAST
-            </th>
-            <th class="caption header white--text font-weight-bold text-right">
-              %CHANGE
-            </th>
-            <th class="caption header white--text font-weight-bold text-right">
-              VALUE
-            </th>
-            <th class="caption header white--text font-weight-bold text-right">
-              TRADES
-            </th>
-            <th class="caption header white--text font-weight-bold"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in stocks" class="tr_custom" :key="item.id">
-            <td class="column white--text" style="width:40px">
-              {{ item.symbol }}
+            <td class="column white--text" style="width:40px;">
+              {{ props.item.symbol }}
             </td>
-            <td class="column white--text text-right" style="width:35px">
+            <td class="column text-right" style="width:35px">
               <span
                 :class="[
-                  { increase: item.change > 0 },
-                  { decrease: item.change < 0 },
-                  { neutral: item.change == 0 }
+                  { increase: props.item.change > 0 },
+                  { decrease: props.item.change < 0 },
+                  { neutral: props.item.change == 0 }
                 ]"
               >
-                {{ item.last | numeral("0.0a") }}
+                {{ props.item.last | numeral("0.0a") }}
               </span>
             </td>
-            <td class="column white--text text-right" style="width:40px">
+            <td class="column text-right" style="width:40px">
               <span
                 :class="[
-                  { increase: item.change > 0 },
-                  { decrease: item.change < 0 },
-                  { neutral: item.change == 0 }
+                  { increase: props.item.change > 0 },
+                  { decrease: props.item.change < 0 },
+                  { neutral: props.item.change == 0 }
                 ]"
               >
-                {{ item.change | numeral("0,0.00") }}
+                {{ props.item.change | numeral("0,0.00") }}
               </span>
             </td>
-            <td class="column white--text text-right" style="width:60px">
+            <td class="column text-right" style="width:60px">
               <span class="text-uppercase">{{
-                item.value | numeral("0.000a")
+                props.item.value | numeral("0.000a")
               }}</span>
             </td>
-            <td class="column white--text text-right" style="width:45px">
-              <span class="">{{ item.trades | numeral("0,0") }}</span>
+            <td class="column text-right" style="width:45px">
+              <span class="">{{ props.item.trades | numeral("0,0") }}</span>
             </td>
-            <td class="column white--text" style="width:25px"></td>
+            <td class="column" style="width:25px"></td>
           </tr>
-        </tbody>
-      </v-simple-table>
+        </template>
+      </v-data-table>
     </v-card>
   </v-content>
 </template>
@@ -82,6 +73,21 @@ export default {
   data() {
     return {
       stocks: [],
+      headers: [
+        { text: "Symbol", value: "symbol", class: "tr_custom header" },
+        { text: "Last", value: "last", class: "tr_custom header text-right" },
+        {
+          text: "Change",
+          value: "change",
+          class: "tr_custom header text-right"
+        },
+        { text: "Value", value: "value", class: "tr_custom header text-right" },
+        {
+          text: "Trades",
+          value: "trades",
+          class: "tr_custom header text-right"
+        }
+      ],
       loading: "#48FFD5"
     };
   },
@@ -99,6 +105,11 @@ export default {
   }
 };
 </script>
+<style>
+.data_table-container i.v-icon.v-data-table-header__icon.mdi.mdi-arrow-up {
+  display: none;
+}
+</style>
 
 <style scoped>
 .tr_custom {
@@ -107,10 +118,12 @@ export default {
 .header {
   background: #00121e !important;
   font-size: 10px !important;
+  color: #fff;
 }
 .column {
-  background: #00121e !important;
+  /* background: #00121e !important; */
   font-size: 10px !important;
+  color: #bbb;
 }
 .theme--dark.v-data-table thead tr:last-child th {
   border: none !important;

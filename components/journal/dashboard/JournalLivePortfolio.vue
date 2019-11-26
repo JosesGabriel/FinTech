@@ -21,7 +21,7 @@
           dark
           class="data_table-container pl-10 secondary--text"
         >
-        <template v-slot:item.average_price="{ item }" >{{ formatPrice(item.average_price) }}</template>
+        <template v-slot:item.average_price="{ item }" >{{ item.average_price.toFixed(3) }}</template>
         <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template>
         <template v-slot:item.market_value="{ item }" >{{ formatPrice(item.market_value) }}</template>
         <template v-slot:item.profit="{ item }" ><span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.profit) }}</span></template>
@@ -128,6 +128,7 @@ export default {
   methods: {
     ...mapActions({
         setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+        setOpenPosition: "journal/setOpenPosition",
     }),
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
@@ -147,7 +148,6 @@ export default {
       .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.defaultPortfolioId +"/delete/" + item, deleteLogs)
       .then(response => {      
           if (response.success) {
-              console.log(response.success);
               
               this.keyCreateCounter = this.renderPortfolioKey;
               this.keyCreateCounter++;
@@ -160,9 +160,6 @@ export default {
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     },
     getOpenPositions() {
-      
-    console.log(this.renderPortfolioKey)
-    console.log(this.defaultPortfolioId)
       this.portfolioLogsStock = []
       const openparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
@@ -171,60 +168,48 @@ export default {
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
           this.portfolioLogs = result.meta.open;
+          
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
-            const params = {
-              "symbol-id": this.portfolioLogs[i].stock_id
-            };
-            this.$api.chart.stocks.list(params).then(
-              function(result) {
-                this.portfolioLogs[i].stock_id = result.data.symbol;
-              }.bind(this)
-            );
+            
             const historyparams  = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };
             this.$api.journal.portfolio.history(historyparams).then(
               function(result) {
                 let portfolioLogsfinal = result.data
-                
                 let market_value = {market_value: 0}
                 let profit = {profit: 0}
-                let perf_percentage = {perf_percentage: 0}
+                let perf_percentage = {perf_percentage: 0, id_str: null}
                 this.portfolioLogs[i] = {...this.portfolioLogs[i],...portfolioLogsfinal,...market_value,...profit,...perf_percentage}
-                this.portfolioLogs[i].market_value = this.portfolioLogs[i].last * this.portfolioLogs[i].position
+                
+                let buyResult = parseFloat(this.portfolioLogs[i].metas.buy_price) * parseFloat(this.portfolioLogs[i].position)
+                let dpartcommission = buyResult * 0.0025;
+                let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+                // TAX
+                let dtax = dcommission * 0.12;
+                // Transfer Fee
+                let dtransferfee = buyResult * 0.00005;
+                // SCCP
+                let dsccp = buyResult * 0.0001;
+                let dsell = buyResult * 0.006;
+                let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+                let results = buyResult - dall;
+
+                this.portfolioLogs[i].market_value = results
                 this.portfolioLogs[i].profit = this.portfolioLogs[i].market_value - this.portfolioLogs[i].total_value
                 this.portfolioLogs[i].perf_percentage = this.portfolioLogs[i].profit / this.portfolioLogs[i].total_value * 100
-
+                this.portfolioLogs[i].stock_id = result.data.symbol
+                this.portfolioLogs[i].id_str = result.data.stockidstr
                 this.portfolioLogsStock.push(this.portfolioLogs[i])
+                // console.log(this.portfolioLogs)
                 // this.portfolioLogsStock
+                
+                this.setOpenPosition(this.portfolioLogs)
               }.bind(this)
             );
           }
         }.bind(this)
-      );
-      const params = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      };
-      this.$api.journal.portfolio.portfolio(params).then(
-          function(result) {
-            
-            let toFindReal = this.defaultPortfolioId;
-            for (let i = 0; i < result.meta.logs.length; i++ ) {
-              let portfolioListPush1 = result.meta.logs[i]
-              if (portfolioListPush1.id === toFindReal) {
-                if(portfolioListPush1.type != "real") {
-                  this.ifVirtualShow = true
-                  this.fundsShow = true
-                  this.snackbar = true
-                } else {
-                  this.ifVirtualShow = false
-                  this.fundsShow = false
-                  this.snackbar = false
-                }
-              }
-            }
-          }.bind(this)
       );
       this.componentKeys++;
     }
@@ -232,6 +217,7 @@ export default {
   computed: {
     ...mapGetters({
       defaultPortfolioId: "journal/getDefaultPortfolioId",
+      userPortfolio: "journal/getUserPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey"
     })
   },

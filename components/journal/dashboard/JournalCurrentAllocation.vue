@@ -163,27 +163,26 @@
       }
     },
     mounted() {
-      if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
-      const openparams = {
-      user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      fund: this.selectedProfile,
-      };
-      this.$api.journal.portfolio.open(openparams).then(
-        function(result) {
-          this.allodata = result.meta.allocations.slice(1);
-          this.cash = result.meta.allocations[0].position;
-          for (let i = 0; i < this.allodata.length; i++) {
-            const params = {
-              "symbol-id": this.allodata[i].stock_id
-            };
-            this.$api.chart.stocks.list(params).then(
-              function(result) {
-                this.allodata[i].stock_id = result.data.symbol;
-              }.bind(this)
-            );
-          }
-        }.bind(this)
-      );
+      // const openparams = {
+      // user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      // fund: this.selectedProfile,
+      // };
+      // this.$api.journal.portfolio.open(openparams).then(
+      //   function(result) {
+      //     this.allodata = result.meta.allocations.slice(1);
+      //     this.cash = result.meta.allocations[0].position;
+      //     for (let i = 0; i < this.allodata.length; i++) {
+      //       const params = {
+      //         "symbol-id": this.allodata[i].stock_id
+      //       };
+      //       this.$api.chart.stocks.list(params).then(
+      //         function(result) {
+      //           this.allodata[i].stock_id = result.data.symbol;
+      //         }.bind(this)
+      //       );
+      //     }
+      //   }.bind(this)
+      // );
     },
   }
 </script>

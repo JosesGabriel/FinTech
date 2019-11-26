@@ -33,26 +33,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in trades" class="tr_custom" :key="item.id">
-            <td class="pl-2 column white--text" style="width:55px;">
+          <tr v-for="item in trades" :key="item.id" class="tr_custom">
+            <td class="pl-2 column" style="width:55px;">
               {{ $moment(item.timestamp).format("hh:mm A") }}
             </td>
-            <td class="column white--text text-right" style="width:35px;">
+            <td class="column text-right" style="width:35px;">
               {{ item.executed_volume | numeral("0.0a") }}
             </td>
-            <td class="column white--text text-right" style="width:45px;">
-              {{ item.executed_price | numeral('0,0.00') }}
+            <td class="column text-right" style="width:45px;">
+              {{ item.executed_price | numeral("0,0.00") }}
             </td>
-            <td class="pl-2 column white--text" style="width:50px;">
+            <td class="pl-2 column" style="width:50px;">
               {{ $globalMethod.limitDisplayString(item.buyer, 6) }}
             </td>
-            <td class="pl-2 column white--text" style="width:50px;">
+            <td class="pl-2 column" style="width:50px;">
               {{ $globalMethod.limitDisplayString(item.seller, 6) }}
             </td>
-            <td
-              class="column white--text font-weight-bold"
-              style="width:10px;"
-            ></td>
+            <td class="column font-weight-bold" style="width:10px;"></td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -104,6 +101,7 @@ export default {
 .column {
   background: #00121e !important;
   font-size: 10px !important;
+  color: #bbb;
 }
 .v-data-table--dense th {
   height: 20px;
