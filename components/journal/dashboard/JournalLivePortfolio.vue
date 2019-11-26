@@ -177,6 +177,7 @@ export default {
             };
             this.$api.journal.portfolio.history(historyparams).then(
               function(result) {
+                console.log(this.portfolioLogs[i])
                 let portfolioLogsfinal = result.data
                 let market_value = {market_value: 0}
                 let profit = {profit: 0}
@@ -197,12 +198,14 @@ export default {
                 let results = buyResult - dall;
 
                 this.portfolioLogs[i].market_value = results
+                this.portfolioLogs[i].total_value = this.portfolioLogs[i].average_price * this.portfolioLogs[i].position
                 this.portfolioLogs[i].profit = this.portfolioLogs[i].market_value - this.portfolioLogs[i].total_value
                 this.portfolioLogs[i].perf_percentage = this.portfolioLogs[i].profit / this.portfolioLogs[i].total_value * 100
+                console.log(this.portfolioLogs[i].market_value, this.portfolioLogs[i].total_value)
                 this.portfolioLogs[i].stock_id = result.data.symbol
                 this.portfolioLogs[i].id_str = result.data.stockidstr
+                console.log(this.portfolioLogs[i])
                 this.portfolioLogsStock.push(this.portfolioLogs[i])
-                // console.log(this.portfolioLogs)
                 // this.portfolioLogsStock
                 
                 this.setOpenPosition(this.portfolioLogs)

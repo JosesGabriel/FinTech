@@ -119,8 +119,7 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.defaultPortfolioId, "test")
-    // console.log(this.renderPortfolioKey, "test")
+    
   },
   computed: {
     ...mapGetters({
@@ -130,6 +129,8 @@ export default {
   },
   methods: {
     getTradeLogs: function() {
+      // console.log(this.defaultPortfolioId, "test")
+      // console.log(this.renderPortfolioKey, "test")
       const tradelogsparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: this.defaultPortfolioId,
@@ -137,17 +138,20 @@ export default {
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
             this.tradeLogs = result.meta.logs;
-            for (let i = 0; i < this.tradeLogs.length; i++) {
-              console.log(this.tradeLogs[i].meta.stock_id, "test")
-              const params = {
-                "symbol-id": this.tradeLogs[i].meta.stock_id
-              };
-              this.$api.chart.stocks.list(params).then(
-                function(result) {
-                  this.tradeLogs[i].meta.stock_id = result.data.symbol;
-                }.bind(this)
-              );
-            }
+            console.log(result)
+            // for (let i = 0; i < this.tradeLogs.length; i++) {
+            //   console.log(this.tradeLogs[i].meta.stock_id, "test")
+            //   const params = {
+            //     "symbol-id": this.tradeLogs[i].meta.stock_id
+            //   };
+            //   this.$api.chart.stocks.list(params).then(
+            //     function(result) {
+            //       let stock_name = {stock_name: null,}
+            //       this.portfolioLogs[i] = {...this.portfolioLogs[i],...portfolioLogsfinal,...market_value,...profit,...perf_percentage}
+            //       this.tradeLogs[i].meta.stock_id = result.data.symbol;
+            //     }.bind(this)
+            //   );
+            // }
         }.bind(this)
       )
       this.componentKeys++;
