@@ -5,7 +5,7 @@
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Portfolio" dense flat dark></v-select>
+                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" :value="this.defaultvalue" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Portfolio" dense flat dark></v-select>
                         <v-text-field
                             label="Available Funds"
                             :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')"
@@ -85,7 +85,8 @@ export default {
             totalCost: 0,
             portfolio: [],
             item: '',
-            fund_id: ''
+            fund_id: '',
+            defaultvalue: '',
         }
     },
     computed: {
@@ -104,14 +105,15 @@ export default {
             this.$api.journal.portfolio.portfolio(portfolioparams).then(
                 function(result) {
                     console.log(result.meta.logs);
-                    for(let i=0; i< result.meta.logs.length; i++){
-                        if(result.meta.logs[i].name == 'Default Virtual Portfolio'){
-                            let avfunds = parseFloat(result.meta.logs[i].balance);    
-                            this.availableFunds = this.addcomma(avfunds);
-                            this.setSimulatorPortfolioID(result.meta.logs[i].id);
-                        }
-                        if(result.meta.logs[i].type == 'virtual'){                    
+                    for(let i=0; i< result.meta.logs.length; i++){              
+                        if(result.meta.logs[i].type == 'virtual' && result.meta.logs[i].name != 'Default Virtual Portfolio'){                    
                             this.portfolio.push(result.meta.logs[i].name);
+                             if(result.meta.logs[i].name == 'My Virtual Portfolio'){
+                                let avfunds = parseFloat(result.meta.logs[i].balance);    
+                                this.availableFunds = this.addcomma(avfunds);
+                                this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                                this.defaultvalue = result.meta.logs[i].name;
+                            }
                         }
 
                     }

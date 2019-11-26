@@ -18,10 +18,10 @@
                     <v-card-text class="pa-0" v-html="date"></v-card-text>
                 </v-btn>
             </template>
-            <v-date-picker v-model="date" color="#00121e" dark scrollable>
+            <v-date-picker v-model="date" color="#00121e" dark class="datepicker-container" scrollable>
                 <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
+                <v-btn text color="success" @click="modal = false">Cancel</v-btn>
+                <v-btn text color="success" @click="$refs.dialog.save(date)">OK</v-btn>
             </v-date-picker>
             </v-dialog>
         </v-card-title>
@@ -160,6 +160,7 @@
                   v-model="portfolioDropdownModel"
                   item-text="name"
                   item-value="id"
+                  append-icon="mdi-chevron-down"
                   @change="whereToSave"
                   label="Select Portfolio"
                   color="#00FFC3"
@@ -173,7 +174,7 @@
                   <v-text-field v-model="priceModel" label="Buy Price" placeholder="Enter Buy Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
-                  <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
+                  <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" type="number" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
                   <v-btn 
                       @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= 100"
                       text 
@@ -277,12 +278,12 @@
           </v-stepper-content>
           <v-stepper-content step="4" class="pt-2">
             <v-container class="pa-0">
-              <v-row no-gutters class="pa-3 pb-0">
+              <v-row no-gutters class="pt-3 pa-0">
                 <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
                 <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
-                  <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
+                  <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" type="number" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
                   <v-btn 
-                    @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= 100"
+                    @click="quantitySellModel -= 100"
                     text 
                     icon 
                     color="success"
@@ -294,10 +295,17 @@
                     color="success"
                   ><v-icon>mdi-chevron-up</v-icon></v-btn>
                 </v-col>
-                <v-col cols="12" sm="12" md="12" class="justify-end d-flex">
-                <v-card-title class="caption pa-0 secondary--text">Board lot: {{ boardLotModel }}</v-card-title>
+                <v-col cols="12">
+                  <v-row no-gutters>
+                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                  </v-row>
                 </v-col>
-                <v-text-field v-model="totalCostSellModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
+                <v-col cols="12" class="pb-5">
+                  <v-row no-gutters>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostSellModel }}</v-card-title>
+                  </v-row>
+                </v-col>
+                <!-- <v-text-field v-model="totalCostSellModel" label="Market Value" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field> -->
                 <!-- <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar> -->
               </v-row>
             </v-container>
@@ -479,8 +487,8 @@ export default {
     buyListArray: function() {
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        position: parseInt(this.quantityModel),
-        stock_price: parseInt(this.priceModel),
+        position: parseFloat(this.quantityModel),
+        stock_price: parseFloat(this.priceModel),
         transaction_meta : {
           strategy: this.strategyModel,
           plan: this.tradeplanModel,
@@ -529,8 +537,8 @@ export default {
     sellListArray: function() {
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        position: parseInt(this.quantitySellModel),
-        stock_price: parseInt(this.priceSellModel),
+        position: parseFloat(this.quantitySellModel),
+        stock_price: parseFloat(this.priceSellModel),
         transaction_meta : {
           strategy : this.strategySellModel,
           average_price : parseInt(this.average_price),
@@ -548,7 +556,7 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setDefaultPortfolioId(this.portfolioDropdownModel);
+            this.setDefaultPortfolioId(this.defaultPortfolioId);
             this.GetSelectStock = "";
             this.priceSellModel = "0.00";
             this.quantitySellModel = "0";
@@ -592,19 +600,19 @@ export default {
           this.stockSymbolGet = result.data;
           
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
-            this.dboard = 1000000;
+            this.boardLotModel = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
-            this.dboard = 100000;
+            this.boardLotModel = 100000;
           } else if (result.data.last >= 0.05 && result.data.last <= 0.495) {
-            this.dboard = 10000;
+            this.boardLotModel = 10000;
           } else if (result.data.last >= 0.5 && result.data.last <= 4.99) {
-            this.dboard = 1000;
+            this.boardLotModel = 1000;
           } else if (result.data.last >= 5 && result.data.last <= 49.95) {
-            this.dboard = 100;
+            this.boardLotModel = 100;
           } else if (result.data.last >= 50 && result.data.last <= 999.5) {
-            this.dboard = 10;
+            this.boardLotModel = 10;
           } else if (result.data.last >= 1000) {
-            this.dboard = 5;
+            this.boardLotModel = 5;
           }
           this.cprice = result.data.last;
           this.cpercentage = result.data.changepercentage.toFixed(2);
@@ -625,11 +633,9 @@ export default {
             for (let i = 0; i < this.openPosition.length; i++) {
               let findOpenPosition = this.openPosition[i]
               if(parseInt(findOpenPosition.stockid) == this.stockSymbolGet.stockid){
-                console.log(findOpenPosition)
-                this.quantityModel = findOpenPosition.position
                 this.priceSellModel = findOpenPosition.last
                 this.quantitySellModel = findOpenPosition.position
-                this.boardLotModel = findOpenPosition.position
+                this.quantityModel = 0
               }
             }
           } else {
@@ -683,7 +689,6 @@ export default {
       for (let i = 0; i < this.userPortfolio.length; i++ ) {
           let portfolioListPush1 = this.userPortfolio[i]
           if (portfolioListPush1.id === this.portfolioDropdownModel) {
-            console.log(portfolioListPush1);
             this.availableFundsModel = parseInt(portfolioListPush1.balance)
             this.portfolioDropdownModel = portfolioListPush1.id
             this.keyCreateCounter = this.renderPortfolioKey;
@@ -728,13 +733,25 @@ export default {
       }
     },
     sellWatch(newValue) {
-      let sellResult = parseInt(this.quantitySellModel) * parseInt(this.priceSellModel)
-      this.totalCostSellModel = sellResult.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      let sellResult = parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel)
+      let dpartcommission = sellResult * 0.0025;
+      let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+      // TAX
+      let dtax = dcommission * 0.12;
+      // Transfer Fee
+      let dtransferfee = sellResult * 0.00005;
+      // SCCP
+      let dsccp = sellResult * 0.0001;
+      let dsell = sellResult * 0.006;
+      let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+      let result = sellResult - dall;
+      this.totalCostSellModel = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+
       if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)){
         this.confirmSellButtonDisable = true;
         this.snackbarSell = true;
       } else {
-        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0 || this.portfolioDropdownModel == null){
+        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
           this.confirmSellButtonDisable = true;
           this.totalCostSellModel = 0
         }else {
@@ -820,5 +837,12 @@ export default {
   height: 20px;
   opacity: 1;
   background: #123;
+}
+/* datepicker */
+.datepicker-container.v-card, .datepicker-container .v-picker__body {
+  background: #00121e !important;
+}
+.datepicker-container .v-date-picker-title__date {
+  color: #00ffc3 !important
 }
 </style>

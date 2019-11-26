@@ -17,7 +17,7 @@
                     <v-container class="pa-0">
                       <div class="separator"></div>
                         <v-row no-gutters>
-                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFunds) }}</v-card-title>
+                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(parseFloat(availableFunds)) }}</v-card-title>
                         </v-row>
                       <v-text-field
                           label="Enter Amount"
@@ -26,6 +26,7 @@
                           dark
                           class="body-1 buy_selector quantity-input py-3"
                           v-model="enterAmount"
+                          maxlength="15"
                       ></v-text-field>
                       <v-col class="pa-0">
                           <span class="custom-dropdown big">
@@ -49,7 +50,7 @@
                     <v-container class="pa-0">
                       <div class="separator"></div>
                         <v-row no-gutters>
-                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFunds) }}</v-card-title>
+                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(parseFloat(availableFunds)) }}</v-card-title>
                         </v-row>
                       <v-text-field
                           label="Enter Amount"
@@ -58,6 +59,7 @@
                           dark
                           class="body-1 buy_selector quantity-input py-3"
                           v-model="withrawAmount"
+                          maxlength="15"
                       ></v-text-field>
                   </v-container>
                 </v-tab-item>
@@ -81,7 +83,7 @@
                     @click="depositNow"
                     @click.stop="show = false"
                     :disabled="disableButtonSave"
-                    >Save1</v-btn
+                    >Save</v-btn
                 >
                 <v-btn
                     color="#48FFD5"
@@ -92,7 +94,7 @@
                     @click="withdrawNow"
                     @click.stop="show = false"
                     :disabled="disableWithdrawButtonSave"
-                    >Save2</v-btn
+                    >Save</v-btn
                 >
                     <!-- @click.stop="show=false" -->
             </v-card-actions>
@@ -125,7 +127,6 @@ export default {
   data() {
     return {
       // data for withdraw
-      availableFunds: 0,
       withrawAmount: "0.00",
       // data for deposit
       items: [{funds_source: "dividend_income", name: "Dividend Income"}, {funds_source: "deposit", name: "Fresh Funds"}],
@@ -136,23 +137,25 @@ export default {
       disableWithdrawButtonSave: true,
       hideWithdrawButton: false,
       hideDepositButton: true,
+      availableFunds: '0.00',
 
       snackbar: false,
       timeoutNotification: 10000,
     }
   },
   mounted() {
-    this.availableFunds = parseFloat(this.selectedPortfolio.balance);
+    // console.log(this.selectedPortfolio)
+    if(!this.selectedPortfolio){
+      this.availableFunds = parseFloat(this.selectedPortfolio.balance);
+      this.disableWithdrawButtonSave = true
+    }
   },
   methods: {
     renderPortfolioKey1() {
-        // console.log(this.selectedPortfolio)
         this.availableFunds = parseFloat(this.selectedPortfolio.balance);
-        console.log(this.selectedPortfolio)
-        console.log(this.renderPortfolioKey)
     },
     depositNow() {
-        console.log(parseFloat(this.enterAmount.replace(/,/g, "")),this.fundSourceModel)
+        // console.log(parseFloat(this.enterAmount.replace(/,/g, "")),this.fundSourceModel)
         const depositparams  = {
             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
             total_value: parseFloat(this.enterAmount.replace(/,/g, "")),
@@ -163,6 +166,13 @@ export default {
         .then(response => {
           if (response.success) {
             //   this.snackbar = true
+            this.quantity = '0.00',
+            this.enterAmount = '0.00',
+            this.fundSourceModel = null,
+            this.disableButtonSave = true,
+            this.disableWithdrawButtonSave = true,
+            this.hideWithdrawButton = false,
+            this.hideDepositButton = true
           }
         });
     },
@@ -176,31 +186,46 @@ export default {
         .then(response => {
           if (response.success) {
             //   this.snackbar = true
+            this.quantity = '0.00',
+            this.enterAmount = '0.00',
+            this.fundSourceModel = null,
+            this.disableButtonSave = true,
+            this.disableWithdrawButtonSave = true,
+            this.hideWithdrawButton = false,
+            this.hideDepositButton = true
           }
         });
     },
     enterAmountWatch: function(newValue) {
-        if(parseInt(this.enterAmount.replace(/,/g, "")) > 0 && this.fundSourceModel != null){
-            this.disableButtonSave = false
+        if(parseFloat(this.enterAmount.replace(/,/g, "")) > 0 && this.fundSourceModel != null && parseInt(this.availableFunds) > 0){
+          this.disableButtonSave = false
         } else {
-            this.disableButtonSave = true
+          this.disableButtonSave = true
         }
+        this.availableFunds = this.availableFunds + parseFloat(this.enterAmount.replace(/,/g, ""))
     },
     fundSourceWatch: function() {
-        if(parseInt(this.enterAmount.replace(/,/g, "")) > 0 && this.fundSourceModel != null){
-            this.disableButtonSave = false
+      if(parseFloat(this.enterAmount.replace(/,/g, "")) > 0 && this.fundSourceModel != null && parseInt(this.availableFunds) > 0){
+        this.disableButtonSave = false
         } else {
-            this.disableButtonSave = true
+          this.disableButtonSave = true
         }
     },
     withrawAmountWatch: function() {
-        if(parseInt(this.withrawAmount.replace(/,/g, "")) > 0){
-            this.disableWithdrawButtonSave = false
+      if(parseFloat(this.withrawAmount.replace(/,/g, "")) > 0 && parseInt(this.availableFunds) > 0){
+          this.disableWithdrawButtonSave = false
         } else {
-            this.disableWithdrawButtonSave = true
+          this.disableWithdrawButtonSave = true
         }
+        this.availableFunds = this.availableFunds + parseFloat(this.withrawAmount.replace(/,/g, ""))
     },
     nFormatter(num) {
+      if (num >= 1000000000000000) {
+        return (num / 1000000000000000).toFixed(2).replace(/\.0$/, "") + "Q";
+      }
+      if (num >= 1000000000000) {
+        return (num / 1000000000000).toFixed(2).replace(/\.0$/, "") + "T";
+      }
       if (num >= 1000000000) {
         return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "B";
       }

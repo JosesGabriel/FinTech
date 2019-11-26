@@ -89,6 +89,7 @@
                             class="select_portfolio mt-2 black--text" 
                             item-color="success" 
                             append-icon="mdi-chevron-down"
+                            :value="this.default_port"
                             item-text="name" 
                             item-value="id"
                             :items="portfolio" 
@@ -143,6 +144,7 @@
       return {
           portfolio: [],
           showCreatePortForm: false,
+          default_port: '0',
       }
     },
      computed: {
@@ -167,15 +169,17 @@
                    
                     let defaultPort = false;
                     for(let i=0; i< result.meta.logs.length; i++){
-                        if(result.meta.logs[i].type == 'virtual'){
+                        if(result.meta.logs[i].type == 'virtual' && result.meta.logs[i].name != 'Default Virtual Portfolio'){
                             let portfolio_params = {
                                 name: result.meta.logs[i].name,
                                 id: result.meta.logs[i].id
                             };     
                             this.portfolio.push(portfolio_params);
-                            if(result.meta.logs[i].name == 'Default Virtual Portfolio'){
+                            if(result.meta.logs[i].name == 'My Virtual Portfolio'){
                                 this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                                this.default_port = result.meta.logs[i].id;
                                 defaultPort = true;
+                                console.log('default port ->'+ this.default_port);
                             }
                         }
                         
@@ -185,7 +189,7 @@
                         const createportfolioparams = {
                                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
                                 currency_code: "PHP",
-                                name: 'Default Virtual Portfolio',
+                                name: 'My Virtual Portfolio',
                                 description: "My Virtual Portfolio",
                                 type: "virtual",
                                 balance: 100000
