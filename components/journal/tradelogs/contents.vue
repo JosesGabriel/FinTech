@@ -38,13 +38,14 @@
           dark
           class="data_table-container pl-10 secondary--text"
         >
-        <template v-slot:item.date="{ item }" >{{ item.meta.date.substring(0,8) }}</template>
         <template v-slot:item.stock_id="{ item }" >{{ item.meta.stock_id }}</template>
-        <template v-slot:item.average_price="{ item }" >{{ item.meta.average_price }}</template>
+        <!-- <template v-slot:item.date="{ item }" >{{ item.meta.date.substring(0,8) }}</template> -->
+        <!-- <template v-slot:item.stock_id="{ item }" >{{ item.meta.stock_id }}</template>
+        <template v-slot:item.average_price="{ item }" >{{ item.meta.average_price }}</template> -->
         <!-- <template v-slot:item.buy_value="{ item }" >{{ item.amount  item.meta.average_price }}</template> -->
-        <template v-slot:item.sell_price="{ item }" >{{ item.meta.sell_price }}</template>
-        <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template>
-        <template v-slot:item.action="{ item }">
+        <!-- <template v-slot:item.sell_price="{ item }" >{{ item.meta.sell_price }}</template>
+        <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template> -->
+        <!-- <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
@@ -57,7 +58,7 @@
           >
             mdi-dots-horizontal
           </v-icon>
-        </template>
+        </template> -->
         </v-data-table>
         <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
           <v-card color="transparent" class="justify-center" elevation="0">
@@ -86,6 +87,7 @@
 </template>
 <script>
 import shareModal from '~/components/modals/share'
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -117,33 +119,55 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.currentProfile) this.selectedProfile = localStorage.currentProfile;
-
-    const tradelogsparams = {
-      user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      fund: this.selectedProfile,
-    };
-    this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
-      function(result) {
-          this.tradeLogs = result.meta.logs;
-          console.log(result)
-      }.bind(this)
-    )
+    // console.log(this.defaultPortfolioId, "test")
+    // console.log(this.renderPortfolioKey, "test")
+  },
+  computed: {
+    ...mapGetters({
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey"
+    })
   },
   methods: {
+    getTradeLogs: function() {
+      const tradelogsparams = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: this.defaultPortfolioId,
+      };
+      this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+        function(result) {
+            this.tradeLogs = result.meta.logs;
+            for (let i = 0; i < this.tradeLogs.length; i++) {
+              console.log(this.tradeLogs[i].meta.stock_id, "test")
+              const params = {
+                "symbol-id": this.tradeLogs[i].meta.stock_id
+              };
+              this.$api.chart.stocks.list(params).then(
+                function(result) {
+                  this.tradeLogs[i].meta.stock_id = result.data.symbol;
+                }.bind(this)
+              );
+            }
+        }.bind(this)
+      )
+      this.componentKeys++;
+    },
     tradelogsmenuLogsShow: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
-
       tl.style.display = "block";
     },
     tradelogsmenuLogsHide: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
-
       tl.style.display = "none";
     },
     formatPrice(value) {
         let val = (value/1).toFixed(2).replace('.', '.')
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+  },
+  watch: {
+    renderPortfolioKey: function() {
+      this.getTradeLogs();
     }
   }
 }

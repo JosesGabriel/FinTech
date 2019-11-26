@@ -278,7 +278,7 @@
           </v-stepper-content>
           <v-stepper-content step="4" class="pt-2">
             <v-container class="pa-0">
-              <v-row no-gutters class="pa-3 pb-0">
+              <v-row no-gutters class="pt-3 pa-0">
                 <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
                 <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
                   <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
@@ -295,10 +295,17 @@
                     color="success"
                   ><v-icon>mdi-chevron-up</v-icon></v-btn>
                 </v-col>
-                <v-col cols="12" sm="12" md="12" class="justify-end d-flex">
-                <v-card-title class="caption pa-0 secondary--text">Board lot: {{ boardLotModel }}</v-card-title>
+                <v-col cols="12">
+                  <v-row no-gutters>
+                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                  </v-row>
                 </v-col>
-                <v-text-field v-model="totalCostSellModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
+                <v-col cols="12" class="pb-5">
+                  <v-row no-gutters>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostSellModel }}</v-card-title>
+                  </v-row>
+                </v-col>
+                <!-- <v-text-field v-model="totalCostSellModel" label="Market Value" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field> -->
                 <!-- <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar> -->
               </v-row>
             </v-container>
@@ -480,8 +487,8 @@ export default {
     buyListArray: function() {
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        position: parseInt(this.quantityModel),
-        stock_price: parseInt(this.priceModel),
+        position: parseFloat(this.quantityModel),
+        stock_price: parseFloat(this.priceModel),
         transaction_meta : {
           strategy: this.strategyModel,
           plan: this.tradeplanModel,
@@ -530,8 +537,8 @@ export default {
     sellListArray: function() {
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        position: parseInt(this.quantitySellModel),
-        stock_price: parseInt(this.priceSellModel),
+        position: parseFloat(this.quantitySellModel),
+        stock_price: parseFloat(this.priceSellModel),
         transaction_meta : {
           strategy : this.strategySellModel,
           average_price : parseInt(this.average_price),
@@ -836,9 +843,9 @@ export default {
 }
 /* datepicker */
 .datepicker-container.v-card, .datepicker-container .v-picker__body {
-  background: #00121e;
+  background: #00121e !important;
 }
 .datepicker-container .v-date-picker-title__date {
-  color: #00ffc3
+  color: #00ffc3 !important
 }
 </style>
