@@ -63,6 +63,11 @@
             <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
           </v-card>
         </v-card>
+        <v-row>
+          <v-col class="text-right font-weight-regular subtitle-2" width="100%" style="color:#fff;">
+          Total Profit/Loss as of {{date}}:<span class="ml-3" :class="(totalProfitLoss < 0 ? 'negative' : 'positive')">{{ totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span><span class="ml-2" :class="(totalProfitLoss < 0 ? 'negative' : 'positive')">{{ totalProfitLossPerf.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}%</span>
+          </v-col>
+        </v-row>
         <v-snackbar v-model="snackbar" class="black--text font-weight-bold" color="success" :timeout="timeoutNotification">
           You can only add Virtual Trade via the Trade Simulator Page.
           <v-btn color="black" class="text-capitalize font-weight-bold" text href="/trade-simulator">
@@ -119,7 +124,11 @@ export default {
       page: 1,
       pageCount: 0,
       menuShow: false,
-      componentKeys: 0
+      componentKeys: 0,
+
+      totalProfitLoss: 0,
+      totalProfitLossPerf: 0,
+      date: new Date().toISOString().substr(0, 10)
     }
   },
   mounted() {
@@ -165,6 +174,8 @@ export default {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: this.defaultPortfolioId,
       };
+      this.totalProfitLoss = 0;
+      this.totalProfitLossPerf = 0;
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
           this.portfolioLogs = result.meta.open;
@@ -177,7 +188,7 @@ export default {
             };
             this.$api.journal.portfolio.history(historyparams).then(
               function(result) {
-                console.log(this.portfolioLogs[i])
+                // console.log(this.portfolioLogs[i])
                 let portfolioLogsfinal = result.data
                 let market_value = {market_value: 0}
                 let profit = {profit: 0}
@@ -201,10 +212,11 @@ export default {
                 this.portfolioLogs[i].total_value = this.portfolioLogs[i].average_price * this.portfolioLogs[i].position
                 this.portfolioLogs[i].profit = this.portfolioLogs[i].market_value - this.portfolioLogs[i].total_value
                 this.portfolioLogs[i].perf_percentage = this.portfolioLogs[i].profit / this.portfolioLogs[i].total_value * 100
-                console.log(this.portfolioLogs[i].market_value, this.portfolioLogs[i].total_value)
                 this.portfolioLogs[i].stock_id = result.data.symbol
                 this.portfolioLogs[i].id_str = result.data.stockidstr
-                console.log(this.portfolioLogs[i])
+                this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.portfolioLogs[i].profit);
+                this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.portfolioLogs[i].perf_percentage);
+                // console.log(this.totalProfitLoss, this.portfolioLogs[i].profit)
                 this.portfolioLogsStock.push(this.portfolioLogs[i])
                 // this.portfolioLogsStock
                 

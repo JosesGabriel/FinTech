@@ -174,7 +174,7 @@
                   <v-text-field v-model="priceModel" label="Buy Price" placeholder="Enter Buy Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
-                  <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
+                  <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" type="number" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
                   <v-btn 
                       @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= 100"
                       text 
@@ -281,7 +281,7 @@
               <v-row no-gutters class="pt-3 pa-0">
                 <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
                 <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
-                  <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
+                  <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" type="number" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
                   <v-btn 
                     @click="quantitySellModel -= 100"
                     text 
