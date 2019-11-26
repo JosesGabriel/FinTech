@@ -405,6 +405,7 @@ export default {
       snackbarTimeout: 2000,
       stocklistBuy: [],
       quantityModel: null,
+      avepriceSell: null
     };
   },
   computed: {
@@ -535,13 +536,14 @@ export default {
         });
     },
     sellListArray: function() {
+      // let aveprice = parseFloat(this.quantitySellModel) / parseFloat(this.totalCostSellModel.replace(/,/g, ''))
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseFloat(this.quantitySellModel),
         stock_price: parseFloat(this.priceSellModel),
         transaction_meta : {
           strategy : this.strategySellModel,
-          average_price : parseInt(this.average_price),
+          average_price : this.avepriceSell,
           plan : this.tradeplanSellModel,
           emotion : this.emotionsSellModel,
           notes: this.notesSellModel,
@@ -552,6 +554,7 @@ export default {
         .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/sell/"+this.GetSelectStock,params)
         .then(response => {
           if (response.success) {
+            console.log(response)
             this.snackbarGo = true
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
@@ -634,6 +637,7 @@ export default {
               let findOpenPosition = this.openPosition[i]
               if(parseInt(findOpenPosition.stockid) == this.stockSymbolGet.stockid){
                 this.priceSellModel = findOpenPosition.last
+                this.avepriceSell = findOpenPosition.average_price
                 this.quantitySellModel = findOpenPosition.position
                 this.quantityModel = 0
               }
