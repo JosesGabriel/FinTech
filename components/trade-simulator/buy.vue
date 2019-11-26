@@ -132,16 +132,37 @@ export default {
     addButton(){
         this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
         let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        let addfees = this.fees(add);
         //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
-        this.totalCost = this.addcomma(add);
+        this.totalCost = this.addcomma(addfees);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));  
         let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        let minfees = this.fees(min);
         //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
-        this.totalCost = this.addcomma(min);
+        this.totalCost = this.addcomma(minfees);
+    },
+    fees(buyResult){
+            let dpartcommission = buyResult * 0.0025;
+            let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+            // TAX
+            let dtax = dcommission * 0.12;
+            // Transfer Fee
+            let dtransferfee = buyResult * 0.00005;
+            // SCCP
+            let dsccp = buyResult * 0.0001;
+            if(this.simulatorConfirmedBuySell == 'sell'){
+                let dsell = buyResult * 0.006;
+                let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+                return buyResult - dall;
+            }else {
+                let dall =  dcommission + dtax + dtransferfee + dsccp;
+                return buyResult + dall;
+            }
+                    
     },
     addcomma(n, sep, decimals) {
 	    sep = sep || "."; // Default to period as decimal separator
@@ -152,9 +173,10 @@ export default {
     },
     keypress: function(){
         let press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        let pressfees = this.fees(press);
         //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
-        this.totalCost = this.addcomma(press);
+        this.totalCost = this.addcomma(pressfees);
     },
     getBalance: function(item){
         console.log(item);

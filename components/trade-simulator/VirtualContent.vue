@@ -8,8 +8,8 @@
                         Realized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1 mb-2">
-                        <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
-                            1,000,000.00
+                        <v-col md="12" :class="(this.realized > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
+                            {{ this.realized }}
                         </v-col> 
                     </v-row>
                     
@@ -19,8 +19,8 @@
                         Unrealized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1">
-                       <v-col md="12" class="text-right pb-0 pl-0 pr-3 negative">
-                            -1,000,000.00
+                       <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3 negative">
+                           {{ this.unrealized }}
                         </v-col>
                     </v-row>
                 </v-col>
@@ -29,8 +29,8 @@
                         Port Performance %
                     </v-row>
                     <v-row class="mt-1">
-                        <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-                            100.00%
+                        <v-col md="12" :class="(this.portperf() > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
+                           {{ this.portperf() }}%
                         </v-col> 
                     </v-row>
                 </v-col>
@@ -119,12 +119,12 @@
                     style="background: #00121e;"
                 >
                     <v-container class="pa-0">
-                        <VirtualLivePortfolio/>                
+                        <VirtualLivePortfolio v-on:totalUnrealized="Unrealized"/>                
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
                     <v-container class="pa-0">
-                        <TradelogsContent/>
+                        <TradelogsContent v-on:totalRealized="Realized" />
                     </v-container>
                 </v-tab-item>
             </v-tabs>
@@ -145,7 +145,12 @@
           portfolio: [],
           showCreatePortForm: false,
           default_port: '0',
+          realized: 0,
+          unrealized: 0,
       }
+    },
+    created() {
+    
     },
      computed: {
          ...mapGetters({
@@ -158,7 +163,27 @@
             }),
             getOpenPosition (selectObj) {
                 this.setSimulatorPortfolioID(selectObj);
-            }
+            },
+            Realized(value){
+                this.realized = value;
+                //this.portperf = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
+            },
+            Unrealized(value){
+                this.unrealized = value;
+                //this.portperf = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
+            },
+            portperf(){
+                let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
+                return this.addcomma(port);
+            },
+            addcomma(n, sep, decimals) {
+                sep = sep || "."; // Default to period as decimal separator
+                decimals = decimals || 2; // Default to 2 decimals
+                return n.toLocaleString().split(sep)[0]
+                    + sep
+                    + n.toFixed(2).split(sep)[1];
+            },
+
     },
     mounted() {
         const portfolioparams = {
@@ -205,7 +230,6 @@
                   
                 }.bind(this)
             ); 
-
     },
     components: {
         VirtualLivePortfolio,
