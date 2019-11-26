@@ -41,32 +41,48 @@ export default {
   computed: {
     ...mapGetters({
       stock: "chart/stock",
-      symbolid: "chart/symbolid"
+      symbolid: "chart/symbolid",
+      index: "chart/index"
     })
   },
   methods: {
     ...mapActions({
       setStock: "chart/setStock",
-      setSymbolID: "chart/setSymbolID"
-    })
+      setSymbolID: "chart/setSymbolID",
+      setIndex: "chart/setIndex"
+    }),
+    initStock: function(symid) {
+      this.loading = "#48FFD5";
+      const params = {
+        "symbol-id": symid
+      };
+      this.$api.chart.stocks.history(params).then(response => {
+        this.data = response.data;
+        this.setIndex(parseInt(this.data.value) > 0 ? false : true);
+        this.setStock(this.data);
+        this.loading = null;
+      });
+    }
+  },
+  watch: {
+    symbolid(symid) {
+      console.log(symid);
+      this.initStock(symid);
+    },
+    index(value) {
+      //console.log("index");
+      //console.log(value);
+    }
   },
   created() {
-    this.setSymbolID("29235363595681792");
+    //this.setSymbolID("29235363595681792");
+    this.setSymbolID("29235364749115392");
   },
   mounted() {
-    const params = {
-      "symbol-id": this.symbolid
-    };
-    this.$api.chart.stocks.history(params).then(response => {
-      this.data = response.data;
-      this.setStock(this.data);
-      this.loading = null;
-    });
-
     // all stock
-    this.$api.chart.stocks.list().then(response => {
-      // console.log(response);
-    });
+    // this.$api.chart.stocks.list().then(response => {
+    // console.log(response);
+    // });
   }
 };
 </script>

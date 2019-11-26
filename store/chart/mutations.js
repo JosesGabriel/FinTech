@@ -29,5 +29,13 @@ export default {
 
   SET_BIDASK(state, data) {
     state.bidask = data;
+  },
+
+  SET_INDEX(state, data) {
+    state.index = data;
+  },
+
+  SET_TABS_SIDEBAR(state, data) {
+    state.tabs_sidebar = data;
   }
 };

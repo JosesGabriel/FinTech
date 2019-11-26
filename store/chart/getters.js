@@ -26,5 +26,12 @@ export default {
 
   bidask: state => {
     return state.bidask;
+  },
+
+  index: state => {
+    return state.index;
+  },
+  tabs_sidebar: state => {
+    return state.tabs_sidebar;
   }
 };

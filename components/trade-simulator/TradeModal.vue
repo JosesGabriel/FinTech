@@ -368,9 +368,7 @@ import { mapActions, mapGetters } from "vuex";
 
                     // if Sell is selected
                 if(this.sellSelected){
-                     console.log('sell confirmed - ' + this.avprice);
-                    
-                       
+                     console.log('sell confirmed - ' + this.avprice);      
                         if(this.avprice != 0){ // if selected stock exist in Live Portfolio
                             const sellparams = {
                                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
@@ -393,7 +391,8 @@ import { mapActions, mapGetters } from "vuex";
                                     console.log('sell success');
                                     //this.setSimulatorConfirmedBuySell('sell');
                                     this.setSimulatorOpenPosition('');
-                                     this.e1 = 1;
+                                    this.e1 = 1;
+                                    this.stock = [];
                                 }
                             });
                         }else { // if selected stock is not in the list
@@ -421,6 +420,7 @@ import { mapActions, mapGetters } from "vuex";
                                 console.log(response.message);
                                  this.setSimulatorOpenPosition('');
                                  this.e1 = 1;
+                                 this.stock = [];
                             }
                         });    
                 }
