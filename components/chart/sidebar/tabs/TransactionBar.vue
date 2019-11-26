@@ -27,20 +27,41 @@ export default {
   },
   computed: {
     ...mapGetters({
-      symbolid: "chart/symbolid"
+      symbolid: "chart/symbolid",
+      index: "chart/index"
     })
   },
+  watch: {
+    symbolid(symid) {
+      //   console.log("depthbar");
+      //   console.log(symid);
+      this.initTransbar(symid);
+    }
+  },
   mounted() {
-    const params = {
-      "symbol-id": this.symbolid,
-      entry: 5
-    };
-    // Top Depth
-    this.$api.chart.stocks.topdepth(params).then(response => {
-      const value = parseFloat(response.data.bid_total_percent).toFixed(2);
-      this.progbar.value = value;
-      this.progbar.loading = false;
-    });
+    this.initTransbar(this.symbolid);
+  },
+  methods: {
+    initTransbar: function(symid) {
+      this.progbar.loading = true;
+      this.progbar.value = 100;
+      const params = {
+        "symbol-id": symid,
+        entry: 5
+      };
+      // Top Depth
+      this.$api.chart.stocks
+        .topdepth(params)
+        .then(response => {
+          this.progbar.value = parseFloat(
+            response.data.bid_total_percent
+          ).toFixed(2);
+          this.progbar.loading = false;
+        })
+        .catch(error => {
+          // console.log(error);
+        });
+    }
   }
 };
 </script>
