@@ -393,6 +393,7 @@ import { mapActions, mapGetters } from "vuex";
                                     console.log('sell success');
                                     //this.setSimulatorConfirmedBuySell('sell');
                                     this.setSimulatorOpenPosition('');
+                                     this.e1 = 1;
                                 }
                             });
                         }else { // if selected stock is not in the list
@@ -419,6 +420,7 @@ import { mapActions, mapGetters } from "vuex";
                             if (response.success) {
                                 console.log(response.message);
                                  this.setSimulatorOpenPosition('');
+                                 this.e1 = 1;
                             }
                         });    
                 }
