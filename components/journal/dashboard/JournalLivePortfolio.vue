@@ -28,7 +28,7 @@
         <template v-slot:item.perf_percentage="{ item }" ><span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.perf_percentage) }}%</span></template>
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
-            <v-btn small class="caption" text color="success">Details</v-btn>
+            <v-btn small class="caption" text color="success" @click.stop="showTradeDetails=true">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
             <v-btn small class="caption" v-model="item" item-value="item" v-on:click="deleteLive(item.action)" text color="success">Delete</v-btn>
           </div>
@@ -78,6 +78,8 @@
         <reset-modal :visible="showResetForm" @close="showResetForm=false" />
         <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
         <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" />
+        <trade-details :visible="showTradeDetails" :author="post" @close="showTradeDetails=false" />
+        <!-- @click.stop="showResetForm=true" -->
     </v-col>
 </template>
 <script>
@@ -85,6 +87,7 @@ import resetModal from '~/components/modals/reset'
 import shareModal from '~/components/modals/share'
 import fundsModal from '~/components/modals/fund'
 import tradeView from '~/components/modals/tradeView'
+import tradeDetails from '~/components/modals/tradeDetails'
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -93,14 +96,20 @@ export default {
     shareModal,
     resetModal,
     fundsModal,
-    tradeView
+    tradeView,
+    tradeDetails
   },
   data () {
     return {
+      post: {
+        id: 1,
+        title: 'My Journey with Vue'
+      },
       showScheduleForm: false,
       showResetForm: false,
       showFundsForm: false,
       showTradeViewForm: false,
+      showTradeDetails: false,
 
       ifVirtualShow: false,
       fundsShow: false,
@@ -132,7 +141,7 @@ export default {
     }
   },
   mounted() {
-    this.getOpenPositions();
+    if(this.defaultPortfolioId != 0 ?  this.getOpenPositions() : ''); 
   },
   methods: {
     ...mapActions({
@@ -150,7 +159,7 @@ export default {
       pl.style.display = "none";
     },
     deleteLive: function(item) {
-      const deleteLogs ={
+      const deleteLogs = {
         user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
       }
       this.$axios

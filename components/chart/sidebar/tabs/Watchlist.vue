@@ -19,7 +19,7 @@
         <div class="top__left pl-2">
           <v-btn
             small
-            color="#0c1a2b"
+            color="#00121e"
             class="span__title"
             @click="setSymbolID(item.id)"
             @dblclick="showRemoveButton(item)"

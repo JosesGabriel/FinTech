@@ -149,25 +149,36 @@ export default {
       this.availableFunds = parseFloat(this.selectedPortfolio.balance);
       this.disableWithdrawButtonSave = true
     }
+    if(this.defaultPortfolioId != null ?  this.renderPortfolioKey1() : ''); 
   },
   methods: {
+    ...mapActions({
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
+    }),
     renderPortfolioKey1() {
-        this.availableFunds = parseFloat(this.selectedPortfolio.balance);
+      console.log(this.defaultPortfolioId)
+      if(this.defaultPortfolioId != null ?  this.availableFunds = parseFloat(this.selectedPortfolio.balance) : '');
     },
     depositNow() {
-        // console.log(parseFloat(this.enterAmount.replace(/,/g, "")),this.fundSourceModel)
         const depositparams  = {
             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-            total_value: parseFloat(this.enterAmount.replace(/,/g, "")),
+            total_value: parseFloat(this.enterAmount),
             action: this.fundSourceModel
         };
         this.$axios
         .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/transactions/deposit",depositparams)
         .then(response => {
           if (response.success) {
+            this.availableFunds = this.availableFunds + parseFloat(response.data.fund.balance);
+            console.log(response)
             //   this.snackbar = true
-            this.quantity = '0.00',
-            this.enterAmount = '0.00',
+            
+            this.keyCreateCounter = this.renderPortfolioKey;
+            this.keyCreateCounter++;
+            this.setRenderPortfolioKey(this.keyCreateCounter);
+            
+            this.enterAmount = 0.00,
             this.fundSourceModel = null,
             this.disableButtonSave = true,
             this.disableWithdrawButtonSave = true,
@@ -179,15 +190,19 @@ export default {
     withdrawNow() {
         const depositparams  = {
             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-            total_value: parseInt(this.withrawAmount.replace(/,/g, ""))
+            total_value: parseFloat(this.withrawAmount)
         };
         this.$axios
         .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/transactions/withdraw",depositparams)
         .then(response => {
           if (response.success) {
+            console.log(response)
             //   this.snackbar = true
-            this.quantity = '0.00',
-            this.enterAmount = '0.00',
+            this.keyCreateCounter = this.renderPortfolioKey;
+            this.keyCreateCounter++;
+            this.setRenderPortfolioKey(this.keyCreateCounter);
+            
+            this.enterAmount = 0.00,
             this.fundSourceModel = null,
             this.disableButtonSave = true,
             this.disableWithdrawButtonSave = true,
@@ -197,27 +212,27 @@ export default {
         });
     },
     enterAmountWatch: function(newValue) {
-        if(parseFloat(this.enterAmount.replace(/,/g, "")) > 0 && this.fundSourceModel != null && parseInt(this.availableFunds) > 0){
+        if(parseFloat(this.enterAmount) > 0 && this.fundSourceModel != null && parseInt(this.availableFunds) > 0){
           this.disableButtonSave = false
         } else {
           this.disableButtonSave = true
         }
-        this.availableFunds = this.availableFunds + parseFloat(this.enterAmount.replace(/,/g, ""))
+        // this.availableFunds = this.availableFunds + parseFloat(this.enterAmount.replace(/,/g, ""))
     },
     fundSourceWatch: function() {
-      if(parseFloat(this.enterAmount.replace(/,/g, "")) > 0 && this.fundSourceModel != null && parseInt(this.availableFunds) > 0){
+      if(parseFloat(this.enterAmount) > 0 && this.fundSourceModel != null && parseInt(this.availableFunds) > 0){
         this.disableButtonSave = false
         } else {
           this.disableButtonSave = true
         }
     },
     withrawAmountWatch: function() {
-      if(parseFloat(this.withrawAmount.replace(/,/g, "")) > 0 && parseInt(this.availableFunds) > 0){
+      if(parseFloat(this.withrawAmount) > 0 && parseInt(this.availableFunds) > 0){
           this.disableWithdrawButtonSave = false
         } else {
           this.disableWithdrawButtonSave = true
         }
-        this.availableFunds = this.availableFunds + parseFloat(this.withrawAmount.replace(/,/g, ""))
+        // this.availableFunds = this.availableFunds + parseFloat(this.withrawAmount.replace(/,/g, ""))
     },
     nFormatter(num) {
       if (num >= 1000000000000000) {
@@ -243,12 +258,12 @@ export default {
         this.renderPortfolioKey1();
     },
     enterAmount: function(newValue) {
-        const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const result = newValue;
         this.enterAmount = result;
         this.enterAmountWatch();
     },
     withrawAmount: function(newValue) {
-        const result = newValue.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const result = newValue;
         this.withrawAmount = result;
         this.withrawAmountWatch();
     },

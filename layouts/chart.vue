@@ -1,6 +1,6 @@
 <template>
   <!-- hello world -->
-  <v-app id="chart_body">
+  <v-app id="chart_body" class="gameGlobal">
     <Header />
     <div class="spacer__content"></div>
     <div class="content__main">
@@ -138,9 +138,23 @@ export default {
 </script>
 
 <style>
+.gameGlobal ::-webkit-scrollbar {
+  width: 5px;
+}
+.gameGlobal ::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+.gameGlobal ::-webkit-scrollbar-thumb {
+  background: #1de9b6;
+  border-radius: 20px;
+}
+.gameGlobal ::-webkit-scrollbar-thumb:hover {
+  background: #1de9b6;
+}
 #chart_body {
   background: #00121e !important;
-  font-family: 'Karla', sans-serif !important;
+  font-family: "Karla", sans-serif !important;
 }
 #button_adjustview {
   position: absolute;

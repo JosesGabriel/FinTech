@@ -17,10 +17,13 @@
 }
 .game__container {
   /* background-color: #fcfbfe; light mode color, add to vuex state soon */
-  background-color: #00121e;
+  background: radial-gradient(50% 50% at 50% 50%, #0d2641 0%, #00121e 88.54%);
 }
 .lightMode {
   background-color: #f2f2f2;
+}
+.transparent__bg {
+  background-color: transparent !important;
 }
 </style>
 

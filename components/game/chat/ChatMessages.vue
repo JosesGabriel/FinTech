@@ -1,18 +1,18 @@
 <template>
-  <v-card style="background-color: transparent;" dark :loading="loader">
+  <v-card class="transparent__bg" dark :loading="loader" flat>
     <div
       class="message__wrap pa-0"
       :class="!playerInGame ? 'message__wrap--full' : 'message__wrap--mini'"
     >
       <div v-for="n in messagesObject.length" :key="n" class="message__list">
-        <v-avatar>
+        <v-avatar size="30">
           <v-img :src="messagesObject[n - 1].AvatarUrl"></v-img>
         </v-avatar>
         <div class="message">
-          <div class="px-2 text--green">
+          <div class="px-2 text--green overline">
             {{ messagesObject[n - 1].displayName }}
           </div>
-          <p class="px-2 py-1 caption">
+          <p class="px-2 caption">
             {{ messagesObject[n - 1].messagesObject }}
           </p>
         </div>
@@ -28,19 +28,19 @@
 .message__wrap {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   padding: 15px;
   overflow: auto;
 }
 .message__wrap--full {
-  height: 603px;
+  height: calc(100vh - 199px);
 }
 .message__wrap--mini {
   height: calc(100vh - 530px);
 }
 .message__list {
   align-self: flex-start;
-  max-width: 70%;
+  max-width: 90%;
   display: inline-flex;
 }
 .message__list--me {
@@ -104,13 +104,12 @@ export default {
             var renderAvatarURL =
               "https://im.arbitrage.ph/_matrix/media/r0/thumbnail/" +
               avtURL +
-              "?width=30;height=30;method=crop";
-            this.messagesObject.push({
+              "?width=40;height=40;method=crop";
+            this.messagesObject.unshift({
               AvatarUrl: renderAvatarURL,
               displayName: usr.displayName,
               messagesObject: event.event.content.body
             });
-            // this.messagesObject = this.messagesObject.reverse(); //possibly inefficient
           }
         }.bind(this)
       );
