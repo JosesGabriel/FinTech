@@ -207,6 +207,8 @@ export default {
     this.widget = this.tvWidget = tvWidget;
 
     tvWidget.onChartReady(() => {
+      //onHeaderReady event
+      //TODO: add custom headers
       tvWidget.headerReady().then(() => {
         /*this.widgetCreateButton(
           "Click to show a notification popup",
