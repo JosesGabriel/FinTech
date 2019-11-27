@@ -210,18 +210,6 @@ export default {
                             this.portfolioLogs[i].stock_id = result.data.symbol;
                           }.bind(this)
                         ); 
-                          if(result.meta.open[i].position <= 0 && result.meta.open[i].position != null){
-                              const paramsdelete ={
-                                    user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                                  }
-                              this.$axios
-                              .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/delete/" + result.meta.open[i].stock_id, paramsdelete)
-                              .then(response => {      
-                                  if (response.success) {
-                                      console.log('delete success');
-                                  }
-                              });
-                          }
                         let buyResult = result.meta.open[i].position * parseFloat(result.meta.open[i].metas.buy_price).toFixed(2);
                         let dpartcommission = buyResult * 0.0025;
                         let dcommission = (dpartcommission > 20 ? dpartcommission : 20);

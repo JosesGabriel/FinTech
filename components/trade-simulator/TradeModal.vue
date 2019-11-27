@@ -144,7 +144,7 @@
                         <!-- -----Second View of Trade Modal----- -->
                         <v-container class="pa-5 pt-0 px-0">
                            <v-row no-gutters>
-                                <BuyTrade/>
+                                <BuyTrade :Position="dataVolume"/>
                             </v-row>
                         </v-container>
                         <v-row no-gutters>
@@ -248,6 +248,7 @@ import { mapActions, mapGetters } from "vuex";
                 disabled: false,
                 sellSelected: false,
                 buySelected: true,
+                dataVolume: 0,
             }
         },
         computed: {
@@ -326,7 +327,7 @@ import { mapActions, mapGetters } from "vuex";
                     );
             },
             btnSell(){
-                //console.log('sell - open positions -' + this.simulatorOpenPosition.length);
+                if(this.GetSelectStock != '' ? this.getDetails(this.GetSelectStock) : '');           
                 this.setSimulatorConfirmedBuySell('sell');
                 this.sellSelected = true;
                 this.buySelected = false;
@@ -463,6 +464,7 @@ import { mapActions, mapGetters } from "vuex";
                                 for(let i = 0; i < results.meta.open.length; i ++){
                                     if(selectObj == results.meta.open[i].stock_id){
                                         this.volm = this.nFormatter(results.meta.open[i].position);
+                                        this.dataVolume = results.meta.open[i].position;
                                         this.avprice = results.meta.open[i].average_price;
                                     }
                                 }
@@ -470,6 +472,7 @@ import { mapActions, mapGetters } from "vuex";
                         );
                     }else {
                         this.volm = this.nFormatter(result.data.volume);
+                        this.dataVolume = result.data.volume;
                     }
                     
                     this.setSimulatorBuyPrice(result.data.last);
