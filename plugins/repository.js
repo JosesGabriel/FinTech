@@ -23,7 +23,10 @@ export default (ctx, inject) => {
     watchlist: {
       watchlists: initApiRepository("/journal/watchlist")
     },
-    game: {}
+    game: {
+      login: initApiRepository("/game/players"),
+      ongoing: initApiRepository("/game/series/ongoing")
+    }
   };
 
   inject("api", api);

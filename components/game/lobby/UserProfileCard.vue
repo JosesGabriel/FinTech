@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="344" class="mx-auto profileCard" color="#00121e" flat dark>
+  <v-card class="mx-auto profileCard" color="#00121e" flat dark>
     <v-list-item class="pa-0">
       <v-list-item-avatar color="grey" class="ma-0" size="65px">
         <v-img

@@ -21,28 +21,30 @@
           >
             <thead>
               <tr>
-                <th class="header pr-1">
+                <th class="headers">
                   #
                 </th>
-                <th class="header pr-1">
+                <th class="headers">
                   VOL
                 </th>
-                <th class="header pr-4">
+                <th class="headers">
                   BID
                 </th>
+                <th class="headers"></th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in bids" :key="item.id" class="tr_custom">
-                <td class="column pr-1" style="width:30px;">
-                  {{ item.price | numeral("0,0.00") }}
+                <td class="column pr-1" style="width:10px;">
+                  {{ item.count | numeral("0,0") }}
                 </td>
                 <td class="column pr-1" style="width:30px;">
                   {{ item.volume | numeral("0.0a") }}
                 </td>
                 <td class="column pr-4" style="width:30px;">
-                  {{ item.count | numeral("0,0") }}
+                  {{ item.price | numeral("0,0.00") }}
                 </td>
+                <td class="column" style="width:5px;"></td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -58,15 +60,16 @@
           >
             <thead>
               <tr>
-                <th class="header pr-1">
+                <th class="headers">
                   ASK
                 </th>
-                <th class="header pr-1">
+                <th class="headers">
                   VOL
                 </th>
-                <th class="header pr-4">
+                <th class="headers">
                   #
                 </th>
+                <th class="headers"></th>
               </tr>
             </thead>
             <tbody>
@@ -77,9 +80,10 @@
                 <td class="column pr-1" style="width:30px;">
                   {{ item.volume | numeral("0.0a") }}
                 </td>
-                <td class="column pr-4" style="width:30px;">
+                <td class="column pr-4" style="width:10px;">
                   {{ item.count | numeral("0,0") }}
                 </td>
+                <td class="column" style="width:5px;"></td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -167,10 +171,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* html {
   font-size: 11px !important;
 } */
+.headers {
+  background: #00121e !important;
+  font-size: 10px !important;
+  color: #fff !important;
+  text-align: center !important;
+}
 #div__bidask {
   display: flex;
   height: 100%;

@@ -5,22 +5,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Datafeed from "~/providers/tradingview/api";
 
 export default {
   name: "TVChartContainer",
   props: {
     //region url
-     datafeedUrl: {
+    datafeedUrl: {
       default: "https://demo_feed.tradingview.com",
       type: String
     },
-     chartsStorageUrl: {
+    chartsStorageUrl: {
       default: "https://saveload.tradingview.com",
       type: String
     },
-    custom_css_url: {
+    customCssUrl: {
       default: "tradingview.css",
       type: String
     },
@@ -197,16 +197,22 @@ export default {
       user_id: this.userId,
       fullscreen: this.fullscreen,
       autosize: this.autosize,
-      custom_css_url: this.custom_css_url,
+      //custom_css_url: this.custom_css_url,
+      custom_css_url: "tradingview.css",
       timezone: this.timezone,
       theme: this.theme
+
       //endregion default
     };
 
     const tvWidget = new window.TradingView.widget(widgetOptions);
     this.widget = this.tvWidget = tvWidget;
 
+    //chart methods
     tvWidget.onChartReady(() => {
+      //! region subscribe
+      //onHeaderReady event
+      //TODO: add custom headers
       tvWidget.headerReady().then(() => {
         /*this.widgetCreateButton(
           "Click to show a notification popup",
@@ -224,6 +230,22 @@ export default {
           }
         );*/
       });
+
+      //chart onSymbolChanged event
+      const that = this;
+      tvWidget
+        .chart()
+        .onSymbolChanged()
+        .subscribe(null, (symbolInfo) => {
+          that.setSymbolID(symbolInfo.id_str);
+          
+          //TODO: call this function ralph, ito yung example nilagay ko lang dito
+          //TODO: need mo ipasa yung market_code completo, append mo
+          //TODO: <EXCHANGE>:<SYMBOL> or kunin mo sa response -> market_code
+          //TODO: author: kbaluyot
+          that.passTickerToChart("PSE:KPPI")
+        });
+      //! endregion subscribe
     });
   },
   destroyed() {
@@ -233,6 +255,24 @@ export default {
     }
   },
   methods: {
+     ...mapActions({
+      setSymbolID: "chart/setSymbolID"
+    }),
+    
+    getLanguageFromURL() {
+      const regex = new RegExp("[\\?&]lang=([^&#]*)");
+      const results = regex.exec(window.location.search);
+      return results === null
+        ? null
+        : decodeURIComponent(results[1].replace(/\+/g, " "));
+    },
+    passTickerToChart(ticker){
+      if (ticker && this.tvWidget) {
+        this.tvWidget.chart().setSymbol(ticker)
+      }
+
+      return false
+    },
     widgetCreateButton(title, content, callback, options) {
       const button = this.widget.createButton(options);
       button.setAttribute("title", title);
@@ -240,13 +280,6 @@ export default {
       button.addEventListener("click", callback);
       button.innerHTML = content;
     },
-    getLanguageFromURL() {
-      const regex = new RegExp("[\\?&]lang=([^&#]*)");
-      const results = regex.exec(window.location.search);
-      return results === null
-        ? null
-        : decodeURIComponent(results[1].replace(/\+/g, " "));
-    }
   }
 };
 </script>
