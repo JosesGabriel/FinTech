@@ -36,8 +36,17 @@
           dark
           class="data_table-container pl-10 secondary--text"
         >
+        <template v-slot:item.count="{ item }">{{ item.count }}</template>
+        <template v-slot:item.created_at="{ item }">{{ item.created_at }}</template>
+        <template v-slot:item.total_value="{ item }">{{ formatPrice(item.total_value) }}</template>
+        <template v-slot:item.balance="{ item }">{{ formatPrice(item.balance) }}</template>
+        <template slot="footer">
+          <tr class='grey lighten-2'>
+            <td colspan="3" ><strong>Mean:</strong></td>
+          </tr>
+        </template>
         <template v-slot:item.action="{ item }">
-          <div v-show="menuShow" class="sidemenu_actions" :id="`lt_${item.id}`" @mouseover="ledgermenuLogsShow(item)" @mouseleave="ledgermenuLogsHide(item)">
+          <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`lt_${item.id}`" @mouseover="ledgermenuLogsShow(item)" @mouseleave="ledgermenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
             <v-btn small class="caption" text color="success">Delete</v-btn>
@@ -78,6 +87,7 @@
 </template>
 <script>
 import shareModal from '~/components/modals/share'
+import { mapActions, mapGetters } from "vuex"
 
 export default {
   components: {
@@ -89,112 +99,59 @@ export default {
       itemsPerPage: 5,
       search: '',
       headers: [
-        { text: 'Count', value: 'Count', align: 'center', sortable: false },
-        { text: 'Date', value: 'Date', align: 'center' },
-        { text: 'Transaction', value: 'Transaction', align: 'center' },
-        { text: 'Debit', value: 'Debit', align: 'center' },
-        { text: 'Credit', value: 'Credit', align: 'center' },
-        { text: 'Balance', value: 'Balance', align: 'center' },
+        { text: 'Count', value: 'count', align: 'center', sortable: false },
+        { text: 'Date', value: 'created_at', align: 'center' },
+        { text: 'Transaction', value: 'transaction', align: 'center' },
+        { text: 'Debit', value: 'Debit', align: 'right' },
+        { text: 'Credit', value: 'total_value', align: 'right' },
+        { text: 'Balance', value: 'balance', align: 'right' },
         { text: '', value: 'action', sortable: false, align: 'right' },
       ],
-      ledgerContent: [
-        {
-          id: 1,
-          Count: 'BDO',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 2,
-          Count: '2GO',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 3,
-          Count: '8990P',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 4,
-          Count: 'AB',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 5,
-          Count: 'ABA',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 6,
-          Count: 'ABG',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 7,
-          Count: 'ABS',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 8,
-          Count: 'ABSP',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 9,
-          Count: 'AC',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-        {
-          id: 10,
-          Count: 'ACE',
-          Date: 159,
-          Transaction: 6.0,
-          Debit: 24,
-          Credit: 4.0,
-          Balance: '1%',
-        },
-      ],
+      ledgerContent: [],
       page: 1,
       pageCount: 0,
+      balance: 0,
       menuShow: false
     }
   },
+  computed: {
+    ...mapGetters({
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey"
+    }),
+  },
+  mounted() {
+    if(this.defaultPortfolioId != 0 ?  this.getLedgerLogs() : ''); 
+  },
   methods: {
+    getLedgerLogs() {
+      const ledgerparams = {
+          user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+	      fund: this.defaultPortfolioId
+      }
+      this.balance = 0;
+      this.count = 0;
+      this.$api.journal.portfolio.ledger(ledgerparams).then(response => {
+      this.ledgerContent = response.meta.ledger
+        for (let i = 0; i < this.ledgerContent.length; i++) {
+          let created_at_date = new Date(this.ledgerContent[i].created_at).toISOString().substr(0, 10)
+          this.ledgerContent[i].created_at = created_at_date
+
+          if(this.ledgerContent[i].action == "deposit"){
+            this.ledgerContent[i].action = "Deposit Income"
+          } else if(this.ledgerContent[i].action == "dividend_income") {
+            this.ledgerContent[i].action = "Dividend Income"
+          }
+        
+          let ledgerArray = {transaction: this.ledgerContent[i].action, balance: 0, counter: 1, count: 0}
+          this.ledgerContent[i] = {...ledgerArray,...this.ledgerContent[i]}
+          
+          this.ledgerContent[i].balance = this.balance = this.balance + parseFloat(this.ledgerContent[i].total_value);
+          this.ledgerContent[i].count = this.count = this.count + parseFloat(this.ledgerContent[i].counter);
+          console.log(this.ledgerContent[i])
+        }
+      });
+    },
     ledgermenuLogsShow: function(item) {
       let lt = document.getElementById(`lt_${item.id}`);
 
@@ -204,6 +161,18 @@ export default {
       let lt = document.getElementById(`lt_${item.id}`);
 
       lt.style.display = "none";
+    },
+    formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', '.')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    },
+  },
+  watch: {
+    renderPortfolioKey: function() {
+      this.getLedgerLogs();
+    },
+    defaultPortfolioId: function() {
+      this.getLedgerLogs();
     }
   }
 }
