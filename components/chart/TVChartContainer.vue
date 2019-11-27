@@ -5,22 +5,22 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Datafeed from "~/providers/tradingview/api";
 
 export default {
   name: "TVChartContainer",
   props: {
     //region url
-     datafeedUrl: {
+    datafeedUrl: {
       default: "https://demo_feed.tradingview.com",
       type: String
     },
-     chartsStorageUrl: {
+    chartsStorageUrl: {
       default: "https://saveload.tradingview.com",
       type: String
     },
-    custom_css_url: {
+    customCssUrl: {
       default: "tradingview.css",
       type: String
     },
@@ -228,13 +228,17 @@ export default {
       });
 
       //chart onSymbolChanged event
-      tvWidget.chart().onSymbolChanged().subscribe(null, function(symbolInfo) {
-        //TODO: ralph ito gamiton mo to query na for data sa sidebar ng chart
-        //TODO: take note na naka id_str to dapat para iwas javascript round-off
-        //TODO: @author: kbaluyot
-        
-        console.log(symbolInfo.id_str)
-      });
+      const that = this;
+      tvWidget
+        .chart()
+        .onSymbolChanged()
+        .subscribe(null, function(symbolInfo) {
+          //TODO: ralph ito gamiton mo to query na for data sa sidebar ng chart
+          //TODO: take note na naka id_str to dapat para iwas javascript round-off
+          //TODO: @author: kbaluyot
+          that.setSymbolID(symbolInfo.id_str);
+          console.log(symbolInfo.id_str);
+        });
     });
   },
   destroyed() {
@@ -244,6 +248,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setSymbolID: "chart/setSymbolID"
+    }),
     widgetCreateButton(title, content, callback, options) {
       const button = this.widget.createButton(options);
       button.setAttribute("title", title);
