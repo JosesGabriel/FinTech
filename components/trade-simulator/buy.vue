@@ -103,8 +103,18 @@ export default {
         default () {
         return ''
         }
+    },
+    Reset: {
+        default (){
+            return ''
+        }
     }
   },
+  watch: {
+      simulatorConfirmedBuySell: function () {
+       this.totalCost = 0;
+      },
+    },
     mounted() {
         const portfolioparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
@@ -127,7 +137,9 @@ export default {
                   
                 }.bind(this)
             );
-
+            this.quantity = this.Position;
+            console.log(this.Reset);
+            if(this.Reset == true ? this.totalCost = 0 : '');
     },
     methods: {
     ...mapActions({
