@@ -29,7 +29,7 @@
             <td class="column white--text text-left" style="width:40px;">
               <span>{{ props.item.symbol }}</span>
             </td>
-            <td class="column text-right" style="width:40px">
+            <td class="column text-right" style="width:35px">
               <span
                 :class="[
                   { increase: props.item.change > 0 },
@@ -40,7 +40,7 @@
                 {{ props.item.last | numeral("0.0a") }}
               </span>
             </td>
-            <td class="column text-right" style="width:50px">
+            <td class="column text-right" style="width:55px">
               <span
                 :class="[
                   { increase: props.item.change > 0 },
@@ -59,7 +59,7 @@
             <td class="column text-right" style="width:45px">
               <span class="">{{ props.item.trades | numeral("0,0") }}</span>
             </td>
-            <td class="column" style="width:10px"></td>
+            <td class="column" style="width:5px"></td>
           </tr>
         </template>
       </v-data-table>
