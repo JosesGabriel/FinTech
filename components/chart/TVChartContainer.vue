@@ -244,6 +244,20 @@ export default {
     }
   },
   methods: {
+     getLanguageFromURL() {
+      const regex = new RegExp("[\\?&]lang=([^&#]*)");
+      const results = regex.exec(window.location.search);
+      return results === null
+        ? null
+        : decodeURIComponent(results[1].replace(/\+/g, " "));
+    },
+    passTickerToChart(ticker){
+      if (ticker && this.tvWidget) {
+        this.tvWidget.chart().setSymbol(ticker)
+      }
+
+      return false
+    },
     widgetCreateButton(title, content, callback, options) {
       const button = this.widget.createButton(options);
       button.setAttribute("title", title);
@@ -251,13 +265,6 @@ export default {
       button.addEventListener("click", callback);
       button.innerHTML = content;
     },
-    getLanguageFromURL() {
-      const regex = new RegExp("[\\?&]lang=([^&#]*)");
-      const results = regex.exec(window.location.search);
-      return results === null
-        ? null
-        : decodeURIComponent(results[1].replace(/\+/g, " "));
-    }
   }
 };
 </script>
