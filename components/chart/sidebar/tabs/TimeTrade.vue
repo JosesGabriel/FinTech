@@ -46,10 +46,10 @@
             <td class="pl-2 column" style="width:50px;">
               {{ $globalMethod.limitDisplayString(item.buyer, 6) }}
             </td>
-            <td class="pl-2 column" style="width:50px;">
+            <td class="pl-2 pr-2 column text-right" style="width:50px;">
               {{ $globalMethod.limitDisplayString(item.seller, 6) }}
             </td>
-            <td class="column font-weight-bold" style="width:15px;"></td>
+            <td class="column font-weight-bold" style="width:5px;"></td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -91,7 +91,8 @@ export default {
         .trades({
           "symbol-id": symid,
           sort: "DESC",
-          broker: true
+          broker: true,
+          limit: 100
         })
         .then(response => {
           this.trades = response.data;
