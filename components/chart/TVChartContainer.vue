@@ -228,7 +228,7 @@ export default {
       });
 
       //chart onSymbolChanged event
-      tvWidget.chart().onSymbolChanged().subscribe(null, function(symbolInfo) {
+      tvWidget.chart().onSymbolChanged().subscribe(null, (symbolInfo) => {
         //TODO: ralph ito gamiton mo to query na for data sa sidebar ng chart
         //TODO: take note na naka id_str to dapat para iwas javascript round-off
         //TODO: @author: kbaluyot
