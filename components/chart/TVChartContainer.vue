@@ -206,7 +206,10 @@ export default {
     const tvWidget = new window.TradingView.widget(widgetOptions);
     this.widget = this.tvWidget = tvWidget;
 
+    //chart methods
     tvWidget.onChartReady(() => {
+      //! region subscribe
+
       //onHeaderReady event
       //TODO: add custom headers
       tvWidget.headerReady().then(() => {
@@ -232,9 +235,11 @@ export default {
         //TODO: ralph ito gamiton mo to query na for data sa sidebar ng chart
         //TODO: take note na naka id_str to dapat para iwas javascript round-off
         //TODO: @author: kbaluyot
-        
+
         console.log(symbolInfo.id_str)
       });
+
+      //! endregion subscribe
     });
   },
   destroyed() {
