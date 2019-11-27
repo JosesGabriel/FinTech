@@ -66,7 +66,7 @@ export default {
   },
   watch: {
     symbolid(symid) {
-      console.log(symid);
+      //  console.log(symid);
       this.initStock(symid);
     },
     index(value) {

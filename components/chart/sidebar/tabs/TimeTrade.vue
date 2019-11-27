@@ -115,7 +115,6 @@ export default {
   font-size: 10px !important;
 }
 .column {
-  background: #00121e !important;
   font-size: 10px !important;
   color: #bbb;
 }
@@ -135,8 +134,6 @@ export default {
 .v-data-table td,
 .v-data-table th {
   padding: 0px 0px !important;
-}
-.card__timetrade {
 }
 .sub__title {
   width: 100%;

@@ -25,13 +25,9 @@
             SYM
         </template> -->
         <template v-slot:item="props">
-          <tr class="tr_custom">
+          <tr class="tr_custom" @click="setSymbolID(props.item.stockidstr)">
             <td class="column white--text text-left" style="width:40px;">
-              <span
-                class="span__symbol"
-                @click="setSymbolID(props.item.stockidstr)"
-                >{{ props.item.symbol }}</span
-              >
+              <span>{{ props.item.symbol }}</span>
             </td>
             <td class="column text-right" style="width:40px">
               <span
@@ -83,19 +79,23 @@ export default {
         {
           text: "Symbol",
           value: "symbol",
-          class: "tr_custom header text-left"
+          class: "header text-left white--text"
         },
-        { text: "Last", value: "last", class: "tr_custom header text-right" },
+        { text: "Last", value: "last", class: "header text-right white--text" },
         {
           text: "%Change",
           value: "change",
-          class: "tr_custom header text-right"
+          class: "header text-right white--text"
         },
-        { text: "Value", value: "value", class: "tr_custom header text-right" },
+        {
+          text: "Value",
+          value: "value",
+          class: "header text-right white--text"
+        },
         {
           text: "Trades",
           value: "trades",
-          class: "tr_custom header text-right"
+          class: "header text-right white--text"
         }
       ],
       loading: "#48FFD5"
@@ -109,7 +109,8 @@ export default {
       .then(response => {
         // console.log("all stock");
         // console.log(response.data);
-        this.stocks = response.data;
+        // this.stocks = response.data
+        this.stocks = response.data.filter(data => parseInt(data.value) > 0);
         this.loading = false;
       });
   },
@@ -121,9 +122,6 @@ export default {
 };
 </script>
 <style>
-.span__symbol {
-  cursor: pointer;
-}
 .data_table-container i.v-icon.v-data-table-header__icon.mdi.mdi-arrow-up {
   display: none;
 }
@@ -132,11 +130,11 @@ export default {
 <style scoped>
 .tr_custom {
   line-height: 0.1rem !important;
+  cursor: pointer;
 }
 .header {
   background: #00121e !important;
   font-size: 10px !important;
-  color: #fff;
 }
 .column {
   /* background: #00121e !important; */
