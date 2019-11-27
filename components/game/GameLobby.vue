@@ -16,35 +16,6 @@
         <LobbyTable />
       </v-col>
       <v-col cols="3"><ChatClient /></v-col>
-      <!-- <v-col cols="9">
-        <v-container>
-          <v-row>
-            <v-col cols="4">
-              <UserProfileCard class="bordered__component" />
-            </v-col>
-            <v-col cols="8">
-              <LobbyTable class="bordered__component" />
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="4" class="pt-0 leaderBoards__column">
-              <Leaderboard class="bordered__component" />
-            </v-col>
-            <v-col cols="8" class="py-0">
-              <ChatClient />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-col>
-      <v-col cols="3">
-        <div v-if="!playerInLobby">
-          <AdCarousel class="mb-5" />
-          <AdCarousel />
-        </div>
-        <div v-if="playerInLobby">
-          <LobbySettings class="bordered__component pt-0" />
-        </div>
-      </v-col> -->
     </v-row>
   </v-container>
 </template>

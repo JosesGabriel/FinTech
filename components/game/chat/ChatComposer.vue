@@ -10,6 +10,8 @@
           rows="1"
           hide-details
           background-color="transparent"
+          no-resize
+          single-line
           @keyup.enter="sendmsg()"
         ></v-textarea>
         <v-btn icon color="success" class="mt-2" @click="sendmsg()">
