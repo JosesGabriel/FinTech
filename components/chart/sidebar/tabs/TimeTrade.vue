@@ -16,7 +16,7 @@
       >
         <thead>
           <tr>
-            <th class="pl-2 header white--text font-weight-bold">
+            <th class="pl-4 text-left header white--text font-weight-bold">
               TIME
             </th>
             <th class="header white--text font-weight-bold text-right">VOL</th>
@@ -37,7 +37,7 @@
             <td class="pl-2 column" style="width:55px;">
               {{ $moment(item.timestamp).format("hh:mm A") }}
             </td>
-            <td class="column text-right" style="width:35px;">
+            <td class="column text-right" style="width:40px;">
               {{ item.executed_volume | numeral("0.0a") }}
             </td>
             <td class="column text-right" style="width:45px;">
@@ -49,7 +49,7 @@
             <td class="pl-2 column" style="width:50px;">
               {{ $globalMethod.limitDisplayString(item.seller, 6) }}
             </td>
-            <td class="column font-weight-bold" style="width:10px;"></td>
+            <td class="column font-weight-bold" style="width:15px;"></td>
           </tr>
         </tbody>
       </v-simple-table>

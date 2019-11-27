@@ -21,13 +21,13 @@
           >
             <thead>
               <tr>
-                <th class="header pr-1">
+                <th class="headers pr-1">
                   #
                 </th>
-                <th class="header pr-1">
+                <th class="headers pr-1">
                   VOL
                 </th>
-                <th class="header pr-4">
+                <th class="headers pr-4">
                   BID
                 </th>
               </tr>
@@ -58,13 +58,13 @@
           >
             <thead>
               <tr>
-                <th class="header pr-1">
+                <th class="headers pr-1">
                   ASK
                 </th>
-                <th class="header pr-1">
+                <th class="headers pr-1">
                   VOL
                 </th>
-                <th class="header pr-4">
+                <th class="headers pr-4">
                   #
                 </th>
               </tr>
@@ -171,6 +171,12 @@ export default {
 /* html {
   font-size: 11px !important;
 } */
+.headers {
+  background: #00121e !important;
+  font-size: 10px !important;
+  color: #fff !important;
+  text-align: center !important;
+}
 #div__bidask {
   display: flex;
   height: 100%;

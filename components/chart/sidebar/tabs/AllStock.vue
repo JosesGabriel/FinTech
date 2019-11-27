@@ -11,7 +11,7 @@
       <v-data-table
         :headers="headers"
         :items="stocks"
-        class="data_table-container"
+        class="data_table-container custom_table"
         dense
         dark
         fixed-header
@@ -25,15 +25,15 @@
             SYM
         </template> -->
         <template v-slot:item="props">
-          <tr>
-            <td class="column white--text" style="width:40px;">
+          <tr class="tr_custom">
+            <td class="column white--text text-left" style="width:40px;">
               <span
                 class="span__symbol"
                 @click="setSymbolID(props.item.stockidstr)"
                 >{{ props.item.symbol }}</span
               >
             </td>
-            <td class="column text-right" style="width:35px">
+            <td class="column text-right" style="width:40px">
               <span
                 :class="[
                   { increase: props.item.change > 0 },
@@ -44,7 +44,7 @@
                 {{ props.item.last | numeral("0.0a") }}
               </span>
             </td>
-            <td class="column text-right" style="width:40px">
+            <td class="column text-right" style="width:50px">
               <span
                 :class="[
                   { increase: props.item.change > 0 },
@@ -52,7 +52,7 @@
                   { neutral: props.item.change == 0 }
                 ]"
               >
-                {{ props.item.change | numeral("0,0.00") }}
+                {{ props.item.changepercentage | numeral("0,0.00") }}
               </span>
             </td>
             <td class="column text-right" style="width:60px">
@@ -63,7 +63,7 @@
             <td class="column text-right" style="width:45px">
               <span class="">{{ props.item.trades | numeral("0,0") }}</span>
             </td>
-            <td class="column" style="width:25px"></td>
+            <td class="column" style="width:10px"></td>
           </tr>
         </template>
       </v-data-table>
@@ -80,10 +80,14 @@ export default {
     return {
       stocks: [],
       headers: [
-        { text: "Symbol", value: "symbol", class: "tr_custom header" },
+        {
+          text: "Symbol",
+          value: "symbol",
+          class: "tr_custom header text-left"
+        },
         { text: "Last", value: "last", class: "tr_custom header text-right" },
         {
-          text: "Change",
+          text: "%Change",
           value: "change",
           class: "tr_custom header text-right"
         },
