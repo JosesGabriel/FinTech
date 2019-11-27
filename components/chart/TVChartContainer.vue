@@ -211,7 +211,6 @@ export default {
     //chart methods
     tvWidget.onChartReady(() => {
       //! region subscribe
-
       //onHeaderReady event
       //TODO: add custom headers
       tvWidget.headerReady().then(() => {
@@ -237,10 +236,16 @@ export default {
       tvWidget
         .chart()
         .onSymbolChanged()
-        .subscribe(null, function(symbolInfo) {
+        .subscribe(null, (symbolInfo) => {
           that.setSymbolID(symbolInfo.id_str);
-          console.log(symbolInfo.id_str);
+          
+          //TODO: call this function ralph, ito yung example nilagay ko lang dito
+          //TODO: need mo ipasa yung market_code completo, append mo
+          //TODO: <EXCHANGE>:<SYMBOL> or kunin mo sa response -> market_code
+          //TODO: author: kbaluyot
+          that.passTickerToChart("PSE:KPPI")
         });
+      //! endregion subscribe
     });
   },
   destroyed() {
@@ -254,7 +259,7 @@ export default {
       setSymbolID: "chart/setSymbolID"
     }),
     
-     getLanguageFromURL() {
+    getLanguageFromURL() {
       const regex = new RegExp("[\\?&]lang=([^&#]*)");
       const results = regex.exec(window.location.search);
       return results === null
