@@ -183,7 +183,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #chart_body {
   background: #00121e !important;
 }

@@ -19,12 +19,8 @@
         <v-container class="pa-0">
           <v-row>
             <GameVariables />
-          </v-row>
-          <v-row>
             <RankingTable />
-          </v-row>
-          <v-row class="pt-2">
-            <ChatClient />
+            <ChatClient class="mr-5" />
           </v-row>
         </v-container>
       </v-col>

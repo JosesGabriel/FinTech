@@ -98,6 +98,13 @@ export default {
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell"
     })
   },
+  props: {
+   Position: {
+        default () {
+        return ''
+        }
+    }
+  },
     mounted() {
         const portfolioparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
@@ -129,13 +136,18 @@ export default {
         setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
         setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
-    addButton(){
-        this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
+    addButton(){      
+        if(this.simulatorConfirmedBuySell == 'sell'){
+            this.quantity = (this.Position <= this.quantity ? this.Position : this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot));      
+        }else {
+            this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
+        }
         let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
         let addfees = this.fees(add);
         //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(addfees);
+        this.$emit('totalPosition', this.quantity);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));  
@@ -144,6 +156,7 @@ export default {
         //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(minfees);
+        this.$emit('totalPosition', this.quantity);
     },
     fees(buyResult){
             let dpartcommission = buyResult * 0.0025;
@@ -172,11 +185,21 @@ export default {
 	        + n.toFixed(2).split(sep)[1];
     },
     keypress: function(){
-        let press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
-        let pressfees = this.fees(press);
-        //this.setSimulatorPositions('buy-'+this.quantity);
-        this.setSimulatorPositions(this.quantity);
-        this.totalCost = this.addcomma(pressfees);
+        let press = 0;
+        if(this.quantity > this.Position){
+            press = parseFloat(this.Position) * parseFloat(this.simulatorBuyPrice);
+            let pressfees = this.fees(press);
+            this.totalCost = this.addcomma(pressfees);
+            this.$emit('totalPosition', this.quantity);
+            return this.quantity = this.Position;
+        }else{
+            press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+            let pressfees = this.fees(press);
+            this.setSimulatorPositions(this.quantity);
+            this.totalCost = this.addcomma(pressfees);
+            this.$emit('totalPosition', this.quantity);
+        }
+        
     },
     getBalance: function(item){
         console.log(item);

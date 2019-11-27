@@ -1,30 +1,37 @@
 <template>
-  <div class="container pt-0 d-flex leaderboard__wrap">
+  <div class="container pt-0 d-flex leaderboard__wrap transparent">
     <div class="row leaderboard__header">
-      <div class="col-12"><span>Leaderboard</span></div>
+      <div class="col-12 pa-0">
+        <span class="text--green subtitle-1">Leaderboard</span>
+      </div>
     </div>
-    <div v-for="n in 9" :key="n" class="leaderboard__list row">
-      <div class="col-2 title pb-0">{{ n }}</div>
-      <div class="col-2 px-0 pt-4 pb-0">
-        <v-avatar class="profile" color="grey" size="34" tile>
+    <div v-for="n in 10" :key="n" class="leaderboard__list row mb-1">
+      <div class="col-2 title py-0">{{ n }}</div>
+      <div class="col-2 px-0 py-0 pt-1">
+        <v-avatar class="profile" color="grey" size="30">
           <v-img src="test.jpg"></v-img>
         </v-avatar>
       </div>
-      <div class="col-8 pb-0">
+      <div class="col-5 pa-0 pt-1">
         <div>Orange</div>
-        <div class="caption">
-          <span>100%</span>
-          <span class="float-right">9,999,999</span>
+        <div class="tiny-font">
+          <span>Winrate 100% | Coins 10,000</span>
         </div>
+      </div>
+      <div class="col-3">
+        <v-icon dark>mdi-flower-outline</v-icon>
       </div>
     </div>
   </div>
 </template>
 <style>
-.leaderboard__header {
+/* .leaderboard__header {
   background-color: #0c1a2b;
   color: white;
   border-bottom: 2px solid #1de9b6;
+} */
+.tiny-font {
+  font-size: 0.525rem;
 }
 .leaderboard__content {
   color: white;
@@ -35,12 +42,14 @@
   flex-direction: column;
   padding: 15px;
   overflow: auto;
-  height: calc(100vh - 448px);
+  /* height: calc(100vh - 448px); */
 }
 .leaderboard__list {
-  align-self: flex-start;
-  max-width: 70%;
+  /* align-self: flex-start; */
+  /* max-width: 70%; */
   display: inline-flex;
+  background-color: #03232f;
+  border-radius: 6px;
 }
 </style>
 <script>
