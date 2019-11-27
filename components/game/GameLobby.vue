@@ -1,7 +1,22 @@
 <template>
   <v-container class="gameLobby__container">
     <v-row>
-      <v-col cols="9">
+      <v-col cols="3 py-0 px-1">
+        <UserProfileCard class="bordered__component" />
+        <div v-if="!playerInLobby">
+          <Leaderboard class="bordered__component" />
+        </div>
+        <div v-if="playerInLobby">
+          <LobbySettings />
+        </div>
+      </v-col>
+      <v-col cols="6" class="px-0"
+        ><AdCarousel class="mb-5" />
+
+        <LobbyTable />
+      </v-col>
+      <v-col cols="3"><ChatClient /></v-col>
+      <!-- <v-col cols="9">
         <v-container>
           <v-row>
             <v-col cols="4">
@@ -29,7 +44,7 @@
         <div v-if="playerInLobby">
           <LobbySettings class="bordered__component pt-0" />
         </div>
-      </v-col>
+      </v-col> -->
     </v-row>
   </v-container>
 </template>
@@ -72,6 +87,7 @@ export default {
       playerInGame: "game/getPlayerInGame"
     })
   },
+  beforeMount: function() {},
   methods: {
     ...mapActions({
       setPlayerInLobby: "game/setPlayerInLobby",
