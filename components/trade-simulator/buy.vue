@@ -147,6 +147,7 @@ export default {
         //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(addfees);
+        this.$emit('totalPosition', this.quantity);
     },
     minusButton(){
         this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));  
@@ -155,6 +156,7 @@ export default {
         //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(minfees);
+        this.$emit('totalPosition', this.quantity);
     },
     fees(buyResult){
             let dpartcommission = buyResult * 0.0025;
@@ -188,12 +190,14 @@ export default {
             press = parseFloat(this.Position) * parseFloat(this.simulatorBuyPrice);
             let pressfees = this.fees(press);
             this.totalCost = this.addcomma(pressfees);
+            this.$emit('totalPosition', this.quantity);
             return this.quantity = this.Position;
         }else{
             press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
             let pressfees = this.fees(press);
             this.setSimulatorPositions(this.quantity);
             this.totalCost = this.addcomma(pressfees);
+            this.$emit('totalPosition', this.quantity);
         }
         
     },

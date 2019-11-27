@@ -134,6 +134,7 @@
                                 @click="e1 = 2"
                                 class="text-capitalize black--text"
                                 light
+                                :disabled="(GetSelectStock != '' ? false : true)"
                             >
                                 Continue
                             </v-btn>
@@ -144,7 +145,7 @@
                         <!-- -----Second View of Trade Modal----- -->
                         <v-container class="pa-5 pt-0 px-0">
                            <v-row no-gutters>
-                                <BuyTrade :Position="dataVolume"/>
+                                <BuyTrade :Position="dataVolume" v-on:totalPosition="totalPosition"/>
                             </v-row>
                         </v-container>
                         <v-row no-gutters>
@@ -155,6 +156,7 @@
                                 @click="nextStep"
                                 class="text-capitalize black--text ml-1"
                                 light
+                                :disabled="(this.totalposition > 0 ? false : true)"
                             >
                                 {{ (this.simulatorConfirmedBuySell == 'sell' ? 'Confirm' : 'Continue') }}
                             </v-btn>
@@ -249,6 +251,7 @@ import { mapActions, mapGetters } from "vuex";
                 sellSelected: false,
                 buySelected: true,
                 dataVolume: 0,
+                totalposition: 0,
             }
         },
         computed: {
@@ -309,6 +312,9 @@ import { mapActions, mapGetters } from "vuex";
                 this.e1 = 3;
                 }
             },
+            totalPosition(value){
+                this.totalposition = value;
+            },
             btnBuy(){
                 console.log('buy');
                 this.setSimulatorConfirmedBuySell('buy');
@@ -316,6 +322,7 @@ import { mapActions, mapGetters } from "vuex";
                 this.buySelected = true;
                 this.sellSelected = false;
                 this.stock = [];
+                this.GetSelectStock = '';
                 const params = {
                     exchange: "PSE",
                     status: "active"
@@ -332,6 +339,7 @@ import { mapActions, mapGetters } from "vuex";
                 this.sellSelected = true;
                 this.buySelected = false;
                 this.stock = [];
+                this.GetSelectStock = '';
                 for(let i = 0; i < this.simulatorOpenPosition.length; i ++){
                     const params = {
                             'symbol-id':this.simulatorOpenPosition[i]
@@ -393,7 +401,8 @@ import { mapActions, mapGetters } from "vuex";
                                     //this.setSimulatorConfirmedBuySell('sell');
                                     this.setSimulatorOpenPosition('');
                                     this.e1 = 1;
-                                    this.stock = [];
+                                    //this.stock = [];
+                                    this.GetSelectStock = '';
                                 }
                             });
                         }else { // if selected stock is not in the list
@@ -421,7 +430,8 @@ import { mapActions, mapGetters } from "vuex";
                                 console.log(response.message);
                                  this.setSimulatorOpenPosition('');
                                  this.e1 = 1;
-                                 this.stock = [];
+                                 //this.stock = [];
+                                 this.GetSelectStock = '';
                             }
                         });    
                 }
