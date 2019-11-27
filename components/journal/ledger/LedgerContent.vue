@@ -38,18 +38,14 @@
         >
         <template v-slot:item.count="{ item }">{{ item.count }}</template>
         <template v-slot:item.created_at="{ item }">{{ item.created_at }}</template>
+        <template v-slot:item.debit="{ item }">-</template>
         <template v-slot:item.total_value="{ item }">{{ formatPrice(item.total_value) }}</template>
         <template v-slot:item.balance="{ item }">{{ formatPrice(item.balance) }}</template>
-        <template slot="footer">
-          <tr class='grey lighten-2'>
-            <td colspan="3" ><strong>Mean:</strong></td>
-          </tr>
-        </template>
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`lt_${item.id}`" @mouseover="ledgermenuLogsShow(item)" @mouseleave="ledgermenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" text color="success">Delete</v-btn>
+            <!-- <v-btn small class="caption" text color="success">Delete</v-btn> -->
           </div>
           <v-icon
             small
@@ -58,6 +54,15 @@
           >
             mdi-dots-horizontal
           </v-icon>
+        </template>
+        <template slot="footer">
+          <v-row no-gutters class="mt-3">
+            <v-spacer></v-spacer>
+            <span style="width: 190px" class="text-right subtitle-2">Total Funds:</span>
+            <span style="width: 190px" class="text-right subtitle-2">0.00</span>
+            <span style="width: 190px" class="text-right subtitle-2" :class="(totalCredit < 0 ? 'negative' : 'positive')">{{ formatPrice(totalCredit) }}</span>
+            <span style="width: 190px; margin-right: 36px;" class="text-right subtitle-2"></span>
+          </v-row>
         </template>
         </v-data-table>
         <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
@@ -102,16 +107,17 @@ export default {
         { text: 'Count', value: 'count', align: 'center', sortable: false },
         { text: 'Date', value: 'created_at', align: 'center' },
         { text: 'Transaction', value: 'transaction', align: 'center' },
-        { text: 'Debit', value: 'Debit', align: 'right' },
-        { text: 'Credit', value: 'total_value', align: 'right' },
-        { text: 'Balance', value: 'balance', align: 'right' },
+        { text: 'Debit', value: 'debit', align: 'right', width: "190px" },
+        { text: 'Credit', value: 'total_value', align: 'right', width: "190px" },
+        { text: 'Balance', value: 'balance', align: 'right', width: "190px" },
         { text: '', value: 'action', sortable: false, align: 'right' },
       ],
       ledgerContent: [],
       page: 1,
       pageCount: 0,
-      balance: 0,
-      menuShow: false
+      totalCredit: 0,
+      menuShow: false,
+      date: new Date().toISOString().substr(0, 10)
     }
   },
   computed: {
@@ -121,7 +127,7 @@ export default {
     }),
   },
   mounted() {
-    if(this.defaultPortfolioId != 0 ?  this.getLedgerLogs() : ''); 
+    if(this.defaultPortfolioId != 0 ?  this.getLedgerLogs() : '');
   },
   methods: {
     getLedgerLogs() {
@@ -129,7 +135,10 @@ export default {
           user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
 	      fund: this.defaultPortfolioId
       }
+      this.totalCredit = 0;
+      this.totalDebit = 0;
       this.balance = 0;
+      this.credit = 0;
       this.count = 0;
       this.$api.journal.portfolio.ledger(ledgerparams).then(response => {
       this.ledgerContent = response.meta.ledger
@@ -148,6 +157,9 @@ export default {
           
           this.ledgerContent[i].balance = this.balance = this.balance + parseFloat(this.ledgerContent[i].total_value);
           this.ledgerContent[i].count = this.count = this.count + parseFloat(this.ledgerContent[i].counter);
+          
+          this.totalDebit = this.totalDebit + parseFloat(this.ledgerContent[i].total_value);
+          this.totalCredit = this.ledgerContent[i].balance;
           console.log(this.ledgerContent[i])
         }
       });

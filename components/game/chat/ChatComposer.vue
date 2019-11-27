@@ -14,7 +14,8 @@
           single-line
           @keyup.enter="sendmsg()"
         ></v-textarea>
-        <v-btn icon color="success" class="mt-2" @click="sendmsg()">
+        <v-divider vertical class="success" inset></v-divider>
+        <v-btn icon color="success" class="mt-2 send__btn" @click="sendmsg()">
           <v-icon>mdi-send</v-icon>
         </v-btn>
       </div>
@@ -23,7 +24,10 @@
 </template>
 <style>
 .composer__container {
-  background-color: #0c1a2b;
+  background-color: transparent;
+}
+.divider {
+  /* border-color: #1de8b6 !important; */
 }
 </style>
 <script>

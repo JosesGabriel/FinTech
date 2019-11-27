@@ -4,7 +4,7 @@
       <div class="col-8 subtitle-2 py-2" style="color: black">Lobby</div>
     </div>
     <div class="row">
-      <div class="col-12">
+      <div class="col-12 pr-0">
         <ChatMessages />
       </div>
     </div>

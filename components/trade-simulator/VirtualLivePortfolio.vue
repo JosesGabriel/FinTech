@@ -199,6 +199,7 @@ export default {
             this.totalPerf = 0;
             this.$api.journal.portfolio.open(openparams2).then(
               function(result) {
+                console.log(result);
                 this.portfolioLogs = result.meta.open;
                 for (let i = 0; i < this.portfolioLogs.length; i++) {
                         this.openposition[i] = this.portfolioLogs[i].stock_id;
@@ -222,9 +223,8 @@ export default {
                         let dsell = buyResult * 0.006;
                         let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
                         let mvalue = buyResult - dall;
-                                
-                        let profit = parseFloat(mvalue) - parseFloat(result.meta.open[i].total_value);
                         let tcost = result.meta.open[i].position * result.meta.open[i].average_price;
+                        let profit = parseFloat(mvalue) - parseFloat(tcost);
                         let perf = (profit / tcost) * 100;
                         let pos = this.addcomma(result.meta.open[i].position).split('.')[0];  
                         if(result.meta.open[i].position > 0){

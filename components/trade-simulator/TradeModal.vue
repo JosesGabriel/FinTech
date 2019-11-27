@@ -145,7 +145,7 @@
                         <!-- -----Second View of Trade Modal----- -->
                         <v-container class="pa-5 pt-0 px-0">
                            <v-row no-gutters>
-                                <BuyTrade :Position="dataVolume" v-on:totalPosition="totalPosition"/>
+                                <BuyTrade :Position="dataVolume" :Reset="onreset" v-on:totalPosition="totalPosition"/>
                             </v-row>
                         </v-container>
                         <v-row no-gutters>
@@ -250,6 +250,7 @@ import { mapActions, mapGetters } from "vuex";
                 disabled: false,
                 sellSelected: false,
                 buySelected: true,
+                onreset: false,
                 dataVolume: 0,
                 totalposition: 0,
             }
@@ -320,6 +321,7 @@ import { mapActions, mapGetters } from "vuex";
                 this.setSimulatorConfirmedBuySell('buy');
                 console.log('Fund-id ' +this.simulatorPortfolioID);
                 this.buySelected = true;
+                this.onreset = true,
                 this.sellSelected = false;
                 this.stock = [];
                 this.GetSelectStock = '';
@@ -338,6 +340,7 @@ import { mapActions, mapGetters } from "vuex";
                 this.setSimulatorConfirmedBuySell('sell');
                 this.sellSelected = true;
                 this.buySelected = false;
+                this.onreset = true,
                 this.stock = [];
                 this.GetSelectStock = '';
                 for(let i = 0; i < this.simulatorOpenPosition.length; i ++){
@@ -401,7 +404,7 @@ import { mapActions, mapGetters } from "vuex";
                                     //this.setSimulatorConfirmedBuySell('sell');
                                     this.setSimulatorOpenPosition('');
                                     this.e1 = 1;
-                                    //this.stock = [];
+                                    this.onreset = false;
                                     this.GetSelectStock = '';
                                 }
                             });
@@ -430,7 +433,7 @@ import { mapActions, mapGetters } from "vuex";
                                 console.log(response.message);
                                  this.setSimulatorOpenPosition('');
                                  this.e1 = 1;
-                                 //this.stock = [];
+                                 
                                  this.GetSelectStock = '';
                             }
                         });    

@@ -6,8 +6,8 @@
       </div>
     </div>
     <div v-for="n in 10" :key="n" class="leaderboard__list row mb-1">
-      <div class="col-2 title py-0">{{ n }}</div>
-      <div class="col-2 px-0 py-0 pt-1">
+      <div class="col-2 title py-0 pt-2">{{ n }}</div>
+      <div class="col-2 px-0 py-0 pt-2">
         <v-avatar class="profile" color="grey" size="30">
           <v-img src="test.jpg"></v-img>
         </v-avatar>
@@ -15,7 +15,7 @@
       <div class="col-5 pa-0 pt-1">
         <div>Orange</div>
         <div class="tiny-font">
-          <span>Winrate 100% | Coins 10,000</span>
+          <span style="color: #bdbdbd">Winrate 100% | Coins 10,000</span>
         </div>
       </div>
       <div class="col-3">
@@ -42,7 +42,7 @@
   flex-direction: column;
   padding: 15px;
   overflow: auto;
-  /* height: calc(100vh - 448px); */
+  height: calc(100vh - 225px);
 }
 .leaderboard__list {
   /* align-self: flex-start; */

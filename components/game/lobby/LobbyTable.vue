@@ -4,9 +4,9 @@
       dark
       :headers="playerInLobby ? headersJoined : headers"
       :items="playerInLobby ? itemsJoined : items"
-      :items-per-page="6"
-      style="background-color: #03232f; border: 1px solid #1de9b6; height: 373px"
-      class="elevation-1 lobbyTable"
+      hide-default-footer
+      height="calc(100vh - 450px)"
+      class="elevation-1 lobby__table transparent__bg"
       :footer-props="{
         disableItemsPerPage: true,
         disablePagination: true
@@ -63,11 +63,16 @@
 }
 .table__footer {
   position: relative;
-  bottom: 30px;
-  display: inline;
+  bottom: 28px;
+  display: block;
 }
 tr span {
   color: black;
+}
+.lobby__table {
+  background-color: #03232f;
+  border: 1px solid #1de9b6;
+  height: calc(100vh - 405px);
 }
 </style>
 <script>
@@ -185,14 +190,14 @@ export default {
           setting: "Public"
         },
         {
-          roomName: "009",
-          players: 392,
-          market: "PSE",
-          time: 98,
-          charts: 0,
-          coinbet: "200",
+          roomName: "007",
+          players: 356,
+          market: "CRYPTO",
+          time: 49,
+          charts: 3.9,
+          coinbet: "160",
           potMoney: "900",
-          setting: "Private"
+          setting: "Public"
         },
         {
           roomName: "008",
@@ -204,6 +209,36 @@ export default {
           potMoney: "900",
           setting: "Public"
         }
+        // {
+        //   roomName: "",
+        //   players: "",
+        //   market: "",
+        //   time: "",
+        //   charts: "",
+        //   coinbet: "",
+        //   potMoney: "",
+        //   setting: ""
+        // },
+        // {
+        //   roomName: "",
+        //   players: "",
+        //   market: "",
+        //   time: "",
+        //   charts: "",
+        //   coinbet: "",
+        //   potMoney: "",
+        //   setting: ""
+        // },
+        // {
+        //   roomName: "",
+        //   players: "",
+        //   market: "",
+        //   time: "",
+        //   charts: "",
+        //   coinbet: "",
+        //   potMoney: "",
+        //   setting: ""
+        // }
       ],
       headersJoined: [
         {
@@ -283,7 +318,7 @@ export default {
     ...mapGetters({
       playerInLobby: "game/getPlayerInLobby",
       playerIsHost: "game/getPlayerIsHost"
-    }),
+    })
     // gray: function() {
     //   this.gray = n;
     //   return this.gray;

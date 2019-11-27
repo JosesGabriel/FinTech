@@ -50,7 +50,7 @@
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" text color="success">Delete</v-btn>
+            <v-btn small class="caption" text color="success" v-model="item" item-value="item" v-on:click="deleteLive(item.id)">Delete</v-btn>
           </div>
           <v-icon
             small
@@ -142,6 +142,22 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       // setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
+    deleteLive: function(item) {
+      console.log(item)
+      const deleteLogs = {
+        user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      }
+      this.$axios
+      .$post(process.env.JOURNAL_API_URL + "/journal/funds/tradelog/delete/"+ item, deleteLogs)
+      .then(response => {      
+          if (response.success) {
+              console.log(response)
+              this.keyCreateCounter = this.renderPortfolioKey;
+              this.keyCreateCounter++;
+              this.setRenderPortfolioKey(this.keyCreateCounter);
+          }
+      });
+    },
     getTradeLogs() {
       console.log(this.defaultPortfolioId)
       console.log(this.renderPortfolioKey)
@@ -156,6 +172,9 @@ export default {
             this.totalProfitLoss = 0;
             this.totalProfitLossPerf = 0;
             for (let i = 0; i < this.tradeLogs.length; i++) {
+              // this.tradeLogs[i].meta.stock_id
+              // console.log(this.tradeLogs[i])
+              // this.tradeLogs[i].action = this.tradelogs
               const params = {
                 "symbol-id": this.tradeLogs[i].meta.stock_id
               };
