@@ -152,6 +152,10 @@ export default {
     if(this.defaultPortfolioId != null ?  this.renderPortfolioKey1() : ''); 
   },
   methods: {
+    ...mapActions({
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
+    }),
     renderPortfolioKey1() {
       console.log(this.defaultPortfolioId)
       if(this.defaultPortfolioId != null ?  this.availableFunds = parseFloat(this.selectedPortfolio.balance) : '');
@@ -169,6 +173,11 @@ export default {
             this.availableFunds = this.availableFunds + parseFloat(response.data.fund.balance);
             console.log(response)
             //   this.snackbar = true
+            
+            this.keyCreateCounter = this.renderPortfolioKey;
+            this.keyCreateCounter++;
+            this.setRenderPortfolioKey(this.keyCreateCounter);
+            
             this.enterAmount = 0.00,
             this.fundSourceModel = null,
             this.disableButtonSave = true,
@@ -189,6 +198,10 @@ export default {
           if (response.success) {
             console.log(response)
             //   this.snackbar = true
+            this.keyCreateCounter = this.renderPortfolioKey;
+            this.keyCreateCounter++;
+            this.setRenderPortfolioKey(this.keyCreateCounter);
+            
             this.enterAmount = 0.00,
             this.fundSourceModel = null,
             this.disableButtonSave = true,
