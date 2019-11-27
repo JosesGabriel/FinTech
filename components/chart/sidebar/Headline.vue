@@ -25,7 +25,7 @@
               { increase: changetype == 1 },
               { decrease: changetype == 2 }
             ]"
-            >{{ stock.change | numeral("0.00") }}%({{
+            >{{ stock.change | numeral("0.00") }} ({{
               stock.changepercentage | numeral("0.00")
             }}%)</span
           >

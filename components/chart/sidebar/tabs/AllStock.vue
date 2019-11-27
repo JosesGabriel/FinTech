@@ -11,7 +11,7 @@
       <v-data-table
         :headers="headers"
         :items="stocks"
-        class="data_table-container"
+        class="data_table-container custom_table"
         dense
         dark
         fixed-header
@@ -25,13 +25,9 @@
             SYM
         </template> -->
         <template v-slot:item="props">
-          <tr>
-            <td class="column white--text" style="width:40px;">
-              <span
-                class="span__symbol"
-                @click="setSymbolID(props.item.stockidstr)"
-                >{{ props.item.symbol }}</span
-              >
+          <tr class="tr_custom" @click="setSymbolID(props.item.stockidstr)">
+            <td class="column white--text text-left" style="width:40px;">
+              <span>{{ props.item.symbol }}</span>
             </td>
             <td class="column text-right" style="width:35px">
               <span
@@ -44,7 +40,7 @@
                 {{ props.item.last | numeral("0.0a") }}
               </span>
             </td>
-            <td class="column text-right" style="width:40px">
+            <td class="column text-right" style="width:55px">
               <span
                 :class="[
                   { increase: props.item.change > 0 },
@@ -52,7 +48,7 @@
                   { neutral: props.item.change == 0 }
                 ]"
               >
-                {{ props.item.change | numeral("0,0.00") }}
+                {{ props.item.changepercentage | numeral("0,0.00") }}
               </span>
             </td>
             <td class="column text-right" style="width:60px">
@@ -63,7 +59,7 @@
             <td class="column text-right" style="width:45px">
               <span class="">{{ props.item.trades | numeral("0,0") }}</span>
             </td>
-            <td class="column" style="width:25px"></td>
+            <td class="column" style="width:5px"></td>
           </tr>
         </template>
       </v-data-table>
@@ -80,18 +76,26 @@ export default {
     return {
       stocks: [],
       headers: [
-        { text: "Symbol", value: "symbol", class: "tr_custom header" },
-        { text: "Last", value: "last", class: "tr_custom header text-right" },
         {
-          text: "Change",
-          value: "change",
-          class: "tr_custom header text-right"
+          text: "Symbol",
+          value: "symbol",
+          class: "header text-left white--text"
         },
-        { text: "Value", value: "value", class: "tr_custom header text-right" },
+        { text: "Last", value: "last", class: "header text-right white--text" },
+        {
+          text: "%Change",
+          value: "change",
+          class: "header text-right white--text"
+        },
+        {
+          text: "Value",
+          value: "value",
+          class: "header text-right white--text"
+        },
         {
           text: "Trades",
           value: "trades",
-          class: "tr_custom header text-right"
+          class: "header text-right white--text"
         }
       ],
       loading: "#48FFD5"
@@ -105,7 +109,8 @@ export default {
       .then(response => {
         // console.log("all stock");
         // console.log(response.data);
-        this.stocks = response.data;
+        // this.stocks = response.data
+        this.stocks = response.data.filter(data => parseInt(data.value) > 0);
         this.loading = false;
       });
   },
@@ -117,9 +122,6 @@ export default {
 };
 </script>
 <style>
-.span__symbol {
-  cursor: pointer;
-}
 .data_table-container i.v-icon.v-data-table-header__icon.mdi.mdi-arrow-up {
   display: none;
 }
@@ -128,11 +130,11 @@ export default {
 <style scoped>
 .tr_custom {
   line-height: 0.1rem !important;
+  cursor: pointer;
 }
 .header {
   background: #00121e !important;
   font-size: 10px !important;
-  color: #fff;
 }
 .column {
   /* background: #00121e !important; */

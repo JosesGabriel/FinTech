@@ -2,28 +2,21 @@
   <v-content>
     <v-card dark class="pa-0 ma-0">
       <v-tabs
-        v-model="tab"
+        v-model="active_tab"
         color="#48ffd5"
         background-color="#00121e"
         grow
         dark
         height="35"
       >
-        <!-- <v-tab
-          v-for="item in items"
+        <v-tab
+          v-for="item in tabs_sidebar"
           :key="item.component"
-          :disabled="item.disabled"
+          :href="`#tab-${item.id}`"
+          :disabled="item.id == 1 && first_load == true"
         >
           <v-icon>{{ item.icon }}</v-icon>
-        </v-tab> -->
-
-        <v-tab :href="`#tab-1`" :disabled="index"
-          ><v-icon>mdi-cash-usd-outline</v-icon></v-tab
-        >
-        <v-tab :href="`#tab-2`"
-          ><v-icon>mdi-format-list-bulleted-square</v-icon></v-tab
-        >
-        <v-tab :href="`#tab-3`"><v-icon>mdi-card-search-outline</v-icon></v-tab>
+        </v-tab>
 
         <v-tab-item
           v-for="item in tabs_sidebar"
@@ -56,13 +49,15 @@ export default {
   data() {
     return {
       color: "#00121e",
-      tab: null
+      active_tab: "tab-2",
+      first_load: true
     };
   },
   computed: {
     ...mapGetters({
       tabs_sidebar: "chart/tabs_sidebar",
-      index: "chart/index"
+      index: "chart/index",
+      symbolid: "chart/symbolid"
     })
   },
   methods: {
@@ -71,8 +66,10 @@ export default {
     })
   },
   watch: {
-    index(value) {
+    symbolid(value) {
       //console.log(value);
+      this.active_tab = "tab-1";
+      this.first_load = false;
     }
   }
 };
