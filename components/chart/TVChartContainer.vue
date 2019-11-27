@@ -238,9 +238,6 @@ export default {
         .chart()
         .onSymbolChanged()
         .subscribe(null, function(symbolInfo) {
-          //TODO: ralph ito gamiton mo to query na for data sa sidebar ng chart
-          //TODO: take note na naka id_str to dapat para iwas javascript round-off
-          //TODO: @author: kbaluyot
           that.setSymbolID(symbolInfo.id_str);
           console.log(symbolInfo.id_str);
         });
