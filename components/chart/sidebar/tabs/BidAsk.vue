@@ -167,8 +167,8 @@ export default {
     }
   },
   mounted() {
-    this.initBidask("29235363595681792");
-    //this.initBidask(this.symbolid);
+    //this.initBidask("29235363595681792");
+    this.initBidask(this.symbolid);
   }
 };
 </script>
