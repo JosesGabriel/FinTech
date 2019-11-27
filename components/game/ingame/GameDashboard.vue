@@ -77,7 +77,7 @@
         </v-container>
       </v-col>
       <!-- <v-col cols="1"></v-col> -->
-      <v-col class="pa-0 ml-6 controller__wrapper" cols="3">
+      <v-col class="pa-0 controller__wrapper" cols="3">
         <GameController />
       </v-col>
     </v-row>
