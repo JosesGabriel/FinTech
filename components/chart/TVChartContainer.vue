@@ -197,9 +197,11 @@ export default {
       user_id: this.userId,
       fullscreen: this.fullscreen,
       autosize: this.autosize,
-      custom_css_url: this.custom_css_url,
+      //custom_css_url: this.custom_css_url,
+      custom_css_url: "tradingview.css",
       timezone: this.timezone,
       theme: this.theme
+
       //endregion default
     };
 
