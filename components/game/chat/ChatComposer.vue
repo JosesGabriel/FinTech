@@ -10,6 +10,7 @@
           rows="1"
           hide-details
           background-color="transparent"
+          @keyup.enter="sendmsg()"
         ></v-textarea>
         <v-btn icon color="success" class="mt-2" @click="sendmsg()">
           <v-icon>mdi-send</v-icon>
@@ -40,13 +41,16 @@ export default {
   },
   methods: {
     sendmsg() {
-      var content = {
-        body: this.textarea,
-        msgtype: "m.notice"
-      };
-      client.sendEvent(roomID, "m.room.message", content, "", (err, res) => {
-        console.log(err);
-      });
+      if (this.textarea != "") {
+        var content = {
+          body: this.textarea,
+          msgtype: "m.notice"
+        };
+        client.sendEvent(roomID, "m.room.message", content, "", (err, res) => {
+          console.log(err);
+        });
+      }
+      this.textarea = "";
     },
     x() {
       client

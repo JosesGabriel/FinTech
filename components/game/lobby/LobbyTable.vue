@@ -15,7 +15,7 @@
       <template v-slot:item="props">
         <tr @click="selectRoom(props.item)">
           <td
-            v-for="n in Object.keys(props.item).length"
+            v-for="(n, index) in Object.keys(props.item).length"
             :key="n"
             class="text-center"
           >
@@ -75,6 +75,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      selectedRoom: [],
       dialog: false,
       itemKey: "",
       headers: [
@@ -282,7 +283,11 @@ export default {
     ...mapGetters({
       playerInLobby: "game/getPlayerInLobby",
       playerIsHost: "game/getPlayerIsHost"
-    })
+    }),
+    // gray: function() {
+    //   this.gray = n;
+    //   return this.gray;
+    // }
   },
   methods: {
     ...mapActions({
@@ -294,7 +299,8 @@ export default {
     },
     selectRoom(a) {
       if (!this.playerInLobby) {
-        alert(Object.values(a));
+        this.selectedRoom = Object.values(a);
+        console.log(this.selectedRoom[0]);
       }
     }
   }
