@@ -4,9 +4,8 @@
       dark
       :headers="playerInLobby ? headersJoined : headers"
       :items="playerInLobby ? itemsJoined : items"
-      :items-per-page="10"
-      height="230px"
-      style="background-color: transparent"
+      :items-per-page="6"
+      style="background-color: #03232f; border: 1px solid #1de9b6; height: 373px"
       class="elevation-1 lobbyTable"
       :footer-props="{
         disableItemsPerPage: true,
@@ -37,43 +36,23 @@
         >Join Game</v-btn
       >
 
-      <v-btn small outlined color="success" @click.stop="dialog = true"
+      <v-btn
+        small
+        outlined
+        color="success"
+        @click="
+          dialog = false;
+          joinLobby();
+          setPlayerIsHost(true);
+        "
         >Create Game</v-btn
       >
-      <v-dialog v-model="dialog" max-width="290">
-        <v-card dark color="#0c1a2b">
-          <v-card-actions>
-            <v-btn
-              color="success"
-              outlined
-              @click="
-                dialog = false;
-                joinLobby();
-              "
-            >
-              Single Player
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="success"
-              outlined
-              @click="
-                dialog = false;
-                joinLobby();
-                setPlayerIsHost(true);
-              "
-            >
-              Multiplayer
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </div>
   </div>
 </template>
 <style>
 .tableHeader {
-  background-color: #0c1a2b;
+  background-color: #1de9b6;
 }
 .v-data-footer__select {
   display: none;
@@ -87,6 +66,9 @@
   bottom: 30px;
   display: inline;
 }
+tr span {
+  color: black;
+}
 </style>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -97,7 +79,7 @@ export default {
       itemKey: "",
       headers: [
         {
-          text: "ROOM #",
+          text: "ROOM ID",
           align: "center",
           value: "roomName",
           class: "tableHeader"
@@ -122,13 +104,13 @@ export default {
           class: "tableHeader"
         },
         {
-          text: "COIN BET",
+          text: "STAKE",
           align: "center",
           value: "coinbet",
           class: "tableHeader"
         },
         {
-          text: "POT MONEY",
+          text: "POT",
           align: "center",
           value: "potMoney",
           class: "tableHeader"

@@ -8,11 +8,9 @@
     show-arrows-on-hover
   >
     <v-carousel-item v-for="(slide, i) in slides" :key="i">
-      <v-sheet :color="colors[i]" height="100%">
-        <v-row class="fill-height" align="center" justify="center">
-          <div class="title-2 text-center">{{ slide }}</div>
-        </v-row>
-      </v-sheet>
+      <v-img
+        src="http://cms.egg.network/media/images/69409370_2223754717747222_162318058340220928_n.original.jpg"
+      ></v-img>
     </v-carousel-item>
   </v-carousel>
 </template>
@@ -27,7 +25,7 @@ export default {
         "red lighten-1",
         "deep-purple accent-4"
       ],
-      slides: [" 13th month ", "Second", "Third"]
+      slides: [" 13th month "]
     };
   }
 };

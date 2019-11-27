@@ -187,9 +187,8 @@ export default {
           take_profit: this.takeProfitModel,
           stop_loss: this.stopLossModel
         };
-        this.$axios
-          .$post(process.env.DEV_API_URL + "/journal/watchlist", params)
-          .then(response => {
+        this.$api.watchlist.watchlists.create(params).then(
+          function(response) {
             this.watchCardModalLoading = false;
             if (response.success) {
               this.watchList__alert = true;
@@ -205,7 +204,8 @@ export default {
               this.post__responseMsg = response.message;
               this.watchList__alertState = false;
             }
-          });
+          }.bind(this)
+        );
       } else {
         this.watchCardModalLoading = false;
         this.watchList__alert = true;
