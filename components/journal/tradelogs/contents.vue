@@ -40,12 +40,12 @@
         >
         <template v-slot:item.stock_id="{ item }" >{{ item.stock_id }}</template>
         <template v-slot:item.date="{ item }" >{{ item.meta.date }}</template>
-        <template v-slot:item.average_price="{ item }" >{{ formatPrice(item.meta.average_price) }}</template>
+        <template v-slot:item.average_price="{ item }" >{{ formatAvePrice(item.meta.average_price) }}</template>
         <template v-slot:item.buy_value="{ item }" >{{ formatPrice(item.meta.buy_value) }}</template>
         <template v-slot:item.sell_price="{ item }" >{{ formatPrice(item.meta.sell_price) }}</template>
         <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template>
-        <template v-slot:item.profit_loss="{ item }" >{{ formatPrice(item.meta.profit_loss) }}</template>
-        <template v-slot:item.profit_loss_percentage="{ item }" >{{ formatPrice(item.meta.profit_loss_percentage) }}%</template>
+        <template v-slot:item.profit_loss="{ item }" ><span :class="item.meta.profit_loss > 0 ? 'positive' : item.meta.profit_loss < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.meta.profit_loss) }}</span></template>
+        <template v-slot:item.profit_loss_percentage="{ item }" ><span :class="item.meta.profit_loss_percentage > 0 ? 'positive' : item.meta.profit_loss_percentage < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.meta.profit_loss_percentage) }}%</span></template>
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
@@ -83,6 +83,11 @@
             <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
           </v-card>
         </v-card>
+        <v-row>
+          <v-col class="text-right font-weight-regular subtitle-2" width="100%" style="color:#fff;">
+          Total Profit/Loss as of {{date}}:<span class="ml-3" :class="(totalProfitLoss < 0 ? 'negative' : 'positive')">{{ totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span><span class="ml-2" :class="(totalProfitLoss < 0 ? 'negative' : 'positive')">{{ totalProfitLossPerf.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}%</span>
+          </v-col>
+        </v-row>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
 </template>
@@ -116,41 +121,14 @@ export default {
       pageCount: 0,
       menuShow: false,
 
-      selectedProfile: null
+      selectedProfile: null,
+      date: new Date().toISOString().substr(0, 10),
+      totalProfitLoss: 0,
+      totalProfitLossPerf: 0
     }
   },
   mounted() {
-    console.log(this.defaultPortfolioId)
-    console.log(this.renderPortfolioKey)
-    const tradelogsparams = {
-      user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      fund: this.defaultPortfolioId,
-    };
-    this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
-      function(result) {
-          this.tradeLogs = result.meta.logs;
-          for (let i = 0; i < this.tradeLogs.length; i++) {
-            const params = {
-              "symbol-id": this.tradeLogs[i].meta.stock_id
-            };
-            this.$api.chart.stocks.list(params).then(
-              function(result) {
-              this.tradeLogs[i].stock_id = result.data.symbol;
-              let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount
-              let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}
-              this.tradeLogs[i].meta = {...average_price}
-              
-              this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value
-              this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100
-
-              // console.log(this.tradeLogs[i].meta.profit_loss, this.tradeLogs[i].buy_value)
-              // this.tradeLogs[i].meta = {profit_loss: profit_loss}
-              }.bind(this)
-            );
-          }
-      }.bind(this)
-    )
-    this.componentKeys++;
+    if(this.defaultPortfolioId != 0 ?  this.getTradeLogs() : ''); 
   },
   computed: {
     ...mapGetters({
@@ -165,6 +143,43 @@ export default {
       // setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
     getTradeLogs() {
+      console.log(this.defaultPortfolioId)
+      console.log(this.renderPortfolioKey)
+      const tradelogsparams = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: this.defaultPortfolioId,
+      };
+      this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+        function(result) {
+            this.tradeLogs = result.meta.logs;
+            
+            this.totalProfitLoss = 0;
+            this.totalProfitLossPerf = 0;
+            for (let i = 0; i < this.tradeLogs.length; i++) {
+              const params = {
+                "symbol-id": this.tradeLogs[i].meta.stock_id
+              };
+              this.$api.chart.stocks.list(params).then(
+                function(result) {
+                this.tradeLogs[i].stock_id = result.data.symbol;
+                let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount
+                let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}
+                this.tradeLogs[i].meta = {...average_price}
+                
+                this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value
+                this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100
+
+                
+                this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
+                this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
+                // console.log(this.tradeLogs[i].meta.profit_loss, this.tradeLogs[i].buy_value)
+                // this.tradeLogs[i].meta = {profit_loss: profit_loss}
+                }.bind(this)
+              );
+            }
+        }.bind(this)
+      )
+      this.componentKeys++;
     },
     tradelogsmenuLogsShow: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
@@ -175,12 +190,19 @@ export default {
       tl.style.display = "none";
     },
     formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', '.')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    },
+    formatAvePrice(value) {
         let val = (value/1).toFixed(3).replace('.', '.')
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     }
   },
   watch: {
     renderPortfolioKey: function() {
+      this.getTradeLogs();
+    },
+    defaultPortfolioId: function() {
       this.getTradeLogs();
     }
   }

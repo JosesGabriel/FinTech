@@ -178,28 +178,26 @@ export default {
       this.watchCardModalLoading = "primary";
       const index = this.userStockData.indexOf(item);
       if (confirm("Are you sure you want to delete this item?")) {
-        this.$axios
-          .$delete(
-            process.env.DEV_API_URL +
-              "/journal/watchlist/" +
-              this.userWatchedStocks[index].id
-          )
-          .then(response => {
-            if (response.success) {
-              this.watchList__alert = true;
-              this.post__responseMsg = response.message;
-              this.watchList__alertState = true;
-              this.watchCardModalLoading = false;
-              this.keyCounter = this.renderChartKey;
-              this.keyCounter++;
-              this.setRenderChartKey(this.keyCounter);
-              this.userStockData.splice(index, 1);
-            } else {
-              this.watchList__alert = true;
-              this.post__responseMsg = response.message;
-              this.watchList__alertState = false;
-            }
-          });
+        this.$api.watchlist.watchlists
+          .delete(this.userWatchedStocks[index].id)
+          .then(
+            function(response) {
+              if (response.success) {
+                this.watchList__alert = true;
+                this.post__responseMsg = response.message;
+                this.watchList__alertState = true;
+                this.watchCardModalLoading = false;
+                this.keyCounter = this.renderChartKey;
+                this.keyCounter++;
+                this.setRenderChartKey(this.keyCounter);
+                this.userStockData.splice(index, 1);
+              } else {
+                this.watchList__alert = true;
+                this.post__responseMsg = response.message;
+                this.watchList__alertState = false;
+              }
+            }.bind(this)
+          );
       }
     },
 

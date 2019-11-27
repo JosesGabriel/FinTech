@@ -45,58 +45,68 @@ export default {
     })
   },
   beforeMount: function() {
-    // this.$axios
-    //   .$get("https://dev-game-api.arbitrage.ph" + "/api/series/", params)
-    //   .then(response => {
-    //     this.watchListObject = response.data.watchlist;
-    //     this.setUserWatchedStocks(response.data.watchlist);
-    //     this.loadingBar = false;
-    //   });
+    this.checkPlayerAccount();
   },
   methods: {
     ...mapActions({
-      setPlayerInGame: "game/setPlayerInGame"
+      setPlayerInGame: "game/setPlayerInGame",
+      setPlayerRanking: "game/setPlayerRanking",
+      setPlayerCoins: "game/setPlayerCoins",
+      setPlayerID: "game/setPlayerID"
     }),
-    checkPlayerAccount() {
-      let playerHasAccount;
-      const params = {
-        user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
-      };
-      this.$axios
-        .$get(process.env.DEV_API_URL + "/api/game/players/", params)
+    async checkPlayerAccount() {
+      let token = localStorage["auth._token.local"];
+      this.$axios.setToken(token);
+      let playerHasAccount, playerHasOngoing, newlyRegistered;
+
+      playerHasAccount = this.loginGameAcc();
+      playerHasOngoing = this.hasOnGoing();
+
+      if ((await playerHasAccount) == false) {
+        newlyRegistered = this.registerGameAcc();
+        console.log("Newly Registered: [" + (await newlyRegistered) + "]");
+        playerHasAccount = this.loginGameAcc();
+      }
+
+      console.log("Player has account: [" + (await playerHasAccount) + "]");
+      console.log("Player is in Game: [" + (await playerHasOngoing) + "]");
+    },
+    loginGameAcc() {
+      return this.$axios
+        .$get(process.env.DEV_API_URL + "/game/players/")
         .then(response => {
           if (response.success) {
-            playerHasAccount = true;
-            console.log(playerHasAccount);
+            this.setPlayerRanking(response.data.player.ranking);
+            this.setPlayerCoins(response.data.player.coins);
+            this.setPlayerID(response.data.player.user_id);
+            return true;
           }
         })
         .catch(e => {
-          playerHasAccount = false;
-          console.log(playerHasAccount);
+          return false;
         });
-
-      // if (!this.$auth.loggedIn) {
-      // } else {
-      //   // const params = {
-      //   //   user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
-      //   // };
-      //   // this.$axios
-      //   //   .$get(process.env.DEV_API_URL + "/api/game/players/", params)
-      //   //   .then(response => {
-      //   //     this.watchListObject = response.data.watchlist;
-      //   //     this.setUserWatchedStocks(response.data.watchlist);
-      //   //     this.loadingBar = false;
-      //   //   });
-      // }
-
-      // client
-      //         .login("m.login.password", {
-      //           user: "@lerroux:im.arbitrage.ph",
-      //           password: "angelus69"
-      //         })
-      //         .then(response => {
-      //           myToken = response.access_token;
-      //         });
+    },
+    hasOnGoing() {
+      return this.$axios
+        .$get(process.env.DEV_API_URL + "/game/series/ongoing")
+        .then(response => {
+          if (response.success) {
+            return true;
+          }
+        })
+        .catch(e => {
+          return false;
+        });
+    },
+    registerGameAcc() {
+      return this.$axios
+        .$post(process.env.DEV_API_URL + "/game/players/")
+        .then(response => {
+          return true;
+        })
+        .catch(e => {
+          return false;
+        });
     }
   }
 };

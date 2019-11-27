@@ -6,7 +6,7 @@
             dark
             >
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-1`">Dashboard</v-tab>
-                <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-2`" @click="toTradelogs">Tradelogs</v-tab>
+                <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-2`">Tradelogs</v-tab>
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-3`">Ledger</v-tab>
                 <v-spacer></v-spacer>
                 <v-col sm="3" md="2" class="pa-0">
@@ -194,13 +194,6 @@ export default {
             setRenderPortfolioKey: "journal/setRenderPortfolioKey",
             setDefaultPortfolioId: "journal/setDefaultPortfolioId"
         }),
-        toTradelogs() {
-            let defaultPortfolioIds = this.defaultPortfolioId
-            this.keyCreateCounter = this.renderPortfolioKey;
-            this.keyCreateCounter++;
-            this.setRenderPortfolioKey(this.keyCreateCounter);
-            // this.setDefaultPortfolioId(this.defaultPortfolioId);
-        },
         changePortfolio(obj){
             // console.log("Selected portfolio ID" + this.portfolioDropdownModel.id)
             this.setDefaultPortfolioId(this.portfolioDropdownModel.id);

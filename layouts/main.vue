@@ -8,6 +8,12 @@
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
         <nuxt />
       </v-container>
+      <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
+        {{ alertMessage }}
+        <v-btn color="white" text @click="alert = false">
+          Close
+        </v-btn>
+      </v-snackbar>
     </v-content>
   </v-app>
 </template>
@@ -22,6 +28,12 @@
 .transparent__bg {
   background-color: transparent !important;
 }
+.text--green {
+  color: #48ffd5;
+}
+.text--red {
+  color: #ff4848;
+}
 </style>
 
 <script>
@@ -32,7 +44,10 @@ export default {
   },
   data() {
     return {
-      isLightMode: 0
+      isLightMode: 0,
+      alert: false,
+      alertState: false,
+      alertMessage: ""
     };
   },
   mounted() {
