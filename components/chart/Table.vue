@@ -19,7 +19,7 @@
         title="Maximize Table"
         @click="toggleTable"
       >
-        <v-icon>mdi-window-maximize</v-icon>
+        <v-icon class="icon-flipped-y">mdi-window-maximize</v-icon>
       </v-btn>
       <v-btn
         small

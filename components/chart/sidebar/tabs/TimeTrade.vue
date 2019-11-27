@@ -70,22 +70,38 @@ export default {
   },
   computed: {
     ...mapGetters({
-      symbolid: "chart/symbolid"
+      symbolid: "chart/symbolid",
+      index: "chart/index"
     })
   },
+  watch: {
+    symbolid(symid) {
+      //   console.log("time trade");
+      //   console.log(this.index);
+      this.initTimetrade(symid);
+    }
+  },
   mounted() {
-    // Time Trade
-    this.$api.chart.stocks
-      .trades({
-        "symbol-id": this.symbolid,
-        sort: "DESC",
-        broker: true
-      })
-      .then(response => {
-        this.trades = response.data;
-        //console.log(this.trades);
-        this.loading = false;
-      });
+    this.initTimetrade(this.symbolid);
+  },
+  methods: {
+    initTimetrade: function(symid) {
+      this.loading = "#48FFD5";
+      this.$api.chart.stocks
+        .trades({
+          "symbol-id": symid,
+          sort: "DESC",
+          broker: true
+        })
+        .then(response => {
+          this.trades = response.data;
+          //console.log(this.trades);
+          this.loading = false;
+        })
+        .catch(error => {
+          // console.log(error);
+        });
+    }
   }
 };
 </script>

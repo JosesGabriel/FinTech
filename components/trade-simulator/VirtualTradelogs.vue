@@ -183,6 +183,7 @@ export default {
             this.tradeLogs[i].action = result.meta.logs[i].id;
 
           }
+            this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
       }.bind(this)
     );
 
