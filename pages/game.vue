@@ -72,8 +72,8 @@ export default {
       console.log("Player is in Game: [" + (await playerHasOngoing) + "]");
     },
     loginGameAcc() {
-      return this.$axios
-        .$get(process.env.DEV_API_URL + "/game/players/")
+      return this.$api.game.login
+        .index()
         .then(response => {
           if (response.success) {
             this.setPlayerRanking(response.data.player.ranking);
@@ -87,8 +87,8 @@ export default {
         });
     },
     hasOnGoing() {
-      return this.$axios
-        .$get(process.env.DEV_API_URL + "/game/series/ongoing")
+      return this.$api.game.ongoing
+        .index()
         .then(response => {
           if (response.success) {
             return true;
@@ -99,8 +99,8 @@ export default {
         });
     },
     registerGameAcc() {
-      return this.$axios
-        .$post(process.env.DEV_API_URL + "/game/players/")
+      return this.$api.game.login
+        .$create()
         .then(response => {
           return true;
         })

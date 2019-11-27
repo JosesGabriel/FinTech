@@ -28,7 +28,7 @@
 .message__wrap {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   padding: 15px;
   overflow: auto;
 }
@@ -105,12 +105,11 @@ export default {
               "https://im.arbitrage.ph/_matrix/media/r0/thumbnail/" +
               avtURL +
               "?width=30;height=30;method=crop";
-            this.messagesObject.push({
+            this.messagesObject.unshift({
               AvatarUrl: renderAvatarURL,
               displayName: usr.displayName,
               messagesObject: event.event.content.body
             });
-            // this.messagesObject = this.messagesObject.reverse(); //possibly inefficient
           }
         }.bind(this)
       );

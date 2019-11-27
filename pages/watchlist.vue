@@ -22,8 +22,8 @@
               indeterminate
             ></v-progress-circular>
           </div>
-          <div style="display: flex;justify-content: flex-end;" class="mb-2">
-            <div style="display: flex;">
+          <div class="mb-2 d-flex justify-end">
+            <div class="d-flex">
               <AddWatcherModal v-if="!loadingBar" />
               <EditDeleteWatcherModal v-if="!loadingBar" />
             </div>
