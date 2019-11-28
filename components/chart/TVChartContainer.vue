@@ -320,11 +320,11 @@ export default {
 
 .chartViewClass_5 {
   /* maximize open ticker */
-  height: calc(100vh - 502px);
+  height: calc(100vh - 402px);
 }
 .chartViewClass_6 {
   /* maximize close ticker */
-  height: calc(100vh - 452px);
+  height: calc(100vh - 352px);
 }
 
 .chartViewClass_7 {

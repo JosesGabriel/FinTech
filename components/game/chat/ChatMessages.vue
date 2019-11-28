@@ -1,5 +1,10 @@
 <template>
-  <v-card class="transparent__bg" dark :loading="loader" flat>
+  <v-card
+    class="transparent__bg"
+    :dark="lightSwitch == 0 ? false : true"
+    :loading="loader"
+    flat
+  >
     <div
       class="message__wrap pa-0"
       :class="!playerInGame ? 'message__wrap--full' : 'message__wrap--mini'"
@@ -64,7 +69,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      playerInGame: "game/getPlayerInGame"
+      playerInGame: "game/getPlayerInGame",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {

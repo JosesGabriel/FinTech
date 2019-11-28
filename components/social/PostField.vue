@@ -1,5 +1,10 @@
 <template>
-  <v-card class="pa-4 transparent__bg" color="#142a46" dark outlined>
+  <v-card
+    class="pa-4 transparent__bg"
+    color="#142a46"
+    :dark="lightSwitch == 0 ? false : true"
+    outlined
+  >
     <v-form enctype="multipart/form-data">
       <v-avatar size="38" class="postField__avatar">
         <img
@@ -84,19 +89,31 @@
               </div>
             </div>
           </div>
-          <v-btn class="mr-6" small dark icon @click="onClickImageUploadBtn">
+          <v-btn
+            class="mr-6"
+            small
+            :dark="lightSwitch == 0 ? false : true"
+            icon
+            @click="onClickImageUploadBtn"
+          >
             <v-icon color="success">mdi-image-outline</v-icon>Photo
           </v-btn>
           <v-btn
             class="ml-3 mr-6"
             small
-            dark
+            :dark="lightSwitch == 0 ? false : true"
             icon
             @click="onClickImageUploadBtn"
           >
             <v-icon color="success">mdi-video</v-icon>Video
           </v-btn>
-          <v-btn class="ml-2" small dark icon @click="onClickImageUploadBtn">
+          <v-btn
+            class="ml-2"
+            small
+            :dark="lightSwitch == 0 ? false : true"
+            icon
+            @click="onClickImageUploadBtn"
+          >
             <v-icon color="success">mdi-poll-box</v-icon>Polls
           </v-btn>
           <v-btn
@@ -160,6 +177,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -172,6 +190,11 @@ export default {
       postField__alert: false,
       postField__imagesArray: []
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   methods: {
     postField__submit: function() {

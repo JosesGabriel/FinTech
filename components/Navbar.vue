@@ -5,8 +5,8 @@
       mobile-break-point
       :mini-variant="data ? true : $vuetify.breakpoint.mdAndDown"
       class="navbarDrawer__card"
-      :class="isLightMode == 1 ? 'lightMode' : ''"
-      :dark="darkText"
+      :class="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+      :dark="lightSwitch == 0 ? false : true"
       color="transparent"
       floating
     >
@@ -229,6 +229,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 import BuySellCalculator from "~/components/calculators/BuySellCalculator";
 import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
 import VARCalculator from "~/components/calculators/VARCalculator";
@@ -257,6 +258,11 @@ export default {
       darkText: false,
       powerToolsToggle: false
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   mounted() {
     if (localStorage.currentMode) {
