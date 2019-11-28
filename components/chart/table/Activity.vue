@@ -186,7 +186,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      min: "540",
+      min: "605",
       max: "285",
       headers: [
         {
