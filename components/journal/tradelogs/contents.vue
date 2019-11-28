@@ -48,9 +48,9 @@
         <template v-slot:item.profit_loss_percentage="{ item }" ><span :class="item.meta.profit_loss_percentage > 0 ? 'positive' : item.meta.profit_loss_percentage < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.meta.profit_loss_percentage) }}%</span></template>
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
-            <v-btn small class="caption" text color="success">Details</v-btn>
-            <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" text color="success" v-model="item" item-value="item" v-on:click="deleteLive(item.id)">Delete</v-btn>
+            <v-btn small class="caption" text color="success" @click.stop="showSellDetails=true" v-on:click="detailsLive(item)">Details</v-btn>
+            <!-- <v-btn small class="caption" text color="success" @click.stop="showSellEdit=true" v-on:click="editLive(item)">Edit</v-btn> -->
+            <v-btn small class="caption" text color="success" @click.stop="showSellDelete=true" v-on:click="deleteLive(item)">Delete</v-btn>
           </div>
           <v-icon
             small
@@ -89,19 +89,30 @@
           </v-col>
         </v-row>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+        <sell-delete :visible="showSellDelete" :itemDetails="itemDetails" @close="showSellDelete=false" />
+        <sell-details :visible="showSellDetails" :itemDetails="itemDetails" @close="showSellDetails=false" />
     </v-col>
 </template>
 <script>
 import shareModal from '~/components/modals/share'
+import sellDelete from '~/components/modals/sellDelete'
+import sellDetails from '~/components/modals/sellDetails'
+
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
-    shareModal
+    shareModal,
+    sellDelete,
+    sellDetails
   },
   data () {
     return {
       showScheduleForm: false,
+      showSellDelete: false,
+      showSellDetails: false,
+      itemDetails: null,
+
       itemsPerPage: 5,
       search: '',
       headers: [
@@ -133,34 +144,25 @@ export default {
   computed: {
     ...mapGetters({
       defaultPortfolioId: "journal/getDefaultPortfolioId",
-      renderPortfolioKey: "journal/getRenderPortfolioKey"
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      renderEditKey: "journal/getRenderEditKey",
     }),
     
   },
   methods: {
     ...mapActions({
-      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-      // setDefaultPortfolioId: "journal/setDefaultPortfolioId"
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
     deleteLive: function(item) {
-      console.log(item)
-      const deleteLogs = {
-        user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      }
-      this.$axios
-      .$post(process.env.JOURNAL_API_URL + "/journal/funds/tradelog/delete/"+ item, deleteLogs)
-      .then(response => {      
-          if (response.success) {
-              console.log(response)
-              this.keyCreateCounter = this.renderPortfolioKey;
-              this.keyCreateCounter++;
-              this.setRenderPortfolioKey(this.keyCreateCounter);
-          }
-      });
+      this.itemDetails = item
+    },
+    detailsLive: function(item) {
+      this.itemDetails = item
+    },
+    editLive: function(item) {
+      this.itemDetails = item
     },
     getTradeLogs() {
-      console.log(this.defaultPortfolioId)
-      console.log(this.renderPortfolioKey)
       const tradelogsparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: this.defaultPortfolioId,
@@ -172,9 +174,6 @@ export default {
             this.totalProfitLoss = 0;
             this.totalProfitLossPerf = 0;
             for (let i = 0; i < this.tradeLogs.length; i++) {
-              // this.tradeLogs[i].meta.stock_id
-              // console.log(this.tradeLogs[i])
-              // this.tradeLogs[i].action = this.tradelogs
               const params = {
                 "symbol-id": this.tradeLogs[i].meta.stock_id
               };
@@ -191,8 +190,6 @@ export default {
                 
                 this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
                 this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
-                // console.log(this.tradeLogs[i].meta.profit_loss, this.tradeLogs[i].buy_value)
-                // this.tradeLogs[i].meta = {profit_loss: profit_loss}
                 }.bind(this)
               );
             }
@@ -222,6 +219,9 @@ export default {
       this.getTradeLogs();
     },
     defaultPortfolioId: function() {
+      this.getTradeLogs();
+    },
+    renderEditKey: function() {
       this.getTradeLogs();
     }
   }

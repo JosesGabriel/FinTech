@@ -5,6 +5,9 @@ export default {
   SET_RENDERPORTFOLIOKEY(state, data) {
     state.renderPortfolioKey = data;
   },
+  SET_RENDEREDITKEY(state, data) {
+    state.renderEditKey = data;
+  },
   SET_DEFAULTPORTFOLIOID(state, data) {
     state.defaultPortfolioId = data;
   },

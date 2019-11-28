@@ -28,9 +28,9 @@
         <template v-slot:item.perf_percentage="{ item }" ><span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.perf_percentage) }}%</span></template>
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
-            <v-btn small class="caption" text color="success" @click.stop="showTradeDetails=true" v-on:click="editLive(item)">Details</v-btn>
-            <v-btn small class="caption" text color="success" v-on:click="editLive(item)">Edit</v-btn>
-            <v-btn small class="caption" text color="success" v-model="item" item-value="item" v-on:click="deleteLive(item.action)">Delete</v-btn>
+            <v-btn small class="caption" text color="success" @click.stop="showTradeDetails=true" v-on:click="detailsLive(item)">Details</v-btn>
+            <v-btn small class="caption" text color="success" @click.stop="showEditDetails=true" v-on:click="editLive(item)">Edit</v-btn>
+            <v-btn small class="caption" text color="success" @click.stop="showDelete=true" v-on:click="deleteLive(item)">Delete</v-btn>
           </div>
           <v-icon
             small
@@ -79,6 +79,8 @@
         <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
         <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" />
         <trade-details :visible="showTradeDetails" :itemDetails="itemDetails" @close="showTradeDetails=false" />
+        <trade-edits :visible="showEditDetails" :itemDetails="itemDetails" @close="showEditDetails=false" />
+        <trade-delete :visible="showDelete" :itemDetails="itemDetails" @close="showDelete=false" />
         <!-- @click.stop="showResetForm=true" -->
     </v-col>
 </template>
@@ -88,6 +90,8 @@ import shareModal from '~/components/modals/share'
 import fundsModal from '~/components/modals/fund'
 import tradeView from '~/components/modals/tradeView'
 import tradeDetails from '~/components/modals/tradeDetails'
+import tradeEdits from '~/components/modals/tradeEdits'
+import tradeDelete from '~/components/modals/tradeDelete'
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -97,7 +101,9 @@ export default {
     resetModal,
     fundsModal,
     tradeView,
-    tradeDetails
+    tradeDetails,
+    tradeEdits,
+    tradeDelete,
   },
   data () {
     return {
@@ -110,7 +116,9 @@ export default {
       showFundsForm: false,
       showTradeViewForm: false,
       showTradeDetails: false,
-      itemDetails: {},
+      showEditDetails: false,
+      showDelete: false,
+      itemDetails: null,
 
       ifVirtualShow: false,
       fundsShow: false,
@@ -160,22 +168,12 @@ export default {
       pl.style.display = "none";
     },
     deleteLive: function(item) {
-      const deleteLogs = {
-        user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      }
-      this.$axios
-      .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.defaultPortfolioId +"/delete/" + item, deleteLogs)
-      .then(response => {      
-          if (response.success) {
-              
-              this.keyCreateCounter = this.renderPortfolioKey;
-              this.keyCreateCounter++;
-              this.setRenderPortfolioKey(this.keyCreateCounter);
-          }
-      });
+      this.itemDetails = item
+    },
+    detailsLive: function(item) {
+      this.itemDetails = item
     },
     editLive: function(item) {
-      // console.log(item)
       this.itemDetails = item
     },
     formatPrice(value) {
@@ -196,7 +194,6 @@ export default {
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             
-            // console.log(this.portfolioLogs[i], "test")
             const historyparams  = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };
@@ -229,7 +226,6 @@ export default {
                 this.portfolioLogs[i].id_str = result.data.stockidstr
                 this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.portfolioLogs[i].profit);
                 this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.portfolioLogs[i].perf_percentage);
-                // console.log(this.totalProfitLoss, this.portfolioLogs[i].profit)
                 this.portfolioLogsStock.push(this.portfolioLogs[i])
                 // this.portfolioLogsStock
                 
@@ -245,12 +241,16 @@ export default {
   computed: {
     ...mapGetters({
       defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      renderEditKey: "journal/getRenderEditKey",
       userPortfolio: "journal/getUserPortfolio",
-      renderPortfolioKey: "journal/getRenderPortfolioKey"
     })
   },
   watch: {
     renderPortfolioKey: function() {
+      this.getOpenPositions();
+    },
+    renderEditKey: function() {
       this.getOpenPositions();
     }
   }

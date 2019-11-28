@@ -195,7 +195,6 @@ export default {
             setDefaultPortfolioId: "journal/setDefaultPortfolioId"
         }),
         changePortfolio(obj){
-            // console.log("Selected portfolio ID" + this.portfolioDropdownModel.id)
             this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
             const openparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
@@ -208,7 +207,6 @@ export default {
                         this.keyCreateCounter++;
                         this.setRenderPortfolioKey(this.keyCreateCounter);
                         this.setSelectedPortfolio(obj);
-                        // console.log(obj)
                     }
                 }.bind(this)
             );
@@ -234,27 +232,7 @@ export default {
                             if (portfolioListPush1.type === toFindReal) {
                                 this.portfolioListPush.push(portfolioListPush1);
                             }
-                            // if(portfolioListPush1.id == 75386709415694336){
-                            //     this.setDefaultPortfolioId(portfolioListPush1.id);
-                            //     console.log(result.meta.logs[i].id, "test")
-                            //     defaultPort = true;
-                            // }
                         }
-                        // if(!defaultPort){
-                        //     const createportfolioparams = {
-                        //         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                        //         currency_code: "PHP",
-                        //         name: 'My Portfolio',
-                        //         description: "My First Portfolio",
-                        //         type: "real",
-                        //         balance: 1000000
-                        //     };
-                        //     this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
-                        //         function(result) {
-                        //             this.setDefaultPortfolioId(result.data.fund.id);
-                        //         }.bind(this)
-                        //     );
-                        // }
                     }
                     if(this.portfolioList.length != 0) {
                         
@@ -286,7 +264,6 @@ export default {
         },
         portfolioDropdownModel() {
             this.getUserPortfolioList();
-            // this.setDefaultPortfolioId(75386709415694336);
         }
     },
 };
