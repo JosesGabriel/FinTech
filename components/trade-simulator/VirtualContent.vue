@@ -49,8 +49,8 @@
                         Equity
                     </v-row>
                     <v-row class="mt-1">
-                        <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-                            1,000,000.00
+                        <v-col md="12" :class="(this.equity > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
+                            {{ this.addcomma(this.equity) }}
                         </v-col> 
                     </v-row>
                 </v-col>
@@ -119,7 +119,7 @@
                     style="background: #00121e;"
                 >
                     <v-container class="pa-0">
-                        <VirtualLivePortfolio v-on:totalUnrealized="Unrealized"/>                
+                        <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
@@ -147,6 +147,9 @@
           default_port: '0',
           realized: 0,
           unrealized: 0,
+          totalmvalue: 0,
+          balance: 0,
+          equity: 0,
       }
     },
     created() {
@@ -156,6 +159,14 @@
          ...mapGetters({
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
         })
+    },
+    watch: {
+      totalmvalue: function () {
+        this.getBalance();
+      },
+      realized: function () {
+        this.getBalance();
+      },
     },
     methods: {
          ...mapActions({
@@ -172,6 +183,9 @@
                 this.unrealized = value;
                 //this.portperf = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
             },
+            TotalMValue(value){
+                this.totalmvalue = value;
+            },
             portperf(){
                 let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
                 return this.addcomma(port);
@@ -183,6 +197,25 @@
                     + sep
                     + n.toFixed(2).split(sep)[1];
             },
+            getBalance(){
+                 const portfolioparams = {
+                        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+                    };
+                this.$api.journal.portfolio.portfolio(portfolioparams).then(
+                    function(result) {
+                            for(let i=0; i< result.meta.logs.length; i++){
+                                if(result.meta.logs[i].type == 'virtual' && result.meta.logs[i].name != 'Default Virtual Portfolio'){                           
+                                    if(result.meta.logs[i].id == this.simulatorPortfolioID){
+                                        this.balance = parseFloat(result.meta.logs[i].balance).toFixed(2);
+                                        this.equity = (parseFloat(this.totalmvalue) + parseFloat(this.balance)) + parseFloat(this.realized);
+                                        
+                                    }
+                                }
+
+                            }
+                         }.bind(this)
+                    ); 
+            }
 
     },
     mounted() {

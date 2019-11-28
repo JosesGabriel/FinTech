@@ -64,7 +64,7 @@
         <v-row>
           <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
           Total Profit/Loss as of {{ this.date }}: <span class="ml-3" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
-          <span class="ml-3" :class="(this.totalProfitLossPerf < 0 ? 'negative' : 'positive')">{{ this.totalProfitLossPerf.toFixed(2) }}%</span>
+          <span class="ml-8 mr-1" :class="(this.totalProfitLossPerf < 0 ? 'negative' : 'positive')">{{ this.totalProfitLossPerf.toFixed(2) }}%</span>
           </v-col>
         </v-row>
         <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
@@ -158,7 +158,8 @@ export default {
       fund: this.simulatorPortfolioID
     };
     
-    this.totalPerf = 0;
+    this.totalProfitLoss = 0;
+    this.totalProfitLossPerf = 0;
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
         console.log(result);
@@ -171,48 +172,20 @@ export default {
                   };
                   this.$api.chart.stocks.list(params).then(
                     function(results) {
-                       if( i == 0){
-                          this.totalProfitLoss = 0;
-                          this.totalProfitLossPerf = 0;
-                        }  
+                       
                       this.tradeLogs[i].stock_id = results.data.symbol;
-
                       let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
                       let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}
-                      this.tradeLogs[i].meta = {...average_price}
-                      
-                      this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value
-                      this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100
-
-                      
+                      this.tradeLogs[i].meta = {...average_price}  
+                      this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value;
+                      this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100;      
                       this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
                       this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
                       this.tradeLogs[i].action = this.tradeLogs[i].id;
                       this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
                     }.bind(this)
                   );
-                  
-            /*let date = result.meta.logs[i].meta.date.split(' ')[0];    
-            let buy = parseFloat(result.meta.logs[i].meta.sell_price).toFixed(2) * parseFloat(result.meta.logs[i].amount).toFixed(2);
-            let bvalue = this.buyfees(buy);           
-            let sell = parseFloat(result.meta.logs[i].meta.sell_price) * parseFloat(result.meta.logs[i].amount);
-            let sellvalue = this.sellfees(sell);
-            let ploss = sellvalue - bvalue;
-            let perc = (ploss / bvalue) * 100;
-            this.totalProfitLoss = parseFloat(this.totalProfitLoss) + parseFloat(ploss);
-            this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perc);
-            //this.tradeLogs[i].stock_id = this.stockSymbol(result.meta.logs[i].meta.stock_id, i);
-            this.tradeLogs[i].date = date;
-            this.tradeLogs[i].amount = result.meta.logs[i].amount;
-            this.tradeLogs[i].AvePrice = result.meta.logs[i].meta.average_price;
-            this.tradeLogs[i].BuyValue = bvalue.toFixed(2);
-            this.tradeLogs[i].SellPrice = result.meta.logs[i].meta.sell_price;
-            this.tradeLogs[i].SellValue = sellvalue.toFixed(2);
-            this.tradeLogs[i].ProfitLoss = ploss.toFixed(2);
-            this.tradeLogs[i].Perf = perc.toFixed(2);
-            this.tradeLogs[i].action = result.meta.logs[i].id;*/
           }
-            //this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
       }.bind(this)
     );
 

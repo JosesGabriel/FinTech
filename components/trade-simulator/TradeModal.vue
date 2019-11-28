@@ -28,7 +28,7 @@
                                                 offset-y="true" 
                                                 item-color="success" 
                                                 color="success" 
-                                                class="pa-0 ma-0" 
+                                                class="pa-0 ma-0 select_stock" 
                                                 append-icon="mdi-chevron-down" 
                                                 :items="stock" 
                                                 item-text="symbol"    
@@ -255,6 +255,7 @@ import { mapActions, mapGetters } from "vuex";
                 totalposition: 0,
             }
         },
+        props: ['visible','OpenPosition'],
         computed: {
             ...mapGetters({
             simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
@@ -294,7 +295,6 @@ import { mapActions, mapGetters } from "vuex";
                         this.stock = result.data;                   
                     }.bind(this)
                     );
-
             },
         methods: {
             ...mapActions({
@@ -310,7 +310,7 @@ import { mapActions, mapGetters } from "vuex";
                     this.show = false;
                     this.confirm();
                 }else{
-                this.e1 = 3;
+                    this.e1 = 3;
                 }
             },
             totalPosition(value){
@@ -343,9 +343,9 @@ import { mapActions, mapGetters } from "vuex";
                 this.onreset = true,
                 this.stock = [];
                 this.GetSelectStock = '';
-                for(let i = 0; i < this.simulatorOpenPosition.length; i ++){
+                for(let i = 0; i < this.OpenPosition.length; i ++){
                     const params = {
-                            'symbol-id':this.simulatorOpenPosition[i]
+                            'symbol-id':this.OpenPosition[i]
                     };
                     this.$api.chart.stocks.history(params).then(
                         function(result) {
@@ -353,7 +353,7 @@ import { mapActions, mapGetters } from "vuex";
                         }.bind(this)
                         );
                 }
-
+               
             },
                        
             addcomma(n, sep, decimals) {
@@ -402,9 +402,11 @@ import { mapActions, mapGetters } from "vuex";
                                 if (response.success) {
                                     console.log('sell success');
                                     //this.setSimulatorConfirmedBuySell('sell');
-                                    this.setSimulatorOpenPosition('');
+                                    this.setSimulatorOpenPosition(this.OpenPosition);
                                     this.e1 = 1;
                                     this.onreset = false;
+                                    this.buySelected = true;
+                                    this.sellSelected = false;
                                     this.GetSelectStock = '';
                                 }
                             });
@@ -431,9 +433,11 @@ import { mapActions, mapGetters } from "vuex";
                         .then(response => {      
                             if (response.success) {
                                 console.log(response.message);
-                                 this.setSimulatorOpenPosition('');
+                                 this.setSimulatorOpenPosition(this.OpenPosition);
                                  this.e1 = 1;
                                  this.onreset = false;
+                                 this.buySelected = true;
+                                 this.sellSelected = false;
                                  this.GetSelectStock = '';
                             }
                         });    
@@ -530,7 +534,11 @@ import { mapActions, mapGetters } from "vuex";
         },
     }
 </script>
-<style>
+<style scoped>
+    .select_stock > .v-input__control > .v-input__slot > .v-select__slot > label .v-select__selections > .v-select__selection--comma {
+        color: #b6b6b6;
+    }
+
     .stock_selector .v-select__slot .v-label,
     .stock_selector .v-select__slot .v-icon {
         color: #00FFC3 !important;
