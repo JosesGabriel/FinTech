@@ -1,7 +1,7 @@
 <template>
   <v-toolbar
-    :dark="isLightMode == 1 ? false : true"
-    :color="isLightMode == 1 ? 'lightcard' : '#00121e'"
+    :dark="lightSwitch == 0 ? false : true"
+    :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
     flat
     height="54"
     class="header__toolbar"
@@ -10,7 +10,7 @@
       ><router-link to="/">
         <img
           class="pl-2 pt-1"
-          src="logo-dark.svg"
+          :src="lightSwitch == 0 ? 'logo-light.svg' : 'logo-dark.svg'"
           alt=""
           width="85"
           height="85"
@@ -29,7 +29,7 @@
           solo
           flat
           dense
-          background-color="darkcard"
+          :background-color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
         ></v-text-field>
       </div>
       <router-link to="/" class="social__router">
@@ -96,6 +96,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
 import HeaderDropdown from "~/components/HeaderDropdown";
 export default {
@@ -111,6 +112,11 @@ export default {
       tab: null,
       showDropdown: false
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   mounted() {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;

@@ -4,7 +4,7 @@
       v-for="n in 4"
       :key="n"
       class="centerPanel__card mb-3 transparent__bg"
-      dark
+      :dark="lightSwitch == 0 ? false : true"
       outlined
     >
       <!-- Start of Post Header -->
@@ -109,7 +109,7 @@
                 </v-btn>
                 <span class="px-2">{{ bearCounter }}</span>
                 |
-                <v-btn small depressed :color="dark_theme_color">
+                <v-btn small depressed color="transparent">
                   <span>Reply</span>
                   <v-icon right>mdi-reply-outline</v-icon>
                 </v-btn>
@@ -170,6 +170,7 @@
   </v-col>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "Newsfeed",
   data() {
@@ -179,6 +180,11 @@ export default {
       dark_theme_color: process.env.DARK_THEME_COLOR,
       user: this.$store.getters["auth/user"]
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   created() {
     //console.log("first");

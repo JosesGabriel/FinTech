@@ -157,6 +157,7 @@ export default {
           
           this.ledgerContent[i].balance = this.balance = this.balance + parseFloat(this.ledgerContent[i].total_value);
           this.ledgerContent[i].count = this.count = this.count + parseFloat(this.ledgerContent[i].counter);
+          this.ledgerContent[0].count = 1;
           
           this.totalDebit = this.totalDebit + parseFloat(this.ledgerContent[i].total_value);
           this.totalCredit = this.ledgerContent[i].balance;

@@ -1,5 +1,10 @@
 <template>
-  <v-card color="darkcard" dark :loading="loader" class="px-2">
+  <v-card
+    :color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+    :dark="lightSwitch == 0 ? false : true"
+    :loading="loader"
+    class="px-2"
+  >
     <v-card-title class="pl-2">
       <span
         class="subtitle-1 font-weight-black py-0 pl-2"
@@ -185,7 +190,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      renderChartKey: "watchers/getRenderChartKey"
+      renderChartKey: "watchers/getRenderChartKey",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {

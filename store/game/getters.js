@@ -8,13 +8,7 @@ export default {
   getPlayerIsHost(state) {
     return state.playerIsHost;
   },
-  getPlayerRanking(state) {
-    return state.playerRanking;
-  },
-  getPlayerCoins(state) {
-    return state.playerCoins;
-  },
-  getPlayerID(state) {
-    return state.playerID;
+  getPlayerData(state) {
+    return state.playerData;
   }
 };

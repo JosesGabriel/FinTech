@@ -5,7 +5,8 @@
         <v-textarea
           v-model="textarea"
           solo
-          dark
+          :dark="lightSwitch == 0 ? false : true"
+          flat
           label="Send a message..."
           rows="1"
           hide-details
@@ -31,6 +32,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 const sdk = require("matrix-js-sdk");
 const HSUrl = "https://im.arbitrage.ph";
 const client = sdk.createClient(HSUrl);
@@ -41,6 +43,11 @@ export default {
       msg: [],
       textarea: ""
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   mounted: function() {
     this.x();

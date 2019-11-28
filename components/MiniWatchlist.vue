@@ -2,7 +2,7 @@
   <v-card
     class="mb-3"
     color="transparent"
-    dark
+    :dark="lightSwitch == 0 ? false : true"
     outlined
     :loading="watchCardLoading"
   >
@@ -225,7 +225,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      renderChartKey: "watchers/getRenderChartKey"
+      renderChartKey: "watchers/getRenderChartKey",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {

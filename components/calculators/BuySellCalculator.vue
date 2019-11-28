@@ -1,5 +1,8 @@
 <template>
-  <v-card color="darkcard" dark>
+  <v-card
+    :color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+    :dark="lightSwitch == 0 ? false : true"
+  >
     <v-card-title class="headline">Buy/Sell Calculator</v-card-title>
     <v-container>
       <v-row class="caption">
@@ -127,6 +130,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 let numeral = require("numeral");
 export default {
   data() {
@@ -152,6 +156,11 @@ export default {
       netProfitPercentage: "",
       netProfit: ""
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   watch: {
     shares: function() {
