@@ -19,7 +19,9 @@
             <th class="pl-4 text-left header white--text font-weight-bold">
               TIME
             </th>
-            <th class="header white--text font-weight-bold text-right">VOL</th>
+            <th class="header white--text font-weight-bold text-right">
+              VOL
+            </th>
             <th class="header white--text font-weight-bold text-right">
               PRICE
             </th>

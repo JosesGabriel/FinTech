@@ -1,75 +1,380 @@
 <template>
   <v-content>
-    <!-- top -->
-    <v-row class="ml-0 mb-3 mr-2" style="color:white;">
-      <v-col class="ml-0 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-        <v-row class="mt-2 pl-3 caption">
-          Position
-        </v-row>
-        <v-row class="mt-1 mb-2">
-          <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
-            1,000.00
+    <div id="top">
+      <!-- top -->
+      <v-content>
+        <v-row class="ml-1 mt-1 mb-3">
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Position
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
+                1,000.00
+              </v-col>
+            </v-row>
           </v-col>
-        </v-row>
-      </v-col>
-      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-        <v-row class="mt-2 pl-3 caption">
-          Ave. Price
-        </v-row>
-        <v-row class="mt-1">
-          <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-            <span class="overline">PHP</span>16.04
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-        <v-row class="mt-2 pl-3 caption">
-          Total Cost
-        </v-row>
-        <v-row class="mt-1">
-          <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-            <span class="overline">PHP</span>16,047.20
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-        <v-row class="mt-2 pl-3 caption">
-          Market Value
-        </v-row>
-        <v-row class="mt-1">
-          <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-            <span class="overline">PHP</span>200,000.00
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-        <v-row class="mt-2 pl-3 caption">
-          Profit
-        </v-row>
-        <v-row class="mt-1">
-          <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
-            <span class="overline">PHP</span>661.90
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-        <v-row class="mt-2 pl-3 caption">
-          Perf. (%)
-        </v-row>
-        <v-row class="mt-0">
-          <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
-            4.12
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
 
-    <!-- Mid -->
-    <!-- <span class="subtitle-1">Trade History</span> -->
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Ave. Price
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3">
+                <span class="overline">PHP</span>16.04
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Total Cost
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3">
+                <span class="overline">PHP</span>16,047.20
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Market Value
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3">
+                <span class="overline">PHP</span>200,000.00
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Profit
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
+                <span class="overline">PHP</span>661.90
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Perf. (%)
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
+                4.12
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-content>
+
+      <!-- mid -->
+      <v-content style="border-bottom:1px solid #0C1A2B">
+        <span class="subtitle-1 ml-3">Trade History</span>
+      </v-content>
+      <v-content class="my-1">
+        <v-btn
+          small
+          color="#00121e"
+          class="caption white--text font-weight-bold text-capitalize increase"
+          >Filter</v-btn
+        >
+
+        <v-btn
+          small
+          color="#00121e"
+          class="caption ml-12 white--text font-weight-bold text-capitalize"
+          >Day</v-btn
+        >
+
+        <v-btn
+          small
+          color="#00121e"
+          class="caption white--text font-weight-bold text-capitalize"
+          >Week</v-btn
+        >
+
+        <v-btn
+          small
+          color="#00121e"
+          class="caption white--text font-weight-bold text-capitalize"
+          >Month</v-btn
+        >
+
+        <v-btn
+          small
+          color="#00121e"
+          class="caption white--text font-weight-bold text-capitalize"
+          >Year</v-btn
+        >
+        <v-btn
+          small
+          color="#00121e"
+          class="caption white--text font-weight-bold text-capitalize increase"
+          >Custom</v-btn
+        >
+      </v-content>
+    </div>
+    <v-content class="mx-1">
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        class="data_table-container custom_table"
+        dark
+        dense
+        fixed-header
+        calculate-widths
+        disable-pagination
+        hide-default-footer
+        style="background:#00121e"
+        :height="`calc(100vh - ${tablesize}px)`"
+      >
+        <template v-slot:item="props">
+          <tr class="tr_custom">
+            <td class="column text-left pl-2" style="width:10%">
+              <span>{{ props.item.date }}</span>
+            </td>
+            <td class="column text-right" style="width:10%">
+              <span>{{ props.item.volume }}</span>
+            </td>
+            <td class="column text-right" style="width:13%">
+              <span>{{ props.item.aveprice }}</span>
+            </td>
+            <td class="column text-right" style="width:13%">
+              <span>{{ props.item.buyvalue }}</span>
+            </td>
+            <td class="column text-right" style="width:13%">
+              <span>{{ props.item.sellprice }}</span>
+            </td>
+            <td class="column text-right" style="width:13%">
+              <span>{{ props.item.sellvalue }}</span>
+            </td>
+            <td class="column text-right" style="width:13%">
+              <span
+                :class="[
+                  { increase: props.item.changestatus == 1 },
+                  { decrease: props.item.changestatus == 2 },
+                  { neutral: props.item.changestatus == 0 }
+                ]"
+                >{{ props.item.profitloss }}</span
+              >
+            </td>
+            <td class="column text-right pr-2" style="width:13%">
+              <span
+                :class="[
+                  { increase: props.item.changestatus == 1 },
+                  { decrease: props.item.changestatus == 2 },
+                  { neutral: props.item.changestatus == 0 }
+                ]"
+                >{{ props.item.percentage }}</span
+              >
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
+    </v-content>
   </v-content>
 </template>
 
+<script>
+import { mapGetters } from "vuex";
+
+export default {
+  data() {
+    return {
+      min: "540",
+      max: "285",
+      headers: [
+        {
+          text: "Date",
+          value: "date",
+          class: "white--text text-left pl-2 caption font-weight-bold header"
+        },
+        {
+          text: "Volume",
+          value: "volume",
+          class: "white--text text-right caption font-weight-bold header"
+        },
+        {
+          text: "Ave. Price",
+          value: "aveprice",
+          class: "white--text text-right caption font-weight-bold header"
+        },
+        {
+          text: "Buy Value",
+          value: "buyvalue",
+          class: "white--text text-right caption font-weight-bold header"
+        },
+        {
+          text: "Sell Price",
+          value: "sellprice",
+          class: "white--text text-right caption font-weight-bold header"
+        },
+        {
+          text: "Sell Value",
+          value: "sellvalue",
+          class: "white--text text-right caption font-weight-bold header"
+        },
+        {
+          text: "Profit/Loss",
+          value: "profitloss",
+          class: "white--text text-right caption font-weight-bold header"
+        },
+        {
+          text: "%",
+          value: "percentage",
+          class: "white--text text-right caption font-weight-bold header pr-2"
+        }
+      ],
+      items: [
+        {
+          date: "2019-10-22",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-21",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-20",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-19",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-18",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-17",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-16",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-15",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-14",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-14",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        }
+      ]
+    };
+  },
+  computed: {
+    ...mapGetters({
+      fullscreen: "chart/getTableFullscreen"
+    }),
+    tablesize: function() {
+      return this.fullscreen ? this.max : this.min;
+    }
+  },
+  watch: {
+    fullscreen(value) {
+      console.log("fullscreen");
+      console.log(value);
+    }
+  }
+};
+</script>
+
 <style scoped>
+#top {
+  /* background: red; */
+  height: 150px;
+}
+.tr_custom {
+  line-height: 2.3rem !important;
+  cursor: pointer;
+}
+.column {
+  /* background: #00121e !important; */
+  font-size: 12px !important;
+  color: #bbb;
+}
 .theme--dark.v-label {
   color: black;
   font-size: 14px;
@@ -135,5 +440,14 @@
 }
 .selector .v-input__control {
   min-height: auto !important;
+}
+.neutral {
+  color: #dddddd !important;
+}
+.increase {
+  color: #48ffd5 !important;
+}
+.decrease {
+  color: #ff4848 !important;
 }
 </style>
