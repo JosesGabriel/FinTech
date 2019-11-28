@@ -2,7 +2,11 @@
   <v-container class="py-0">
     <v-row class="rankTable__row">
       <v-col cols="12" class="">
-        <v-simple-table dark class="rankingTable rankingTable--color" dense>
+        <v-simple-table
+          :dark="lightSwitch == 0 ? false : true"
+          class="rankingTable rankingTable--color"
+          dense
+        >
           <template v-slot:default>
             <thead class="text-center">
               <tr>
@@ -38,6 +42,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 export default {
   layout: "main",
   data() {
@@ -96,6 +101,11 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   }
 };
 </script>

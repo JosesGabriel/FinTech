@@ -35,7 +35,7 @@
       </v-col>
     </v-row>
     <v-dialog v-model="buyselldialog" width="300">
-      <v-card color="darkcard">
+      <v-card :dark="lightSwitch == 0 ? false : true" transparent>
         <v-card-title>
           <span class="subtitle-1 font-weight-light" style="color: #1DE9B6"
             ><strong>{{ modalTypeText }}</strong></span
@@ -108,7 +108,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      playerInGame: "game/getPlayerInGame"
+      playerInGame: "game/getPlayerInGame",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   methods: {
