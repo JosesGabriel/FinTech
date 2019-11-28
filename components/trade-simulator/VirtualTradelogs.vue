@@ -64,7 +64,7 @@
         <v-row>
           <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
           Total Profit/Loss as of {{ this.date }}: <span class="ml-3" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
-          <span class="ml-3" :class="(this.totalProfitLossPerf < 0 ? 'negative' : 'positive')">{{ this.totalProfitLossPerf.toFixed(2) }}%</span>
+          <span class="ml-8 mr-1" :class="(this.totalProfitLossPerf < 0 ? 'negative' : 'positive')">{{ this.totalProfitLossPerf.toFixed(2) }}%</span>
           </v-col>
         </v-row>
         <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
@@ -158,7 +158,8 @@ export default {
       fund: this.simulatorPortfolioID
     };
     
-    this.totalPerf = 0;
+    this.totalProfitLoss = 0;
+    this.totalProfitLossPerf = 0;
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
         console.log(result);
@@ -171,10 +172,7 @@ export default {
                   };
                   this.$api.chart.stocks.list(params).then(
                     function(results) {
-                       if(i == 0){
-                          this.totalProfitLoss = 0;
-                          this.totalProfitLossPerf = 0;
-                        }  
+                       
                       this.tradeLogs[i].stock_id = results.data.symbol;
                       let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
                       let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}

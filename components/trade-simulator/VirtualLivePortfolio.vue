@@ -41,8 +41,8 @@
         </v-data-table>
         <v-row>
           <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
-          Total Profit/Loss as of {{ this.date }}: <span class="ml-3" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
-          <span class="ml-3" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
+          Total Profit/Loss as of {{ this.date }}: <span class="ml-3 mr-4" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
+          <span class="ml-12 mr-5" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
           </v-col>
         </v-row>
        <!-- <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
@@ -166,6 +166,7 @@ export default {
         editDetails: '',
         totalProfitLoss: 0,
         totalPerf: 0,
+        totalmvalue: 0,
         date: new Date().toISOString().substr(0, 10),
       }
       
@@ -199,6 +200,7 @@ export default {
             this.totalProfitLoss = 0;
             this.totalPerf = 0;
             this.openposition = [];
+            this.totalmvalue = 0;
             this.$api.journal.portfolio.open(openparams2).then(
               function(result) {
                 console.log('live port',result);
@@ -230,6 +232,7 @@ export default {
                         let profit = parseFloat(mvalue) - parseFloat(tcost);
                         let perf = (profit / tcost) * 100;
                         let pos = this.addcomma(result.meta.open[i].position).split('.')[0];  
+                        this.totalmvalue = parseFloat(this.totalmvalue) + parseFloat(mvalue);
                         if(result.meta.open[i].position > 0){
                           this.totalProfitLoss = parseFloat(this.totalProfitLoss) + parseFloat(profit);
                           this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perf);
@@ -250,6 +253,7 @@ export default {
                 }          
                  //this.setSimulatorOpenPosition(this.openposition);
                  this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(2));
+                 this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
               }.bind(this)
             );   
       },
