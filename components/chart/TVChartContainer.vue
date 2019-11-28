@@ -83,6 +83,8 @@ export default {
     ...mapGetters({
       ticker: "chart/getTicker",
       table: "chart/getTable",
+      symbolid: "chart/symbolid",
+      stock: "chart/stock",
       maximize_table: "chart/getTableMaximize",
       fullscreen_table: "chart/getTableFullscreen"
     }),
@@ -125,6 +127,17 @@ export default {
       }
     }
   },
+  // watch: {
+  //   symbolid(value) {
+  //     console.log("changed");
+  //     console.log(this);
+  //     "PSE:KPPI"
+  //       console.log(this.stock.market_code);
+  //       if (this.passTickerToChart() != undefined) {
+  //         this.passTickerToChart(this.stock.market_code);
+  //       }
+  //   }
+  // },
   mounted() {
     // listen to ticker toggle
     this.$bus.$on("adjustChartView", data => {
@@ -236,14 +249,14 @@ export default {
       tvWidget
         .chart()
         .onSymbolChanged()
-        .subscribe(null, (symbolInfo) => {
+        .subscribe(null, symbolInfo => {
           that.setSymbolID(symbolInfo.id_str);
-          
+
           //TODO: call this function ralph, ito yung example nilagay ko lang dito
           //TODO: need mo ipasa yung market_code completo, append mo
           //TODO: <EXCHANGE>:<SYMBOL> or kunin mo sa response -> market_code
           //TODO: author: kbaluyot
-          that.passTickerToChart("PSE:KPPI")
+          //that.passTickerToChart("PSE:KPPI");
         });
       //! endregion subscribe
     });
@@ -255,10 +268,10 @@ export default {
     }
   },
   methods: {
-     ...mapActions({
+    ...mapActions({
       setSymbolID: "chart/setSymbolID"
     }),
-    
+
     getLanguageFromURL() {
       const regex = new RegExp("[\\?&]lang=([^&#]*)");
       const results = regex.exec(window.location.search);
@@ -266,12 +279,12 @@ export default {
         ? null
         : decodeURIComponent(results[1].replace(/\+/g, " "));
     },
-    passTickerToChart(ticker){
+    passTickerToChart(ticker) {
       if (ticker && this.tvWidget) {
-        this.tvWidget.chart().setSymbol(ticker)
+        this.tvWidget.chart().setSymbol(ticker);
       }
 
-      return false
+      return false;
     },
     widgetCreateButton(title, content, callback, options) {
       const button = this.widget.createButton(options);
@@ -279,7 +292,7 @@ export default {
       //button.classList.add('apply-common-tooltip');
       button.addEventListener("click", callback);
       button.innerHTML = content;
-    },
+    }
   }
 };
 </script>

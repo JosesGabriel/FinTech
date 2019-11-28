@@ -150,24 +150,27 @@ export default {
       user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
       fund: this.simulatorPortfolioID
     };
-    this.totalProfitLoss = 0;
+    
     this.totalPerf = 0;
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
         console.log(result);
-          this.tradeLogs = result.meta.logs;       
-          for(let i = 0; i < result.meta.logs.length; i++){       
+          this.tradeLogs = result.meta.logs;   
+          for(let i = 0; i < result.meta.logs.length; i++){   
+            if(i == 0 ? this.totalProfitLoss = 0 :'');    
             const params = {
                     "symbol-id": this.tradeLogs[i].meta.stock_id
                   };
                   this.$api.chart.stocks.list(params).then(
-                    function(result) {
-                      this.tradeLogs[i].stock_id = result.data.symbol;
+                    function(results) {
+                      this.tradeLogs[i].stock_id = results.data.symbol;
                     }.bind(this)
                   );
-            let date = result.meta.logs[i].meta.date.split(' ')[0];
-            let bvalue = parseFloat(result.meta.logs[i].meta.average_price) * parseFloat(result.meta.logs[i].amount);
-            let sellvalue = parseFloat(result.meta.logs[i].meta.sell_price) * parseFloat(result.meta.logs[i].amount);
+            let date = result.meta.logs[i].meta.date.split(' ')[0];    
+            let buy = parseFloat(result.meta.logs[i].meta.sell_price).toFixed(2) * parseFloat(result.meta.logs[i].amount).toFixed(2);
+            let bvalue = this.buyfees(buy);           
+            let sell = parseFloat(result.meta.logs[i].meta.sell_price) * parseFloat(result.meta.logs[i].amount);
+            let sellvalue = this.sellfees(sell);
             let ploss = sellvalue - bvalue;
             let perc = (ploss / bvalue) * 100;
             this.totalProfitLoss = parseFloat(this.totalProfitLoss) + parseFloat(ploss);
@@ -181,12 +184,36 @@ export default {
             this.tradeLogs[i].ProfitLoss = ploss.toFixed(2);
             this.tradeLogs[i].Perf = perc.toFixed(2);
             this.tradeLogs[i].action = result.meta.logs[i].id;
-
           }
             this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
       }.bind(this)
     );
 
+    },
+    buyfees(buyResult){
+            let dpartcommission = buyResult * 0.0025;
+            let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+            // TAX
+            let dtax = dcommission * 0.12;
+            // Transfer Fee
+            let dtransferfee = buyResult * 0.00005;
+            // SCCP
+            let dsccp = buyResult * 0.0001;
+            let dall =  dcommission + dtax + dtransferfee + dsccp;
+            return buyResult + dall;               
+    },
+    sellfees(buyResult){
+            let dpartcommission = buyResult * 0.0025;
+            let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+            // TAX
+            let dtax = dcommission * 0.12;
+            // Transfer Fee
+            let dtransferfee = buyResult * 0.00005;
+            // SCCP
+            let dsccp = buyResult * 0.0001;
+            let dsell = buyResult * 0.006;
+            let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+            return buyResult - dall;                    
     },
     deleteLogs: function(item){
         const params ={

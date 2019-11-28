@@ -30,6 +30,30 @@
       >
         <v-icon>mdi-dock-right</v-icon>
       </v-btn>
+      <!-- <div id="div__btn">
+        <div
+          id="btn__ticker"
+          :class="{ div__hide: !ticker }"
+          @click="toggleTicker"
+        ></div>
+        <div
+          id="btn__tools"
+          class="div__disable"
+          :class="{ div__hide: !tools }"
+          @click="toggleTools"
+        ></div>
+        <div
+          id="btn__table"
+          :class="[{ div__hide: !table }, { div__disable: !jockey }]"
+          @click="toggleTable"
+        ></div>
+        <div id="btn__sidebar"></div>
+        <div
+          id="btn__sidebarboard"
+          :class="{ div__hide: !sidebarboard }"
+          @click="toggleSidebarBoard"
+        ></div>
+      </div> -->
     </v-content>
 
     <v-tabs height="30" color="#48FFD5" background-color="#00121e" dark>
@@ -70,9 +94,7 @@
         background-color="#00121e"
         :value="'tab-' + 2"
       >
-        <v-container class="pa-0">
-          <Activity />
-        </v-container>
+        <v-container class="pa-0"> </v-container>
       </v-tab-item>
       <v-tab-item
         dark
@@ -87,12 +109,10 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import Jockey from "~/components/chart/table/Jockey";
-import Activity from "~/components/chart/table/Activity";
+import Jockey from "~/components/chart/Jockey";
 export default {
   components: {
-    Jockey,
-    Activity
+    Jockey
   },
   data() {
     return {
