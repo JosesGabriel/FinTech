@@ -348,10 +348,10 @@ import { mapActions, mapGetters } from "vuex";
                             'symbol-id':this.simulatorOpenPosition[i]
                     };
                     this.$api.chart.stocks.history(params).then(
-                                    function(result) {
-                                            this.stock.push(result.data);                     
-                                    }.bind(this)
-                                    );
+                        function(result) {
+                                this.stock.push(result.data);                     
+                        }.bind(this)
+                        );
                 }
 
             },
@@ -433,7 +433,7 @@ import { mapActions, mapGetters } from "vuex";
                                 console.log(response.message);
                                  this.setSimulatorOpenPosition('');
                                  this.e1 = 1;
-                                 
+                                 this.onreset = false;
                                  this.GetSelectStock = '';
                             }
                         });    
@@ -450,7 +450,7 @@ import { mapActions, mapGetters } from "vuex";
                 };          
                 this.$api.chart.stocks.history(params).then(
                 function(result) {    
-                    console.log(result);
+                    //console.log('data -- ',result);
                     if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
 			            this.dboard = 1000000;
 			        } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
@@ -485,7 +485,7 @@ import { mapActions, mapGetters } from "vuex";
                         );
                     }else {
                         this.volm = this.nFormatter(result.data.volume);
-                        this.dataVolume = result.data.volume;
+                        //this.dataVolume = result.data.volume;
                     }
                     
                     this.setSimulatorBuyPrice(result.data.last);

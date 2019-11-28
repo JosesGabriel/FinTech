@@ -37,9 +37,15 @@
           dark
           class="data_table-container pl-10 secondary--text"
         >
-        <template v-slot:item.ProfitLoss="{ item }"><span :class="(item.ProfitLoss > 0 ? 'positive' : item.ProfitLoss < 0 ? 'negative' : '')">{{ item.ProfitLoss }}</span></template>
-        <template v-slot:item.Perf="{ item }"><span :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
-
+        <template v-slot:item.stock_id="{ item }" >{{ item.stock_id }}</template>
+        <template v-slot:item.date="{ item }" >{{ item.meta.date.split(' ')[0] }}</template>
+        <template v-slot:item.average_price="{ item }" >{{ addcomma(parseFloat(item.meta.average_price)) }}</template>
+        <template v-slot:item.buy_value="{ item }" >{{ addcomma(parseFloat(item.meta.buy_value)) }}</template>
+        <template v-slot:item.sell_price="{ item }" >{{ addcomma(parseFloat(item.meta.sell_price)) }}</template>
+        <template v-slot:item.total_value="{ item }" >{{ addcomma(parseFloat(item.total_value)) }}</template>
+        <template v-slot:item.profit_loss="{ item }" ><span :class="item.meta.profit_loss > 0 ? 'positive' : item.meta.profit_loss < 0 ? 'negative' : 'neutral' ">{{ addcomma(parseFloat(item.meta.profit_loss)) }}</span></template>
+        <template v-slot:item.profit_loss_percentage="{ item }" ><span :class="item.meta.profit_loss_percentage > 0 ? 'positive' : item.meta.profit_loss_percentage < 0 ? 'negative' : 'neutral' ">{{ addcomma(parseFloat(item.meta.profit_loss_percentage)) }}%</span></template>
+ 
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
@@ -58,7 +64,7 @@
         <v-row>
           <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
           Total Profit/Loss as of {{ this.date }}: <span class="ml-3" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
-          <span class="ml-3" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
+          <span class="ml-3" :class="(this.totalProfitLossPerf < 0 ? 'negative' : 'positive')">{{ this.totalProfitLossPerf.toFixed(2) }}%</span>
           </v-col>
         </v-row>
         <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
@@ -104,12 +110,12 @@ export default {
         { text: 'Stocks', value: 'stock_id' , align: 'left', sortable: false },
         { text: 'Date', value: 'date', align: 'right' },
         { text: 'Volume', value: 'amount', align: 'right' },
-        { text: 'Ave. Price', value: 'AvePrice', align: 'right' },
-        { text: 'Buy Value', value: 'BuyValue', align: 'right' },
-        { text: 'Sell Price', value: 'SellPrice', align: 'right' },
-        { text: 'Sell Value', value: 'SellValue', align: 'right' },
-        { text: 'Profit/Loss', value: 'ProfitLoss', align: 'right' },
-        { text: 'Perf. (%)', value: 'Perf', align: 'right' },
+        { text: 'Ave. Price', value: 'average_price', align: 'right' },
+        { text: 'Buy Value', value: 'buy_value', align: 'right' },
+        { text: 'Sell Price', value: 'sell_price', align: 'right' },
+        { text: 'Sell Value', value: 'total_value', align: 'right' },
+        { text: 'Profit/Loss', value: 'profit_loss', align: 'right' },
+        { text: 'Perf. (%)', value: 'profit_loss_percentage', align: 'right' },
         { text: '', value: 'action', sortable: false, align: 'right' },
       ],
       tradeLogs: [],
@@ -119,6 +125,7 @@ export default {
       selectedProfile: null,
       componentKeys: 0,
       totalProfitLoss: 0,
+      totalProfitLossPerf: 0,
       totalPerf: 0,
       date: new Date().toISOString().substr(0, 10),
     }
@@ -156,17 +163,36 @@ export default {
       function(result) {
         console.log(result);
           this.tradeLogs = result.meta.logs;   
+          
           for(let i = 0; i < result.meta.logs.length; i++){   
-            if(i == 0 ? this.totalProfitLoss = 0 :'');    
+
             const params = {
                     "symbol-id": this.tradeLogs[i].meta.stock_id
                   };
                   this.$api.chart.stocks.list(params).then(
                     function(results) {
+                       if( i == 0){
+                          this.totalProfitLoss = 0;
+                          this.totalProfitLossPerf = 0;
+                        }  
                       this.tradeLogs[i].stock_id = results.data.symbol;
+
+                      let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
+                      let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}
+                      this.tradeLogs[i].meta = {...average_price}
+                      
+                      this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value
+                      this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100
+
+                      
+                      this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
+                      this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
+                      this.tradeLogs[i].action = this.tradeLogs[i].meta.stock_id
+                      this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
                     }.bind(this)
                   );
-            let date = result.meta.logs[i].meta.date.split(' ')[0];    
+                  
+            /*let date = result.meta.logs[i].meta.date.split(' ')[0];    
             let buy = parseFloat(result.meta.logs[i].meta.sell_price).toFixed(2) * parseFloat(result.meta.logs[i].amount).toFixed(2);
             let bvalue = this.buyfees(buy);           
             let sell = parseFloat(result.meta.logs[i].meta.sell_price) * parseFloat(result.meta.logs[i].amount);
@@ -175,6 +201,7 @@ export default {
             let perc = (ploss / bvalue) * 100;
             this.totalProfitLoss = parseFloat(this.totalProfitLoss) + parseFloat(ploss);
             this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perc);
+            //this.tradeLogs[i].stock_id = this.stockSymbol(result.meta.logs[i].meta.stock_id, i);
             this.tradeLogs[i].date = date;
             this.tradeLogs[i].amount = result.meta.logs[i].amount;
             this.tradeLogs[i].AvePrice = result.meta.logs[i].meta.average_price;
@@ -183,13 +210,14 @@ export default {
             this.tradeLogs[i].SellValue = sellvalue.toFixed(2);
             this.tradeLogs[i].ProfitLoss = ploss.toFixed(2);
             this.tradeLogs[i].Perf = perc.toFixed(2);
-            this.tradeLogs[i].action = result.meta.logs[i].id;
+            this.tradeLogs[i].action = result.meta.logs[i].id;*/
           }
-            this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
+            //this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
       }.bind(this)
     );
 
     },
+    
     buyfees(buyResult){
             let dpartcommission = buyResult * 0.0025;
             let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
