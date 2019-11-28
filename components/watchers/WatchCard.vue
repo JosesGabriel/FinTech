@@ -3,8 +3,8 @@
     <v-card
       class="mb-1 watchCard"
       :class="!hover ? 'watchCard--unfocused' : ''"
-      :color="isLightMode == 1 ? 'lightcard' : 'darkcard'"
-      :dark="isLightMode == 1 ? false : true"
+      :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+      :dark="lightSwitch == 0 ? false : true"
       shaped
       max-height="245"
       :loading="watchCardLoading"
@@ -271,7 +271,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userWatchedStocks: "watchers/getUserWatchedStocks"
+      userWatchedStocks: "watchers/getUserWatchedStocks",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {
@@ -285,7 +286,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setUserWatchedStocks: "watchers/setUserWatchedStocks"
+      setUserWatchedStocks: "watchers/setUserWatchedStocks",
+      setLightSwitch: "global/setLightSwitch"
     }),
     watchCardMount() {
       // GET Closing Price from Stock History API
@@ -296,7 +298,7 @@ export default {
       };
       this.$api.chart.charts.latest(params).then(
         function(result) {
-          console.log(result)
+          console.log(result);
           this.$refs.closePriceChart.updateSeries([
             {
               data: result.data.c.reverse()

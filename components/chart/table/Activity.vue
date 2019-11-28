@@ -67,7 +67,7 @@
   </v-col>
 </template>
 
-<style>
+<style scoped>
 .theme--dark.v-label {
   color: black;
   font-size: 14px;

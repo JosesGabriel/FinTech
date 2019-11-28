@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-data-table
-      dark
+      :dark="lightSwitch == 0 ? false : true"
       :headers="playerInLobby ? headersJoined : headers"
       :items="playerInLobby ? itemsJoined : items"
       hide-default-footer
@@ -325,7 +325,8 @@ export default {
   computed: {
     ...mapGetters({
       playerInLobby: "game/getPlayerInLobby",
-      playerIsHost: "game/getPlayerIsHost"
+      playerIsHost: "game/getPlayerIsHost",
+      lightSwitch: "global/getLightSwitch"
     })
     // gray: function() {
     //   this.gray = n;

@@ -1,5 +1,9 @@
 <template>
-  <v-card color="transparent" :loading="loader"
+  <v-card
+    :dark="lightSwitch == 0 ? false : true"
+    color="transparent"
+    flat
+    :loading="loader"
     ><div class="container pt-0 d-flex leaderboard__wrap transparent">
       <div class="row leaderboard__header">
         <div class="col-12 pa-0">
@@ -10,6 +14,11 @@
         v-for="n in leaderboardObject.length"
         :key="n"
         class="leaderboard__list row mb-1 pt-2"
+        :class="
+          lightSwitch == 0
+            ? 'leaderboard__list--light'
+            : 'leaderboard__list--dark'
+        "
       >
         <div class="col-2 title py-0">{{ n }}</div>
         <div class="col-2 px-0 py-0 pt-">
@@ -53,17 +62,28 @@
 }
 .leaderboard__list {
   display: inline-flex;
-  background-color: #03232f;
   border-radius: 6px;
+}
+.leaderboard__list--dark {
+  background-color: #03232f;
+}
+.leaderboard__list--light {
+  background-color: white;
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
       loader: false,
       leaderboardObject: []
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   mounted: function() {
     this.loadLeaderboards();

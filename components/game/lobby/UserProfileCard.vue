@@ -1,5 +1,10 @@
 <template>
-  <v-card class="mx-auto profileCard" color="#00121e" flat dark>
+  <v-card
+    class="mx-auto profileCard"
+    color="transparent"
+    flat
+    :dark="lightSwitch == 0 ? false : true"
+  >
     <v-list-item class="pa-0">
       <v-list-item-avatar color="grey" class="ma-0" size="65px">
         <v-img
@@ -105,7 +110,7 @@
 }
 </style>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -114,7 +119,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      playerData: "game/getPlayerData"
+      playerData: "game/getPlayerData",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   mounted() {

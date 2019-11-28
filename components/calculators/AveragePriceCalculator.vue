@@ -1,5 +1,8 @@
 <template>
-  <v-card color="darkcard" dark>
+  <v-card
+    :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+    :dark="lightSwitch == 0 ? false : true"
+  >
     <v-card-title class="title-2">Average Price Calculator</v-card-title>
     <v-container>
       <v-row>
@@ -84,6 +87,7 @@
   </v-card>
 </template>
 <script>
+import { mapGetters } from "vuex";
 let numeral = require("numeral");
 export default {
   data() {
@@ -97,6 +101,11 @@ export default {
 
       positionKey: 1
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   methods: {
     parseNumber(num) {

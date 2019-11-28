@@ -1,5 +1,10 @@
 <template>
-  <v-card class="mb-3" color="transparent" dark outlined>
+  <v-card
+    class="mb-3"
+    color="transparent"
+    :dark="lightSwitch == 0 ? false : true"
+    outlined
+  >
     <v-card-text class="pa-0 pl-2">
       <div class="body-2 font-weight-black">Bulletin</div>
       <v-divider></v-divider>
@@ -27,3 +32,13 @@
     </v-card-text>
   </v-card>
 </template>
+<script>
+import { mapGetters } from "vuex";
+export default {
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
+  }
+};
+</script>
