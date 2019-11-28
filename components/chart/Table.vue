@@ -1,7 +1,20 @@
 <template>
-  <!-- Mestro Meny -->
   <v-col class="pa-0">
     <v-content class="content__btncontainer">
+      <v-btn
+        small
+        icon
+        :color="maximize && !fullscreen ? '#48FFD5' : '#BBB'"
+        :class="[{ button__disable: !maximize && !fullscreen }]"
+        title="Maximize Table"
+        @click="toggleTabsFullscreen"
+      >
+        <v-icon class="icon-flipped-y">mdi-window-maximize</v-icon>
+        <!-- <v-icon class="icon-flipped-y">{{
+          !fullscreen ? "mdi-window-maximize" : "mdi-window-minimize"
+        }}</v-icon> -->
+      </v-btn>
+
       <v-btn
         small
         icon
@@ -11,16 +24,7 @@
       >
         <v-icon class="icon-flipped-y">mdi-dock-bottom</v-icon>
       </v-btn>
-      <v-btn
-        small
-        icon
-        :class="[{ div__disable: !jockey }]"
-        :color="!table && jockey ? '#48FFD5' : '#BBB'"
-        title="Maximize Table"
-        @click="toggleTable"
-      >
-        <v-icon class="icon-flipped-y">mdi-window-maximize</v-icon>
-      </v-btn>
+
       <v-btn
         small
         icon
@@ -34,122 +38,102 @@
 
     <v-tabs height="30" color="#48FFD5" background-color="#00121e" dark>
       <v-tab
-        :disabled="fullscreen"
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-1`"
-        @click="toggleJockey"
-        >Jockey</v-tab
+        v-for="item in tabs_content"
+        :key="item.id"
+        :href="`#tab-${item.id}`"
+        class="text-capitalize subtitle-1"
+        @click="toggleTabs(item.id)"
       >
-      <v-tab
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-2`"
-        >Activity</v-tab
-      >
-      <v-tab
-        disabled
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-3`"
-        >Trade</v-tab
-      >
+        {{ item.title }}
+      </v-tab>
 
       <v-tab-item
-        dark
-        color="#48FFD5"
-        background-color="black"
-        :value="'tab-' + 1"
+        v-for="item in tabs_content"
+        :key="item.id"
+        :value="`tab-${item.id}`"
         style="background: #00121e;"
-      >
-        <Jockey v-show="jockey" />
-      </v-tab-item>
-      <v-tab-item
-        dark
         color="#48FFD5"
-        background-color="#00121e"
-        :value="'tab-' + 2"
       >
-        <v-container class="pa-0">
-          <Activity />
-        </v-container>
-      </v-tab-item>
-      <v-tab-item
-        dark
-        color="#48FFD5"
-        background-color="#00121e"
-        :value="'tab-' + 3"
-      >
-        <v-container class="pa-0"> </v-container>
+        <component :is="item.component" v-show="tabs_show" />
       </v-tab-item>
     </v-tabs>
   </v-col>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import Jockey from "~/components/chart/table/Jockey";
 import Activity from "~/components/chart/table/Activity";
+import Trade from "~/components/chart/table/Trade";
+
 export default {
   components: {
     Jockey,
-    Activity
+    Activity,
+    Trade
   },
   data() {
     return {
-      ticker: true,
-      sidebarboard: true,
-      table: false,
-      tools: true,
-      maximize: false,
-      fullscreen: false,
-      jockey: false
+      tabs_show: false,
+      active_tab: 0,
+      tabs_content: [
+        {
+          id: 1,
+          icon: "mdi-cash-usd-outline",
+          title: "Jockey",
+          component: "Jockey",
+          disabled: false
+        },
+        {
+          id: 2,
+          icon: "mdi-format-list-bulleted-square",
+          title: "Activity",
+          component: "Activity",
+          disabled: false
+        },
+        {
+          id: 3,
+          icon: "mdi-card-search-outline",
+          title: "Trade",
+          component: "Trade",
+          disabled: false
+        }
+      ]
     };
+  },
+  computed: {
+    ...mapGetters({
+      ticker: "chart/getTicker",
+      maximize: "chart/getTableMaximize",
+      fullscreen: "chart/getTableFullscreen",
+      sidebarboard: "chart/getSidebar"
+    })
   },
   methods: {
     ...mapActions({
       setTicker: "chart/setTicker",
-      setTable: "chart/setTable",
       setSidebar: "chart/setSidebar",
+      setTable: "chart/setTable",
       setTableMaximize: "chart/setTableMaximize",
       setTableFullscreen: "chart/setTableFullscreen"
     }),
     toggleTicker: function() {
-      this.ticker = !this.ticker;
-      this.setTicker(this.ticker);
-      this.$bus.$emit("adjustChartView");
-    },
-    toggleTools: function() {
-      this.tools = !this.tools;
-      // console.log(this.tools);
-      console.log("test");
-    },
-    toggleTable: function() {
-      if (this.maximize == true) {
-        this.table = true;
-        this.maximize = false;
-        this.fullscreen = true;
-      } else {
-        this.fullscreen = false;
-        this.maximize = true;
-        this.table = false;
-      }
-      this.jockey = true;
-      this.setTableFullscreen(this.table);
+      this.setTicker(!this.ticker);
       this.$bus.$emit("adjustChartView");
     },
     toggleSidebarBoard: function() {
-      this.sidebarboard = !this.sidebarboard;
-      this.setSidebar(this.sidebarboard);
+      this.setSidebar(!this.sidebarboard);
     },
-    toggleJockey: function() {
-      // default hide
-      this.fullscreen = false;
-      this.table = false;
-      this.setTableFullscreen(this.table);
-      // main event
-      this.jockey = !this.jockey;
-      this.maximize = !this.maximize;
-      this.setTableMaximize(this.maximize);
+    toggleTabs: function(tab) {
+      if (this.fullscreen) return;
+      if (this.active_tab == tab || this.maximize == false) {
+        this.tabs_show = !this.tabs_show;
+        this.setTableMaximize(!this.maximize);
+        this.$bus.$emit("adjustChartView");
+      }
+      this.active_tab = tab;
+    },
+    toggleTabsFullscreen: function() {
+      this.setTableFullscreen(!this.fullscreen);
       this.$bus.$emit("adjustChartView");
     }
   }
@@ -182,68 +166,8 @@ export default {
   -ms-transform: scaleY(-1);
   transform: scaleY(-1);
 }
-.div__hide {
-  /* background: #ddd !important; */
-  color: #bbb;
-  /* background: #0c1a2b !important;
-  border: #48ffd5 1px solid !important; */
-}
-.div__disable {
-  /* background: #37474f !important; */
+.button__disable {
   cursor: not-allowed !important;
   pointer-events: none;
-}
-#div__btn {
-  height: 45px;
-  width: 50px;
-  margin-top: -10px;
-}
-#btn__ticker {
-  position: absolute;
-  height: 35%;
-  width: 80%;
-  background: #48ffd5;
-  border: 1px solid #000;
-  cursor: pointer;
-}
-#btn__tools {
-  position: absolute;
-  height: 94%;
-  width: 20%;
-  bottom: 0;
-  background: #48ffd5;
-  border: 1px solid #000;
-  cursor: pointer;
-}
-#btn__sidebar {
-  position: absolute;
-  height: 72%;
-  width: 20%;
-  bottom: 0px;
-  right: 0;
-  /* background: #48ffd5; */
-  border: 1px solid #000;
-  background: #37474f;
-  cursor: not-allowed;
-}
-#btn__table {
-  position: absolute;
-  height: 95%;
-  width: 60%;
-  bottom: 0;
-  left: 20%;
-  background: #48ffd5;
-  border: 1px solid #000;
-  cursor: pointer;
-}
-#btn__sidebarboard {
-  position: absolute;
-  width: 20%;
-  right: 0;
-  top: -10px;
-  background: #48ffd5;
-  border: 1px solid #000;
-  cursor: pointer;
-  height: 128%;
 }
 </style>

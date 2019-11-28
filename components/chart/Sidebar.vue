@@ -6,6 +6,7 @@
       color="#00121e"
       elevation="12"
       dark
+      flat
     >
       <Headline />
       <Status />

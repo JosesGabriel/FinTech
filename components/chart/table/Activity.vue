@@ -1,6 +1,7 @@
 <template>
-  <v-col cols="12" sm="12" md="12">
-    <v-row class="mt-3 ml-0 mb-3 mr-2" style="color:white;">
+  <v-content>
+    <!-- top -->
+    <v-row class="ml-0 mb-3 mr-2" style="color:white;">
       <v-col class="ml-0 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
         <v-row class="mt-2 pl-3 caption">
           Position
@@ -11,63 +12,64 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
+      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
         <v-row class="mt-2 pl-3 caption">
           Ave. Price
         </v-row>
         <v-row class="mt-1">
           <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-            1,000,000.00
+            <span class="overline">PHP</span>16.04
           </v-col>
         </v-row>
       </v-col>
-      <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
+      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
         <v-row class="mt-2 pl-3 caption">
           Total Cost
         </v-row>
         <v-row class="mt-1">
           <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-            1,000,000.00
+            <span class="overline">PHP</span>16,047.20
           </v-col>
         </v-row>
       </v-col>
-      <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
+      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
         <v-row class="mt-2 pl-3 caption">
           Market Value
         </v-row>
         <v-row class="mt-1">
           <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-            1,000,000.00
+            <span class="overline">PHP</span>200,000.00
           </v-col>
         </v-row>
       </v-col>
-      <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
+      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
         <v-row class="mt-2 pl-3 caption">
           Profit
         </v-row>
         <v-row class="mt-1">
-          <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-            1,000,000.00
+          <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
+            <span class="overline">PHP</span>661.90
           </v-col>
         </v-row>
       </v-col>
-      <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
+      <v-col class="mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
         <v-row class="mt-2 pl-3 caption">
-          Perf
+          Perf. (%)
         </v-row>
         <v-row class="mt-0">
-          <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-            100.00%
+          <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
+            4.12
           </v-col>
         </v-row>
       </v-col>
     </v-row>
 
-    <!-- <ChartTesting/> -->
-  </v-col>
+    <!-- Mid -->
+    <!-- <span class="subtitle-1">Trade History</span> -->
+  </v-content>
 </template>
 
-<style>
+<style scoped>
 .theme--dark.v-label {
   color: black;
   font-size: 14px;
