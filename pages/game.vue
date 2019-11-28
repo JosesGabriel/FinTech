@@ -50,9 +50,7 @@ export default {
   methods: {
     ...mapActions({
       setPlayerInGame: "game/setPlayerInGame",
-      setPlayerRanking: "game/setPlayerRanking",
-      setPlayerCoins: "game/setPlayerCoins",
-      setPlayerID: "game/setPlayerID"
+      setPlayerData: "game/setPlayerData"
     }),
     async checkPlayerAccount() {
       let token = localStorage["auth._token.local"];
@@ -76,9 +74,7 @@ export default {
         .index()
         .then(response => {
           if (response.success) {
-            this.setPlayerRanking(response.data.player.ranking);
-            this.setPlayerCoins(response.data.player.coins);
-            this.setPlayerID(response.data.player.user_id);
+            this.setPlayerData(response.data.player);
             return true;
           }
         })

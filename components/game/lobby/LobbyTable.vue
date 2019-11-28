@@ -5,6 +5,7 @@
       :headers="playerInLobby ? headersJoined : headers"
       :items="playerInLobby ? itemsJoined : items"
       hide-default-footer
+      fixed-header
       height="calc(100vh - 450px)"
       class="elevation-1 lobby__table transparent__bg"
       :footer-props="{
@@ -28,6 +29,7 @@
       <v-btn
         small
         outlined
+        class="gamefooter__btn"
         color="success"
         @click="
           joinLobby();
@@ -39,6 +41,7 @@
       <v-btn
         small
         outlined
+        class="gamefooter__btn"
         color="success"
         @click="
           dialog = false;
@@ -51,8 +54,8 @@
   </div>
 </template>
 <style>
-.tableHeader {
-  background-color: #1de9b6;
+.v-data-table-header tr th {
+  background-color: #1de9b6 !important;
 }
 .v-data-footer__select {
   display: none;
@@ -73,6 +76,11 @@ tr span {
   background-color: #03232f;
   border: 1px solid #1de9b6;
   height: calc(100vh - 405px);
+}
+.gamefooter__btn {
+  position: relative;
+  bottom: 10px;
+  left: 10px;
 }
 </style>
 <script>

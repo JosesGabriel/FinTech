@@ -10,7 +10,7 @@
         ></v-img>
       </v-list-item-avatar>
       <v-list-item-content class="profileCard__header py-0">
-        <div class="container py-1">
+        <div class="container py-0">
           <div class="row">
             <div class="col-12 profileCard__header--username py-0">
               <span class="headline text--green font-weight-bold"
@@ -18,8 +18,10 @@
               </span>
             </div>
             <div class="col-12 py-0">
-              <span>Lydian</span>
-              <span>{{ playerCoins }}</span>
+              <v-avatar class="profile" color="grey" size="30">
+                <v-img src="/badges/badge.svg"></v-img>
+              </v-avatar>
+              <span>Archon</span>
             </div>
           </div>
         </div>
@@ -29,19 +31,23 @@
     <v-card-text class="pa-0 playerStats__container mt-2">
       <div class="container py-0">
         <div class="row">
-          <div class="col-4 text-center py-1 px-0">
+          <div class="col-4 text-center py-0 px-0">
             <span>Winrate</span><br />
-            <span class="title font-weight-medium text--green">100%</span>
+            <span class="title font-weight-medium text--green"
+              >{{ playerData.win_percentage }}%</span
+            >
           </div>
-          <div class="col-4 text-center py-1 px-0">
+          <div class="col-4 text-center py-0 px-0">
             <span>Rank</span><br />
             <span class="title font-weight-medium text--green">{{
-              playerRanking
+              playerData.ranking
             }}</span>
           </div>
-          <div class="col-4 text-center py-1 px-0">
+          <div class="col-4 text-center py-0 px-0">
             <span class="caption no-wrap"> No. Of Games </span><br />
-            <span class="title font-weight-medium text--green">420</span>
+            <span class="title font-weight-medium text--green">{{
+              playerData.series_played_count
+            }}</span>
           </div>
         </div>
       </div>
@@ -50,10 +56,11 @@
       <div class="row">
         <div class="col-12 py-0">
           <div class="row">
-            <div class="col-12 d-flex justify-space-between py-0 pt-1">
-              <v-btn icon small>
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
+            <div class="col-12 d-flex justify-space-between py-0 pt-2">
+              <div>
+                <span>Lydian </span>
+                <span>{{ playerData.coins }}</span>
+              </div>
               <v-btn outlined color="success" small>Play Game</v-btn>
             </div>
           </div>
@@ -107,8 +114,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      playerRanking: "game/getPlayerRanking",
-      playerCoins: "game/getPlayerCoins"
+      playerData: "game/getPlayerData"
     })
   },
   mounted() {
