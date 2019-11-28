@@ -115,7 +115,7 @@
                       </v-card>
                     </v-dialog>
 
-            <TradeModal :visible="EnterTradeModal" @close="EnterTradeModal=false" />
+            <TradeModal :visible="EnterTradeModal" :OpenPosition="openposition" @close="EnterTradeModal=false" />
             <reset-modal :visible="showResetForm" @close="showResetForm=false" />
             <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
@@ -146,6 +146,7 @@ export default {
         ],
         portfolioLogs: [],
         openposition: [],
+        //OpenPositionList: [],
         items: [
             { title: 'Note' },
             { title: 'Delete' },
@@ -197,10 +198,12 @@ export default {
             };
             this.totalProfitLoss = 0;
             this.totalPerf = 0;
+            this.openposition = [];
             this.$api.journal.portfolio.open(openparams2).then(
               function(result) {
                 console.log('live port',result);
                 this.portfolioLogs = result.meta.open;
+
                 for (let i = 0; i < this.portfolioLogs.length; i++) {
                         this.openposition[i] = this.portfolioLogs[i].stock_id;
                         const params = {
@@ -244,9 +247,8 @@ export default {
                             emotion: result.meta.open[i].metas.emotion,
                             notes: result.meta.open[i].metas.notes
                           }       
-                }  
-                
-                 this.setSimulatorOpenPosition(this.openposition);
+                }          
+                 //this.setSimulatorOpenPosition(this.openposition);
                  this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(2));
               }.bind(this)
             );   

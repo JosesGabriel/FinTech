@@ -207,20 +207,20 @@ export default {
     },
     keypress: function(){
         let press = 0;
-        if(this.quantity > this.Position){
-            press = parseFloat(this.Position) * parseFloat(this.simulatorBuyPrice);
-            let pressfees = this.fees(press);
-            this.totalCost = this.addcomma(pressfees);
-            this.$emit('totalPosition', this.quantity);
-            return this.quantity = this.Position;
-        }else{
+        if(this.simulatorConfirmedBuySell == 'sell'){
+            if(this.quantity > this.Position){
+                press = parseFloat(this.Position) * parseFloat(this.simulatorBuyPrice);
+                let pressfees = this.fees(press);
+                this.totalCost = this.addcomma(pressfees);
+                this.$emit('totalPosition', this.quantity);
+                return this.quantity = this.Position;
+            }
+        }
             press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
             let pressfees = this.fees(press);
             this.setSimulatorPositions(this.quantity);
             this.totalCost = this.addcomma(pressfees);
-            this.$emit('totalPosition', this.quantity);
-        }
-        
+            this.$emit('totalPosition', this.quantity);    
     },
     getBalance: function(item){
         console.log(item);
