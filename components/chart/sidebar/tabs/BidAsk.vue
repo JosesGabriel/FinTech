@@ -9,86 +9,65 @@
       style="height:105px;"
       flat
     >
-      <div id="div__bidask">
-        <div id="div__bid">
-          <v-simple-table
-            dense
-            dark
-            fixed-header
-            style="background:#00121e"
-            height="105px"
-            class="custom_table"
+      <v-simple-table
+        dense
+        dark
+        fixed-header
+        style="background:#00121e"
+        height="105px"
+        class="custom_table"
+      >
+        <thead>
+          <tr>
+            <th class="headers">
+              #
+            </th>
+            <th class="headers">
+              VOL
+            </th>
+            <th class="headers">
+              BID
+            </th>
+            <th class="headers">
+              ASK
+            </th>
+            <th class="headers">
+              VOL
+            </th>
+            <th class="headers">
+              #
+            </th>
+            <th class="headers"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(item, key) in bidask.limit"
+            :key="item.id"
+            class="tr_custom"
           >
-            <thead>
-              <tr>
-                <th class="headers">
-                  #
-                </th>
-                <th class="headers">
-                  VOL
-                </th>
-                <th class="headers">
-                  BID
-                </th>
-                <th class="headers"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in bids" :key="item.id" class="tr_custom">
-                <td class="column pr-1" style="width:10px;">
-                  {{ item.count | numeral("0,0") }}
-                </td>
-                <td class="column pr-1" style="width:30px;">
-                  {{ item.volume | numeral("0.0a") }}
-                </td>
-                <td class="column pr-4" style="width:30px;">
-                  {{ item.price | numeral("0,0.00") }}
-                </td>
-                <td class="column" style="width:5px;"></td>
-              </tr>
-            </tbody>
-          </v-simple-table>
-        </div>
-        <div id="div__ask">
-          <v-simple-table
-            dense
-            dark
-            fixed-header
-            style="background:#00121e"
-            height="105px"
-            class="custom_table"
-          >
-            <thead>
-              <tr>
-                <th class="headers">
-                  ASK
-                </th>
-                <th class="headers">
-                  VOL
-                </th>
-                <th class="headers">
-                  #
-                </th>
-                <th class="headers"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in asks" :key="item.id" class="tr_custom">
-                <td class="column pr-1" style="width:30px;">
-                  {{ item.price | numeral("0,0.00") }}
-                </td>
-                <td class="column pr-1" style="width:30px;">
-                  {{ item.volume | numeral("0.0a") }}
-                </td>
-                <td class="column pr-4" style="width:10px;">
-                  {{ item.count | numeral("0,0") }}
-                </td>
-                <td class="column" style="width:5px;"></td>
-              </tr>
-            </tbody>
-          </v-simple-table>
-        </div>
-      </div>
+            <td class="column pr-1" style="width:15px;">
+              {{ formatItem(bidask.bids[key], "count") }}
+            </td>
+            <td class="column pr-1" style="width:25px;">
+              {{ formatItem(bidask.bids[key], "volume") }}
+            </td>
+            <td class="column pr-4" style="width:30px;">
+              {{ formatItem(bidask.bids[key], "price") }}
+            </td>
+            <td class="column pr-4" style="width:30px;">
+              {{ formatItem(bidask.asks[key], "price") }}
+            </td>
+            <td class="column pr-1" style="width:25px;">
+              {{ formatItem(bidask.asks[key], "volume") }}
+            </td>
+            <td class="column pr-1" style="width:15px;">
+              {{ formatItem(bidask.asks[key], "count") }}
+            </td>
+            <td class="column" style="width:5px;"></td>
+          </tr>
+        </tbody>
+      </v-simple-table>
     </v-card>
     <!-- depthbar -->
     <DepthBar />
@@ -104,10 +83,11 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-
 import DepthBar from "../tabs/DepthBar";
 import TimeTrade from "../tabs/TimeTrade";
 import TransactionBar from "../tabs/TransactionBar";
+
+let numeral = require("numeral");
 
 export default {
   name: "BidAsk",
@@ -119,8 +99,8 @@ export default {
   data() {
     return {
       loading: "#48FFD5",
-      asks: [],
-      bids: []
+      asks: {},
+      bids: {}
     };
   },
   computed: {
@@ -133,14 +113,33 @@ export default {
   watch: {
     symbolid(symid) {
       this.initBidask(symid);
-      this.asks = [];
-      this.bids = [];
+      this.asks = {};
+      this.bids = {};
     }
   },
   methods: {
     ...mapActions({
       setBidask: "chart/setBidask"
     }),
+    formatItem(item, key = null) {
+      if (item == undefined) return;
+      let result = null;
+      switch (key) {
+        case "count":
+          result = numeral(Object.values(item)[0]).format("0,0");
+          break;
+        case "id":
+          result = Object.values(item)[1];
+          break;
+        case "price":
+          result = numeral(Object.values(item)[2]).format("0,0.00");
+          break;
+        case "volume":
+          result = numeral(Object.values(item)[3]).format("0.0a");
+          break;
+      }
+      return result;
+    },
     initBidask: function(symid) {
       this.loading = "#48FFD5";
       this.$api.chart.stocks
@@ -152,20 +151,23 @@ export default {
         .then(response => {
           this.asks = Object.values(response.data.asks);
           this.bids = Object.values(response.data.bids);
+          const limit = Math.max(this.asks.length, this.bids.length);
           const bidask = {
             asks: this.asks,
-            bids: this.bids
+            bids: this.bids,
+            limit
           };
-          // console.log(bidask);
+          //console.log(bidask);
           this.setBidask(bidask);
           this.loading = null;
         })
         .catch(error => {
-          // console.log(error);
+          console.log(error);
         });
     }
   },
   mounted() {
+    //this.initBidask("29235363595681792");
     this.initBidask(this.symbolid);
   }
 };
@@ -179,20 +181,7 @@ export default {
   background: #00121e !important;
   font-size: 10px !important;
   color: #fff !important;
-  text-align: center !important;
-}
-#div__bidask {
-  display: flex;
-  height: 100%;
-  margin-left: 7px;
-}
-#div__bid {
-  flex: 0 0 120px;
-  background: blue;
-}
-#div__ask {
-  flex: 0 0 120px;
-  background: red;
+  text-align: right !important;
 }
 .tr_custom {
   line-height: 0.1rem !important;
@@ -200,14 +189,8 @@ export default {
 .custom_table tr {
   height: 5px !important;
 }
-.header {
-  background: #00121e !important;
-  font-size: 10px !important;
-  color: #fff !important;
-  text-align: right !important;
-}
 .column {
-  background: #00121e !important;
+  /* background: #00121e !important; */
   font-size: 10px !important;
   color: #bbb;
   text-align: right;

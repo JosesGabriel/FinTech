@@ -59,6 +59,7 @@ export default {
       this.$api.chart.stocks.history(params).then(response => {
         this.data = response.data;
         this.setIndex(parseInt(this.data.value) > 0 ? false : true);
+        //  console.log(this.data);
         this.setStock(this.data);
         this.loading = null;
       });
@@ -66,7 +67,8 @@ export default {
   },
   watch: {
     symbolid(symid) {
-      //  console.log(symid);
+      //console.log(symid);
+      //console.log(symid);
       this.initStock(symid);
     },
     index(value) {
