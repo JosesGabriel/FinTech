@@ -127,22 +127,23 @@ export default {
       }
     }
   },
-  //   watch: {
-  //     symbolid(value) {
-  //       console.log("changed");
-  //       //console.log(this);
-  //       //   console.log(this.stock.market_code);
-  //       //   if (this.passTickerToChart() != undefined) {
-  //       //     this.passTickerToChart(this.stock.market_code);
-  //       //   }
-  //     }
-  //   },
+  // watch: {
+  //   symbolid(value) {
+  //     console.log("changed");
+  //     console.log(this);
+  //     "PSE:KPPI"
+  //       console.log(this.stock.market_code);
+  //       if (this.passTickerToChart() != undefined) {
+  //         this.passTickerToChart(this.stock.market_code);
+  //       }
+  //   }
+  // },
   mounted() {
     // listen to ticker toggle
     this.$bus.$on("adjustChartView", data => {
       this.chartView;
-      //console.log(this.chartViewId);
-      //console.log(this.chartViewClass);
+      console.log(this.chartViewId);
+      console.log(this.chartViewClass);
     });
 
     //! BEWARE: no trailing slash is expected in feed URL
