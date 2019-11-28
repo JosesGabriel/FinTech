@@ -199,7 +199,7 @@ export default {
             this.totalPerf = 0;
             this.$api.journal.portfolio.open(openparams2).then(
               function(result) {
-                console.log(result);
+                console.log('live port',result);
                 this.portfolioLogs = result.meta.open;
                 for (let i = 0; i < this.portfolioLogs.length; i++) {
                         this.openposition[i] = this.portfolioLogs[i].stock_id;

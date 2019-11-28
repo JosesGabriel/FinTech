@@ -28,9 +28,9 @@
         <template v-slot:item.perf_percentage="{ item }" ><span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.perf_percentage) }}%</span></template>
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
-            <v-btn small class="caption" text color="success" @click.stop="showTradeDetails=true">Details</v-btn>
-            <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" v-model="item" item-value="item" v-on:click="deleteLive(item.action)" text color="success">Delete</v-btn>
+            <v-btn small class="caption" text color="success" @click.stop="showTradeDetails=true" v-on:click="editLive(item)">Details</v-btn>
+            <v-btn small class="caption" text color="success" v-on:click="editLive(item)">Edit</v-btn>
+            <v-btn small class="caption" text color="success" v-model="item" item-value="item" v-on:click="deleteLive(item.action)">Delete</v-btn>
           </div>
           <v-icon
             small
@@ -78,7 +78,7 @@
         <reset-modal :visible="showResetForm" @close="showResetForm=false" />
         <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
         <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" />
-        <trade-details :visible="showTradeDetails" :author="post" @close="showTradeDetails=false" />
+        <trade-details :visible="showTradeDetails" :itemDetails="itemDetails" @close="showTradeDetails=false" />
         <!-- @click.stop="showResetForm=true" -->
     </v-col>
 </template>
@@ -110,6 +110,7 @@ export default {
       showFundsForm: false,
       showTradeViewForm: false,
       showTradeDetails: false,
+      itemDetails: {},
 
       ifVirtualShow: false,
       fundsShow: false,
@@ -173,6 +174,10 @@ export default {
           }
       });
     },
+    editLive: function(item) {
+      // console.log(item)
+      this.itemDetails = item
+    },
     formatPrice(value) {
         let val = (value/1).toFixed(2).replace('.', '.')
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -188,23 +193,22 @@ export default {
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
           this.portfolioLogs = result.meta.open;
-          
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             
+            // console.log(this.portfolioLogs[i], "test")
             const historyparams  = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };
             this.$api.journal.portfolio.history(historyparams).then(
               function(result) {
-                // console.log(this.portfolioLogs[i])
                 let portfolioLogsfinal = result.data
                 let market_value = {market_value: 0}
                 let profit = {profit: 0}
                 let perf_percentage = {perf_percentage: 0, id_str: null}
                 this.portfolioLogs[i] = {...this.portfolioLogs[i],...portfolioLogsfinal,...market_value,...profit,...perf_percentage}
                 
-                let buyResult = parseFloat(this.portfolioLogs[i].metas.buy_price) * parseFloat(this.portfolioLogs[i].position)
+                let buyResult = parseFloat(this.portfolioLogs[i].last) * parseFloat(this.portfolioLogs[i].position)
                 let dpartcommission = buyResult * 0.0025;
                 let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
                 // TAX
@@ -218,7 +222,7 @@ export default {
                 let results = buyResult - dall;
 
                 this.portfolioLogs[i].market_value = results
-                this.portfolioLogs[i].total_value = this.portfolioLogs[i].average_price * this.portfolioLogs[i].position
+                this.portfolioLogs[i].total_value = this.portfolioLogs[i].last * this.portfolioLogs[i].position
                 this.portfolioLogs[i].profit = this.portfolioLogs[i].market_value - this.portfolioLogs[i].total_value
                 this.portfolioLogs[i].perf_percentage = this.portfolioLogs[i].profit / this.portfolioLogs[i].total_value * 100
                 this.portfolioLogs[i].stock_id = result.data.symbol
@@ -316,4 +320,19 @@ export default {
     margin: 0;
     outline-color: transparent;
   }
+  /* Custom Scrollbar */
+.gameGlobal ::-webkit-scrollbar {
+  width: 5px;
+}
+.gameGlobal ::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+.gameGlobal ::-webkit-scrollbar-thumb {
+  background: #1de9b6;
+  border-radius: 20px;
+}
+.gameGlobal ::-webkit-scrollbar-thumb:hover {
+  background: #1de9b6;
+}
 </style>
