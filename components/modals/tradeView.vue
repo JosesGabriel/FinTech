@@ -16,6 +16,7 @@
                 <v-btn v-on="on" text class="px-1" color="#00FFC3">
                     <span class="text-capitalize">Date: </span>
                     <v-card-text class="pa-0" v-html="date"></v-card-text>
+                    <v-icon>mdi-chevron-down</v-icon>
                 </v-btn>
             </template>
             <v-date-picker v-model="date" color="#00121e" dark class="datepicker-container" scrollable>

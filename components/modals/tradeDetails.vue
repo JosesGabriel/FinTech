@@ -5,24 +5,25 @@
 </template>
 <script>
 export default {
-  props: ['visible', 'author'],
+  props: ['visible', 'itemDetails'],
   computed: {
     show: {
       get () {
-        return this.visible
+        console.log(this.itemDetails)
+        return this.visible, this.itemDetails
       },
       set (value) {
         if (!value) {
           this.$emit('close')
         }
-      }
-    },
-    getDetails() {
-        this.author
+      },
+        getDetails() {
+            this.visible
+    console.log(this.itemDetails)
+        }
     }
   },
   mounted() {
-    console.log(this.author)
   }
 }
 </script>
