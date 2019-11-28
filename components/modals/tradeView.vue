@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" max-width="320px">
+  <v-dialog v-model="show" max-width="320px" class="gameGlobal">
     <v-card color="#00121E">
       <v-card-title
         class="text-left justify-left pa-5 pb-0 px-5 success--text subtitle-1 font-weight-bold"
@@ -38,11 +38,19 @@
                 </v-tabs>
                 <v-col cols="12" sm="12" md="12" class="pt-3">
                   <v-select v-model="GetSelectStock" offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stocklist" item-text="symbol" item-value="id_str" label="Select Stock" @change="getStockDetails" ></v-select>
-                  <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
+                  <!-- <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
                   <v-spacer></v-spacer>
                   <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span class="caption" :class=" change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral' " >{{ change }}</span>
                   <span class="caption" :class=" cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral' ">({{ cpercentage }}%)</span >
-                  </p>
+                  </p> -->
+                  
+                  <v-col cols="12" class="pa-0">
+                    <v-row no-gutters>
+                      <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Current Price</v-card-title>
+                      <v-spacer></v-spacer>
+                      <v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ cprice }}<span class="caption pl-1" :class=" change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral' " > {{ change }} ({{ cpercentage }}%)</span ></v-card-title>
+                    </v-row>
+                  </v-col>
                   <v-row no-gutters class="mt-2">
                     <v-col class="pa-0" cols="12" sm="6" md="6">
                       <v-simple-table
@@ -176,23 +184,29 @@
                 <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
                   <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" type="number" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
                   <v-btn 
-                      @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= 100"
+                      @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotQuantity"
                       text 
                       icon 
                       color="success"
                   ><v-icon>mdi-chevron-down</v-icon></v-btn>
                   <v-btn 
-                      @click="quantityModel += 100"
+                      @click="quantityModel += boardLotQuantity"
                       text 
                       icon 
                       color="success"
                   ><v-icon>mdi-chevron-up</v-icon></v-btn>
                 </v-col>
-                <v-col cols="12" sm="12" md="12" class="justify-end d-flex">
-                <v-card-title class="caption pa-0 secondary--text">Board lot: {{ boardLotModel }}</v-card-title>
+                <v-col cols="12">
+                  <v-row no-gutters>
+                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                  </v-row>
                 </v-col>
-                <v-text-field v-model="totalCostModel" label="Total Cost" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field>
-                <!-- <v-snackbar v-model="snackbar" :timeout="snackbarTimeout">Insufficient funds<v-btn color="blue" text @click="snackbar = false">Close</v-btn></v-snackbar> -->
+                <v-col cols="12" class="pb-5">
+                  <v-row no-gutters>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostModel }}</v-card-title>
+                  </v-row>
+                </v-col>
+
               </v-row>
             </v-container>
             <v-row no-gutters>
@@ -283,13 +297,13 @@
                 <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
                   <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" type="number" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
                   <v-btn 
-                    @click="quantitySellModel -= 100"
+                    @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= boardLotQuantity"
                     text 
                     icon 
                     color="success"
                   ><v-icon>mdi-chevron-down</v-icon></v-btn>
                   <v-btn 
-                    @click="quantitySellModel += 100"
+                    @click="quantitySellModel += boardLotQuantity"
                     text 
                     icon 
                     color="success"
@@ -381,6 +395,7 @@ export default {
       quantitySellModel: 0,
       totalCostModel: 0,
       totalCostSellModel: 0,
+      boardLotQuantity: 0,
 
       strategySellModel: null,
       tradeplanSellModel: null,
@@ -600,22 +615,30 @@ export default {
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
+          console.log(result)
           this.stockSymbolGet = result.data;
           
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.boardLotModel = 1000000;
+            this.boardLotQuantity = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
             this.boardLotModel = 100000;
+            this.boardLotQuantity = 100000;
           } else if (result.data.last >= 0.05 && result.data.last <= 0.495) {
             this.boardLotModel = 10000;
+            this.boardLotQuantity = 10000;
           } else if (result.data.last >= 0.5 && result.data.last <= 4.99) {
             this.boardLotModel = 1000;
+            this.boardLotQuantity = 1000;
           } else if (result.data.last >= 5 && result.data.last <= 49.95) {
             this.boardLotModel = 100;
+            this.boardLotQuantity = 100;
           } else if (result.data.last >= 50 && result.data.last <= 999.5) {
             this.boardLotModel = 10;
+            this.boardLotQuantity = 10;
           } else if (result.data.last >= 1000) {
             this.boardLotModel = 5;
+            this.boardLotQuantity = 5;
           }
           this.cprice = result.data.last;
           this.cpercentage = result.data.changepercentage.toFixed(2);

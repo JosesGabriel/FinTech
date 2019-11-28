@@ -188,23 +188,22 @@ export default {
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
           this.portfolioLogs = result.meta.open;
-          
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             
+            console.log(this.portfolioLogs[i], "test")
             const historyparams  = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };
             this.$api.journal.portfolio.history(historyparams).then(
               function(result) {
-                // console.log(this.portfolioLogs[i])
                 let portfolioLogsfinal = result.data
                 let market_value = {market_value: 0}
                 let profit = {profit: 0}
                 let perf_percentage = {perf_percentage: 0, id_str: null}
                 this.portfolioLogs[i] = {...this.portfolioLogs[i],...portfolioLogsfinal,...market_value,...profit,...perf_percentage}
                 
-                let buyResult = parseFloat(this.portfolioLogs[i].metas.buy_price) * parseFloat(this.portfolioLogs[i].position)
+                let buyResult = parseFloat(this.portfolioLogs[i].last) * parseFloat(this.portfolioLogs[i].position)
                 let dpartcommission = buyResult * 0.0025;
                 let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
                 // TAX
@@ -218,7 +217,7 @@ export default {
                 let results = buyResult - dall;
 
                 this.portfolioLogs[i].market_value = results
-                this.portfolioLogs[i].total_value = this.portfolioLogs[i].average_price * this.portfolioLogs[i].position
+                this.portfolioLogs[i].total_value = this.portfolioLogs[i].last * this.portfolioLogs[i].position
                 this.portfolioLogs[i].profit = this.portfolioLogs[i].market_value - this.portfolioLogs[i].total_value
                 this.portfolioLogs[i].perf_percentage = this.portfolioLogs[i].profit / this.portfolioLogs[i].total_value * 100
                 this.portfolioLogs[i].stock_id = result.data.symbol
@@ -316,4 +315,19 @@ export default {
     margin: 0;
     outline-color: transparent;
   }
+  /* Custom Scrollbar */
+.gameGlobal ::-webkit-scrollbar {
+  width: 5px;
+}
+.gameGlobal ::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+.gameGlobal ::-webkit-scrollbar-thumb {
+  background: #1de9b6;
+  border-radius: 20px;
+}
+.gameGlobal ::-webkit-scrollbar-thumb:hover {
+  background: #1de9b6;
+}
 </style>
