@@ -25,7 +25,8 @@ export default (ctx, inject) => {
     },
     game: {
       login: initApiRepository("/game/players"),
-      ongoing: initApiRepository("/game/series/ongoing")
+      ongoing: initApiRepository("/game/series/ongoing"),
+      leaderboards: initApiRepository("/game/players/leaderboard?page=1")
     }
   };
 

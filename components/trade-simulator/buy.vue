@@ -96,7 +96,8 @@ export default {
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
       simulatorPositions: "tradesimulator/getSimulatorPositions",
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell"
-    })
+    }),
+    
   },
   props: {
    Position: {
@@ -112,7 +113,17 @@ export default {
   },
   watch: {
       simulatorConfirmedBuySell: function () {
-       this.totalCost = 0;
+       //this.totalCost = 0;
+            if(this.simulatorConfirmedBuySell == 'sell'){
+                //this.quantity = this.Position; 
+                let tcost = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice); 
+                this.totalCost = this.fees(tcost);
+                this.totalCost = this.addcomma(this.totalCost);
+                console.log('Quantity - ' + this.Position);
+                console.log('total cost - ' + this.totalCost);
+            }else {
+                if(this.Reset == true ? this.totalCost = 0 : '');
+            }
       },
     },
     mounted() {
@@ -137,9 +148,7 @@ export default {
                   
                 }.bind(this)
             );
-            this.quantity = this.Position;
-            console.log(this.Reset);
-            if(this.Reset == true ? this.totalCost = 0 : '');
+           // this.quantity = this.Position;
     },
     methods: {
     ...mapActions({
@@ -198,20 +207,20 @@ export default {
     },
     keypress: function(){
         let press = 0;
-        if(this.quantity > this.Position){
-            press = parseFloat(this.Position) * parseFloat(this.simulatorBuyPrice);
-            let pressfees = this.fees(press);
-            this.totalCost = this.addcomma(pressfees);
-            this.$emit('totalPosition', this.quantity);
-            return this.quantity = this.Position;
-        }else{
+        if(this.simulatorConfirmedBuySell == 'sell'){
+            if(this.quantity > this.Position){
+                press = parseFloat(this.Position) * parseFloat(this.simulatorBuyPrice);
+                let pressfees = this.fees(press);
+                this.totalCost = this.addcomma(pressfees);
+                this.$emit('totalPosition', this.quantity);
+                return this.quantity = this.Position;
+            }
+        }
             press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
             let pressfees = this.fees(press);
             this.setSimulatorPositions(this.quantity);
             this.totalCost = this.addcomma(pressfees);
-            this.$emit('totalPosition', this.quantity);
-        }
-        
+            this.$emit('totalPosition', this.quantity);    
     },
     getBalance: function(item){
         console.log(item);

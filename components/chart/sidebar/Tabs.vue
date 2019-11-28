@@ -1,6 +1,6 @@
 <template>
-  <v-content>
-    <v-card dark class="pa-0 ma-0">
+  <v-content style="background: #00121e;">
+    <v-card color="#00121e" dark class="pa-0 ma-0">
       <v-tabs
         v-model="active_tab"
         color="#48ffd5"

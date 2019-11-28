@@ -128,7 +128,7 @@ export default {
           lightcard: "#f2f2f2"
         },
         dark: {
-          background: colors.blue.darken3
+          anchor: colors.blue
         }
       }
     }

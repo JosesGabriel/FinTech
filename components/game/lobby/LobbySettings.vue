@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-flex lobbySettings__wrap">
+  <div class="container d-flex lobbySettings__wrap px-0">
     <v-overlay :value="fullScreenLoader">
       <v-progress-circular
         color="success"
@@ -7,14 +7,8 @@
         size="64"
       ></v-progress-circular>
     </v-overlay>
-    <div class="row lobbySettings__header">
-      <div class="col-12">
-        <span style="color: black;">Settings</span>
-      </div>
-    </div>
-    <span class="caption mt-2">Game Settings</span>
     <div class="row">
-      <div class="col-6 pr-0 pb-0">
+      <div class="col-6 pa-0 pl-5">
         <v-select
           v-model="playerCountModel"
           class="lobbySettings__select"
@@ -25,53 +19,27 @@
           color="success"
           item-color="success"
           append-icon="mdi-chevron-down"
+          hide-details
+          dense
           outlined
           dark
           :disabled="!playerIsHost"
         ></v-select>
       </div>
-      <div class="col-6 pl-0 pb-0">
-        <!-- <v-select
-          class="lobbySettings__select"
-          :items="items"
-          label="Coin Bet"
-          placeholder="Coin Bet"
-          background-color="transparent"
-          color="success"
-          item-color="success"
-          append-icon="mdi-chevron-down"
-          outlined
-          dark
-          :disabled="!playerIsHost"
-        ></v-select> -->
+      <div class="col-6 pa-0 pl-5">
         <v-text-field
           v-model="coinsModel"
-          label="Coin Bet"
-          prepend-inner-icon="mdi-coins"
+          outlined
+          dense
+          hide-details
+          label="Stake"
           type="number"
           color="success"
+          class="stake__field"
           dark
         ></v-text-field>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-6 pr-0 py-0">
-        <v-select
-          v-model="marketModel"
-          class="lobbySettings__select"
-          :items="market"
-          label="Market"
-          placeholder="Market"
-          background-color="transparent"
-          color="success"
-          item-color="success"
-          append-icon="mdi-chevron-down"
-          outlined
-          dark
-          :disabled="!playerIsHost"
-        ></v-select>
-      </div>
-      <div class="col-6 pl-0 py-0">
+      <div class="col-6 pa-0 pl-5">
         <v-select
           v-model="chartCountModel"
           class="lobbySettings__select"
@@ -83,14 +51,30 @@
           item-color="success"
           append-icon="mdi-chevron-down"
           outlined
+          hide-details
           dark
           :disabled="!playerIsHost"
         ></v-select>
       </div>
-    </div>
-    <span class="caption">Room Type</span>
-    <div class="row">
-      <div class="col-12 py-0">
+      <div class="col-6 pa-0 pl-5">
+        <v-select
+          v-model="marketModel"
+          class="lobbySettings__select"
+          :items="market"
+          label="Market"
+          placeholder="Market"
+          background-color="transparent"
+          color="success"
+          item-color="success"
+          append-icon="mdi-chevron-down"
+          outlined
+          hide-details
+          dark
+          :disabled="!playerIsHost"
+        ></v-select>
+      </div>
+      <div class="col-6 pa-0 roomtype__radio--wrapper pl-5">
+        <span class="caption">Room Type</span>
         <v-radio-group
           v-model="roomTypeModel"
           dark
@@ -98,28 +82,14 @@
           class="lobbySettings__select mt-0"
           color="success"
           dense
+          hide-details
           :disabled="!playerIsHost"
         >
-          <v-radio label="Public" :value="0"></v-radio>
+          <v-radio class="caption" label="Public" :value="0"></v-radio>
           <v-radio label="Private" :value="1"></v-radio>
         </v-radio-group>
       </div>
-    </div>
-    <div v-if="roomTypeModel == 1" class="row">
-      <div class="col-12 pt-0">
-        <v-text-field
-          label="Password"
-          placeholder="Input password"
-          class="lobbySettings__select"
-          outlined
-          dense
-          dark
-          :disabled="!playerIsHost"
-        ></v-text-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 py-0">
+      <div class="col-6 pa-0 pl-5">
         <v-select
           v-model="limitModel"
           class="lobbySettings__select"
@@ -132,16 +102,15 @@
           item-color="success"
           append-icon="mdi-chevron-down"
           outlined
+          hide-details
           dark
           :disabled="!playerIsHost"
         ></v-select>
       </div>
-    </div>
-    <span class="caption">Invite/share settings</span>
-    <div class="row">
-      <div class="col-12 py-0">
+      <span class="caption pl-5">Invite/share settings</span>
+      <div class="col-12 pa-0 d-flex">
         <v-switch
-          class="lobbySettings__select"
+          class="lobbySettings__select pl-5 mt-0"
           label="Allow Player Invite"
           dark
           color="success"
@@ -150,15 +119,6 @@
           hide-details
           :disabled="!playerIsHost"
         ></v-switch>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 pb-0">
-        <span class="caption">Invite</span>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 py-0">
         <v-btn text icon color="white">
           <v-icon>mdi-facebook-box</v-icon>
         </v-btn>
@@ -169,9 +129,7 @@
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12 text-right d-flex">
+      <div class="col-12 text-right d-flex py-0 ml-2">
         <v-btn
           class="lobbySettings__select"
           dense
@@ -203,20 +161,26 @@
   </div>
 </template>
 <style>
-.lobbySettings__header {
-  background-color: #1de9b6;
-}
 .lobbySettings__select {
   transform: scale(0.8);
-  transform-origin: left;
+  transform-origin: top left;
 }
 .lobbySettings__wrap {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 15px;
-  overflow: auto;
-  height: calc(100vh - 136px);
+  overflow: hidden;
+  height: calc(100vh - 266px);
+  background-color: #01202a;
+}
+.stake__field {
+  transform: scale(0.8);
+  transform-origin: top left;
+}
+.roomtype__radio--wrapper {
+  position: relative;
+  bottom: 15px;
 }
 </style>
 <script>

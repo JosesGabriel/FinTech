@@ -2,14 +2,19 @@
   <div>
     <div class="userSettings__dropdown--caret"></div>
     <v-card
-      color="primary"
-      dark
+      :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+      :dark="lightSwitch == 0 ? false : true"
+      outlined
       max-width="150px"
       class="userSettings__dropdown"
-      flat
     >
       <v-card-actions class="d-block">
-        <v-btn block text @click="logout()">Logout</v-btn>
+        <v-btn outlined text @click="logout()">Logout</v-btn>
+        <v-switch
+          v-model="lightSwitch_m"
+          color="warning"
+          :label="lightSwitch_m ? 'Light' : 'Dark'"
+        ></v-switch>
       </v-card-actions>
     </v-card>
   </div>
@@ -33,19 +38,36 @@
 }
 </style>
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
       alert: false,
       alertState: false,
-      alertMessage: ""
+      alertMessage: "",
+      lightSwitch_m: false
     };
   },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
+  },
+  watch: {
+    lightSwitch_m: function() {
+      this.setLightSwitch(this.lightSwitch_m ? 0 : 1);
+      localStorage.currentMode = this.lightSwitch;
+    }
+  },
+  mounted() {
+    this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
+  },
   methods: {
+    ...mapActions({
+      setLightSwitch: "global/setLightSwitch"
+    }),
     logout() {
       this.$auth.logout();
-      // this.alert = true;
-      // this.alertMessage = "Logged out";
     }
   }
 };

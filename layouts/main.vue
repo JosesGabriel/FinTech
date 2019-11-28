@@ -2,7 +2,7 @@
   <v-app>
     <v-content
       class="social__container"
-      :class="isLightMode == 1 ? 'lightMode' : ''"
+      :class="lightSwitch == 0 ? 'lightMode' : ''"
     >
       <rbHeader />
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
@@ -18,6 +18,9 @@
   </v-app>
 </template>
 <style>
+.theme--dark.v-sheet {
+  background-color: #00121e;
+}
 .social__container {
   /* background-color: #fcfbfe; light mode color, add to vuex state soon */
   background-color: #00121e;
@@ -37,6 +40,7 @@
 </style>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 import rbHeader from "~/components/Header";
 export default {
   components: {
@@ -50,8 +54,20 @@ export default {
       alertMessage: ""
     };
   },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
+  },
   mounted() {
-    if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
+    if (localStorage.currentMode) {
+      this.setLightSwitch(localStorage.currentMode);
+    }
+  },
+  methods: {
+    ...mapActions({
+      setLightSwitch: "global/setLightSwitch"
+    })
   }
 };
 </script>

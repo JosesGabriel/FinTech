@@ -1,35 +1,51 @@
 <template>
-  <div class="container pt-0 d-flex leaderboard__wrap transparent">
-    <div class="row leaderboard__header">
-      <div class="col-12 pa-0">
-        <span class="text--green subtitle-1">Leaderboard</span>
-      </div>
-    </div>
-    <div v-for="n in 10" :key="n" class="leaderboard__list row mb-1">
-      <div class="col-2 title py-0 pt-2">{{ n }}</div>
-      <div class="col-2 px-0 py-0 pt-2">
-        <v-avatar class="profile" color="grey" size="30">
-          <v-img src="test.jpg"></v-img>
-        </v-avatar>
-      </div>
-      <div class="col-5 pa-0 pt-1">
-        <div>Orange</div>
-        <div class="tiny-font">
-          <span style="color: #bdbdbd">Winrate 100% | Coins 10,000</span>
+  <v-card
+    :dark="lightSwitch == 0 ? false : true"
+    color="transparent"
+    flat
+    :loading="loader"
+    ><div class="container pt-0 d-flex leaderboard__wrap transparent">
+      <div class="row leaderboard__header">
+        <div class="col-12 pa-0">
+          <span class="text--green subtitle-1">Leaderboard</span>
         </div>
       </div>
-      <div class="col-3">
-        <v-icon dark>mdi-flower-outline</v-icon>
-      </div>
-    </div>
-  </div>
+      <div
+        v-for="n in leaderboardObject.length"
+        :key="n"
+        class="leaderboard__list row mb-1 pt-2"
+        :class="
+          lightSwitch == 0
+            ? 'leaderboard__list--light'
+            : 'leaderboard__list--dark'
+        "
+      >
+        <div class="col-2 title py-0">{{ n }}</div>
+        <div class="col-2 px-0 py-0 pt-">
+          <v-avatar class="profile" color="grey" size="30">
+            <v-img src="test.jpg"></v-img>
+          </v-avatar>
+        </div>
+        <div class="col-5 pa-0">
+          <div style="font-size: 0.8em;">
+            {{ leaderboardObject[n - 1].coins }}
+          </div>
+          <div class="tiny-font">
+            <span style="color: #bdbdbd"
+              >Winrate {{ leaderboardObject[n - 1].win_percentage }}% | Coins
+              {{ leaderboardObject[n - 1].coins }}</span
+            >
+          </div>
+        </div>
+        <div class="col-3 pa-0">
+          <v-avatar class="profile" color="grey" size="30">
+            <v-img src="/badges/badge.svg"></v-img>
+          </v-avatar>
+        </div>
+      </div></div
+  ></v-card>
 </template>
 <style>
-/* .leaderboard__header {
-  background-color: #0c1a2b;
-  color: white;
-  border-bottom: 2px solid #1de9b6;
-} */
 .tiny-font {
   font-size: 0.525rem;
 }
@@ -42,20 +58,52 @@
   flex-direction: column;
   padding: 15px;
   overflow: auto;
-  height: calc(100vh - 225px);
+  height: calc(100vh - 221px);
 }
 .leaderboard__list {
-  /* align-self: flex-start; */
-  /* max-width: 70%; */
   display: inline-flex;
-  background-color: #03232f;
   border-radius: 6px;
+}
+.leaderboard__list--dark {
+  background-color: #03232f;
+}
+.leaderboard__list--light {
+  background-color: white;
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      loader: false,
+      leaderboardObject: []
+    };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
+  },
+  mounted: function() {
+    this.loadLeaderboards();
+  },
+  methods: {
+    loadLeaderboards() {
+      this.loader = "primary";
+      this.$api.game.leaderboards
+        .index()
+        .then(response => {
+          if (response.success) {
+            this.leaderboardObject = response.data.players;
+            this.loader = false;
+            return true;
+          }
+        })
+        .catch(e => {
+          return false;
+        });
+    }
   }
 };
 </script>
