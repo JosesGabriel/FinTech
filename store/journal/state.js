@@ -5,4 +5,5 @@ export default () => ({
     defaultPortfolioId: null,
     selectedPortfolio: {},
     openPosition: null,
+    journalCharts: [],
 });

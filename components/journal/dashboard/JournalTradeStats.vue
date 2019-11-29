@@ -58,13 +58,13 @@
           series: [7,3],
           chartOptions: {
             chart: {
-                  dropShadow: {
-                      enabled: true,
-                      opacity: 0.1,
-                      blur: 2,
-                      left: 3,
-                      top: 3
-                  },
+              dropShadow: {
+                  enabled: true,
+                  opacity: 0.1,
+                  blur: 2,
+                  left: 3,
+                  top: 3
+              },
             },
             labels: ['Win', 'Loss'],
             colors: ['#00FFC3','#FF4848'],
@@ -145,12 +145,12 @@
       }
     },
     computed: {
-        winlossresult: function() {
-            return this.result = parseInt(this.win) + parseInt(this.loss);
-        },
-        winrateresult: function() {
-            return ((this.win * 100) / this.result).toFixed(0)
-        }
+      winlossresult: function() {
+          return this.result = parseInt(this.win) + parseInt(this.loss);
+      },
+      winrateresult: function() {
+          return ((this.win * 100) / this.result).toFixed(0)
+      }
     }
   }
 </script>

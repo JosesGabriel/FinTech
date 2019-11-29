@@ -9,7 +9,7 @@
         </v-card-title>
         <v-col class="pa-0" cols="12" sm="12" md="12">
           <div id="chart">
-            <apexcharts type=bar class="monthlyperf_chart" height=300 width=90% :options="chartOptions" :series="series" />
+            <apexcharts type=bar class="monthlyperf_chart" height=300 width=90%  ref="monthlyPerformance" :options="chartOptions" :series="series" />
           </div>
         </v-col>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
@@ -19,6 +19,8 @@
   import VueApexCharts from 'vue-apexcharts'
   import shareModal from '~/components/modals/share'
   
+  import { mapActions, mapGetters } from "vuex";
+
   export default {
     components: {
       apexcharts: VueApexCharts,
@@ -29,7 +31,7 @@
         showScheduleForm: false,
         series: [{
           name: 'Loss',
-          data: [1,2,-3,-4,5,4,1,2,3,4,5,4]
+          data: [0,0,0,0,0,0,0,0,0,0,0,0]
         }],
         chartOptions: {
           colors: ['#00FFC3','#FF4848'],
@@ -153,6 +155,63 @@
             }
           }
         }
+      }
+    },
+    computed: {
+        ...mapGetters({
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            journalCharts: "journal/getJournalCharts"
+        })
+    },
+    methods: {
+      getMPerformance() {
+          // console.log(this.defaultPortfolioId, "monthyP")
+          // if(this.renderPortfolioKey > 0){
+          //   
+          // }
+          // const journalchartsparams = {
+          //   user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+          //   fund: this.defaultPortfolioId,
+          // };
+          // this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
+          //   function(result) {
+          //       if(result.success) {
+          //         console.log(result.meta)
+          //         let mPerf = result.meta.monthly_performance
+          //         this.$refs.monthlyPerformance.updateSeries([
+          //           {
+          //             data: mPerf
+          //           }
+          //         ]);
+          //       }
+          //   }.bind(this)
+          // )
+      // GET Closing Price from Stock History API
+        // const journalchartsparams = {
+        //   user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        //   fund: this.defaultPortfolioId,
+        // };
+        // this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
+        //   function(result) {
+        //     console.log(result.meta.monthly_performance, "test");
+        //     this.$refs.monthlyPerformance.updateSeries([
+        //       {
+        //         data: result.meta.monthly_performance
+        //       }
+        //     ]);
+        //   }.bind(this)
+        // )
+        this.componentKeys++;
+      },
+      formatPrice(value) {
+          let val = (value/1).toFixed(2).replace('.', '.')
+          return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      }
+    },
+    watch: {
+      renderPortfolioKey: function() {
+        this.getMPerformance();
       }
     }
   }

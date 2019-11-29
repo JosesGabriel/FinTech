@@ -17,4 +17,7 @@ export default {
     getOpenPosition(state) {
         return state.openPosition;
     },
+    getJournalCharts(state) {
+        return state.journalCharts;
+    },
 };

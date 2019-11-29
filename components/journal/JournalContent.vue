@@ -192,7 +192,7 @@ export default {
             setUserPortfolio: "journal/setUserPortfolio",
             setSelectedPortfolio: "journal/setSelectedPortfolio",
             setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-            setDefaultPortfolioId: "journal/setDefaultPortfolioId"
+            setDefaultPortfolioId: "journal/setDefaultPortfolioId",
         }),
         changePortfolio(obj){
             this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
@@ -255,7 +255,7 @@ export default {
         ...mapGetters({
             userPortfolio: "journal/getUserPortfolio",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
-            renderPortfolioKey: "journal/getRenderPortfolioKey"
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
         })
     },
     watch: {

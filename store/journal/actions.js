@@ -17,8 +17,12 @@ export default {
   async setSelectedPortfolio({ commit }, data) {
     await commit("SET_SELECTEDPORTFOLIO", data);
   },
-  // Set Selected Portfolio global on change
+  // Set Open Position
   async setOpenPosition({ commit }, data) {
     await commit("SET_OPENPOSITION", data);
+  },
+  // Set Journal Charts
+  async setJournalCharts({ commit }, data) {
+    await commit("SET_JOURNALCHARTS", data);
   },
 };

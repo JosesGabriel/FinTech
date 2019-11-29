@@ -12,10 +12,10 @@
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
-                            <tr v-for="item in allodata" :key="item.stocks" id="table_tr_snap-cont">
+                            <tr v-for="item in allodata.slice(0, 8)" :key="item.stocks" id="table_tr_snap-cont">
                             <!-- <v-icon class="pa-1 caption" :style="{ 'color': item.bulletcolor}">mdi-circle</v-icon> -->
                             <td class="item_position-prop caption text-capitalize px-1 py-1">{{ item.stock_id }}</td>
-                            <td class="item_position-prop caption text-right px-1 py-1">{{ item.position }}</td>
+                            <td class="item_position-prop caption text-right px-1 py-1">{{ (item.position).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -23,7 +23,7 @@
             </v-col>
             <v-col class="pa-0 pt-5" cols="6" sm="6" md="6">
                 <div class="small">
-                    <apexcharts width="280" height="280" type="donut" ref="currentAlloChart" :options="chartOptions" :series="series"></apexcharts>
+                    <apexcharts width="280" height="280" type="donut" :options="chartOptions" :series="series"></apexcharts>
                 </div>
             </v-col>
         </v-row>
@@ -46,12 +46,13 @@
         showScheduleForm: false,
         isLightMode: 0,
         darkText: '#b6b6b6',
-        allodata: [0, 0],
+        allodata: [],
         cash: null,
         series: [],
+        updateLabels: [],
         updateSeries: [],
         chartOptions: {
-          labels: [''],
+          labels: [],
           colors: ['#00FFC3', '#00F2BA', '#00CC9C', '#00BF93', '#00A67F', '#008C6C', '#009975'],
           legend: {
             show: false
@@ -111,8 +112,9 @@
                     fontFamily: 'Karla',
                     color: "#d8d8d8",
                     offsetY: -5,
-                    formatter: function (val) {
-                      return val + ".00"
+                    formatter: function (value) {
+                      let val = (value/1).toFixed(2).replace('.', '.')
+                      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
                   },
                   total: {
@@ -170,42 +172,47 @@
     },
     methods: {
       getAllocations() {
-        const openparams = {
+      const openparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: this.defaultPortfolioId,
       };
       this.$api.journal.portfolio.open(openparams).then(response => {
-      this.allodata = response.meta.allocations
-      // this.series = []
+        this.allodata = response.meta.allocations
+      // this.chartOptions.labels = ['2GO', 'BPI']
+      
+        this.series = []
+        this.updateLabels = []
         for(let i = 0; i < this.allodata.length; i++){
+
+          const params = {
+            "symbol-id": this.allodata[i].stock_id
+          };
+          this.$api.chart.stocks.list(params).then(
+            function(result) {
+              this.allodata[i].stock_id = result.data.symbol;
+            }.bind(this)
+          ); 
+          this.updateLabels.push(this.allodata[i].stock_id)
           this.updateSeries.push(this.allodata[i].position)
-          // this.chartOptions = {
-          // ...this.chartOptions,
-          //   ...{
-          //       labels: [this.allodata[i].stock_id]
-          //   }
-          // };
-          // let labelsList = this.allodata[i].stock_id
+
+          this.series.push(this.updateSeries[i])
         }
-        this.series.push(this.updateSeries)
-          console.log(this.updateSeries)
-          // const listparams  = {
-          //   "symbol-id": this.allodata[i].stock_id
-          // };
-          // this.$api.journal.portfolio.list(listparams).then(response => {
-          //   this.allodata[i].stock_id = response.data.symbol
-          //   // this.chartOptions.labels(this.allodata[i].stock_id)
-          //   this.chartOptions = {
-          //     ...this.chartOptions,
-          //     ...{
-          //       labels: [this.allodata[i].stock_id]
-          //     }
-          //   };
-          // });
         
-        
+          this.chartOptions = {
+            ...this.chartOptions,
+              ...{
+                  labels: this.updateLabels
+              }
+          };
+          // this.chartOptions.labels.push(this.updateLabels)
+          console.log(this.updateLabels, "tst")
+
       });
-      }
+      },
+      formatPrice(value) {
+        let val = (value/1).toFixed(2).replace('.', '.')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      },
     },
     watch: {
       renderPortfolioKey: function() {
