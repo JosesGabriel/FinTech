@@ -563,7 +563,7 @@ export default {
           plan : this.tradeplanSellModel,
           emotion : this.emotionsSellModel,
           notes: this.notesSellModel,
-          date : this.dateSellModel
+          date : this.date
         }
       };
       this.$axios

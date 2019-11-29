@@ -196,7 +196,7 @@ export default {
   font-size: 11px;
 }
 .decrease {
-  color: #ff4848 !important;
+  color: #f44336 !important;
   font-size: 11px;
 }
 </style>

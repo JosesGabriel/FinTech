@@ -21,6 +21,14 @@ export default $axios => ({
         let query = buildParams(ledgerparams);
         return $axios.$get(`${baseURL}/portfolio/ledger${query.length > 0 ? "?" + query : ""}`);
     },
+    snapshot(snapshotparams) {
+        let query = buildParams(snapshotparams);
+        return $axios.$get(`${baseURL}/portfolio/snapshot${query.length > 0 ? "?" + query : ""}`);
+    },
+    journalcharts(journalchartsparams) {
+        let query = buildParams(journalchartsparams);
+        return $axios.$get(`${baseURL}/portfolio/charts${query.length > 0 ? "?" + query : ""}`);
+    },
     createportfolio(createportfolioparams) {
         return $axios.$post(`${baseURL}/funds`, createportfolioparams);
     },
@@ -49,6 +57,8 @@ function buildParams(args) {
     let openparams = "";
     let tradelogsparams = "";
     let ledgerparams = "";
+    let snapshotparams = "";
+    let journalchartsparams = "";
     let createportfolioparams = "";
     let historyparams = "";
     let listparams = "";
@@ -61,6 +71,8 @@ function buildParams(args) {
       params = bld.join("&");
       openparams = bld.join("&");
       tradelogsparams = bld.join("&");
+      snapshotparams = bld.join("&");
+      journalchartsparams = bld.join("&");
       createportfolioparams = bld.join("&");
       historyparams = bld.join("&");
       listparams = bld.join("&");
@@ -68,5 +80,5 @@ function buildParams(args) {
       ledgerparams = bld.join("&");
       edittrade = bld.join("&");
     }
-    return params, openparams, tradelogsparams, ledgerparams, createportfolioparams, historyparams, depositparams, edittrade, listparams;
+    return params, openparams, tradelogsparams, snapshotparams, journalchartsparams, ledgerparams, createportfolioparams, historyparams, depositparams, edittrade, listparams;
 }

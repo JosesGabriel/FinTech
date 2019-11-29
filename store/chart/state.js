@@ -28,5 +28,6 @@ export default () => ({
       component: "Watchlist",
       disabled: false
     }
-  ]
+  ],
+  trade_login: false
 });

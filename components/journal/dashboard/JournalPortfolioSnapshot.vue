@@ -15,9 +15,17 @@
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
-                            <tr v-for="item in tradingr" :key="item.name" id="table_tr_snap-cont">
-                            <td class="item_position-prop px-3 py-1 caption">{{ item.name }}</td>
-                            <td class="item_position-prop text-right px-3 py-1 caption">{{ item.value }}</td>
+                            <tr id="table_tr_snap-cont">
+                                <td class="item_position-prop px-3 py-1 caption">Starting Capital</td>
+                                <td class="item_position-prop text-right px-3 py-1 caption">{{ formatPrice(parseFloat(startingCapital)) }}</td>
+                            </tr>
+                            <tr id="table_tr_snap-cont">
+                                <td class="item_position-prop px-3 py-1 caption">Year to Date P/L</td>
+                                <td class="item_position-prop text-right px-3 py-1 caption">{{ formatPrice(parseFloat(yearTDPL)) }}</td>
+                            </tr>
+                            <tr id="table_tr_snap-cont">
+                                <td class="item_position-prop px-3 py-1 caption">Portfolio YTD %</td>
+                                <td class="item_position-prop text-right px-3 py-1 caption">{{ formatPrice(parseFloat(portfolioTDPL)) }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -30,9 +38,17 @@
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
-                            <tr v-for="item in tradingr" :key="item.name" id="table_tr_snap-cont">
-                            <td class="item_position-prop px-3 py-1 caption">{{ item.name }}</td>
-                            <td class="item_position-prop text-right px-3 py-1 caption">{{ item.value }}</td>
+                            <tr id="table_tr_snap-cont">
+                                <td class="item_position-prop px-3 py-1 caption">Deposits</td>
+                                <td class="item_position-prop text-right px-3 py-1 caption">{{ formatPrice(parseFloat(Deposits)) }}</td>
+                            </tr>
+                            <tr id="table_tr_snap-cont">
+                                <td class="item_position-prop px-3 py-1 caption">Withdrawals</td>
+                                <td class="item_position-prop text-right px-3 py-1 caption">{{ formatPrice(parseFloat(Withdrawals)) }}</td>
+                            </tr>
+                            <tr id="table_tr_snap-cont">
+                                <td class="item_position-prop px-3 py-1 caption">Equity</td>
+                                <td class="item_position-prop text-right px-3 py-1 caption">{{ formatPrice(parseFloat(Equity)) }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -45,6 +61,8 @@
 <script>
 import shareModal from '~/components/modals/share'
 
+import { mapActions, mapGetters } from "vuex";
+
 export default {
     components: {
         shareModal
@@ -52,22 +70,48 @@ export default {
     data () {
       return {
         showScheduleForm: false,
-        tradingr: [
-          {
-            name: 'Starting Capital',
-            value: '10,000.00',
-          },
-          {
-            name: 'Year to Date P/L',
-            value: '10,000.00',
-          },
-          {
-            name: 'Portfolio YTD %',
-            value: '10,000.00',
-          }
-        ]
+        startingCapital: 0,
+        yearTDPL: 0,
+        portfolioTDPL: 0,
+        Deposits: 0,
+        Withdrawals: 0,
+        Equity: 0,
       }
     },
+    computed: {
+        ...mapGetters({
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+            renderPortfolioKey: "journal/getRenderPortfolioKey"
+        })
+    },
+    methods: {
+        getSnapshot() {
+            const snapshotparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: this.defaultPortfolioId,
+            };
+            this.$api.journal.portfolio.snapshot(snapshotparams).then(response => {
+                let snapshot = response.meta.snapshot
+                this.startingCapital = snapshot.capital
+                this.yearTDPL = snapshot.PL
+                this.portfolioTDPL = snapshot.PL_percentage
+                this.Deposits = snapshot.deposits
+                this.Withdrawals = snapshot.withdraw
+            });
+        },
+        formatPrice(value) {
+            let val = (value/1).toFixed(2).replace('.', '.')
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        },
+    },
+    watch: {
+        renderPortfolioKey: function() {
+            this.getSnapshot();
+        },
+        renderEditKey: function() {
+            this.getSnapshot();
+        }
+    }
 }
 </script>
 <style scoped>

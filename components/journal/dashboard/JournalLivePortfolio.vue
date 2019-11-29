@@ -156,6 +156,7 @@ export default {
     ...mapActions({
         setRenderPortfolioKey: "journal/setRenderPortfolioKey",
         setOpenPosition: "journal/setOpenPosition",
+        setJournalCharts: "journal/setJournalCharts",
     }),
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
@@ -221,7 +222,6 @@ export default {
                 let resultsBuy = buyResult + dbuyall;
 
                 this.portfolioLogs[i].market_value = results
-                console.log(this.portfolioLogs[i].last, this.portfolioLogs[i].position)
 
                 this.portfolioLogs[i].total_value = resultsBuy
                 

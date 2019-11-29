@@ -55,7 +55,7 @@
 </template>
 <style>
 .v-data-table-header tr th {
-  background-color: #00bf93 !important;
+  background-color: #03dac5 !important;
 }
 .v-data-footer__select {
   display: none;
