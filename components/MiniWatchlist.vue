@@ -62,7 +62,7 @@
   color: #03dac5;
 }
 .watchlistCard__text--red {
-  color: #ff4848;
+  color: #f44336;
 }
 .watchlistCard__text--gray {
   color: gray;
@@ -306,7 +306,7 @@ export default {
                   });
                 } else if (this.stockData[i].change < 0) {
                   this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#FF4848"]
+                    colors: ["#f44336"]
                   });
                 } else {
                   this.$refs.closePriceChart[i].updateOptions({

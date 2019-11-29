@@ -31,7 +31,7 @@
   color: #03dac5;
 }
 .text--red {
-  color: #ff4848;
+  color: #f44336;
 }
 .text__secondary--light {
   color: #494949;

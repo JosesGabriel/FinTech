@@ -74,14 +74,14 @@
   background-color: #03dac5;
 }
 .watchlistCard__bar--red {
-  background-color: #ff4848;
+  background-color: #f44336;
 }
 .watchlistCard__text--green,
 .watchlistCard__header--percent {
   color: #03dac5;
 }
 .watchlistCard__text--red {
-  color: #ff4848;
+  color: #f44336;
 }
 .watchlistCard__text--gray {
   color: gray;
@@ -342,7 +342,7 @@ export default {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#FF4848"]
+                colors: ["#f44336"]
               }
             };
           } else {

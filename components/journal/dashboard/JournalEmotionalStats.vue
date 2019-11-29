@@ -105,7 +105,7 @@ export default {
                         show: false
                     },
                 },
-                colors: ['#00FFC3','#FF4848'],
+                colors: ['#00FFC3','#f44336'],
                 dataLabels: {
                     enabled: false,
                     offsetX: 0,

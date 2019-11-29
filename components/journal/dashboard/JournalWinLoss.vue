@@ -13,7 +13,7 @@
                                 <td class="item_position-prop caption text-right px-1 py-1">Bottom Picking</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#FF4848">mdi-circle</v-icon>Lossing Strategy</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#f44336">mdi-circle</v-icon>Lossing Strategy</td>
                                 <td class="item_position-prop caption text-right px-1 py-1">Trend Following</td>
                             </tr>
                         </tbody>
@@ -47,7 +47,7 @@
                     },
                 },
                 labels: ['Winning', 'Lossing'],
-                colors: ['#00FFC3','#FF4848'],
+                colors: ['#00FFC3','#f44336'],
                 legend: {
                     show: false
                 },
