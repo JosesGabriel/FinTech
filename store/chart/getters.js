@@ -33,5 +33,8 @@ export default {
   },
   tabs_sidebar: state => {
     return state.tabs_sidebar;
+  },
+  trade_login: state => {
+    return state.trade_login;
   }
 };

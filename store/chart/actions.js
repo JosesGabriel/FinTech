@@ -28,5 +28,8 @@ export default {
   },
   async setTabsSidebar({ commit }, data) {
     await commit("SET_TABS_SIDEBAR", data);
+  },
+  async setTradeLogin({ commit }, data) {
+    await commit("SET_TRADE_LOGIN", data);
   }
 };

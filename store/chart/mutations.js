@@ -37,5 +37,9 @@ export default {
 
   SET_TABS_SIDEBAR(state, data) {
     state.tabs_sidebar = data;
+  },
+
+  SET_TRADE_LOGIN(state, data) {
+    state.trade_login = data;
   }
 };
