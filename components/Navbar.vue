@@ -52,7 +52,7 @@
               :color="active == 'social' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon color="#ababab">mdi-account-supervisor-circle</v-icon>
+                <v-icon color="#b6b6b6">mdi-account-supervisor-circle</v-icon>
                 <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
               </v-list-item-icon>
               <v-list-item-content
@@ -87,7 +87,7 @@
               :color="active == 'journal' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon color="#ababab">mdi-library-books</v-icon>
+                <v-icon color="#b6b6b6">mdi-library-books</v-icon>
                 <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
               </v-list-item-icon>
               <v-list-item-content
@@ -123,7 +123,7 @@
               :color="active == 'game' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#ababab">mdi-gamepad</v-icon></v-list-item-icon
+                ><v-icon color="#b6b6b6">mdi-gamepad</v-icon></v-list-item-icon
               >
               <v-list-item-content
                 ><v-list-item-title
@@ -138,7 +138,7 @@
               :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#ababab"
+                ><v-icon color="#b6b6b6"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
@@ -151,7 +151,7 @@
           </router-link>
           <v-list-item @click="powerToolsToggle = !powerToolsToggle">
             <v-list-item-icon class="mr-4">
-              <v-icon color="#ababab">mdi-dots-horizontal</v-icon>
+              <v-icon color="#b6b6b6">mdi-dots-horizontal</v-icon>
             </v-list-item-icon>
             <v-list-item-content
               ><v-list-item-title>More</v-list-item-title></v-list-item-content
@@ -165,7 +165,7 @@
           </v-list-item-icon>
           <v-list-item @click.stop="buySellDialog = true">
             <v-list-item-icon class="mr-4">
-              <v-icon color="#ababab">mdi-calculator</v-icon>
+              <v-icon color="#b6b6b6">mdi-calculator</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -177,7 +177,7 @@
           </v-list-item>
           <v-list-item @click.stop="varDialog = true">
             <v-list-item-icon class="mr-4">
-              <v-icon color="#ababab">mdi-page-layout-header-footer</v-icon>
+              <v-icon color="#b6b6b6">mdi-page-layout-header-footer</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -189,7 +189,7 @@
           </v-list-item>
           <v-list-item @click.stop="averagePriceDialog = true">
             <v-list-item-icon class="mr-4">
-              <v-icon color="#ababab">mdi-tag-text-outline</v-icon>
+              <v-icon color="#b6b6b6">mdi-tag-text-outline</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -201,7 +201,7 @@
           </v-list-item>
           <v-list-item>
             <v-list-item-icon class="mr-4">
-              <v-icon color="#ababab">mdi-chart-areaspline</v-icon>
+              <v-icon color="#b6b6b6">mdi-chart-areaspline</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>

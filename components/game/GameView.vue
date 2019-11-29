@@ -9,7 +9,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12 py-0">
+            <v-col cols="12 py-0 px-0">
               <GameDashboard />
             </v-col>
           </v-row>
@@ -34,6 +34,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 import TVChart from "~/components/game/TVChartContainer";
 import GameDashboard from "~/components/game/ingame/GameDashboard";
 import ChatClient from "~/components/game/ChatClient";
@@ -47,6 +48,11 @@ export default {
     ChatClient,
     GameVariables,
     RankingTable
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   }
 };
 </script>

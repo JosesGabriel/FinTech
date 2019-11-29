@@ -663,6 +663,10 @@ export default {
                 this.priceSellModel = findOpenPosition.last
                 this.avepriceSell = findOpenPosition.average_price
                 this.quantitySellModel = findOpenPosition.position
+                this.strategySellModel = findOpenPosition.metas.strategy
+                this.tradeplanSellModel = findOpenPosition.metas.plan
+                this.emotionsSellModel = findOpenPosition.metas.emotion
+                this.notesSellModel = findOpenPosition.metas.notes
                 this.quantityModel = 0
               }
             }

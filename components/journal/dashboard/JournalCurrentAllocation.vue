@@ -12,14 +12,9 @@
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
-                            <tr id="table_tr_snap-cont">
-                            <!-- <v-icon class="pa-1 caption" :style="{ 'color': item.bulletcolor}">mdi-circle</v-icon> -->
-                            <td class="item_position-prop caption px-1 py-1">Cash</td>
-                            <td class="item_position-prop caption text-right px-1 py-1">{{ cash }}</td>
-                            </tr>
                             <tr v-for="item in allodata" :key="item.stocks" id="table_tr_snap-cont">
                             <!-- <v-icon class="pa-1 caption" :style="{ 'color': item.bulletcolor}">mdi-circle</v-icon> -->
-                            <td class="item_position-prop caption px-1 py-1">{{ item.stock_id }}</td>
+                            <td class="item_position-prop caption text-capitalize px-1 py-1">{{ item.stock_id }}</td>
                             <td class="item_position-prop caption text-right px-1 py-1">{{ item.position }}</td>
                             </tr>
                         </tbody>
@@ -28,7 +23,7 @@
             </v-col>
             <v-col class="pa-0 pt-5" cols="6" sm="6" md="6">
                 <div class="small">
-                    <apexcharts width="280" height="280" type="donut" :options="chartOptions" :series="series"></apexcharts>
+                    <apexcharts width="280" height="280" type="donut" ref="currentAlloChart" :options="chartOptions" :series="series"></apexcharts>
                 </div>
             </v-col>
         </v-row>
@@ -39,6 +34,7 @@
 <script>
   import VueApexCharts from 'vue-apexcharts'
   import shareModal from '~/components/modals/share'
+  import { mapActions, mapGetters } from "vuex";
 
   export default {
     components: {
@@ -50,11 +46,12 @@
         showScheduleForm: false,
         isLightMode: 0,
         darkText: '#b6b6b6',
-        allodata: [],
+        allodata: [0, 0],
         cash: null,
-        series: [70, 60, 50, 40, 30, 20, 10],
+        series: [],
+        updateSeries: [],
         chartOptions: {
-          labels: ['BDO', 'KPPI', 'HLCM', '2GO', 'HOME', 'HLCM', 'HOUSE'],
+          labels: [''],
           colors: ['#00FFC3', '#00F2BA', '#00CC9C', '#00BF93', '#00A67F', '#008C6C', '#009975'],
           legend: {
             show: false
@@ -162,28 +159,59 @@
         }
       }
     },
-    mounted() {
-      // const openparams = {
-      // user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      // fund: this.selectedProfile,
-      // };
-      // this.$api.journal.portfolio.open(openparams).then(
-      //   function(result) {
-      //     this.allodata = result.meta.allocations.slice(1);
-      //     this.cash = result.meta.allocations[0].position;
-      //     for (let i = 0; i < this.allodata.length; i++) {
-      //       const params = {
-      //         "symbol-id": this.allodata[i].stock_id
-      //       };
-      //       this.$api.chart.stocks.list(params).then(
-      //         function(result) {
-      //           this.allodata[i].stock_id = result.data.symbol;
-      //         }.bind(this)
-      //       );
-      //     }
-      //   }.bind(this)
-      // );
+    computed: {
+      ...mapGetters({
+        renderPortfolioKey: "journal/getRenderPortfolioKey",
+        defaultPortfolioId: "journal/getDefaultPortfolioId",
+      }),
     },
+    mounted() {
+      
+    },
+    methods: {
+      getAllocations() {
+        const openparams = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: this.defaultPortfolioId,
+      };
+      this.$api.journal.portfolio.open(openparams).then(response => {
+      this.allodata = response.meta.allocations
+      // this.series = []
+        for(let i = 0; i < this.allodata.length; i++){
+          this.updateSeries.push(this.allodata[i].position)
+          // this.chartOptions = {
+          // ...this.chartOptions,
+          //   ...{
+          //       labels: [this.allodata[i].stock_id]
+          //   }
+          // };
+          // let labelsList = this.allodata[i].stock_id
+        }
+        this.series.push(this.updateSeries)
+          console.log(this.updateSeries)
+          // const listparams  = {
+          //   "symbol-id": this.allodata[i].stock_id
+          // };
+          // this.$api.journal.portfolio.list(listparams).then(response => {
+          //   this.allodata[i].stock_id = response.data.symbol
+          //   // this.chartOptions.labels(this.allodata[i].stock_id)
+          //   this.chartOptions = {
+          //     ...this.chartOptions,
+          //     ...{
+          //       labels: [this.allodata[i].stock_id]
+          //     }
+          //   };
+          // });
+        
+        
+      });
+      }
+    },
+    watch: {
+      renderPortfolioKey: function() {
+        this.getAllocations();
+      }
+    }
   }
 </script>
 

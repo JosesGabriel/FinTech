@@ -41,27 +41,13 @@
         <template v-slot:item.debit="{ item }">-</template>
         <template v-slot:item.total_value="{ item }">{{ formatPrice(item.total_value) }}</template>
         <template v-slot:item.balance="{ item }">{{ formatPrice(item.balance) }}</template>
-        <template v-slot:item.action="{ item }">
-          <div v-show="menuShow" class="sidemenu_actions mt-n1" :id="`lt_${item.id}`" @mouseover="ledgermenuLogsShow(item)" @mouseleave="ledgermenuLogsHide(item)">
-            <v-btn small class="caption" text color="success">Details</v-btn>
-            <v-btn small class="caption" text color="success">Edit</v-btn>
-            <!-- <v-btn small class="caption" text color="success">Delete</v-btn> -->
-          </div>
-          <v-icon
-            small
-            class="mr-2"
-            @mouseover="ledgermenuLogsShow(item)"
-          >
-            mdi-dots-horizontal
-          </v-icon>
-        </template>
         <template slot="footer">
           <v-row no-gutters class="mt-3">
             <v-spacer></v-spacer>
             <span style="width: 190px" class="text-right subtitle-2">Total Funds:</span>
             <span style="width: 190px" class="text-right subtitle-2">0.00</span>
             <span style="width: 190px" class="text-right subtitle-2" :class="(totalCredit < 0 ? 'negative' : 'positive')">{{ formatPrice(totalCredit) }}</span>
-            <span style="width: 190px; margin-right: 36px;" class="text-right subtitle-2"></span>
+            <span style="width: 190px;" class="text-right subtitle-2"></span>
           </v-row>
         </template>
         </v-data-table>
@@ -110,7 +96,6 @@ export default {
         { text: 'Debit', value: 'debit', align: 'right', width: "190px" },
         { text: 'Credit', value: 'total_value', align: 'right', width: "190px" },
         { text: 'Balance', value: 'balance', align: 'right', width: "190px" },
-        { text: '', value: 'action', sortable: false, align: 'right' },
       ],
       ledgerContent: [],
       page: 1,

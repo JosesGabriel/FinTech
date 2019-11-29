@@ -6,6 +6,9 @@ export default {
   async setRenderPortfolioKey({ commit }, data) {
     await commit("SET_RENDERPORTFOLIOKEY", data);
   },
+  async setRenderEditKey({ commit }, data) {
+    await commit("SET_RENDEREDITKEY", data);
+  },
   // Set Portfolio ID global on load
   async setDefaultPortfolioId({ commit }, data) {
     await commit("SET_DEFAULTPORTFOLIOID", data);

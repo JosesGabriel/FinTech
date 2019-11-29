@@ -274,18 +274,18 @@ export default {
 }
 </script>
 <style>
-  .balance_amount {
+    .balance_amount {
         font-size: 23px
     }
     .v-text-field__details {
         display: none
     }
-    .v-menu__content .v-card, .v-menu__content .v-list {
+    /* .v-menu__content .v-card, .v-menu__content .v-list {
         background: #000 !important;
-    }
-    .v-menu__content .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+    } */
+    /* .v-menu__content .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
         color: #00FFC3 !important;
-    }
+    } */
     .v-select__slot .v-label,
     .v-select__slot .v-icon
     {

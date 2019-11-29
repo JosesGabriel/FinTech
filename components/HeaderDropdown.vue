@@ -56,6 +56,7 @@ export default {
   watch: {
     lightSwitch_m: function() {
       this.setLightSwitch(this.lightSwitch_m ? 0 : 1);
+      localStorage.currentMode = this.lightSwitch;
     }
   },
   mounted() {
