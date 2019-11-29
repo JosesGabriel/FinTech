@@ -216,10 +216,15 @@ export default {
                 let dsccp = buyResult * 0.0001;
                 let dsell = buyResult * 0.006;
                 let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+                let dbuyall =  dcommission + dtax + dtransferfee + dsccp;
                 let results = buyResult - dall;
+                let resultsBuy = buyResult + dbuyall;
 
                 this.portfolioLogs[i].market_value = results
-                this.portfolioLogs[i].total_value = this.portfolioLogs[i].last * this.portfolioLogs[i].position
+                console.log(this.portfolioLogs[i].last, this.portfolioLogs[i].position)
+
+                this.portfolioLogs[i].total_value = resultsBuy
+                
                 this.portfolioLogs[i].profit = this.portfolioLogs[i].market_value - this.portfolioLogs[i].total_value
                 this.portfolioLogs[i].perf_percentage = this.portfolioLogs[i].profit / this.portfolioLogs[i].total_value * 100
                 this.portfolioLogs[i].stock_id = result.data.symbol

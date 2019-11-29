@@ -278,36 +278,16 @@ export default {
     
 </style>
 <style>
-    /* .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-        color: #00FFC3;
-    } */
-    .theme--light.v-list {
+    /* .theme--light.v-list {
         background: #00121e;
         border: 1px solid #00FFC3;
-    }
-    .v-window.v-item-group.theme--light.v-tabs-items {
-    background: none;
-    }
-    .v-menu__content ::-webkit-scrollbar {
-        width: 5px;
-    }
-    .v-menu__content ::-webkit-scrollbar-track {
-        background: transparent;
-        border-radius: 10px;
-    }
-    .v-menu__content ::-webkit-scrollbar-thumb {
-        background: #1de9b6;
-        border-radius: 20px;
-    }
-    .v-menu__content ::-webkit-scrollbar-thumb:hover {
-        background: #1de9b6;
-    }
+    } */
     .rtf_top-btn.v-btn--outlined:hover,
     .rtf_top-btn.v-btn--outlined:active,
     .rtf_top-btn.v-btn--outlined:focus {
     background-color: #48ffd5;
     border: 2px solid #48ffd5;
-    color: #00121e !important;
+    color: #fff !important;
     font-weight: 600 !important;
     }
     .rtf_top-btn.v-btn--outlined {
@@ -379,8 +359,5 @@ export default {
         color: #b6b6b6;
         font-weight: 600;
         padding-left: 16px;
-    }
-    .theme--light.v-divider {
-        border-color: rgb(0, 215, 164);
     }
 </style>
