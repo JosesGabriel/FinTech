@@ -288,6 +288,16 @@
 
 .select_portfolio > .v-input__control > .v-input__slot > .v-select__slot > .v-select__selections > .v-select__selection--comma {
     color: black;
+    font-size: 14px;
+    font-weight: 600;
+    padding-top: 5px;
+}
+
+.select_portfolio > .v-input__control > .v-input__slot > .v-select__slot {
+    height: 40px;
+}
+.select_portfolio > .v-input__control > .v-input__slot {
+    min-height: initial;
 }
 
 .theme--light.v-list {
