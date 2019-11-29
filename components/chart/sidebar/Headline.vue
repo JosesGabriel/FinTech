@@ -104,10 +104,10 @@ div {
   top: -5px;
 }
 .increase {
-  color: #48ffd5 !important;
+  color: #03dac5 !important;
 }
 .decrease {
-  color: #ff4848 !important;
+  color: #f44336 !important;
 }
 #headline {
   display: flex;

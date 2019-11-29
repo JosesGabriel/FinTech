@@ -71,17 +71,17 @@
   opacity: 0.5;
 }
 .watchlistCard__bar--green {
-  background-color: #48ffd5;
+  background-color: #03dac5;
 }
 .watchlistCard__bar--red {
-  background-color: #ff4848;
+  background-color: #f44336;
 }
 .watchlistCard__text--green,
 .watchlistCard__header--percent {
-  color: #48ffd5;
+  color: #03dac5;
 }
 .watchlistCard__text--red {
-  color: #ff4848;
+  color: #f44336;
 }
 .watchlistCard__text--gray {
   color: gray;
@@ -298,7 +298,7 @@ export default {
       };
       this.$api.chart.charts.latest(params).then(
         function(result) {
-          console.log(result);
+          console.log(result.data.c, "test");
           this.$refs.closePriceChart.updateSeries([
             {
               data: result.data.c.reverse()
@@ -313,6 +313,7 @@ export default {
       };
       this.$api.chart.stocks.list(params2).then(
         function(result) {
+          // console.log(result.data, "test");
           this.stockExchange = result.data.exchange;
           this.stockSymbol = result.data.symbol;
           this.$refs.closePriceChart.updateSeries([
@@ -342,7 +343,7 @@ export default {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#FF4848"]
+                colors: ["#f44336"]
               }
             };
           } else {

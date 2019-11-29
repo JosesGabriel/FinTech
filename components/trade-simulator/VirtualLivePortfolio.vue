@@ -5,8 +5,8 @@
               OPEN POSITION/S (PHP)
             </h1>
             <v-spacer></v-spacer>
-            <v-btn rounded outlined color="#48FFD5" dark class="text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
-            <v-btn rounded outlined color="#48FFD5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Trade</v-btn>
+            <v-btn rounded outlined color="#03dac5" dark class="text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
+            <v-btn rounded outlined color="#03dac5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Trade</v-btn>
                      
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -236,7 +236,7 @@ export default {
                           this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perf);
                         }
                         this.portfolioLogs[i].Position = pos;
-                        this.portfolioLogs[i].AvgPrice = result.meta.open[i].average_price.toFixed(2);
+                        this.portfolioLogs[i].AvgPrice = result.meta.open[i].average_price.toFixed(3);
                         this.portfolioLogs[i].TotalCost = this.addcomma(tcost);
                         this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
                         this.portfolioLogs[i].Profit = profit.toFixed(2);
@@ -249,7 +249,7 @@ export default {
                             notes: result.meta.open[i].metas.notes
                           }       
                 }          
-                 this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(2));
+                 this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
                  this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
               }.bind(this)
             );   

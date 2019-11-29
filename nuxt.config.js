@@ -122,8 +122,8 @@ export default {
           secondary: colors.grey.lighten1,
           info: colors.purple,
           warning: colors.orange,
-          error: colors.red,
-          success: colors.teal.accent3,
+          error: "#F44336",
+          success: "#03DAC5",
           darkcard: "#0c1a2b",
           lightcard: "#f2f2f2"
         },

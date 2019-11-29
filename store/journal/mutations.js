@@ -17,4 +17,7 @@ export default {
   SET_OPENPOSITION(state, data) {
     state.openPosition = data;
   },
+  SET_JOURNALCHARTS(state, data) {
+    state.journalCharts = data;
+  },
 };

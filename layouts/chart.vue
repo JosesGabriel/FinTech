@@ -90,11 +90,11 @@ export default {
   border-radius: 10px;
 }
 .gameGlobal ::-webkit-scrollbar-thumb {
-  background: #1de9b6;
+  background: #03dac5;
   border-radius: 20px;
 }
 .gameGlobal ::-webkit-scrollbar-thumb:hover {
-  background: #1de9b6;
+  background: #03dac5;
 }
 #chart_body {
   background: #00121e !important;

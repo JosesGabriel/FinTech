@@ -4,7 +4,7 @@
         <v-card color="#00121E">
             <v-card-title class="text-left justify-left pa-3 px-5 success--text subtitle-1 font-weight-bold">FUND</v-card-title>
             <v-tabs
-            color="#48FFD5"
+            color="#03dac5"
             background-color="#00121E"
             class="px-7"
             dark
@@ -13,7 +13,7 @@
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#funds-1`" @click="hideWithdrawButton = false, hideDepositButton = true">Deposit</v-tab>
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#funds-2`" @click="hideWithdrawButton = true, hideDepositButton = false">Withdraw</v-tab>
 
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" class="active-class" :value="'funds-' + 1">
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" class="active-class" :value="'funds-' + 1">
                     <v-container class="pa-0">
                       <div class="separator"></div>
                         <v-row no-gutters>
@@ -46,7 +46,7 @@
                       </v-col>
                   </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'funds-' + 2">
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'funds-' + 2">
                     <v-container class="pa-0">
                       <div class="separator"></div>
                         <v-row no-gutters>
@@ -75,7 +75,7 @@
                 >
                     <!-- @click.stop="show=false" -->
                 <v-btn
-                    color="#48FFD5"
+                    color="#03dac5"
                     class="text-capitalize"
                     depressed
                     light
@@ -86,7 +86,7 @@
                     >Save</v-btn
                 >
                 <v-btn
-                    color="#48FFD5"
+                    color="#03dac5"
                     class="text-capitalize"
                     depressed
                     light

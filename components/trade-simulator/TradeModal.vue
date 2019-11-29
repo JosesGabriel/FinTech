@@ -562,7 +562,7 @@ import { mapActions, mapGetters } from "vuex";
     }
     .selected {
         border-bottom: 1px solid;
-        color: #48FFD5 !important;
+        color: #03dac5 !important;
     }
     .nonselected {
         border-bottom: none;

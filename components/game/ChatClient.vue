@@ -20,14 +20,14 @@
   color: white;
 }
 .chatClient__wrapper {
-  border: 2px solid #1de9b6;
+  border: 2px solid #03dac5;
 }
 .client__header {
-  background-color: #1de9b6;
+  background-color: #03dac5;
 }
 .chatMembers__container {
-  border-right: 1px solid #1de9b6;
-  border-left: 1px solid #1de9b6;
+  border-right: 1px solid #03dac5;
+  border-left: 1px solid #03dac5;
 }
 </style>
 <script>

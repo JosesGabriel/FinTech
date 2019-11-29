@@ -3,9 +3,9 @@
         <v-card-title class="text-left justify-left px-0 py-3 pt-5">
             <h1 class="font-weight-regular subtitle-2" style="color:#fff;">OPEN POSITION/S (PHP)</h1>
             <v-spacer></v-spacer>
-            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
-            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" style="border-width: 2px" height="23">Trade</v-btn>
-            <v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" style="border-width: 2px" height="23">Fund</v-btn>
+            <v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
+            <v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" style="border-width: 2px" height="23">Trade</v-btn>
+            <v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" style="border-width: 2px" height="23">Fund</v-btn>
 
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -156,6 +156,7 @@ export default {
     ...mapActions({
         setRenderPortfolioKey: "journal/setRenderPortfolioKey",
         setOpenPosition: "journal/setOpenPosition",
+        setJournalCharts: "journal/setJournalCharts",
     }),
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
@@ -221,7 +222,6 @@ export default {
                 let resultsBuy = buyResult + dbuyall;
 
                 this.portfolioLogs[i].market_value = results
-                console.log(this.portfolioLogs[i].last, this.portfolioLogs[i].position)
 
                 this.portfolioLogs[i].total_value = resultsBuy
                 
@@ -334,10 +334,10 @@ export default {
   border-radius: 10px;
 }
 .gameGlobal ::-webkit-scrollbar-thumb {
-  background: #1de9b6;
+  background: #03dac5;
   border-radius: 20px;
 }
 .gameGlobal ::-webkit-scrollbar-thumb:hover {
-  background: #1de9b6;
+  background: #03dac5;
 }
 </style>

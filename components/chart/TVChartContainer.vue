@@ -86,7 +86,8 @@ export default {
       symbolid: "chart/symbolid",
       stock: "chart/stock",
       maximize_table: "chart/getTableMaximize",
-      fullscreen_table: "chart/getTableFullscreen"
+      fullscreen_table: "chart/getTableFullscreen",
+      lightSwitch: "global/getLightSwitch"
     }),
     chartView: function() {
       if (this.ticker && this.table) {
@@ -127,6 +128,11 @@ export default {
       }
     }
   },
+  watch: {
+    lightSwitch: function() {
+      this.loadChart();
+    }
+  },
   // watch: {
   //   symbolid(value) {
   //     console.log("changed");
@@ -139,95 +145,121 @@ export default {
   //   }
   // },
   mounted() {
-    // listen to ticker toggle
-    this.$bus.$on("adjustChartView", data => {
-      this.chartView;
-      //console.log(this.chartViewId);
-      //console.log(this.chartViewClass);
-    });
+    this.loadChart();
+  },
+  destroyed() {
+    if (this.tvWidget !== null) {
+      this.tvWidget.remove();
+      this.tvWidget = null;
+    }
+  },
+  methods: {
+    ...mapActions({
+      setSymbolID: "chart/setSymbolID"
+    }),
+    loadChart() {
+      if (this.lightSwitch == 0) {
+        this.theme = "Light";
+      } else {
+        this.theme = "Dark";
+      }
+      // listen to ticker toggle
+      this.$bus.$on("adjustChartView", data => {
+        this.chartView;
+        //console.log(this.chartViewId);
+        //console.log(this.chartViewClass);
+      });
 
-    //! BEWARE: no trailing slash is expected in feed URL
-    const widgetOptions = {
-      //region overrides
-      overrides: {
-        "paneProperties.background": "#00121e",
-        "paneProperties.gridProperties.color": "#bdc3c7",
-        "scalesProperties.textColor": "#bdc3c7",
-        "scalesProperties.lineColor": "#34495e",
-        "scalesProperties.backgroundColor": "#2c3e50",
-        "paneProperties.vertGridProperties.color": "rgba(52, 73, 94, 0)",
-        "paneProperties.horzGridProperties.color": "rgba(52, 73, 94, 0)",
-        "symbolWatermarkProperties.color": "#808080",
-        "symbolWatermarkProperties.transparency": 90,
-        volumePaneSize: "tiny",
-        "mainSeriesProperties.showCountdown": true,
-        "scalesProperties.showStudyPlotLabels": true
-      },
-      studies_overrides: {
-        "volume.show ma": true
-      },
-      //endregion overrides
+      //! BEWARE: no trailing slash is expected in feed URL
+      const widgetOptions = {
+        //region overrides
+        overrides: {
+          "paneProperties.background":
+            this.lightSwitch == 0 ? "#FFF" : "#00121e",
+          "paneProperties.gridProperties.color":
+            this.lightSwitch == 0 ? "#000" : "#bdc3c7",
+          "scalesProperties.textColor":
+            this.lightSwitch == 0 ? "#000" : "#bdc3c7",
+          "scalesProperties.lineColor":
+            this.lightSwitch == 0 ? "#000" : "#34495e",
+          "scalesProperties.backgroundColor":
+            this.lightSwitch == 0 ? "#OOO" : "#2c3e50",
+          "paneProperties.vertGridProperties.color":
+            this.lightSwitch == 0 ? "#FFF" : "rgba(52, 73, 94, 0)",
+          "paneProperties.horzGridProperties.color":
+            this.lightSwitch == 0 ? "#FFF" : "rgba(52, 73, 94, 0)",
+          "symbolWatermarkProperties.color":
+            this.lightSwitch == 0 ? "#OOO" : "#808080",
+          "symbolWatermarkProperties.transparency": 90,
+          volumePaneSize: "tiny",
+          "mainSeriesProperties.showCountdown": true,
+          "scalesProperties.showStudyPlotLabels": true
+        },
+        studies_overrides: {
+          "volume.show ma": true
+        },
+        //endregion overrides
 
-      //region perma static
-      disabled_features: ["link_to_tradingview"],
-      enabled_features: [
-        "narrow_chart_enabled",
-        "study_templates",
-        "keep_left_toolbar_visible_on_small_screens"
-      ],
-      toolbar_bg: "#00121e",
-      time_frames: [
-        { text: "50y", resolution: "D" },
-        { text: "20y", resolution: "D" },
-        { text: "10y", resolution: "D" },
-        { text: "5y", resolution: "D" },
-        { text: "4y", resolution: "D" },
-        { text: "3y", resolution: "D" },
-        { text: "2y", resolution: "D" },
-        { text: "1y", resolution: "D" },
-        { text: "6m", resolution: "D" },
-        { text: "3m", resolution: "D" },
-        { text: "2m", resolution: "D" },
-        { text: "1m", resolution: "D" },
-        { text: "1w", resolution: "30" },
-        { text: "3d", resolution: "15" },
-        { text: "1d", resolution: "5" }
-      ],
-      symbol_search_request_delay: 300,
-      //endregion perma static
+        //region perma static
+        disabled_features: ["link_to_tradingview"],
+        enabled_features: [
+          "narrow_chart_enabled",
+          "study_templates",
+          "keep_left_toolbar_visible_on_small_screens"
+        ],
+        toolbar_bg: this.lightSwitch == 0 ? "#F2F2F2" : "#00121e",
+        time_frames: [
+          { text: "50y", resolution: "D" },
+          { text: "20y", resolution: "D" },
+          { text: "10y", resolution: "D" },
+          { text: "5y", resolution: "D" },
+          { text: "4y", resolution: "D" },
+          { text: "3y", resolution: "D" },
+          { text: "2y", resolution: "D" },
+          { text: "1y", resolution: "D" },
+          { text: "6m", resolution: "D" },
+          { text: "3m", resolution: "D" },
+          { text: "2m", resolution: "D" },
+          { text: "1m", resolution: "D" },
+          { text: "1w", resolution: "30" },
+          { text: "3d", resolution: "15" },
+          { text: "1d", resolution: "5" }
+        ],
+        symbol_search_request_delay: 300,
+        //endregion perma static
 
-      //region default
-      debug: false,
-      symbol: this.symbol,
-      datafeed: Datafeed,
-      interval: this.interval,
-      container_id: this.containerId,
-      library_path: this.libraryPath,
-      locale: this.getLanguageFromURL() || "en",
-      charts_storage_url: this.chartsStorageUrl,
-      charts_storage_api_version: this.chartsStorageApiVersion,
-      client_id: this.clientId,
-      user_id: this.userId,
-      fullscreen: this.fullscreen,
-      autosize: this.autosize,
-      //custom_css_url: this.custom_css_url,
-      custom_css_url: "tradingview.css",
-      timezone: this.timezone,
-      theme: this.theme
+        //region default
+        debug: false,
+        symbol: this.symbol,
+        datafeed: Datafeed,
+        interval: this.interval,
+        container_id: this.containerId,
+        library_path: this.libraryPath,
+        locale: this.getLanguageFromURL() || "en",
+        charts_storage_url: this.chartsStorageUrl,
+        charts_storage_api_version: this.chartsStorageApiVersion,
+        client_id: this.clientId,
+        user_id: this.userId,
+        fullscreen: this.fullscreen,
+        autosize: this.autosize,
+        //custom_css_url: this.custom_css_url,
+        custom_css_url: "tradingview.css",
+        timezone: this.timezone,
+        theme: this.theme
 
-      //endregion default
-    };
+        //endregion default
+      };
 
-    const tvWidget = new window.TradingView.widget(widgetOptions);
-    this.widget = this.tvWidget = tvWidget;
+      const tvWidget = new window.TradingView.widget(widgetOptions);
+      this.widget = this.tvWidget = tvWidget;
 
-    //chart methods
-    tvWidget.onChartReady(() => {
-      //! region subscribe
-      //onHeaderReady event
-      //TODO: add custom headers
-      tvWidget.headerReady().then(() => {
-        /*this.widgetCreateButton(
+      //chart methods
+      tvWidget.onChartReady(() => {
+        //! region subscribe
+        //onHeaderReady event
+        //TODO: add custom headers
+        tvWidget.headerReady().then(() => {
+          /*this.widgetCreateButton(
           "Click to show a notification popup",
           "Setting",
           function() {
@@ -242,36 +274,25 @@ export default {
             });
           }
         );*/
-      });
-
-      //chart onSymbolChanged event
-      const that = this;
-      tvWidget
-        .chart()
-        .onSymbolChanged()
-        .subscribe(null, symbolInfo => {
-          that.setSymbolID(symbolInfo.id_str);
-
-          //TODO: call this function ralph, ito yung example nilagay ko lang dito
-          //TODO: need mo ipasa yung market_code completo, append mo
-          //TODO: <EXCHANGE>:<SYMBOL> or kunin mo sa response -> market_code
-          //TODO: author: kbaluyot
-          //that.passTickerToChart("PSE:KPPI");
         });
-      //! endregion subscribe
-    });
-  },
-  destroyed() {
-    if (this.tvWidget !== null) {
-      this.tvWidget.remove();
-      this.tvWidget = null;
-    }
-  },
-  methods: {
-    ...mapActions({
-      setSymbolID: "chart/setSymbolID"
-    }),
 
+        //chart onSymbolChanged event
+        const that = this;
+        tvWidget
+          .chart()
+          .onSymbolChanged()
+          .subscribe(null, symbolInfo => {
+            that.setSymbolID(symbolInfo.id_str);
+
+            //TODO: call this function ralph, ito yung example nilagay ko lang dito
+            //TODO: need mo ipasa yung market_code completo, append mo
+            //TODO: <EXCHANGE>:<SYMBOL> or kunin mo sa response -> market_code
+            //TODO: author: kbaluyot
+            //that.passTickerToChart("PSE:KPPI");
+          });
+        //! endregion subscribe
+      });
+    },
     getLanguageFromURL() {
       const regex = new RegExp("[\\?&]lang=([^&#]*)");
       const results = regex.exec(window.location.search);

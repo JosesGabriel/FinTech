@@ -76,7 +76,7 @@
             </v-row>
 
             <v-tabs
-            color="#48FFD5"
+            color="#03dac5"
             background-color="transparent"
             dark
             >
@@ -113,7 +113,7 @@
                 </v-row>
                 <v-tab-item
                     dark
-                    color="#48FFD5"
+                    color="#03dac5"
                     background-color="black"
                     :value="'tab-' + 1"
                     style="background: #00121e;"
@@ -122,7 +122,7 @@
                         <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
                     </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
                     <v-container class="pa-0">
                         <TradelogsContent v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
                     </v-container>
@@ -194,10 +194,10 @@
             },
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
-                decimals = decimals || 2; // Default to 2 decimals
+                decimals = decimals || 3; // Default to 2 decimals
                 return n.toLocaleString().split(sep)[0]
                     + sep
-                    + n.toFixed(2).split(sep)[1];
+                    + n.toFixed(3).split(sep)[1];
             },
             getBalance(){
                  const portfolioparams = {
@@ -288,6 +288,16 @@
 
 .select_portfolio > .v-input__control > .v-input__slot > .v-select__slot > .v-select__selections > .v-select__selection--comma {
     color: black;
+    font-size: 14px;
+    font-weight: 600;
+    padding-top: 5px;
+}
+
+.select_portfolio > .v-input__control > .v-input__slot > .v-select__slot {
+    height: 40px;
+}
+.select_portfolio > .v-input__control > .v-input__slot {
+    min-height: initial;
 }
 
 .theme--light.v-list {

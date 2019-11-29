@@ -21,7 +21,7 @@
           <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
           <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
           <v-spacer></v-spacer>
-          <!--<v-btn rounded outlined color="#48FFD5" dark class="rtf_top-btn text-capitalize mr-2" @click ="EnterRecordModal=true" style="border-width: 2px" height="23">Record</v-btn>-->
+          <!--<v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click ="EnterRecordModal=true" style="border-width: 2px" height="23">Record</v-btn>-->
             <v-btn icon small @click.stop="showScheduleForm=true"> 
                 <img src="/icon/journal-icons/share-icon.svg" width="15">
             </v-btn>
@@ -180,7 +180,7 @@ export default {
                       this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
                       this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
                       this.tradeLogs[i].action = this.tradeLogs[i].id;
-                      this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
+                      this.$emit('totalRealized', this.totalProfitLoss.toFixed(3));
 
                        if(parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0) {
                           plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;

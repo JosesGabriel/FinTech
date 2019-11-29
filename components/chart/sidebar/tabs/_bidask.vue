@@ -118,7 +118,7 @@ export default {
   },
   data() {
     return {
-      loading: "#48FFD5",
+      loading: "#03dac5",
       asks: [],
       bids: []
     };
@@ -142,7 +142,7 @@ export default {
       setBidask: "chart/setBidask"
     }),
     initBidask: function(symid) {
-      this.loading = "#48FFD5";
+      this.loading = "#03dac5";
       this.$api.chart.stocks
         .bidask({
           "symbol-id": symid,
