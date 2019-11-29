@@ -236,7 +236,7 @@ export default {
                           this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perf);
                         }
                         this.portfolioLogs[i].Position = pos;
-                        this.portfolioLogs[i].AvgPrice = result.meta.open[i].average_price.toFixed(2);
+                        this.portfolioLogs[i].AvgPrice = result.meta.open[i].average_price.toFixed(3);
                         this.portfolioLogs[i].TotalCost = this.addcomma(tcost);
                         this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
                         this.portfolioLogs[i].Profit = profit.toFixed(2);
@@ -249,7 +249,7 @@ export default {
                             notes: result.meta.open[i].metas.notes
                           }       
                 }          
-                 this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(2));
+                 this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
                  this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
               }.bind(this)
             );   

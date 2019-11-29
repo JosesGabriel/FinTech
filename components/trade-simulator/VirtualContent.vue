@@ -194,10 +194,10 @@
             },
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
-                decimals = decimals || 2; // Default to 2 decimals
+                decimals = decimals || 3; // Default to 2 decimals
                 return n.toLocaleString().split(sep)[0]
                     + sep
-                    + n.toFixed(2).split(sep)[1];
+                    + n.toFixed(3).split(sep)[1];
             },
             getBalance(){
                  const portfolioparams = {

@@ -180,7 +180,7 @@ export default {
                       this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
                       this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
                       this.tradeLogs[i].action = this.tradeLogs[i].id;
-                      this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
+                      this.$emit('totalRealized', this.totalProfitLoss.toFixed(3));
 
                        if(parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0) {
                           plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;
