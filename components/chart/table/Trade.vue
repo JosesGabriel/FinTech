@@ -15,6 +15,7 @@
         class="card__trades pa-2"
         outlined
         tile
+        flat
         :class="[{ hide__card: item.show == false }]"
         @click="showModal(item)"
       >
@@ -39,6 +40,7 @@
         class="card__trades pa-2"
         outlined
         tile
+        flat
         :class="{ hide__card: item.show == false }"
         @click="showModal(item)"
       >
@@ -57,7 +59,7 @@
       <v-dialog v-model="trade_login" persistent max-width="290">
         <v-card color="#00121e" flat dark>
           <v-content class="content__broker text-center">
-            <v-card id="card__broker" class="pa-2 mt-3 mb-2">
+            <v-card id="card__broker" flat dark class="pa-2 mt-3 mb-2">
               <v-img
                 contain
                 class="img__broker"
