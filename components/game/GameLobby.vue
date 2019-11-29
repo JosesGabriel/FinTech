@@ -38,7 +38,7 @@ import LobbySettings from "~/components/game/lobby/LobbySettings";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  layout: "chart",
+  layout: "game",
   components: {
     UserProfileCard,
     LobbyTable,

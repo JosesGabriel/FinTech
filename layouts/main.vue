@@ -1,9 +1,6 @@
 <template>
   <v-app>
-    <v-content
-      class="social__container"
-      :class="lightSwitch == 0 ? 'lightMode' : ''"
-    >
+    <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <rbHeader />
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
         <nuxt />
@@ -21,8 +18,7 @@
 .theme--dark.v-sheet {
   background-color: #00121e;
 }
-.social__container {
-  /* background-color: #fcfbfe; light mode color, add to vuex state soon */
+.darkMode {
   background-color: #00121e;
 }
 .lightMode {
@@ -36,6 +32,9 @@
 }
 .text--red {
   color: #ff4848;
+}
+.text__secondary--light {
+  color: #494949;
 }
 </style>
 

@@ -13,7 +13,10 @@
         <v-avatar size="30">
           <v-img :src="messagesObject[n - 1].AvatarUrl"></v-img>
         </v-avatar>
-        <div class="message">
+        <div
+          class="message text"
+          :class="lightSwitch == 0 ? 'text__secondary--light' : ''"
+        >
           <div class="px-2 text--green overline">
             {{ messagesObject[n - 1].displayName }}
           </div>
@@ -28,6 +31,8 @@
 <style scoped>
 .message {
   position: relative;
+  width: 100%;
+  overflow-y: hidden;
   bottom: 7px;
 }
 .message__wrap {
@@ -45,11 +50,8 @@
 }
 .message__list {
   align-self: flex-start;
-  max-width: 90%;
+  max-width: 70%;
   display: inline-flex;
-}
-.message__list--me {
-  align-self: flex-end;
 }
 .message__sender {
   color: orange;

@@ -27,13 +27,14 @@
           </v-avatar>
         </div>
         <div class="col-5 pa-0">
-          <div style="font-size: 0.8em;">
-            {{ leaderboardObject[n - 1].coins }}
+          <div style="font-size: 0.8em;" class="font-weight-black">
+            Joses
           </div>
           <div class="tiny-font">
-            <span style="color: #bdbdbd"
-              >Winrate {{ leaderboardObject[n - 1].win_percentage }}% | Coins
-              {{ leaderboardObject[n - 1].coins }}</span
+            <span
+              >Winrate
+              <strong>{{ leaderboardObject[n - 1].win_percentage }}%</strong> |
+              Coins <strong>{{ leaderboardObject[n - 1].coins }}</strong></span
             >
           </div>
         </div>
@@ -68,7 +69,7 @@
   background-color: #03232f;
 }
 .leaderboard__list--light {
-  background-color: white;
+  background-color: #e6efed;
 }
 </style>
 <script>

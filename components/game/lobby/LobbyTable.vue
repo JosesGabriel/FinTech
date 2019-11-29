@@ -7,7 +7,7 @@
       hide-default-footer
       fixed-header
       height="calc(100vh - 450px)"
-      class="elevation-1 lobby__table transparent__bg"
+      class="elevation-1 lobby__table transparent__bg text__secondary--light"
       :footer-props="{
         disableItemsPerPage: true,
         disablePagination: true
@@ -18,7 +18,7 @@
           <td
             v-for="(n, index) in Object.keys(props.item).length"
             :key="n"
-            class="text-center"
+            class="text-center font-weight-black"
           >
             {{ props.item[[Object.keys(props.item)[n - 1]]] }}
           </td>
@@ -55,7 +55,7 @@
 </template>
 <style>
 .v-data-table-header tr th {
-  background-color: #1de9b6 !important;
+  background-color: #00bf93 !important;
 }
 .v-data-footer__select {
   display: none;
@@ -93,7 +93,7 @@ export default {
       itemKey: "",
       headers: [
         {
-          text: "ROOM ID",
+          text: "ROOM #",
           align: "center",
           value: "roomName",
           class: "tableHeader"

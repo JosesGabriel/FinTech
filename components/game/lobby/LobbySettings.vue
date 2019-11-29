@@ -12,6 +12,7 @@
         <v-select
           v-model="playerCountModel"
           class="lobbySettings__select"
+          success
           :items="playerCount"
           label="Players"
           placeholder="Players"
@@ -31,6 +32,7 @@
           v-model="coinsModel"
           outlined
           dense
+          success
           hide-details
           label="Stake"
           type="number"
@@ -43,6 +45,7 @@
         <v-select
           v-model="chartCountModel"
           class="lobbySettings__select"
+          success
           :items="chartCount"
           label="No. Of Charts"
           placeholder="No. Of Charts"
@@ -69,6 +72,7 @@
           append-icon="mdi-chevron-down"
           outlined
           hide-details
+          success
           dark
           :disabled="!playerIsHost"
         ></v-select>
@@ -92,6 +96,7 @@
       <div class="col-6 pa-0 pl-5">
         <v-select
           v-model="limitModel"
+          success
           class="lobbySettings__select"
           :items="timeLimit"
           item-value="value"
