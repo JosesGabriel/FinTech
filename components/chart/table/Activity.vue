@@ -131,7 +131,7 @@
         disable-pagination
         hide-default-footer
         style="background:#00121e"
-        :height="`calc(100vh - ${tablesize}px)`"
+        :height="`${tablesize}`"
       >
         <template v-slot:item="props">
           <tr class="tr_custom">
@@ -186,8 +186,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      min: "605",
-      max: "285",
+      min: "100px",
+      max: "calc(100vh - 300px)",
       headers: [
         {
           text: "Date",
@@ -340,13 +340,344 @@ export default {
           profitloss: "9,218.63",
           percentage: "21.10",
           changestatus: 1
+        },
+        {
+          date: "2019-10-22",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-21",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-20",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-19",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-18",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-17",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-16",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-15",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-14",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-14",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-22",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-21",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-20",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-19",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-18",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-17",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-16",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-15",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-14",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-14",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-22",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-21",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-20",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-19",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-18",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-17",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-16",
+          volume: "8,098",
+          aveprice: "13.41",
+          buyvalue: "108,594.18",
+          sellprice: "2.4",
+          sellvalue: "19,234.90",
+          profitloss: "89,158.89",
+          percentage: "82.%",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-15",
+          volume: "9,590",
+          aveprice: "7.69",
+          buyvalue: "73,747.10",
+          sellprice: "14.11",
+          sellvalue: "135,314.90",
+          profitloss: "-61,597.80",
+          percentage: "-83.49",
+          changestatus: 2
+        },
+        {
+          date: "2019-10-14",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
+        },
+        {
+          date: "2019-10-14",
+          volume: "6,187",
+          aveprice: "7.06",
+          buyvalue: "43,680.22",
+          sellprice: "5.57",
+          sellvalue: "34,461.59",
+          profitloss: "9,218.63",
+          percentage: "21.10",
+          changestatus: 1
         }
       ]
     };
   },
   computed: {
     ...mapGetters({
-      fullscreen: "chart/getTableFullscreen"
+      fullscreen: "chart/getTableFullscreen",
+      ticker: "chart/getTicker"
     }),
     tablesize: function() {
       return this.fullscreen ? this.max : this.min;
@@ -356,6 +687,15 @@ export default {
     fullscreen(value) {
       console.log("fullscreen");
       console.log(value);
+    },
+    ticker(value) {
+      // console.log("ticker");
+      // console.log(value);
+      if (value) {
+        this.max = "calc(100vh - 300px)";
+      } else {
+        this.max = "calc(100vh - 250px)";
+      }
     }
   }
 };

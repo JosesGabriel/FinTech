@@ -2,18 +2,31 @@
   <v-col class="pa-0">
     <v-content class="content__btncontainer">
       <v-btn
+        v-show="maximize || fullscreen"
         small
         icon
-        :color="maximize && !fullscreen ? '#48FFD5' : '#BBB'"
+        :color="fullscreen ? '#48FFD5' : '#BBB'"
         :class="[{ button__disable: !maximize && !fullscreen }]"
         title="Maximize Table"
         @click="toggleTabsFullscreen"
       >
         <v-icon class="icon-flipped-y">mdi-window-maximize</v-icon>
+        <!-- :color="maximize && !fullscreen ? '#48FFD5' : '#BBB'" -->
         <!-- <v-icon class="icon-flipped-y">{{
           !fullscreen ? "mdi-window-maximize" : "mdi-window-minimize"
         }}</v-icon> -->
       </v-btn>
+
+      <!-- <v-btn
+        v-show="!maximize && !fullscreen"
+        small
+        icon
+        color="#48FFD5"
+        title="Expand Up"
+        @click="toggleTabs(0)"
+      >
+        <v-icon>mdi-arrow-expand-up</v-icon>
+      </v-btn> -->
 
       <v-btn
         small
@@ -75,6 +88,7 @@ export default {
     return {
       tabs_show: false,
       active_tab: 0,
+      last_visit: 0,
       tabs_content: [
         {
           id: 1,
@@ -124,6 +138,7 @@ export default {
       this.setSidebar(!this.sidebarboard);
     },
     toggleTabs: function(tab) {
+      //console.log(tab);
       if (this.fullscreen) return;
       if (this.active_tab == tab || this.maximize == false) {
         this.tabs_show = !this.tabs_show;
