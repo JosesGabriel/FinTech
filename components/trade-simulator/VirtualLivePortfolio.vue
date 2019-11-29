@@ -71,9 +71,9 @@
                       v-model="showEditForm"
                       max-width="290"
                       dark
-                      style="background:#142b46;"
+                      style="background:transparent;"
                     >
-                      <v-card color="#00121E">
+                      <v-card color="transparent">
                         <v-card-title>{{ (this.editDetails == 'edit' ? 'Edit' : 'Trade Details') }}</v-card-title>
                         <v-card-text>
                         <v-col sm="12" md="12" class="my-0">
