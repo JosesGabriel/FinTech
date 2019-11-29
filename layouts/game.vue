@@ -13,7 +13,6 @@
   max-width: 100%;
 }
 .darkMode {
-  /* background-color: #fcfbfe; light mode color, add to vuex state soon */
   background: radial-gradient(50% 50% at 50% 50%, #0d2641 0%, #00121e 88.54%);
 }
 .lightMode {
@@ -22,10 +21,13 @@
 .transparent__bg {
   background-color: transparent !important;
 }
+.text__secondary--light {
+  color: #494949;
+}
 </style>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import rbHeader from "~/components/Header";
 export default {
   components: {
@@ -42,7 +44,14 @@ export default {
     })
   },
   mounted() {
-    if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
+    if (localStorage.currentMode) {
+      this.setLightSwitch(localStorage.currentMode);
+    }
+  },
+  methods: {
+    ...mapActions({
+      setLightSwitch: "global/setLightSwitch"
+    })
   }
 };
 </script>

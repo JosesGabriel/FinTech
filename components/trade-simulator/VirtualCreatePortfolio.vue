@@ -29,7 +29,7 @@
                     >Close</v-btn
                 >
                 <v-btn
-                    color="#48FFD5"
+                    color="#03dac5"
                     class="text-capitalize"
                     depressed
                     light

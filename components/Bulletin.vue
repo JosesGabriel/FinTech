@@ -11,7 +11,7 @@
       <v-list class="transparent">
         <v-list-item v-for="n in 5" :key="n" class="px-0 mb-2">
           <div class="mr-2">
-            <span style="color: rgb(72,255,213)" class="subtitle-1"
+            <span style="color: #03dac5" class="subtitle-1"
               >20<br />
               NOV</span
             >

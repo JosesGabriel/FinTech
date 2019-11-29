@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       trades: [],
-      loading: "#48FFD5"
+      loading: "#03dac5"
     };
   },
   computed: {
@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     initTimetrade: function(symid) {
-      this.loading = "#48FFD5";
+      this.loading = "#03dac5";
       this.$api.chart.stocks
         .trades({
           "symbol-id": symid,

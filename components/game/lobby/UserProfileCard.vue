@@ -33,23 +33,41 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-card-text class="pa-0 playerStats__container mt-2">
+    <v-card-text
+      class="pa-0 playerStats__container mt-2"
+      :class="
+        lightSwitch == 0
+          ? 'playerStats__container--light'
+          : 'playerStats__container--dark'
+      "
+    >
       <div class="container py-0">
         <div class="row">
           <div class="col-4 text-center py-0 px-0">
-            <span>Winrate</span><br />
+            <span
+              class="font-weight-black"
+              :style="lightSwitch == 0 ? 'color: black;' : 'color: white;'"
+              >Winrate</span
+            ><br />
             <span class="title font-weight-medium text--green"
               >{{ playerData.win_percentage }}%</span
             >
           </div>
           <div class="col-4 text-center py-0 px-0">
-            <span>Rank</span><br />
+            <span class="font-weight-black" :style="lightSwitch == 0 ? 'color: black;' : 'color: white;'"
+              >Rank</span
+            ><br />
             <span class="title font-weight-medium text--green">{{
               playerData.ranking
             }}</span>
           </div>
           <div class="col-4 text-center py-0 px-0">
-            <span class="caption no-wrap"> No. Of Games </span><br />
+            <span
+              class="caption no-wrap font-weight-black"
+              :style="lightSwitch == 0 ? 'color: black;' : 'color: white;'"
+            >
+              No. Of Games </span
+            ><br />
             <span class="title font-weight-medium text--green">{{
               playerData.series_played_count
             }}</span>
@@ -92,21 +110,24 @@
 </template>
 <style>
 /* .profileCard__header {
-  border-bottom: 2px solid #1de9b6;
+  border-bottom: 2px solid #03dac5;
   background-color: #0c1a2b;
 }
 .profileCard__header--username {
-  border-right: 2px solid #1de9b6;
+  border-right: 2px solid #03dac5;
 } */
 .avatar__img--border {
-  border: 5px solid #1de9b6;
+  border: 5px solid #03dac5;
 }
 .no-wrap {
   white-space: nowrap;
 }
-.playerStats__container {
+.playerStats__container--dark {
+  border: 1px solid #03dac5;
   background-color: #014241;
-  border: 1px solid #1de9b6;
+}
+.playerStats__container--light {
+  background-color: #e6efed;
 }
 </style>
 <script>

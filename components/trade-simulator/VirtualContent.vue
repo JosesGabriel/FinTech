@@ -76,7 +76,7 @@
             </v-row>
 
             <v-tabs
-            color="#48FFD5"
+            color="#03dac5"
             background-color="transparent"
             dark
             >
@@ -113,7 +113,7 @@
                 </v-row>
                 <v-tab-item
                     dark
-                    color="#48FFD5"
+                    color="#03dac5"
                     background-color="black"
                     :value="'tab-' + 1"
                     style="background: #00121e;"
@@ -122,7 +122,7 @@
                         <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
                     </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
                     <v-container class="pa-0">
                         <TradelogsContent v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
                     </v-container>

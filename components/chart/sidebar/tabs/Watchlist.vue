@@ -192,7 +192,7 @@ export default {
 }
 
 .increase {
-  color: #48ffd5 !important;
+  color: #03dac5 !important;
   font-size: 11px;
 }
 .decrease {

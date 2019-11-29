@@ -5,7 +5,7 @@
         <v-btn
           rounded
           outlined
-          color="#48FFD5"
+          color="#03dac5"
           dark
           class="text-capitalize mr-2"
           style="border-width: 2px"
@@ -16,7 +16,7 @@
       </template>
       <v-card :loading="watchCardModalLoading" color="darkcard">
         <v-card-title>
-          <span class="subtitle-1 font-weight-light" style="color: #1DE9B6"
+          <span class="subtitle-1 font-weight-light" style="color: #03dac5"
             >Add Watchlist</span
           >
         </v-card-title>
@@ -84,7 +84,7 @@
           >
           <v-btn
             class="addWatch__button"
-            color="#48FFD5"
+            color="#03dac5"
             light
             depressed
             :disabled="saveButtonDisable"

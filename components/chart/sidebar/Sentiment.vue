@@ -13,7 +13,7 @@
       <div id="prgbr__container">
         <v-progress-linear
           background-color="error"
-          color="#48FFD5"
+          color="success"
           value="70"
           height="5"
           class="mt-3"

@@ -59,7 +59,7 @@
 <style>
 .watchlistCard__text--green,
 .watchlistCard__header--percent {
-  color: #48ffd5;
+  color: #03dac5;
 }
 .watchlistCard__text--red {
   color: #ff4848;

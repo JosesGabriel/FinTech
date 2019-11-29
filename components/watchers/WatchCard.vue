@@ -71,14 +71,14 @@
   opacity: 0.5;
 }
 .watchlistCard__bar--green {
-  background-color: #48ffd5;
+  background-color: #03dac5;
 }
 .watchlistCard__bar--red {
   background-color: #ff4848;
 }
 .watchlistCard__text--green,
 .watchlistCard__header--percent {
-  color: #48ffd5;
+  color: #03dac5;
 }
 .watchlistCard__text--red {
   color: #ff4848;

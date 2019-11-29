@@ -3,7 +3,7 @@
     <v-card color="#00121e" dark class="pa-0 ma-0">
       <v-tabs
         v-model="active_tab"
-        color="#48ffd5"
+        color="success"
         background-color="#00121e"
         grow
         dark
@@ -83,6 +83,6 @@ export default {
   height: calc(100vh - 290px);
 }
 .theme--dark.v-icon {
-  color: #48ffd5;
+  color: #03dac5;
 }
 </style>

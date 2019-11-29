@@ -123,7 +123,7 @@ export default {
           info: colors.purple,
           warning: colors.orange,
           error: colors.red,
-          success: colors.teal.accent3,
+          success: "#03DAC5",
           darkcard: "#0c1a2b",
           lightcard: "#f2f2f2"
         },

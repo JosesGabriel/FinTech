@@ -36,7 +36,7 @@ export default {
   data() {
     return {
       data: {},
-      loading: "#48FFD5"
+      loading: "#03dac5"
     };
   },
   computed: {
@@ -53,7 +53,7 @@ export default {
       setIndex: "chart/setIndex"
     }),
     initStock: function(symid) {
-      this.loading = "#48FFD5";
+      this.loading = "#03dac5";
       const params = {
         "symbol-id": symid
       };
