@@ -145,7 +145,7 @@
                         <!-- -----Second View of Trade Modal----- -->
                         <v-container class="pa-5 pt-0 px-0">
                            <v-row no-gutters>
-                                <BuyTrade :Position="dataVolume" :Reset="onreset" v-on:totalPosition="totalPosition"/>
+                                <BuyTrade :Position="dataVolume" :BuyPrice="buyprice" :BoardLot="boardlot" :Reset="onreset" v-on:totalPosition="totalPosition"/>
                             </v-row>
                         </v-container>
                         <v-row no-gutters>
@@ -203,7 +203,6 @@
 </template>
 <script>
 import BuyTrade from '~/components/trade-simulator/buy'
-//import SellTrade from '~/components/trade-simulator/sell'
 import { mapActions, mapGetters } from "vuex";
 
     export default {
@@ -252,14 +251,14 @@ import { mapActions, mapGetters } from "vuex";
                 buySelected: true,
                 onreset: false,
                 dataVolume: 0,
+                buyprice: 0,
+                boardlot: 0,
                 totalposition: 0,
             }
         },
         props: ['visible','OpenPosition'],
         computed: {
             ...mapGetters({
-            simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
-            simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
             simulatorPositions: "tradesimulator/getSimulatorPositions",
             simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
@@ -298,8 +297,6 @@ import { mapActions, mapGetters } from "vuex";
             },
         methods: {
             ...mapActions({
-                setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
-                setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
                 setSimulatorPositions: "tradesimulator/setSimulatorPositions",
                 setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
                 setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
@@ -401,7 +398,6 @@ import { mapActions, mapGetters } from "vuex";
                             .then(response => {      
                                 if (response.success) {
                                     console.log('sell success');
-                                    //this.setSimulatorConfirmedBuySell('sell');
                                     this.setSimulatorOpenPosition(this.OpenPosition);
                                     this.e1 = 1;
                                     this.onreset = false;
@@ -491,9 +487,8 @@ import { mapActions, mapGetters } from "vuex";
                         this.volm = this.nFormatter(result.data.volume);
                         //this.dataVolume = result.data.volume;
                     }
-                    
-                    this.setSimulatorBuyPrice(result.data.last);
-                    this.setSimulatorBoardLot(this.dboard);
+                    this.buyprice = result.data.last;
+                    this.boardlot = this.dboard;
                     this.stock_id = selectObj;
                     this.cprice = result.data.last;
                     this.cpercentage = result.data.changepercentage.toFixed(2); 
@@ -504,7 +499,6 @@ import { mapActions, mapGetters } from "vuex";
                     this.high = result.data.high.toFixed(2);
                     this.wklow = result.data.weekyearlow.toFixed(2);
                     this.wkhigh = result.data.weekyearhigh.toFixed(2);
-                    //this.volm = this.nFormatter(volume);
                     this.vole = this.nFormatter(result.data.value);
                     this.trades = result.data.trades;
                     this.ave = result.data.average.toFixed(2);                 
@@ -512,8 +506,7 @@ import { mapActions, mapGetters } from "vuex";
                 );
 
                 this.$api.chart.stocks.fulldepth(params).then(
-                function(result) {
-                    //console.log(result.data);  
+                function(result) { 
                     this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);                 
                 }.bind(this)
                 );

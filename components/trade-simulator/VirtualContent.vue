@@ -8,7 +8,7 @@
                         Realized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1 mb-2">
-                        <v-col md="12" :class="(this.realized > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
+                        <v-col md="12" :class="(this.realized > 0 ? 'positive' : this.realized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
                             {{ this.realized }}
                         </v-col> 
                     </v-row>
@@ -19,7 +19,7 @@
                         Unrealized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1">
-                       <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3 negative">
+                       <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : this.unrealized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3 negative">
                            {{ this.unrealized }}
                         </v-col>
                     </v-row>
@@ -29,7 +29,7 @@
                         Port Performance %
                     </v-row>
                     <v-row class="mt-1">
-                        <v-col md="12" :class="(this.portperf() > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
+                        <v-col md="12" :class="(this.portperf() > 0 ? 'positive' : this.portperf() < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
                            {{ this.portperf() }}%
                         </v-col> 
                     </v-row>
@@ -39,8 +39,8 @@
                        Max Drawdown %
                     </v-row>
                     <v-row class="mt-1">
-                       <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-                            100.00%
+                       <v-col md="12" :class="(this.totalmax > 0 ? 'positive' : this.totalmax < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
+                            {{ this.totalmax }}%
                         </v-col> 
                     </v-row>
                 </v-col>
@@ -124,7 +124,7 @@
                 </v-tab-item>
                 <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
                     <v-container class="pa-0">
-                        <TradelogsContent v-on:totalRealized="Realized" />
+                        <TradelogsContent v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
                     </v-container>
                 </v-tab-item>
             </v-tabs>
@@ -148,6 +148,7 @@
           realized: 0,
           unrealized: 0,
           totalmvalue: 0,
+          totalmax: 0,
           balance: 0,
           equity: 0,
       }
@@ -177,14 +178,15 @@
             },
             Realized(value){
                 this.realized = value;
-                //this.portperf = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
             },
             Unrealized(value){
                 this.unrealized = value;
-                //this.portperf = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
             },
             TotalMValue(value){
                 this.totalmvalue = value;
+            },
+            TotalMax(value){
+                this.totalmax = value;
             },
             portperf(){
                 let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
@@ -284,6 +286,10 @@
     font-weight: 600;
 }
 
+.select_portfolio > .v-input__control > .v-input__slot > .v-select__slot > .v-select__selections > .v-select__selection--comma {
+    color: black;
+}
+
 .theme--light.v-list {
     background: #00121e;
     border: 1px solid #00FFC3;
@@ -303,6 +309,9 @@
 }
 .negative{
     color: #fe4949;
+}
+.neutral{
+    color: #b6b6b6;
 }
 .theme--dark.v-icon {
     color: #0e0e0e;

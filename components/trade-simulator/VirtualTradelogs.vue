@@ -96,7 +96,6 @@
 <script>
 import shareModal from '~/components/modals/share'
 import { mapActions, mapGetters } from "vuex";
-//import RecordModal from '~/components/trade-simulator/RecordModal'
 export default {
   components: {
     shareModal,
@@ -163,16 +162,15 @@ export default {
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
         console.log(result);
-          this.tradeLogs = result.meta.logs;   
-          
+          this.tradeLogs = result.meta.logs;  
+          let plossperc = []; 
           for(let i = 0; i < result.meta.logs.length; i++){   
 
             const params = {
                     "symbol-id": this.tradeLogs[i].meta.stock_id
                   };
                   this.$api.chart.stocks.list(params).then(
-                    function(results) {
-                       
+                    function(results) {                 
                       this.tradeLogs[i].stock_id = results.data.symbol;
                       let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
                       let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}
@@ -183,14 +181,29 @@ export default {
                       this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
                       this.tradeLogs[i].action = this.tradeLogs[i].id;
                       this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
+
+                       if(parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0) {
+                          plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;
+                          let maxx = this.arrayMax(plossperc);
+                          this.$emit('MaxDrawdown', maxx.toFixed(2));
+                        }                    
                     }.bind(this)
                   );
           }
+                    
       }.bind(this)
     );
 
     },
-    
+    arrayMax(arr) {
+        var len = arr.length, min = Infinity;
+          while (len--) {
+            if (arr[len] < min) {
+              min = arr[len];
+            }
+          }
+          return min;
+      },
     buyfees(buyResult){
             let dpartcommission = buyResult * 0.0025;
             let dcommission = (dpartcommission > 20 ? dpartcommission : 20);

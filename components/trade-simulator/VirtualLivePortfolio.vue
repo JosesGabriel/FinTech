@@ -146,7 +146,6 @@ export default {
         ],
         portfolioLogs: [],
         openposition: [],
-        //OpenPositionList: [],
         items: [
             { title: 'Note' },
             { title: 'Delete' },
@@ -191,7 +190,6 @@ export default {
             setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell",
         }),
           getOpenPositions() {
-            //this.setSimulatorPortfolioID('74329357480497152');
             console.log(this.simulatorPortfolioID);
             const openparams2 = {
               user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
@@ -251,7 +249,6 @@ export default {
                             notes: result.meta.open[i].metas.notes
                           }       
                 }          
-                 //this.setSimulatorOpenPosition(this.openposition);
                  this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(2));
                  this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
               }.bind(this)
