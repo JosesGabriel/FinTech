@@ -2,23 +2,36 @@
   <v-col class="pa-0">
     <v-content class="content__btncontainer">
       <v-btn
+        v-show="maximize || fullscreen"
         small
         icon
-        :color="maximize && !fullscreen ? '#48FFD5' : '#BBB'"
+        :color="fullscreen ? '#03dac5' : '#BBB'"
         :class="[{ button__disable: !maximize && !fullscreen }]"
         title="Maximize Table"
         @click="toggleTabsFullscreen"
       >
         <v-icon class="icon-flipped-y">mdi-window-maximize</v-icon>
+        <!-- :color="maximize && !fullscreen ? '#03dac5' : '#BBB'" -->
         <!-- <v-icon class="icon-flipped-y">{{
           !fullscreen ? "mdi-window-maximize" : "mdi-window-minimize"
         }}</v-icon> -->
       </v-btn>
 
+      <!-- <v-btn
+        v-show="!maximize && !fullscreen"
+        small
+        icon
+        color="#03dac5"
+        title="Expand Up"
+        @click="toggleTabs(0)"
+      >
+        <v-icon>mdi-arrow-expand-up</v-icon>
+      </v-btn> -->
+
       <v-btn
         small
         icon
-        :color="ticker ? '#48FFD5' : '#BBB'"
+        :color="ticker ? '#03dac5' : '#BBB'"
         title="Ticker"
         @click="toggleTicker"
       >
@@ -28,7 +41,7 @@
       <v-btn
         small
         icon
-        :color="sidebarboard ? '#48FFD5' : '#BBB'"
+        :color="sidebarboard ? '#03dac5' : '#BBB'"
         title="Sidebar"
         @click="toggleSidebarBoard"
       >
@@ -36,7 +49,7 @@
       </v-btn>
     </v-content>
 
-    <v-tabs height="30" color="#48FFD5" background-color="#00121e" dark>
+    <v-tabs height="30" color="#03dac5" background-color="#00121e" dark>
       <v-tab
         v-for="item in tabs_content"
         :key="item.id"
@@ -52,7 +65,7 @@
         :key="item.id"
         :value="`tab-${item.id}`"
         style="background: #00121e;"
-        color="#48FFD5"
+        color="#03dac5"
       >
         <component :is="item.component" v-show="tabs_show" />
       </v-tab-item>
@@ -75,6 +88,7 @@ export default {
     return {
       tabs_show: false,
       active_tab: 0,
+      last_visit: 0,
       tabs_content: [
         {
           id: 1,
@@ -124,6 +138,7 @@ export default {
       this.setSidebar(!this.sidebarboard);
     },
     toggleTabs: function(tab) {
+      //console.log(tab);
       if (this.fullscreen) return;
       if (this.active_tab == tab || this.maximize == false) {
         this.tabs_show = !this.tabs_show;

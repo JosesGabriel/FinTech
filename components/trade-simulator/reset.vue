@@ -1,4 +1,3 @@
-
 <template>
     <v-dialog v-model="show" max-width="450px">
         <v-card color="#00121E">

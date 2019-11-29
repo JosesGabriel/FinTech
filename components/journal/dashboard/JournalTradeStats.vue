@@ -21,7 +21,7 @@
                                 <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#00ffc3">mdi-circle</v-icon>Win</td>
                                 <td class="item_position-prop caption text-right px-1 py-1">{{ win }}</td>
                                 
-                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#FF4848">mdi-circle</v-icon>Loss</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#f44336">mdi-circle</v-icon>Loss</td>
                                 <td class="item_position-prop caption text-right px-1 py-1">{{ loss }}</td>
                             </tr>
                             <tr>
@@ -67,7 +67,7 @@
               },
             },
             labels: ['Win', 'Loss'],
-            colors: ['#00FFC3','#FF4848'],
+            colors: ['#00FFC3','#f44336'],
             legend: {
               show: false
             },

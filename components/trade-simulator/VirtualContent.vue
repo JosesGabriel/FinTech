@@ -8,7 +8,7 @@
                         Realized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1 mb-2">
-                        <v-col md="12" :class="(this.realized > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
+                        <v-col md="12" :class="(this.realized > 0 ? 'positive' : this.realized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
                             {{ this.realized }}
                         </v-col> 
                     </v-row>
@@ -19,7 +19,7 @@
                         Unrealized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1">
-                       <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3 negative">
+                       <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : this.unrealized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3 negative">
                            {{ this.unrealized }}
                         </v-col>
                     </v-row>
@@ -29,7 +29,7 @@
                         Port Performance %
                     </v-row>
                     <v-row class="mt-1">
-                        <v-col md="12" :class="(this.portperf() > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
+                        <v-col md="12" :class="(this.portperf() > 0 ? 'positive' : this.portperf() < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
                            {{ this.portperf() }}%
                         </v-col> 
                     </v-row>
@@ -39,8 +39,8 @@
                        Max Drawdown %
                     </v-row>
                     <v-row class="mt-1">
-                       <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-                            100.00%
+                       <v-col md="12" :class="(this.totalmax > 0 ? 'positive' : this.totalmax < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
+                            {{ this.totalmax }}%
                         </v-col> 
                     </v-row>
                 </v-col>
@@ -76,7 +76,7 @@
             </v-row>
 
             <v-tabs
-            color="#48FFD5"
+            color="#03dac5"
             background-color="transparent"
             dark
             >
@@ -113,7 +113,7 @@
                 </v-row>
                 <v-tab-item
                     dark
-                    color="#48FFD5"
+                    color="#03dac5"
                     background-color="black"
                     :value="'tab-' + 1"
                     style="background: #00121e;"
@@ -122,9 +122,9 @@
                         <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
                     </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2" style="background: #00121e;">
                     <v-container class="pa-0">
-                        <TradelogsContent v-on:totalRealized="Realized" />
+                        <TradelogsContent v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
                     </v-container>
                 </v-tab-item>
             </v-tabs>
@@ -148,6 +148,7 @@
           realized: 0,
           unrealized: 0,
           totalmvalue: 0,
+          totalmax: 0,
           balance: 0,
           equity: 0,
       }
@@ -177,14 +178,15 @@
             },
             Realized(value){
                 this.realized = value;
-                //this.portperf = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
             },
             Unrealized(value){
                 this.unrealized = value;
-                //this.portperf = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
             },
             TotalMValue(value){
                 this.totalmvalue = value;
+            },
+            TotalMax(value){
+                this.totalmax = value;
             },
             portperf(){
                 let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
@@ -192,10 +194,10 @@
             },
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
-                decimals = decimals || 2; // Default to 2 decimals
+                decimals = decimals || 3; // Default to 2 decimals
                 return n.toLocaleString().split(sep)[0]
                     + sep
-                    + n.toFixed(2).split(sep)[1];
+                    + n.toFixed(3).split(sep)[1];
             },
             getBalance(){
                  const portfolioparams = {
@@ -284,6 +286,20 @@
     font-weight: 600;
 }
 
+.select_portfolio > .v-input__control > .v-input__slot > .v-select__slot > .v-select__selections > .v-select__selection--comma {
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    padding-top: 5px;
+}
+
+.select_portfolio > .v-input__control > .v-input__slot > .v-select__slot {
+    height: 40px;
+}
+.select_portfolio > .v-input__control > .v-input__slot {
+    min-height: initial;
+}
+
 .theme--light.v-list {
     background: #00121e;
     border: 1px solid #00FFC3;
@@ -303,6 +319,9 @@
 }
 .negative{
     color: #fe4949;
+}
+.neutral{
+    color: #b6b6b6;
 }
 .theme--dark.v-icon {
     color: #0e0e0e;

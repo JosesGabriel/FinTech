@@ -33,7 +33,7 @@
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters>
                 
-                <v-tabs color="#48FFD5" background-color="#00121E" dark grow>
+                <v-tabs color="#03dac5" background-color="#00121E" dark grow>
                   <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" @click="toBuy">Buy</v-tab>
                   <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" @click="toSell">Sell</v-tab>
                 </v-tabs>

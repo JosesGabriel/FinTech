@@ -8,7 +8,7 @@
       <v-btn
         rounded
         outlined
-        color="#48FFD5"
+        color="#03dac5"
         dark
         class="text-capitalize mr-2"
         style="border-width: 2px"
@@ -18,7 +18,7 @@
       <v-btn
         rounded
         outlined
-        color="#48FFD5"
+        color="#03dac5"
         dark
         class="text-capitalize mr-2"
         style="border-width: 2px"
@@ -28,7 +28,7 @@
       <v-btn
         rounded
         outlined
-        color="#48FFD5"
+        color="#03dac5"
         dark
         class="text-capitalize"
         style="border-width: 2px"

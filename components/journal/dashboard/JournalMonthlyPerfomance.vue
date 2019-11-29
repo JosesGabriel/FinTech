@@ -34,7 +34,7 @@
           data: [0,0,0,0,0,0,0,0,0,0,0,0]
         }],
         chartOptions: {
-          colors: ['#00FFC3','#FF4848'],
+          colors: ['#00FFC3','#f44336'],
           plotOptions: {
             bar: {
               horizontal: false,

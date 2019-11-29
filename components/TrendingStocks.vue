@@ -19,7 +19,7 @@
               <v-list-item-subtitle
                 class="overline d-flex justify-space-between"
                 ><span>D&L Industries</span
-                ><span style="color: rgb(72,255,213)"
+                ><span style="color: #03dac5"
                   >+2.91%</span
                 ></v-list-item-subtitle
               >

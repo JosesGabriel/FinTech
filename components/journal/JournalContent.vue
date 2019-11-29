@@ -1,7 +1,7 @@
 <template>
     <v-col class="pt-10 mt-5" cols="12" sm="12" md="12">
             <v-tabs
-            color="#48FFD5"
+            color="#03dac5"
             background-color="transparent"
             dark
             >
@@ -52,7 +52,7 @@
                         </template>
                     </v-select>
                 </v-col>
-                <v-tab-item color="#48FFD5" background-color="black" :value="'tab-' + 1">
+                <v-tab-item color="#03dac5" background-color="black" :value="'tab-' + 1">
                     <v-container class="pa-0">
                         <div class="separator"></div>
                         <JournalLivePortfolio/>
@@ -105,13 +105,13 @@
                         <div class="component_spacer"></div>
                     </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 2">
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2">
                     <v-container class="pa-0">
                         <div class="separator"></div>
                         <TradelogsContent/>
                     </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#48FFD5" background-color="#0c1f33" :value="'tab-' + 3">
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 3">
                     <v-container class="pa-0">
                         <div class="separator"></div>
                         <LedgerContent/>
@@ -285,8 +285,8 @@ export default {
     .rtf_top-btn.v-btn--outlined:hover,
     .rtf_top-btn.v-btn--outlined:active,
     .rtf_top-btn.v-btn--outlined:focus {
-    background-color: #48ffd5;
-    border: 2px solid #48ffd5;
+    background-color: #03dac5;
+    border: 2px solid #03dac5;
     color: #fff !important;
     font-weight: 600 !important;
     }

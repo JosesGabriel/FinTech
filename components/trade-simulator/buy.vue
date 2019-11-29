@@ -26,7 +26,7 @@
                             dark
                             class="body-2 buy_selector quantity-input py-3"
                             readonly
-                            :value= this.simulatorBuyPrice
+                            :value= this.BuyPrice
                         ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
@@ -45,17 +45,17 @@
                             @click="minusButton"
                             text 
                             icon 
-                            color="primary"
-                        ><v-icon>mdi-minus</v-icon></v-btn>
+                            color="success"
+                        ><v-icon>mdi-chevron-down</v-icon></v-btn>
                         <v-btn 
                             @click="addButton"
                             text 
                             icon 
-                            color="primary"
-                        ><v-icon>mdi-plus</v-icon></v-btn>
+                            color="success"
+                        ><v-icon>mdi-chevron-up</v-icon></v-btn>
                     </v-col>
                     <v-col class="ma-0 pa-0 boardlot" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')">
-                        BoardLot : <span>{{ this.simulatorBoardLot }}</span>
+                        BoardLot : <span>{{ this.BoardLot }}</span>
                     </v-col>
                     <v-text-field
                         :label="(this.simulatorConfirmedBuySell == 'sell' ? 'Market Value' : 'Total Cost')"
@@ -91,8 +91,6 @@ export default {
     },
     computed: {
     ...mapGetters({
-      simulatorBuyPrice: "tradesimulator/getSimulatorBuyPrice",
-      simulatorBoardLot: "tradesimulator/getSimulatorBoardLot",
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
       simulatorPositions: "tradesimulator/getSimulatorPositions",
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell"
@@ -109,6 +107,16 @@ export default {
         default (){
             return ''
         }
+    },
+    BuyPrice: {
+        default () {
+        return ''
+        }
+    },
+    BoardLot: {
+        default () {
+        return ''
+        }
     }
   },
   watch: {
@@ -116,7 +124,7 @@ export default {
        //this.totalCost = 0;
             if(this.simulatorConfirmedBuySell == 'sell'){
                 //this.quantity = this.Position; 
-                let tcost = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice); 
+                let tcost = parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice); 
                 this.totalCost = this.fees(tcost);
                 this.totalCost = this.addcomma(this.totalCost);
                 console.log('Quantity - ' + this.Position);
@@ -152,29 +160,25 @@ export default {
     },
     methods: {
     ...mapActions({
-        setSimulatorBuyPrice: "tradesimulator/setSimulatorBuyPrice",
-        setSimulatorBoardLot: "tradesimulator/setSimulatorBoardLot",
         setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
         setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
     addButton(){      
         if(this.simulatorConfirmedBuySell == 'sell'){
-            this.quantity = (this.Position <= this.quantity ? this.Position : this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot));      
+            this.quantity = (this.Position <= this.quantity ? this.Position : this.quantity = parseInt(this.quantity) + parseInt(this.BoardLot));      
         }else {
-            this.quantity = parseInt(this.quantity) + parseInt(this.simulatorBoardLot);
+            this.quantity = parseInt(this.quantity) + parseInt(this.BoardLot);
         }
-        let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
         let addfees = this.fees(add);
-        //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(addfees);
         this.$emit('totalPosition', this.quantity);
     },
     minusButton(){
-        this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.simulatorBoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.simulatorBoardLot));  
-        let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+        this.quantity = (this.quantity <= 0 || this.quantity < parseInt(this.BoardLot) ? 0 : this.quantity = parseInt(this.quantity) - parseInt(this.BoardLot));  
+        let min = parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
         let minfees = this.fees(min);
-        //this.setSimulatorPositions('buy-'+this.quantity);
         this.setSimulatorPositions(this.quantity);
         this.totalCost = this.addcomma(minfees);
         this.$emit('totalPosition', this.quantity);
@@ -209,14 +213,14 @@ export default {
         let press = 0;
         if(this.simulatorConfirmedBuySell == 'sell'){
             if(this.quantity > this.Position){
-                press = parseFloat(this.Position) * parseFloat(this.simulatorBuyPrice);
+                press = parseFloat(this.Position) * parseFloat(this.BuyPrice);
                 let pressfees = this.fees(press);
                 this.totalCost = this.addcomma(pressfees);
                 this.$emit('totalPosition', this.quantity);
                 return this.quantity = this.Position;
             }
         }
-            press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.simulatorBuyPrice);
+            press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
             let pressfees = this.fees(press);
             this.setSimulatorPositions(this.quantity);
             this.totalCost = this.addcomma(pressfees);
@@ -234,8 +238,7 @@ export default {
                         if(result.meta.logs[i].name == item){
                             this.setSimulatorPortfolioID(result.meta.logs[i].id);
                             let avfunds = parseFloat(result.meta.logs[i].balance);    
-                            this.availableFunds = this.addcomma(avfunds);
-                            //this.fund_id = result.meta.logs[i].id;                     
+                            this.availableFunds = this.addcomma(avfunds);                     
                         }
                     }                
                 }.bind(this)

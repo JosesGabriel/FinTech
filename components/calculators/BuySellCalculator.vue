@@ -120,10 +120,10 @@
 </template>
 <style>
 .text--green {
-  color: #48ffd5;
+  color: #03dac5;
 }
 .text--red {
-  color: #ff4848;
+  color: #f44336;
 }
 .text--gray {
   color: gray;
