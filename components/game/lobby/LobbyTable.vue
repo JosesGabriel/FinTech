@@ -74,7 +74,7 @@ tr span {
 }
 .lobby__table {
   background-color: #03232f;
-  border: 1px solid #1de9b6;
+  border: 1px solid #03dac5;
   height: calc(100vh - 405px);
 }
 .gamefooter__btn {

@@ -17,7 +17,7 @@
                 <v-switch
                   v-model="toggleButton"
                   class="toggleButton"
-                  color="#48FFD5"
+                  color="#03dac5"
                 ></v-switch>
               </v-content>
             </v-col>
@@ -35,7 +35,7 @@
             :indeterminate="progbar.loading"
             :value="progbar.value"
             background-color="error"
-            color="#48FFD5"
+            color="#03dac5"
             height="5"
           ></v-progress-linear>
         </v-content>

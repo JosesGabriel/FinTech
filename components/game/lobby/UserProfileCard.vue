@@ -110,20 +110,20 @@
 </template>
 <style>
 /* .profileCard__header {
-  border-bottom: 2px solid #1de9b6;
+  border-bottom: 2px solid #03dac5;
   background-color: #0c1a2b;
 }
 .profileCard__header--username {
-  border-right: 2px solid #1de9b6;
+  border-right: 2px solid #03dac5;
 } */
 .avatar__img--border {
-  border: 5px solid #1de9b6;
+  border: 5px solid #03dac5;
 }
 .no-wrap {
   white-space: nowrap;
 }
 .playerStats__container--dark {
-  border: 1px solid #1de9b6;
+  border: 1px solid #03dac5;
   background-color: #014241;
 }
 .playerStats__container--light {

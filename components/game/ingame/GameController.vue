@@ -37,7 +37,7 @@
     <v-dialog v-model="buyselldialog" width="300">
       <v-card :dark="lightSwitch == 0 ? false : true" transparent>
         <v-card-title>
-          <span class="subtitle-1 font-weight-light" style="color: #1DE9B6"
+          <span class="subtitle-1 font-weight-light" style="color: #03dac5"
             ><strong>{{ modalTypeText }}</strong></span
           >
         </v-card-title>
@@ -80,7 +80,7 @@
           <v-btn depressed color="transparent" @click="dialog = false"
             >Close</v-btn
           >
-          <v-btn color="#48FFD5" light depressed @click="addWatch()"
+          <v-btn color="#03dac5" light depressed @click="addWatch()"
             >Confirm</v-btn
           >
         </v-card-actions>

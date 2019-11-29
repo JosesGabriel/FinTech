@@ -7,7 +7,7 @@
           <Leaderboard class="bordered__component" />
         </div>
         <div v-if="playerInLobby">
-          <span style="color: #1de9b6;">Game Settings</span>
+          <span style="color: #03dac5;">Game Settings</span>
           <LobbySettings />
         </div>
       </v-col>

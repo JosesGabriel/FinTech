@@ -8,7 +8,7 @@
     <v-card-title class="pl-2">
       <span
         class="subtitle-1 font-weight-black py-0 pl-2"
-        style="color: #1DE9B6"
+        style="color: #03dac5"
         >VAR CALCULATOR</span
       >
     </v-card-title>
@@ -74,7 +74,7 @@
         </v-row>
         <v-row v-if="resultPage">
           <v-col cols="12">
-            <span class="body-2 font-weight-light" style="color: #1DE9B6"
+            <span class="body-2 font-weight-light" style="color: #03dac5"
               >Your results</span
             >
           </v-col>
@@ -117,7 +117,7 @@
       <v-btn
         v-if="!resultPage"
         class="addWatch__button"
-        color="#48FFD5"
+        color="success"
         light
         depressed
         :disabled="nextButtonDisable"
@@ -127,7 +127,7 @@
       <v-btn
         v-else
         class="addWatch__button"
-        color="#48FFD5"
+        color="success"
         light
         depressed
         @click="addToWatchlist()"
@@ -147,7 +147,7 @@
 </template>
 <style>
 .text--green {
-  color: #48ffd5;
+  color: #03dac5;
 }
 .text--red {
   color: #ff4848;

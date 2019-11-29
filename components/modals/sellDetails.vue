@@ -81,10 +81,10 @@ export default {
     border-radius: 10px;
     }
     .notes_text::-webkit-scrollbar-thumb {
-    background: #1de9b6;
+    background: #03dac5;
     border-radius: 20px;
     }
     .notes_text::-webkit-scrollbar-thumb:hover {
-    background: #1de9b6;
+    background: #03dac5;
     }
 </style>
