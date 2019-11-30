@@ -43,6 +43,8 @@
 <script>
   import VueApexCharts from 'vue-apexcharts'
   import shareModal from '~/components/modals/share'
+  
+  import { mapActions, mapGetters } from "vuex";
 
   export default {
     components: {
@@ -145,12 +147,41 @@
       }
     },
     computed: {
+      ...mapGetters({
+        renderPortfolioKey: "journal/getRenderPortfolioKey",
+        defaultPortfolioId: "journal/getDefaultPortfolioId",
+      }),
       winlossresult: function() {
           return this.result = parseInt(this.win) + parseInt(this.loss);
       },
       winrateresult: function() {
           return ((this.win * 100) / this.result).toFixed(0)
       }
+    },
+    watch: {
+      renderPortfolioKey: function() {
+        this.getTradeStats();
+      },
+      defaultPortfolioId: function() {
+        this.getTradeStats();
+      }
+    },
+    methods: {
+      ...mapActions({
+        setJournalCharts: "journal/setRenderPortfolioKey"
+      }),
+      getTradeStats() {
+        const journalchartsparams = {
+          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+          fund: this.defaultPortfolioId,
+        };
+        this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
+          function(result) {
+            console.log(result.trade_statistics, "tests")
+          }.bind(this)
+        )
+        this.componentKeys++;
+      },
     }
   }
 </script>
