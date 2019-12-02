@@ -56,6 +56,7 @@
   </v-col>
 </template>
 <script>
+import { mapGetters } from "vuex";
 export default {
   components: {},
   data() {
@@ -76,6 +77,19 @@ export default {
       jockey: []
     };
   },
+  computed: {
+    ...mapGetters({
+      symbolid: "chart/symbolid",
+      index: "chart/index"
+    })
+  },
+  watch: {
+    symbolid(symid) {
+      //   console.log("time trade");
+      //   console.log('stock id - '+symid);
+      this.initJockey(symid);
+    }
+  },
   mounted() {
     this.$api.chart.stocks
       .brokersActivity({
@@ -93,6 +107,16 @@ export default {
               + sep
               + n.toFixed(2).split(sep)[1];
       },
+      initJockey(id){
+        this.$api.chart.stocks
+          .brokersActivity({
+            'symbol-id': id
+          })
+          .then(response => {
+            console.log('data response');
+            this.jockey = response.data;         
+          });
+      }
   }
 };
 </script>
