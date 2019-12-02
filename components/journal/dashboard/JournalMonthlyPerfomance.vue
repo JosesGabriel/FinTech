@@ -121,6 +121,10 @@
                   fontSize: '12px',
                   fontFamily: 'Karla',
                   cssClass: 'apexcharts-yaxis-label',
+              },
+              formatter: function (value) {
+                let val = (value/1).toFixed(2).replace('.', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
             },
             lines: {
@@ -166,42 +170,19 @@
     },
     methods: {
       getMPerformance() {
-          // console.log(this.defaultPortfolioId, "monthyP")
-          // if(this.renderPortfolioKey > 0){
-          //   
-          // }
-          // const journalchartsparams = {
-          //   user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-          //   fund: this.defaultPortfolioId,
-          // };
-          // this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
-          //   function(result) {
-          //       if(result.success) {
-          //         console.log(result.meta)
-          //         let mPerf = result.meta.monthly_performance
-          //         this.$refs.monthlyPerformance.updateSeries([
-          //           {
-          //             data: mPerf
-          //           }
-          //         ]);
-          //       }
-          //   }.bind(this)
-          // )
-      // GET Closing Price from Stock History API
-        // const journalchartsparams = {
-        //   user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        //   fund: this.defaultPortfolioId,
-        // };
-        // this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
-        //   function(result) {
-        //     console.log(result.meta.monthly_performance, "test");
-        //     this.$refs.monthlyPerformance.updateSeries([
-        //       {
-        //         data: result.meta.monthly_performance
-        //       }
-        //     ]);
-        //   }.bind(this)
-        // )
+        const journalchartsparams = {
+          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+          fund: this.defaultPortfolioId,
+        };
+        this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
+          function(result) {
+            this.$refs.monthlyPerformance.updateSeries([
+              {
+                data: result.meta.monthly_performance
+              }
+            ]);
+          }.bind(this)
+        )
         this.componentKeys++;
       },
       formatPrice(value) {

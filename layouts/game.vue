@@ -13,7 +13,8 @@
   max-width: 100%;
 }
 .darkMode {
-  background: radial-gradient(50% 50% at 50% 50%, #0d2641 0%, #00121e 88.54%);
+  /* background: radial-gradient(50% 50% at 50% 50%, #0d2641 0%, #00121e 88.54%); */
+   background-color: #00121e;
 }
 .lightMode {
   background-color: #f2f2f2;

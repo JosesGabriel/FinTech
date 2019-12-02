@@ -205,7 +205,6 @@
               }
           };
           // this.chartOptions.labels.push(this.updateLabels)
-          console.log(this.updateLabels, "tst")
 
       });
       },
