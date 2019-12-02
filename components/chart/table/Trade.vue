@@ -25,7 +25,7 @@
             <v-img
               :class="[{ fix_image: item.modal == false }]"
               class="img__trades"
-              :src="`/Icon/chart/trades/${item.img}`"
+              :src="`/icon/chart/trades/${item.img}`"
             ></v-img>
           </v-card-actions>
         </v-card>
@@ -50,7 +50,7 @@
             <v-img
               contain
               class="img__trades"
-              :src="`/Icon/chart/trades/${item.img}`"
+              :src="`/icon/chart/trades/${item.img}`"
             ></v-img>
           </v-card-actions>
         </v-card>
@@ -65,7 +65,7 @@
                 <v-img
                   contain
                   class="img__broker"
-                  :src="`/Icon/chart/trades/${broker.img}`"
+                  :src="`/icon/chart/trades/${broker.img}`"
                 ></v-img>
               </v-card>
               <span class="white--text caption font-weight-bold">{{
