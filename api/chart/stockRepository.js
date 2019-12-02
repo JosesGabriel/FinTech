@@ -64,6 +64,13 @@ export default $axios => ({
         query.length > 0 ? "?" + query : ""
       }`
     );
+  },
+  brokersActivity(params) {
+    let query = buildParams(params);
+    $axios.setToken(token, "Bearer");
+    return $axios.$get(
+      `${baseURL}/trades/brokers-activity/latest${query.length > 0 ? "?" + query : ""}`
+    );
   }
 });
 
