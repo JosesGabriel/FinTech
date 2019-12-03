@@ -9,8 +9,8 @@
         <Navbar active="social" />
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
-        <PostField class="mb-3" />
-        <Newsfeed />
+        <PostField class="mb-3" @authorNewPost="authorNewPost" />
+        <Newsfeed :new-post="newPost" />
       </v-col>
       <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
         <TrendingStocks />
@@ -53,7 +53,8 @@ export default {
   },
   data() {
     return {
-      isOpen: true
+      isOpen: true,
+      newPost: {}
     };
   },
   mounted() {
@@ -64,6 +65,9 @@ export default {
   methods: {
     toggle: function() {
       this.isOpen = !this.isOpen;
+    },
+    authorNewPost: function(value) {
+      this.newPost = value;
     }
   },
   head() {

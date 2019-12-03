@@ -1,7 +1,7 @@
 <template>
   <v-col class="pa-0">
     <v-card
-      v-for="n in maxshown"
+      v-for="n in postsObject.length"
       :key="n"
       class="centerPanel__card mb-3 transparent__bg"
       :dark="lightSwitch == 0 ? false : true"
@@ -38,7 +38,14 @@
               >
             </v-col>
             <v-col class="text-right">
-              <v-btn icon fab small class="postOptions__btn" color="secondary">
+              <v-btn
+                icon
+                fab
+                small
+                class="postOptions__btn"
+                color="secondary"
+                @click="test()"
+              >
                 <v-icon>mdi-dots-horizontal</v-icon>
               </v-btn>
             </v-col>
@@ -52,10 +59,7 @@
           <span class="body-1 px-5 pb-3">
             {{ postsObject[n - 1].content }}
           </span>
-          <!-- <v-img
-            src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
-            height="300"
-          ></v-img> -->
+          <PhotoCarousel :images="postsObject[n - 1].attachments" />
         </v-list-item-content>
       </v-list-item>
       <!-- End of Post Body -->
@@ -138,7 +142,6 @@
             </v-list-item-content>
           </v-list-item>
           <!-- End of Main Comment -->
-
           <!-- Start of Main Comment -->
           <!-- <v-list-item class="pa-0 ma-0 ml-12 mt-2">
             <v-list-item-avatar>
@@ -227,8 +230,20 @@
 </style>
 <script>
 import { mapGetters } from "vuex";
+import PhotoCarousel from "~/components/social/PhotoCarousel";
 export default {
   name: "Newsfeed",
+  components: {
+    PhotoCarousel
+  },
+  props: {
+    newPost: {
+      default: function() {
+        return [];
+      },
+      type: Object
+    }
+  },
   data() {
     return {
       bullCounter: 9,
@@ -236,7 +251,6 @@ export default {
       dark_theme_color: process.env.DARK_THEME_COLOR,
       user: this.$store.getters["auth/user"],
       postsObject: [],
-      maxshown: 0,
       loader: true
     };
   },
@@ -245,17 +259,33 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
+  watch: {
+    newPost: function() {
+      this.postsObject.unshift({
+        content: this.newPost.content,
+        bears_count: 0,
+        bulls_count: 0,
+        created_at: new Date(),
+        user: {
+          profile_image: this.$auth.user.data.user.profile_image,
+          first_name: this.$auth.user.data.user.first_name,
+          last_name: this.$auth.user.data.user.last_name
+        },
+        comments: [],
+        comments_count: 0
+      });
+    }
+  },
   created() {},
   mounted() {
     const params = {
-      page: "10"
+      page: "1"
     };
     this.$api.social.posts
-      .get()
+      .get(params)
       .then(response => {
         if (response.success) {
           this.postsObject = response.data.posts;
-          this.maxshown = 10;
           console.log(this.postsObject);
           this.loader = false;
         }
@@ -265,6 +295,9 @@ export default {
       });
   },
   methods: {
+    openImageCarousel() {
+      console.log(this.newPost);
+    },
     post_react(post_id, type) {
       const params = post_id;
       if (type == "bull") {
