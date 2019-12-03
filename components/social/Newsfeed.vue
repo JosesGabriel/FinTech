@@ -261,8 +261,14 @@ export default {
   },
   watch: {
     newPost: function() {
+      let attachments = [];
+      for (let i = 0; i < this.newPost.attachments.length; i++) {
+        attachments[i] = {};
+        attachments[i]["url"] = this.newPost.attachments[i];
+      }
       this.postsObject.unshift({
         content: this.newPost.content,
+        attachments: attachments,
         bears_count: 0,
         bulls_count: 0,
         created_at: new Date(),
