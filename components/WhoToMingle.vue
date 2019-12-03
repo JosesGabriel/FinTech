@@ -6,7 +6,7 @@
     outlined
   >
     <v-card-text class="pa-0 pl-2">
-      <div class="body-2 font-weight-black">Who To Mingle</div>
+      <div class="body-2 font-weight-black">Suggested Traders</div>
       <v-divider></v-divider>
       <v-list class="transparent">
         <v-list-item v-for="n in 5" :key="n" class="px-0 mb-2">

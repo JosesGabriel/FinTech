@@ -1,7 +1,7 @@
 <template>
   <v-col class="pa-0">
     <v-card
-      v-for="n in 4"
+      v-for="n in maxshown"
       :key="n"
       class="centerPanel__card mb-3 transparent__bg"
       :dark="lightSwitch == 0 ? false : true"
@@ -10,110 +10,129 @@
       <!-- Start of Post Header -->
       <v-list-item>
         <v-list-item-avatar class="mr-2">
-          <v-img
-            :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-          ></v-img>
+          <img
+            :src="
+              postsObject[n - 1].user.profile_image
+                ? postsObject[n - 1].user.profile_image
+                : 'user_default.png'
+            "
+          />
         </v-list-item-avatar>
         <v-list-item-content class="pa-0 ma-0">
           <v-row>
             <v-col>
               <v-list-item-title class="subtitle-2"
-                ><strong>Sven Mithreel</strong></v-list-item-title
+                ><strong
+                  >{{ postsObject[n - 1].user.first_name }}
+                  {{ postsObject[n - 1].user.last_name }}</strong
+                ></v-list-item-title
               >
               <v-list-item-subtitle class="overline"
-                >5hrs <v-icon class="overline mt-0">mdi-earth</v-icon
-                ><span style="color: #00ffc3;">
-                  Bullish</span
-                ></v-list-item-subtitle
+                >{{
+                  $moment(postsObject[n - 1].created_at).format(
+                    "MMM DD hh:mm A"
+                  )
+                }}
+                <v-icon class="overline mt-0">mdi-earth</v-icon
+                ><span class="text--green"> Bullish</span></v-list-item-subtitle
               >
             </v-col>
             <v-col class="text-right">
-              <!--
-                        <v-btn small fab class="mr-2" :color="dark_theme_color"> 
-                            <v-icon>mdi-more</v-icon>
-                        </v-btn>
-                        -->
+              <v-btn icon fab small class="postOptions__btn" color="secondary">
+                <v-icon>mdi-dots-horizontal</v-icon>
+              </v-btn>
             </v-col>
           </v-row>
         </v-list-item-content>
       </v-list-item>
       <!-- End of Post Header -->
-
       <!-- Start of Post Body -->
       <v-list-item class="pa-0 ma-0">
         <v-list-item-content class="ma-0 pa-0">
-          <span class="body-2 px-2 mb-2">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit fuga
-            consectetur placeat id vero tenetur molestiae minus corrupti animi
-            eveniet asperiores, quae incidunt ex saepe facilis numquam
-            cupiditate perferendis excepturi.
+          <span class="body-1 px-5 pb-3">
+            {{ postsObject[n - 1].content }}
           </span>
-          <v-img
+          <!-- <v-img
             src="https://storage.arbitrage.ph/dev/2018/10/mainhero-1024x682.jpg"
             height="300"
-          ></v-img>
+          ></v-img> -->
         </v-list-item-content>
       </v-list-item>
       <!-- End of Post Body -->
-
-      <v-card-actions>
-        <v-btn icon outlined fab x-small color="success">
+      <v-divider></v-divider>
+      <v-card-actions class="pl-5">
+        <v-btn
+          icon
+          outlined
+          fab
+          x-small
+          color="success"
+          @click="post_react(postsObject[n - 1].id, 'bull')"
+        >
           <img src="/icon/bullish.svg" width="15" />
         </v-btn>
-        <v-btn icon outlined fab x-small color="error">
+        <span class="px-2">{{ postsObject[n - 1].bulls_count }}</span>
+        <v-btn
+          icon
+          outlined
+          fab
+          x-small
+          color="error"
+          @click="post_react(postsObject[n - 1].id, 'bear')"
+        >
           <img src="/icon/bearish.svg" width="15" />
         </v-btn>
+        <span class="px-2">{{ postsObject[n - 1].bears_count }}</span>
+        <v-spacer></v-spacer>
+        <v-btn icon fab x-small color="secondary">
+          <v-icon>mdi-comment-text-outline</v-icon>
+        </v-btn>
+        <span>{{ postsObject[n - 1].comments_count }}</span>
+        <v-btn icon fab x-small color="secondary">
+          <v-icon>mdi-share-variant</v-icon>
+        </v-btn>
+        <span>1000</span>
       </v-card-actions>
       <v-divider></v-divider>
-
-      <!-- Start of Comment -->
-      <v-list-item class="ma-0">
-        <v-list-item-avatar>
-          <v-img></v-img>
-        </v-list-item-avatar>
-        <v-list-item-content class="pb-0 mb-0">
-          <v-text-field label="Write a comment..." color="primary">
-          </v-text-field>
-        </v-list-item-content>
-      </v-list-item>
-      <!-- End of Comment -->
-
-      <v-divider></v-divider>
-
-      <!-- Start of Subcomment -->
-      <v-list-item>
-        <v-list-item-content class="pa-0 ma-0 mt-3">
+      <v-list-item
+        v-for="k in postsObject[n - 1].comments.length"
+        :key="k"
+        class="pa-0 ma-0 mt-3"
+      >
+        <v-list-item-content>
           <!-- Start of Main Comment -->
           <v-list-item>
             <v-list-item-avatar>
-              <v-img
-                position="top"
-                :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-              ></v-img>
+              <img
+                :src="
+                  postsObject[n - 1].comments[k - 1]['user']['profile_image']
+                    ? postsObject[n - 1].comments[k - 1]['user'][
+                        'profile_image'
+                      ]
+                    : 'user_default.png'
+                "
+              />
             </v-list-item-avatar>
             <v-list-item-content class="pa-0 ma-0">
               <v-container class="pa-0 body-2">
-                <strong class="blue--text text--darken-2">Sven Mithreel</strong>
-                <span
-                  >This is a Comment. Lorem Ipsum is simply dummy text of the
-                  printing and typesetting industry.
-                </span>
+                <strong class="blue--text text--darken-2"
+                  >{{ n - 1 }} joses {{ k - 1 }}</strong
+                >
               </v-container>
               <v-container class="pa-0 ma-0">
                 <v-btn icon outlined fab x-small color="success">
                   <img src="/icon/bullish.svg" width="15" />
                 </v-btn>
                 <span class="px-2">{{ bullCounter }}</span>
-                <v-btn icon outlined fab x-small color="red">
+                <v-btn icon outlined fab x-small color="error">
                   <img src="/icon/bearish.svg" width="15" />
                 </v-btn>
                 <span class="px-2">{{ bearCounter }}</span>
-                |
-                <v-btn small depressed color="transparent">
-                  <span>Reply</span>
-                  <v-icon right>mdi-reply-outline</v-icon>
+                <!-- | -->
+                <v-btn icon small depressed>
+                  <v-icon>mdi-reply-outline</v-icon>
                 </v-btn>
-                |
+                <!-- | -->
                 <span class="px-2 overline">6 hours ago</span>
               </v-container>
             </v-list-item-content>
@@ -121,7 +140,7 @@
           <!-- End of Main Comment -->
 
           <!-- Start of Main Comment -->
-          <v-list-item class="pa-0 ma-0 ml-12 mt-2">
+          <!-- <v-list-item class="pa-0 ma-0 ml-12 mt-2">
             <v-list-item-avatar>
               <v-img
                 src="https://66.media.tumblr.com/d6c116eb3990fddb869d916c64f18e5c/tumblr_phsox3GWrv1uwzkkgo1_400.jpg"
@@ -145,15 +164,14 @@
                   <img src="/icon/bearish.svg" width="15" />
                 </v-btn>
                 <span class="px-2">{{ bearCounter }}</span>
-                |
                 <span class="px-2 overline">10 hours ago</span>
               </v-container>
             </v-list-item-content>
-          </v-list-item>
+          </v-list-item> -->
           <!-- End of Main Comment -->
 
           <!-- start of subreply -->
-          <v-list-item class="ma-0 pa-0 ml-12 mt-2">
+          <!-- <v-list-item class="ma-0 pa-0 ml-12 mt-2">
             <v-list-item-avatar>
               <v-img></v-img>
             </v-list-item-avatar>
@@ -161,14 +179,52 @@
               <v-text-field label="Write a reply..." color="primary">
               </v-text-field>
             </v-list-item-content>
-          </v-list-item>
+          </v-list-item> -->
           <!-- end of subreply -->
         </v-list-item-content>
       </v-list-item>
+      <!-- Start of Comment -->
+      <v-list-item class="ma-0">
+        <v-list-item-avatar>
+          <v-img
+            :src="
+              $auth.loggedIn
+                ? $auth.user.data.user.profile_image
+                : 'default.png'
+            "
+          ></v-img>
+        </v-list-item-avatar>
+        <v-list-item-content class="pt-0 mb-0">
+          <v-text-field
+            dense
+            rounded
+            hide-details
+            label="Write a comment..."
+            color="primary"
+            background-color="#0c1a2b"
+          >
+          </v-text-field>
+        </v-list-item-content>
+      </v-list-item>
+      <!-- End of Comment -->
+      <v-divider></v-divider>
+
+      <!-- Start of Subcomment -->
+
       <!-- End of Subcomment -->
     </v-card>
   </v-col>
 </template>
+<style>
+.postOptions__btn {
+  position: relative;
+  bottom: 15px;
+  left: 10px;
+}
+.postOptions__btn::before {
+  color: transparent;
+}
+</style>
 <script>
 import { mapGetters } from "vuex";
 export default {
@@ -178,7 +234,10 @@ export default {
       bullCounter: 9,
       bearCounter: 2,
       dark_theme_color: process.env.DARK_THEME_COLOR,
-      user: this.$store.getters["auth/user"]
+      user: this.$store.getters["auth/user"],
+      postsObject: [],
+      maxshown: 0,
+      loader: true
     };
   },
   computed: {
@@ -186,64 +245,40 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
-  created() {
-    //console.log("first");
-    // mutations
-    // this.$store.commit('auth/SET_USER', { user_id:1, fullname:'Joses Gabriel Lu', profile:'test.jpg' });
-    // actions
-    // simple state
-    // console.log(this.$store.state.auth.user);
-    // getters
-    // console.log(this.$store.getters['auth/user']);
-    // this.$store.dispatch("auth/setUser", {
-    //   user_id: 1,
-    //   fullname: "Joses Gabriel Lu",
-    //   profile: "test.jpg"
-    // });
-  },
+  created() {},
   mounted() {
-    console.log("api");
-    // console.log(this.$api);
-    const params1 = {
-      exchange: "PSE",
-      symbol: "TEL"
+    const params = {
+      page: "10"
     };
-    // console.log(this.$api.chart.stocks.list(params1));
-
-    const params2 = {
-      "symbol-id": 29235365118214144,
-      //   exchange: "PSE",
-      //   symbol: "BPI",
-      resolution: "1D",
-      limit: "1"
-    };
-
-    console.log(this.$api.chart.charts.latest(params2));
-
-    // standard axios
-    /*
-    const data = {
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET
-    };
-    const id = 28878466413891584;
-    this.$axios
-      .$get(`/social/posts/${id}`, {
-        data: data
+    this.$api.social.posts
+      .get()
+      .then(response => {
+        if (response.success) {
+          this.postsObject = response.data.posts;
+          this.maxshown = 10;
+          console.log(this.postsObject);
+          this.loader = false;
+        }
       })
-      .then(res => {
-        console.log("old");
-        console.log(res);
+      .catch(e => {
+        console.log(response);
       });
-
-    // repository type axios
-    this.$api.social.posts.show(id).then(res => {
-      console.log("new");
-      console.log(res);
-    });
-    */
   },
-  methods: {},
+  methods: {
+    post_react(post_id, type) {
+      const params = post_id;
+      if (type == "bull") {
+        this.$api.social.posts.bullish(params).then(response => {
+          this.postsObject[n - 1].bears_count;
+          console.log(response);
+        });
+      } else if (type == "bear") {
+        this.$api.social.posts.bearish(params).then(response => {
+          console.log(response);
+        });
+      }
+    }
+  },
   head() {
     return {
       title: "Arbitrage | Social Page",
