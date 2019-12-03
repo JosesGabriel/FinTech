@@ -17,7 +17,7 @@
         <WhoToMingle />
         <MiniWatchlist />
         <Bulletin />
-        <!-- <FooterSidebar /> -->
+        <FooterSidebar />
       </v-col>
     </v-row>
   </v-container>
