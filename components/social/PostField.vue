@@ -28,6 +28,10 @@
           row-height="25"
           color="primary"
           required
+          no-resize
+          solo
+          flat
+          background-color="transparent"
           :loading="postField__loading"
           >{{ postFieldModel }}</v-textarea
         >
@@ -90,7 +94,7 @@
             </div>
           </div>
           <v-btn
-            class="mr-6"
+            class="mr-6 postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
@@ -99,22 +103,22 @@
             <v-icon color="success">mdi-image-outline</v-icon>Photo
           </v-btn>
           <v-btn
-            class="ml-3 mr-6"
+            class="ml-3 mr-6 postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
             @click="onClickImageUploadBtn"
           >
-            <v-icon color="success">mdi-video</v-icon>Video
+            <img class="mr-1" src="/icon/video.svg" width="20" />Video
           </v-btn>
           <v-btn
-            class="ml-2"
+            class="ml-2 postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
             @click="onClickImageUploadBtn"
           >
-            <v-icon color="success">mdi-poll-box</v-icon>Polls
+            <img class="mr-1" src="/icon/polls.svg" width="17" />Polls
           </v-btn>
           <v-btn
             rounded
@@ -165,6 +169,9 @@
 }
 .postField__imageCard {
   flex: 0 0 auto;
+}
+.postField__btn::before {
+  color: transparent;
 }
 .postField__imageWrapper--closebtn {
   position: relative;

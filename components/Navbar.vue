@@ -165,7 +165,7 @@
           </v-list-item-icon>
           <v-list-item @click.stop="buySellDialog = true">
             <v-list-item-icon class="mr-4">
-              <v-icon color="#b6b6b6">mdi-calculator</v-icon>
+              <img src="/icon/navbar-icons/buySellCalculator.svg" width="25" />
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -177,7 +177,7 @@
           </v-list-item>
           <v-list-item @click.stop="varDialog = true">
             <v-list-item-icon class="mr-4">
-              <v-icon color="#b6b6b6">mdi-page-layout-header-footer</v-icon>
+              <img src="/icon/navbar-icons/varCalculator.svg" width="25" />
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -189,7 +189,10 @@
           </v-list-item>
           <v-list-item @click.stop="averagePriceDialog = true">
             <v-list-item-icon class="mr-4">
-              <v-icon color="#b6b6b6">mdi-tag-text-outline</v-icon>
+              <img
+                src="/icon/navbar-icons/averagePriceCalculator.svg"
+                width="25"
+              />
             </v-list-item-icon>
 
             <v-list-item-content>
