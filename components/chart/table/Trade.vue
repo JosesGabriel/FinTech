@@ -2,14 +2,21 @@
   <v-content>
     <!-- select broker -->
     <v-content v-show="show_brokers" class="mx-12 text-center">
-      <span class="subtitle-1 font-weight-bold">Start Trading</span>
+      <span
+        class="subtitle-1 font-weight-bold"
+        :class="[
+          { darkmode__text: lightSwitch },
+          { lightmode__text: !ligthSwitch }
+        ]"
+        >Start Trading</span
+      >
       <br />
       <span class="caption grey--text">Connect to your broker's account</span>
       <v-card
         class="card__container d-flex justify-space-around mb-6 mt-6 px-12"
-        color="#00121e"
+        :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         flat
-        dark
+        :dark="lightSwitch == true"
       >
         <v-card
           v-for="item in items_top"
@@ -18,6 +25,7 @@
           outlined
           tile
           flat
+          :style="{ background: cardbackground }"
           :class="[{ hide__card: item.show == false }]"
           @click="showModal(item)"
         >
@@ -32,9 +40,9 @@
       </v-card>
       <v-card
         class="card__container d-flex justify-space-around mb-6 mt-6 px-12"
-        color="#00121e"
+        :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         flat
-        dark
+        :dark="lightSwitch == true"
       >
         <v-card
           v-for="item in items_bottom"
@@ -43,6 +51,7 @@
           outlined
           tile
           flat
+          :style="{ background: cardbackground }"
           :class="{ hide__card: item.show == false }"
           @click="showModal(item)"
         >
@@ -59,18 +68,26 @@
       <!-- dialog -->
       <v-row justify="center">
         <v-dialog v-model="trade_login" persistent max-width="290">
-          <v-card color="#00121e" flat dark>
+          <v-card
+            :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+            flat
+            :dark="lightSwitch == true"
+          >
             <v-content class="content__broker text-center">
-              <v-card id="card__broker" flat dark class="pa-2 mt-3 mb-2">
+              <v-card
+                id="card__broker"
+                flat
+                :dark="lightSwitch == true"
+                :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+                class="pa-2 mt-3 mb-2"
+              >
                 <v-img
                   contain
                   class="img__broker"
                   :src="`/icon/chart/trades/${broker.img}`"
                 ></v-img>
               </v-card>
-              <span class="white--text caption font-weight-bold">{{
-                broker.title
-              }}</span>
+              <span class="caption font-weight-bold">{{ broker.title }}</span>
             </v-content>
             <v-card-text>
               <v-row class="ma-0 mt-4">
@@ -95,9 +112,9 @@
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col class="col-2 pa-0 pt-3"
+                    <v-col class="col-2 pa-0 pt-3 text-center"
                       ><span id="span__dash"
-                        ><v-icon color="white">mdi-color-helper</v-icon></span
+                        ><v-icon color="#b6b6b6">mdi-color-helper</v-icon></span
                       ></v-col
                     >
                     <v-col class="col-5 pa-0">
@@ -113,10 +130,7 @@
                     required
                   ></v-text-field>
                   <v-content class="text-right">
-                    <span
-                      id="forget_password"
-                      class="white--text caption font-weight-bold"
-                    >
+                    <span id="forget_password" class="caption font-weight-bold">
                       Forget Password
                     </span>
                   </v-content>
@@ -142,8 +156,45 @@
 
     <!-- paper trade -->
     <v-content v-show="!show_brokers">
-      <h1>Paper Trade</h1>
-      <v-btn @click="showBrokers">Return</v-btn>
+      <!-- <span class="mx-3 mb-3">Available Funds 100,000,000.00</span>
+
+      <v-content>
+        <v-row class="ml-1 mt-1 mb-3">
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Price
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
+                1,000.00
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Quality
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3">
+                <span class="overline">PHP</span>100,000
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Total
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3">
+                <span class="overline">PHP</span>1,000,000.00
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-content>
+      <v-btn @click="showBrokers">Return</v-btn> -->
     </v-content>
   </v-content>
 </template>
@@ -206,8 +257,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      trade_login: "chart/trade_login"
-    })
+      trade_login: "chart/trade_login",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   methods: {
     ...mapActions({
@@ -231,7 +286,7 @@ export default {
 
 <style scoped>
 .hide__card {
-  background: #00121e !important;
+  /* background: #00121e !important; */
   border: none !important;
   cursor: not-allowed !important;
   pointer-events: none;

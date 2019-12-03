@@ -1,5 +1,11 @@
 <template>
-  <v-content class="template">
+  <v-content
+    class="template"
+    :class="[
+      { darkmode__text: lightSwitch },
+      { lightmode__text: !ligthSwitch }
+    ]"
+  >
     <div id="sentiment__caption">Members Sentiment</div>
     <div id="sentiment__container">
       <div id="bull__container">
@@ -35,6 +41,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Sentiment",
   methods: {
@@ -44,13 +52,21 @@ export default {
     bullCircle: function() {
       console.log("bull");
     }
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   }
 };
 </script>
 
 <style scoped>
-.template {
-  color: #fff;
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
 }
 .header {
   text-align: center;
@@ -85,7 +101,7 @@ export default {
   /* background: blue; */
 }
 #prgbr__container {
-  flex: 0 0 170px;
+  flex: 0 0 190px;
   /* background: green; */
   padding-left: 5px;
   padding-right: 5px;
@@ -97,6 +113,6 @@ export default {
   font-size: 11px;
 }
 .percentage {
-  font-size: 8px;
+  font-size: 9px;
 }
 </style>

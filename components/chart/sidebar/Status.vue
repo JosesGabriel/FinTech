@@ -2,7 +2,13 @@
   <v-content class="template">
     <div id="status__container">
       <div id="con__left">
-        <table id="table__left">
+        <table
+          id="table__left"
+          :class="[
+            { darkmode__text: lightSwitch },
+            { lightmode__text: !ligthSwitch }
+          ]"
+        >
           <tr>
             <td class="tleft__label">Previous</td>
             <td class="tleft__column">{{ stock.close | numeral("0,0.00") }}</td>
@@ -44,7 +50,13 @@
         </table>
       </div>
       <div id="con__right">
-        <table id="table__right">
+        <table
+          id="table__right"
+          :class="[
+            { darkmode__text: lightSwitch },
+            { lightmode__text: !ligthSwitch }
+          ]"
+        >
           <tr>
             <td class="tright__label">Open</td>
             <td
@@ -117,16 +129,20 @@ export default {
   },
   computed: {
     ...mapGetters({
-      stock: "chart/stock"
-    }),
-    textSize() {
-      return this.$vssWidth < 1530 ? "overline" : "caption";
-    }
+      stock: "chart/stock",
+      lightSwitch: "global/getLightSwitch"
+    })
   }
 };
 </script>
 
 <style scoped>
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
+}
 .increase {
   color: #03dac5 !important;
 }
@@ -139,14 +155,14 @@ export default {
   /* height: 200px; */
 }
 #con__left {
-  flex: 0 0 136px;
+  flex: 0 0 146px;
 }
 #con__right {
-  flex: 0 0 136px;
+  flex: 0 0 140px;
 }
 #table__left {
-  width: 136px;
-  font-size: 10px;
+  width: 146px;
+  font-size: 11px;
   line-height: 11px;
   padding-left: 5px;
   padding-right: 5px;
@@ -155,7 +171,6 @@ export default {
   padding: 0;
   text-transform: uppercase;
   padding-left: 10px;
-  color: #bbb !important;
 }
 .tleft__column {
   padding: 0;
@@ -165,8 +180,8 @@ export default {
 }
 
 #table__right {
-  width: 136px;
-  font-size: 10px;
+  width: 140px;
+  font-size: 11px;
   line-height: 11px;
   padding-right: 10px;
 }
@@ -174,7 +189,6 @@ export default {
   padding: 0;
   text-transform: uppercase;
   padding-left: 5px;
-  color: #bbb !important;
 }
 .tright__column {
   padding: 0;

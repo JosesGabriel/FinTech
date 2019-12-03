@@ -76,6 +76,7 @@ export default {
       widget: null,
       tvWidget: null,
       chartViewId: 0,
+      //chartViewClass: "chartViewClass_2"
       chartViewClass: "chartViewClass_1"
     };
   },
@@ -146,6 +147,9 @@ export default {
   // },
   mounted() {
     this.loadChart();
+    setTimeout(() => {
+      //  this.passTickerToChart("PSE:KPPI");
+    }, 3000);
   },
   destroyed() {
     if (this.tvWidget !== null) {
@@ -175,7 +179,7 @@ export default {
         //region overrides
         overrides: {
           "paneProperties.background":
-            this.lightSwitch == 0 ? "#FFF" : "#00121e",
+            this.lightSwitch == 0 ? "#f2f2f2" : "#00121e",
           "paneProperties.gridProperties.color":
             this.lightSwitch == 0 ? "#000" : "#bdc3c7",
           "scalesProperties.textColor":
@@ -185,9 +189,9 @@ export default {
           "scalesProperties.backgroundColor":
             this.lightSwitch == 0 ? "#OOO" : "#2c3e50",
           "paneProperties.vertGridProperties.color":
-            this.lightSwitch == 0 ? "#FFF" : "rgba(52, 73, 94, 0)",
+            this.lightSwitch == 0 ? "#f2f2f2" : "rgba(52, 73, 94, 0)",
           "paneProperties.horzGridProperties.color":
-            this.lightSwitch == 0 ? "#FFF" : "rgba(52, 73, 94, 0)",
+            this.lightSwitch == 0 ? "#f2f2f2" : "rgba(52, 73, 94, 0)",
           "symbolWatermarkProperties.color":
             this.lightSwitch == 0 ? "#OOO" : "#808080",
           "symbolWatermarkProperties.transparency": 90,
@@ -283,12 +287,12 @@ export default {
           .onSymbolChanged()
           .subscribe(null, symbolInfo => {
             that.setSymbolID(symbolInfo.id_str);
-
+            console.log("on change chart");
             //TODO: call this function ralph, ito yung example nilagay ko lang dito
             //TODO: need mo ipasa yung market_code completo, append mo
             //TODO: <EXCHANGE>:<SYMBOL> or kunin mo sa response -> market_code
             //TODO: author: kbaluyot
-            //that.passTickerToChart("PSE:KPPI");
+            //that.passTickerToChart("PSE:KPPI", false);
           });
         //! endregion subscribe
       });

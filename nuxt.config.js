@@ -125,7 +125,9 @@ export default {
           error: "#F44336",
           success: "#03DAC5",
           darkcard: "#0c1a2b",
-          lightcard: "#f2f2f2"
+          lightcard: "#f2f2f2",
+          darkchart: "00121e",
+          lightchart: "#f2f2f2"
         },
         dark: {
           anchor: colors.blue

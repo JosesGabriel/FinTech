@@ -11,7 +11,13 @@
           >
         </v-content>
       </div>
-      <div class="headline_description">
+      <div
+        class="headline_description"
+        :class="[
+          { darkmode__text: lightSwitch },
+          { lightmode__text: !ligthSwitch }
+        ]"
+      >
         <div class="hcontainer_top">
           <span class="htitle">{{
             $globalMethod.limitDisplayString(stock.description, 16, true)
@@ -25,8 +31,8 @@
               { increase: changetype == 1 },
               { decrease: changetype == 2 }
             ]"
-            >{{ stock.change | numeral("0.00") }} ({{
-              stock.changepercentage | numeral("0.00")
+            >{{ stock.change | numeral("0.00a") }} ({{
+              stock.changepercentage | numeral("0.00a")
             }}%)</span
           >
         </div>
@@ -50,7 +56,8 @@ export default {
   name: "Headline",
   computed: {
     ...mapGetters({
-      stock: "chart/stock"
+      stock: "chart/stock",
+      lightSwitch: "global/getLightSwitch"
     }),
     changetype() {
       let value = this.stock.change;
