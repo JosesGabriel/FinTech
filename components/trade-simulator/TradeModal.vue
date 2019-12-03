@@ -534,13 +534,13 @@ import { mapActions, mapGetters } from "vuex";
 
     .stock_selector .v-select__slot .v-label,
     .stock_selector .v-select__slot .v-icon {
-        color: #00FFC3 !important;
+        color: #03DAC5 !important;
     }
     .stock_selector .v-input__slot {
         margin: 0;
     }
     .stock_selector .v-select__selection--comma {
-        color: #00FFC3;
+        color: #03DAC5;
         font-size: 12px;
     }
     .stock_selector .v-input__control {
@@ -558,7 +558,7 @@ import { mapActions, mapGetters } from "vuex";
         background-color: transparent;
     }
     .positive{
-    color: #00FFC3;
+    color: #03DAC5;
     }
     .selected {
         border-bottom: 1px solid;
