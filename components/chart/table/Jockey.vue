@@ -20,7 +20,7 @@
         dark
         fixed-header
         hide-default-footer
-        height="calc(100vh - 430px)"
+        height="calc(100vh - 435px)"
         style="background:#00121e"
       >
       
