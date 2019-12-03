@@ -9,7 +9,12 @@
           max-height="400"
           @click="showCarousel"
         />
-        <video v-else controls :src="images[0]['url']"></video>
+        <video
+          v-else
+          class="fullWidth"
+          controls
+          :src="images[0]['url']"
+        ></video>
       </v-col>
     </v-row>
     <v-row v-else-if="images.length == 2">
@@ -21,7 +26,12 @@
           height="100%"
           @click="showCarousel"
         />
-        <video v-else controls :src="images[p - 1]['url']"></video>
+        <video
+          v-else
+          class="fullWidth"
+          controls
+          :src="images[p - 1]['url']"
+        ></video>
       </v-col>
     </v-row>
     <v-row v-else-if="images.length == 3">
@@ -33,7 +43,12 @@
           :src="images[p]['url']"
           @click="showCarousel"
         />
-        <video v-else controls :src="images[p]['url']"></video>
+        <video
+          v-else
+          class="fullWidth"
+          controls
+          :src="images[p]['url']"
+        ></video>
       </v-col>
       <v-col cols="12" class="pa-0 px-1 pt-1">
         <v-img
@@ -43,7 +58,12 @@
           height="100%"
           @click="showCarousel"
         />
-        <video v-else controls :src="images[0]['url']"></video>
+        <video
+          v-else
+          class="fullWidth"
+          controls
+          :src="images[0]['url']"
+        ></video>
       </v-col>
     </v-row>
     <v-row v-else-if="images.length >= 4">
@@ -100,6 +120,9 @@
   position: absolute;
   bottom: 27%;
   right: 20%;
+}
+.fullWidth {
+  width: 100%;
 }
 </style>
 <script>
