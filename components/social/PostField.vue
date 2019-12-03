@@ -28,6 +28,10 @@
           row-height="25"
           color="primary"
           required
+          no-resize
+          solo
+          flat
+          background-color="transparent"
           :loading="postField__loading"
           >{{ postFieldModel }}</v-textarea
         >
@@ -90,7 +94,7 @@
             </div>
           </div>
           <v-btn
-            class="mr-6"
+            class="mr-6 postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
@@ -99,22 +103,22 @@
             <v-icon color="success">mdi-image-outline</v-icon>Photo
           </v-btn>
           <v-btn
-            class="ml-3 mr-6"
+            class="ml-3 mr-6 postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
             @click="onClickImageUploadBtn"
           >
-            <v-icon color="success">mdi-video</v-icon>Video
+            <img class="mr-1" src="/icon/video.svg" width="20" />Video
           </v-btn>
           <v-btn
-            class="ml-2"
+            class="ml-2 postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
             @click="onClickImageUploadBtn"
           >
-            <v-icon color="success">mdi-poll-box</v-icon>Polls
+            <img class="mr-1" src="/icon/polls.svg" width="17" />Polls
           </v-btn>
           <v-btn
             rounded
@@ -166,6 +170,9 @@
 .postField__imageCard {
   flex: 0 0 auto;
 }
+.postField__btn::before {
+  color: transparent;
+}
 .postField__imageWrapper--closebtn {
   position: relative;
   bottom: 96px;
@@ -201,46 +208,51 @@ export default {
       this.postField__loading = true;
       const formData = new FormData();
       formData.append("file", this.$refs.postField__inputRef.files[0]);
-      console.log(this.$refs.postField__inputRef.files[0]);
       if (this.$refs.postField__inputRef.files[0]) {
         //text + image
-        this.$axios
-          .$post("https://dev-api.arbitrage.ph/api/storage/upload", formData)
-          .then(response => {
-            this.$axios
-              .$post("https://dev-api.arbitrage.ph/api/social/posts", {
-                user_id: "76f0f772-0de8-47cb-944e-c903d810a7ca",
+        this.$api.social.upload
+          .create(formData)
+          .then(
+            function(response) {
+              const params = {
                 content: this.postFieldModel,
                 attachments: [response.data.file.url],
                 visibility: "public",
                 status: "active"
-              })
-              .then(response => {
-                this.post__responseMsg = response.message;
-                this.clearInputs("success");
-              })
-              .catch(error => {
-                this.post__responseMsg = error.response.data.message;
-                this.clearInputs("error");
-              });
-          })
+              };
+              this.$api.social.create
+                .create(params)
+                .then(
+                  function(response) {
+                    this.post__responseMsg = response.message;
+                    this.clearInputs("success");
+                  }.bind(this)
+                )
+                .catch(error => {
+                  this.post__responseMsg = error.response.data.message;
+                  this.clearInputs("error");
+                });
+            }.bind(this)
+          )
           .catch(error => {
             this.post__responseMsg = error.response.data.message;
             this.clearInputs("error");
           });
       } else {
         // can't reuse axios code above bc its asynchronous. Suggestions on how to improve r welcome
-        this.$axios
-          .$post("https://dev-api.arbitrage.ph/api/social/posts", {
-            user_id: "76f0f772-0de8-47cb-944e-c903d810a7ca",
-            content: this.postFieldModel,
-            visibility: "public",
-            status: "active"
-          })
-          .then(response => {
-            this.post__responseMsg = response.message;
-            this.clearInputs("success");
-          })
+        const params = {
+          content: this.postFieldModel,
+          visibility: "public",
+          status: "active"
+        };
+        this.$api.social.create
+          .create(params)
+          .then(
+            function(response) {
+              this.post__responseMsg = response.message;
+              this.clearInputs("success");
+            }.bind(this)
+          )
           .catch(error => {
             this.post__responseMsg = error.response.data.message;
             this.clearInputs("error");

@@ -276,10 +276,10 @@
 </script>
 <style >
 .v-select__slot .v-label, .v-select__slot .v-icon {
-    color: #00FFC3 !important;
+    color: #03DAC5 !important;
 }
 .v-menu__content .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-    color: #00FFC3 !important;
+    color: #03DAC5 !important;
 }
 .select_portfolio .v-select__slot .v-label, .select_portfolio .v-select__slot .v-icon {
     color: black !important;
@@ -302,7 +302,6 @@
 
 .theme--light.v-list {
     background: #00121e;
-    border: 1px solid #00FFC3;
 }
 
 .v-slide-group__content.v-tabs-bar__content:before {
@@ -315,7 +314,7 @@
   background: #000;
 }
 .positive{
-    color: #00FFC3;
+    color: #03DAC5;
 }
 .negative{
     color: #fe4949;

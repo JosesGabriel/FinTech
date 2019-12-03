@@ -354,7 +354,7 @@ export default {
   width: auto;
   right: 0;
   background: #00121e;
-  border: 1px solid rgb(0, 255, 195);
+  border: 1px solid #03DAC5;
   border-radius: 4px;
 }
 
@@ -377,7 +377,7 @@ export default {
 }
 
 .pagination a.active {
-  background-color: #00FFC3;
+  background-color: #03DAC5;
   color: #00121E;
 }
 
@@ -386,12 +386,12 @@ export default {
     border-radius: 20px
 }
 .show_rows-select {
-    background: #00FFC3;
+    background: #03DAC5;
     color: #00121E;
 }
 .show_rows-cont {
-    border: 2px solid #00FFC3;
-    color: #00FFC3;
+    border: 2px solid #03DAC5;
+    color: #03DAC5;
     outline-color: none !important;
     height: 18px;
     line-height: 1;
@@ -411,7 +411,7 @@ export default {
     background: transparent
   }
   .show_rows {
-    border: 2px solid #00ffc3;
+    border: 2px solid #03DAC5;
     width: 45px;
   }
   .show_rows .v-input__control {
@@ -433,10 +433,10 @@ export default {
       width: 10px;
   }
   .lp_data_table-pagination {
-    color: #00ffc3;
+    color: #03DAC5;
   }
   .v-pagination.lp_data_table-pagination .v-pagination__item--active {
-    color: #00FFC3;
+    color: #03DAC5;
   }
   .lp_data_table-pagination i.v-icon {
     font-size: 11px
@@ -448,7 +448,7 @@ export default {
     outline-color: transparent;
   }
   .positive{
-    color: #00FFC3;
+    color: #03DAC5;
 }
   .negative{
       color: #fe4949;
