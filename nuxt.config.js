@@ -95,6 +95,9 @@ export default {
       logout: "/login"
     }
   },
+  router: {
+    middleware: ["auth"]
+  },
   axios: {},
   /*
    ** vuetify module configuration
