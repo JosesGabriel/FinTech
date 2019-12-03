@@ -76,8 +76,8 @@ export default {
       widget: null,
       tvWidget: null,
       chartViewId: 0,
-      chartViewClass: "chartViewClass_2"
-      //chartViewClass: "chartViewClass_1"
+      //chartViewClass: "chartViewClass_2"
+      chartViewClass: "chartViewClass_1"
     };
   },
   computed: {
@@ -179,7 +179,7 @@ export default {
         //region overrides
         overrides: {
           "paneProperties.background":
-            this.lightSwitch == 0 ? "#FFF" : "#00121e",
+            this.lightSwitch == 0 ? "#f2f2f2" : "#00121e",
           "paneProperties.gridProperties.color":
             this.lightSwitch == 0 ? "#000" : "#bdc3c7",
           "scalesProperties.textColor":
@@ -189,9 +189,9 @@ export default {
           "scalesProperties.backgroundColor":
             this.lightSwitch == 0 ? "#OOO" : "#2c3e50",
           "paneProperties.vertGridProperties.color":
-            this.lightSwitch == 0 ? "#FFF" : "rgba(52, 73, 94, 0)",
+            this.lightSwitch == 0 ? "#f2f2f2" : "rgba(52, 73, 94, 0)",
           "paneProperties.horzGridProperties.color":
-            this.lightSwitch == 0 ? "#FFF" : "rgba(52, 73, 94, 0)",
+            this.lightSwitch == 0 ? "#f2f2f2" : "rgba(52, 73, 94, 0)",
           "symbolWatermarkProperties.color":
             this.lightSwitch == 0 ? "#OOO" : "#808080",
           "symbolWatermarkProperties.transparency": 90,

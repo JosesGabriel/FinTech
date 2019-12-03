@@ -113,6 +113,6 @@ export default {
   font-size: 11px;
 }
 .percentage {
-  font-size: 8px;
+  font-size: 9px;
 }
 </style>

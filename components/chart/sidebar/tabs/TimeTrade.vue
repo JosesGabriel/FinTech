@@ -17,7 +17,7 @@
       >
         <thead>
           <tr>
-            <th class="pl-4 text-left font-weight-bold">
+            <th class="pl-2 text-left font-weight-bold">
               TIME
             </th>
             <th class="font-weight-bold text-right">
@@ -37,19 +37,19 @@
         </thead>
         <tbody>
           <tr v-for="item in trades" :key="item.id" class="tr_custom">
-            <td class="pl-2" style="width:50px;">
+            <td class="pl-2" style="width:55px;">
               {{ $moment(item.timestamp).format("hh:mm A") }}
             </td>
-            <td class="text-right" style="width:35px;">
+            <td class="text-right" style="width:45px;">
               {{ item.executed_volume | numeral("0.0a") }}
             </td>
-            <td class="text-right" style="width:45px;">
+            <td class="text-right" style="width:40px;">
               {{ item.executed_price | numeral("0,0.00") }}
             </td>
-            <td class="pl-2 text-right" style="width:40px;">
+            <td class="pl-2 text-right" style="width:30px;">
               {{ $globalMethod.limitDisplayString(item.buyer, 6) }}
             </td>
-            <td class="pl-2 pr-2 text-right" style="width:50px;">
+            <td class="pl-2 pr-2 text-right" style="width:30px;">
               {{ $globalMethod.limitDisplayString(item.seller, 6) }}
             </td>
             <td class="font-weight-bold" style="width:5px;"></td>

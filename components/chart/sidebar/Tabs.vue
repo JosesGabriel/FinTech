@@ -4,6 +4,7 @@
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :dark="lightSwitch == true"
       class="pa-0 ma-0"
+      tile
     >
       <v-tabs
         v-model="active_tab"

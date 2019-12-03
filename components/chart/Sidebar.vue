@@ -4,8 +4,9 @@
       :loading="loading"
       style="height:200px"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      elevation="12"
+      elevation="2"
       flat
+      tile
     >
       <Headline />
       <Status />
@@ -53,7 +54,8 @@ export default {
     ...mapActions({
       setStock: "chart/setStock",
       setSymbolID: "chart/setSymbolID",
-      setIndex: "chart/setIndex"
+      setIndex: "chart/setIndex",
+      setTicker: "chart/setTicker"
     }),
     initStock: function(symid) {
       this.loading = "#03dac5";
@@ -83,6 +85,7 @@ export default {
   created() {
     //this.setSymbolID("29235363595681792");
     this.setSymbolID("29235364749115392");
+    //this.setTicker(false);
   },
   mounted() {
     // all stock
@@ -97,22 +100,22 @@ export default {
 /* light / dark mode */
 .theme--dark.v-data-table .v-data-table-header th.sortable {
   background: #00121e;
-  font-size: 10px;
+  font-size: 11px;
 }
 .theme--light.v-data-table .v-data-table-header th.sortable {
   background: #f2f2f2;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .theme--dark.v-data-table.v-data-table--fixed-header thead th {
   background: #00121e;
-  font-size: 10px;
+  font-size: 11px;
   color: #fff;
 }
 
 .theme--light.v-data-table.v-data-table--fixed-header thead th {
   background: #f2f2f2;
-  font-size: 10px;
+  font-size: 11px;
   color: #000;
 }
 
@@ -162,7 +165,7 @@ export default {
   height: 20px;
 }
 .v-data-table--dense td {
-  font-size: 10px;
+  font-size: 11px;
 }
 .v-data-table td,
 .v-data-table th {

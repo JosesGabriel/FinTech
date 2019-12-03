@@ -7,9 +7,9 @@
       <span class="caption grey--text">Connect to your broker's account</span>
       <v-card
         class="card__container d-flex justify-space-around mb-6 mt-6 px-12"
-        color="#00121e"
+        :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         flat
-        dark
+        :dark="lightSwitch == true"
       >
         <v-card
           v-for="item in items_top"
@@ -18,6 +18,7 @@
           outlined
           tile
           flat
+          :style="{ background: cardbackground }"
           :class="[{ hide__card: item.show == false }]"
           @click="showModal(item)"
         >
@@ -32,9 +33,9 @@
       </v-card>
       <v-card
         class="card__container d-flex justify-space-around mb-6 mt-6 px-12"
-        color="#00121e"
+        :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         flat
-        dark
+        :dark="lightSwitch == true"
       >
         <v-card
           v-for="item in items_bottom"
@@ -43,6 +44,7 @@
           outlined
           tile
           flat
+          :style="{ background: cardbackground }"
           :class="{ hide__card: item.show == false }"
           @click="showModal(item)"
         >
@@ -59,18 +61,26 @@
       <!-- dialog -->
       <v-row justify="center">
         <v-dialog v-model="trade_login" persistent max-width="290">
-          <v-card color="#00121e" flat dark>
+          <v-card
+            :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+            flat
+            :dark="lightSwitch == true"
+          >
             <v-content class="content__broker text-center">
-              <v-card id="card__broker" flat dark class="pa-2 mt-3 mb-2">
+              <v-card
+                id="card__broker"
+                flat
+                :dark="lightSwitch == true"
+                :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+                class="pa-2 mt-3 mb-2"
+              >
                 <v-img
                   contain
                   class="img__broker"
                   :src="`/icon/chart/trades/${broker.img}`"
                 ></v-img>
               </v-card>
-              <span class="white--text caption font-weight-bold">{{
-                broker.title
-              }}</span>
+              <span class="caption font-weight-bold">{{ broker.title }}</span>
             </v-content>
             <v-card-text>
               <v-row class="ma-0 mt-4">
@@ -95,9 +105,9 @@
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col class="col-2 pa-0 pt-3"
+                    <v-col class="col-2 pa-0 pt-3 text-center"
                       ><span id="span__dash"
-                        ><v-icon color="white">mdi-color-helper</v-icon></span
+                        ><v-icon color="#b6b6b6">mdi-color-helper</v-icon></span
                       ></v-col
                     >
                     <v-col class="col-5 pa-0">
@@ -113,10 +123,7 @@
                     required
                   ></v-text-field>
                   <v-content class="text-right">
-                    <span
-                      id="forget_password"
-                      class="white--text caption font-weight-bold"
-                    >
+                    <span id="forget_password" class="caption font-weight-bold">
                       Forget Password
                     </span>
                   </v-content>
@@ -243,8 +250,12 @@ export default {
   },
   computed: {
     ...mapGetters({
-      trade_login: "chart/trade_login"
-    })
+      trade_login: "chart/trade_login",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   methods: {
     ...mapActions({
@@ -268,7 +279,7 @@ export default {
 
 <style scoped>
 .hide__card {
-  background: #00121e !important;
+  /* background: #00121e !important; */
   border: none !important;
   cursor: not-allowed !important;
   pointer-events: none;

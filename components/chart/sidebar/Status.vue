@@ -155,14 +155,14 @@ export default {
   /* height: 200px; */
 }
 #con__left {
-  flex: 0 0 136px;
+  flex: 0 0 146px;
 }
 #con__right {
-  flex: 0 0 136px;
+  flex: 0 0 140px;
 }
 #table__left {
-  width: 136px;
-  font-size: 10px;
+  width: 146px;
+  font-size: 11px;
   line-height: 11px;
   padding-left: 5px;
   padding-right: 5px;
@@ -180,8 +180,8 @@ export default {
 }
 
 #table__right {
-  width: 136px;
-  font-size: 10px;
+  width: 140px;
+  font-size: 11px;
   line-height: 11px;
   padding-right: 10px;
 }

@@ -5,9 +5,10 @@
       :dark="lightSwitch == true"
       :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
       :loading="loading"
-      class="pl-3 pr-5"
+      class="pl-3 pr-2"
       style="height: calc(100vh - 315px)"
       flat
+      tile
     >
       <v-data-table
         :headers="headers"

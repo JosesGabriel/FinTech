@@ -11,6 +11,7 @@
     <v-card
       v-for="(item, key) in items"
       :key="item.id"
+      tile
       :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
       elevation="2"
       class="mb-1"

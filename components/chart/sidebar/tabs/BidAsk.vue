@@ -8,6 +8,7 @@
       :loading="loading"
       style="height:105px;"
       flat
+      tile
     >
       <v-simple-table
         dense
