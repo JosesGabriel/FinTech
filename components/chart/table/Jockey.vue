@@ -1,6 +1,17 @@
 <template>
   <!-- hehhee -->
   <v-col class="pa-0 mt-3">
+      <template >
+        <tr>
+          <td style="width: 214px;"></td>
+          <td style="width: 62px; text-align:right;border-bottom: 1px solid #828b91;">Buying</td>
+          <td style="width: 275px;border-bottom: 1px solid #828b91;"></td>
+          <td style="width: 62px; text-align:right;border-bottom: 1px solid #828b91;">Selling</td>
+          <td style="width: 275px;border-bottom: 1px solid #828b91;"></td>
+          <td style="width: 83px; text-align:right;border-bottom: 1px solid #828b91;">Net</td>
+          <td style="width: 98px;border-bottom: 1px solid #828b91;"></td>
+        </tr >
+      </template>
       <v-data-table
         :headers="headers"
         :items="jockey"
@@ -8,50 +19,53 @@
         dense
         dark
         fixed-header
-       
         hide-default-footer
-        height="calc(100vh - 415px)"
+        height="calc(100vh - 435px)"
         style="background:#00121e"
       >
-      <template v-slot:item.broker_code="{ item }">
-          <div class="ml-1">
-               {{ item.broker_code }}
-          </div>
-          <div class="broker_desc mr-0 pr-0 ml-1">
-             {{ item.broker_description }}
-          </div>
-      </template>
-      <template v-slot:item.buy_volume="{ item }">
-        <span class="font-regular caption item_position-prop text-left px-1 py-0">{{ addcomma(item.buying.volume) }}</span>
-      </template>
-      <template v-slot:item.buy_avprice="{ item }">
-        <span class="font-regular caption item_position-prop text-left px-1 py-0">{{ addcomma(item.buying.average_price) }}</span>
-      </template>
-      <template v-slot:item.buy_value="{ item }">
-        <span class="font-regular caption item_position-prop text-left px-1 py-0">{{ addcomma(item.buying.value) }}</span>
-      </template>
-      <template v-slot:item.buy_mweight="{ item }">
-         <span class="font-regular caption item_position-prop text-left px-1 py-0">{{ item.buying.market_weight_percentage.toFixed(2) }}%</span>
-      </template>
-      <template v-slot:item.sell_volume="{ item }">
-         <span class="font-regular caption item_position-prop text-left px-1 py-0">{{ addcomma(item.selling.volume) }}</span>
-      </template>
-      <template v-slot:item.sell_avprice="{ item }">
-         <span class="font-regular caption item_position-prop text-left px-1 py-0"> {{ addcomma(item.selling.average_price) }}</span>
-      </template>
-      <template v-slot:item.sell_value="{ item }">
-          <span class="font-regular caption item_position-prop text-left px-1 py-0">{{ addcomma(item.selling.value) }}</span>
-      </template>
-      <template v-slot:item.sell_mweight="{ item }">
-         <span class="font-regular caption item_position-prop text-left px-1 py-0"> {{ item.selling.market_weight_percentage.toFixed(2) }}%</span>
-      </template>
-      <template v-slot:item.net_volume="{ item }">
-        <span class="font-regular caption item_position-prop text-left px-1 py-0"> {{ addcomma(item.net.volume) }}</span>
-      </template>
-      <template v-slot:item.net_value="{ item }">
-         <span class="font-regular caption item_position-prop text-left px-1 py-0">{{ addcomma(item.net.value) }}</span>
-      </template>
-        
+      
+      <template v-slot:item="props">       
+        <tr>
+            <td>
+              <div class="ml-1">
+               {{ props.item.broker_code }}
+              </div>
+              <div class="broker_desc mr-0 pr-0 ml-1">
+                {{ props.item.broker_description }}
+              </div>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(props.item.buying.volume) }}</span>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(props.item.buying.average_price) }}</span>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(props.item.buying.value) }}</span>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ props.item.buying.market_weight_percentage.toFixed(2) }}%</span>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(props.item.selling.volume) }}</span>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(props.item.selling.average_price) }}</span>
+            </td>
+             <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(props.item.selling.value) }}</span>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ props.item.selling.market_weight_percentage.toFixed(2) }}%</span>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(props.item.net.volume) }}</span>
+            </td>
+            <td style="text-align: right;">
+                <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(props.item.net.value) }}</span>
+            </td>        
+        </tr>
+      </template>       
      </v-data-table>
   </v-col>
 </template>
@@ -63,7 +77,7 @@ export default {
     return {
       headers: [
         { text: 'Broker', value: 'broker_code' , align: 'left', width: "20%"},
-        { text: 'Volume', value: 'buy_volume', align: 'right' },
+        { text: 'Volume', value: 'buy_volume', align: 'right', child:["December"] },
         { text: 'Ave. Price', value: 'buy_avprice', align: 'right' },
         { text: 'Value', value: 'buy_value', align: 'right' },
         { text: 'Market Weight', value: 'buy_mweight', align: 'right' },

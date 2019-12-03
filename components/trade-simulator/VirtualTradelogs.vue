@@ -273,11 +273,11 @@ export default {
     width: auto;
     right: 0;
     background: #00121e;
-    border: 1px solid rgb(0, 255, 195);
+    border: 1px solid #03DAC5;
     border-radius: 4px;
   }
    .positive{
-    color: #00FFC3;
+    color: #03DAC5;
 }
   .negative{
       color: #fe4949;

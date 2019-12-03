@@ -128,13 +128,13 @@ export default {
 <style>
     .portfolio_type .v-select__slot .v-label,
     .portfolio_type .v-select__slot .v-icon {
-        color: #00FFC3 !important;
+        color: #03DAC5 !important;
     }
     .portfolio_type .v-input__slot {
         margin: 0;
     }
     .portfolio_type .v-select__selection--comma {
-        color: #00FFC3;
+        color: #03DAC5;
         font-size: 14px;
     }
     .portfolio_type .v-input__control {
