@@ -35,10 +35,10 @@
             ]"
             @click="setSymbolID(props.item.stockidstr)"
           >
-            <td class="column text-left" style="width:40px;">
+            <td class="text-left" style="width:40px;">
               <span>{{ props.item.symbol }}</span>
             </td>
-            <td class="column text-right" style="width:35px">
+            <td class="text-right" style="width:35px">
               <span
                 :class="[
                   { increase: props.item.change > 0 },
@@ -49,7 +49,7 @@
                 {{ props.item.last | numeral("0.0a") }}
               </span>
             </td>
-            <td class="column text-right" style="width:55px">
+            <td class="text-right" style="width:55px">
               <span
                 :class="[
                   { increase: props.item.change > 0 },
@@ -60,15 +60,15 @@
                 {{ props.item.changepercentage | numeral("0,0.00") }}
               </span>
             </td>
-            <td class="column text-right" style="width:60px">
+            <td class="text-right" style="width:60px">
               <span class="text-uppercase">{{
                 props.item.value | numeral("0.000a")
               }}</span>
             </td>
-            <td class="column text-right" style="width:45px">
+            <td class="text-right" style="width:45px">
               <span class="">{{ props.item.trades | numeral("0,0") }}</span>
             </td>
-            <td class="column" style="width:5px"></td>
+            <td style="width:5px"></td>
           </tr>
         </template>
       </v-data-table>
