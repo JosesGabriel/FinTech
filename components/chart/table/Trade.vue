@@ -2,7 +2,14 @@
   <v-content>
     <!-- select broker -->
     <v-content v-show="show_brokers" class="mx-12 text-center">
-      <span class="subtitle-1 font-weight-bold">Start Trading</span>
+      <span
+        class="subtitle-1 font-weight-bold"
+        :class="[
+          { darkmode__text: lightSwitch },
+          { lightmode__text: !ligthSwitch }
+        ]"
+        >Start Trading</span
+      >
       <br />
       <span class="caption grey--text">Connect to your broker's account</span>
       <v-card

@@ -101,7 +101,7 @@ export default {
   /* background: blue; */
 }
 #prgbr__container {
-  flex: 0 0 170px;
+  flex: 0 0 190px;
   /* background: green; */
   padding-left: 5px;
   padding-right: 5px;

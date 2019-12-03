@@ -1,5 +1,9 @@
 <template>
   <v-col class="pa-0">
+    <v-content class="content__vynduebutton pl-2">
+        <img class="img__vyndue" src="/icon/vyndue.svg" title="Vyndue"></img
+      >
+    </v-content>
     <v-content class="content__btncontainer">
       <v-btn
         v-show="maximize || fullscreen"
@@ -52,6 +56,7 @@
     <v-tabs
       height="30"
       color="#03dac5"
+      class="table__tabs"
       :background-color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :dark="lightSwitch == true"
     >
@@ -163,7 +168,24 @@ export default {
 };
 </script>
 
+<style>
+.table__tabs .v-slide-group__wrapper {
+  padding-left: 55px !important;
+}
+</style>
+
 <style scoped>
+.img__vyndue {
+  margin-top:2px;
+  height: 35px;
+  cursor: pointer;
+}
+.content__vynduebutton {
+  height: 30px;
+  width: 55px;
+  position: absolute;
+  z-index: 9;
+}
 .content__btncontainer {
   padding: 0px;
   position: absolute;
