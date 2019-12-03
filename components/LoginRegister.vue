@@ -1,165 +1,205 @@
 <template>
   <v-dialog v-model="show" max-width="360px">
     <v-card :loading="card__loader">
-      <v-tabs
-        v-model="tab"
-        :dark="isLightMode == 1 ? false : true"
-        :class="isLightMode == 1 ? 'lightcard' : 'darkcard'"
-        background-color="transparent"
-        grow
-      >
-        <v-tab>
-          Login
-        </v-tab>
-        <v-tab>
-          Sign Up
-        </v-tab>
-      </v-tabs>
+      <v-stepper v-model="e1">
+        <v-stepper-header>
+          <v-stepper-step :complete="e1 > 1" step="1"
+            >Name of step 1</v-stepper-step
+          >
 
-      <v-tabs-items v-model="tab">
-        <v-tab-item>
-          <v-card
-            :dark="isLightMode == 1 ? false : true"
-            :color="isLightMode == 1 ? 'lightcard' : 'darkcard'"
-            :loading="registerLoading"
+          <v-divider></v-divider>
+
+          <v-stepper-step :complete="e1 > 2" step="2"
+            >Name of step 2</v-stepper-step
           >
-            <v-card-text>
-              <div class="title text-center pt-5">
-                Welcome to Arbitrage
-              </div>
-              <div class="body-2 text-center">
-                Don't have an account? <a>Sign Up</a>
-              </div>
-            </v-card-text>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="login__username"
-                      label="Email"
-                      color="primary"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="login__password"
-                      label="Password"
-                      color="primary"
-                      type="password"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <small><a>Forgot your password?</a></small>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="login()">Log In</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card
-            :dark="isLightMode == 1 ? false : true"
-            :color="isLightMode == 1 ? 'lightcard' : 'darkcard'"
-            :loading="registerLoading"
-          >
-            <v-form
-              ref="register__form"
-              v-model="register__model"
-              @submit.prevent="signUp()"
+
+          <v-divider></v-divider>
+
+          <v-stepper-step step="3">Name of step 3</v-stepper-step>
+        </v-stepper-header>
+
+        <v-stepper-items>
+          <v-stepper-content step="1">
+            <v-card>hatdog</v-card>
+            <v-btn color="primary" @click="e1 = 1">
+              Continue
+            </v-btn>
+
+            <v-btn text>Cancel</v-btn>
+          </v-stepper-content>
+          <v-stepper-content step="2">
+            <v-card
+              :dark="isLightMode == 0 ? false : true"
+              :color="isLightMode == 0 ? 'lightcard' : 'darkcard'"
+              :loading="registerLoading"
             >
               <v-card-text>
                 <div class="title text-center pt-5">
-                  Join Arbitrage. It's free!
+                  Welcome to Arbitrage
                 </div>
                 <div class="body-2 text-center">
-                  Already have an account? <a>Log in</a>
+                  Don't have an account? <a>Sign Up</a>
                 </div>
               </v-card-text>
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="6">
+                    <v-col cols="12">
                       <v-text-field
-                        v-model="firstName"
-                        :rules="nameRules"
-                        label="First name"
-                        color="primary"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="lastName"
-                        :rules="nameRules"
-                        label="Last name"
+                        v-model="login__username"
+                        label="Email"
                         color="primary"
                         required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="emailAddress"
-                        :rules="emailRules"
-                        type="email"
-                        label="Email address"
-                        color="primary"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="userName"
-                        :rules="usernameRules"
-                        label="Username"
-                        color="primary"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="password"
-                        :rules="passwordRules"
+                        v-model="login__password"
                         label="Password"
                         color="primary"
                         type="password"
                         required
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="6">
-                      <v-text-field
-                        v-model="confirmPassword"
-                        :rules="confirmPasswordRules"
-                        label="Confirm Password"
-                        color="primary"
-                        required
-                        type="password"
-                      ></v-text-field>
-                    </v-col>
                   </v-row>
                 </v-container>
-                <small
-                  >By signing up, you agree to the Terms and Conditions.</small
-                >
+                <small><a>Forgot your password?</a></small>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  type="submit"
-                  :disabled="!register__model"
-                  >Sign Up</v-btn
+                <v-btn color="blue darken-1" text @click="login()"
+                  >Log In</v-btn
                 >
               </v-card-actions>
-            </v-form>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
+            </v-card>
+
+            <v-btn color="primary" @click="e1 = 2">
+              Continue
+            </v-btn>
+
+            <v-btn text>Cancel</v-btn>
+          </v-stepper-content>
+
+          <v-stepper-content step="3">
+            <v-card
+              :dark="isLightMode == 0 ? false : true"
+              :color="isLightMode == 0 ? 'lightcard' : 'darkcard'"
+              :loading="registerLoading"
+            >
+              <v-form
+                ref="register__form"
+                v-model="register__model"
+                @submit.prevent="signUp()"
+              >
+                <v-card-text>
+                  <div class="title text-center pt-5">
+                    Join Arbitrage. It's free!
+                  </div>
+                  <div class="body-2 text-center">
+                    Already have an account? <a>Log in</a>
+                  </div>
+                </v-card-text>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="firstName"
+                          :rules="nameRules"
+                          label="First name"
+                          color="primary"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="lastName"
+                          :rules="nameRules"
+                          label="Last name"
+                          color="primary"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="emailAddress"
+                          :rules="emailRules"
+                          type="email"
+                          label="Email address"
+                          color="primary"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="userName"
+                          :rules="usernameRules"
+                          label="Username"
+                          color="primary"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="password"
+                          :rules="passwordRules"
+                          label="Password"
+                          color="primary"
+                          type="password"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-text-field
+                          v-model="confirmPassword"
+                          :rules="confirmPasswordRules"
+                          label="Confirm Password"
+                          color="primary"
+                          required
+                          type="password"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <small
+                    >By signing up, you agree to the Terms and
+                    Conditions.</small
+                  >
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    type="submit"
+                    :disabled="!register__model"
+                    >Sign Up</v-btn
+                  >
+                </v-card-actions>
+              </v-form>
+            </v-card>
+            <v-btn color="primary" @click="e1 = 3">
+              Continue
+            </v-btn>
+
+            <v-btn text>Cancel</v-btn>
+          </v-stepper-content>
+
+          <v-stepper-content step="3">
+            <v-card
+              class="mb-12"
+              color="grey lighten-1"
+              height="200px"
+            ></v-card>
+
+            <v-btn color="primary" @click="e1 = 1">
+              Continue
+            </v-btn>
+
+            <v-btn text>Cancel</v-btn>
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
     </v-card>
 
     <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
@@ -177,6 +217,7 @@ export default {
   },
   data() {
     return {
+      e1: 0,
       register__model: false,
       firstName: "",
       lastName: "",

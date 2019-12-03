@@ -36,7 +36,7 @@
                 }}
               </strong>
             </v-list-item-title>
-            <v-list-item-subtitle class="overline"
+            <v-list-item-subtitle class="caption"
               >@{{
                 $auth.loggedIn ? $auth.user.data.user.username : "Guest"
               }}</v-list-item-subtitle
@@ -224,8 +224,8 @@
   color: white;
   text-decoration: none;
 }
-.v-list-item--active .v-list-item__icon i {
-  color: rgb(72, 255, 213) !important;
+.v-list-item:hover::before {
+  opacity: 0;
 }
 .v-list-item--active::before {
   opacity: 0;

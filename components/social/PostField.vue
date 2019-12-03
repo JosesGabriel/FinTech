@@ -208,46 +208,51 @@ export default {
       this.postField__loading = true;
       const formData = new FormData();
       formData.append("file", this.$refs.postField__inputRef.files[0]);
-      console.log(this.$refs.postField__inputRef.files[0]);
       if (this.$refs.postField__inputRef.files[0]) {
         //text + image
-        this.$axios
-          .$post("https://dev-api.arbitrage.ph/api/storage/upload", formData)
-          .then(response => {
-            this.$axios
-              .$post("https://dev-api.arbitrage.ph/api/social/posts", {
-                user_id: "76f0f772-0de8-47cb-944e-c903d810a7ca",
+        this.$api.social.upload
+          .create(formData)
+          .then(
+            function(response) {
+              const params = {
                 content: this.postFieldModel,
                 attachments: [response.data.file.url],
                 visibility: "public",
                 status: "active"
-              })
-              .then(response => {
-                this.post__responseMsg = response.message;
-                this.clearInputs("success");
-              })
-              .catch(error => {
-                this.post__responseMsg = error.response.data.message;
-                this.clearInputs("error");
-              });
-          })
+              };
+              this.$api.social.create
+                .create(params)
+                .then(
+                  function(response) {
+                    this.post__responseMsg = response.message;
+                    this.clearInputs("success");
+                  }.bind(this)
+                )
+                .catch(error => {
+                  this.post__responseMsg = error.response.data.message;
+                  this.clearInputs("error");
+                });
+            }.bind(this)
+          )
           .catch(error => {
             this.post__responseMsg = error.response.data.message;
             this.clearInputs("error");
           });
       } else {
         // can't reuse axios code above bc its asynchronous. Suggestions on how to improve r welcome
-        this.$axios
-          .$post("https://dev-api.arbitrage.ph/api/social/posts", {
-            user_id: "76f0f772-0de8-47cb-944e-c903d810a7ca",
-            content: this.postFieldModel,
-            visibility: "public",
-            status: "active"
-          })
-          .then(response => {
-            this.post__responseMsg = response.message;
-            this.clearInputs("success");
-          })
+        const params = {
+          content: this.postFieldModel,
+          visibility: "public",
+          status: "active"
+        };
+        this.$api.social.create
+          .create(params)
+          .then(
+            function(response) {
+              this.post__responseMsg = response.message;
+              this.clearInputs("success");
+            }.bind(this)
+          )
           .catch(error => {
             this.post__responseMsg = error.response.data.message;
             this.clearInputs("error");
