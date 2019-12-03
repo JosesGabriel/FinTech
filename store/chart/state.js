@@ -1,5 +1,5 @@
 export default () => ({
-  ticker: true,
+  ticker: false,
   table: true,
   tableMaximize: false,
   tableFullscreen: false,

@@ -1,7 +1,8 @@
 <template>
   <v-content>
     <v-card
-      color="#00121e"
+      :dark="lightSwitch == true"
+      :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
       :loading="loading"
       style="height: calc(100vh - 490px)"
       class="card__timetrade pl-1 pr-2"
@@ -9,49 +10,49 @@
     >
       <v-simple-table
         dense
-        dark
+        :dark="lightSwitch == true"
         fixed-header
-        style="background:#00121e"
+        :style="{ background: cardbackground }"
         height="calc(100vh - 490px)"
       >
         <thead>
           <tr>
-            <th class="pl-4 text-left header white--text font-weight-bold">
+            <th class="pl-4 text-left font-weight-bold">
               TIME
             </th>
-            <th class="header white--text font-weight-bold text-right">
+            <th class="font-weight-bold text-right">
               VOL
             </th>
-            <th class="header white--text font-weight-bold text-right">
+            <th class="font-weight-bold text-right">
               PRICE
             </th>
-            <th class="header white--text text-right font-weight-bold pl-2">
+            <th class="text-right font-weight-bold pl-2">
               BUYER
             </th>
-            <th class="header white--text text-right font-weight-bold pl-2">
+            <th class="text-right font-weight-bold pl-2">
               SELLER
             </th>
-            <th class="header white--text font-weight-bold"></th>
+            <th class="font-weight-bold"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in trades" :key="item.id" class="tr_custom">
-            <td class="pl-2 column" style="width:50px;">
+            <td class="pl-2" style="width:50px;">
               {{ $moment(item.timestamp).format("hh:mm A") }}
             </td>
-            <td class="column text-right" style="width:35px;">
+            <td class="text-right" style="width:35px;">
               {{ item.executed_volume | numeral("0.0a") }}
             </td>
-            <td class="column text-right" style="width:45px;">
+            <td class="text-right" style="width:45px;">
               {{ item.executed_price | numeral("0,0.00") }}
             </td>
-            <td class="pl-2 column text-right" style="width:40px;">
+            <td class="pl-2 text-right" style="width:40px;">
               {{ $globalMethod.limitDisplayString(item.buyer, 6) }}
             </td>
-            <td class="pl-2 pr-2 column text-right" style="width:50px;">
+            <td class="pl-2 pr-2 text-right" style="width:50px;">
               {{ $globalMethod.limitDisplayString(item.seller, 6) }}
             </td>
-            <td class="column font-weight-bold" style="width:5px;"></td>
+            <td class="font-weight-bold" style="width:5px;"></td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -73,8 +74,12 @@ export default {
   computed: {
     ...mapGetters({
       symbolid: "chart/symbolid",
-      index: "chart/index"
-    })
+      index: "chart/index",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   watch: {
     symbolid(symid) {
@@ -109,41 +114,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .tr_custom {
   line-height: 0.1rem !important;
-}
-.header {
-  background: #00121e !important;
-  font-size: 10px !important;
-}
-.column {
-  font-size: 10px !important;
-  color: #bbb;
-}
-.v-data-table--dense th {
-  height: 20px;
-}
-.theme--dark.v-data-table thead tr:last-child th,
-.theme--dark.v-data-table
-  tbody
-  tr:not(:last-child)
-  td:not(.v-data-table__mobile-row) {
-  border: none !important;
-}
-.theme--dark.v-data-table.v-data-table--fixed-header thead th {
-  box-shadow: none !important;
-}
-.v-data-table td,
-.v-data-table th {
-  padding: 0px 0px !important;
-}
-.sub__title {
-  width: 100%;
-  height: 20px;
-  padding: 0;
-  padding-left: 10px;
-  font-weight: bold;
-  font-size: 10px;
 }
 </style>

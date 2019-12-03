@@ -1,12 +1,16 @@
 <template>
-  <v-content style="background: #00121e;">
-    <v-card color="#00121e" dark class="pa-0 ma-0">
+  <v-content :style="{ background: cardbackground }">
+    <v-card
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+      :dark="lightSwitch == true"
+      class="pa-0 ma-0"
+    >
       <v-tabs
         v-model="active_tab"
         color="success"
-        background-color="#00121e"
+        :background-color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         grow
-        dark
+        :dark="lightSwitch == true"
         height="35"
       >
         <v-tab
@@ -23,9 +27,13 @@
           :key="item.component"
           :value="`tab-${item.id}`"
         >
-          <v-card dark :color="color" class="pa-0 ma-0 tab__height">
+          <v-card
+            :dark="lightSwitch == true"
+            :color="color"
+            class="pa-0 ma-0 tab__height"
+          >
             <v-card-text class="pa-0 ma-0">
-              <component :is="item.component" />
+              <component :is="item.component" lightswitch="lightSwitch" />
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -48,7 +56,6 @@ export default {
   },
   data() {
     return {
-      color: "#00121e",
       active_tab: "tab-2",
       first_load: true
     };
@@ -57,8 +64,15 @@ export default {
     ...mapGetters({
       tabs_sidebar: "chart/tabs_sidebar",
       index: "chart/index",
-      symbolid: "chart/symbolid"
-    })
+      symbolid: "chart/symbolid",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    color: function() {
+      return this.lightSwitch == 0 ? "lightchart" : "darkchart";
+    },
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   methods: {
     ...mapActions({
@@ -76,6 +90,12 @@ export default {
 </script>
 
 <style>
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
+}
 .v-data-table--dense td {
   height: 16px;
 }

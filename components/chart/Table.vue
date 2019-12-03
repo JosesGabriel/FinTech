@@ -28,7 +28,7 @@
         <v-icon>mdi-arrow-expand-up</v-icon>
       </v-btn> -->
 
-      <v-btn
+      <!-- <v-btn
         small
         icon
         :color="ticker ? '#03dac5' : '#BBB'"
@@ -36,7 +36,7 @@
         @click="toggleTicker"
       >
         <v-icon class="icon-flipped-y">mdi-dock-bottom</v-icon>
-      </v-btn>
+      </v-btn> -->
 
       <v-btn
         small

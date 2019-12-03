@@ -142,8 +142,45 @@
 
     <!-- paper trade -->
     <v-content v-show="!show_brokers">
-      <h1>Paper Trade</h1>
-      <v-btn @click="showBrokers">Return</v-btn>
+      <!-- <span class="mx-3 mb-3">Available Funds 100,000,000.00</span>
+
+      <v-content>
+        <v-row class="ml-1 mt-1 mb-3">
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Price
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
+                1,000.00
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Quality
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3">
+                <span class="overline">PHP</span>100,000
+              </v-col>
+            </v-row>
+          </v-col>
+
+          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+            <v-row class="mt-1 pl-3 caption">
+              Total
+            </v-row>
+            <v-row class="mt-1 mb-1">
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3">
+                <span class="overline">PHP</span>1,000,000.00
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </v-content>
+      <v-btn @click="showBrokers">Return</v-btn> -->
     </v-content>
   </v-content>
 </template>
