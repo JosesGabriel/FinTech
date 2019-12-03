@@ -53,7 +53,8 @@
     },
     data () {
         return {    
-          showScheduleForm: false,    
+          showScheduleForm: false,
+          journalchart: [],
           win: 7,
           loss: 3,
           result: 3,
@@ -150,6 +151,7 @@
       ...mapGetters({
         renderPortfolioKey: "journal/getRenderPortfolioKey",
         defaultPortfolioId: "journal/getDefaultPortfolioId",
+        journalCharts: "journal/getJournalCharts",
       }),
       winlossresult: function() {
           return this.result = parseInt(this.win) + parseInt(this.loss);
@@ -161,27 +163,19 @@
     watch: {
       renderPortfolioKey: function() {
         this.getTradeStats();
-      },
-      defaultPortfolioId: function() {
-        this.getTradeStats();
       }
     },
     methods: {
-      ...mapActions({
-        setJournalCharts: "journal/setRenderPortfolioKey"
-      }),
       getTradeStats() {
-        const journalchartsparams = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-          fund: this.defaultPortfolioId,
-        };
-        this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
-          function(result) {
-            console.log(result.trade_statistics, "tests")
-          }.bind(this)
-        )
+        this.journalchart = this.journalCharts
+        console.log(this.journalchart.meta.trade_statistics)
+        console.log(this.series)
+        
         this.componentKeys++;
       },
+    },
+    mounted() {
+      // this.getTradeStats();
     }
   }
 </script>

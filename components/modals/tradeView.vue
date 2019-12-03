@@ -204,7 +204,7 @@
                 </v-col>
                 <v-col cols="12" class="pb-5">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostModel }}</v-card-title>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Total Cost</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostModel }}</v-card-title>
                   </v-row>
                 </v-col>
 

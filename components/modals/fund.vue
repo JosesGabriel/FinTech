@@ -157,7 +157,6 @@ export default {
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
     renderPortfolioKey1() {
-      console.log(this.defaultPortfolioId)
       if(this.defaultPortfolioId != null ?  this.availableFunds = parseFloat(this.selectedPortfolio.balance) : '');
     },
     depositNow() {

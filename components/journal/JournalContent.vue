@@ -193,9 +193,20 @@ export default {
             setSelectedPortfolio: "journal/setSelectedPortfolio",
             setRenderPortfolioKey: "journal/setRenderPortfolioKey",
             setDefaultPortfolioId: "journal/setDefaultPortfolioId",
+            setJournalCharts: "journal/setJournalCharts",
         }),
         changePortfolio(obj){
             this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
+            
+            const journalchartsparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: this.portfolioDropdownModel.id,
+            };
+            this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
+                function(result) {
+                    this.setJournalCharts(result);
+                }.bind(this)
+            )
             const openparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
                 fund: this.portfolioDropdownModel.id
@@ -207,6 +218,7 @@ export default {
                         this.keyCreateCounter++;
                         this.setRenderPortfolioKey(this.keyCreateCounter);
                         this.setSelectedPortfolio(obj);
+                        
                     }
                 }.bind(this)
             );
@@ -255,7 +267,7 @@ export default {
         ...mapGetters({
             userPortfolio: "journal/getUserPortfolio",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
-            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            renderPortfolioKey: "journal/getRenderPortfolioKey"
         })
     },
     watch: {
