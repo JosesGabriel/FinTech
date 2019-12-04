@@ -11,6 +11,10 @@ export default $axios => ({
       `${baseURL}/posts${query.length > 0 ? "?" + query : ""}`
     );
   },
+  postComment(params, payload) {
+    $axios.setToken(token);
+    return $axios.$post(`${baseURL}/posts/` + params + `/comments`, payload);
+  },
   bearish(params) {
     $axios.setToken(token);
     return $axios.$post(`${baseURL}/posts/` + params + `/bear`);
