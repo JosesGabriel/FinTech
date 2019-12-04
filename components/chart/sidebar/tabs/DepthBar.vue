@@ -4,10 +4,15 @@
       <!-- toggle bid and ask -->
       <v-col class="py-0 mt-0 mb-1">
         <v-content>
-          <v-row>
+          <v-row
+            :class="[
+              { darkmode__text: lightSwitch },
+              { lightmode__text: !ligthSwitch }
+            ]"
+          >
             <v-col class="col-5 text-right pa-0">
               <span
-                :class="{ 'white--text font-weight-bold': !toggleButton }"
+                :class="{ 'font-weight-bold': !toggleButton }"
                 class="overline"
                 >Top Five</span
               >
@@ -23,7 +28,7 @@
             </v-col>
             <v-col class="col-5 text-left pa-0">
               <span
-                :class="{ 'white--text font-weight-bold': toggleButton }"
+                :class="{ 'font-weight-bold': toggleButton }"
                 class="overline"
                 >Full Depth</span
               >
@@ -63,7 +68,8 @@ export default {
   computed: {
     ...mapGetters({
       symbolid: "chart/symbolid",
-      index: "chart/index"
+      index: "chart/index",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {

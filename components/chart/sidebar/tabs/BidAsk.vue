@@ -3,41 +3,42 @@
     <div class="sub__title">Bid and Ask</div>
     <!-- bid and ask -->
     <v-card
-      color="#00121e"
-      class="pl-1 pr-5"
+      :dark="lightSwitch == true"
+      :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
       :loading="loading"
       style="height:105px;"
       flat
+      tile
     >
       <v-simple-table
         dense
-        dark
+        :dark="lightSwitch == true"
         fixed-header
-        style="background:#00121e"
+        :style="{ background: cardbackground }"
         height="105px"
-        class="custom_table"
+        class="custom_table pl-5 pr-3"
       >
         <thead>
           <tr>
-            <th class="headers">
+            <th>
               #
             </th>
-            <th class="headers">
+            <th>
               VOL
             </th>
-            <th class="headers">
+            <th>
               BID
             </th>
-            <th class="headers">
+            <th>
               ASK
             </th>
-            <th class="headers">
+            <th>
               VOL
             </th>
-            <th class="headers">
+            <th>
               #
             </th>
-            <th class="headers"></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -46,25 +47,25 @@
             :key="item.id"
             class="tr_custom"
           >
-            <td class="column pr-1" style="width:15px;">
+            <td class="" style="width:15px;">
               {{ formatItem(bidask.bids[key], "count") }}
             </td>
-            <td class="column pr-1" style="width:25px;">
+            <td class="" style="width:10px;">
               {{ formatItem(bidask.bids[key], "volume") }}
             </td>
-            <td class="column pr-4" style="width:30px;">
+            <td class="" style="width:10px;">
               {{ formatItem(bidask.bids[key], "price") }}
             </td>
-            <td class="column pr-4" style="width:30px;">
+            <td class="" style="width:25px;">
               {{ formatItem(bidask.asks[key], "price") }}
             </td>
-            <td class="column pr-1" style="width:25px;">
+            <td class="" style="width:10px;">
               {{ formatItem(bidask.asks[key], "volume") }}
             </td>
-            <td class="column pr-1" style="width:15px;">
+            <td class="" style="width:10px;">
               {{ formatItem(bidask.asks[key], "count") }}
             </td>
-            <td class="column" style="width:5px;"></td>
+            <td style="width:5px;"></td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -107,8 +108,12 @@ export default {
     ...mapGetters({
       symbolid: "chart/symbolid",
       index: "chart/index",
-      bidask: "chart/bidask"
-    })
+      bidask: "chart/bidask",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   watch: {
     symbolid(symid) {
@@ -174,59 +179,10 @@ export default {
 </script>
 
 <style scoped>
-/* html {
-  font-size: 11px !important;
-} */
-.headers {
-  background: #00121e !important;
-  font-size: 10px !important;
-  color: #fff !important;
-  text-align: right !important;
-}
 .tr_custom {
   line-height: 0.1rem !important;
 }
 .custom_table tr {
   height: 5px !important;
-}
-.column {
-  /* background: #00121e !important; */
-  font-size: 10px !important;
-  color: #bbb;
-  text-align: right;
-}
-/*  {
-  font-size: 8px !important;
-} */
-.v-data-table--dense th {
-  height: 20px;
-}
-.v-data-table--dense tr {
-  /* height: 10px !important;
-  padding: 0; */
-}
-.theme--dark.v-data-table thead tr:last-child th,
-.theme--dark.v-data-table
-  tbody
-  tr:not(:last-child)
-  td:not(.v-data-table__mobile-row) {
-  border: none !important;
-}
-.theme--dark.v-data-table.v-data-table--fixed-header thead th {
-  /* background: #424242;
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.12); */
-  box-shadow: none !important;
-}
-.v-data-table td,
-.v-data-table th {
-  padding: 0px 0px !important;
-}
-.sub__title {
-  width: 100%;
-  height: 20px;
-  padding: 0;
-  padding-left: 10px;
-  font-weight: bold;
-  font-size: 10px;
 }
 </style>

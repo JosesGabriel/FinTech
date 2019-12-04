@@ -1,6 +1,10 @@
 <template>
   <!-- hello world -->
-  <v-app id="chart_body" class="gameGlobal">
+  <v-app
+    id="chart_body"
+    class="gameGlobal"
+    :style="{ background: cardbackground }"
+  >
     <Header />
     <div class="spacer__content"></div>
     <div class="content__main">
@@ -69,8 +73,12 @@ export default {
   computed: {
     ...mapGetters({
       ticker: "chart/getTicker",
-      sidebar: "chart/getSidebar"
-    })
+      sidebar: "chart/getSidebar",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   methods: {
     ...mapActions({
@@ -97,20 +105,20 @@ export default {
   background: #03dac5;
 }
 #chart_body {
-  background: #00121e !important;
+  /* background: #00121e !important; */
   font-family: "Karla", sans-serif !important;
 }
 .chart__container {
 }
 .ticker__container {
   height: 50px;
-  color: #fff;
-  background: #00121e;
+  /* color: #fff; */
+  /* background: #00121e; */
 }
 .table__container {
   height: 30px;
-  color: #fff;
-  background: #00121e;
+  /* color: #fff; */
+  /* background: #00121e; */
 }
 .spacer__content {
   height: 52px;
@@ -123,7 +131,7 @@ export default {
   flex: 1;
 }
 .content__right {
-  background: #00121e;
-  flex: 0 0 250px;
+  /* background: #00121e; */
+  flex: 0 0 280px;
 }
 </style>

@@ -3,6 +3,7 @@
     class="pa-4 transparent__bg"
     color="#142a46"
     :dark="lightSwitch == 0 ? false : true"
+    :loading="loader"
     outlined
   >
     <v-form enctype="multipart/form-data">
@@ -116,7 +117,6 @@
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
-            @click="onClickImageUploadBtn"
           >
             <img class="mr-1" src="/icon/polls.svg" width="17" />Polls
           </v-btn>
@@ -195,7 +195,9 @@ export default {
       postField__previewImage: [],
       postField__loading: false,
       postField__alert: false,
-      postField__imagesArray: []
+      postField__imagesArray: [],
+      postField__cloudArray: [],
+      loader: false
     };
   },
   computed: {
@@ -206,32 +208,22 @@ export default {
   methods: {
     postField__submit: function() {
       this.postField__loading = true;
-      const formData = new FormData();
-      formData.append("file", this.$refs.postField__inputRef.files[0]);
-      if (this.$refs.postField__inputRef.files[0]) {
+
+      if (this.$refs.postField__inputRef.files) {
         //text + image
-        this.$api.social.upload
-          .create(formData)
+        const params = {
+          content: this.postFieldModel,
+          attachments: this.postField__cloudArray,
+          visibility: "public",
+          status: "active"
+        };
+        this.$api.social.create
+          .create(params)
           .then(
             function(response) {
-              const params = {
-                content: this.postFieldModel,
-                attachments: [response.data.file.url],
-                visibility: "public",
-                status: "active"
-              };
-              this.$api.social.create
-                .create(params)
-                .then(
-                  function(response) {
-                    this.post__responseMsg = response.message;
-                    this.clearInputs("success");
-                  }.bind(this)
-                )
-                .catch(error => {
-                  this.post__responseMsg = error.response.data.message;
-                  this.clearInputs("error");
-                });
+              this.post__responseMsg = response.message;
+              this.$emit("authorNewPost", params);
+              this.clearInputs("success");
             }.bind(this)
           )
           .catch(error => {
@@ -250,6 +242,7 @@ export default {
           .then(
             function(response) {
               this.post__responseMsg = response.message;
+              this.$emit("authorNewPost", params);
               this.clearInputs("success");
             }.bind(this)
           )
@@ -262,7 +255,27 @@ export default {
     onClickImageUploadBtn: function() {
       this.$refs.postField__inputRef.click(); // clicks actual input type file button. lisod i-style ang <input type="file">
     },
+    uploadImage: function() {
+      this.loader = "success";
+      for (let i = 0; i < this.$refs.postField__inputRef.files.length; i++) {
+        let formData = new FormData();
+        formData.append("file", this.$refs.postField__inputRef.files[i]);
+        this.$api.social.upload
+          .create(formData)
+          .then(
+            function(response) {
+              this.postField__cloudArray.push(response.data.file.url);
+              this.loader = false;
+            }.bind(this)
+          )
+          .catch(error => {
+            this.post__responseMsg = error.response.data.message;
+            this.clearInputs("error");
+          });
+      }
+    },
     onInputFileChange: function(e) {
+      this.uploadImage();
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       for (var i = 0; i < files.length; i++) {
@@ -276,7 +289,6 @@ export default {
         type == "image"
           ? (this.post__isImage = true)
           : (this.post__isImage = false);
-        console.log(this.post__isImage);
         this.postField__imagesArray.push(e.target.result);
       };
       reader.readAsDataURL(file);

@@ -11,16 +11,19 @@
     <v-card
       v-for="(item, key) in items"
       :key="item.id"
-      color="#00121e"
-      elevation="5"
+      tile
+      :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
+      elevation="2"
       class="mb-1"
     >
       <div class="watchlist__top">
         <div class="top__left pl-2">
           <v-btn
             small
-            color="#00121e"
-            class="span__title"
+            outlined
+            :color="lightSwitch == true ? 'lightchart' : 'darkchart'"
+            :dark="lightSwitch == true"
+            style="border:none"
             @click="setSymbolID(item.id)"
             @dblclick="showRemoveButton(item)"
             >{{ item.title }}</v-btn
@@ -32,9 +35,15 @@
       </div>
       <div class="watchlist__bottom">
         <div class="bottom__left pl-2">
-          <span>{{
-            $globalMethod.limitDisplayString(item.description, 16, true)
-          }}</span>
+          <span
+            :class="[
+              { darkmode__text: lightSwitch },
+              { lightmode__text: !ligthSwitch }
+            ]"
+            >{{
+              $globalMethod.limitDisplayString(item.description, 16, true)
+            }}</span
+          >
         </div>
         <div class="bottom__right pr-2">
           <span
@@ -60,7 +69,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Watchlist",
   data() {
@@ -102,6 +111,14 @@ export default {
         // }
       ]
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   methods: {
     showRemoveButton: function(item) {

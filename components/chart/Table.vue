@@ -1,11 +1,15 @@
 <template>
   <v-col class="pa-0">
+    <v-content class="content__vynduebutton pl-2">
+        <img class="img__vyndue" src="/icon/vyndue.svg" title="Vyndue"></img
+      >
+    </v-content>
     <v-content class="content__btncontainer">
       <v-btn
         v-show="maximize || fullscreen"
         small
         icon
-        :color="fullscreen ? '#03dac5' : '#BBB'"
+        :color="fullscreen ? '#03dac5' : '#b6b6b6'"
         :class="[{ button__disable: !maximize && !fullscreen }]"
         title="Maximize Table"
         @click="toggleTabsFullscreen"
@@ -41,7 +45,7 @@
       <v-btn
         small
         icon
-        :color="sidebarboard ? '#03dac5' : '#BBB'"
+        :color="sidebarboard ? '#03dac5' : '#b6b6b6'"
         title="Sidebar"
         @click="toggleSidebarBoard"
       >
@@ -49,7 +53,13 @@
       </v-btn>
     </v-content>
 
-    <v-tabs height="30" color="#03dac5" background-color="#00121e" dark>
+    <v-tabs
+      height="30"
+      color="#03dac5"
+      class="table__tabs"
+      :background-color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+      :dark="lightSwitch == true"
+    >
       <v-tab
         v-for="item in tabs_content"
         :key="item.id"
@@ -64,8 +74,7 @@
         v-for="item in tabs_content"
         :key="item.id"
         :value="`tab-${item.id}`"
-        style="background: #00121e;"
-        color="#03dac5"
+        :style="{ background: cardbackground }"
       >
         <component :is="item.component" v-show="tabs_show" />
       </v-tab-item>
@@ -119,8 +128,12 @@ export default {
       ticker: "chart/getTicker",
       maximize: "chart/getTableMaximize",
       fullscreen: "chart/getTableFullscreen",
-      sidebarboard: "chart/getSidebar"
-    })
+      sidebarboard: "chart/getSidebar",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   methods: {
     ...mapActions({
@@ -155,7 +168,24 @@ export default {
 };
 </script>
 
+<style>
+.table__tabs .v-slide-group__wrapper {
+  padding-left: 55px !important;
+}
+</style>
+
 <style scoped>
+.img__vyndue {
+  margin-top:2px;
+  height: 35px;
+  cursor: pointer;
+}
+.content__vynduebutton {
+  height: 30px;
+  width: 55px;
+  position: absolute;
+  z-index: 9;
+}
 .content__btncontainer {
   padding: 0px;
   position: absolute;
