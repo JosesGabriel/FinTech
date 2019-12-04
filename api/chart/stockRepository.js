@@ -26,7 +26,7 @@ export default $axios => ({
     );
   },
 
-   bidask(params) {
+  bidask(params) {
     let query = buildParams(params);
     $axios.setToken(token, "Bearer");
     return $axios.$get(
@@ -65,11 +65,24 @@ export default $axios => ({
       }`
     );
   },
+
   brokersActivity(params) {
     let query = buildParams(params);
     $axios.setToken(token, "Bearer");
     return $axios.$get(
-      `${baseURL}/trades/brokers-activity/latest${query.length > 0 ? "?" + query : ""}`
+      `${baseURL}/trades/brokers-activity/latest${
+        query.length > 0 ? "?" + query : ""
+      }`
+    );
+  },
+
+  transaction(params) {
+    let query = buildParams(params);
+    $axios.setToken(token, "Bearer");
+    return $axios.$get(
+      `${baseURL}/trades/latest/transaction-bar${
+        query.length > 0 ? "?" + query : ""
+      }`
     );
   }
 });

@@ -1,8 +1,8 @@
 <template>
   <!-- hehhee -->
   <v-col class="pa-0 mt-3">
-    <template >
-      <tr  >
+    <template>
+      <tr>
         <td style="width: 214px;"></td>
         <td
           style="width: 62px; text-align:right;border-bottom: 1px solid #828b91;"
@@ -157,9 +157,9 @@ export default {
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-     tablesize: function() {
+    tablesize: function() {
       return this.fullscreen ? this.max : this.min;
-    },
+    }
   },
   watch: {
     symbolid(symid) {
@@ -167,7 +167,7 @@ export default {
       //   console.log('stock id - '+symid);
       this.initJockey(symid);
     },
-        fullscreen(value) {
+    fullscreen(value) {
       console.log("fullscreen");
       console.log(value);
     },

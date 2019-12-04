@@ -44,10 +44,12 @@
                 small
                 class="postOptions__btn"
                 color="secondary"
-                @click="test()"
+                @click="postOptionsModal[n - 1] = !postOptionsModal[n - 1]"
               >
                 <v-icon>mdi-dots-horizontal</v-icon>
+                {{ postOptionsModal[n - 1] }}
               </v-btn>
+              <v-card v-if="postOptionsModal[n - 1]">sesoo</v-card>
             </v-col>
           </v-row>
         </v-list-item-content>
@@ -101,7 +103,7 @@
       <v-list-item
         v-for="k in postsObject[n - 1].comments.length"
         :key="k"
-        class="pa-0 ma-0 mt-3"
+        class="pa-0 ma-0"
       >
         <v-list-item-content>
           <!-- Start of Main Comment -->
@@ -120,24 +122,34 @@
             <v-list-item-content class="pa-0 ma-0">
               <v-container class="pa-0 body-2">
                 <strong class="blue--text text--darken-2"
-                  >{{ n - 1 }} joses {{ k - 1 }}</strong
+                  >{{
+                    postsObject[n - 1].comments[k - 1]["user"]["first_name"]
+                  }}
+                  {{
+                    postsObject[n - 1].comments[k - 1]["user"]["last_name"]
+                  }}</strong
                 >
+                <span>{{ postsObject[n - 1].comments[k - 1].content }}</span>
               </v-container>
               <v-container class="pa-0 ma-0">
                 <v-btn icon outlined fab x-small color="success">
                   <img src="/icon/bullish.svg" width="15" />
                 </v-btn>
-                <span class="px-2">{{ bullCounter }}</span>
+                <span class="px-2">0</span>
                 <v-btn icon outlined fab x-small color="error">
                   <img src="/icon/bearish.svg" width="15" />
                 </v-btn>
-                <span class="px-2">{{ bearCounter }}</span>
+                <span class="px-2">0</span>
                 <!-- | -->
                 <v-btn icon small depressed>
                   <v-icon>mdi-reply-outline</v-icon>
                 </v-btn>
                 <!-- | -->
-                <span class="px-2 overline">6 hours ago</span>
+                <span class="px-2 overline">{{
+                  $moment(postsObject[n - 1].comments[k - 1].created_at).format(
+                    "MMM DD hh:mm A"
+                  )
+                }}</span>
               </v-container>
             </v-list-item-content>
           </v-list-item>
@@ -199,12 +211,15 @@
         </v-list-item-avatar>
         <v-list-item-content class="pt-0 mb-0">
           <v-text-field
+            v-model="commentField[n - 1]"
             dense
             rounded
             hide-details
             label="Write a comment..."
             color="primary"
-            background-color="#0c1a2b"
+            :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+            :dark="lightSwitch == 0 ? true : false"
+            @keyup.enter="postComment(postsObject[n - 1].id, n - 1)"
           >
           </v-text-field>
         </v-list-item-content>
@@ -216,6 +231,12 @@
 
       <!-- End of Subcomment -->
     </v-card>
+    <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
+      {{ alertResponse }}
+      <v-btn color="white" text @click="alert = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-col>
 </template>
 <style>
@@ -246,12 +267,18 @@ export default {
   },
   data() {
     return {
-      bullCounter: 9,
-      bearCounter: 2,
       dark_theme_color: process.env.DARK_THEME_COLOR,
       user: this.$store.getters["auth/user"],
       postsObject: [],
-      loader: true
+      loader: true,
+      scrolledToBottom: false,
+      pageCount: 1,
+      commentModel: "",
+      commentField: [],
+      alert: false,
+      alertState: "",
+      alertResponse: "",
+      postOptionsModal: []
     };
   },
   computed: {
@@ -284,25 +311,51 @@ export default {
   },
   created() {},
   mounted() {
-    const params = {
-      page: "1"
-    };
-    this.$api.social.posts
-      .get(params)
-      .then(response => {
-        if (response.success) {
-          this.postsObject = response.data.posts;
-          console.log(this.postsObject);
-          this.loader = false;
-        }
-      })
-      .catch(e => {
-        console.log(response);
-      });
+    this.loadPosts();
+    this.scroll();
   },
   methods: {
-    openImageCarousel() {
-      console.log(this.newPost);
+    loadPosts() {
+      const params = {
+        page: this.pageCount
+      };
+      this.$api.social.posts
+        .get(params)
+        .then(response => {
+          if (response.success) {
+            this.postsObject = this.postsObject.concat(response.data.posts);
+            console.log(this.postsObject);
+            this.loader = false;
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    postComment(id, index) {
+      let payload = {
+        parent_id: 0,
+        user_id: this.$auth.user.data.user.uuid,
+        content: this.commentField[index]
+      };
+      this.$api.social.posts.postComment(id, payload).then(response => {
+        if (response.success) {
+          this.triggerAlert(true, response.message);
+          this.postsObject[index].comments.push({
+            content: this.commentField[index],
+            created_at: new Date(),
+            user: {
+              profile_image: this.$auth.user.data.user.profile_image,
+              first_name: this.$auth.user.data.user.first_name,
+              last_name: this.$auth.user.data.user.last_name
+            }
+          });
+        } else {
+          this.triggerAlert(false, response.message);
+        }
+
+        this.commentField[index] = "";
+      });
     },
     post_react(post_id, type) {
       const params = post_id;
@@ -316,6 +369,28 @@ export default {
           console.log(response);
         });
       }
+    },
+    scroll() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          Math.max(
+            window.pageYOffset,
+            document.documentElement.scrollTop,
+            document.body.scrollTop
+          ) +
+            window.innerHeight ===
+          document.documentElement.offsetHeight;
+
+        if (bottomOfWindow) {
+          this.pageCount++;
+          this.loadPosts();
+        }
+      };
+    },
+    triggerAlert(type, message) {
+      this.alert = true;
+      this.alertState = type;
+      this.alertResponse = message;
     }
   },
   head() {

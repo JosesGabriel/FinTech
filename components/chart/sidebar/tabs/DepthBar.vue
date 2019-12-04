@@ -7,7 +7,7 @@
           <v-row
             :class="[
               { darkmode__text: lightSwitch },
-              { lightmode__text: !ligthSwitch }
+              { lightmode__text: !lightSwitch }
             ]"
           >
             <v-col class="col-5 text-right pa-0">

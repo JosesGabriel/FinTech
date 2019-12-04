@@ -119,6 +119,14 @@ export default {
   color: #000;
 }
 
+.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {
+  background: #142a46;
+}
+
+.theme--light.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {
+  background: #b6b6b6;
+}
+
 .theme--dark.v-data-table {
   color: #b6b6b6;
 }
