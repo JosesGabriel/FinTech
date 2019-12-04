@@ -166,6 +166,7 @@ export default {
         totalProfitLoss: 0,
         totalPerf: 0,
         totalmvalue: 0,
+        dayprior: 0,
         date: new Date().toISOString().substr(0, 10),
       }
       

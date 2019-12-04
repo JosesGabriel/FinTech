@@ -1,6 +1,83 @@
 <template>
   <!-- hehhee -->
   <v-col class="pa-0 mt-3">
+    <!-- <v-simple-table
+      dense
+      dark
+      height="calc(100vh - 435px)"
+      style="background:#00121e"
+     >
+        <template v-slot:default>
+          <thead>
+            <div class="header">
+                <tr>
+                    <td></td>
+                    <td style="text-align:right" >Buying</td>
+                    <td colspan="3"></td>
+                    <td style="text-align:right">Selling</td>
+                    <td colspan="3"></td>
+                    <td style="text-align:right">Net</td>
+                </tr >
+                <tr>
+                    <td style="width:200px;">Broker</td>
+                    <td class="theader" @click="dataSort('buying.volume')" style="width:80px; text-align:right">Volume</td>
+                    <td class="theader" style="width:75px;text-align:right">Ave. Price</td>
+                    <td class="theader" style="width:80px;text-align:right">Value</td>
+                    <td class="theader" style="width:105px;text-align:right">Market Weight</td>
+                    <td class="theader" style="width:80px;text-align:right">Volume</td>
+                    <td class="theader" style="width:75px;text-align:right">Ave. Price</td>
+                    <td class="theader" style="width:80px;text-align:right">Value</td>
+                    <td class="theader" style="width:105px;text-align:right">Market Weight</td>
+                    <td class="theader" style="width:90px;text-align:right">Net Volume</td>
+                    <td class="theader" style="width:90px;text-align:right">Net Value</td>
+                </tr>
+            </div>
+          </thead>
+          <tbody class="table_body">
+            <tr v-for="item in jockey">
+              <td style="width:200px;">
+                  <div class="ml-1">
+                  {{ item.broker_code }}
+                  </div>
+                  <div class="broker_desc mr-0 pr-0 ml-1">
+                    {{ item.broker_description }}
+                  </div>
+              </td>
+              <td style="text-align: right; width:80px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(item.buying.volume) }}</span>
+              </td>
+              <td style="text-align: right;width:75px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(item.buying.average_price) }}</span>
+              </td>
+              <td style="text-align: right;width:80px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(item.buying.value) }}</span>
+              </td>
+              <td style="text-align: right;width:105px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.buying.market_weight_percentage.toFixed(2) }}%</span>
+              </td>
+              <td style="text-align: right;width:80px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(item.selling.volume) }}</span>
+              </td>
+              <td style="text-align: right;width:75px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(item.selling.average_price) }}</span>
+              </td>
+              <td style="text-align: right;width:80px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(item.selling.value) }}</span>
+              </td>
+              <td style="text-align: right;width:105px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ item.selling.market_weight_percentage.toFixed(2) }}%</span>
+              </td>
+              <td style="text-align: right;width:90px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(item.net.volume) }}</span>
+              </td>
+              <td style="text-align: right;width:90px;">
+                  <span class="font-regular caption item_position-prop text-right px-1 py-0">{{ addcomma(item.net.value) }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+    </v-simple-table>-->
+
       <template >
         <tr>
           <td style="width: 214px;"></td>
@@ -23,7 +100,6 @@
         height="calc(100vh - 435px)"
         style="background:#00121e"
       >
-      
       <template v-slot:item="props">       
         <tr>
             <td>
@@ -130,7 +206,21 @@ export default {
             console.log('data response');
             this.jockey = response.data;         
           });
-      }
+      },
+     /* dataSort: function(item) {
+        console.log('sort - ' + item);
+       
+          function compare(a, b) {
+            if (a.buying.volume > b.buying.volume)
+              return -1;
+            if (a.buying.volume < b.buying.volume)
+              return 1;
+            return 0;
+          }
+
+          return this.jockey.sort(compare);
+          //console.log('sorted - ', this.jockey);
+        }*/
   }
 };
 </script>
@@ -169,6 +259,20 @@ export default {
   font-size: 11px;
   font-weight: 100;
   color: grey;
+}
+.header {
+  position: fixed;
+  z-index: 1;
+}
+.table_body{
+  position: absolute;
+  height: 245px;
+  padding-top: 43px;
+  overflow-y: auto;
+  width: 100%;
+}
+.theader{
+  cursor: pointer;
 }
 
 </style>
