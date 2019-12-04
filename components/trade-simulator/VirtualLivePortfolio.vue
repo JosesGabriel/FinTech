@@ -200,6 +200,7 @@ export default {
             this.totalPerf = 0;
             this.openposition = [];
             this.totalmvalue = 0;
+            let lastprice = 0;
             this.$api.journal.portfolio.open(openparams2).then(
               function(result) {
                 console.log('live port',result);
@@ -210,51 +211,75 @@ export default {
                         const params = {
                           "symbol-id": this.portfolioLogs[i].stock_id
                         };
-                        this.$api.chart.stocks.list(params).then(
+                        //this.$api.chart.stocks.list(params).then(
+                        this.$api.journal.portfolio.history(params).then(
                           function(result) {
                             this.portfolioLogs[i].stock_id = result.data.symbol;
+                            //console.log('last - ', result.data)
+                            // console.log('position - ' + this.portfolioLogs[i].position)
+                            let buyResult = this.portfolioLogs[i].position * parseFloat(result.data.last).toFixed(2);
+                            //console.log('Buy Result - '+ buyResult1)
+                            let dpartcommission = buyResult * 0.0025;
+                            let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+                            // TAX
+                            let dtax = dcommission * 0.12;
+                            // Transfer Fee
+                            let dtransferfee = buyResult * 0.00005;
+                            // SCCP
+                            let dsccp = buyResult * 0.0001;
+                            let dsell = buyResult * 0.006;
+                            let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+                            let mvalue = buyResult - dall;
+                            let tcost = this.portfolioLogs[i].position * this.portfolioLogs[i].average_price;
+                            let profit = parseFloat(mvalue) - parseFloat(tcost);
+                            let perf = (profit / tcost) * 100;
+                            let pos = this.addcomma(this.portfolioLogs[i].position).split('.')[0];
+
+                            this.totalmvalue = parseFloat(this.totalmvalue) + parseFloat(mvalue);
+                            if(this.portfolioLogs[i].position > 0){
+                              this.totalProfitLoss = parseFloat(this.totalProfitLoss) + parseFloat(profit);
+                              this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perf);
+                            }
+                            this.portfolioLogs[i].Position = pos;
+                            this.portfolioLogs[i].AvgPrice = this.portfolioLogs[i].average_price.toFixed(3);
+                            this.portfolioLogs[i].TotalCost = this.addcomma(tcost);
+                            this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
+                            this.portfolioLogs[i].Profit = profit.toFixed(2);
+                            this.portfolioLogs[i].Perf = perf.toFixed(2);
+                            this.portfolioLogs[i].action = {
+                                id: result.data.stockidstr,
+                                strategy: this.portfolioLogs[i].metas.strategy,
+                                tradeplan: this.portfolioLogs[i].metas.plan,
+                                emotion: this.portfolioLogs[i].metas.emotion,
+                                notes: this.portfolioLogs[i].metas.notes
+                              }       
+
+                             this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
+                             this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
+                           
                           }.bind(this)
                         ); 
-                        let buyResult = result.meta.open[i].position * parseFloat(result.meta.open[i].metas.buy_price).toFixed(2);
-                        let dpartcommission = buyResult * 0.0025;
-                        let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
-                        // TAX
-                        let dtax = dcommission * 0.12;
-                        // Transfer Fee
-                        let dtransferfee = buyResult * 0.00005;
-                        // SCCP
-                        let dsccp = buyResult * 0.0001;
-                        let dsell = buyResult * 0.006;
-                        let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
-                        let mvalue = buyResult - dall;
-                        let tcost = result.meta.open[i].position * result.meta.open[i].average_price;
-                        let profit = parseFloat(mvalue) - parseFloat(tcost);
-                        let perf = (profit / tcost) * 100;
-                        let pos = this.addcomma(result.meta.open[i].position).split('.')[0];  
-                        this.totalmvalue = parseFloat(this.totalmvalue) + parseFloat(mvalue);
-                        if(result.meta.open[i].position > 0){
-                          this.totalProfitLoss = parseFloat(this.totalProfitLoss) + parseFloat(profit);
-                          this.totalPerf = parseFloat(this.totalPerf) + parseFloat(perf);
-                        }
-                        this.portfolioLogs[i].Position = pos;
-                        this.portfolioLogs[i].AvgPrice = result.meta.open[i].average_price.toFixed(3);
-                        this.portfolioLogs[i].TotalCost = this.addcomma(tcost);
-                        this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
-                        this.portfolioLogs[i].Profit = profit.toFixed(2);
-                        this.portfolioLogs[i].Perf = perf.toFixed(2);
-                        this.portfolioLogs[i].action = {
-                            id: this.portfolioLogs[i].stock_id,
-                            strategy: result.meta.open[i].metas.strategy,
-                            tradeplan: result.meta.open[i].metas.plan,
-                            emotion: result.meta.open[i].metas.emotion,
-                            notes: result.meta.open[i].metas.notes
-                          }       
+                            
                 }          
-                 this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
-                 this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
+                 //this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
+                // this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
               }.bind(this)
             );   
+
+             this.$axios
+            .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/daychange")
+                  .then(response => {      
+                      if (response.success) {
+                          console.log('day change', response.data.change); 
+                          this.$emit('totalDayChange', response.data.change.change);  
+                          this.$emit('totalDayChangePercentage', response.data.change.percentage);     
+                      }
+              });
+
+
+
       },
+      
       deleteLive: function (item) {
          
         console.log('delete-' + item);

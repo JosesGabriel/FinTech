@@ -61,13 +61,13 @@
                     <v-row class="mt-0">
                         <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3 positive">
                             <v-row class="ma-0 pa-0 overline">
-                                <v-col class="ma-0 pa-0">
-                                    (100.00%)
+                                <v-col :class="(this.daychangepercentage > 0 ? 'positive' : 'negative')" class="ma-0 pa-0">
+                                    ( {{ this.addcomma(this.daychangepercentage) }}%)
                                 </v-col>
                             </v-row>
                             <v-row class="ma-0 pa-0">
-                                <v-col class="ma-0 pa-0">
-                                    1,000,000.00
+                                <v-col :class="(this.daychange > 0 ? 'positive' : 'negative')" class="ma-0 pa-0">
+                                   {{ this.addcomma(this.daychange) }}
                                 </v-col>
                             </v-row>
                         </v-col> 
@@ -119,7 +119,7 @@
                     style="background:transparent;"
                 >
                     <v-container class="pa-0">
-                        <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
+                        <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#03dac5" background-color="transparent" :value="'tab-' + 2" style="background: transparent;">
@@ -150,6 +150,8 @@
           totalmvalue: 0,
           totalmax: 0,
           balance: 0,
+          daychange: 0,
+          daychangepercentage: 0,
           equity: 0,
       }
     },
@@ -187,6 +189,12 @@
             },
             TotalMax(value){
                 this.totalmax = value;
+            },
+            DayChange(value){
+                this.daychange = value;
+            },
+            DayChangePercentage(value){
+                this.daychangepercentage = value;
             },
             portperf(){
                 let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
