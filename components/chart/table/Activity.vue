@@ -2,7 +2,7 @@
   <v-content
     :class="[
       { darkmode__text: lightSwitch },
-      { lightmode__text: !ligthSwitch }
+      { lightmode__text: !lightSwitch }
     ]"
   >
     <div id="top">

@@ -3,7 +3,7 @@
     class="template"
     :class="[
       { darkmode__text: lightSwitch },
-      { lightmode__text: !ligthSwitch }
+      { lightmode__text: !lightSwitch }
     ]"
   >
     <div id="sentiment__caption">Members Sentiment</div>

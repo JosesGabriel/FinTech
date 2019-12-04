@@ -46,15 +46,15 @@ export default {
       this.progbar.loading = true;
       this.progbar.value = 100;
       const params = {
-        "symbol-id": symid,
-        entry: 5
+        "symbol-id": symid
       };
-      // Top Depth
+      // Transaction Bar
       this.$api.chart.stocks
-        .topdepth(params)
+        .transaction(params)
         .then(response => {
+          //  console.log(response);
           this.progbar.value = parseFloat(
-            response.data.bid_total_percent
+            response.data.high_total_percent
           ).toFixed(2);
           this.progbar.loading = false;
         })

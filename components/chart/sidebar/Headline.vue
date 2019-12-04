@@ -15,7 +15,7 @@
         class="headline_description"
         :class="[
           { darkmode__text: lightSwitch },
-          { lightmode__text: !ligthSwitch }
+          { lightmode__text: !lightSwitch }
         ]"
       >
         <div class="hcontainer_top">

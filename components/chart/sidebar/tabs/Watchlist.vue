@@ -38,7 +38,7 @@
           <span
             :class="[
               { darkmode__text: lightSwitch },
-              { lightmode__text: !ligthSwitch }
+              { lightmode__text: !lightSwitch }
             ]"
             >{{
               $globalMethod.limitDisplayString(item.description, 16, true)

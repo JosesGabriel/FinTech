@@ -32,6 +32,7 @@
             :dark="lightSwitch == true"
             :color="color"
             class="pa-0 ma-0 tab__height"
+            tile
           >
             <v-card-text class="pa-0 ma-0">
               <component :is="item.component" lightswitch="lightSwitch" />

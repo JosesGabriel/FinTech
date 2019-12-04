@@ -6,7 +6,7 @@
           id="table__left"
           :class="[
             { darkmode__text: lightSwitch },
-            { lightmode__text: !ligthSwitch }
+            { lightmode__text: !lightSwitch }
           ]"
         >
           <tr>
@@ -54,7 +54,7 @@
           id="table__right"
           :class="[
             { darkmode__text: lightSwitch },
-            { lightmode__text: !ligthSwitch }
+            { lightmode__text: !lightSwitch }
           ]"
         >
           <tr>

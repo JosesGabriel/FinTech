@@ -112,8 +112,8 @@ export default {
   },
   watch: {
     lightSwitch(value) {
-      console.log("light");
-      console.log(this.mode);
+      //console.log("light");
+      //console.log(this.mode);
     }
   }
 };
