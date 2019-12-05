@@ -46,7 +46,7 @@
             <div class="ml-1 caption">
               {{ props.item.broker_code }}
             </div>
-            <div class="broker_desc mr-0 pr-0 ml-1">
+            <div class="broker_desc mr-0 pr-0 ml-1" style="width:200px;text-overflow:ellipsis;white-space: nowrap; overflow: hidden;">
               {{ props.item.broker_description }}
             </div>
           </td>
