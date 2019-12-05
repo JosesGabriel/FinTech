@@ -76,7 +76,6 @@ export default {
       widget: null,
       tvWidget: null,
       chartViewId: 0,
-      //chartViewClass: "chartViewClass_2"
       chartViewClass: "chartViewClass_1"
     };
   },
@@ -88,7 +87,8 @@ export default {
       stock: "chart/stock",
       maximize_table: "chart/getTableMaximize",
       fullscreen_table: "chart/getTableFullscreen",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      market_code: "chart/market_code"
     }),
     chartView: function() {
       if (this.ticker && this.table) {
@@ -132,24 +132,18 @@ export default {
   watch: {
     lightSwitch: function() {
       this.loadChart();
+    },
+    market_code(value, old) {
+      if (old == null) return;
+      const params = {
+        symbolid: null,
+        market_code: value
+      };
+      this.passTickerToChart(params);
     }
   },
-  // watch: {
-  //   symbolid(value) {
-  //     console.log("changed");
-  //     console.log(this);
-  //     "PSE:KPPI"
-  //       console.log(this.stock.market_code);
-  //       if (this.passTickerToChart() != undefined) {
-  //         this.passTickerToChart(this.stock.market_code);
-  //       }
-  //   }
-  // },
   mounted() {
     this.loadChart();
-    setTimeout(() => {
-      //  this.passTickerToChart("PSE:KPPI");
-    }, 3000);
   },
   destroyed() {
     if (this.tvWidget !== null) {
@@ -173,7 +167,6 @@ export default {
         //console.log(this.chartViewId);
         //console.log(this.chartViewClass);
       });
-
       //! BEWARE: no trailing slash is expected in feed URL
       const widgetOptions = {
         //region overrides
@@ -286,13 +279,17 @@ export default {
           .chart()
           .onSymbolChanged()
           .subscribe(null, symbolInfo => {
-            that.setSymbolID(symbolInfo.id_str);
-            console.log("on change chart");
+            // console.log(symbolInfo.full_name);
+            //that.setSymbolID(symbolInfo.id_str);
             //TODO: call this function ralph, ito yung example nilagay ko lang dito
             //TODO: need mo ipasa yung market_code completo, append mo
             //TODO: <EXCHANGE>:<SYMBOL> or kunin mo sa response -> market_code
             //TODO: author: kbaluyot
-            //that.passTickerToChart("PSE:KPPI", false);
+            const params = {
+              symbolid: symbolInfo.id_str,
+              market_code: symbolInfo.full_name
+            };
+            that.passTickerToChart(params);
           });
         //! endregion subscribe
       });
@@ -304,9 +301,13 @@ export default {
         ? null
         : decodeURIComponent(results[1].replace(/\+/g, " "));
     },
-    passTickerToChart(ticker) {
-      if (ticker && this.tvWidget) {
-        this.tvWidget.chart().setSymbol(ticker);
+    passTickerToChart(object) {
+      if (object && this.tvWidget) {
+        //console.log(object);
+        if (object.symbolid != null) {
+          this.setSymbolID(object.symbolid);
+        }
+        this.tvWidget.chart().setSymbol(object.market_code);
       }
 
       return false;
