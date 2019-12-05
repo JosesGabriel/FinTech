@@ -43,6 +43,9 @@ html.theme-dark .tv-control-input {
 .spinner div {
     display: none;
 }
+.spinner div {
+    display: none !important;
+}
 .spinner {
     background-color: transparent; 
     background: url('/loader.gif') no-repeat 50% 50%;

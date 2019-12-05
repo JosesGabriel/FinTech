@@ -6379,7 +6379,7 @@ html.theme-dark .chart-widget--themed-dark .price-axis-stub-3MoqVLRB- .wrapper-1
     cursor: ew-resize
 }
 
-.tv-spinner {
+/* .tv-spinner {
     display: none;
     position: absolute;
     width: 1em;
@@ -6391,7 +6391,7 @@ html.theme-dark .chart-widget--themed-dark .price-axis-stub-3MoqVLRB- .wrapper-1
     animation: tv-spinner__container-rotate .9s linear infinite; 
     will-change: transform;
     direction: ltr
-}
+} */
 
 /* .tv-spinner--size_mini {
     font-size: 16px
