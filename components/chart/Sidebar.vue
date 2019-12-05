@@ -44,6 +44,7 @@ export default {
       stock: "chart/stock",
       symbolid: "chart/symbolid",
       index: "chart/index",
+      market_code: "chart/market_code",
       lightSwitch: "global/getLightSwitch"
     }),
     cardbackground: function() {
@@ -55,6 +56,7 @@ export default {
       setStock: "chart/setStock",
       setSymbolID: "chart/setSymbolID",
       setIndex: "chart/setIndex",
+      setMarketCode: "chart/setMarketCode",
       setTicker: "chart/setTicker"
     }),
     initStock: function(symid) {
@@ -67,12 +69,14 @@ export default {
         this.setIndex(parseInt(this.data.value) > 0 ? false : true);
         //  console.log(this.data);
         this.setStock(this.data);
+        this.setMarketCode(this.data.market_code);
         this.loading = null;
       });
     }
   },
   watch: {
     symbolid(symid) {
+      //console.log("sidebar");
       //console.log(symid);
       //console.log(symid);
       this.initStock(symid);

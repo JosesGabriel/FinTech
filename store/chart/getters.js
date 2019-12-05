@@ -36,5 +36,8 @@ export default {
   },
   trade_login: state => {
     return state.trade_login;
+  },
+  market_code: state => {
+    return state.market_code;
   }
 };

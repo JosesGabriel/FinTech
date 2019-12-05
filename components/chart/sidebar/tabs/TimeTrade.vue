@@ -29,7 +29,7 @@
             <th class="text-right font-weight-bold pl-2">
               BUYER
             </th>
-            <th class="text-right font-weight-bold pl-2">
+            <th class="text-right font-weight-bold pl-2 pr-2">
               SELLER
             </th>
             <th class="font-weight-bold"></th>

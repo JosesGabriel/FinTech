@@ -6,6 +6,7 @@ export default () => ({
   sidebar: true,
 
   symbolid: 0,
+  market_code: null,
   index: true,
   stock: {},
   bidask: {},

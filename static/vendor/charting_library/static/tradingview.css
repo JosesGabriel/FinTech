@@ -18,11 +18,11 @@ html.theme-dark .tv-insert-indicator-dialog__search-control input {
     background-color: #2c3e50;
 }
 html.theme-dark ._tv-dialog {
-    border-color: #34495e;
-    background: #34495e;
+    border-color: #172431;
+    background: #172431;
 }
 html.theme-dark .tv-tabbed-dialog {
-    background-color: #34495e;
+    background-color: #172431;
 }
 .tv-insert-study-item:hover {background-color: #2c3e50 !important;}
 html.theme-dark .tv-compare-dialog__tab-page input {
@@ -44,8 +44,9 @@ html.theme-dark .tv-control-input {
     display: none;
 }
 .spinner {
-	background-color: transparent; 
-    background: url(https://arbitrage.ph/images/arb_preloader.svg) no-repeat 50% 50%;
+    background-color: transparent; 
+    background: url('/loader.gif') no-repeat 50% 50%;
+    /* background: url(https://arbitrage.ph/images/arb_preloader.svg) no-repeat 50% 50%; */
     background-size: 50px;
 	margin:-25px 0 0 -25px;
 	width:50px !important;
@@ -65,28 +66,28 @@ html.theme-light .group-wWM3zP_M- {
     padding: 0 10px;
 }
 html.theme-dark .chart-page {
-    background: #34495e;
+    background: #172431;
 }
 html.theme-dark .context-menu .action-separator td {
-    border-color: #34495e;
+    border-color: #172431;
     background-color: #4a5c6d;
 }
 html.theme-dark .context-menu-hover td,
-html.theme-dark .context-menu-hover {background-color: #34495e;}
+html.theme-dark .context-menu-hover {background-color: #172431;}
 html.theme-dark .context-menu-wrapper {
-    background-color: #34495e;
+    background-color: #172431;
     border-color: #4a5c6d;
 }
 html.feature-no-touch.theme-dark .item-2xPVYue0-:active, html.feature-no-touch.theme-dark .item-2xPVYue0-:hover, html.feature-touch.theme-dark .item-2xPVYue0-:active, html.theme-dark .item-2xPVYue0-.hovered-1uf45E05- {
-    background-color: #34495e;
+    background-color: #172431;
 }
 .menuBox-3CsColoQ- {
     padding: 0;
 }
 html.theme-dark .tv-linetool-properties-toolbar__color-picker .colorpicker-widget+svg .bg {
-    fill: #34495e;
+    fill: #172431;
 }
-.loading_screen {background-color: #34495e;}
+.loading_screen {background-color: #172431;}
 html.theme-dark .menuWrap-23ejLU7n- {
     box-shadow: none;
     border: 1px solid #4a5c6d;
@@ -100,16 +101,16 @@ html.theme-dark .tv-floating-toolbar {
     background-color: #2c3e50;
 }
 html.theme-dark .scrollWrap-2ReEQpR0-::-webkit-scrollbar-thumb {
-    background-color: #34495e;
+    background-color: #172431;
     border-color: #2c3e50;
 }
 html.theme-dark .tv-insert-indicator-dialog__pages::-webkit-scrollbar-thumb {
     background-color: #2c3e50;
-    border-color: #34495e;
+    border-color: #172431;
 }
 html.theme-dark .tv-dialog {
     box-shadow: none;
-    background-color: #34495e;
+    background-color: #172431;
     border: solid 1px #4a5c6d;
 }
 .js-study-item.tv-insert-study-item.i-without-stars:hover {
@@ -211,7 +212,7 @@ html.theme-dark .tv-select-container .sbOptions a.active, html.theme-dark .tv-un
     background: #26384a;
 }
 html.feature-no-touch.theme-dark .tv-grouped-floating-toolbar__widget-wrapper:hover, html.theme-dark .tv-grouped-floating-toolbar__widget-wrapper.i-dropped {
-    background-color: #34495e;
+    background-color: #172431;
 }
 html.theme-dark .tv-grouped-floating-toolbar__popup {
     box-shadow: none;
@@ -247,13 +248,13 @@ html.theme-dark .tv-dropdown__body {
     padding: 0;
 }
 .tv-dropdown__item.js-dropdown-item {
-    background-color: #34495e;
+    background-color: #172431;
 }
 html.feature-no-touch.theme-dark .tv-grouped-floating-toolbar__sub-widget:hover, html.theme-dark .tv-grouped-floating-toolbar__sub-widget--current {
     background-color: #26384a;
 }
 html.theme-dark .dialog-37P3XYj-- {
-    background-color: #34495e;
+    background-color: #172431;
     border: 1px solid #4a5c6d;
     box-shadow: none;
     border-radius: 0;

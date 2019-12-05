@@ -31,5 +31,8 @@ export default {
   },
   async setTradeLogin({ commit }, data) {
     await commit("SET_TRADE_LOGIN", data);
+  },
+  async setMarketCode({ commit }, data) {
+    await commit("SET_MARKET_CODE", data);
   }
 };

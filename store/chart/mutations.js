@@ -41,5 +41,9 @@ export default {
 
   SET_TRADE_LOGIN(state, data) {
     state.trade_login = data;
+  },
+
+  SET_MARKET_CODE(state, data) {
+    state.market_code = data;
   }
 };
