@@ -19,7 +19,7 @@
                         Unrealized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1">
-                       <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : this.unrealized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3 negative">
+                       <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : this.unrealized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
                            {{ this.unrealized }}
                         </v-col>
                     </v-row>
@@ -59,14 +59,14 @@
                         Day Change
                     </v-row>
                     <v-row class="mt-0">
-                        <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3 positive">
+                        <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
                             <v-row class="ma-0 pa-0 overline">
-                                <v-col :class="(this.daychangepercentage > 0 ? 'positive' : 'negative')" class="ma-0 pa-0">
+                                <v-col :class="(this.daychangepercentage > 0 ? 'positive' : this.daychangepercentage < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
                                     ( {{ this.addcomma(this.daychangepercentage) }}%)
                                 </v-col>
                             </v-row>
                             <v-row class="ma-0 pa-0">
-                                <v-col :class="(this.daychange > 0 ? 'positive' : 'negative')" class="ma-0 pa-0">
+                                <v-col :class="(this.daychange > 0 ? 'positive' : this.daychange < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
                                    {{ this.addcomma(this.daychange) }}
                                 </v-col>
                             </v-row>
@@ -124,7 +124,7 @@
                 </v-tab-item>
                 <v-tab-item dark color="#03dac5" background-color="transparent" :value="'tab-' + 2" style="background: transparent;">
                     <v-container class="pa-0">
-                        <TradelogsContent v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
+                        <TradelogsContent :item="item" ref="tradelogsComponent" v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
                     </v-container>
                 </v-tab-item>
             </v-tabs>
@@ -153,6 +153,7 @@
           daychange: 0,
           daychangepercentage: 0,
           equity: 0,
+          item: {},
       }
     },
     created() {
@@ -200,6 +201,10 @@
                 let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
                 return this.addcomma(port);
             },
+            getTradeLogs(){
+                //this.bus.$emit('submit_tl')
+                //this.$refs.tradelogsComponent.getTradeLogs();
+            },
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
                 decimals = decimals || 3; // Default to 2 decimals
@@ -217,16 +222,13 @@
                                 if(result.meta.logs[i].type == 'virtual' && result.meta.logs[i].name != 'Default Virtual Portfolio'){                           
                                     if(result.meta.logs[i].id == this.simulatorPortfolioID){
                                         this.balance = parseFloat(result.meta.logs[i].balance).toFixed(2);
-                                        this.equity = (parseFloat(this.totalmvalue) + parseFloat(this.balance)) + parseFloat(this.realized);
-                                        
+                                        this.equity = (parseFloat(this.totalmvalue) + parseFloat(this.balance)) + parseFloat(this.realized);                                       
                                     }
                                 }
-
                             }
                          }.bind(this)
                     ); 
             }
-
     },
     mounted() {
         const portfolioparams = {
@@ -273,6 +275,8 @@
                   
                 }.bind(this)
             ); 
+
+        //this.getTradeLogs();
     },
     components: {
         VirtualLivePortfolio,

@@ -129,6 +129,7 @@ export default {
       date: new Date().toISOString().substr(0, 10),
     }
   },
+  props: ['item'],
    computed: {
       ...mapGetters({
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
@@ -137,6 +138,7 @@ export default {
     },
   mounted() {
      if(this.simulatorPortfolioID != 0 ?  this.getTradeLogs() : ''); 
+     //this.bus.$on('submit_tl', this.getTradeLogs);
   },
   watch: {
       simulatorPortfolioID: function () {
