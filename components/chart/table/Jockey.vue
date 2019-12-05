@@ -2,24 +2,26 @@
   <!-- hehhee -->
   <v-col class="pa-0 mt-3">
     <template>
-      <tr>
-        <td style="width: 214px;"></td>
+      <tr class="mb-3">
+        <td style="width: 224px;"></td>
         <td
-          style="width: 62px; text-align:right;border-bottom: 1px solid #828b91;"
-          class="label"
+          style="width: 80px; text-align:center;border-bottom: 1px solid #828b91;"
+          class="label pb-1"
         >
           Buying
         </td>
-        <td style="width: 275px;border-bottom: 1px solid #828b91;"></td>
+        <td style="width: 290px;border-bottom: 1px solid #828b91;"></td>
+        <td style="width: 20px;"></td>
         <td
-          style="width: 62px; text-align:right;border-bottom: 1px solid #828b91;"
+          style="width: 80px; text-align:center;border-bottom: 1px solid #828b91;"
           class="label"
         >
           Selling
         </td>
-        <td style="width: 275px;border-bottom: 1px solid #828b91;"></td>
+        <td style="width: 280px;border-bottom: 1px solid #828b91;"></td>
+        <td style="width: 20px;"></td>
         <td
-          style="width: 83px; text-align:right;border-bottom: 1px solid #828b91;"
+          style="width: 75px; text-align:center;border-bottom: 1px solid #828b91;"
           class="label"
         >
           Net
@@ -30,7 +32,7 @@
     <v-data-table
       :headers="headers"
       :items="jockey"
-      class="data_table-container jockey_table"
+      class="data_table-container jockey_table mt-2"
       dense
       :dark="lightSwitch == true"
       fixed-header
@@ -41,10 +43,10 @@
       <template v-slot:item="props">
         <tr>
           <td>
-            <div class="ml-1">
+            <div class="ml-1 caption">
               {{ props.item.broker_code }}
             </div>
-            <div class="broker_desc mr-0 pr-0 ml-1">
+            <div class="broker_desc mr-0 pr-0 ml-1" style="width:200px;text-overflow:ellipsis;white-space: nowrap; overflow: hidden;">
               {{ props.item.broker_description }}
             </div>
           </td>
@@ -74,6 +76,7 @@
               }}%</span
             >
           </td>
+          <td style="text-align: right; width: 10px;"></td>
           <td style="text-align: right;">
             <span
               class="font-regular caption item_position-prop text-right px-1 py-0"
@@ -100,6 +103,7 @@
               }}%</span
             >
           </td>
+          <td style="text-align: right; width: 10px;"></td>
           <td style="text-align: right;">
             <span
               class="font-regular caption item_position-prop text-right px-1 py-0"
@@ -126,20 +130,22 @@ export default {
       min: "225px",
       max: "calc(100vh - 300px)",
       headers: [
-        { text: "Broker", value: "broker_code", align: "left", width: "20%" },
+        { text: "Broker", value: "broker_code", align: "left", width: "200px" },
         {
           text: "Volume",
           value: "buy_volume",
           align: "right",
-          child: ["December"]
+          width: "80px"
         },
-        { text: "Ave. Price", value: "buy_avprice", align: "right" },
-        { text: "Value", value: "buy_value", align: "right" },
-        { text: "Market Weight", value: "buy_mweight", align: "right" },
-        { text: "Volume", value: "sell_volume", align: "right" },
-        { text: "Ave. Price", value: "sell_avprice", align: "right" },
-        { text: "Value", value: "sell_value", align: "right" },
-        { text: "Market Weight", value: "sell_mweight", align: "right" },
+        { text: "Ave. Price", value: "buy_avprice", align: "right", width: "80px" },
+        { text: "Value", value: "buy_value", align: "right", width: "90px" },
+        { text: "Market Weight", value: "buy_mweight", align: "right", width: "90px" },
+        { text: " ", value: " ", align: "right", width: "10px" },
+        { text: "Volume", value: "sell_volume", align: "right", width: "80px" },
+        { text: "Ave. Price", value: "sell_avprice", align: "right", width: "80px" },
+        { text: "Value", value: "sell_value", align: "right", width: "90px" },
+        { text: "Market Weight", value: "sell_mweight", align: "right", width: "90px" },
+        { text: " ", value: " ", align: "right", width: "10px" },
         { text: "Net Volume", value: "net_volume", align: "right" },
         { text: "Net Value", value: "net_value", align: "right" }
       ],
