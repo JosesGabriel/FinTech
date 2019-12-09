@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="pa-4 transparent__bg"
+    class="pa-4 transparent__bg pb-3"
     color="#142a46"
     :dark="lightSwitch == 0 ? false : true"
     :loading="loader"
@@ -48,13 +48,14 @@
           :loading="postField__loading"
           >{{ postFieldModel }}</v-textarea
         >
+        <v-divider />
         <div>
           <input
             ref="postField__inputRef"
             type="file"
             class="d-none"
             multiple
-            accept=".jpg, .jpeg, .png, .mp4, .webm"
+            accept=".jpg, .jpeg, .png, .mp4, .webm, .gif"
             @change="onInputFileChange"
           />
           <div class="postField__preview pt-2">
@@ -95,30 +96,33 @@
             </div>
           </div>
           <v-btn
-            class="mr-6 postField__btn"
+            class="postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
             @click="onClickImageUploadBtn"
           >
-            <v-icon color="success">mdi-image-outline</v-icon>Photo
+            <v-icon color="success">mdi-image-outline</v-icon
+            ><span class="text--green">Photo</span>
           </v-btn>
           <v-btn
-            class="ml-3 mr-6 postField__btn"
+            class="postField__btn p-10"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
             @click="onClickImageUploadBtn"
           >
-            <img class="mr-1" src="/icon/video.svg" width="20" />Video
+            <img class="mr-1" src="/icon/video.svg" width="20" />
+            <span class="text--green">Video</span>
           </v-btn>
           <v-btn
-            class="ml-2 postField__btn"
+            class="postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
             icon
           >
-            <img class="mr-1" src="/icon/polls.svg" width="17" />Polls
+            <img class="mr-1" src="/icon/polls.svg" width="17" />
+            <span class="text--green">Polls</span>
           </v-btn>
           <v-btn
             rounded
@@ -169,6 +173,14 @@
 }
 .postField__imageCard {
   flex: 0 0 auto;
+}
+.postField__btn {
+  position: relative;
+  right: 30px;
+  text-transform: none;
+}
+.p-10 {
+  margin: 0 50px;
 }
 .postField__btn::before {
   color: transparent;

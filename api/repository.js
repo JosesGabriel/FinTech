@@ -16,10 +16,17 @@ export default $axios => resource => ({
   },
 
   update(id, payload) {
+    $axios.setToken(token);
     return $axios.$post(`${resource}/${id}`, payload);
   },
 
+  put(id, payload) {
+    $axios.setToken(token);
+    return $axios.$put(`${resource}/${id}`, payload);
+  },
+
   delete(id) {
+    $axios.setToken(token);
     return $axios.$delete(`${resource}/${id}`);
   }
 });
