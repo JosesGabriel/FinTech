@@ -28,12 +28,12 @@
           </tr>
           <tr class="ma-0 pa-0">
             <th class="text-left">Broker</th>
-            <th class="text-right">Volume</th>
+            <th class="text-right j_header" @click="sortArray('buy_volume')" >Volume</th>
             <th class="text-right j_header"  @click="sortArray('buy_avprice')" >Ave. Price</th>
             <th class="text-right">Value</th>
             <th class="text-right">Market Weight</th>
             <th class="text-right"> </th>
-            <th class="text-right">Volume</th>
+            <th class="text-right j_header" @click="sortArray('sell_volume')" >Volume</th>
             <th class="text-right j_header"  @click="sortArray('sell_avprice')">Ave. Price</th>
             <th class="text-right">Value</th>
             <th class="text-right">Market Weight</th>
