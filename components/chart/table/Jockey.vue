@@ -29,12 +29,12 @@
           <tr class="ma-0 pa-0">
             <th class="text-left">Broker</th>
             <th class="text-right">Volume</th>
-            <th class="text-right">Ave. Price</th>
+            <th class="text-right j_header"  @click="sortArray('buy_avprice')" >Ave. Price</th>
             <th class="text-right">Value</th>
             <th class="text-right">Market Weight</th>
             <th class="text-right"> </th>
             <th class="text-right">Volume</th>
-            <th class="text-right">Ave. Price</th>
+            <th class="text-right j_header"  @click="sortArray('sell_avprice')">Ave. Price</th>
             <th class="text-right">Value</th>
             <th class="text-right">Market Weight</th>
              <th class="text-right"> </th>
@@ -49,12 +49,12 @@
             <td class="text-right">{{ addcomma(item.buy_avprice) }}</td>
             <td class="text-right">{{ addcomma(item.buy_value) }}</td>
             <td class="text-right">{{ addcomma(item.buy_mweight) }}%</td>
-            <td class="text-center" style="width:20px;">&nbsp;</td>
+            <td class="text-center" style="width:20px;"></td>
             <td class="text-right">{{ addcomma(item.sell_volume) }}</td>
             <td class="text-right">{{ addcomma(item.sell_avprice) }}</td>
             <td class="text-right">{{ addcomma(item.sell_value) }}</td>
             <td class="text-right">{{ addcomma(item.sell_mweight) }}%</td>
-            <td class="text-center" style="width:20px;">&nbsp;</td>
+            <td class="text-center" style="width:20px;"></td>
             <td class="text-right">{{ addcomma(item.net_volume) }}</td>
             <td class="text-right pr-2">{{ addcomma(item.net_value) }}</td>
           </tr>
@@ -166,14 +166,28 @@ export default {
         });
     },
     sortArray(data){
-        function compare(a, b) {       
-              if (a[data] > b[data])
-                return -1;
-              if (a[data] < b[data])
-                return 1;
-              return 0;
-          }
-          return this.jockey.sort(compare);
+      
+        if(this.desc){
+          this.desc = false;
+            function compare(a, b) {   
+                if (a[data] > b[data])
+                  return -1;
+                if (a[data] < b[data])
+                  return 1;
+                return 0;
+            }
+            return this.jockey.sort(compare);
+        }else{
+          this.desc = true;
+            function compare(a, b) {   
+                if (a[data] < b[data])
+                  return -1;
+                if (a[data] > b[data])
+                  return 1;
+                return 0;
+            }
+            return this.jockey.sort(compare);
+        }
       },
         nFormatter(num) {
                 if (num >= 1000000000) {
