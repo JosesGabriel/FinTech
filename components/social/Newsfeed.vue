@@ -1,5 +1,17 @@
 <template>
   <v-col class="pa-0">
+    <!-- Written by Joses | December 2019 -->
+    <!-- Docs: Posts object is retrieved on mount, then mag iterate thru the entire
+    object as can be seen sa v-card underneath. Then if post has comments, mag loop thru lang gihapon sa length.
+    
+    So basically, puro checks lang sa current index if it has comments, or attachments etc., then display.
+    Only used 1 external component (PhotoCarousel.vue) for easier organizing of data flow.
+
+    Image posts will be passed to PhotoCarousel.vue <- contains the grid layout arrangement para sa images.
+    also contains the carousel modal that is triggered on click.
+
+    "[n-1]" is used extensively, current index lang meaning ana.
+    -->
     <v-card
       v-for="n in postsObject.length"
       :key="n"
@@ -38,18 +50,71 @@
               >
             </v-col>
             <v-col class="text-right">
-              <v-btn
-                icon
-                fab
-                small
-                class="postOptions__btn"
-                color="secondary"
-                @click="postOptionsModal[n - 1] = !postOptionsModal[n - 1]"
-              >
+              <!-- <v-btn icon fab small class="postOptions__btn" color="secondary">
                 <v-icon>mdi-dots-horizontal</v-icon>
-                {{ postOptionsModal[n - 1] }}
-              </v-btn>
-              <v-card v-if="postOptionsModal[n - 1]">sesoo</v-card>
+              </v-btn> -->
+              <v-dialog width="500">
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-if="
+                      postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
+                    "
+                    x-small
+                    icon
+                    v-on="on"
+                  >
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </template>
+
+                <v-card
+                  :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+                  :dark="lightSwitch == 0 ? false : true"
+                >
+                  <v-card-title
+                    class="headline text--green lighten-2"
+                    primary-title
+                  >
+                    Delete Post?
+                  </v-card-title>
+
+                  <v-card-text>
+                    Are you sure you want to permanently remove this post from
+                    Lyduz?
+                  </v-card-text>
+
+                  <v-divider></v-divider>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <!-- <v-btn color="secondary" text @click="deleteDialog = false">
+                      Cancel
+                    </v-btn> -->
+                    <v-btn
+                      v-if="
+                        postsObject[n - 1].user.uuid ==
+                          $auth.user.data.user.uuid
+                      "
+                      text
+                      color="error"
+                      @click="
+                        deletePost(postsObject[n - 1].id, n - 1),
+                          (deleteDialog = false)
+                      "
+                      >Delete</v-btn
+                    >
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-btn
+                v-if="postsObject[n - 1].user.uuid == $auth.user.data.user.uuid"
+                x-small
+                icon
+                @click="(editPostMode = !editPostMode), (currentEdit = n - 1)"
+                ><v-icon>mdi-comment-edit</v-icon></v-btn
+              >
             </v-col>
           </v-row>
         </v-list-item-content>
@@ -58,9 +123,39 @@
       <!-- Start of Post Body -->
       <v-list-item class="pa-0 ma-0">
         <v-list-item-content class="ma-0 pa-0">
-          <span class="body-1 px-5 pb-3">
+          <div
+            v-if="
+              editPostMode &&
+                postsObject[n - 1].user.uuid == $auth.user.data.user.uuid &&
+                currentEdit == n - 1
+            "
+          >
+            <v-textarea
+              v-model="editTextAreaModel[n - 1]"
+              outlined
+              :placeholder="postsObject[n - 1].content"
+              dense
+              hide-details
+            ></v-textarea>
+            <v-btn small outlined @click="editPostMode = false">Cancel</v-btn>
+            <v-btn
+              small
+              outlined
+              @click="
+                editPost(
+                  postsObject[n - 1].id,
+                  editTextAreaModel[n - 1],
+                  n - 1
+                ),
+                  (editPostMode = false)
+              "
+              >Done Editing</v-btn
+            >
+          </div>
+          <span v-else class="body-1 px-5 pb-3">
             {{ postsObject[n - 1].content }}
           </span>
+
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
         </v-list-item-content>
       </v-list-item>
@@ -218,8 +313,10 @@
             label="Write a comment..."
             color="primary"
             :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
-            :dark="lightSwitch == 0 ? true : false"
-            @keyup.enter="postComment(postsObject[n - 1].id, n - 1)"
+            :dark="lightSwitch == 0 ? false : true"
+            @keyup.enter="
+              postComment(postsObject[n - 1].id, commentField[n - 1], n - 1)
+            "
           >
           </v-text-field>
         </v-list-item-content>
@@ -278,7 +375,12 @@ export default {
       alert: false,
       alertState: "",
       alertResponse: "",
-      postOptionsModal: []
+      postOptionsModal: [],
+      editModel: [],
+      editPostMode: false,
+      editTextAreaModel: [],
+      currentEdit: 0,
+      deleteDialog: false
     };
   },
   computed: {
@@ -332,17 +434,42 @@ export default {
           console.log(e);
         });
     },
-    postComment(id, index) {
+    deletePost(id, index) {
+      this.$api.social.deletePost
+        .delete(id)
+        .then(response => {
+          this.triggerAlert(true, response.message);
+          this.postsObject.splice(index, 1);
+        })
+        .catch(e => {
+          this.triggerAlert(true, e.message);
+        });
+    },
+    editPost(id, content, index) {
+      let payload = {
+        content: content
+      };
+      this.$api.social.updatePost
+        .put(id, payload)
+        .then(response => {
+          this.triggerAlert(true, response.message);
+          this.postsObject[index].content = content;
+        })
+        .catch(e => {
+          this.triggerAlert(true, e.message);
+        });
+    },
+    postComment(id, content, index) {
       let payload = {
         parent_id: 0,
         user_id: this.$auth.user.data.user.uuid,
-        content: this.commentField[index]
+        content: content
       };
       this.$api.social.posts.postComment(id, payload).then(response => {
         if (response.success) {
           this.triggerAlert(true, response.message);
           this.postsObject[index].comments.push({
-            content: this.commentField[index],
+            content: content,
             created_at: new Date(),
             user: {
               profile_image: this.$auth.user.data.user.profile_image,
@@ -350,11 +477,10 @@ export default {
               last_name: this.$auth.user.data.user.last_name
             }
           });
+          this.commentField[index] = "";
         } else {
           this.triggerAlert(false, response.message);
         }
-
-        this.commentField[index] = "";
       });
     },
     post_react(post_id, type) {

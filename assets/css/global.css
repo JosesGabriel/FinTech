@@ -1,7 +1,6 @@
-/* @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap'); */
-@import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:semi-bold&display=swap');
 #app {
-    font-family: 'Karla', sans-serif !important;
+    font-family: 'Nunito Sans', sans-serif !important;
 }
 #liveportfolio-table {
     background: none;

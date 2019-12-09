@@ -1,12 +1,12 @@
 <template>
   <v-container class="pa-0">
     <v-row v-if="images.length == 1">
-      <v-col cols="12" class="pa-0 px-1">
+      <v-col cols="12" class="pa-0 pr-1">
         <v-img
           v-if="mediaTypeCheck(images[0]['url'])"
           position="top"
           :src="images[0]['url']"
-          max-height="400"
+          max-height="200"
           @click="showCarousel"
         />
         <video
@@ -18,11 +18,11 @@
       </v-col>
     </v-row>
     <v-row v-else-if="images.length == 2">
-      <v-col v-for="p in images.length" :key="p" cols="6" class="pa-0 px-1">
+      <v-col v-for="p in images.length" :key="p" cols="6" class="pa-0 pr-1">
         <v-img
           v-if="mediaTypeCheck(images[p - 1]['url'])"
           :src="images[p - 1]['url']"
-          max-height="400"
+          max-height="200"
           height="100%"
           @click="showCarousel"
         />
@@ -35,10 +35,10 @@
       </v-col>
     </v-row>
     <v-row v-else-if="images.length == 3">
-      <v-col v-for="p in images.length - 1" :key="p" cols="6" class="pa-0 px-1">
+      <v-col v-for="p in images.length - 1" :key="p" cols="6" class="pa-0 pr-1">
         <v-img
           v-if="mediaTypeCheck(images[p]['url'])"
-          max-height="400"
+          max-height="200"
           height="100%"
           :src="images[p]['url']"
           @click="showCarousel"
@@ -50,11 +50,11 @@
           :src="images[p]['url']"
         ></video>
       </v-col>
-      <v-col cols="12" class="pa-0 px-1 pt-1">
+      <v-col cols="12" class="pa-0 pr-1 pt-1">
         <v-img
           v-if="mediaTypeCheck(images[0]['url'])"
           :src="images[0]['url']"
-          max-height="400"
+          max-height="200"
           height="100%"
           @click="showCarousel"
         />
@@ -67,11 +67,11 @@
       </v-col>
     </v-row>
     <v-row v-else-if="images.length >= 4">
-      <v-col v-for="p in 4" :key="p" cols="6" class="pa-0 pa-1">
+      <v-col v-for="p in 4" :key="p" cols="6" class="pa-05">
         <v-img
           v-if="mediaTypeCheck(images[p - 1]['url'])"
           :src="images[p - 1]['url']"
-          max-height="400"
+          max-height="200"
           height="100%"
           :class="images.length > 4 && p == 4 ? 'lowOpacity' : ''"
           @click="showCarousel"
@@ -91,7 +91,7 @@
 
     <v-dialog v-model="dialog" width="50%">
       <v-card>
-        <v-carousel hide-delimiters continuous="false">
+        <v-carousel hide-delimiters>
           <v-carousel-item v-for="(index, n) in images" :key="n">
             <v-img
               v-if="mediaTypeCheck(images[n]['url'])"
@@ -124,6 +124,9 @@
 .fullWidth {
   width: 100%;
 }
+.pa-05 {
+  padding: 2px;
+}
 </style>
 <script>
 export default {
@@ -148,7 +151,8 @@ export default {
       if (
         media.split(".").pop() == "jpg" ||
         media.split(".").pop() == "jpeg" ||
-        media.split(".").pop() == "png"
+        media.split(".").pop() == "png" ||
+        media.split(".").pop() == "gif"
       )
         return true;
       else return false;
