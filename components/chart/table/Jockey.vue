@@ -9,7 +9,7 @@
           class="label pb-1"
         >
           Buying
-        </td>
+        </td> 
         <td style="width: 290px;border-bottom: 1px solid #828b91;"></td>
         <td style="width: 20px;"></td>
         <td
