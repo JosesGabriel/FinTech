@@ -17,7 +17,11 @@
           </div>
           <div class="no-wrap caption">
             <span class="font-weight-medium">Lakeith Hathfield</span><br />
-            <span style="font-size: 11px;">420 Friends</span>
+            <v-list-item-subtitle
+              ><span class="font-weight-thin" style="font-size: 11px;"
+                >420 Friends</span
+              ></v-list-item-subtitle
+            >
           </div>
           <v-spacer></v-spacer>
           <div>

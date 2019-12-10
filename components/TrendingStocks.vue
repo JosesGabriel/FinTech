@@ -12,7 +12,7 @@
         <v-list-item class="px-0">
           <v-list-item-content class="pt-0">
             <div v-for="n in 4" :key="n" class="pb-3">
-              <v-list-item-title class="body-2 d-flex justify-space-between"
+              <v-list-item-title class="caption d-flex justify-space-between"
                 ><span>DNL</span><span>1.06</span></v-list-item-title
               >
               <v-list-item-subtitle

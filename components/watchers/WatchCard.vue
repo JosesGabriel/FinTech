@@ -24,9 +24,9 @@
             <span
               :class="
                 stockCurrentChange > 0
-                  ? 'watchlistCard__text--green'
+                  ? 'success--text'
                   : stockCurrentChange < 0
-                  ? 'watchlistCard__text--red'
+                  ? 'error--text'
                   : 'watchlistCard__text--gray'
               "
             >
@@ -75,13 +75,6 @@
 }
 .watchlistCard__bar--red {
   background-color: #f44336;
-}
-.watchlistCard__text--green,
-.watchlistCard__header--percent {
-  color: #03dac5;
-}
-.watchlistCard__text--red {
-  color: #f44336;
 }
 .watchlistCard__text--gray {
   color: gray;
