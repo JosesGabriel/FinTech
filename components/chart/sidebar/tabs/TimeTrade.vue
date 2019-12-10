@@ -4,7 +4,7 @@
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
-      style="height: calc(100vh - 490px)"
+      :style="`height: calc(100vh - ${responsive_height}px)`"
       class="card__timetrade pl-1 pr-2"
       flat
     >
@@ -13,7 +13,7 @@
         :dark="lightSwitch == 1"
         fixed-header
         :style="{ background: cardbackground }"
-        height="calc(100vh - 490px)"
+        :height="`calc(100vh - ${responsive_height}px)`"
       >
         <thead>
           <tr>
@@ -75,7 +75,8 @@ export default {
     ...mapGetters({
       symbolid: "chart/symbolid",
       index: "chart/index",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      responsive_height: "chart/responsive_height"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -89,6 +90,8 @@ export default {
     }
   },
   mounted() {
+    //console.log("responsive height");
+    //console.log(this.responsive_height);
     this.initTimetrade(this.symbolid);
   },
   methods: {

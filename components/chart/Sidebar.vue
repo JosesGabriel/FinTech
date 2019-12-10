@@ -2,7 +2,7 @@
   <v-content :style="{ background: cardbackground }">
     <v-card
       :loading="loading"
-      style="height:200px"
+      style="height:220px"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       elevation="2"
       flat

@@ -102,7 +102,7 @@ export default {
   height: 16px;
 }
 .tab__height {
-  height: calc(100vh - 290px);
+  height: calc(100vh - 310px);
 }
 .theme--dark.v-icon {
   color: #03dac5;

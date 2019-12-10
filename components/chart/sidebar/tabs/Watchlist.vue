@@ -153,8 +153,8 @@ export default {
       window.open(routeData.href, "_blank");
     },
     changeStock: stock => {
-      console.log("stock selected");
-      console.log(stock.id);
+      // console.log("stock selected");
+      // console.log(stock.id);
     },
     ...mapActions({
       setSymbolID: "chart/setSymbolID"
@@ -204,7 +204,8 @@ export default {
   cursor: pointer;
 }
 .content__card-watchlist {
-  height: calc(100vh - 315px);
+  /* ${responsive_height - 175} */
+  height: calc(100vh - 335px);
   overflow-x: auto;
 }
 

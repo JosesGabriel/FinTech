@@ -6,7 +6,7 @@
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
       class="pl-3 pr-2"
-      style="height: calc(100vh - 315px)"
+      :style="`height: calc(100vh - ${responsive_height - 175}px)`"
       flat
       tile
     >
@@ -17,10 +17,9 @@
         dense
         :dark="lightSwitch == 1"
         fixed-header
-        calculate-widths
         disable-pagination
         hide-default-footer
-        height="calc(100vh - 315px)"
+        :height="`calc(100vh - ${responsive_height - 175}px)`"
         :style="{ background: cardbackground }"
       >
         <!-- <template #item.symbol="{item}">
@@ -125,7 +124,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      responsive_height: "chart/responsive_height"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
