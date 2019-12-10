@@ -5,7 +5,7 @@
     :dark="lightSwitch == 0 ? false : true"
     outlined
   >
-    <v-card-text class="pa-0 pl-2">
+    <div class="pa-0 pl-2">
       <div class="body-2 font-weight-black">Suggested Traders</div>
       <v-divider></v-divider>
       <v-list class="transparent">
@@ -15,10 +15,11 @@
               <v-img src="test.jpg"></v-img>
             </v-avatar>
           </div>
-          <div class="no-wrap overline">
-            <span>Lakeith Hathfield</span><br />
-            <span>420 Friends</span>
+          <div class="no-wrap caption">
+            <span class="font-weight-medium">Lakeith Hathfield</span><br />
+            <span style="font-size: 11px;">420 Friends</span>
           </div>
+          <v-spacer></v-spacer>
           <div>
             <v-btn icon color="success"
               ><v-icon>mdi-account-multiple-plus</v-icon></v-btn
@@ -29,7 +30,7 @@
           Show more
         </router-link>
       </v-list>
-    </v-card-text>
+    </div>
   </v-card>
 </template>
 <style scoped>

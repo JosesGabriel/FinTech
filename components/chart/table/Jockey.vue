@@ -27,7 +27,7 @@
             <th class="text-left" style="padding-bottom: 5px !important; border-bottom: 1px solid #414f58 !important;"></th>
           </tr>
           <tr class="ma-0 pa-0">
-            <th class="text-left">Broker</th>
+            <th class="text-left j_header" @click="sortArray('broker_code')">Broker</th>
             <th class="text-right j_header" @click="sortArray('buy_volume')" >Volume</th>
             <th class="text-right j_header"  @click="sortArray('buy_avprice')" >Ave. Price</th>
             <th class="text-right">Value</th>

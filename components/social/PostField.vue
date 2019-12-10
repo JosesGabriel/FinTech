@@ -1,13 +1,12 @@
 <template>
   <v-card
     class="pa-4 transparent__bg pb-3"
-    color="#142a46"
     :dark="lightSwitch == 0 ? false : true"
     :loading="loader"
     outlined
   >
     <v-form enctype="multipart/form-data">
-      <v-avatar size="38" class="postField__avatar">
+      <v-avatar size="45" class="postField__avatar">
         <img
           alt="Avatar"
           :src="
@@ -130,7 +129,7 @@
             small
             right
             absolute
-            color="primary"
+            color="success"
             :disabled="!postFieldModel"
             @click="postField__submit"
           >
