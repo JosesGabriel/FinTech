@@ -99,7 +99,7 @@ export default {
   color: #e5e5e5;
 }
 .v-data-table--dense td {
-  height: 16px;
+  height: 20px !important;
 }
 .tab__height {
   height: calc(100vh - 310px);
