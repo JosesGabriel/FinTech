@@ -3,8 +3,8 @@
     <div class="sub__title">Bid and Ask</div>
     <!-- bid and ask -->
     <v-card
-      :dark="lightSwitch == true"
-      :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
       style="height:105px;"
       flat
@@ -12,7 +12,7 @@
     >
       <v-simple-table
         dense
-        :dark="lightSwitch == true"
+        :dark="lightSwitch == 1"
         fixed-header
         :style="{ background: cardbackground }"
         height="105px"
@@ -184,5 +184,11 @@ export default {
 }
 .custom_table tr {
   height: 5px !important;
+}
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
 }
 </style>

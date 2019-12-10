@@ -1,8 +1,8 @@
 <template>
   <v-content>
     <v-card
-      :dark="lightSwitch == true"
-      :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
       style="height: calc(100vh - 490px)"
       class="card__timetrade pl-1 pr-2"
@@ -10,7 +10,7 @@
     >
       <v-simple-table
         dense
-        :dark="lightSwitch == true"
+        :dark="lightSwitch == 1"
         fixed-header
         :style="{ background: cardbackground }"
         height="calc(100vh - 490px)"
@@ -37,10 +37,10 @@
         </thead>
         <tbody>
           <tr v-for="item in trades" :key="item.id" class="tr_custom">
-            <td class="pl-2" style="width:55px;">
-              {{ $moment(item.timestamp).format("hh:mm A") }}
+            <td class="pl-2" style="width:40px;">
+              {{ $moment(item.timestamp).format("HH:mm") }}
             </td>
-            <td class="text-right" style="width:45px;">
+            <td class="text-right" style="width:40px;">
               {{ item.executed_volume | numeral("0.0a") }}
             </td>
             <td class="text-right" style="width:40px;">
@@ -117,5 +117,11 @@ export default {
 <style scoped>
 .tr_custom {
   line-height: 0.1rem !important;
+}
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
 }
 </style>
