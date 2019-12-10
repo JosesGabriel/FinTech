@@ -25,7 +25,13 @@
                 >
                   Log In
                 </v-btn>
-                <v-btn block outlined rounded color="success">
+                <v-btn
+                  block
+                  outlined
+                  rounded
+                  color="success"
+                  @click="stepper = 3"
+                >
                   Sign up for free
                 </v-btn>
               </div>

@@ -10,53 +10,45 @@
       color="transparent"
       floating
     >
-      <v-list>
-        <v-list-item>
-          <router-link to="/user">
-            <v-list-item-avatar>
-              <v-img
-                :src="
-                  $auth.loggedIn
-                    ? $auth.user.data.user.profile_image
-                    : 'default.png'
-                "
-              ></v-img>
-            </v-list-item-avatar>
-          </router-link>
-
-          <v-list-item-content>
-            <v-list-item-title class="caption"
-              ><strong>
-                {{
-                  $auth.loggedIn
-                    ? $auth.user.data.user.first_name +
-                      " " +
-                      $auth.user.data.user.last_name
-                    : "Guest"
-                }}
-              </strong>
-            </v-list-item-title>
-            <v-list-item-subtitle class="caption"
-              >@{{
-                $auth.loggedIn ? $auth.user.data.user.username : "Guest"
-              }}</v-list-item-subtitle
-            >
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
       <v-list nav dense rounded>
         <v-list-item-group>
+          <router-link to="/" class="navbar__links">
+            <v-list-item>
+              <v-list-item-avatar class="mr-4" size="24">
+                <v-img
+                  :src="
+                    $auth.loggedIn
+                      ? $auth.user.data.user.profile_image
+                      : 'default.png'
+                  "
+                ></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content
+                ><v-list-item-title class="font-weight-black">
+                  {{
+                    $auth.loggedIn
+                      ? $auth.user.data.user.first_name +
+                        " " +
+                        $auth.user.data.user.last_name
+                      : "Guest"
+                  }}</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
           <router-link to="/" class="navbar__links">
             <v-list-item
               :class="active == 'social' ? 'v-list-item--active' : ''"
               :color="active == 'social' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon color="#b6b6b6">mdi-account-supervisor-circle</v-icon>
+                <v-icon :color="active == 'social' ? 'success' : '#b6b6b6'"
+                  >mdi-account-supervisor-circle</v-icon
+                >
                 <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title
+                ><v-list-item-title class="font-weight-black"
                   >Social Wall</v-list-item-title
                 ></v-list-item-content
               >
@@ -71,10 +63,13 @@
                 <!-- <v-icon color="#bfb538"
                   >mdi-chart-bar</v-icon
                 > -->
-                <img src="/icon/navbar-icons/chart.svg" width="20" />
+                <!-- <img src="/icon/navbar-icons/chart.svg" width="20" /> -->
+                <v-icon :color="active == 'chart' ? 'success' : '#b6b6b6'"
+                  >mdi-chart-bar</v-icon
+                >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title
+                ><v-list-item-title class="font-weight-medium"
                   >Interactive Chart</v-list-item-title
                 ></v-list-item-content
               >
@@ -87,11 +82,13 @@
               :color="active == 'journal' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon color="#b6b6b6">mdi-library-books</v-icon>
+                <v-icon :color="active == 'journal' ? 'success' : '#b6b6b6'"
+                  >mdi-library-books</v-icon
+                >
                 <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title
+                ><v-list-item-title class="font-weight-medium"
                   >Trading Journal</v-list-item-title
                 ></v-list-item-content
               >
@@ -104,13 +101,17 @@
               :color="active == 'virtualtrade' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <img
+                <!-- <img
                   src="/icon/journal-icons/mdi-eye-plus-outline.svg"
                   width="25"
-                />
+                /> -->
+                <v-icon
+                  :color="active == 'virtualtrade' ? 'success' : '#b6b6b6'"
+                  >mdi-cloud-print-outline</v-icon
+                >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title
+                ><v-list-item-title class="font-weight-medium"
                   >Virtual Trading</v-list-item-title
                 ></v-list-item-content
               >
@@ -123,10 +124,12 @@
               :color="active == 'game' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#b6b6b6">mdi-gamepad</v-icon></v-list-item-icon
+                ><v-icon :color="active == 'game' ? 'success' : '#b6b6b6'"
+                  >mdi-gamepad</v-icon
+                ></v-list-item-icon
               >
               <v-list-item-content
-                ><v-list-item-title
+                ><v-list-item-title class="font-weight-medium"
                   >Games</v-list-item-title
                 ></v-list-item-content
               >
@@ -138,12 +141,12 @@
               :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon color="#b6b6b6"
+                ><v-icon :color="active == 'watchlist' ? 'success' : '#b6b6b6'"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
               <v-list-item-content
-                ><v-list-item-title
+                ><v-list-item-title class="font-weight-medium"
                   >Watchlist</v-list-item-title
                 ></v-list-item-content
               >
@@ -154,7 +157,9 @@
               <v-icon color="#b6b6b6">mdi-dots-horizontal</v-icon>
             </v-list-item-icon>
             <v-list-item-content
-              ><v-list-item-title>More</v-list-item-title></v-list-item-content
+              ><v-list-item-title class="font-weight-medium"
+                >More</v-list-item-title
+              ></v-list-item-content
             >
           </v-list-item>
         </v-list-item-group>
@@ -165,11 +170,14 @@
           </v-list-item-icon>
           <v-list-item @click.stop="buySellDialog = true">
             <v-list-item-icon class="mr-4">
-              <img src="/icon/navbar-icons/buySellCalculator.svg" width="25" />
+              <!-- <img src="/icon/navbar-icons/buySellCalculator.svg" width="25" /> -->
+              <v-icon color="#b6b6b6">mdi-calculator-variant</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>Buy/Sell Calculator</v-list-item-title>
+              <v-list-item-title class="font-weight-medium"
+                >Buy/Sell Calculator</v-list-item-title
+              >
             </v-list-item-content>
             <v-dialog v-model="buySellDialog" max-width="290">
               <BuySellCalculator />
@@ -177,11 +185,14 @@
           </v-list-item>
           <v-list-item @click.stop="varDialog = true">
             <v-list-item-icon class="mr-4">
-              <img src="/icon/navbar-icons/varCalculator.svg" width="25" />
+              <!-- <img src="/icon/navbar-icons/varCalculator.svg" width="25" /> -->
+              <v-icon color="#b6b6b6">mdi-alert-outline</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>VAR Calculator</v-list-item-title>
+              <v-list-item-title class="font-weight-medium"
+                >VAR Calculator</v-list-item-title
+              >
             </v-list-item-content>
             <v-dialog v-model="varDialog" max-width="320">
               <VARCalculator :data="varDialog" />
@@ -196,7 +207,9 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>Average Price Calculator</v-list-item-title>
+              <v-list-item-title class="font-weight-medium"
+                >Average Price Calculator</v-list-item-title
+              >
             </v-list-item-content>
             <v-dialog v-model="averagePriceDialog" max-width="290">
               <AveragePriceCalculator />
@@ -208,7 +221,9 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>Multicharts</v-list-item-title>
+              <v-list-item-title class="font-weight-medium"
+                >Multicharts</v-list-item-title
+              >
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -229,6 +244,9 @@
 }
 .v-list-item--active::before {
   opacity: 0;
+}
+.v-list-item--active .v-list-item__content .v-list-item__title {
+  font-weight: bold;
 }
 </style>
 <script>

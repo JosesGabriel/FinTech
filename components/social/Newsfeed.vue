@@ -21,7 +21,7 @@
     >
       <!-- Start of Post Header -->
       <v-list-item>
-        <v-list-item-avatar class="mr-2">
+        <v-list-item-avatar class="mr-2" size="42">
           <img
             :src="
               postsObject[n - 1].user.profile_image
@@ -152,7 +152,7 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="body-1 px-5 pb-3">
+          <span v-else class="body-2 px-5 pb-3">
             {{ postsObject[n - 1].content }}
           </span>
 
@@ -161,7 +161,7 @@
       </v-list-item>
       <!-- End of Post Body -->
       <v-divider></v-divider>
-      <v-card-actions class="pl-5">
+      <v-card-actions class="pl-5 py-1">
         <v-btn
           icon
           outlined
@@ -295,7 +295,7 @@
       </v-list-item>
       <!-- Start of Comment -->
       <v-list-item class="ma-0">
-        <v-list-item-avatar>
+        <v-list-item-avatar size="28" class="mr-2">
           <v-img
             :src="
               $auth.loggedIn
@@ -312,7 +312,7 @@
             hide-details
             label="Write a comment..."
             color="primary"
-            :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+            :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
             :dark="lightSwitch == 0 ? false : true"
             @keyup.enter="
               postComment(postsObject[n - 1].id, commentField[n - 1], n - 1)
