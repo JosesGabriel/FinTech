@@ -26,11 +26,14 @@
     >
       <v-card
         v-for="(item, key) in items"
+        :id="`watch__${item.id}`"
         :key="item.id"
         tile
         flat
-        :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-        class="mb-1"
+        :color="item.color ? '#DADADA' : ''"
+        class="mb-1 pt-1"
+        @mouseover.native="item.color = true"
+        @mouseleave.native="item.color = false"
       >
         <div class="watchlist__top">
           <div class="top__left pl-2">
@@ -98,7 +101,8 @@ export default {
           description: "Jollibee Foods Corp.",
           value: "232.23",
           volume: "-0.20(0.10%)",
-          changetype: 2
+          changetype: 2,
+          color: false
         },
         {
           id: "29235365000773632",
@@ -106,7 +110,8 @@ export default {
           description: "Pal Holdings Inc.",
           value: "31.23",
           volume: "0.20(0.09%)",
-          changetype: 1
+          changetype: 1,
+          color: false
         }
         // {
         //   id: 3,
@@ -180,6 +185,16 @@ export default {
 </script>
 
 <style scoped>
+.theme--light.v-card {
+  background-color: #f2f2f2;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.theme--dark.v-card {
+  background-color: #00121e;
+  color: #fff;
+}
+
 .sub__title {
   display: flex;
 }
@@ -234,7 +249,9 @@ export default {
   height: calc(100vh - 335px);
   overflow-x: auto;
 }
-
+.hoverwatch {
+  background: pink !important;
+}
 .increase {
   color: #03dac5 !important;
   font-size: 11px;
