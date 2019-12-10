@@ -1,7 +1,7 @@
 <template>
   <v-col class="pa-0">
     <v-content class="content__vynduebutton pl-2">
-        <img class="img__vyndue" src="/icon/vyndue.svg" title="Vyndue"></img
+        <img class="img__vyndue" src="/icon/vyndue2.svg" title="Vyndue"></img
       >
     </v-content>
     <v-content class="content__btncontainer">

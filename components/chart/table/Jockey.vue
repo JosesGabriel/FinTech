@@ -11,7 +11,6 @@
       hide-default-footer
       :height="`${tablesize}`"
       :style="{ background: cardbackground }"
-    
     >
       <template v-slot:default>
         <thead>
@@ -43,7 +42,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in jockey" :key="item.broker_code">
+          <tr v-for="item in jockey" :key="item.broker_code">        
             <td style="width:200px;">
                 <div style="font-weight: bold; padding-top: 3px;">{{ item.broker_code }}</div>
                 <div class="broker_desc">{{ item.broker_description }}</div>
@@ -60,6 +59,7 @@
             <td class="text-center" style="width:20px;"></td>
             <td class="text-right">{{ addcomma(item.net_volume) }}</td>
             <td :class="(item.net_volume > 0 ? 'positive' : item.net_volume < 0 ? 'negative' : '' )" class="text-right pr-2">{{ addcomma(item.net_value) }}</td>
+           
           </tr>
         </tbody>
       </template>
@@ -77,6 +77,7 @@ export default {
       jockey: [],
       desc: true,
       current: 0,
+      hover: false,
     };
   },
   computed: {
@@ -136,8 +137,11 @@ export default {
             this.jockey[i].net_volume = this.jockey[i].net.volume;
             this.jockey[i].net_value =this.jockey[i].net.value;     
          }
-
+        this.desc = true;
+        this.sortArray('buy_volume');
       });
+
+      
   },
   methods: {
 
@@ -180,6 +184,8 @@ export default {
             this.jockey[i].net_volume = this.jockey[i].net.volume;
             this.jockey[i].net_value =this.jockey[i].net.value;     
          }
+         this.desc = true;
+         this.sortArray('buy_volume');
         });
     },
     sortArray(data){
@@ -225,6 +231,14 @@ export default {
 
 .v-data-table--fixed-header thead tr:nth-child(2) th {
     top: 25px;
+}
+.hover_active {
+    background-color: #b6b6b6 !important;
+    opacity: 20%;
+}
+.hover_inactive {
+    background-color: unset;
+    opacity: unset;
 }
 
 .theme--light.v-tabs-items {
