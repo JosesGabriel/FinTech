@@ -198,6 +198,6 @@ export default {
   padding: 0;
   padding-left: 10px;
   font-weight: bold;
-  font-size: 10px;
+  font-size: 11px;
 }
 </style>

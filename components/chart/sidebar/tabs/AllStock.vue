@@ -1,6 +1,14 @@
 <template>
   <v-content>
-    <div class="sub__title">All Stock</div>
+    <div
+      class="sub__title"
+      :class="[
+        { 'black--text': lightSwitch == 0 },
+        { 'white--text': lightSwitch == 1 }
+      ]"
+    >
+      All Stock
+    </div>
     <v-card
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"

@@ -1,6 +1,12 @@
 <template>
   <v-content>
-    <div class="sub__title">
+    <div
+      class="sub__title"
+      :class="[
+        { 'black--text': lightSwitch == 0 },
+        { 'white--text': lightSwitch == 1 }
+      ]"
+    >
       <div class="title__left">Watchlist</div>
       <div class="title__right">
         <v-icon size="15" class="icon__add-watchlist" @click="addWatchlist"
