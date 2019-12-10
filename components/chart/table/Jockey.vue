@@ -3,7 +3,7 @@
   <v-col class="pa-0 mt-3">
 
     <v-simple-table
-      class="data_table-container jockey_table mt-2 ml-2 mr-2"
+      class="data_table-container jockey_table mt-2 ml-3 mr-2"
       dense
       :dark="lightSwitch == true"
       disable-pagination
@@ -16,50 +16,50 @@
       <template v-slot:default>
         <thead>
           <tr  class="ma-0 pb-1">
-            <th class="text-left" style="padding-bottom: 5px !important;"></th>
-            <th colspan="4" class="text-left j_header" @click="sortArray('buy_volume')" style="padding-bottom: 5px !important; border-bottom: 2px solid #414f58 !important; font-size: 12px;font-weight: bold;">Buying</th>
+            <th class="text-left" style="padding-bottom: 6px !important;"></th>
+            <th colspan="4" class="text-left j_header" @click="sortArray('buy_volume')" style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;">Buying</th>
             <!--<th class="text-left" style="padding-bottom: 5px !important; border-bottom: 1px solid #414f58 !important;"></th>-->
             <th class="text-left"></th>
-            <th colspan="4" class="text-left j_header" @click="sortArray('sell_volume')" style="padding-bottom: 5px !important; border-bottom: 2px solid #414f58 !important; font-size: 12px;font-weight: bold;">Selling</th>
+            <th colspan="4" class="text-left j_header" @click="sortArray('sell_volume')" style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;">Selling</th>
             <!--<th class="text-left" style="padding-bottom: 5px !important; border-bottom: 1px solid #414f58 !important;"></th>-->
             <th class="text-left"></th>
-            <th colspan="2" class="text-left j_header" @click="sortArray('net_volume')" style="padding-bottom: 5px !important; border-bottom: 2px solid #414f58 !important; font-size: 12px;font-weight: bold;">Net</th>
+            <th colspan="2" class="text-left j_header" @click="sortArray('net_volume')" style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;">Net</th>
             <th class="text-left" style="padding-bottom: 5px !important; border-bottom: 1px solid #414f58 !important;"></th>
           </tr>
           <tr class="ma-0 pb-1">
-            <th class="text-left j_header secondary_color" @click="sortArray('broker_code')">Broker</th>
-            <th class="text-right j_header secondary_color" @click="sortArray('buy_volume')" >Volume</th>
-            <th class="text-right j_header secondary_color"  @click="sortArray('buy_avprice')" >Ave. Price</th>
-            <th class="text-right secondary_color">Value</th>
-            <th class="text-right secondary_color">Weight</th>
-            <th class="text-right"> </th>
-            <th class="text-right j_header secondary_color" @click="sortArray('sell_volume')" >Volume</th>
-            <th class="text-right j_header secondary_color"  @click="sortArray('sell_avprice')">Ave. Price</th>
-            <th class="text-right secondary_color">Value</th>
-            <th class="text-right secondary_color">Weight</th>
-             <th class="text-right"> </th>
-            <th class="text-right secondary_color">Net Volume</th>
-            <th class="text-right pr-2 secondary_color">Net Value</th>
+            <th class="text-left j_header secondary_color pt-2" @click="sortArray('broker_code')">Broker</th>
+            <th class="text-right j_header secondary_color pt-2" @click="sortArray('buy_volume')" >Volume</th>
+            <th class="text-right j_header secondary_color pt-2"  @click="sortArray('buy_avprice')" >Ave. Price</th>
+            <th class="text-right secondary_color pt-2">Value</th>
+            <th class="text-right secondary_color pt-2">Weight</th>
+            <th class="text-right pt-2"> </th>
+            <th class="text-right j_header secondary_color pt-2" @click="sortArray('sell_volume')" >Volume</th>
+            <th class="text-right j_header secondary_color pt-2"  @click="sortArray('sell_avprice')">Ave. Price</th>
+            <th class="text-right secondary_color pt-2">Value</th>
+            <th class="text-right secondary_color pt-2">Weight</th>
+             <th class="text-right pt-2"> </th>
+            <th class="text-right secondary_color pt-2">Net Volume</th>
+            <th class="text-right pr-2 secondary_color pt-2">Net Value</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in jockey" :key="item.broker_code">
             <td style="width:200px;">
-                <div style="font-weight: bold;">{{ item.broker_code }}</div>
-                <div class="broker_desc" style="padding-bottom: 1.5px;">{{ item.broker_description }}</div>
+                <div style="font-weight: bold; padding-top: 3px;">{{ item.broker_code }}</div>
+                <div class="broker_desc">{{ item.broker_description }}</div>
             </td>
             <td class="text-right">{{ addcomma(item.buy_volume) }}</td>
-            <td :class="(item.buy_avprice < current ? 'positive' : item.buy_avprice > current ? 'negative' : 'neutral' )" class="text-right">{{ addcomma(item.buy_avprice) }}</td>
+            <td :class="(item.buy_avprice < current ? 'positive' : item.buy_avprice > current ? 'negative' : '' )" class="text-right">{{ addcomma(item.buy_avprice) }}</td>
             <td class="text-right">{{ addcomma(item.buy_value) }}</td>
             <td class="text-right">{{ addcomma(item.buy_mweight) }}%</td>
             <td class="text-center" style="width:20px;"></td>
             <td class="text-right">{{ addcomma(item.sell_volume) }}</td>
-            <td :class="(item.sell_avprice > current ? 'positive' : item.sell_avprice < current ? 'negative' : 'neutral' )" class="text-right">{{ addcomma(item.sell_avprice) }}</td>
+            <td :class="(item.sell_avprice > current ? 'positive' : item.sell_avprice < current ? 'negative' : '' )" class="text-right">{{ addcomma(item.sell_avprice) }}</td>
             <td class="text-right">{{ addcomma(item.sell_value) }}</td>
             <td class="text-right">{{ addcomma(item.sell_mweight) }}%</td>
             <td class="text-center" style="width:20px;"></td>
             <td class="text-right">{{ addcomma(item.net_volume) }}</td>
-            <td :class="(item.net_volume > 0 ? 'positive' : item.net_volume < 0 ? 'negative' : 'neutral' )" class="text-right pr-2">{{ addcomma(item.net_value) }}</td>
+            <td :class="(item.net_volume > 0 ? 'positive' : item.net_volume < 0 ? 'negative' : '' )" class="text-right pr-2">{{ addcomma(item.net_value) }}</td>
           </tr>
         </tbody>
       </template>
@@ -231,13 +231,10 @@ export default {
   background: none;
 }
 .positive {
-  color: #00ffc3;
+  color: #03dac5;
 }
 .negative {
-  color: #fe4949;
-}
-.neutral {
-  color:  #b6b6b6;
+  color: #f44336;
 }
 .label {
   color: #a9a8a7;
@@ -256,7 +253,7 @@ export default {
   background: rgb(20, 42, 70) !important;
 }
 .broker_desc {
-  font-size: 9px;
+  font-size: 8px;
   width: 200px;
   white-space: nowrap;
   display: inline-block;
