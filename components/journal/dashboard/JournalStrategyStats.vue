@@ -10,10 +10,10 @@
             </v-card-title>
         </v-col>
         <v-col class="pa-0" cols="7" sm="7" md="7">
-            <JournalStrategyStatsLogs/>
+            <JournalStrategyStatsLogs :strategyStat="strategyStat"/>
         </v-col>
         <v-col class="pa-0" cols="5" sm="5" md="5">
-            <JournalWinLoss/>
+            <JournalWinLoss :strategyStat="strategyStat"/>
         </v-col>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-row>
@@ -25,6 +25,8 @@ import JournalStrategyStatsLogs from '~/components/journal/dashboard/JournalStra
 import JournalWinLoss from '~/components/journal/dashboard/JournalWinLoss'
 import shareModal from '~/components/modals/share'
 
+import { mapActions, mapGetters } from "vuex";
+
 export default {
     components: {
         JournalStrategyStatsLogs,
@@ -34,7 +36,33 @@ export default {
     data () {
         return {
             showScheduleForm: false,
+            strategyStat: null,
         }
-    }
+    },
+    computed: {
+        ...mapGetters({
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+            journalCharts: "journal/getJournalCharts",
+        }),
+    },
+    methods: {
+        getStrategyStat(){
+            if(this.journalCharts.length != 0) {
+                this.strategyStat = [this.journalCharts.meta.strategy_statistics]
+            }
+            console.log(this.strategyStat, 'data')
+            
+            this.componentKeys++;
+        }
+    },
+    mounted() {
+        this.getStrategyStat();
+    },
+    watch: {
+        renderPortfolioKey: function() {
+            this.getStrategyStat();
+        }
+    },
 }
 </script>

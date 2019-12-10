@@ -429,7 +429,8 @@ export default {
       defaultPortfolioId: "journal/getDefaultPortfolioId",
       userPortfolio: "journal/getUserPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey",
-      openPosition: "journal/getOpenPosition"
+      openPosition: "journal/getOpenPosition",
+      stockList: "global/getStockList"
     }),
     show: {
       get() {
@@ -445,6 +446,12 @@ export default {
   watch: {
     renderPortfolioKey: function() {
       this.getUserPortfolio();
+    },
+    stockList: function() {
+      this.initPortfolio();
+      
+      this.stocklist = this.stockList.data;
+      this.stocklistBuy = this.stockList.data;
     },
     GetSelectStock: function() {
       this.selectWatch();
@@ -470,37 +477,26 @@ export default {
     }
   },
   mounted() {
-    const params = {
-      exchange: "PSE",
-      status: "active"
-    };
-    this.$api.chart.stocks.list(params).then(
-      function(result) {
-        this.stocklist = result.data;
-        this.stocklistBuy = result.data;
-      }.bind(this)
-    );
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-
-    var dateTime = date+' '+time;
-    this.dateModel = dateTime
-
-    this.getUserPortfolio();
     
-    // if(this.openPosition != null) {
-    //   console.log(this.openPosition)
-    //   this.showSellTab = false
-    // } else {
-    //   this.showSellTab = true
-    // }
   },
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
+      setDefaultPortfolioId: "journal/setDefaultPortfolioId",
+      setStockList: "global/setStockList"
     }),
+    initPortfolio(){
+
+      var today = new Date();
+      
+      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+
+      var dateTime = date+' '+time;
+      this.dateModel = dateTime
+
+      this.getUserPortfolio();
+    },
     buyListArray: function() {
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",

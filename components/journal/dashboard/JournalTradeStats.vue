@@ -51,14 +51,33 @@
       apexcharts: VueApexCharts,
       shareModal
     },
+    computed: {
+      ...mapGetters({
+        renderPortfolioKey: "journal/getRenderPortfolioKey",
+        defaultPortfolioId: "journal/getDefaultPortfolioId",
+        journalCharts: "journal/getJournalCharts",
+      }),
+      winlossresult: function() {
+        return this.result = parseInt(this.win) + parseInt(this.loss);
+      },
+      winrateresult: function() {
+          let NaNcon = ((this.win * 100) / this.result).toFixed(0)
+          if ( NaNcon == 'NaN') {
+            return 0;
+          } else {
+            return ((this.win * 100) / this.result).toFixed(0)
+          }
+      }
+    },
     data () {
         return {    
           showScheduleForm: false,
+          tradeStaticsArr: null,
           journalchart: [],
-          win: 7,
-          loss: 3,
-          result: 3,
-          series: [7,3],
+          win: 0,
+          loss: 0,
+          result: 0,
+          series: [],
           chartOptions: {
             chart: {
               dropShadow: {
@@ -147,36 +166,35 @@
           }
       }
     },
-    computed: {
-      ...mapGetters({
-        renderPortfolioKey: "journal/getRenderPortfolioKey",
-        defaultPortfolioId: "journal/getDefaultPortfolioId",
-        journalCharts: "journal/getJournalCharts",
-      }),
-      winlossresult: function() {
-          return this.result = parseInt(this.win) + parseInt(this.loss);
-      },
-      winrateresult: function() {
-          return ((this.win * 100) / this.result).toFixed(0)
+    methods: {
+      getJournalChart() {
+        this.tradeStaticsArr = this.journalCharts.meta
+        this.journalchart = []
+        if (this.journalCharts.length != 0) {
+          if (this.tradeStaticsArr != undefined || this.tradeStaticsArr.trade_statistics != undefined) {
+
+            for (let [key, value] of Object.entries(this.tradeStaticsArr.trade_statistics).slice(0, 2)) {
+              let arr = `${value}`
+              this.journalchart.push(parseFloat(arr))
+
+            }
+
+            this.win = this.journalchart[0]
+            this.loss = this.journalchart[1]
+            this.series = [...this.journalchart];
+          }
+        }
+        this.componentKeys++;
       }
+    },
+    mounted() {
+      this.getJournalChart();
     },
     watch: {
       renderPortfolioKey: function() {
-        this.getTradeStats();
+        this.getJournalChart();
       }
     },
-    methods: {
-      getTradeStats() {
-        this.journalchart = this.journalCharts
-        console.log(this.journalchart.meta.trade_statistics)
-        console.log(this.series)
-        
-        this.componentKeys++;
-      },
-    },
-    mounted() {
-      // this.getTradeStats();
-    }
   }
 </script>
 

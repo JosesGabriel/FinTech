@@ -29,6 +29,7 @@
     data () {
       return {
         showScheduleForm: false,
+        monthlyPerformance: null,
         series: [{
           name: 'Loss',
           data: [0,0,0,0,0,0,0,0,0,0,0,0]
@@ -95,7 +96,7 @@
               style: {
                 colors: '#b6b6b6',
                 fontSize: '12px',
-                fontFamily: 'Karla',
+                fontFamily: "'Nunito' !important",
                 cssClass: 'apexcharts-xaxis-label',
               }
             },
@@ -119,7 +120,7 @@
               style: {
                   color: '#b6b6b6',
                   fontSize: '12px',
-                  fontFamily: 'Karla',
+                  fontFamily: "'Nunito' !important",
                   cssClass: 'apexcharts-yaxis-label',
               },
               formatter: function (value) {
@@ -140,8 +141,9 @@
           tooltip: {
             y: {
               show: false,
-              formatter: function (val) {
-                return val
+              formatter: function (value) {
+                let val = (value/1).toFixed(2).replace('.', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
             },
             x: {
@@ -155,7 +157,7 @@
             },
             theme: false,
             style: {
-              fontFamily: 'Karla'
+              fontFamily: "'Nunito' !important"
             }
           }
         }
@@ -170,25 +172,27 @@
     },
     methods: {
       getMPerformance() {
-        const journalchartsparams = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-          fund: this.defaultPortfolioId,
-        };
-        this.$api.journal.portfolio.journalcharts(journalchartsparams).then(
-          function(result) {
+        this.monthlyPerformance = this.journalCharts.meta
+        if (this.journalCharts.length != 0){
+          console.log(this.monthlyPerformance)
+          if (this.monthlyPerformance != undefined || this.monthlyPerformance.monthly_performance != undefined) {
+            let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance
             this.$refs.monthlyPerformance.updateSeries([
               {
-                data: result.meta.monthly_performance
+                data: monthlyPerformanceArr
               }
             ]);
-          }.bind(this)
-        )
-        this.componentKeys++;
+          }
+        }
+      this.componentKeys++;
       },
       formatPrice(value) {
           let val = (value/1).toFixed(2).replace('.', '.')
           return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       }
+    },
+    mounted() {
+      this.getMPerformance();
     },
     watch: {
       renderPortfolioKey: function() {

@@ -1,3 +1,9 @@
 export default () => ({
-  lightSwitch: 0
+  //region configs
+  lightSwitch: 0,
+  //endregion configs
+
+  //region stock data
+  stockList: [],
+  //endregion stock data
 });
