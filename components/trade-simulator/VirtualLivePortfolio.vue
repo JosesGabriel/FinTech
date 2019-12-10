@@ -19,7 +19,8 @@
               :page.sync="page"
               hide-default-footer
               @page-count="pageCount = $event"
-              dark
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
               class="data_table-container pl-10 secondary--text"
             >
             <template v-slot:item.stock_id="{ item }"><span class="pl-3">{{ item.stock_id }}</span></template>
@@ -350,7 +351,11 @@ export default {
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
             simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
             simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
+            lightSwitch: "global/getLightSwitch",
             }),
+            cardbackground: function() {
+              return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+            },
     },
      mounted() {
        if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');   
