@@ -5,8 +5,8 @@
         <table
           id="table__left"
           :class="[
-            { darkmode__text: lightSwitch },
-            { lightmode__text: !lightSwitch }
+            { darkmode__text: lightSwitch == 1 },
+            { lightmode__text: lightSwitch == 0 }
           ]"
         >
           <tr>
@@ -53,8 +53,8 @@
         <table
           id="table__right"
           :class="[
-            { darkmode__text: lightSwitch },
-            { lightmode__text: !lightSwitch }
+            { darkmode__text: lightSwitch == 1 },
+            { lightmode__text: lightSwitch == 0 }
           ]"
         >
           <tr>
@@ -132,6 +132,10 @@ export default {
       stock: "chart/stock",
       lightSwitch: "global/getLightSwitch"
     })
+  },
+  mounted() {
+    // console.log("status");
+    // console.log(this.lightSwitch);
   }
 };
 </script>
@@ -163,7 +167,7 @@ export default {
 #table__left {
   width: 146px;
   font-size: 11px;
-  line-height: 11px;
+  line-height: 13px;
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -182,7 +186,7 @@ export default {
 #table__right {
   width: 140px;
   font-size: 11px;
-  line-height: 11px;
+  line-height: 13px;
   padding-right: 10px;
 }
 .tright__label {

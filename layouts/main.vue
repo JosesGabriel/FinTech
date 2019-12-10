@@ -27,12 +27,6 @@
 .transparent__bg {
   background-color: transparent !important;
 }
-.text--green {
-  color: #03dac5;
-}
-.text--red {
-  color: #f44336;
-}
 .text__secondary--light {
   color: #494949;
 }

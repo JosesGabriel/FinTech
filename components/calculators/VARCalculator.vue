@@ -146,10 +146,7 @@
   </v-card>
 </template>
 <style>
-.text--green {
-  color: #03dac5;
-}
-.text--red {
+.error--text {
   color: #f44336;
 }
 .text--gray {

@@ -14,13 +14,13 @@
       <div
         class="headline_description"
         :class="[
-          { darkmode__text: lightSwitch },
-          { lightmode__text: !lightSwitch }
+          { darkmode__text: lightSwitch == 1 },
+          { lightmode__text: lightSwitch == 0 }
         ]"
       >
         <div class="hcontainer_top">
           <span class="htitle">{{
-            $globalMethod.limitDisplayString(stock.description, 16, true)
+            $globalMethod.limitDisplayString(stock.description, 18, true)
           }}</span>
         </div>
         <div class="hcontainer_mid">
@@ -74,6 +74,12 @@ export default {
 </script>
 
 <style scoped>
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
+}
 div {
   margin: 0;
   padding: 0;

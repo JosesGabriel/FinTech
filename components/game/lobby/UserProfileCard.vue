@@ -18,7 +18,7 @@
         <div class="container py-0">
           <div class="row">
             <div class="col-12 profileCard__header--username py-0">
-              <span class="headline text--green font-weight-bold"
+              <span class="headline success--text font-weight-bold"
                 >{{ $auth.loggedIn ? $auth.user.data.user.username : "Guest" }}
               </span>
             </div>
@@ -49,7 +49,7 @@
               :style="lightSwitch == 0 ? 'color: black;' : 'color: white;'"
               >Winrate</span
             ><br />
-            <span class="title font-weight-medium text--green"
+            <span class="title font-weight-medium success--text"
               >{{ playerData.win_percentage }}%</span
             >
           </div>
@@ -57,7 +57,7 @@
             <span class="font-weight-black" :style="lightSwitch == 0 ? 'color: black;' : 'color: white;'"
               >Rank</span
             ><br />
-            <span class="title font-weight-medium text--green">{{
+            <span class="title font-weight-medium success--text">{{
               playerData.ranking
             }}</span>
           </div>
@@ -68,7 +68,7 @@
             >
               No. Of Games </span
             ><br />
-            <span class="title font-weight-medium text--green">{{
+            <span class="title font-weight-medium success--text">{{
               playerData.series_played_count
             }}</span>
           </div>

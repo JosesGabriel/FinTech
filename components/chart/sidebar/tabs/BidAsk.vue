@@ -1,10 +1,18 @@
 <template>
   <v-content>
-    <div class="sub__title">Bid and Ask</div>
+    <div
+      class="sub__title"
+      :class="[
+        { 'black--text': lightSwitch == 0 },
+        { 'white--text': lightSwitch == 1 }
+      ]"
+    >
+      Bid and Ask
+    </div>
     <!-- bid and ask -->
     <v-card
-      :dark="lightSwitch == true"
-      :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
       style="height:105px;"
       flat
@@ -12,7 +20,7 @@
     >
       <v-simple-table
         dense
-        :dark="lightSwitch == true"
+        :dark="lightSwitch == 1"
         fixed-header
         :style="{ background: cardbackground }"
         height="105px"
@@ -74,7 +82,15 @@
     <DepthBar />
 
     <!-- time and trades -->
-    <div class="sub__title">Time and Trade</div>
+    <div
+      class="sub__title"
+      :class="[
+        { 'black--text': lightSwitch == 0 },
+        { 'white--text': lightSwitch == 1 }
+      ]"
+    >
+      Time and Trade
+    </div>
     <TimeTrade />
 
     <!-- TransactionBar -->
@@ -184,5 +200,11 @@ export default {
 }
 .custom_table tr {
   height: 5px !important;
+}
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
 }
 </style>

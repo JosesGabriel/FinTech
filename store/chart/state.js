@@ -30,5 +30,6 @@ export default () => ({
       disabled: false
     }
   ],
-  trade_login: false
+  trade_login: false,
+  responsive_height: 510
 });

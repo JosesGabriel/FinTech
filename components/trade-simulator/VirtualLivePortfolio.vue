@@ -1,9 +1,9 @@
 <template>
     <v-col class="pa-0">
         <v-card-title class="text-left justify-left px-0 py-3 pt-5">
-            <h1 class="font-weight-regular subtitle-2" style="color:#fff;">
+            <!--<h1 class="font-weight-regular subtitle-2" style="color:#fff;">
               OPEN POSITION/S (PHP)
-            </h1>
+            </h1>-->
             <v-spacer></v-spacer>
             <v-btn rounded outlined color="#03dac5" dark class="text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
             <v-btn rounded outlined color="#03dac5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Trade</v-btn>
@@ -19,9 +19,11 @@
               :page.sync="page"
               hide-default-footer
               @page-count="pageCount = $event"
-              dark
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
               class="data_table-container pl-10 secondary--text"
             >
+            <template v-slot:item.stock_id="{ item }"><span class="pl-3">{{ item.stock_id }}</span></template>
             <template v-slot:item.Profit="{ item }"><span :class="(item.Profit > 0 ? 'positive' : item.Profit < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
             <template v-slot:item.Perf="{ item }"><span :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
             <template v-slot:item.action="{ item }">
@@ -349,7 +351,11 @@ export default {
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
             simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
             simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
+            lightSwitch: "global/getLightSwitch",
             }),
+            cardbackground: function() {
+              return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+            },
     },
      mounted() {
        if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');   
@@ -427,6 +433,14 @@ export default {
   .v-application .pl-4 {
       height: 24px;
   }
+  .v-data-table td {
+      font-size: 12px;
+  }
+  /*.theme--dark.v-data-table tbody tr:hover, .theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row){
+    background-color: #b6b6b6 !important;
+    opacity: 20%;
+  }*/
+
 .v-data-table.data_table-container .v-data-footer {
     border: none;
   }

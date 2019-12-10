@@ -106,7 +106,8 @@ export default {
 }
 #chart_body {
   /* background: #00121e !important; */
-  font-family: "Karla", sans-serif !important;
+  /*font-family: "Karla", sans-serif !important;*/
+  font-family: 'Nunito Sans', sans-serif !important;
 }
 .chart__container {
 }

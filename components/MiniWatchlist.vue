@@ -36,9 +36,9 @@
             <span
               :class="
                 stockData[index].change > 0
-                  ? 'watchlistCard__text--green'
+                  ? 'success--text'
                   : stockData[index].change < 0
-                  ? 'watchlistCard__text--red'
+                  ? 'error--text'
                   : 'watchlistCard__text--gray'
               "
               >{{ stockData[index] ? stockData[index].change : "" }}%</span
@@ -57,11 +57,11 @@
   </v-card>
 </template>
 <style>
-.watchlistCard__text--green,
+.watchlistCard__success--text,
 .watchlistCard__header--percent {
   color: #03dac5;
 }
-.watchlistCard__text--red {
+.watchlistCard__error--text {
   color: #f44336;
 }
 .watchlistCard__text--gray {
@@ -98,7 +98,7 @@ export default {
             show: false
           },
           dropShadow: {
-            enabled: true,
+            enabled: false,
             opacity: 0.3,
             blur: 2,
             left: 3,

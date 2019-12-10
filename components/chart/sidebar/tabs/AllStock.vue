@@ -1,12 +1,20 @@
 <template>
   <v-content>
-    <div class="sub__title">All Stock</div>
+    <div
+      class="sub__title"
+      :class="[
+        { 'black--text': lightSwitch == 0 },
+        { 'white--text': lightSwitch == 1 }
+      ]"
+    >
+      All Stock
+    </div>
     <v-card
-      :dark="lightSwitch == true"
-      :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
       class="pl-3 pr-2"
-      style="height: calc(100vh - 315px)"
+      :style="`height: calc(100vh - ${responsive_height - 170}px)`"
       flat
       tile
     >
@@ -15,12 +23,11 @@
         :items="stocks"
         class="data_table-container custom_table"
         dense
-        :dark="lightSwitch == true"
+        :dark="lightSwitch == 1"
         fixed-header
-        calculate-widths
         disable-pagination
         hide-default-footer
-        height="calc(100vh - 315px)"
+        :height="`calc(100vh - ${responsive_height - 160}px)`"
         :style="{ background: cardbackground }"
       >
         <!-- <template #item.symbol="{item}">
@@ -30,8 +37,8 @@
           <tr
             class="tr_custom"
             :class="[
-              { darkmode__text: lightSwitch },
-              { lightmode__text: !lightSwitch }
+              { darkmode__text: lightSwitch == 1 },
+              { lightmode__text: lightSwitch == 0 }
             ]"
             @click="setSymbolID(props.item.stockidstr)"
           >
@@ -42,8 +49,7 @@
               <span
                 :class="[
                   { increase: props.item.change > 0 },
-                  { decrease: props.item.change < 0 },
-                  { neutral: props.item.change == 0 }
+                  { decrease: props.item.change < 0 }
                 ]"
               >
                 {{ props.item.last | numeral("0.0a") }}
@@ -53,8 +59,7 @@
               <span
                 :class="[
                   { increase: props.item.change > 0 },
-                  { decrease: props.item.change < 0 },
-                  { neutral: props.item.change == 0 }
+                  { decrease: props.item.change < 0 }
                 ]"
               >
                 {{ props.item.changepercentage | numeral("0,0.00") }}
@@ -125,7 +130,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      responsive_height: "chart/responsive_height"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -140,6 +146,12 @@ export default {
 </script>
 
 <style scoped>
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
+}
 .tr_custom {
   line-height: 0.1rem !important;
   cursor: pointer;
