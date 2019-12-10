@@ -20,9 +20,10 @@
       outlined
     >
       <!-- Start of Post Header -->
-      <v-list-item>
-        <v-list-item-avatar class="mr-2">
+      <v-list-item class="pt-1">
+        <v-list-item-avatar class="mr-2" size="42">
           <img
+            class="avatar__border"
             :src="
               postsObject[n - 1].user.profile_image
                 ? postsObject[n - 1].user.profile_image
@@ -39,82 +40,109 @@
                   {{ postsObject[n - 1].user.last_name }}</strong
                 ></v-list-item-title
               >
-              <v-list-item-subtitle class="overline"
+              <v-list-item-subtitle class="overline no-transform"
                 >{{
                   $moment(postsObject[n - 1].created_at).format(
                     "MMM DD hh:mm A"
                   )
                 }}
                 <v-icon class="overline mt-0">mdi-earth</v-icon
-                ><span class="text--green"> Bullish</span></v-list-item-subtitle
+                ><span class="success--text post--sentiment pa-05">
+                  Bullish</span
+                ></v-list-item-subtitle
               >
             </v-col>
             <v-col class="text-right">
-              <!-- <v-btn icon fab small class="postOptions__btn" color="secondary">
+              <v-btn
+                icon
+                fab
+                small
+                class="postOptions__btn"
+                color="secondary"
+                @click="
+                  (postOptionsMode = !postOptionsMode), (currentEdit = n - 1)
+                "
+              >
                 <v-icon>mdi-dots-horizontal</v-icon>
-              </v-btn> -->
-              <v-dialog width="500">
-                <template v-slot:activator="{ on }">
+              </v-btn>
+              <div
+                v-if="
+                  postOptionsMode &&
+                    currentEdit == n - 1 &&
+                    postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
+                "
+              >
+                <div class="postOptions__dropdown--caret"></div>
+                <div class="postOptions__container">
+                  <v-dialog width="500">
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        v-if="
+                          postsObject[n - 1].user.uuid ==
+                            $auth.user.data.user.uuid
+                        "
+                        x-small
+                        text
+                        v-on="on"
+                      >
+                        Delete
+                      </v-btn>
+                    </template>
+
+                    <v-card
+                      :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+                      :dark="lightSwitch == 0 ? false : true"
+                    >
+                      <v-card-title
+                        class="headline success--text lighten-2"
+                        primary-title
+                      >
+                        Delete Post?
+                      </v-card-title>
+
+                      <v-card-text>
+                        Are you sure you want to permanently remove this post
+                        from Lyduz?
+                      </v-card-text>
+
+                      <v-divider></v-divider>
+
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <!-- <v-btn color="secondary" text @click="deleteDialog = false">
+                      Cancel
+                    </v-btn> -->
+                        <v-btn
+                          v-if="
+                            postsObject[n - 1].user.uuid ==
+                              $auth.user.data.user.uuid
+                          "
+                          text
+                          color="error"
+                          @click="
+                            deletePost(postsObject[n - 1].id, n - 1),
+                              (deleteDialog = false)
+                          "
+                          >Delete</v-btn
+                        >
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+
                   <v-btn
                     v-if="
                       postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
                     "
                     x-small
-                    icon
-                    v-on="on"
+                    text
+                    @click="
+                      (editPostMode = !editPostMode), (currentEdit = n - 1)
+                    "
+                    >Edit</v-btn
                   >
-                    <v-icon>mdi-delete</v-icon>
-                  </v-btn>
-                </template>
-
-                <v-card
-                  :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
-                  :dark="lightSwitch == 0 ? false : true"
-                >
-                  <v-card-title
-                    class="headline text--green lighten-2"
-                    primary-title
-                  >
-                    Delete Post?
-                  </v-card-title>
-
-                  <v-card-text>
-                    Are you sure you want to permanently remove this post from
-                    Lyduz?
-                  </v-card-text>
-
-                  <v-divider></v-divider>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-
-                    <!-- <v-btn color="secondary" text @click="deleteDialog = false">
-                      Cancel
-                    </v-btn> -->
-                    <v-btn
-                      v-if="
-                        postsObject[n - 1].user.uuid ==
-                          $auth.user.data.user.uuid
-                      "
-                      text
-                      color="error"
-                      @click="
-                        deletePost(postsObject[n - 1].id, n - 1),
-                          (deleteDialog = false)
-                      "
-                      >Delete</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-
-              <v-btn
-                v-if="postsObject[n - 1].user.uuid == $auth.user.data.user.uuid"
-                x-small
-                icon
-                @click="(editPostMode = !editPostMode), (currentEdit = n - 1)"
-                ><v-icon>mdi-comment-edit</v-icon></v-btn
-              >
+                </div>
+              </div>
             </v-col>
           </v-row>
         </v-list-item-content>
@@ -152,7 +180,7 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="body-1 px-5 pb-3">
+          <span v-else class="caption px-5 pb-3">
             {{ postsObject[n - 1].content }}
           </span>
 
@@ -161,38 +189,40 @@
       </v-list-item>
       <!-- End of Post Body -->
       <v-divider></v-divider>
-      <v-card-actions class="pl-5">
+      <v-card-actions class="pl-5 py-1">
         <v-btn
           icon
           outlined
           fab
-          x-small
+          width="24"
+          height="24"
           color="success"
           @click="post_react(postsObject[n - 1].id, 'bull')"
         >
-          <img src="/icon/bullish.svg" width="15" />
+          <img src="/icon/bullish.svg" width="12" />
         </v-btn>
-        <span class="px-2">{{ postsObject[n - 1].bulls_count }}</span>
+        <span class="px-2 caption">{{ postsObject[n - 1].bulls_count }}</span>
         <v-btn
           icon
           outlined
           fab
-          x-small
+          width="24"
+          height="24"
           color="error"
           @click="post_react(postsObject[n - 1].id, 'bear')"
         >
-          <img src="/icon/bearish.svg" width="15" />
+          <img src="/icon/bearish.svg" width="12" />
         </v-btn>
-        <span class="px-2">{{ postsObject[n - 1].bears_count }}</span>
+        <span class="px-2 caption">{{ postsObject[n - 1].bears_count }}</span>
         <v-spacer></v-spacer>
         <v-btn icon fab x-small color="secondary">
           <v-icon>mdi-comment-text-outline</v-icon>
         </v-btn>
-        <span>{{ postsObject[n - 1].comments_count }}</span>
+        <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
         <v-btn icon fab x-small color="secondary">
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
-        <span>1000</span>
+        <span class="caption">1000</span>
       </v-card-actions>
       <v-divider></v-divider>
       <v-list-item
@@ -205,6 +235,7 @@
           <v-list-item>
             <v-list-item-avatar>
               <img
+                class="avatar__border"
                 :src="
                   postsObject[n - 1].comments[k - 1]['user']['profile_image']
                     ? postsObject[n - 1].comments[k - 1]['user'][
@@ -216,7 +247,7 @@
             </v-list-item-avatar>
             <v-list-item-content class="pa-0 ma-0">
               <v-container class="pa-0 body-2">
-                <strong class="blue--text text--darken-2"
+                <strong class="text--darken-2"
                   >{{
                     postsObject[n - 1].comments[k - 1]["user"]["first_name"]
                   }}
@@ -224,23 +255,47 @@
                     postsObject[n - 1].comments[k - 1]["user"]["last_name"]
                   }}</strong
                 >
-                <span>{{ postsObject[n - 1].comments[k - 1].content }}</span>
+                <span class="caption">{{
+                  postsObject[n - 1].comments[k - 1].content
+                }}</span>
               </v-container>
               <v-container class="pa-0 ma-0">
-                <v-btn icon outlined fab x-small color="success">
-                  <img src="/icon/bullish.svg" width="15" />
+                <v-btn
+                  icon
+                  outlined
+                  fab
+                  width="21"
+                  height="21"
+                  color="secondary"
+                >
+                  <img
+                    src="/icon/bullish_secondary.svg"
+                    height="13"
+                    width="10"
+                  />
                 </v-btn>
-                <span class="px-2">0</span>
-                <v-btn icon outlined fab x-small color="error">
-                  <img src="/icon/bearish.svg" width="15" />
+                <span class="px-2 caption">0</span>
+                <v-btn
+                  icon
+                  outlined
+                  fab
+                  width="21"
+                  height="21"
+                  color="secondary"
+                >
+                  <img
+                    src="/icon/bearish_secondary.svg"
+                    height="13"
+                    width="10"
+                  />
                 </v-btn>
-                <span class="px-2">0</span>
+                <span class="px-2 caption">0</span>
                 <!-- | -->
                 <v-btn icon small depressed>
                   <v-icon>mdi-reply-outline</v-icon>
                 </v-btn>
                 <!-- | -->
-                <span class="px-2 overline">{{
+                <span class="px-2 overline no-transform">{{
                   $moment(postsObject[n - 1].comments[k - 1].created_at).format(
                     "MMM DD hh:mm A"
                   )
@@ -295,7 +350,7 @@
       </v-list-item>
       <!-- Start of Comment -->
       <v-list-item class="ma-0">
-        <v-list-item-avatar>
+        <v-list-item-avatar size="28" class="mr-2">
           <v-img
             :src="
               $auth.loggedIn
@@ -310,9 +365,10 @@
             dense
             rounded
             hide-details
-            label="Write a comment..."
+            placeholder="Write a comment..."
+            class="caption"
             color="primary"
-            :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+            :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
             :dark="lightSwitch == 0 ? false : true"
             @keyup.enter="
               postComment(postsObject[n - 1].id, commentField[n - 1], n - 1)
@@ -322,7 +378,7 @@
         </v-list-item-content>
       </v-list-item>
       <!-- End of Comment -->
-      <v-divider></v-divider>
+      <!-- <v-divider></v-divider> -->
 
       <!-- Start of Subcomment -->
 
@@ -344,6 +400,30 @@
 }
 .postOptions__btn::before {
   color: transparent;
+}
+.post--sentiment {
+  background: rgba(3, 218, 197, 0.2);
+  border-radius: 20px;
+}
+.postOptions__container {
+  position: absolute;
+  display: inline-grid;
+  background-color: #0c1a2b;
+  padding: 4px;
+  border-radius: 10px;
+  right: 4px;
+  top: 40px;
+  z-index: 1;
+}
+.postOptions__dropdown--caret {
+  width: 0;
+  height: 0;
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-bottom: 17px solid #0c1a2b;
+  position: absolute;
+  right: 18px;
+  top: 28px;
 }
 </style>
 <script>
@@ -380,7 +460,8 @@ export default {
       editPostMode: false,
       editTextAreaModel: [],
       currentEdit: 0,
-      deleteDialog: false
+      deleteDialog: false,
+      postOptionsMode: false
     };
   },
   computed: {

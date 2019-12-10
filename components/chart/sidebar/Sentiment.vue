@@ -2,8 +2,8 @@
   <v-content
     class="template"
     :class="[
-      { darkmode__text: lightSwitch },
-      { lightmode__text: !lightSwitch }
+      { darkmode__text: lightSwitch == 1 },
+      { lightmode__text: lightSwitch == 0 }
     ]"
   >
     <div id="sentiment__caption">Members Sentiment</div>

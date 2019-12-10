@@ -39,5 +39,8 @@ export default {
   },
   market_code: state => {
     return state.market_code;
+  },
+  responsive_height: state => {
+    return state.responsive_height;
   }
 };

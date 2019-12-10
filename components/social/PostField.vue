@@ -1,14 +1,14 @@
 <template>
   <v-card
     class="pa-4 transparent__bg pb-3"
-    color="#142a46"
     :dark="lightSwitch == 0 ? false : true"
     :loading="loader"
     outlined
   >
     <v-form enctype="multipart/form-data">
-      <v-avatar size="38" class="postField__avatar">
+      <v-avatar size="45" class="postField__avatar">
         <img
+          class="avatar__border"
           alt="Avatar"
           :src="
             $auth.loggedIn ? $auth.user.data.user.profile_image : 'default.png'
@@ -19,12 +19,12 @@
         <v-textarea
           v-if="$auth.loggedIn"
           v-model="postFieldModel"
-          :label="
+          :placeholder="
             'Hey ' +
               $auth.user.data.user.username +
               ', penny for your thoughts?'
           "
-          class="pt-0"
+          class="pt-0 caption postField__textarea"
           rows="3"
           row-height="25"
           color="primary"
@@ -48,7 +48,7 @@
           :loading="postField__loading"
           >{{ postFieldModel }}</v-textarea
         >
-        <v-divider />
+        <v-divider class="postField__divider" />
         <div>
           <input
             ref="postField__inputRef"
@@ -103,7 +103,7 @@
             @click="onClickImageUploadBtn"
           >
             <v-icon color="success">mdi-image-outline</v-icon
-            ><span class="text--green">Photo</span>
+            ><span class="success--text">Photo</span>
           </v-btn>
           <v-btn
             class="postField__btn p-10"
@@ -113,7 +113,7 @@
             @click="onClickImageUploadBtn"
           >
             <img class="mr-1" src="/icon/video.svg" width="20" />
-            <span class="text--green">Video</span>
+            <span class="success--text">Video</span>
           </v-btn>
           <v-btn
             class="postField__btn"
@@ -122,7 +122,7 @@
             icon
           >
             <img class="mr-1" src="/icon/polls.svg" width="17" />
-            <span class="text--green">Polls</span>
+            <span class="success--text">Polls</span>
           </v-btn>
           <v-btn
             rounded
@@ -130,7 +130,7 @@
             small
             right
             absolute
-            color="primary"
+            color="success"
             :disabled="!postFieldModel"
             @click="postField__submit"
           >
@@ -151,6 +151,11 @@
   </v-card>
 </template>
 <style>
+.postField__divider {
+  position: absolute;
+  width: 526px;
+  left: 0px;
+}
 .postField__preview img,
 .postField__preview video {
   max-width: 100%;
@@ -193,6 +198,10 @@
 }
 .postField__imageWrapper--image {
   margin-left: -40px;
+}
+.postField__textarea {
+  position: relative;
+  bottom: 10px;
 }
 </style>
 <script>

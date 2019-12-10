@@ -5,8 +5,8 @@
       <span
         class="subtitle-1 font-weight-bold"
         :class="[
-          { darkmode__text: lightSwitch },
-          { lightmode__text: !lightSwitch }
+          { darkmode__text: lightSwitch == 1 },
+          { lightmode__text: lightSwitch == 0 }
         ]"
         >Start Trading</span
       >
@@ -16,7 +16,7 @@
         class="card__container d-flex justify-space-around mb-6 mt-6 px-12"
         :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         flat
-        :dark="lightSwitch == true"
+        :dark="lightSwitch == 1"
       >
         <v-card
           v-for="item in items_top"
@@ -42,7 +42,7 @@
         class="card__container d-flex justify-space-around mb-6 mt-6 px-12"
         :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         flat
-        :dark="lightSwitch == true"
+        :dark="lightSwitch == 1"
       >
         <v-card
           v-for="item in items_bottom"
@@ -71,13 +71,13 @@
           <v-card
             :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
             flat
-            :dark="lightSwitch == true"
+            :dark="lightSwitch == 1"
           >
             <v-content class="content__broker text-center">
               <v-card
                 id="card__broker"
                 flat
-                :dark="lightSwitch == true"
+                :dark="lightSwitch == 1"
                 :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
                 class="pa-2 mt-3 mb-2"
               >
@@ -159,8 +159,8 @@
       v-show="!show_brokers"
       class="pt-2"
       :class="[
-        { darkmode__text: lightSwitch },
-        { lightmode__text: !lightSwitch }
+        { darkmode__text: lightSwitch == 1 },
+        { lightmode__text: lightSwitch == 0 }
       ]"
     >
       <span class="mx-3 mb-3 body-2">Available Funds 100,000,000.00</span>
@@ -176,7 +176,7 @@
               min-width="165"
               min-height="70"
               :style="{ background: cardbackground }"
-              :dark="lightSwitch == true"
+              :dark="lightSwitch == 1"
             >
               <v-card-text class="pa-0">
                 <v-row class="ma-0">
@@ -184,8 +184,8 @@
                     <span
                       class="overline font-weight-bold"
                       :class="[
-                        { 'black--text': lightSwitch == false },
-                        { 'white--text': lightSwitch == true }
+                        { 'black--text': lightSwitch == 0 },
+                        { 'white--text': lightSwitch == 1 }
                       ]"
                       >{{ item.title }}</span
                     >
@@ -195,8 +195,8 @@
                   <v-col
                     class="text-right pa-0 pr-2 pt-2 body-1"
                     :class="[
-                      { 'black--text': !lightSwitch },
-                      { 'white--text': lightSwitch }
+                      { 'black--text': lightSwitch == 0 },
+                      { 'white--text': lightSwitch == 1 }
                     ]"
                     ><span v-show="item.php" class="overline">PHP</span
                     >{{ item.amount }}</v-col
@@ -210,17 +210,17 @@
           <v-container class="d-flex flex-row-reverse pa-0 pt-10 pr-3">
             <v-btn
               small
-              :color="lightSwitch == true ? 'lightchart' : 'darkchart'"
+              :color="lightSwitch == 1 ? 'lightchart' : 'darkchart'"
               outlined
-              :dark="lightSwitch == true"
+              :dark="lightSwitch == 1"
               class="caption ml-2"
               >BUY</v-btn
             >
             <v-btn
               small
-              :color="lightSwitch == true ? 'lightchart' : 'darkchart'"
+              :color="lightSwitch == 1 ? 'lightchart' : 'darkchart'"
               outlined
-              :dark="lightSwitch == true"
+              :dark="lightSwitch == 1"
               class="caption"
               >SELL</v-btn
             >
@@ -235,7 +235,7 @@
               class="select__trade ma-0 pa-0"
               item-color="success"
               append-icon="mdi-chevron-down"
-              background-color="#00FFC3"
+              background-color="#03dac5"
               label="Select Strategy"
               color="success"
               dense
@@ -246,7 +246,7 @@
               class="select__trade ma-0 pa-0"
               item-color="success"
               append-icon="mdi-chevron-down"
-              background-color="#00FFC3"
+              background-color="#03dac5"
               label="Select Trade Plan"
               color="success"
               dense
@@ -257,7 +257,7 @@
               class="select__trade ma-0 pa-0"
               item-color="success"
               append-icon="mdi-chevron-down"
-              background-color="#00FFC3"
+              background-color="#03dac5"
               label="Select Emotion"
               color="success"
               dense
@@ -271,7 +271,7 @@
               outlined
               no-resize
               color="success"
-              :dark="lightSwitch == true"
+              :dark="lightSwitch == 1"
               full-width
               height="110px"
               label="Notes"
@@ -285,7 +285,7 @@
           <v-btn
             small
             color="#03DAC5"
-            :dark="lightSwitch == true"
+            :dark="lightSwitch == 1"
             class="caption mt-2"
             >ENTER</v-btn
           >

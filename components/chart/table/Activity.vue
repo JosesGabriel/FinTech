@@ -1,8 +1,8 @@
 <template>
   <v-content
     :class="[
-      { darkmode__text: lightSwitch },
-      { lightmode__text: !lightSwitch }
+      { darkmode__text: lightSwitch == 1 },
+      { lightmode__text: lightSwitch == 0 }
     ]"
   >
     <div id="top">
@@ -86,7 +86,7 @@
           small
           :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
           depressed
-          :dark="lightSwitch == true"
+          :dark="lightSwitch == 1"
           class="caption font-weight-bold text-capitalize increase"
           >Filter</v-btn
         >
@@ -95,7 +95,7 @@
           small
           :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
           depressed
-          :dark="lightSwitch == true"
+          :dark="lightSwitch == 1"
           class="caption ml-12 font-weight-bold text-capitalize"
           >Day</v-btn
         >
@@ -104,7 +104,7 @@
           small
           :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
           depressed
-          :dark="lightSwitch == true"
+          :dark="lightSwitch == 1"
           class="caption font-weight-bold text-capitalize"
           >Week</v-btn
         >
@@ -113,7 +113,7 @@
           small
           :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
           depressed
-          :dark="lightSwitch == true"
+          :dark="lightSwitch == 1"
           class="caption font-weight-bold text-capitalize"
           >Month</v-btn
         >
@@ -122,7 +122,7 @@
           small
           :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
           depressed
-          :dark="lightSwitch == true"
+          :dark="lightSwitch == 1"
           class="caption font-weight-bold text-capitalize"
           >Year</v-btn
         >
@@ -130,7 +130,7 @@
           small
           :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
           depressed
-          :dark="lightSwitch == true"
+          :dark="lightSwitch == 1"
           class="caption font-weight-bold text-capitalize increase"
           >Custom</v-btn
         >
@@ -141,7 +141,7 @@
         :headers="headers"
         :items="items"
         class="data_table-container"
-        :dark="lightSwitch == true"
+        :dark="lightSwitch == 1"
         dense
         fixed-header
         calculate-widths
@@ -728,11 +728,11 @@ export default {
   height: 150px;
 }
 .tr_custom {
-  line-height: 2.3rem !important;
+  line-height: 2.0rem !important;
   cursor: pointer;
 }
 .positive {
-  color: #00ffc3;
+  color: #03dac5;
 }
 .negative {
   color: #fe4949;

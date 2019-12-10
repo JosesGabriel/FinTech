@@ -20,44 +20,43 @@
       :loading="loading"
       :max-height="`calc(100vh - ${responsive_height - 170}px)`"
       style="overflow-y: auto;"
-      class="mt-2"
       flat
       tile
     >
       <v-card
         v-for="(item, key) in items"
-        :id="`watch__${item.id}`"
         :key="item.id"
         tile
         flat
-        :color="onHoverEffect(item.color)"
-        class="mb-1 pt-1"
-        @mouseover.native="item.color = true"
-        @mouseleave.native="item.color = false"
+        :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+        class="mb-1"
       >
         <div class="watchlist__top">
           <div class="top__left pl-2">
-            <span
-              class="span__symbolid"
+            <v-btn
+              small
+              outlined
+              :color="lightSwitch == 1 ? 'lightchart' : 'darkchart'"
+              :dark="lightSwitch == 1"
+              style="border:none"
               @click="setSymbolID(item.id)"
               @dblclick="showRemoveButton(item)"
-              >{{ item.title }}</span
+              >{{ item.title }}</v-btn
             >
           </div>
           <div class="top__right pr-2">
-            <span class="">{{ item.value | numeral("0,0.00") }}</span>
+            <span>{{ item.value | numeral("0,0.00") }}</span>
           </div>
         </div>
         <div class="watchlist__bottom">
           <div class="bottom__left pl-2">
             <span
-              class="text-uppercase"
               :class="[
                 { darkmode__text: lightSwitch == 1 },
                 { lightmode__text: lightSwitch == 0 }
               ]"
               >{{
-                $globalMethod.limitDisplayString(item.description, 18, true)
+                $globalMethod.limitDisplayString(item.description, 16, true)
               }}</span
             >
           </div>
@@ -101,8 +100,7 @@ export default {
           description: "Jollibee Foods Corp.",
           value: "232.23",
           volume: "-0.20(0.10%)",
-          changetype: 2,
-          color: false
+          changetype: 2
         },
         {
           id: "29235365000773632",
@@ -110,8 +108,7 @@ export default {
           description: "Pal Holdings Inc.",
           value: "31.23",
           volume: "0.20(0.09%)",
-          changetype: 1,
-          color: false
+          changetype: 1
         }
         // {
         //   id: 3,
@@ -142,11 +139,6 @@ export default {
     }
   },
   methods: {
-    onHoverEffect: function(value) {
-      if (value == true) {
-        return this.lightSwitch == 0 ? "#e6e6e6" : "#142a46";
-      }
-    },
     showRemoveButton: function(item) {
       //   this.showColumn = !this.showColumn;
       //   let watch = document.getElementById(`watch_${item.id}`);
@@ -190,16 +182,6 @@ export default {
 </script>
 
 <style scoped>
-.theme--light.v-card {
-  background-color: #f2f2f2;
-  color: rgba(0, 0, 0, 0.87);
-}
-
-.theme--dark.v-card {
-  background-color: #00121e;
-  color: #fff;
-}
-
 .sub__title {
   display: flex;
 }
@@ -215,19 +197,14 @@ export default {
   display: flex;
   font-size: 11px;
 }
-
-.watchlist__top :hover {
-  /* background: red; */
-}
-
 .top__left {
   flex: 0 0 136px;
-  font-size: 16px;
+  font-size: 11px;
 }
 .top__right {
   flex: 0 0 136px;
   text-align: right;
-  font-size: 14px;
+  font-size: 11px;
 }
 .watchlist__bottom {
   display: flex;
@@ -236,15 +213,10 @@ export default {
   flex: 0 0 136px;
   color: #bbb;
   font-size: 11px;
-  margin-top: -4px;
-}
-.span__symbolid {
-  cursor: pointer;
 }
 .bottom__right {
   flex: 0 0 136px;
   text-align: right;
-  margin-top: -4px;
 }
 .icon__add-watchlist {
   cursor: pointer;
@@ -254,9 +226,7 @@ export default {
   height: calc(100vh - 335px);
   overflow-x: auto;
 }
-.hoverwatch {
-  background: pink !important;
-}
+
 .increase {
   color: #03dac5 !important;
   font-size: 11px;

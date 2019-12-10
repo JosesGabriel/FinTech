@@ -7,7 +7,7 @@
     ><div class="container pt-0 d-flex leaderboard__wrap transparent">
       <div class="row leaderboard__header">
         <div class="col-12 pa-0">
-          <span class="text--green subtitle-1">Leaderboard</span>
+          <span class="success--text subtitle-1">Leaderboard</span>
         </div>
       </div>
       <div

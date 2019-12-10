@@ -124,9 +124,7 @@
 .fullWidth {
   width: 100%;
 }
-.pa-05 {
-  padding: 2px;
-}
+
 </style>
 <script>
 export default {

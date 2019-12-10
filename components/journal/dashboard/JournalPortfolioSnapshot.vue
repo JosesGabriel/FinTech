@@ -86,23 +86,29 @@ export default {
     },
     methods: {
         getSnapshot() {
-            const snapshotparams = {
-                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                fund: this.defaultPortfolioId,
-            };
-            this.$api.journal.portfolio.snapshot(snapshotparams).then(response => {
-                let snapshot = response.meta.snapshot
-                this.startingCapital = snapshot.capital
-                this.yearTDPL = snapshot.PL
-                this.portfolioTDPL = snapshot.PL_percentage
-                this.Deposits = snapshot.deposits
-                this.Withdrawals = snapshot.withdraw
-            });
+            if (this.defaultPortfolioId != null) {
+                const snapshotparams = {
+                    user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                    fund: this.defaultPortfolioId,
+                };
+                this.$api.journal.portfolio.snapshot(snapshotparams).then(response => {
+                    let snapshot = response.meta.snapshot
+                    this.startingCapital = snapshot.capital
+                    this.yearTDPL = snapshot.PL
+                    this.portfolioTDPL = snapshot.PL_percentage
+                    this.Deposits = snapshot.deposits
+                    this.Withdrawals = snapshot.withdraw
+                });
+            }
+            this.componentKeys++;
         },
         formatPrice(value) {
             let val = (value/1).toFixed(2).replace('.', '.')
             return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         },
+    },
+    mounted() {
+        this.getSnapshot();
     },
     watch: {
         renderPortfolioKey: function() {

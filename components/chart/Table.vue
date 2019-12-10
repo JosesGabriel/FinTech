@@ -1,7 +1,7 @@
 <template>
   <v-col class="pa-0">
     <v-content class="content__vynduebutton pl-2">
-        <img class="img__vyndue" src="/icon/vyndue.svg" title="Vyndue"></img
+        <img class="img__vyndue" src="/icon/vyndue2.svg" title="Vyndue"></img
       >
     </v-content>
     <v-content class="content__btncontainer">
@@ -66,6 +66,7 @@
         :href="`#tab-${item.id}`"
         class="text-capitalize subtitle-1"
         @click="toggleTabs(item.id)"
+        style="font-size: .8rem !important;"
       >
         {{ item.title }}
       </v-tab>

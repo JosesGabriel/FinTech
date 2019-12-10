@@ -2,7 +2,7 @@
     <v-container class="py-0">
         <v-col class="pa-0" cols="12" sm="12" md="12">
             <div id="chart">
-                <apexcharts type=bar height=230 :options="chartOptions" :series="series" />
+                <apexcharts ref="lossersChart" type=bar height=230 :options="chartOptions" :series="series" />
             </div>
         </v-col>
     </v-container>
@@ -12,15 +12,29 @@
 
 import VueApexCharts from 'vue-apexcharts'
 
+import { mapActions, mapGetters } from "vuex";
+
 export default {
     components: {
         apexcharts: VueApexCharts
     },
+    computed: {
+        ...mapGetters({
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+        })
+    },
+    props: {
+        negaArr: {
+            type: Array
+        }
+    },
     data () {
         return {
+            losserArr: [],
             series: [{
                 name: 'Lossers',
-                data: [ -80, -53, -50, -44, -41, -40, -35]
+                data: [ 0, 0, 0, 0, 0, 0, 0]
             }],
             chartOptions: {
                 plotOptions: {
@@ -145,6 +159,33 @@ export default {
                     followCursor: true,
                 }
             }
+        }
+    },
+    methods: {
+        getTopLossers() {
+            this.losserArr = []
+            if(this.negaArr.length != 0){
+                
+                for (let i = 0; i < this.negaArr.length; i++) {
+                    this.losserArr.push(parseFloat(this.negaArr[i].value))
+                }
+                
+                let data_loss = [...this.losserArr,...this.series[0].data].slice(0, 7);
+                this.$refs.lossersChart.updateSeries([
+                    {
+                        data: data_loss
+                    }
+                ]);
+
+                console.log(data_loss)
+                console.log(this.losserArr)
+                console.log(this.series)
+            }
+        }
+    },
+    watch: {
+        negaArr() {
+            this.getTopLossers();
         }
     }
 }

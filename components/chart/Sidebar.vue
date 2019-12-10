@@ -2,9 +2,8 @@
   <v-content :style="{ background: cardbackground }">
     <v-card
       :loading="loading"
-      style="height:200px"
+      style="height:220px"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      elevation="2"
       flat
       tile
     >
@@ -48,7 +47,8 @@ export default {
       lightSwitch: "global/getLightSwitch"
     }),
     cardbackground: function() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+      //return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+      return this.lightSwitch == 0 ? "#e3e9ed" : "#172431";
     }
   },
   methods: {
@@ -198,6 +198,8 @@ export default {
   padding: 0;
   padding-left: 10px;
   font-weight: bold;
-  font-size: 10px;
+  font-size: 11px;
+  margin-bottom: 5px;
+  margin-top: 6px;
 }
 </style>

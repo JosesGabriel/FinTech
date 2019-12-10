@@ -4,7 +4,12 @@
     :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
   >
     <v-row class="mb-6" no-gutters>
-      <v-col class="hidden-xs-and-down" cols="1" sm="1" md="1">
+      <v-col
+        class="navbar__container hidden-xs-only px-3"
+        cols="1"
+        sm="1"
+        md="1"
+      >
         <NavBar :data="navbarMiniVariantSetter" active="virtualtrade" />
       </v-col>
       <v-col cols="11">
