@@ -8,6 +8,7 @@
     <v-form enctype="multipart/form-data">
       <v-avatar size="45" class="postField__avatar">
         <img
+          class="avatar__border"
           alt="Avatar"
           :src="
             $auth.loggedIn ? $auth.user.data.user.profile_image : 'default.png'
@@ -23,7 +24,7 @@
               $auth.user.data.user.username +
               ', penny for your thoughts?'
           "
-          class="pt-0 caption"
+          class="pt-0 caption postField__textarea"
           rows="3"
           row-height="25"
           color="primary"
@@ -197,6 +198,10 @@
 }
 .postField__imageWrapper--image {
   margin-left: -40px;
+}
+.postField__textarea {
+  position: relative;
+  bottom: 10px;
 }
 </style>
 <script>

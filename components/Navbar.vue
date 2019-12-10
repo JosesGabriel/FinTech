@@ -1,5 +1,5 @@
 <template>
-  <v-card class="navbar__card" max-width="240" flat color="transparent">
+  <v-card class="navbar__card pt-2" max-width="240" flat color="transparent">
     <v-navigation-drawer
       disable-resize-watcher
       mobile-break-point
@@ -16,6 +16,7 @@
             <v-list-item>
               <v-list-item-avatar class="mr-4" size="24">
                 <v-img
+                  class="avatar__border"
                   :src="
                     $auth.loggedIn
                       ? $auth.user.data.user.profile_image
@@ -42,7 +43,7 @@
               :color="active == 'social' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'social' ? 'success' : '#78909C'"
+                <v-icon :color="active == 'social' ? 'success' : 'secondary'"
                   >mdi-account-supervisor-circle</v-icon
                 >
                 <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
@@ -64,7 +65,7 @@
                   >mdi-chart-bar</v-icon
                 > -->
                 <!-- <img src="/icon/navbar-icons/chart.svg" width="20" /> -->
-                <v-icon :color="active == 'chart' ? 'success' : '#78909C'"
+                <v-icon :color="active == 'chart' ? 'success' : 'secondary'"
                   >mdi-chart-bar</v-icon
                 >
               </v-list-item-icon>
@@ -82,7 +83,7 @@
               :color="active == 'journal' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'journal' ? 'success' : '#78909C'"
+                <v-icon :color="active == 'journal' ? 'success' : 'secondary'"
                   >mdi-library-books</v-icon
                 >
                 <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
@@ -106,7 +107,7 @@
                   width="25"
                 /> -->
                 <v-icon
-                  :color="active == 'virtualtrade' ? 'success' : '#78909C'"
+                  :color="active == 'virtualtrade' ? 'success' : 'secondary'"
                   >mdi-cloud-print-outline</v-icon
                 >
               </v-list-item-icon>
@@ -124,7 +125,7 @@
               :color="active == 'game' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'game' ? 'success' : '#78909C'"
+                ><v-icon :color="active == 'game' ? 'success' : 'secondary'"
                   >mdi-gamepad</v-icon
                 ></v-list-item-icon
               >
@@ -141,7 +142,7 @@
               :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'watchlist' ? 'success' : '#78909C'"
+                ><v-icon :color="active == 'watchlist' ? 'success' : 'secondary'"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
@@ -154,7 +155,7 @@
           </router-link>
           <v-list-item @click="powerToolsToggle = !powerToolsToggle">
             <v-list-item-icon class="mr-4">
-              <v-icon color="#78909C">mdi-dots-horizontal</v-icon>
+              <v-icon color="secondary">mdi-dots-horizontal</v-icon>
             </v-list-item-icon>
             <v-list-item-content
               ><v-list-item-title class="font-weight-medium"
@@ -171,7 +172,7 @@
           <v-list-item @click.stop="buySellDialog = true">
             <v-list-item-icon class="mr-4">
               <!-- <img src="/icon/navbar-icons/buySellCalculator.svg" width="25" /> -->
-              <v-icon color="#78909C">mdi-calculator-variant</v-icon>
+              <v-icon color="secondary">mdi-calculator-variant</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -186,7 +187,7 @@
           <v-list-item @click.stop="varDialog = true">
             <v-list-item-icon class="mr-4">
               <!-- <img src="/icon/navbar-icons/varCalculator.svg" width="25" /> -->
-              <v-icon color="#78909C">mdi-alert-outline</v-icon>
+              <v-icon color="secondary">mdi-alert-outline</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -204,7 +205,7 @@
                 src="/icon/navbar-icons/averagePriceCalculator.svg"
                 width="25"
               /> -->
-              <v-icon color="#78909C">mdi-set-center</v-icon>
+              <v-icon color="secondary">mdi-set-center</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
@@ -218,7 +219,7 @@
           </v-list-item>
           <v-list-item>
             <v-list-item-icon class="mr-4">
-              <v-icon color="#78909C">mdi-chart-areaspline</v-icon>
+              <v-icon color="secondary">mdi-chart-areaspline</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>

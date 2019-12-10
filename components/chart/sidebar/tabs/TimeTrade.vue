@@ -4,16 +4,17 @@
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
-      :style="`height: calc(100vh - ${responsive_height}px)`"
+      :style="`height: calc(100vh - ${responsive_height + 20}px)`"
       class="card__timetrade pl-1 pr-2"
       flat
+      tile
     >
       <v-simple-table
         dense
         :dark="lightSwitch == 1"
         fixed-header
         :style="{ background: cardbackground }"
-        :height="`calc(100vh - ${responsive_height}px)`"
+        :height="`calc(100vh - ${responsive_height + 20}px)`"
       >
         <thead>
           <tr>

@@ -14,7 +14,7 @@
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
       class="pl-3 pr-2"
-      :style="`height: calc(100vh - ${responsive_height - 175}px)`"
+      :style="`height: calc(100vh - ${responsive_height - 170}px)`"
       flat
       tile
     >
@@ -27,7 +27,7 @@
         fixed-header
         disable-pagination
         hide-default-footer
-        :height="`calc(100vh - ${responsive_height - 175}px)`"
+        :height="`calc(100vh - ${responsive_height - 160}px)`"
         :style="{ background: cardbackground }"
       >
         <!-- <template #item.symbol="{item}">
@@ -49,8 +49,7 @@
               <span
                 :class="[
                   { increase: props.item.change > 0 },
-                  { decrease: props.item.change < 0 },
-                  { neutral: props.item.change == 0 }
+                  { decrease: props.item.change < 0 }
                 ]"
               >
                 {{ props.item.last | numeral("0.0a") }}
@@ -60,8 +59,7 @@
               <span
                 :class="[
                   { increase: props.item.change > 0 },
-                  { decrease: props.item.change < 0 },
-                  { neutral: props.item.change == 0 }
+                  { decrease: props.item.change < 0 }
                 ]"
               >
                 {{ props.item.changepercentage | numeral("0,0.00") }}
