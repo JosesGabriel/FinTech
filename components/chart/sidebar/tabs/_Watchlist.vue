@@ -20,7 +20,6 @@
       :loading="loading"
       :max-height="`calc(100vh - ${responsive_height - 170}px)`"
       style="overflow-y: auto;"
-      class="mt-2"
       flat
       tile
     >
@@ -34,27 +33,30 @@
       >
         <div class="watchlist__top">
           <div class="top__left pl-2">
-            <span
-              class="span__symbolid"
+            <v-btn
+              small
+              outlined
+              :color="lightSwitch == 1 ? 'lightchart' : 'darkchart'"
+              :dark="lightSwitch == 1"
+              style="border:none"
               @click="setSymbolID(item.id)"
               @dblclick="showRemoveButton(item)"
-              >{{ item.title }}</span
+              >{{ item.title }}</v-btn
             >
           </div>
           <div class="top__right pr-2">
-            <span class="">{{ item.value | numeral("0,0.00") }}</span>
+            <span>{{ item.value | numeral("0,0.00") }}</span>
           </div>
         </div>
         <div class="watchlist__bottom">
           <div class="bottom__left pl-2">
             <span
-              class="text-uppercase"
               :class="[
                 { darkmode__text: lightSwitch == 1 },
                 { lightmode__text: lightSwitch == 0 }
               ]"
               >{{
-                $globalMethod.limitDisplayString(item.description, 18, true)
+                $globalMethod.limitDisplayString(item.description, 16, true)
               }}</span
             >
           </div>
@@ -195,19 +197,14 @@ export default {
   display: flex;
   font-size: 11px;
 }
-
-.watchlist__top :hover {
-  /* background: red; */
-}
-
 .top__left {
   flex: 0 0 136px;
-  font-size: 16px;
+  font-size: 11px;
 }
 .top__right {
   flex: 0 0 136px;
   text-align: right;
-  font-size: 14px;
+  font-size: 11px;
 }
 .watchlist__bottom {
   display: flex;
@@ -216,15 +213,10 @@ export default {
   flex: 0 0 136px;
   color: #bbb;
   font-size: 11px;
-  margin-top: -4px;
-}
-.span__symbolid {
-  cursor: pointer;
 }
 .bottom__right {
   flex: 0 0 136px;
   text-align: right;
-  margin-top: -4px;
 }
 .icon__add-watchlist {
   cursor: pointer;

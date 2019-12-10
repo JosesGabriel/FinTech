@@ -199,5 +199,7 @@ export default {
   padding-left: 10px;
   font-weight: bold;
   font-size: 11px;
+  margin-bottom: 5px;
+  margin-top: 6px;
 }
 </style>
