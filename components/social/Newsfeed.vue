@@ -53,77 +53,95 @@
               >
             </v-col>
             <v-col class="text-right">
-              <v-btn icon fab small class="postOptions__btn" color="secondary">
+              <v-btn
+                icon
+                fab
+                small
+                class="postOptions__btn"
+                color="secondary"
+                @click="
+                  (postOptionsMode = !postOptionsMode), (currentEdit = n - 1)
+                "
+              >
                 <v-icon>mdi-dots-horizontal</v-icon>
               </v-btn>
-              <div>
-                <v-dialog width="500">
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      v-if="
-                        postsObject[n - 1].user.uuid ==
-                          $auth.user.data.user.uuid
-                      "
-                      x-small
-                      flat
-                      text
-                      v-on="on"
-                    >
-                      Delete
-                    </v-btn>
-                  </template>
-
-                  <v-card
-                    :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
-                    :dark="lightSwitch == 0 ? false : true"
-                  >
-                    <v-card-title
-                      class="headline success--text lighten-2"
-                      primary-title
-                    >
-                      Delete Post?
-                    </v-card-title>
-
-                    <v-card-text>
-                      Are you sure you want to permanently remove this post from
-                      Lyduz?
-                    </v-card-text>
-
-                    <v-divider></v-divider>
-
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-
-                      <!-- <v-btn color="secondary" text @click="deleteDialog = false">
-                      Cancel
-                    </v-btn> -->
+              <div
+                v-if="
+                  postOptionsMode &&
+                    currentEdit == n - 1 &&
+                    postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
+                "
+              >
+                <div class="postOptions__dropdown--caret"></div>
+                <div class="postOptions__container">
+                  <v-dialog width="500">
+                    <template v-slot:activator="{ on }">
                       <v-btn
                         v-if="
                           postsObject[n - 1].user.uuid ==
                             $auth.user.data.user.uuid
                         "
+                        x-small
                         text
-                        color="error"
-                        @click="
-                          deletePost(postsObject[n - 1].id, n - 1),
-                            (deleteDialog = false)
-                        "
-                        >Delete</v-btn
+                        v-on="on"
                       >
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
+                        Delete
+                      </v-btn>
+                    </template>
 
-                <v-btn
-                  v-if="
-                    postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
-                  "
-                  x-small
-                  flat
-                  text
-                  @click="(editPostMode = !editPostMode), (currentEdit = n - 1)"
-                  >Edit</v-btn
-                >
+                    <v-card
+                      :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+                      :dark="lightSwitch == 0 ? false : true"
+                    >
+                      <v-card-title
+                        class="headline success--text lighten-2"
+                        primary-title
+                      >
+                        Delete Post?
+                      </v-card-title>
+
+                      <v-card-text>
+                        Are you sure you want to permanently remove this post
+                        from Lyduz?
+                      </v-card-text>
+
+                      <v-divider></v-divider>
+
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <!-- <v-btn color="secondary" text @click="deleteDialog = false">
+                      Cancel
+                    </v-btn> -->
+                        <v-btn
+                          v-if="
+                            postsObject[n - 1].user.uuid ==
+                              $auth.user.data.user.uuid
+                          "
+                          text
+                          color="error"
+                          @click="
+                            deletePost(postsObject[n - 1].id, n - 1),
+                              (deleteDialog = false)
+                          "
+                          >Delete</v-btn
+                        >
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+
+                  <v-btn
+                    v-if="
+                      postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
+                    "
+                    x-small
+                    text
+                    @click="
+                      (editPostMode = !editPostMode), (currentEdit = n - 1)
+                    "
+                    >Edit</v-btn
+                  >
+                </div>
               </div>
             </v-col>
           </v-row>
@@ -237,21 +255,23 @@
                     postsObject[n - 1].comments[k - 1]["user"]["last_name"]
                   }}</strong
                 >
-                <span>{{ postsObject[n - 1].comments[k - 1].content }}</span>
+                <span class="caption">{{
+                  postsObject[n - 1].comments[k - 1].content
+                }}</span>
               </v-container>
               <v-container class="pa-0 ma-0">
                 <v-btn
                   icon
                   outlined
                   fab
-                  width="24"
-                  height="24"
+                  width="21"
+                  height="21"
                   color="secondary"
                 >
                   <img
                     src="/icon/bullish_secondary.svg"
-                    height="16"
-                    width="12"
+                    height="13"
+                    width="10"
                   />
                 </v-btn>
                 <span class="px-2 caption">0</span>
@@ -259,14 +279,14 @@
                   icon
                   outlined
                   fab
-                  width="24"
-                  height="24"
+                  width="21"
+                  height="21"
                   color="secondary"
                 >
                   <img
                     src="/icon/bearish_secondary.svg"
-                    height="14"
-                    width="12"
+                    height="13"
+                    width="10"
                   />
                 </v-btn>
                 <span class="px-2 caption">0</span>
@@ -385,6 +405,26 @@
   background: rgba(3, 218, 197, 0.2);
   border-radius: 20px;
 }
+.postOptions__container {
+  position: absolute;
+  display: inline-grid;
+  background-color: #0c1a2b;
+  padding: 4px;
+  border-radius: 10px;
+  right: 4px;
+  top: 40px;
+  z-index: 1;
+}
+.postOptions__dropdown--caret {
+  width: 0;
+  height: 0;
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-bottom: 17px solid #0c1a2b;
+  position: absolute;
+  right: 18px;
+  top: 28px;
+}
 </style>
 <script>
 import { mapGetters } from "vuex";
@@ -420,7 +460,8 @@ export default {
       editPostMode: false,
       editTextAreaModel: [],
       currentEdit: 0,
-      deleteDialog: false
+      deleteDialog: false,
+      postOptionsMode: false
     };
   },
   computed: {
