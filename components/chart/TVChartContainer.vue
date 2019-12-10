@@ -156,11 +156,11 @@ export default {
       setSymbolID: "chart/setSymbolID"
     }),
     loadChart() {
-      //   if (this.lightSwitch == 0) {
-      //     this.theme = "Light";
-      //   } else {
-      //     this.theme = "Dark";
-      //   }
+      if (this.lightSwitch == 0) {
+        this.theme = "Light";
+      } else {
+        this.theme = "Dark";
+      }
       // listen to ticker toggle
       this.$bus.$on("adjustChartView", data => {
         this.chartView;
