@@ -12,10 +12,10 @@
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
-                            <tr v-for="item in allodata.slice(0, 8)" :key="item.stocks" id="table_tr_snap-cont">
-                            <!-- <v-icon class="pa-1 caption" :style="{ 'color': item.bulletcolor}">mdi-circle</v-icon> -->
+                            <tr v-for="item in allodata.slice(0, 9)" :key="item.stocks" id="table_tr_snap-cont">
+                            <v-icon class="pa-1 caption" :style="{ 'color': item.color}">mdi-circle</v-icon>
                             <td class="item_position-prop caption text-capitalize px-1 py-1">{{ item.stock_id }}</td>
-                            <td class="item_position-prop caption text-right px-1 py-1">{{ (item.position).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
+                            <td class="item_position-prop caption text-right px-1 py-1" width="75%">{{ (item.position).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -49,11 +49,12 @@
         allodata: [],
         cash: null,
         series: [],
-        updateLabels: [],
+        labelArray: [],
+        stockarr: [],
         updateSeries: [],
         chartOptions: {
           labels: [],
-          colors: ['#00FFC3', '#00F2BA', '#00CC9C', '#00BF93', '#00A67F', '#008C6C', '#009975'],
+          colors: ['#03DAC5', '#05CCB4', '#04BFA9', '#04B29D', '#04A592', '#049987', '#038C7C', '#037F70', '#037265', '#02665A'],
           legend: {
             show: false
           },
@@ -102,14 +103,14 @@
                   name: {
                     show: true,
                     fontSize: '12px',
-                    fontFamily: 'Karla',
+                    fontFamily: "'Nunito' !important",
                     color: "#d8d8d8",
                     offsetY: -5
                   },
                   value: {
                     show: true,
                     fontSize: '12px',
-                    fontFamily: 'Karla',
+                    fontFamily: "'Nunito' !important",
                     color: "#d8d8d8",
                     offsetY: -5,
                     formatter: function (value) {
@@ -121,7 +122,7 @@
                     show: true,
                     label: 'Total Allocation',
                     fontSize: '12px',
-                    fontFamily: 'Karla',
+                    fontFamily: "'Nunito' !important",
                     color: '#d8d8d8',
                   }
                 }
@@ -140,7 +141,7 @@
             theme: true,
             style: {
               fontSize: '12px',
-              fontFamily: "'Karla', sans-serif",
+              fontFamily: "'Nunito' !important",
             },
             fixed: {
               enabled: false,
@@ -165,48 +166,54 @@
       ...mapGetters({
         renderPortfolioKey: "journal/getRenderPortfolioKey",
         defaultPortfolioId: "journal/getDefaultPortfolioId",
+        stockList: "global/getStockList"
       }),
     },
     mounted() {
-      
+      this.getAllocations();
     },
     methods: {
       getAllocations() {
-      const openparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        fund: this.defaultPortfolioId,
-      };
-      this.$api.journal.portfolio.open(openparams).then(response => {
-        this.allodata = response.meta.allocations
-      // this.chartOptions.labels = ['2GO', 'BPI']
-      
-        this.series = []
         this.updateLabels = []
-        for(let i = 0; i < this.allodata.length; i++){
-
-          const params = {
-            "symbol-id": this.allodata[i].stock_id
+        if (this.defaultPortfolioId != null) {
+          
+          const openparams = {
+            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+            fund: this.defaultPortfolioId,
           };
-          this.$api.chart.stocks.list(params).then(
-            function(result) {
-              this.allodata[i].stock_id = result.data.symbol;
-            }.bind(this)
-          ); 
-          this.updateLabels.push(this.allodata[i].stock_id)
-          this.updateSeries.push(this.allodata[i].position)
+          this.$api.journal.portfolio.open(openparams).then(response => {
+            this.allodata = response.meta.allocations
 
-          this.series.push(this.updateSeries[i])
+            this.chartOptions.labels = ['Cash']
+            for(let i = 1; i < this.allodata.length; i++){
+              const filteredStocks = this.stockList.data.filter((stock) => {
+                return stock.id_str == this.allodata[i].stock_id;
+              });
+
+              this.allodata[i].stock_id = filteredStocks[0].symbol;
+              this.allodata[i] = {color: this.chartOptions.colors[i],...this.allodata[i]}
+              
+              this.chartOptions.labels.push(filteredStocks[0].symbol)
+            }
+            this.chartOptions = {
+              ...this.chartOptions,
+                ...{
+                  labels: this.chartOptions.labels
+                }
+            };
+            
+            this.series = []
+            this.updateSeries = []
+            for(let i = 0; i < this.allodata.length; i++) {
+              
+              this.updateSeries.push(this.allodata[i].position)
+
+              this.series.push(this.updateSeries[i])
+
+            }
+          });
+          
         }
-        
-          this.chartOptions = {
-            ...this.chartOptions,
-              ...{
-                  labels: this.updateLabels
-              }
-          };
-          // this.chartOptions.labels.push(this.updateLabels)
-
-      });
       },
       formatPrice(value) {
         let val = (value/1).toFixed(2).replace('.', '.')
@@ -215,6 +222,9 @@
     },
     watch: {
       renderPortfolioKey: function() {
+        this.getAllocations();
+      },
+      stockList: function() {
         this.getAllocations();
       }
     }
