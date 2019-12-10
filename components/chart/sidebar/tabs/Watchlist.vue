@@ -12,7 +12,7 @@
       v-for="(item, key) in items"
       :key="item.id"
       tile
-      :color="lightSwitch == false ? 'lightchart' : 'darkchart'"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       elevation="2"
       class="mb-1"
     >
@@ -21,8 +21,8 @@
           <v-btn
             small
             outlined
-            :color="lightSwitch == true ? 'lightchart' : 'darkchart'"
-            :dark="lightSwitch == true"
+            :color="lightSwitch == 1 ? 'lightchart' : 'darkchart'"
+            :dark="lightSwitch == 1"
             style="border:none"
             @click="setSymbolID(item.id)"
             @dblclick="showRemoveButton(item)"
@@ -37,8 +37,8 @@
         <div class="bottom__left pl-2">
           <span
             :class="[
-              { darkmode__text: lightSwitch },
-              { lightmode__text: !lightSwitch }
+              { darkmode__text: lightSwitch == 1 },
+              { lightmode__text: lightSwitch == 0 }
             ]"
             >{{
               $globalMethod.limitDisplayString(item.description, 16, true)
@@ -215,5 +215,11 @@ export default {
 .decrease {
   color: #f44336 !important;
   font-size: 11px;
+}
+.lightmode__text {
+  color: #494949;
+}
+.darkmode__text {
+  color: #e5e5e5;
 }
 </style>

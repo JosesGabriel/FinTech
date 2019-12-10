@@ -2,16 +2,16 @@
   <v-content :style="{ background: cardbackground }">
     <v-card
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      :dark="lightSwitch == true"
+      :dark="lightSwitch == 1"
       class="pa-0 ma-0"
       tile
     >
       <v-tabs
         v-model="active_tab"
-        color="success"
+        color="#03dac5"
         :background-color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         grow
-        :dark="lightSwitch == true"
+        :dark="lightSwitch == 1"
         height="35"
       >
         <v-tab
@@ -29,13 +29,13 @@
           :value="`tab-${item.id}`"
         >
           <v-card
-            :dark="lightSwitch == true"
+            :dark="lightSwitch == 1"
             :color="color"
             class="pa-0 ma-0 tab__height"
             tile
           >
             <v-card-text class="pa-0 ma-0">
-              <component :is="item.component" lightswitch="lightSwitch" />
+              <component :is="item.component" />
             </v-card-text>
           </v-card>
         </v-tab-item>
