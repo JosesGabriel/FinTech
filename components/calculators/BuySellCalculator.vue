@@ -105,9 +105,9 @@
             <span
               :class="
                 parseInt(netProfitPercentage) > 0
-                  ? 'text--green'
+                  ? 'success--text'
                   : parseInt(netProfitPercentage) < 0
-                  ? 'text--red'
+                  ? 'error--text'
                   : 'text--gray'
               "
               >₱{{ netProfit }} ({{ netProfitPercentage }})</span
@@ -119,12 +119,6 @@
   </v-card>
 </template>
 <style>
-.text--green {
-  color: #03dac5;
-}
-.text--red {
-  color: #f44336;
-}
 .text--gray {
   color: gray;
 }
