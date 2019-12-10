@@ -66,6 +66,7 @@
         :href="`#tab-${item.id}`"
         class="text-capitalize subtitle-1"
         @click="toggleTabs(item.id)"
+        style="font-size: .8rem !important;"
       >
         {{ item.title }}
       </v-tab>
