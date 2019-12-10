@@ -167,7 +167,7 @@ export default {
 #table__left {
   width: 146px;
   font-size: 11px;
-  line-height: 11px;
+  line-height: 13px;
   padding-left: 5px;
   padding-right: 5px;
 }
@@ -186,7 +186,7 @@ export default {
 #table__right {
   width: 140px;
   font-size: 11px;
-  line-height: 11px;
+  line-height: 13px;
   padding-right: 10px;
 }
 .tright__label {

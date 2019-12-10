@@ -1,6 +1,6 @@
 <template>
   <!-- <v-card color="darkcard" dark>
-    <v-card-title class="title-2 pb-0 text--green"
+    <v-card-title class="title-2 pb-0 success--text"
       >Value At Risk (VAR) Calculator</v-card-title
     >
     <v-container class="pt-0">

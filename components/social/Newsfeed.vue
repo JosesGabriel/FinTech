@@ -46,7 +46,7 @@
                   )
                 }}
                 <v-icon class="overline mt-0">mdi-earth</v-icon
-                ><span class="text--green"> Bullish</span></v-list-item-subtitle
+                ><span class="success--text"> Bullish</span></v-list-item-subtitle
               >
             </v-col>
             <v-col class="text-right">
@@ -72,7 +72,7 @@
                   :dark="lightSwitch == 0 ? false : true"
                 >
                   <v-card-title
-                    class="headline text--green lighten-2"
+                    class="headline success--text lighten-2"
                     primary-title
                   >
                     Delete Post?
@@ -152,7 +152,7 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="body-2 px-5 pb-3">
+          <span v-else class="caption px-5 pb-3">
             {{ postsObject[n - 1].content }}
           </span>
 
@@ -166,22 +166,24 @@
           icon
           outlined
           fab
-          x-small
+          width="24"
+          height="24"
           color="success"
           @click="post_react(postsObject[n - 1].id, 'bull')"
         >
-          <img src="/icon/bullish.svg" width="15" />
+          <img src="/icon/bullish.svg" width="12" />
         </v-btn>
         <span class="px-2">{{ postsObject[n - 1].bulls_count }}</span>
         <v-btn
           icon
           outlined
           fab
-          x-small
+          width="24"
+          height="24"
           color="error"
           @click="post_react(postsObject[n - 1].id, 'bear')"
         >
-          <img src="/icon/bearish.svg" width="15" />
+          <img src="/icon/bearish.svg" width="12" />
         </v-btn>
         <span class="px-2">{{ postsObject[n - 1].bears_count }}</span>
         <v-spacer></v-spacer>
@@ -310,7 +312,8 @@
             dense
             rounded
             hide-details
-            label="Write a comment..."
+            placeholder="Write a comment..."
+            class="caption"
             color="primary"
             :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
             :dark="lightSwitch == 0 ? false : true"

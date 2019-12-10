@@ -17,7 +17,7 @@
           class="message text"
           :class="lightSwitch == 0 ? 'text__secondary--light' : ''"
         >
-          <div class="px-2 text--green overline">
+          <div class="px-2 success--text overline">
             {{ messagesObject[n - 1].displayName }}
           </div>
           <p class="px-2 caption">

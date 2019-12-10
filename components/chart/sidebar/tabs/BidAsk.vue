@@ -1,6 +1,14 @@
 <template>
   <v-content>
-    <div class="sub__title">Bid and Ask</div>
+    <div
+      class="sub__title"
+      :class="[
+        { 'black--text': lightSwitch == 0 },
+        { 'white--text': lightSwitch == 1 }
+      ]"
+    >
+      Bid and Ask
+    </div>
     <!-- bid and ask -->
     <v-card
       :dark="lightSwitch == 1"
@@ -74,7 +82,15 @@
     <DepthBar />
 
     <!-- time and trades -->
-    <div class="sub__title">Time and Trade</div>
+    <div
+      class="sub__title"
+      :class="[
+        { 'black--text': lightSwitch == 0 },
+        { 'white--text': lightSwitch == 1 }
+      ]"
+    >
+      Time and Trade
+    </div>
     <TimeTrade />
 
     <!-- TransactionBar -->

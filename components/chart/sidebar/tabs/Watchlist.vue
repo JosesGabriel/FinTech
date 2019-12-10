@@ -1,6 +1,12 @@
 <template>
   <v-content>
-    <div class="sub__title">
+    <div
+      class="sub__title"
+      :class="[
+        { 'black--text': lightSwitch == 0 },
+        { 'white--text': lightSwitch == 1 }
+      ]"
+    >
       <div class="title__left">Watchlist</div>
       <div class="title__right">
         <v-icon size="15" class="icon__add-watchlist" @click="addWatchlist"
@@ -153,8 +159,8 @@ export default {
       window.open(routeData.href, "_blank");
     },
     changeStock: stock => {
-      console.log("stock selected");
-      console.log(stock.id);
+      // console.log("stock selected");
+      // console.log(stock.id);
     },
     ...mapActions({
       setSymbolID: "chart/setSymbolID"
@@ -204,7 +210,8 @@ export default {
   cursor: pointer;
 }
 .content__card-watchlist {
-  height: calc(100vh - 315px);
+  /* ${responsive_height - 175} */
+  height: calc(100vh - 335px);
   overflow-x: auto;
 }
 
