@@ -5,8 +5,8 @@
               OPEN POSITION/S (PHP)
             </h1>-->
             <v-spacer></v-spacer>
-            <v-btn rounded outlined color="#03dac5" dark class="text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
-            <v-btn rounded outlined color="#03dac5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Trade</v-btn>
+            <v-btn outlined color="#03dac5" dark class="text-capitalize mr-2 resetbtn" @click.stop="showResetForm=true"  height="23">Reset</v-btn>
+            <v-btn outlined color="#03dac5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2 resetbtn" height="23">Trade</v-btn>
                      
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -42,7 +42,7 @@
             </template>
         </v-data-table>
         <v-row>
-          <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
+          <v-col style="font-size: 12px;" class="text-right font-weight-regular mr-10" width="100%" :style="{ color: fontcolor }">
           Total Profit/Loss as of {{ this.date }}: <span class="ml-3 mr-4" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
           <span class="ml-12 mr-5" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
           </v-col>
@@ -256,7 +256,7 @@ export default {
                                 notes: this.portfolioLogs[i].metas.notes
                               }       
 
-                             this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
+                             this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(2));
                              this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
                            
                           }.bind(this)
@@ -356,6 +356,9 @@ export default {
             cardbackground: function() {
               return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
             },
+             fontcolor: function() {
+              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+            },
     },
      mounted() {
        if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');   
@@ -388,6 +391,7 @@ export default {
   background: #00121e;
   border: 1px solid #03DAC5;
   border-radius: 4px;
+  margin-top: -6px;
 }
 
 .edit_icons {
@@ -477,6 +481,7 @@ export default {
   }
   .v-pagination.lp_data_table-pagination .v-pagination__item--active {
     color: #03DAC5;
+    font-size: 12px;
   }
   .lp_data_table-pagination i.v-icon {
     font-size: 11px
@@ -496,5 +501,11 @@ export default {
   .nodisplay{
     display: none;
   }
+
+  .resetbtn > .v-btn__content{
+    padding-top: 2px !important;
+    font-size: 12px !important; 
+  }
+  
 
 </style>
