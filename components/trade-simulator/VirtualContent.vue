@@ -1,10 +1,10 @@
 <template>
     <v-col cols="12" sm="12" md="12">
-            <v-row class="mt-12 ml-0 mb-10 mr-2" style="color:white;">
+            <v-row class="mt-3 ml-0 mb-10 mr-2">
     
-                <v-col class="ml-0 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
+                <v-col class="ml-0 mb-2 pt-0 pb-0 vt_realized"  :style="{ border: cardbackground2 }" style="width:20%;">
                  
-                    <v-row class="mt-2 pl-3 caption">
+                    <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Realized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1 mb-2">
@@ -14,8 +14,8 @@
                     </v-row>
                     
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-                    <v-row class="mt-2 pl-3 caption">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
+                    <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Unrealized P/L (PHP)
                     </v-row>
                     <v-row class="mt-1">
@@ -24,8 +24,8 @@
                         </v-col>
                     </v-row>
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-                    <v-row class="mt-2 pl-3 caption">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
+                    <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Port Performance %
                     </v-row>
                     <v-row class="mt-1">
@@ -34,8 +34,8 @@
                         </v-col> 
                     </v-row>
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-                    <v-row class="mt-2 pl-3 caption">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
+                    <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                        Max Drawdown %
                     </v-row>
                     <v-row class="mt-1">
@@ -44,8 +44,8 @@
                         </v-col> 
                     </v-row>
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-                    <v-row class="mt-2 pl-3 caption">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
+                    <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Equity
                     </v-row>
                     <v-row class="mt-1">
@@ -54,8 +54,8 @@
                         </v-col> 
                     </v-row>
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" style="width:20%;">
-                    <v-row class="mt-2 pl-3 caption">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
+                    <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Day Change
                     </v-row>
                     <v-row class="mt-0">
@@ -78,10 +78,12 @@
             <v-tabs
             color="#03dac5"
             background-color="transparent"
+            :dark="lightSwitch == true"
+            :style="{ background: cardbackground }"
             dark
             >
-                <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-1`">Live Portfolio</v-tab>
-                <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-2`">Tradelogs</v-tab>
+                <v-tab :style="{ color: fontcolor }" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-1`">Live Portfolio</v-tab>
+                <v-tab :style="{ color: fontcolor }" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-2`">Tradelogs</v-tab>
                
                 <v-row>
                     <v-col md="3" class="text-right caption px-2 ma-0" style="position:absolute; right:0; top: -26px; width: 180px;">
@@ -93,7 +95,7 @@
                             item-text="name" 
                             item-value="id"
                             :items="portfolio" 
-                            background-color="#00FFC3" 
+                            background-color="#03DAC5" 
                             label="Select Portfolio" 
                             v-on:change="getOpenPosition"
                             dense solo flat>
@@ -162,7 +164,17 @@
      computed: {
          ...mapGetters({
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
-        })
+            lightSwitch: "global/getLightSwitch",
+        }),
+        cardbackground: function() {
+              return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+            },
+             fontcolor: function() {
+              return this.lightSwitch == 0 ? "#000000 !important" : "#ffffff !important";
+            },
+            cardbackground2: function() {
+              return this.lightSwitch == 0 ? "1px solid #dadada" : "1px solid #172431";
+            },
     },
     watch: {
       totalmvalue: function () {
@@ -207,10 +219,10 @@
             },
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
-                decimals = decimals || 3; // Default to 2 decimals
+                decimals = decimals || 2; // Default to 2 decimals
                 return n.toLocaleString().split(sep)[0]
                     + sep
-                    + n.toFixed(3).split(sep)[1];
+                    + n.toFixed(2).split(sep)[1];
             },
             getBalance(){
                  const portfolioparams = {
@@ -290,6 +302,15 @@
 .v-select__slot .v-label, .v-select__slot .v-icon {
     color: #03DAC5 !important;
 }
+
+.select_portfolio > .v-input__control {
+    padding-top: 16px !important;
+}
+
+.v-menu__content {
+    border-radius: unset !important;
+}
+
 .v-menu__content .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
     color: #03DAC5 !important;
 }
@@ -300,20 +321,15 @@
 
 .select_portfolio > .v-input__control > .v-input__slot > .v-select__slot > .v-select__selections > .v-select__selection--comma {
     color: black;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    padding-top: 5px;
 }
 
 .select_portfolio > .v-input__control > .v-input__slot > .v-select__slot {
-    height: 40px;
+    height: 30px;
 }
 .select_portfolio > .v-input__control > .v-input__slot {
     min-height: initial;
-}
-
-.theme--light.v-list {
-    background: #00121e;
 }
 
 .v-slide-group__content.v-tabs-bar__content:before {
@@ -323,20 +339,20 @@
   bottom: -3px;
   z-index: 1;
   height: 4px;
-  background: #000;
+  background: #b6b6b6; 
 }
 .positive{
     color: #03DAC5;
 }
 .negative{
-    color: #fe4949;
+    color: #f44336;
 }
 .neutral{
-    color: #b6b6b6;
+    color: #535358;
 }
-.theme--dark.v-icon {
+/*.theme--dark.v-icon {
     color: #0e0e0e;
-}
+}*/
 .selector > .v-input__control > .v-input__slot > .v-select__slot > .v-select__selections{
     color: black;
 }
@@ -345,12 +361,12 @@
 }
 .vt_realized {
    /* border: 1px solid black;*/
-    background: #0c1a2b73;
+   /* background: #0c1a2b73; */
 }
 
 .vt_realized:hover {
-    background: #0c1a2b;
-    box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12) !important;
+   /* background: #0c1a2b; */
+    box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.1), 0px 10px 15px 2px rgba(0, 0, 0, 0.12), 0px 3px 20px 2px rgba(0, 0, 0, 0.10) !important;
 }
 .select_portfolio .v-input__slot {
     margin: 0;

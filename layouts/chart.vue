@@ -46,6 +46,10 @@
         v-show="sidebar"
         transition="slide-y-reverse-transition"
         class="content__right"
+        :class="[
+          { right_dark_mode: lightSwitch == 1 },
+          { right_light_mode: lightSwitch == 0 }
+        ]"
       >
         <Sidebar />
       </div>
@@ -107,9 +111,10 @@ export default {
 #chart_body {
   /* background: #00121e !important; */
   /*font-family: "Karla", sans-serif !important;*/
-  font-family: 'Nunito Sans', sans-serif !important;
+  font-family: "Nunito Sans", sans-serif !important;
 }
 .chart__container {
+  /* border: 1px solid red; */
 }
 .ticker__container {
   height: 50px;
@@ -133,6 +138,16 @@ export default {
 }
 .content__right {
   /* background: #00121e; */
-  flex: 0 0 280px;
+  padding-left: 3px !important;
+  margin-left: 10px !important;
+  flex: 0 0 270px;
+}
+
+.right_light_mode {
+  border-left: 1px solid #e3e9ed !important;
+}
+
+.right_dark_mode {
+  border-left: 1px solid #172431 !important;
 }
 </style>

@@ -1,6 +1,8 @@
 <template>
   <v-content>
-    <tv-chart-container></tv-chart-container>
+    <v-content class="content__chart">
+      <tv-chart-container></tv-chart-container>
+    </v-content>
   </v-content>
 </template>
 
@@ -9,3 +11,12 @@ export default {
   layout: "chart"
 };
 </script>
+
+<style scoped>
+.content__chart {
+  /* margin-left: 10px !important; */
+  /* border-right: #ccc 1px solid;
+  
+  margin-right: 10px !important; */
+}
+</style>

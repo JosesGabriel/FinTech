@@ -20,7 +20,7 @@
       :loading="loading"
       :max-height="`calc(100vh - ${responsive_height - 170}px)`"
       style="overflow-y: auto;"
-      class="mt-2"
+      class="mt-2 mr-2"
       flat
       tile
     >
@@ -30,7 +30,7 @@
         :key="item.id"
         tile
         flat
-        :color="item.color ? '#DADADA' : ''"
+        :color="onHoverEffect(item.color)"
         class="mb-1 pt-1"
         @mouseover.native="item.color = true"
         @mouseleave.native="item.color = false"
@@ -142,6 +142,11 @@ export default {
     }
   },
   methods: {
+    onHoverEffect: function(value) {
+      if (value == true) {
+        return this.lightSwitch == 0 ? "#e6e6e6" : "#142a46";
+      }
+    },
     showRemoveButton: function(item) {
       //   this.showColumn = !this.showColumn;
       //   let watch = document.getElementById(`watch_${item.id}`);

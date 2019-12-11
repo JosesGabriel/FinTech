@@ -5,8 +5,8 @@
               OPEN POSITION/S (PHP)
             </h1>-->
             <v-spacer></v-spacer>
-            <v-btn rounded outlined color="#03dac5" dark class="text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
-            <v-btn rounded outlined color="#03dac5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2" style="border-width: 2px" height="23">Trade</v-btn>
+            <v-btn outlined color="#03dac5" dark class="text-capitalize mr-2 resetbtn" @click.stop="showResetForm=true"  height="23">Reset</v-btn>
+            <v-btn outlined color="#03dac5" @click.stop="EnterTradeModal=true" dark class="text-capitalize mr-2 resetbtn" height="23">Trade</v-btn>
                      
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -23,9 +23,13 @@
               :style="{ background: cardbackground }"
               class="data_table-container pl-10 secondary--text"
             >
-            <template v-slot:item.stock_id="{ item }"><span class="pl-3">{{ item.stock_id }}</span></template>
-            <template v-slot:item.Profit="{ item }"><span :class="(item.Profit > 0 ? 'positive' : item.Profit < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
-            <template v-slot:item.Perf="{ item }"><span :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
+            <template v-slot:item.stock_id="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.stock_id }}</span></template>
+            <template v-slot:item.Position="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.Position }}</span></template>
+            <template v-slot:item.AvgPrice="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.AvgPrice }}</span></template>
+            <template v-slot:item.TotalCost="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.TotalCost }}</span></template>
+            <template v-slot:item.MarketValue="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.MarketValue }}</span></template>
+            <template v-slot:item.Profit="{ item }"><span  :class="(item.Profit > 0 ? 'positive' : item.Profit < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
+            <template v-slot:item.Perf="{ item }"><span  :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
             <template v-slot:item.action="{ item }">
                   <div v-show="menuShow" class="sidemenu_actions" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
                     <v-btn small class="caption" @click.stop="showEditForm=true" v-on:click="details(item.action, 'details')" text color="success">Details</v-btn>
@@ -42,7 +46,7 @@
             </template>
         </v-data-table>
         <v-row>
-          <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
+          <v-col style="font-size: 12px;" class="text-right font-weight-regular mr-10" width="100%" :style="{ color: fontcolor }">
           Total Profit/Loss as of {{ this.date }}: <span class="ml-3 mr-4" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
           <span class="ml-12 mr-5" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
           </v-col>
@@ -256,7 +260,7 @@ export default {
                                 notes: this.portfolioLogs[i].metas.notes
                               }       
 
-                             this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
+                             this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(2));
                              this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
                            
                           }.bind(this)
@@ -356,6 +360,12 @@ export default {
             cardbackground: function() {
               return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
             },
+             fontcolor: function() {
+              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
+            },
+            fontcolor2: function() {
+              return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+            },
     },
      mounted() {
        if(this.simulatorPortfolioID != 0 ?  this.getOpenPositions() : '');   
@@ -388,6 +398,7 @@ export default {
   background: #00121e;
   border: 1px solid #03DAC5;
   border-radius: 4px;
+  margin-top: -6px;
 }
 
 .edit_icons {
@@ -477,6 +488,7 @@ export default {
   }
   .v-pagination.lp_data_table-pagination .v-pagination__item--active {
     color: #03DAC5;
+    font-size: 12px;
   }
   .lp_data_table-pagination i.v-icon {
     font-size: 11px
@@ -497,4 +509,13 @@ export default {
     display: none;
   }
 
+  .resetbtn > .v-btn__content{
+    padding-top: 2px !important;
+    font-size: 12px !important; 
+  }
+
+  .theme--light.v-data-table thead tr th {
+    color: #494949;
+  }
+  
 </style>
