@@ -65,11 +65,11 @@ export default {
     timezone: {
       default: "Asia/Hong_Kong",
       type: String
-    },
-    theme: {
-      default: "Dark",
-      type: String
     }
+    // theme: {
+    //   default: "Dark",
+    //   type: String
+    // }
   },
   data() {
     return {
@@ -90,6 +90,9 @@ export default {
       lightSwitch: "global/getLightSwitch",
       market_code: "chart/market_code"
     }),
+    theme: function() {
+      return this.lightSwitch == 0 ? "Light" : "Dark";
+    },
     chartView: function() {
       if (this.ticker && this.table) {
         //console.log('both open');
@@ -130,7 +133,9 @@ export default {
     }
   },
   watch: {
-    lightSwitch: function() {
+    lightSwitch(value) {
+      //   console.log("chart switch");
+      //   console.log(value);
       this.loadChart();
     },
     market_code(value, old) {
@@ -143,6 +148,9 @@ export default {
     }
   },
   mounted() {
+    if (localStorage.currentMode) {
+      this.setLightSwitch(localStorage.currentMode);
+    }
     this.loadChart();
   },
   destroyed() {
@@ -153,14 +161,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSymbolID: "chart/setSymbolID"
+      setSymbolID: "chart/setSymbolID",
+      setLightSwitch: "global/setLightSwitch"
     }),
     loadChart() {
-      if (this.lightSwitch == 0) {
-        this.theme = "Light";
-      } else {
-        this.theme = "Dark";
-      }
       // listen to ticker toggle
       this.$bus.$on("adjustChartView", data => {
         this.chartView;
