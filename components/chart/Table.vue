@@ -177,9 +177,10 @@ export default {
 
 <style scoped>
 .img__vyndue {
-  margin-top:2px;
-  height: 35px;
+  margin-top:6px;
+  height: 20px;
   cursor: pointer;
+  padding-left: 10px;
 }
 .content__vynduebutton {
   height: 30px;

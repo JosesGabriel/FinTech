@@ -47,7 +47,7 @@
                   )
                 }}
                 <v-icon class="overline mt-0">mdi-earth</v-icon
-                ><span class="success--text post--sentiment pa-05">
+                ><span class="success--text overline post--sentiment pa-05">
                   Bullish</span
                 ></v-list-item-subtitle
               >
@@ -60,7 +60,7 @@
                 class="postOptions__btn"
                 color="secondary"
                 @click="
-                  (postOptionsMode = !postOptionsMode), (currentEdit = n - 1)
+                  (postOptionsMode = !postOptionsMode), (currentPost = n - 1)
                 "
               >
                 <v-icon>mdi-dots-horizontal</v-icon>
@@ -68,7 +68,7 @@
               <div
                 v-if="
                   postOptionsMode &&
-                    currentEdit == n - 1 &&
+                    currentPost == n - 1 &&
                     postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
                 "
               >
@@ -137,7 +137,7 @@
                     x-small
                     text
                     @click="
-                      (editPostMode = !editPostMode), (currentEdit = n - 1)
+                      (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
                     >Edit</v-btn
                   >
@@ -155,7 +155,7 @@
             v-if="
               editPostMode &&
                 postsObject[n - 1].user.uuid == $auth.user.data.user.uuid &&
-                currentEdit == n - 1
+                currentPost == n - 1
             "
           >
             <v-textarea
@@ -197,7 +197,7 @@
           width="24"
           height="24"
           color="success"
-          @click="post_react(postsObject[n - 1].id, 'bull')"
+          @click="post_react(postsObject[n - 1].id, 'bull', n - 1)"
         >
           <img src="/icon/bullish.svg" width="12" />
         </v-btn>
@@ -209,7 +209,7 @@
           width="24"
           height="24"
           color="error"
-          @click="post_react(postsObject[n - 1].id, 'bear')"
+          @click="post_react(postsObject[n - 1].id, 'bear', n - 1)"
         >
           <img src="/icon/bearish.svg" width="12" />
         </v-btn>
@@ -247,7 +247,7 @@
             </v-list-item-avatar>
             <v-list-item-content class="pa-0 ma-0">
               <v-container class="pa-0 body-2">
-                <strong class="text--darken-2"
+                <strong class="text--darken-2 caption"
                   >{{
                     postsObject[n - 1].comments[k - 1]["user"]["first_name"]
                   }}
@@ -274,7 +274,7 @@
                     width="10"
                   />
                 </v-btn>
-                <span class="px-2 caption">0</span>
+                <span class="px-1 caption">0</span>
                 <v-btn
                   icon
                   outlined
@@ -289,7 +289,7 @@
                     width="10"
                   />
                 </v-btn>
-                <span class="px-2 caption">0</span>
+                <span class="px-1 caption">0</span>
                 <!-- | -->
                 <v-btn icon small depressed>
                   <v-icon>mdi-reply-outline</v-icon>
@@ -349,9 +349,11 @@
         </v-list-item-content>
       </v-list-item>
       <!-- Start of Comment -->
+      <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
         <v-list-item-avatar size="28" class="mr-2">
           <v-img
+            class="avatar__border"
             :src="
               $auth.loggedIn
                 ? $auth.user.data.user.profile_image
@@ -361,7 +363,6 @@
         </v-list-item-avatar>
         <v-list-item-content class="pt-0 mb-0">
           <v-text-field
-            v-model="commentField[n - 1]"
             dense
             rounded
             hide-details
@@ -371,7 +372,7 @@
             :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
             :dark="lightSwitch == 0 ? false : true"
             @keyup.enter="
-              postComment(postsObject[n - 1].id, commentField[n - 1], n - 1)
+              postComment(postsObject[n - 1].id, $event.target.value, n - 1)
             "
           >
           </v-text-field>
@@ -402,7 +403,7 @@
   color: transparent;
 }
 .post--sentiment {
-  background: rgba(3, 218, 197, 0.2);
+  background: rgba(0, 219, 197, 0.2);
   border-radius: 20px;
 }
 .postOptions__container {
@@ -444,23 +445,16 @@ export default {
   },
   data() {
     return {
-      dark_theme_color: process.env.DARK_THEME_COLOR,
-      user: this.$store.getters["auth/user"],
       postsObject: [],
       loader: true,
-      scrolledToBottom: false,
       pageCount: 1,
-      commentModel: "",
-      commentField: [],
       alert: false,
       alertState: "",
       alertResponse: "",
-      postOptionsModal: [],
-      editModel: [],
-      editPostMode: false,
       editTextAreaModel: [],
-      currentEdit: 0,
+      currentPost: "",
       deleteDialog: false,
+      editPostMode: false,
       postOptionsMode: false
     };
   },
@@ -492,7 +486,6 @@ export default {
       });
     }
   },
-  created() {},
   mounted() {
     this.loadPosts();
     this.scroll();
@@ -558,22 +551,28 @@ export default {
               last_name: this.$auth.user.data.user.last_name
             }
           });
-          this.commentField[index] = "";
         } else {
           this.triggerAlert(false, response.message);
         }
       });
     },
-    post_react(post_id, type) {
+    post_react(post_id, type, index) {
       const params = post_id;
       if (type == "bull") {
         this.$api.social.posts.bullish(params).then(response => {
-          this.postsObject[n - 1].bears_count;
-          console.log(response);
+          if (response.success) {
+            this.postsObject[index].bulls_count += 1;
+          } else {
+            this.triggerAlert(false, response.message);
+          }
         });
       } else if (type == "bear") {
         this.$api.social.posts.bearish(params).then(response => {
-          console.log(response);
+          if (response.success) {
+            this.postsObject[index].bears_count += 1;
+          } else {
+            this.triggerAlert(false, response.message);
+          }
         });
       }
     },

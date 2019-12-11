@@ -15,11 +15,11 @@
             ></v-text-field>
           </v-col>
           <v-spacer></v-spacer>
-          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>
-          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Week</v-btn>
-          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
-          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
-          <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
+          <v-btn small dark text color="success" @click="filterDate('day')" class="body-2 text-capitalize" elevation="0">Day</v-btn>
+          <v-btn small dark text color="success" @click="filterDate('week')" class="body-2 text-capitalize" elevation="0">Week</v-btn>
+          <v-btn small dark text color="success" @click="filterDate('month')" class="body-2 text-capitalize" elevation="0">Month</v-btn>
+          <v-btn small dark text color="success" @click="filterDate('year')" class="body-2 text-capitalize" elevation="0">Year</v-btn>
+          <v-btn small dark text color="success" @click="filterDate('custom')" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
           <v-spacer></v-spacer>
           <!--<v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click ="EnterRecordModal=true" style="border-width: 2px" height="23">Record</v-btn>-->
             <v-btn icon small @click.stop="showScheduleForm=true"> 
@@ -57,13 +57,14 @@
             small
             class="mr-2"
             @mouseover="tradelogsmenuLogsShow(item)"
+            style="color: #fff !important;"
           >
             mdi-dots-horizontal
           </v-icon>
         </template>
         </v-data-table>
         <v-row>
-          <v-col class="text-right font-weight-regular subtitle-2 mr-10" width="100%" style="color:#fff;">
+          <v-col style="font-size: 12px;" class="text-right font-weight-regular mr-10" width="100%" :style="{ color: fontcolor }">
           Total Profit/Loss as of {{ this.date }}: <span class="ml-3" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
           <span class="ml-8 mr-1" :class="(this.totalProfitLossPerf < 0 ? 'negative' : 'positive')">{{ this.totalProfitLossPerf.toFixed(2) }}%</span>
           </v-col>
@@ -119,6 +120,8 @@ export default {
         { text: '', value: 'action', sortable: false, align: 'right' },
       ],
       tradeLogs: [],
+      filter: [],
+      tradelogs2: [],
       page: 1,
       pageCount: 0,
       menuShow: false,
@@ -140,6 +143,9 @@ export default {
       cardbackground: function() {
           return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
       },
+      fontcolor: function() {
+              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+            },
     },
   mounted() {
      if(this.simulatorPortfolioID != 0 ?  this.getTradeLogs() : ''); 
@@ -169,7 +175,8 @@ export default {
     this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
       function(result) {
         console.log(result);
-          this.tradeLogs = result.meta.logs;  
+          this.tradeLogs = result.meta.logs;
+          this.tradelogs2 = this.tradeLogs;  
           let plossperc = []; 
           for(let i = 0; i < result.meta.logs.length; i++){   
 
@@ -187,7 +194,7 @@ export default {
                       this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
                       this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
                       this.tradeLogs[i].action = this.tradeLogs[i].id;
-                      this.$emit('totalRealized', this.totalProfitLoss.toFixed(3));
+                      this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
 
                        if(parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0) {
                           plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;
@@ -197,7 +204,7 @@ export default {
                     }.bind(this)
                   );
           }
-                    
+                                 
       }.bind(this)
     );
 
@@ -266,6 +273,52 @@ export default {
               + sep
               + n.toFixed(2).split(sep)[1];
       },
+    filterDate(data){
+        let d = new Date;
+        
+        let day = d.getDate();
+        let fweek = new Date(d.getTime() - (7 * 24 * 60 * 60 * 1000));
+        let fmonth = d.getMonth()+1;
+        let fyear = d.getFullYear();
+        this.tradeLogs = this.tradelogs2;
+        this.filter = this.tradeLogs;
+        this.tradeLogs = [];
+        let dnum = 0;
+        let mnum = 0;
+        let ynum = 0;
+            for(let i = 0; i < this.filter.length; i++){
+              let fil_date = this.filter[i].meta.date.split(' ')[0];
+              let today = fil_date.split('/')[1];
+              let month = fil_date.split('/')[0];
+              let year = fil_date.split('/')[2];
+                if(data == 'day'){
+                    if(day == today){
+                      this.tradeLogs[dnum] = this.filter[i];
+                      dnum++;
+                    }
+                }
+                if(data == 'month'){
+                    if(fmonth == month){
+                      this.tradeLogs[mnum] = this.filter[i];
+                      mnum++;
+                    }
+                }
+                if(data == 'year'){
+                    if(fyear == year){
+                      this.tradeLogs[mnum] = this.filter[i];
+                      mnum++;
+                    }
+                }
+                if(data == 'week'){
+                  let dayweek = fweek.getDate();
+                  let monthweek = fweek.getMonth()+1;
+                    if(today >= dayweek && month == monthweek){
+                      this.tradeLogs[mnum] = this.filter[i];
+                      mnum++;
+                    }
+                }
+            }
+    },
  
   },
 }
@@ -282,6 +335,7 @@ export default {
     background: #00121e;
     border: 1px solid #03DAC5;
     border-radius: 4px;
+    margin-top: -6px;
   }
    .positive{
     color: #03DAC5;
