@@ -10,7 +10,8 @@
     background: none;
 }
 .avatar__border {
-    border: 1px solid #1f2f39;
+    border: 1px solid rgba(189,189,189,0.2);
+    /* rgba: (189,189,189, 0.2) */
 }
 .no-transform {
     text-transform: none !important;
