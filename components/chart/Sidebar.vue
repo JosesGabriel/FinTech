@@ -47,7 +47,7 @@ export default {
       lightSwitch: "global/getLightSwitch"
     }),
     cardbackground: function() {
-      //return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+      //return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e"; e3e9ed
       return this.lightSwitch == 0 ? "#e3e9ed" : "#172431";
     }
   },

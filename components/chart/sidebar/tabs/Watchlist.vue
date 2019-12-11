@@ -20,7 +20,7 @@
       :loading="loading"
       :max-height="`calc(100vh - ${responsive_height - 170}px)`"
       style="overflow-y: auto;"
-      class="mt-2"
+      class="mt-2 mr-2"
       flat
       tile
     >
