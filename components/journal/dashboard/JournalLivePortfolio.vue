@@ -3,9 +3,9 @@
         <v-card-title class="text-left justify-left px-0 py-3 pt-5">
             <h1 class="font-weight-regular subtitle-2" style="color:#fff;">OPEN POSITION/S (PHP)</h1>
             <v-spacer></v-spacer>
-            <v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
-            <v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" style="border-width: 2px" height="23">Trade</v-btn>
-            <v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" style="border-width: 2px" height="23">Fund</v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" style="border-width: 2px" height="23">Trade</v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" style="border-width: 2px" height="23">Fund</v-btn>
 
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">

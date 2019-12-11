@@ -5,6 +5,7 @@
       :dark="lightSwitch == 1"
       class="pa-0 ma-0"
       tile
+      flat
     >
       <v-tabs
         v-model="active_tab"
@@ -33,6 +34,7 @@
             :color="color"
             class="pa-0 ma-0 tab__height"
             tile
+            flat
           >
             <v-card-text class="pa-0 ma-0">
               <component :is="item.component" />

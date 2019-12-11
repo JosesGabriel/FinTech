@@ -6,8 +6,8 @@
         <v-content>
           <v-row
             :class="[
-              { darkmode__text: lightSwitch },
-              { lightmode__text: !lightSwitch }
+              { darkmode__text: lightSwitch == 1 },
+              { lightmode__text: lightSwitch == 0 }
             ]"
           >
             <v-col class="col-5 text-right pa-0">

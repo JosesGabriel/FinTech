@@ -96,7 +96,7 @@
 }
 </style>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
 import HeaderDropdown from "~/components/HeaderDropdown";
 export default {
@@ -115,13 +115,29 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      stockList: "global/getStockList"
     })
   },
   mounted() {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
+    if(this.stockList.length == 0 ){
+      const params = {
+        exchange: "PSE",
+        status: "active",
+        type: "stock"
+      };
+      this.$api.chart.stocks.list(params).then(
+        function(result) {
+          this.setStockList(result)
+        }.bind(this)
+      );
+    }
   },
   methods: {
+    ...mapActions({
+      setStockList: "global/setStockList"
+    }),
     toggleSearch() {
       this.searchButtonIsVisible
         ? (this.searchButtonIsVisible = false)

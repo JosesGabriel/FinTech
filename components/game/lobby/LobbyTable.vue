@@ -45,7 +45,7 @@
         color="success"
         @click="
           dialog = false;
-          joinLobby();
+          createLobby();
           setPlayerIsHost(true);
         "
         >Create Game</v-btn
@@ -85,6 +85,8 @@ tr span {
 </style>
 <script>
 import { mapActions, mapGetters } from "vuex";
+// const HSUrl = "https://im.arbitrage.ph";
+// const client = sdk.createClient(HSUrl);
 export default {
   data() {
     return {
@@ -339,6 +341,11 @@ export default {
       setPlayerIsHost: "game/setPlayerIsHost"
     }),
     joinLobby() {
+      this.setPlayerInLobby(true);
+    },
+    createLobby(){
+      //create Vyndue Game Room first:
+
       this.setPlayerInLobby(true);
     },
     selectRoom(a) {

@@ -189,7 +189,12 @@
 }
 </style>
 <script>
+  const sdk = require("matrix-js-sdk");
+  const HSUrl = "https://im.arbitrage.ph";
+  const client = sdk.createClient(HSUrl);
+  const roomID = "!OlWVatkysuERsuXfCS:im.arbitrage.ph";
 import { mapActions, mapGetters } from "vuex";
+  import axios from 'axios';
 export default {
   data() {
     return {
@@ -246,14 +251,81 @@ export default {
     },
     checkFields() {
       if (
+
         this.playerCountModel != "" &&
         this.coinsModel != "" &&
         this.marketModel != "" &&
         this.chartCountModel != "" &&
         this.limitModel != ""
       ) {
+
+
+        var myToken = '';
+        client
+                .login("m.login.password", {
+                  user: "@lerroux:im.arbitrage.ph",
+                  password: "angelus69"
+                })
+                .then(response => {
+                  myToken = response.access_token;
+                });
+        client.startClient();
+        client.on("sync", function(state, prevState, data) {
+          switch (state) {
+            case "PREPARED":
+              //create the room here
+                      console.log("Ready to create Lobby");
+              //get rooms that the user is a member of
+                    console.log(client.getRooms());
+              //get rooms that the user is a member of
+              //test display room tags
+              client.getRoomTags("!qbKboNnrmpjbMQmklT:im.arbitrage.ph").then(function(data){
+                console.log(data);
+              });
+              //test display room tags
+                      // Ses: We should define the room aliases and names when we create, this could be a random string. Si vyndue na mo return sa room ID. makita na nimo below sa response data.
+
+                      var options = {
+                        "preset": "public_chat",
+                        "room_alias_name": "TheTest7",
+                        "name": "The Grand Test Room7",
+                        "topic": "All about testing7",
+                        "creation_content": {
+                          "m.federate": false
+                        }
+                      };
+
+                      axios.defaults.headers.common['Authorization'] = `Bearer ` + myToken;
+                      axios.post('https://im.arbitrage.ph/_matrix/client/r0/createRoom', options).then(function (response) {
+                            console.log(response.data['room_id']);
+                            // Create the room tags/options here
+                                  //client.setRoomTag(roomID,tagname,objectdata,callback)
+                                    var gameOptions = {
+                                      "Players" : "3",
+                                      "Stake" : "2",
+                                      "NumCharts" : "2",
+                                      "Market"  : "PSE",
+                                      "Visibility" : "Public",
+                                      "TimeLimit" : "10"
+                                    };
+                                    client.setRoomTag(response.data['room_id'],'Options',gameOptions,function (response){
+                                      console.log(response);
+                                    });
+
+                            // Create the room tags/options here
+                          }).catch(function (error) {
+                                console.log(error);
+                          });
+              //create the room here
+
+              break;
+          }
+        });
+
+
         return true;
       } else {
+        console.log('false');
         return false;
       }
     },
