@@ -91,8 +91,6 @@ export default {
       market_code: "chart/market_code"
     }),
     theme: function() {
-      console.log("switch");
-      console.log(this.lightSwitch);
       return this.lightSwitch == 0 ? "Light" : "Dark";
     },
     chartView: function() {
@@ -136,8 +134,8 @@ export default {
   },
   watch: {
     lightSwitch(value) {
-      console.log("chart switch");
-      console.log(value);
+      //   console.log("chart switch");
+      //   console.log(value);
       this.loadChart();
     },
     market_code(value, old) {
@@ -150,6 +148,9 @@ export default {
     }
   },
   mounted() {
+    if (localStorage.currentMode) {
+      this.setLightSwitch(localStorage.currentMode);
+    }
     this.loadChart();
   },
   destroyed() {
@@ -160,7 +161,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSymbolID: "chart/setSymbolID"
+      setSymbolID: "chart/setSymbolID",
+      setLightSwitch: "global/setLightSwitch"
     }),
     loadChart() {
       // listen to ticker toggle

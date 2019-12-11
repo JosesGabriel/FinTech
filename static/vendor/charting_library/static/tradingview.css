@@ -112,7 +112,7 @@ html.theme-dark .tv-control-input {
 }
 .spinner {
     background-color: transparent; 
-    background: url('/loader.gif') no-repeat 50% 50%;
+    /* background: url('/loader.gif') no-repeat 50% 50%; */
     /* background: url(https://arbitrage.ph/images/arb_preloader.svg) no-repeat 50% 50%; */
     background-size: 50px;
 	margin:-25px 0 0 -25px;
