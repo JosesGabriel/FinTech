@@ -83,7 +83,7 @@
                     @click="depositNow"
                     @click.stop="show = false"
                     :disabled="disableButtonSave"
-                    >Save</v-btn
+                    >Deposit</v-btn
                 >
                 <v-btn
                     color="#03dac5"
@@ -94,7 +94,7 @@
                     @click="withdrawNow"
                     @click.stop="show = false"
                     :disabled="disableWithdrawButtonSave"
-                    >Save</v-btn
+                    >Withdraw</v-btn
                 >
                     <!-- @click.stop="show=false" -->
             </v-card-actions>
@@ -144,7 +144,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.selectedPortfolio)
     if(!this.selectedPortfolio){
       this.availableFunds = parseFloat(this.selectedPortfolio.balance);
       this.disableWithdrawButtonSave = true

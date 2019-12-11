@@ -300,7 +300,6 @@ export default {
     .rtf_top-btn.v-btn--outlined:active,
     .rtf_top-btn.v-btn--outlined:focus {
     background-color: #03dac5;
-    border: 2px solid #03dac5;
     color: #000 !important;
     font-weight: 600 !important;
     }

@@ -34,20 +34,22 @@
           hide-default-footer
           @page-count="pageCount = $event"
           dark
+          :loading="liveLedgerLoading"
+          loading-text="Loading..."
           class="data_table-container pl-10 secondary--text"
         >
         <template v-slot:item.count="{ item }">{{ item.count }}</template>
         <template v-slot:item.created_at="{ item }">{{ item.created_at }}</template>
-        <template v-slot:item.debit="{ item }">-</template>
-        <template v-slot:item.total_value="{ item }">{{ formatPrice(item.total_value) }}</template>
+        <template v-slot:item.debit="{ item }">{{ item.debit }}</template>
+        <template v-slot:item.credit="{ item }">{{ item.credit }}</template>
         <template v-slot:item.balance="{ item }">{{ formatPrice(item.balance) }}</template>
         <template slot="footer">
           <v-row no-gutters class="mt-3">
             <v-spacer></v-spacer>
             <span style="width: 190px" class="text-right subtitle-2">Total Funds:</span>
-            <span style="width: 190px" class="text-right subtitle-2">0.00</span>
+            <span style="width: 190px" class="text-right subtitle-2" :class="(totalDebit < 0 ? 'negative' : 'positive')">{{ formatPrice(totalDebit) }}</span>
             <span style="width: 190px" class="text-right subtitle-2" :class="(totalCredit < 0 ? 'negative' : 'positive')">{{ formatPrice(totalCredit) }}</span>
-            <span style="width: 190px;" class="text-right subtitle-2"></span>
+            <span style="width: 190px;" class="text-right subtitle-2" >  </span>
           </v-row>
         </template>
         </v-data-table>
@@ -86,21 +88,23 @@ export default {
   },
   data () {
     return {
+      liveLedgerLoading: "success",
       showScheduleForm: false,
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       search: '',
       headers: [
         { text: 'Count', value: 'count', align: 'center', sortable: false },
         { text: 'Date', value: 'created_at', align: 'center' },
-        { text: 'Transaction', value: 'transaction', align: 'center' },
+        { text: 'Transaction', value: 'action', align: 'center' },
         { text: 'Debit', value: 'debit', align: 'right', width: "190px" },
-        { text: 'Credit', value: 'total_value', align: 'right', width: "190px" },
+        { text: 'Credit', value: 'credit', align: 'right', width: "190px" },
         { text: 'Balance', value: 'balance', align: 'right', width: "190px" },
       ],
       ledgerContent: [],
       page: 1,
       pageCount: 0,
       totalCredit: 0,
+      totalDebit: 0,
       menuShow: false,
       date: new Date().toISOString().substr(0, 10)
     }
@@ -124,30 +128,45 @@ export default {
       this.totalDebit = 0;
       this.balance = 0;
       this.credit = 0;
+      this.debit = 0;
       this.count = 0;
       this.$api.journal.portfolio.ledger(ledgerparams).then(response => {
       this.ledgerContent = response.meta.ledger
         for (let i = 0; i < this.ledgerContent.length; i++) {
-          let created_at_date = new Date(this.ledgerContent[i].created_at).toISOString().substr(0, 10)
-          this.ledgerContent[i].created_at = created_at_date
-
-          if(this.ledgerContent[i].action == "deposit"){
-            this.ledgerContent[i].action = "Deposit Income"
-          } else if(this.ledgerContent[i].action == "dividend_income") {
-            this.ledgerContent[i].action = "Dividend Income"
-          }
-        
+          this.ledgerContent[i].created_at = this.ledgerContent[i].created_at.slice(0, 10)
+          console.log(this.ledgerContent[i])
           let ledgerArray = {transaction: this.ledgerContent[i].action, balance: 0, counter: 1, count: 0}
           this.ledgerContent[i] = {...ledgerArray,...this.ledgerContent[i]}
+
+          if(this.ledgerContent[i].action == "deposit"){
+            const Depositdebit = {debit: '-', credit: parseFloat(this.ledgerContent[i].total_value).toFixed(2).replace('.', '.').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            this.ledgerContent[i] = {...Depositdebit,...this.ledgerContent[i]}
+            this.ledgerContent[i].action = "Deposit Income"
+          } else if(this.ledgerContent[i].action == "dividend_income") {
+            const Dividenddebit = {debit: '-', credit: parseFloat(this.ledgerContent[i].total_value).toFixed(2).replace('.', '.').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+            this.ledgerContent[i] = {...Dividenddebit,...this.ledgerContent[i]}
+            this.ledgerContent[i].action = "Dividend Income"
+          } else if(this.ledgerContent[i].action == "withdraw") {
+            const debit = {debit: parseFloat(this.ledgerContent[i].total_value).toFixed(2).replace('.', '.').toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","), credit: '-'}
+            this.ledgerContent[i] = {...debit,...this.ledgerContent[i]}
+            this.ledgerContent[i].action = "Withdraw"
+          }
           
-          this.ledgerContent[i].balance = this.balance = this.balance + parseFloat(this.ledgerContent[i].total_value);
           this.ledgerContent[i].count = this.count = this.count + parseFloat(this.ledgerContent[i].counter);
           this.ledgerContent[0].count = 1;
           
-          this.totalDebit = this.totalDebit + parseFloat(this.ledgerContent[i].total_value);
-          this.totalCredit = this.ledgerContent[i].balance;
-          console.log(this.ledgerContent[i])
+          if(this.ledgerContent[i].debit != '-') {
+            this.totalDebit = this.debit = this.debit + parseFloat(this.ledgerContent[i].debit.replace(/,/g, ''));
+
+            this.ledgerContent[i].balance = this.balance = this.balance - parseFloat(this.ledgerContent[i].debit.replace(/,/g, ''));
+          } else if (this.ledgerContent[i].credit != '-') {
+            this.totalCredit = this.credit = this.credit + parseFloat(this.ledgerContent[i].credit.replace(/,/g, ''));
+
+            this.ledgerContent[i].balance = this.balance = this.balance + parseFloat(this.ledgerContent[i].credit.replace(/,/g, ''));
+          }
+          
         }
+        this.liveLedgerLoading = false
       });
     },
     ledgermenuLogsShow: function(item) {

@@ -36,9 +36,11 @@
           hide-default-footer
           @page-count="pageCount = $event"
           dark
+          :loading="liveTradelogsLoading"
+          loading-text="Loading..."
           class="data_table-container pl-10 secondary--text"
         >
-        <template v-slot:item.stock_id="{ item }" >{{ item.stock_id }}</template>
+        <template v-slot:item.stock_id="{ item }" ><span class="pl-2">{{ item.stock_id }}</span></template>
         <template v-slot:item.date="{ item }" >{{ item.meta.date }}</template>
         <template v-slot:item.average_price="{ item }" >{{ formatAvePrice(item.meta.average_price) }}</template>
         <template v-slot:item.buy_value="{ item }" >{{ formatPrice(item.meta.buy_value) }}</template>
@@ -108,6 +110,7 @@ export default {
   },
   data () {
     return {
+      liveTradelogsLoading: "success",
       showScheduleForm: false,
       showSellDelete: false,
       showSellDetails: false,
@@ -186,12 +189,13 @@ export default {
                 
                 this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value
                 this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100
-                
+
                 this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
                 this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
                 }.bind(this)
               );
             }
+            this.liveTradelogsLoading = false
         }.bind(this)
       )
       this.componentKeys++;

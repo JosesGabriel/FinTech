@@ -53,7 +53,7 @@ export default {
                 annotations: {
                     yaxis: [{
                     y: 0,
-                    borderColor: '#00FFC3',
+                    borderColor: '#03DAC5',
                     }]
                 },
                 chart: {
@@ -80,7 +80,7 @@ export default {
                         autoSelected: 'zoom' 
                         },
                 },
-                colors: ['#00FFC3'],
+                colors: ['#03DAC5'],
                 stroke: {
                     width: 2,
                     curve: 'smooth',
@@ -226,7 +226,7 @@ export default {
                     this.chartOptions = {
                         ...this.chartOptions,
                             ...{
-                                annotations: {yaxis: [{ y: this.equityCurveArr[0][1], borderColor: '#00FFC3'}]}
+                                annotations: {yaxis: [{ y: this.equityCurveArr[0][1], borderColor: '#03DAC5'}]}
                             }
                     };
                 });
