@@ -275,7 +275,9 @@ export default {
             case "PREPARED":
               //create the room here
                       console.log("Ready to create Lobby");
-
+              //get rooms that the user is a member of
+                    console.log(client.getRooms());
+              //get rooms that the user is a member of
               //test display room tags
               client.getRoomTags("!qbKboNnrmpjbMQmklT:im.arbitrage.ph").then(function(data){
                 console.log(data);
