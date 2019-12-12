@@ -118,13 +118,17 @@
                     color="#03dac5"
                     background-color="black"
                     :value="'tab-' + 1"
-                    style="background:transparent;"
+                    :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                 >
                     <v-container class="pa-0">
                         <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
                     </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#03dac5" background-color="transparent" :value="'tab-' + 2" style="background: transparent;">
+                <v-tab-item dark color="#03dac5" 
+                    background-color="transparent" 
+                    :value="'tab-' + 2" 
+                    :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
+                    >
                     <v-container class="pa-0">
                         <TradelogsContent :item="item" ref="tradelogsComponent" v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
                     </v-container>
@@ -174,6 +178,9 @@
             },
             cardbackground2: function() {
               return this.lightSwitch == 0 ? "1px solid #dadada" : "1px solid #172431";
+            },
+            tabsborder: function() {
+              return this.lightSwitch == 0 ? "1px solid #b6b6b6" : "1px solid #535358";
             },
     },
     watch: {
@@ -339,8 +346,9 @@
   bottom: -3px;
   z-index: 1;
   height: 4px;
-  background: #b6b6b6; 
+ /* background: #b6b6b6; */
 }
+
 .positive{
     color: #03DAC5;
 }

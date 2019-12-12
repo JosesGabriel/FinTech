@@ -9,7 +9,8 @@
               outlined
               dense
               hide-details
-              dark
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
               color="success"
               class="tl_searchfields"
             ></v-text-field>
@@ -38,17 +39,18 @@
           :style="{ background: cardbackground }"
           class="data_table-container pl-10 secondary--text"
         >
-        <template v-slot:item.stock_id="{ item }" >{{ item.stock_id }}</template>
-        <template v-slot:item.date="{ item }" >{{ item.meta.date.split(' ')[0] }}</template>
-        <template v-slot:item.average_price="{ item }" >{{ addcomma(parseFloat(item.meta.average_price)) }}</template>
-        <template v-slot:item.buy_value="{ item }" >{{ addcomma(parseFloat(item.meta.buy_value)) }}</template>
-        <template v-slot:item.sell_price="{ item }" >{{ addcomma(parseFloat(item.meta.sell_price)) }}</template>
-        <template v-slot:item.total_value="{ item }" >{{ addcomma(parseFloat(item.total_value)) }}</template>
+        <template v-slot:item.stock_id="{ item }" ><span :style="{ color: fontcolor2 }">{{ item.stock_id }}</span></template>
+        <template v-slot:item.date="{ item }" ><span :style="{ color: fontcolor2 }">{{ item.meta.date.split(' ')[0] }} </span></template>
+        <template v-slot:item.amount="{ item }" ><span :style="{ color: fontcolor2 }">{{ item.amount }} </span></template>
+        <template v-slot:item.average_price="{ item }" ><span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.average_price)) }}</span></template>
+        <template v-slot:item.buy_value="{ item }" ><span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.buy_value)) }}</span></template>
+        <template v-slot:item.sell_price="{ item }" ><span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.sell_price)) }}</span></template>
+        <template v-slot:item.total_value="{ item }" ><span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.total_value)) }}</span></template>
         <template v-slot:item.profit_loss="{ item }" ><span :class="item.meta.profit_loss > 0 ? 'positive' : item.meta.profit_loss < 0 ? 'negative' : 'neutral' ">{{ addcomma(parseFloat(item.meta.profit_loss)) }}</span></template>
         <template v-slot:item.profit_loss_percentage="{ item }" ><span :class="item.meta.profit_loss_percentage > 0 ? 'positive' : item.meta.profit_loss_percentage < 0 ? 'negative' : 'neutral' ">{{ addcomma(parseFloat(item.meta.profit_loss_percentage)) }}%</span></template>
  
         <template v-slot:item.action="{ item }">
-          <div v-show="menuShow" class="sidemenu_actions" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
+          <div v-show="menuShow" class="sidemenu_actions" :dark="lightSwitch == true" :style="{ background: cardbackground }" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
             <v-btn small class="caption" text color="success">Details</v-btn>
             <v-btn small class="caption" text color="success">Edit</v-btn>
             <v-btn small class="caption" v-on:click="deleteLogs(item.action)" text color="success">Delete</v-btn>
@@ -57,7 +59,7 @@
             small
             class="mr-2"
             @mouseover="tradelogsmenuLogsShow(item)"
-            style="color: #fff !important;"
+            :style="{ color: fontcolor2 }"
           >
             mdi-dots-horizontal
           </v-icon>
@@ -71,7 +73,7 @@
         </v-row>
         <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
           <v-card color="transparent" class="justify-center" elevation="0">
-            <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
+            <v-card-title class="caption pa-0"><span :style="{ color: fontcolor2 }" >Show Rows</span>
             <v-spacer></v-spacer>
             <v-text-field
               :value="itemsPerPage"
@@ -79,12 +81,13 @@
               min="5"
               max="10"
               @input="itemsPerPage = parseInt($event, 10)"
-              dark
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
               class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
               color="success"
               dense
             ></v-text-field>
-            <span class="pl-1">of {{ tradeLogs.length }}</span>
+            <span class="pl-1" :style="{ color: fontcolor2 }" >of {{ tradeLogs.length }}</span>
             </v-card-title>
           </v-card>
           <v-card color="transparent" elevation="0">
@@ -145,6 +148,9 @@ export default {
       },
       fontcolor: function() {
               return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+            },
+      fontcolor2: function() {
+              return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
             },
     },
   mounted() {
@@ -283,9 +289,9 @@ export default {
         this.tradeLogs = this.tradelogs2;
         this.filter = this.tradeLogs;
         this.tradeLogs = [];
-        let dnum = 0;
-        let mnum = 0;
-        let ynum = 0;
+        let num = 0;
+        //let mnum = 0;
+        //let ynum = 0;
             for(let i = 0; i < this.filter.length; i++){
               let fil_date = this.filter[i].meta.date.split(' ')[0];
               let today = fil_date.split('/')[1];
@@ -293,28 +299,28 @@ export default {
               let year = fil_date.split('/')[2];
                 if(data == 'day'){
                     if(day == today){
-                      this.tradeLogs[dnum] = this.filter[i];
-                      dnum++;
+                      this.tradeLogs[num] = this.filter[i];
+                      num++;
                     }
                 }
                 if(data == 'month'){
                     if(fmonth == month){
-                      this.tradeLogs[mnum] = this.filter[i];
-                      mnum++;
+                      this.tradeLogs[num] = this.filter[i];
+                      num++;
                     }
                 }
                 if(data == 'year'){
                     if(fyear == year){
-                      this.tradeLogs[mnum] = this.filter[i];
-                      mnum++;
+                      this.tradeLogs[num] = this.filter[i];
+                      num++;
                     }
                 }
                 if(data == 'week'){
                   let dayweek = fweek.getDate();
                   let monthweek = fweek.getMonth()+1;
                     if(today >= dayweek && month == monthweek){
-                      this.tradeLogs[mnum] = this.filter[i];
-                      mnum++;
+                      this.tradeLogs[num] = this.filter[i];
+                      num++;
                     }
                 }
             }

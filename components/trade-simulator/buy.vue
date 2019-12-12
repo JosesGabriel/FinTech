@@ -4,11 +4,11 @@
         <v-row no-gutters class="pa-3 pb-0">
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters>
-                    <v-card-title :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title  v-model="availableFunds" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" class="subtitle-1 px-0 py-2 secondary--text">{{ this.availableFunds }}</v-card-title>
+                    <v-card-title :style="{ color: fontcolor2 }" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title  v-model="availableFunds" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" class="subtitle-1 px-0 py-2 secondary--text">{{ this.availableFunds }}</v-card-title>
                 </v-row>
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" :value="this.defaultvalue" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Select Portfolio" dense flat dark></v-select>
+                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" :value="this.defaultvalue" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Select Portfolio" dense flat ></v-select>
                         <!--<v-text-field
                             label="Available Funds"
                             :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')"
@@ -25,8 +25,7 @@
                             :label="(this.simulatorConfirmedBuySell == 'sell' ? 'Sell Price' : 'Buy Price')"
                             :placeholder="(this.simulatorConfirmedBuySell == 'sell' ? 'Enter Sell Price' : 'Enter Buy Price')"
                             color="#00FFC3"
-                            style="color: #00FFC3"
-                            dark
+                            :style="{ color: fontcolor2 }"
                             class="body-2 buy_selector quantity-input py-3"
                             readonly
                             :value= this.BuyPrice
@@ -38,9 +37,8 @@
                             placeholder="Enter Quantity"
                             v-on:keyup="keypress"
                             color="#00FFC3"
-                            style="color: #00FFC3"
+                            :style="{ color: fontcolor2 }"
                             flat
-                            dark
                             class="body-2 buy_selector buy_price-input py-3 pb-0"
                             type="number"
                             v-model="quantity"
@@ -60,7 +58,7 @@
                     </v-col>
                      <v-col cols="12">
                         <v-row no-gutters>
-                            <v-card-title :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')" class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 pa-0 secondary--text">{{ this.BoardLot }}</v-card-title>
+                            <v-card-title :style="{ color: fontcolor2 }" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')" class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 pa-0 secondary--text">{{ this.BoardLot }}</v-card-title>
                         </v-row>
                     </v-col>
                     <!--<v-col class="ma-0 pa-0 boardlot" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')">
@@ -68,7 +66,7 @@
                     </v-col>-->
                     <v-col cols="12" class="pb-5">
                         <v-row no-gutters>
-                            <v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ (this.simulatorConfirmedBuySell == 'sell' ? 'Market Value' : 'Total Cost') }}</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ this.totalCost }}</v-card-title>
+                            <v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 px-0 py-2 secondary--text">{{ (this.simulatorConfirmedBuySell == 'sell' ? 'Market Value' : 'Total Cost') }}</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 px-0 py-2 secondary--text">{{ this.totalCost }}</v-card-title>
                         </v-row>
                     </v-col>
                     <!--<v-text-field
@@ -107,8 +105,18 @@ export default {
     ...mapGetters({
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
       simulatorPositions: "tradesimulator/getSimulatorPositions",
-      simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell"
+      simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
+      lightSwitch: "global/getLightSwitch",
     }),
+    cardbackground: function() {
+        return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    },
+        fontcolor: function() {
+        return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
+    },
+    fontcolor2: function() {
+        return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+    },
     
   },
   props: {

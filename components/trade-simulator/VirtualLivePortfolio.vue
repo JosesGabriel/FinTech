@@ -31,7 +31,7 @@
             <template v-slot:item.Profit="{ item }"><span  :class="(item.Profit > 0 ? 'positive' : item.Profit < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
             <template v-slot:item.Perf="{ item }"><span  :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
             <template v-slot:item.action="{ item }">
-                  <div v-show="menuShow" class="sidemenu_actions" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
+                  <div v-show="menuShow" class="sidemenu_actions" :dark="lightSwitch == true" :style="{ background: cardbackground }" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
                     <v-btn small class="caption" @click.stop="showEditForm=true" v-on:click="details(item.action, 'details')" text color="success">Details</v-btn>
                     <v-btn small class="caption" v-on:click="details(item.action, 'edit')" @click.stop="showEditForm=true" text color="success">Edit</v-btn>
                     <v-btn small class="caption" v-on:click="deleteLive(item.action)" text color="success">Delete</v-btn>
@@ -47,7 +47,7 @@
         </v-data-table>
         <v-row>
           <v-col style="font-size: 12px;" class="text-right font-weight-regular mr-10" width="100%" :style="{ color: fontcolor }">
-          Total Profit/Loss as of {{ this.date }}: <span class="ml-3 mr-4" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
+          Total Profit/Loss as of {{ this.date }}: <span class="ml-3 mr-4" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.addcomma(this.totalProfitLoss) }}</span>
           <span class="ml-12 mr-5" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
           </v-col>
         </v-row>
@@ -77,9 +77,10 @@
                       v-model="showEditForm"
                       max-width="290"
                       dark
-                      style="background:transparent;"
+                      :dark="lightSwitch == true"
+                      :style="{ background: cardbackground }"
                     >
-                      <v-card color="transparent">
+                      <v-card >
                         <v-card-title>{{ (this.editDetails == 'edit' ? 'Edit' : 'Trade Details') }}</v-card-title>
                         <v-card-text>
                         <v-col sm="12" md="12" class="my-0">
@@ -512,6 +513,11 @@ export default {
   .resetbtn > .v-btn__content{
     padding-top: 2px !important;
     font-size: 12px !important; 
+  }
+
+  .resetbtn:hover {
+    background:#03DAC5;
+    color: #00121e !important;
   }
 
   .theme--light.v-data-table thead tr th {

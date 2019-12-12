@@ -1,8 +1,16 @@
 <template>
-    <v-dialog v-model="show" max-width="320px">
-        <v-card color="#00121E">
+    <v-dialog 
+    v-model="show" 
+    max-width="320px"
+    :dark="lightSwitch == true"
+    :style="{ background: cardbackground }"
+    >
+        <v-card 
+            :dark="lightSwitch == true"
+            :style="{ background: cardbackground }"
+        >
             <v-card-title class="text-left justify-left pa-5 pb-0 px-5 success--text subtitle-1 font-weight-bold">TRADE</v-card-title>
-            <v-stepper v-model="e1" dark id="stepper_container" >
+            <v-stepper v-model="e1" :dark="lightSwitch == true" :style="{ background: cardbackground }" id="stepper_container" >
                 <v-stepper-items >
                     <v-stepper-content step="1" class="mt-0 pt-0">
                         <!-- -----First View of Trade Modal----- -->
@@ -44,7 +52,7 @@
                                         <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span :class="(change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral')" class="caption">{{ change }}</span> <span :class="(cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral')" class="caption">({{ cpercentage }}%)</span></p>
                                     <v-row no-gutters class="mt-2">
                                         <v-col class="pa-0" cols="6" sm="6" md="6">
-                                            <v-simple-table :dense="true" dark id="liveportfolio-table">
+                                            <v-simple-table :dense="true" :dark="lightSwitch == true" :style="{ background: cardbackground }" id="liveportfolio-table">
                                                 <template v-slot:default>
                                                     <tbody>
                                                         <tr id="table_tr_snap-cont">
@@ -72,7 +80,7 @@
                                             </v-simple-table>
                                         </v-col>
                                         <v-col class="pa-0" cols="6" sm="6" md="6">
-                                            <v-simple-table :dense="true" dark id="liveportfolio-table">
+                                            <v-simple-table :dense="true" :dark="lightSwitch == true" :style="{ background: cardbackground }" id="liveportfolio-table">
                                                 <template v-slot:default>
                                                     <tbody>
                                                         <tr id="table_tr_snap-cont">
@@ -102,7 +110,7 @@
                                     </v-row>
                                     <div class="px-3">
                                         <v-card-title class="pa-0 justify-center mt-3">
-                                            <h1 class="font-weight-thin caption" style="color:#fff;">Bid/ Ask Bar</h1>
+                                            <h1 class="font-weight-thin caption" :style="{ color: fontcolor2 }" >Bid/ Ask Bar</h1>
                                         </v-card-title>
                                     
                                         <v-progress-linear
@@ -113,7 +121,7 @@
                                             class="mt-1"
                                         ></v-progress-linear>
                                         <v-card-title class="pa-0 justify-center mt-3">
-                                            <h1 class="font-weight-thin caption" style="color:#fff;">Members Sentiments</h1>
+                                            <h1 class="font-weight-thin caption" :style="{ color: fontcolor2 }" >Members Sentiments</h1>
                                         </v-card-title>
                                         <v-progress-linear
                                             value="50"
@@ -263,7 +271,17 @@ import { mapActions, mapGetters } from "vuex";
             simulatorPositions: "tradesimulator/getSimulatorPositions",
             simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
             simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
+            lightSwitch: "global/getLightSwitch",
             }),
+            cardbackground: function() {
+              return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+            },
+             fontcolor: function() {
+              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
+            },
+            fontcolor2: function() {
+              return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+            },
 
             show: {
                 get () {
