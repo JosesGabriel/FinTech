@@ -167,6 +167,9 @@ export default {
       client.on(
         "Room.timeline",
         function(event, room, toStartOfTimeline, user) {
+          if (event.getType() !== "m.room.message") {
+            return;
+          }
           if (event.getRoomId() === roomID) {
             var usr = client.getUser(event.getSender());
             var avtURLorig = usr.avatarUrl;
