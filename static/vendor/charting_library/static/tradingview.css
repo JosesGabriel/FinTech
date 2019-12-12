@@ -88,6 +88,7 @@ html.theme-dark .tv-tabbed-dialog {
     color: #03DAC5 !important;
 }
 
+
 /* .tv-insert-study-item:hover {background-color: #2c3e50 !important;} */
 html.theme-dark .tv-compare-dialog__tab-page input {
     border-color: #00121e;
@@ -602,10 +603,6 @@ html.theme-dark .menuWrap-1gEtmoET- {
     box-shadow: 0 2px 4px 0 #000;
 }
 
-html.theme-dark .button-2ioYhFEY-.isInteractive-20uLObIc-:hover:before {
-    background-color: #142a46;
-}
-
 html.theme-dark .tv-button--primary, .tv-button--primary_ghost {
     color: #000;
     border-color: #03DAC5 !important;
@@ -654,6 +651,20 @@ html.theme-dark tr.symbol-edit-popup:hover {
     height: 3px;
     background-color: #03DAC5;
 }
+
+.button-2ioYhFEY-.isInteractive-20uLObIc-:hover:before {
+    background-color: rgb(182,182,182,.2) !important;
+}
+
+.button-13wlLwhJ-:hover:before {
+    background-color: rgb(182,182,182,.2) !important;
+}
+
+.button-263WXsg--:hover .bg-1kRv1Pf2- {
+    background-color: rgb(182,182,182,.2) !important;
+}
+
+
 
 /* html.theme-dark .button-13wlLwhJ-:hover {
     background-color: #142a46;
