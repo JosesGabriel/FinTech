@@ -32,9 +32,9 @@
             <template v-slot:item.Perf="{ item }"><span  :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
             <template v-slot:item.action="{ item }">
                   <div v-show="menuShow" class="sidemenu_actions" :dark="lightSwitch == true" :style="{ background: cardbackground }" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
-                    <v-btn small class="caption" @click.stop="showEditForm=true" v-on:click="details(item.action, 'details')" text color="success">Details</v-btn>
-                    <v-btn small class="caption" v-on:click="details(item.action, 'edit')" @click.stop="showEditForm=true" text color="success">Edit</v-btn>
-                    <v-btn small class="caption" v-on:click="deleteLive(item.action)" text color="success">Delete</v-btn>
+                    <v-btn small class="caption btn_sidemenu" @click.stop="showEditForm=true" v-on:click="details(item.action, 'details')" text >Details</v-btn>
+                    <v-btn small class="caption btn_sidemenu" v-on:click="details(item.action, 'edit')" @click.stop="showEditForm=true" text >Edit</v-btn>
+                    <v-btn small class="caption btn_sidemenu" v-on:click="deleteLive(item.action)" text >Delete</v-btn>
                   </div>
                   <v-icon
                     small
@@ -265,7 +265,7 @@ export default {
                                 notes: this.portfolioLogs[i].metas.notes
                               }       
 
-                             this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(2));
+                             this.$emit('totalUnrealized', this.addcomma(this.totalProfitLoss));
                              this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
                            
                           }.bind(this)
@@ -528,6 +528,10 @@ export default {
 
   .theme--light.v-data-table thead tr th {
     color: #494949;
+  }
+
+  .btn_sidemenu:hover {
+    color: #03DAC5;
   }
   
 </style>

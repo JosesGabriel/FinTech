@@ -100,12 +100,19 @@
                             v-on:change="getOpenPosition"
                             dense solo flat>
                             
-                            <template v-slot:append-item>
+                            <template 
+                                v-slot:append-item
+                                background-color="#03DAC5"
+                                :dark="lightSwitch == true"
+                                :style="{ background: cardbackground }"
+                            >
                                 <v-list-item
-                                ripple
+                                ripple 
+                                :dark="lightSwitch == true"
+                                :style="{ background: cardbackground }"
                                 @click.stop="showCreatePortForm=true"
                                 >   
-                                    <v-list-item-content>
+                                    <v-list-item-content >
                                         <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
