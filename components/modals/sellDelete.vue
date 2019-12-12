@@ -21,7 +21,7 @@
                     light
                     @click="deleteNow"
                     @click.stop="show = false"
-                    >Save</v-btn>
+                    >Delete</v-btn>
                 </v-row>
             </v-container>
         </v-card>
@@ -46,7 +46,6 @@ export default {
                 if (this.visible){
                     this.details = this.itemDetails
                     this.transaction_id = this.itemDetails.id
-                    console.log(this.details)
                 }
                 return this.visible
             },

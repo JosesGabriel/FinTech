@@ -2,7 +2,7 @@
     <v-col cols="12" sm="12" md="12">
             <v-row class="mt-3 ml-0 mb-10 mr-2">
     
-                <v-col class="ml-0 mb-2 pt-0 pb-0 vt_realized"  :style="{ background: cardbackground2 }" style="width:20%;">
+                <v-col class="ml-0 mb-2 pt-0 pb-0 vt_realized"  :style="{ border: cardbackground2 }" style="width:20%;">
                  
                     <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Realized P/L (PHP)
@@ -14,7 +14,7 @@
                     </v-row>
                     
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ background: cardbackground2 }" style="width:20%;">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
                     <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Unrealized P/L (PHP)
                     </v-row>
@@ -24,7 +24,7 @@
                         </v-col>
                     </v-row>
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ background: cardbackground2 }" style="width:20%;">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
                     <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Port Performance %
                     </v-row>
@@ -34,7 +34,7 @@
                         </v-col> 
                     </v-row>
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ background: cardbackground2 }" style="width:20%;">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
                     <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                        Max Drawdown %
                     </v-row>
@@ -44,7 +44,7 @@
                         </v-col> 
                     </v-row>
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ background: cardbackground2 }" style="width:20%;">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
                     <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Equity
                     </v-row>
@@ -54,7 +54,7 @@
                         </v-col> 
                     </v-row>
                 </v-col>
-                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ background: cardbackground2 }" style="width:20%;">
+                <v-col class="ml-3 mb-2 pt-0 pb-0 vt_realized" :style="{ border: cardbackground2 }" style="width:20%;">
                     <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">
                         Day Change
                     </v-row>
@@ -170,10 +170,10 @@
               return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
             },
              fontcolor: function() {
-              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+              return this.lightSwitch == 0 ? "#000000 !important" : "#ffffff !important";
             },
             cardbackground2: function() {
-              return this.lightSwitch == 0 ? "#dadada" : "#0c1a2b";
+              return this.lightSwitch == 0 ? "1px solid #dadada" : "1px solid #172431";
             },
     },
     watch: {
@@ -332,10 +332,6 @@
     min-height: initial;
 }
 
-.theme--light.v-list {
-    background: #0c1a2b;
-}
-
 .v-slide-group__content.v-tabs-bar__content:before {
   content: "";
   width: 100%;
@@ -343,7 +339,7 @@
   bottom: -3px;
   z-index: 1;
   height: 4px;
-  background: #535358;
+  background: #b6b6b6; 
 }
 .positive{
     color: #03DAC5;
@@ -365,12 +361,12 @@
 }
 .vt_realized {
    /* border: 1px solid black;*/
-    background: #0c1a2b73;
+   /* background: #0c1a2b73; */
 }
 
 .vt_realized:hover {
-    background: #0c1a2b;
-    box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12) !important;
+   /* background: #0c1a2b; */
+    box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.1), 0px 10px 15px 2px rgba(0, 0, 0, 0.12), 0px 3px 20px 2px rgba(0, 0, 0, 0.10) !important;
 }
 .select_portfolio .v-input__slot {
     margin: 0;

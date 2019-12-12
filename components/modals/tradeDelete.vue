@@ -21,7 +21,7 @@
                     light
                     @click="deleteNow"
                     @click.stop="show = false"
-                    >Save</v-btn>
+                    >Delete</v-btn>
                 </v-row>
             </v-container>
         </v-card>

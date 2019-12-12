@@ -23,9 +23,13 @@
               :style="{ background: cardbackground }"
               class="data_table-container pl-10 secondary--text"
             >
-            <template v-slot:item.stock_id="{ item }"><span class="pl-3">{{ item.stock_id }}</span></template>
-            <template v-slot:item.Profit="{ item }"><span :class="(item.Profit > 0 ? 'positive' : item.Profit < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
-            <template v-slot:item.Perf="{ item }"><span :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
+            <template v-slot:item.stock_id="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.stock_id }}</span></template>
+            <template v-slot:item.Position="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.Position }}</span></template>
+            <template v-slot:item.AvgPrice="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.AvgPrice }}</span></template>
+            <template v-slot:item.TotalCost="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.TotalCost }}</span></template>
+            <template v-slot:item.MarketValue="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.MarketValue }}</span></template>
+            <template v-slot:item.Profit="{ item }"><span  :class="(item.Profit > 0 ? 'positive' : item.Profit < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
+            <template v-slot:item.Perf="{ item }"><span  :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
             <template v-slot:item.action="{ item }">
                   <div v-show="menuShow" class="sidemenu_actions" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
                     <v-btn small class="caption" @click.stop="showEditForm=true" v-on:click="details(item.action, 'details')" text color="success">Details</v-btn>
@@ -357,7 +361,10 @@ export default {
               return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
             },
              fontcolor: function() {
-              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
+            },
+            fontcolor2: function() {
+              return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
             },
     },
      mounted() {
@@ -506,6 +513,9 @@ export default {
     padding-top: 2px !important;
     font-size: 12px !important; 
   }
-  
 
+  .theme--light.v-data-table thead tr th {
+    color: #494949;
+  }
+  
 </style>

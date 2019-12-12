@@ -486,15 +486,12 @@ export default {
       setStockList: "global/setStockList"
     }),
     initPortfolio(){
-
-      var today = new Date();
-      
+      var today = new Date(this.date);
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      // var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var dateTime = date+' '+time;
-      this.dateModel = dateTime
-
+      // var dateTime = date+' '+time;
+      this.dateModel = date
       this.getUserPortfolio();
     },
     buyListArray: function() {
@@ -526,7 +523,7 @@ export default {
             this.tradeplanModel = "";
             this.emotionsModel = "";
             this.notesModel = "";
-            this.dateModel = new Date();
+            this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
 
             this.cprice = "0.00";
@@ -548,7 +545,7 @@ export default {
         });
     },
     sellListArray: function() {
-      // let aveprice = parseFloat(this.quantitySellModel) / parseFloat(this.totalCostSellModel.replace(/,/g, ''))
+      let aveprice = parseFloat(this.quantitySellModel) / parseFloat(this.totalCostSellModel.replace(/,/g, ''))
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseFloat(this.quantitySellModel),
@@ -559,7 +556,7 @@ export default {
           plan : this.tradeplanSellModel,
           emotion : this.emotionsSellModel,
           notes: this.notesSellModel,
-          date : this.date
+          date : this.dateModel
         }
       };
       this.$axios
@@ -575,7 +572,7 @@ export default {
             this.GetSelectStock = "";
             this.priceSellModel = "0.00";
             this.quantitySellModel = "0";
-            this.dateModel = new Date();
+            this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
 
             this.cprice = "0.00";
@@ -788,12 +785,12 @@ export default {
       }
     },
     dateWatch() {
-      var today = new Date();
+      var today = new Date(this.date);
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      // var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var dateTime = date+' '+time;
-      this.dateModel = dateTime
+      // var dateTime = date+' '+time;
+      this.dateModel = date
     }
   }
 };
