@@ -58,7 +58,7 @@
                     </v-col>
                      <v-col cols="12">
                         <v-row no-gutters>
-                            <v-card-title :style="{ color: fontcolor2 }" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')" class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 pa-0 secondary--text">{{ this.BoardLot }}</v-card-title>
+                            <v-card-title style="font-size:13px !important" :style="{ color: fontcolor2 }" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')" class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 pa-0 secondary--text" style="font-size:13px !important">{{ this.BoardLot }}</v-card-title>
                         </v-row>
                     </v-col>
                     <!--<v-col class="ma-0 pa-0 boardlot" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')">
@@ -66,7 +66,7 @@
                     </v-col>-->
                     <v-col cols="12" class="pb-5">
                         <v-row no-gutters>
-                            <v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 px-0 py-2 secondary--text">{{ (this.simulatorConfirmedBuySell == 'sell' ? 'Market Value' : 'Total Cost') }}</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 px-0 py-2 secondary--text">{{ this.totalCost }}</v-card-title>
+                            <v-card-title style="font-size:13px !important" :style="{ color: fontcolor2 }" class="subtitle-1 px-0 py-2 secondary--text">{{ (this.simulatorConfirmedBuySell == 'sell' ? 'Peso Value' : 'Total Cost') }}</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 px-0 py-2 secondary--text" style="font-size:13px !important">{{ this.totalCost }}</v-card-title>
                         </v-row>
                     </v-col>
                     <!--<v-text-field
@@ -116,8 +116,7 @@ export default {
     },
     fontcolor2: function() {
         return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
-    },
-    
+    },    
   },
   props: {
    Position: {
@@ -139,7 +138,8 @@ export default {
         default () {
         return ''
         }
-    }
+    },
+    
   },
   watch: {
       simulatorConfirmedBuySell: function () {
@@ -155,6 +155,10 @@ export default {
                 if(this.Reset == true ? this.totalCost = 0 : '');
             }
       },
+      BuyPrice: function() {
+          this.quantity = 0;
+          this.totalCost = 0;
+      }
     },
     mounted() {
         const portfolioparams = {

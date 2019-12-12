@@ -122,7 +122,7 @@
                       </v-card>
                     </v-dialog>
 
-            <TradeModal :visible="EnterTradeModal" :OpenPosition="openposition" @close="EnterTradeModal=false" />
+            <TradeModal :visible="EnterTradeModal" :OpenPosition="openposition" :Trade_Modal="trade_modal" @close="EnterTradeModal=false" />
             <reset-modal :visible="showResetForm" @close="showResetForm=false" />
             <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
@@ -158,6 +158,7 @@ export default {
             { title: 'Delete' },
         ],
         EnterTradeModal: false,
+        trade_modal: false,
         showResetForm: false,
         showEditForm: false,
         showScheduleForm: false,
@@ -189,6 +190,9 @@ export default {
       },
       simulatorPortfolioID: function () {
         this.getOpenPositions();
+      },
+      EnterTradeModal: function(){
+        this.trade_modal = this.EnterTradeModal;
       }
     },
     methods: {
@@ -358,6 +362,7 @@ export default {
             simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
             lightSwitch: "global/getLightSwitch",
             }),
+
             cardbackground: function() {
               return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
             },
@@ -518,6 +523,7 @@ export default {
   .resetbtn:hover {
     background:#03DAC5;
     color: #00121e !important;
+    border: unset !important;
   }
 
   .theme--light.v-data-table thead tr th {

@@ -374,7 +374,7 @@
 
 .vt_realized:hover {
    /* background: #0c1a2b; */
-    box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.1), 0px 10px 15px 2px rgba(0, 0, 0, 0.12), 0px 3px 20px 2px rgba(0, 0, 0, 0.10) !important;
+    box-shadow: 0px 5px 6px -2px rgba(0, 0, 0, 0.1), 0px 10px 15px 2px rgba(0, 0, 0, 0.10), 0px 1px 5px 2px rgba(0, 0, 0, 0.10) !important;
 }
 .select_portfolio .v-input__slot {
     margin: 0;
