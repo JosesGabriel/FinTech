@@ -10,5 +10,8 @@ export default {
   },
   SET_PLAYERDATA(state, data) {
     state.playerData = data;
+  },
+  SET_PLAYERCURRENTCHATROOM(state, data) {
+    state.playerCurrentChatRoom = data;
   }
 };

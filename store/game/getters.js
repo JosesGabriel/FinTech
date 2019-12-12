@@ -10,5 +10,8 @@ export default {
   },
   getPlayerData(state) {
     return state.playerData;
+  },
+  getPlayerCurrentChatRoom(state) {
+    return state.playerCurrentChatRoom;
   }
 };

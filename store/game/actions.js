@@ -10,5 +10,8 @@ export default {
   },
   async setPlayerData({ commit }, data) {
     await commit("SET_PLAYERDATA", data);
+  },
+  async setPlayerCurrentChatRoom({ commit }, data) {
+    await commit("SET_PLAYERCURRENTCHATROOM", data);
   }
 };

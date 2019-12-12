@@ -2,5 +2,6 @@ export default () => ({
   playerInLobby: false,
   playerInGame: false,
   playerIsHost: false,
-  playerData: []
+  playerData: [],
+  playerCurrentChatRoom: "!OlWVatkysuERsuXfCS:im.arbitrage.ph"
 });

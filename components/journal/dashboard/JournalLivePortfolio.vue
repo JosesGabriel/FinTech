@@ -3,9 +3,9 @@
         <v-card-title class="text-left justify-left px-0 py-3 pt-5">
             <h1 class="font-weight-regular subtitle-2" style="color:#fff;">OPEN POSITION/S (PHP)</h1>
             <v-spacer></v-spacer>
-            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" style="border-width: 2px" height="23">Reset</v-btn>
-            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" style="border-width: 2px" height="23">Trade</v-btn>
-            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" style="border-width: 2px" height="23">Fund</v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" height="23">Reset</v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" height="23">Trade</v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" height="23">Fund</v-btn>
 
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -19,8 +19,11 @@
           hide-default-footer
           @page-count="pageCount = $event"
           dark
+          :loading="livePortfolioLoading"
+          loading-text="Loading..."
           class="data_table-container pl-10 secondary--text"
         >
+        <template v-slot:item.stock_id="{ item }" ><span class="pl-2">{{ item.stock_id }}</span></template>
         <template v-slot:item.average_price="{ item }" >{{ item.average_price.toFixed(3) }}</template>
         <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template>
         <template v-slot:item.market_value="{ item }" >{{ formatPrice(item.market_value) }}</template>
@@ -46,7 +49,7 @@
             <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
             <v-spacer></v-spacer>
             <v-text-field
-              :value="itemsPerPage"
+              :value="(portfolioLogs.length == 0 ? 0 : 5)"
               type="number"
               min="5"
               max="10"
@@ -111,6 +114,7 @@ export default {
         id: 1,
         title: 'My Journey with Vue'
       },
+      livePortfolioLoading: "success",
       showScheduleForm: false,
       showResetForm: false,
       showFundsForm: false,
@@ -201,6 +205,7 @@ export default {
             this.$api.journal.portfolio.history(historyparams).then(
               function(result) {
                 let portfolioLogsfinal = result.data
+
                 let market_value = {market_value: 0}
                 let profit = {profit: 0}
                 let perf_percentage = {perf_percentage: 0, id_str: null}
@@ -235,6 +240,8 @@ export default {
                 // this.portfolioLogsStock
                 
                 this.setOpenPosition(this.portfolioLogs)
+
+                this.livePortfolioLoading = false
               }.bind(this)
             );
           }
@@ -325,19 +332,7 @@ export default {
     margin: 0;
     outline-color: transparent;
   }
-  /* Custom Scrollbar */
-.gameGlobal ::-webkit-scrollbar {
-  width: 5px;
-}
-.gameGlobal ::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 10px;
-}
-.gameGlobal ::-webkit-scrollbar-thumb {
-  background: #03dac5;
-  border-radius: 20px;
-}
-.gameGlobal ::-webkit-scrollbar-thumb:hover {
-  background: #03dac5;
-}
+  .v-data-table.data_table-container th:first-child {
+    padding-left: 8px !important;
+  }
 </style>

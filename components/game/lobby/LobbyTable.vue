@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table
+      :loading="loader"
       :dark="lightSwitch == 0 ? false : true"
       :headers="playerInLobby ? headersJoined : headers"
       :items="playerInLobby ? itemsJoined : items"
@@ -13,7 +14,7 @@
         disablePagination: true
       }"
     >
-      <template v-slot:item="props">
+      <!-- <template v-slot:item="props">
         <tr @click="selectRoom(props.item)">
           <td
             v-for="(n, index) in Object.keys(props.item).length"
@@ -23,7 +24,7 @@
             {{ props.item[[Object.keys(props.item)[n - 1]]] }}
           </td>
         </tr>
-      </template>
+      </template> -->
     </v-data-table>
     <div class="table__footer">
       <v-btn
@@ -85,8 +86,10 @@ tr span {
 </style>
 <script>
 import { mapActions, mapGetters } from "vuex";
-// const HSUrl = "https://im.arbitrage.ph";
-// const client = sdk.createClient(HSUrl);
+const sdk = require("matrix-js-sdk");
+const HSUrl = "https://im.arbitrage.ph";
+const client = sdk.createClient(HSUrl);
+const roomID = "!OlWVatkysuERsuXfCS:im.arbitrage.ph";
 export default {
   data() {
     return {
@@ -97,159 +100,53 @@ export default {
         {
           text: "ROOM #",
           align: "center",
-          value: "roomName",
+          value: "RoomNumber",
           class: "tableHeader"
         },
         {
           text: "PLAYERS",
           align: "center",
-          value: "players",
+          value: "Players",
           class: "tableHeader"
         },
         {
           text: "MARKET",
           align: "center",
-          value: "market",
+          value: "Market",
           class: "tableHeader"
         },
-        { text: "TIME", align: "center", value: "time", class: "tableHeader" },
+        {
+          text: "TIME",
+          align: "center",
+          value: "TimeLimit",
+          class: "tableHeader"
+        },
         {
           text: "CHARTS",
           align: "center",
-          value: "charts",
+          value: "NumCharts",
           class: "tableHeader"
         },
         {
           text: "STAKE",
           align: "center",
-          value: "coinbet",
+          value: "Stake",
           class: "tableHeader"
         },
         {
           text: "POT",
           align: "center",
-          value: "potMoney",
+          value: "PotMoney",
           class: "tableHeader"
         },
         {
           text: "SETTING",
           align: "center",
-          value: "setting",
+          value: "Visibility",
           class: "tableHeader"
         }
       ],
-      items: [
-        {
-          roomName: "003",
-          players: 159,
-          market: "PSE",
-          time: 24,
-          charts: 4.0,
-          coinbet: "100",
-          potMoney: "900",
-          setting: "Private"
-        },
-        {
-          roomName: "004",
-          players: 237,
-          market: "NYSE",
-          time: 37,
-          charts: 4.3,
-          coinbet: "1000",
-          potMoney: "900",
-          setting: "Private"
-        },
-        {
-          roomName: "005",
-          players: 262,
-          market: "NYSE",
-          time: 23,
-          charts: 6.0,
-          coinbet: "700",
-          potMoney: "900",
-          setting: "Public"
-        },
-        {
-          roomName: "006",
-          players: 305,
-          market: "FOREX",
-          time: 67,
-          charts: 4.3,
-          coinbet: "180",
-          potMoney: "900",
-          setting: "Public"
-        },
-        {
-          roomName: "007",
-          players: 356,
-          market: "CRYPTO",
-          time: 49,
-          charts: 3.9,
-          coinbet: "160",
-          potMoney: "900",
-          setting: "Public"
-        },
-        {
-          roomName: "008",
-          players: 375,
-          market: "PSE",
-          time: 94,
-          charts: 0.0,
-          coinbet: "110",
-          potMoney: "900",
-          setting: "Public"
-        },
-        {
-          roomName: "007",
-          players: 356,
-          market: "CRYPTO",
-          time: 49,
-          charts: 3.9,
-          coinbet: "160",
-          potMoney: "900",
-          setting: "Public"
-        },
-        {
-          roomName: "008",
-          players: 375,
-          market: "PSE",
-          time: 94,
-          charts: 0.0,
-          coinbet: "110",
-          potMoney: "900",
-          setting: "Public"
-        }
-        // {
-        //   roomName: "",
-        //   players: "",
-        //   market: "",
-        //   time: "",
-        //   charts: "",
-        //   coinbet: "",
-        //   potMoney: "",
-        //   setting: ""
-        // },
-        // {
-        //   roomName: "",
-        //   players: "",
-        //   market: "",
-        //   time: "",
-        //   charts: "",
-        //   coinbet: "",
-        //   potMoney: "",
-        //   setting: ""
-        // },
-        // {
-        //   roomName: "",
-        //   players: "",
-        //   market: "",
-        //   time: "",
-        //   charts: "",
-        //   coinbet: "",
-        //   potMoney: "",
-        //   setting: ""
-        // }
-      ],
+      items: [],
       headersJoined: [
         {
           text: "PLAYERS",
@@ -321,7 +218,8 @@ export default {
           rank: "6",
           ready: ""
         }
-      ]
+      ],
+      loader: false
     };
   },
   computed: {
@@ -330,10 +228,9 @@ export default {
       playerIsHost: "game/getPlayerIsHost",
       lightSwitch: "global/getLightSwitch"
     })
-    // gray: function() {
-    //   this.gray = n;
-    //   return this.gray;
-    // }
+  },
+  mounted: function() {
+    this.loadRooms();
   },
   methods: {
     ...mapActions({
@@ -343,16 +240,55 @@ export default {
     joinLobby() {
       this.setPlayerInLobby(true);
     },
-    createLobby(){
+    createLobby() {
+      this.$emit("showSettings");
       //create Vyndue Game Room first:
-
-      this.setPlayerInLobby(true);
+      // this.setPlayerInLobby(true);
     },
     selectRoom(a) {
       if (!this.playerInLobby) {
         this.selectedRoom = Object.values(a);
         console.log(this.selectedRoom[0]);
       }
+    },
+    loadRooms() {
+      this.loader = true;
+      client
+        .login("m.login.password", {
+          user: "@lerroux:im.arbitrage.ph",
+          password: "angelus69"
+        })
+        .then(response => {
+          myToken = response.access_token;
+        });
+      client.startClient();
+      client.on(
+        "sync",
+        function(state, prevState, data) {
+          switch (state) {
+            case "PREPARED": {
+              console.log(client.getRooms());
+              let vyndueRooms = client.getRooms();
+              for (let i = 0; i < vyndueRooms.length; i++) {
+                if (vyndueRooms[i].tags.Options != undefined) {
+                  let potMoney =
+                    vyndueRooms[i].tags.Options.Players *
+                    vyndueRooms[i].tags.Options.Stake;
+                  vyndueRooms[i].tags.Options["RoomNumber"] = i;
+                  vyndueRooms[i].tags.Options["PotMoney"] = potMoney;
+                  this.items.push(vyndueRooms[i].tags.Options);
+                }
+              }
+              this.loader = false;
+            }
+          }
+        }.bind(this)
+      );
+      // client.on("event", function(event) {
+      //   if (event.getType() == "m.room.create") {
+      //     console.log("new room");
+      //   }
+      // });
     }
   }
 };
