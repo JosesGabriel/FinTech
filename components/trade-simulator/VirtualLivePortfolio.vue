@@ -265,7 +265,7 @@ export default {
                                 notes: this.portfolioLogs[i].metas.notes
                               }       
 
-                             this.$emit('totalUnrealized', this.addcomma(this.totalProfitLoss));
+                             this.$emit('totalUnrealized', this.totalProfitLoss);
                              this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
                            
                           }.bind(this)

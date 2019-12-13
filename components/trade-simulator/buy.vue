@@ -4,21 +4,11 @@
         <v-row no-gutters class="pa-3 pb-0">
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters>
-                    <v-card-title :style="{ color: fontcolor2 }" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title  v-model="availableFunds" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" class="subtitle-1 px-0 py-2 secondary--text">{{ this.availableFunds }}</v-card-title>
+                    <v-card-title :style="{ color: fontcolor2 }" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" style="font-size:13px !important;" class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title  v-model="availableFunds" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" class="subtitle-1 px-0 py-2 secondary--text" style="font-size:13px !important;">{{ this.availableFunds }}</v-card-title>
                 </v-row>
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" :value="this.defaultvalue" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0" :items="portfolio" label="Select Portfolio" dense flat ></v-select>
-                        <!--<v-text-field
-                            label="Available Funds"
-                            :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')"
-                            color="#00FFC3"
-                            style="color: #00FFC3"
-                            dark
-                            class="body-2 buy_selector quantity-input py-3"
-                            v-model="availableFunds"
-                            readonly
-                        ></v-text-field>-->
+                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" :value="this.defaultvalue" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0 select_port" :items="portfolio" label="Select Portfolio" dense flat ></v-select>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field
@@ -61,24 +51,13 @@
                             <v-card-title style="font-size:13px !important" :style="{ color: fontcolor2 }" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')" class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 pa-0 secondary--text" style="font-size:13px !important">{{ this.BoardLot }}</v-card-title>
                         </v-row>
                     </v-col>
-                    <!--<v-col class="ma-0 pa-0 boardlot" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'boardlotsell' : 'boardlotbuy')">
-                        BoardLot : <span>{{ this.BoardLot }}</span>
-                    </v-col>-->
+                   
                     <v-col cols="12" class="pb-5">
                         <v-row no-gutters>
                             <v-card-title style="font-size:13px !important" :style="{ color: fontcolor2 }" class="subtitle-1 px-0 py-2 secondary--text">{{ (this.simulatorConfirmedBuySell == 'sell' ? 'Peso Value' : 'Total Cost') }}</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 px-0 py-2 secondary--text" style="font-size:13px !important">{{ this.totalCost }}</v-card-title>
                         </v-row>
                     </v-col>
-                    <!--<v-text-field
-                        :label="(this.simulatorConfirmedBuySell == 'sell' ? 'Market Value' : 'Total Cost')"
-                        color="#00FFC3"
-                        style="color: #00FFC3"
-                        dark
-                        class="body-2 buy_selector quantity-input py-3"
-                        v-model="totalCost"
-                        :value = this.totalCost
-                        readonly
-                    ></v-text-field>-->
+                    
                 </v-row>
                 
             </v-col>
@@ -116,7 +95,8 @@ export default {
     },
     fontcolor2: function() {
         return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
-    },    
+    }, 
+    
   },
   props: {
    Position: {
@@ -156,9 +136,17 @@ export default {
             }
       },
       BuyPrice: function() {
-          this.quantity = 0;
-          this.totalCost = 0;
+           if(this.simulatorConfirmedBuySell == 'buy' ?  this.quantity = 0 : '');
+             this.totalCost = 0;
+      },
+      Position: function(){
+          this.quantity = this.Position;
+          this.setSimulatorPositions(this.quantity);
+          let add = parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
+          let addfees = this.fees(add);
+          this.totalCost = this.addcomma(addfees);
       }
+
     },
     mounted() {
         const portfolioparams = {
@@ -173,7 +161,6 @@ export default {
                              if(result.meta.logs[i].name == 'My Virtual Portfolio'){
                                 let avfunds = parseFloat(result.meta.logs[i].balance);    
                                 this.availableFunds = this.addcomma(avfunds);
-                                //this.setSimulatorPortfolioID(result.meta.logs[i].id);
                                 this.defaultvalue = result.meta.logs[i].name;
                             }
                         }
@@ -189,7 +176,7 @@ export default {
         setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
         setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
-    addButton(){      
+    addButton(){     
         if(this.simulatorConfirmedBuySell == 'sell'){
             this.quantity = (this.Position <= this.quantity ? this.Position : this.quantity = parseInt(this.quantity) + parseInt(this.BoardLot));      
         }else {
@@ -332,5 +319,10 @@ export default {
     }
     .boardlotbuy {
         top: 306px;
+    }
+</style>
+<style>
+.select_port > .v-input__control > .v-input__slot > .v-select__slot > label {
+        font-size: 13px;
     }
 </style>
