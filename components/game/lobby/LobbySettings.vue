@@ -24,7 +24,7 @@
           dense
           outlined
           dark
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-select>
       </div>
       <div class="col-6 pa-0 pl-5">
@@ -56,7 +56,7 @@
           outlined
           hide-details
           dark
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-select>
       </div>
       <div class="col-6 pa-0 pl-5">
@@ -74,7 +74,7 @@
           hide-details
           success
           dark
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-select>
       </div>
       <div class="col-6 pa-0 roomtype__radio--wrapper pl-5">
@@ -87,7 +87,7 @@
           color="success"
           dense
           hide-details
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         >
           <v-radio class="caption" label="Public" value="Public"></v-radio>
           <v-radio label="Private" value="Private"></v-radio>
@@ -109,7 +109,7 @@
           outlined
           hide-details
           dark
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-select>
       </div>
       <span class="caption pl-5">Invite/share settings</span>
@@ -122,7 +122,7 @@
           dense
           flat
           hide-details
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-switch>
         <v-btn text icon color="white">
           <v-icon>mdi-facebook-box</v-icon>
@@ -153,7 +153,7 @@
           >Start Game</v-btn
         >
         <v-btn
-          v-if="!playerIsHost"
+          v-if="disableFields"
           class="lobbySettings__select"
           dense
           outlined
@@ -189,6 +189,7 @@
 }
 </style>
 <script>
+require("dotenv").config();
 const sdk = require("matrix-js-sdk");
 const HSUrl = "https://im.arbitrage.ph";
 const client = sdk.createClient(HSUrl);
@@ -226,12 +227,12 @@ export default {
       market: ["PSE"],
       chartCount: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       limitModel: "",
-      marketModel: ""
+      marketModel: "",
+      disableFields: false
     };
   },
   computed: {
     ...mapGetters({
-      playerInLobby: "game/getPlayerInLobby",
       playerIsHost: "game/getPlayerIsHost",
       playerInGame: "game/getPlayerInGame",
       playerID: "game/getPlayerID",
@@ -240,13 +241,18 @@ export default {
   },
   methods: {
     ...mapActions({
-      setPlayerInLobby: "game/setPlayerInLobby",
+      setPlayerCurrentLobby: "game/setPlayerCurrentLobby",
       setPlayerIsHost: "game/setPlayerIsHost",
       setPlayerInGame: "game/setPlayerInGame",
       setPlayerCurrentChatRoom: "game/setPlayerCurrentChatRoom"
     }),
     leaveLobby() {
-      this.setPlayerInLobby(false);
+      this.setPlayerCurrentLobby("");
+      if (this.playerCurrentChatRoom != process.env.DEFAULT_CHAT_ROOM_ID) {
+        client.leave(this.playerCurrentChatRoom);
+        this.setPlayerCurrentChatRoom(process.env.DEFAULT_CHAT_ROOM_ID);
+        this.$emit("showSettings");
+      }
     },
     joinGame() {
       this.setPlayerInGame(true);
@@ -348,6 +354,7 @@ export default {
                       //If reached here, room creation is successful
                       // Join newly created room, by changing vuex currentChatRoom. Variable is watched, onchange, chatroom is re-rendered
                       this.setPlayerCurrentChatRoom(response.data["room_id"]);
+                      this.disableFields = true;
                       this.fullScreenLoader = false;
                     }.bind(this)
                   )

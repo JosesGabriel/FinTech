@@ -8,12 +8,11 @@
         </div>
         <div v-else>
           <span style="color: #03dac5;">Game Settings</span>
-          <LobbySettings />
+          <LobbySettings @showSettings="showSettings = false" />
         </div>
       </v-col>
       <v-col cols="6" class="px-0"
         ><AdCarousel class="mb-5" />
-        {{ showSettings }}
         <LobbyTable @showSettings="showSettings = true" />
       </v-col>
       <v-col cols="3"><ChatClient /></v-col>
@@ -52,21 +51,6 @@ export default {
       show: true,
       showSettings: false
     };
-  },
-  computed: {
-    ...mapGetters({
-      playerInLobby: "game/getPlayerInLobby",
-      playerIsHost: "game/getPlayerIsHost",
-      playerInGame: "game/getPlayerInGame"
-    })
-  },
-  beforeMount: function() {},
-  methods: {
-    ...mapActions({
-      setPlayerInLobby: "game/setPlayerInLobby",
-      setPlayerIsHost: "game/setPlayerIsHost",
-      setPlayerIGame: "game/setPlayerInGame"
-    })
   }
 };
 </script>

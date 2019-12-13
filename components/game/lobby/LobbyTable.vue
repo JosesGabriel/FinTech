@@ -3,8 +3,8 @@
     <v-data-table
       :loading="loader"
       :dark="lightSwitch == 0 ? false : true"
-      :headers="playerInLobby ? headersJoined : headers"
-      :items="playerInLobby ? itemsJoined : items"
+      :headers="playerCurrentChatRoom != defaultRoom ? headersJoined : headers"
+      :items="items"
       hide-default-footer
       fixed-header
       height="calc(100vh - 450px)"
@@ -85,6 +85,7 @@ tr span {
 }
 </style>
 <script>
+require("dotenv").config();
 import { mapActions, mapGetters } from "vuex";
 const sdk = require("matrix-js-sdk");
 const HSUrl = "https://im.arbitrage.ph";
@@ -155,103 +156,63 @@ export default {
           class: "tableHeader"
         },
         {
-          text: "RANK",
-          align: "center",
-          value: "rank",
-          class: "tableHeader"
-        },
-        {
           text: "READY",
           align: "center",
-          value: "ready",
+          value: "status",
           class: "tableHeader"
         }
       ],
-      itemsJoined: [
-        {
-          playerName: "Orange",
-          rank: "1",
-          ready: "READY"
-        },
-        {
-          playerName: "Jeff_ology",
-          rank: "3",
-          ready: "READY"
-        },
-        {
-          playerName: "Kring-Krungchao",
-          rank: "4",
-          ready: "READY"
-        },
-        {
-          playerName: "Kureyri",
-          rank: "2",
-          ready: "READY"
-        },
-        {
-          playerName: "aimeumemura",
-          rank: "9",
-          ready: "READY"
-        },
-        {
-          playerName: "Red",
-          rank: "5",
-          ready: "READY"
-        },
-        {
-          playerName: "Fuschia",
-          rank: "8",
-          ready: ""
-        },
-        {
-          playerName: "Purple",
-          rank: "10",
-          ready: "READY"
-        },
-        {
-          playerName: "AliceBlue",
-          rank: "7",
-          ready: ""
-        },
-        {
-          playerName: "Psalm",
-          rank: "6",
-          ready: ""
-        }
-      ],
+      defaultRoom: process.env.DEFAULT_CHAT_ROOM_ID,
       loader: false
     };
   },
   computed: {
     ...mapGetters({
-      playerInLobby: "game/getPlayerInLobby",
+      playerCurrentLobby: "game/getPlayerCurrentLobby",
       playerIsHost: "game/getPlayerIsHost",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      playerCurrentChatRoom: "game/getPlayerCurrentChatRoom"
     })
   },
+  watch: {
+    playerCurrentChatRoom: function() {
+      if (this.playerCurrentChatRoom == process.env.DEFAULT_CHAT_ROOM_ID) {
+        this.loadDefaultRoom();
+      } else {
+        this.loadLobby(this.playerCurrentChatRoom);
+      }
+    }
+  },
   mounted: function() {
-    this.loadRooms();
+    this.loadDefaultRoom();
   },
   methods: {
     ...mapActions({
-      setPlayerInLobby: "game/setPlayerInLobby",
+      setPlayerCurrentLobby: "game/setPlayerCurrentLobby",
       setPlayerIsHost: "game/setPlayerIsHost"
     }),
     joinLobby() {
-      this.setPlayerInLobby(true);
+      // this.setplayerCurrentLobby(true);
     },
     createLobby() {
       this.$emit("showSettings");
       //create Vyndue Game Room first:
-      // this.setPlayerInLobby(true);
+      // this.setplayerCurrentLobby(true);
     },
     selectRoom(a) {
-      if (!this.playerInLobby) {
+      if (this.playerCurrentLobby == "") {
         this.selectedRoom = Object.values(a);
         console.log(this.selectedRoom[0]);
       }
     },
-    loadRooms() {
+    loadLobby(id) {
+      let room = client.getRoom(id);
+      if (room.currentState._joinedMemberCount == 1) {
+        this.items[0].playerName = this.$auth.user.data.user.username;
+        this.items[0].status = "READY";
+      }
+    },
+    loadDefaultRoom() {
       this.loader = true;
       client
         .login("m.login.password", {
