@@ -3,18 +3,17 @@
     <v-row>
       <v-col cols="3 py-0 px-1">
         <UserProfileCard class="bordered__component" />
-        <div v-if="!playerInLobby">
+        <div v-if="showSettings == false">
           <Leaderboard class="bordered__component" />
         </div>
-        <div v-if="playerInLobby">
+        <div v-else>
           <span style="color: #03dac5;">Game Settings</span>
-          <LobbySettings />
+          <LobbySettings @showSettings="showSettings = false" />
         </div>
       </v-col>
       <v-col cols="6" class="px-0"
         ><AdCarousel class="mb-5" />
-
-        <LobbyTable />
+        <LobbyTable @showSettings="showSettings = true" />
       </v-col>
       <v-col cols="3"><ChatClient /></v-col>
     </v-row>
@@ -49,23 +48,9 @@ export default {
   },
   data() {
     return {
-      show: true
+      show: true,
+      showSettings: false
     };
-  },
-  computed: {
-    ...mapGetters({
-      playerInLobby: "game/getPlayerInLobby",
-      playerIsHost: "game/getPlayerIsHost",
-      playerInGame: "game/getPlayerInGame"
-    })
-  },
-  beforeMount: function() {},
-  methods: {
-    ...mapActions({
-      setPlayerInLobby: "game/setPlayerInLobby",
-      setPlayerIsHost: "game/setPlayerIsHost",
-      setPlayerIGame: "game/setPlayerInGame"
-    })
   }
 };
 </script>

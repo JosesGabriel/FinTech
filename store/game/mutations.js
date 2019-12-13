@@ -1,6 +1,6 @@
 export default {
-  SET_PLAYERINLOBBY(state, data) {
-    state.playerInLobby = data;
+  SET_PLAYERCURRENTLOBBY(state, data) {
+    state.playerCurrentLobby = data;
   },
   SET_PLAYERINGAME(state, data) {
     state.playerInGame = data;
@@ -10,5 +10,11 @@ export default {
   },
   SET_PLAYERDATA(state, data) {
     state.playerData = data;
+  },
+  SET_PLAYERCURRENTCHATROOM(state, data) {
+    state.playerCurrentChatRoom = data;
+  },
+  SET_PLAYERLOGGEDINVYNDUE(state, data) {
+    state.playerLoggedInVyndue = data;
   }
 };

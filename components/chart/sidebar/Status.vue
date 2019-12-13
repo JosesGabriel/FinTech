@@ -40,7 +40,7 @@
           <tr>
             <td class="tleft__label">Volume</td>
             <td class="tleft__column">
-              {{ stock.volume | numeral("0.000a") }}
+              {{ stock.volume | numeral("0.00a") }}
             </td>
           </tr>
           <tr>
@@ -96,7 +96,7 @@
           <tr>
             <td class="tright__label">Value</td>
             <td class="tright__column">
-              {{ stock.value | numeral("0.000a") }}
+              {{ stock.value | numeral("0.00a") }}
             </td>
           </tr>
           <tr>

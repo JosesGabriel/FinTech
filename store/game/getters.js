@@ -1,6 +1,6 @@
 export default {
-  getPlayerInLobby(state) {
-    return state.playerInLobby;
+  getPlayerCurrentLobby(state) {
+    return state.playerCurrentLobby;
   },
   getPlayerInGame(state) {
     return state.playerInGame;
@@ -10,5 +10,11 @@ export default {
   },
   getPlayerData(state) {
     return state.playerData;
+  },
+  getPlayerCurrentChatRoom(state) {
+    return state.playerCurrentChatRoom;
+  },
+  getPlayerLoggedInVyndue(state) {
+    return state.playerLoggedInVyndue;
   }
 };

@@ -1,8 +1,16 @@
 <template>
-    <v-dialog v-model="show" max-width="320px">
-        <v-card color="#00121E">
+    <v-dialog 
+    v-model="show" 
+    max-width="320px"
+    :dark="lightSwitch == true"
+    :style="{ background: cardbackground }"
+    >
+        <v-card 
+            :dark="lightSwitch == true"
+            :style="{ background: cardbackground }"
+        >
             <v-card-title class="text-left justify-left pa-5 pb-0 px-5 success--text subtitle-1 font-weight-bold">TRADE</v-card-title>
-            <v-stepper v-model="e1" dark id="stepper_container" >
+            <v-stepper v-model="e1" :dark="lightSwitch == true" :style="{ background: cardbackground }" id="stepper_container" >
                 <v-stepper-items >
                     <v-stepper-content step="1" class="mt-0 pt-0">
                         <!-- -----First View of Trade Modal----- -->
@@ -24,9 +32,10 @@
                                 <v-col cols="12" sm="12" md="12">
                                     <v-card-title class="pa-0 text-right justify-end">
                                         <v-col sm="12" md="12" class="pa-0">
-                                            <v-select 
+                                            <v-select                                          
                                                 offset-y="true" 
-                                                item-color="success" 
+                                                item-color="success"
+                                                :dark="lightSwitch == true"
                                                 color="success" 
                                                 class="pa-0 ma-0 select_stock" 
                                                 append-icon="mdi-chevron-down" 
@@ -39,61 +48,70 @@
                                                 ></v-select>
                                         </v-col>
                                     </v-card-title>
-                                        <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
+
+                                   
+                                        <v-row no-gutters >
+                                            <v-card-title  class="subtitle-1 pa-0" style="font-size:12.5px !important;">Current Price</v-card-title><v-spacer></v-spacer><v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 pa-0">
+                                                <p class="text-right ma-0 body-1" style="font-size:12.5px !important;" :style="{ color: fontcolor2 }" >{{ cprice }} <span :class="(change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral')" class="caption">{{ change }}</span> <span :class="(cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral')" class="caption">({{ cpercentage }}%)</span></p>
+                                            </v-card-title>
+                                        </v-row>
+                                   
+
+                                       <!-- <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
                                         <v-spacer></v-spacer>
-                                        <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span :class="(change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral')" class="caption">{{ change }}</span> <span :class="(cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral')" class="caption">({{ cpercentage }}%)</span></p>
+                                        <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span :class="(change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral')" class="caption">{{ change }}</span> <span :class="(cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral')" class="caption">({{ cpercentage }}%)</span></p>-->
                                     <v-row no-gutters class="mt-2">
                                         <v-col class="pa-0" cols="6" sm="6" md="6">
-                                            <v-simple-table :dense="true" dark id="liveportfolio-table">
+                                            <v-simple-table :dense="true" :dark="lightSwitch == true" :style="{ background: cardbackground }"  style="font-size: 12px;" id="liveportfolio-table">
                                                 <template v-slot:default>
                                                     <tbody>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">Previous</td>
-                                                            <td class="item_position-prop body-2 text-right pa-0 px-1">{{ prev }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details" >Previous</td>
+                                                            <td class="item_position-prop body-2 text-right pa-0 px-1 stock_details">{{ prev }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1" >Low</td>
-                                                            <td class="body-2 text-right py-1 px-1" :class="valueStatusLow">{{ low }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details" >Low</td>
+                                                            <td class="body-2 text-right py-1 px-1 stock_details" :class="valueStatusLow"> {{ low }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">52WKLow</td>
-                                                            <td class="body-2 text-right py-1 px-1">{{ wklow }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details">52WKLow</td>
+                                                            <td class="body-2 text-right py-1 px-1 stock_details">{{ wklow }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">Volume</td>
-                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ volm }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details">Volume</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1 stock_details">{{ volm }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">Trades</td>
-                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ trades }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details">Trades</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1 stock_details">{{ trades }}</td>
                                                         </tr>
                                                     </tbody>
                                                 </template>
                                             </v-simple-table>
                                         </v-col>
                                         <v-col class="pa-0" cols="6" sm="6" md="6">
-                                            <v-simple-table :dense="true" dark id="liveportfolio-table">
+                                            <v-simple-table :dense="true" :dark="lightSwitch == true" :style="{ background: cardbackground }" id="liveportfolio-table">
                                                 <template v-slot:default>
                                                     <tbody>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">Open</td>
-                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ open }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details">Open</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1 stock_details">{{ open }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">High</td>
-                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ high }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details">High</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1 stock_details">{{ high }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">52WKHigh</td>
-                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ wkhigh }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details">52WKHigh</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1 stock_details">{{ wkhigh }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">Value</td>
-                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ vole }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details">Value</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1 stock_details">{{ vole }}</td>
                                                         </tr>
                                                         <tr id="table_tr_snap-cont">
-                                                            <td class="item_position-prop body-2 py-1 px-1">Average</td>
-                                                            <td class="item_position-prop body-2 text-right py-1 px-1">{{ ave }}</td>
+                                                            <td class="item_position-prop body-2 py-1 px-1 stock_details">Average</td>
+                                                            <td class="item_position-prop body-2 text-right py-1 px-1 stock_details">{{ ave }}</td>
                                                         </tr>
                                                     </tbody>
                                                 </template>
@@ -102,7 +120,7 @@
                                     </v-row>
                                     <div class="px-3">
                                         <v-card-title class="pa-0 justify-center mt-3">
-                                            <h1 class="font-weight-thin caption" style="color:#fff;">Bid/ Ask Bar</h1>
+                                            <h1 class="font-weight-thin caption" :style="{ color: fontcolor2 }" >Bid/ Ask Bar</h1>
                                         </v-card-title>
                                     
                                         <v-progress-linear
@@ -113,7 +131,7 @@
                                             class="mt-1"
                                         ></v-progress-linear>
                                         <v-card-title class="pa-0 justify-center mt-3">
-                                            <h1 class="font-weight-thin caption" style="color:#fff;">Members Sentiments</h1>
+                                            <h1 class="font-weight-thin caption" :style="{ color: fontcolor2 }" >Members Sentiments</h1>
                                         </v-card-title>
                                         <v-progress-linear
                                             value="50"
@@ -145,7 +163,7 @@
                         <!-- -----Second View of Trade Modal----- -->
                         <v-container class="pa-5 pt-0 px-0">
                            <v-row no-gutters>
-                                <BuyTrade :Position="dataVolume" :BuyPrice="buyprice" :BoardLot="boardlot" :Reset="onreset" v-on:totalPosition="totalPosition"/>
+                                <BuyTrade :Position="dataVolume" :BuyPrice="buyprice" :toReset="quantity_reset" :BoardLot="boardlot" :Reset="onreset" v-on:totalPosition="totalPosition"/>
                             </v-row>
                         </v-container>
                         <v-row no-gutters>
@@ -220,6 +238,7 @@ import { mapActions, mapGetters } from "vuex";
                 dboard: 0,
                 stock_id: 0,
                 stock: [],
+                stock2: [],
                 prev: '0',
                 low: 122,
                 wklow: 0,
@@ -249,6 +268,7 @@ import { mapActions, mapGetters } from "vuex";
                 disabled: false,
                 sellSelected: false,
                 buySelected: true,
+                quantity_reset: false,
                 onreset: false,
                 dataVolume: 0,
                 buyprice: 0,
@@ -256,14 +276,24 @@ import { mapActions, mapGetters } from "vuex";
                 totalposition: 0,
             }
         },
-        props: ['visible','OpenPosition'],
+        props: ['visible','OpenPosition','Trade_Modal'],
         computed: {
             ...mapGetters({
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
             simulatorPositions: "tradesimulator/getSimulatorPositions",
             simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
             simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
+            lightSwitch: "global/getLightSwitch",
             }),
+            cardbackground: function() {
+              return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+            },
+             fontcolor: function() {
+              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
+            },
+            fontcolor2: function() {
+              return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+            },
 
             show: {
                 get () {
@@ -283,6 +313,20 @@ import { mapActions, mapGetters } from "vuex";
                 }
             },
         },
+        watch: {
+            Trade_Modal: function(){
+                if(!this.Trade_Modal){
+                    this.e1 = 1;
+                    this.buySelected = true;
+                    this.sellSelected = false;
+                    this.stock = this.stock2; 
+                    this.GetSelectStock = '';
+                    this.setSimulatorConfirmedBuySell('buy');
+                    this.quantity_reset = true;
+                    this.totalposition = 0;
+                } 
+            }
+        },
         mounted() {
                 console.log('Fund id = ' + this.simulatorPortfolioID);
                 const params = {
@@ -291,14 +335,15 @@ import { mapActions, mapGetters } from "vuex";
                     };
                     this.$api.chart.stocks.list(params).then(
                     function(result) {
-                        this.stock = result.data;                   
+                        this.stock = result.data;  
+                        this.stock2 = this.stock;                  
                     }.bind(this)
                     );
             },
         methods: {
             ...mapActions({
                 setSimulatorPositions: "tradesimulator/setSimulatorPositions",
-                setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+                //setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
                 setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
                 setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell",
             }),
@@ -322,7 +367,8 @@ import { mapActions, mapGetters } from "vuex";
                 this.sellSelected = false;
                 this.stock = [];
                 this.GetSelectStock = '';
-                const params = {
+                this.stock = this.stock2; 
+                /*const params = {
                     exchange: "PSE",
                     status: "active"
                     };
@@ -330,7 +376,7 @@ import { mapActions, mapGetters } from "vuex";
                     function(result) {
                         this.stock = result.data;                   
                     }.bind(this)
-                    );
+                    );*/
             },
             btnSell(){
                 if(this.GetSelectStock != '' ? this.getDetails(this.GetSelectStock) : '');           
@@ -569,6 +615,19 @@ import { mapActions, mapGetters } from "vuex";
     }
     .negative{
         color: #fe4949;
+    }   
+    .stock_details {
+        font-size: 12px !important;
     }
-    
+</style>
+<style>
+   .v-menu__content > .v-select-list > .v-list.v-sheet {
+       /* background: #EAE8E8; */
+    }
+    .v-menu__content > .v-select-list > .v-list.v-sheet > .v-list-item > .v-list-item__content > .v-list-item__title{
+       font-size: 13px;
+    }
+    .v-select__slot > .v-select__selections > .v-select__selection--comma {
+       font-size: 13px; 
+    }
 </style>

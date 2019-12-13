@@ -24,12 +24,12 @@
           dense
           outlined
           dark
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-select>
       </div>
       <div class="col-6 pa-0 pl-5">
         <v-text-field
-          v-model="coinsModel"
+          v-model="stakeModel"
           outlined
           dense
           success
@@ -56,7 +56,7 @@
           outlined
           hide-details
           dark
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-select>
       </div>
       <div class="col-6 pa-0 pl-5">
@@ -74,7 +74,7 @@
           hide-details
           success
           dark
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-select>
       </div>
       <div class="col-6 pa-0 roomtype__radio--wrapper pl-5">
@@ -87,10 +87,10 @@
           color="success"
           dense
           hide-details
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         >
-          <v-radio class="caption" label="Public" :value="0"></v-radio>
-          <v-radio label="Private" :value="1"></v-radio>
+          <v-radio class="caption" label="Public" value="Public"></v-radio>
+          <v-radio label="Private" value="Private"></v-radio>
         </v-radio-group>
       </div>
       <div class="col-6 pa-0 pl-5">
@@ -109,7 +109,7 @@
           outlined
           hide-details
           dark
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-select>
       </div>
       <span class="caption pl-5">Invite/share settings</span>
@@ -122,7 +122,7 @@
           dense
           flat
           hide-details
-          :disabled="!playerIsHost"
+          :disabled="disableFields"
         ></v-switch>
         <v-btn text icon color="white">
           <v-icon>mdi-facebook-box</v-icon>
@@ -149,11 +149,11 @@
           dense
           outlined
           color="success"
-          @click="checkFields()"
+          @click="createGame()"
           >Start Game</v-btn
         >
         <v-btn
-          v-if="!playerIsHost"
+          v-if="disableFields"
           class="lobbySettings__select"
           dense
           outlined
@@ -189,19 +189,20 @@
 }
 </style>
 <script>
-  const sdk = require("matrix-js-sdk");
-  const HSUrl = "https://im.arbitrage.ph";
-  const client = sdk.createClient(HSUrl);
-  const roomID = "!OlWVatkysuERsuXfCS:im.arbitrage.ph";
+require("dotenv").config();
+const sdk = require("matrix-js-sdk");
+const HSUrl = "https://im.arbitrage.ph";
+const client = sdk.createClient(HSUrl);
+const roomID = "!OlWVatkysuERsuXfCS:im.arbitrage.ph";
 import { mapActions, mapGetters } from "vuex";
-  import axios from 'axios';
+import axios from "axios";
 export default {
   data() {
     return {
       fullScreenLoader: false,
       items: [1, 2, 3, 4, 5],
       playerCountModel: 0,
-      coinsModel: 0,
+      stakeModel: 0,
       roomTypeModel: null,
       timeLimit: [
         {
@@ -226,106 +227,46 @@ export default {
       market: ["PSE"],
       chartCount: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       limitModel: "",
-      marketModel: ""
+      marketModel: "",
+      disableFields: false
     };
   },
   computed: {
     ...mapGetters({
-      playerInLobby: "game/getPlayerInLobby",
       playerIsHost: "game/getPlayerIsHost",
       playerInGame: "game/getPlayerInGame",
-      playerID: "game/getPlayerID"
+      playerID: "game/getPlayerID",
+      playerCurrentChatRoom: "game/getPlayerCurrentChatRoom"
     })
   },
   methods: {
     ...mapActions({
-      setPlayerInLobby: "game/setPlayerInLobby",
+      setPlayerCurrentLobby: "game/setPlayerCurrentLobby",
       setPlayerIsHost: "game/setPlayerIsHost",
-      setPlayerInGame: "game/setPlayerInGame"
+      setPlayerInGame: "game/setPlayerInGame",
+      setPlayerCurrentChatRoom: "game/setPlayerCurrentChatRoom"
     }),
     leaveLobby() {
-      this.setPlayerInLobby(false);
+      this.setPlayerCurrentLobby("");
+      if (this.playerCurrentChatRoom != process.env.DEFAULT_CHAT_ROOM_ID) {
+        client.leave(this.playerCurrentChatRoom);
+        this.setPlayerCurrentChatRoom(process.env.DEFAULT_CHAT_ROOM_ID);
+        this.$emit("showSettings");
+      }
     },
     joinGame() {
       this.setPlayerInGame(true);
     },
     checkFields() {
       if (
-
         this.playerCountModel != "" &&
-        this.coinsModel != "" &&
+        this.stakeModel != "" &&
         this.marketModel != "" &&
         this.chartCountModel != "" &&
         this.limitModel != ""
       ) {
-
-
-        var myToken = '';
-        client
-                .login("m.login.password", {
-                  user: "@lerroux:im.arbitrage.ph",
-                  password: "angelus69"
-                })
-                .then(response => {
-                  myToken = response.access_token;
-                });
-        client.startClient();
-        client.on("sync", function(state, prevState, data) {
-          switch (state) {
-            case "PREPARED":
-              //create the room here
-                      console.log("Ready to create Lobby");
-              //get rooms that the user is a member of
-                    console.log(client.getRooms());
-              //get rooms that the user is a member of
-              //test display room tags
-              client.getRoomTags("!qbKboNnrmpjbMQmklT:im.arbitrage.ph").then(function(data){
-                console.log(data);
-              });
-              //test display room tags
-                      // Ses: We should define the room aliases and names when we create, this could be a random string. Si vyndue na mo return sa room ID. makita na nimo below sa response data.
-
-                      var options = {
-                        "preset": "public_chat",
-                        "room_alias_name": "TheTest7",
-                        "name": "The Grand Test Room7",
-                        "topic": "All about testing7",
-                        "creation_content": {
-                          "m.federate": false
-                        }
-                      };
-
-                      axios.defaults.headers.common['Authorization'] = `Bearer ` + myToken;
-                      axios.post('https://im.arbitrage.ph/_matrix/client/r0/createRoom', options).then(function (response) {
-                            console.log(response.data['room_id']);
-                            // Create the room tags/options here
-                                  //client.setRoomTag(roomID,tagname,objectdata,callback)
-                                    var gameOptions = {
-                                      "Players" : "3",
-                                      "Stake" : "2",
-                                      "NumCharts" : "2",
-                                      "Market"  : "PSE",
-                                      "Visibility" : "Public",
-                                      "TimeLimit" : "10"
-                                    };
-                                    client.setRoomTag(response.data['room_id'],'Options',gameOptions,function (response){
-                                      console.log(response);
-                                    });
-
-                            // Create the room tags/options here
-                          }).catch(function (error) {
-                                console.log(error);
-                          });
-              //create the room here
-
-              break;
-          }
-        });
-
-
         return true;
       } else {
-        console.log('false');
         return false;
       }
     },
@@ -333,23 +274,98 @@ export default {
       if (!this.checkFields) {
         console.log("alert");
       } else {
+        let playerCountModel = this.playerCountModel;
+        let stakeModel = this.stakeModel;
+        let chartCountModel = this.chartCountModel;
+        let marketModel = this.marketModel;
+        let roomTypeModel = this.roomTypeModel;
+        let limitModel = this.limitModel;
         this.fullScreenLoader = true;
-        const params = {
-          mode: "practice",
-          market: this.marketModel,
-          time_limit: this.limitModel,
-          players: {
-            "0": this.playerID
-          },
-          meta: {
-            creator: this.playerID
-          }
-        };
-        this.$axios
-          .$post(process.env.DEV_API_URL + "/game/series/", params)
+        // const params = {
+        //   mode: "practice",
+        //   market: this.marketModel,
+        //   time_limit: this.limitModel,
+        //   players: {
+        //     "0": this.playerID
+        //   },
+        //   meta: {
+        //     creator: this.playerID
+        //   }
+        // };
+        // this.$axios
+        //   .$post(process.env.DEV_API_URL + "/game/series/", params)
+        //   .then(response => {
+        //     this.setPlayerInGame(true);
+        //   });
+        var myToken = "";
+        client
+          .login("m.login.password", {
+            user: "@lerroux:im.arbitrage.ph",
+            password: "angelus69"
+          })
           .then(response => {
-            this.setPlayerInGame(true);
+            myToken = response.access_token;
           });
+        client.startClient();
+        client.on(
+          "sync",
+          function(state, prevState, data) {
+            switch (state) {
+              case "PREPARED":
+                var options = {
+                  preset: "public_chat",
+                  room_alias_name: Math.random()
+                    .toString(36)
+                    .substr(2, 5),
+                  name: Math.random()
+                    .toString(36)
+                    .substr(2, 5),
+                  topic: "Game Room",
+                  creation_content: {
+                    "m.federate": false
+                  }
+                };
+                axios.defaults.headers.common["Authorization"] =
+                  `Bearer ` + myToken;
+                axios
+                  .post(
+                    "https://im.arbitrage.ph/_matrix/client/r0/createRoom",
+                    options
+                  )
+                  .then(
+                    function(response) {
+                      // console.log(response.data["room_id"]);
+                      var gameOptions = {
+                        Players: playerCountModel,
+                        Stake: stakeModel,
+                        NumCharts: chartCountModel,
+                        Market: marketModel,
+                        Visibility: roomTypeModel,
+                        TimeLimit: limitModel
+                      };
+                      client.setRoomTag(
+                        response.data["room_id"],
+                        "Options",
+                        gameOptions,
+                        function(response) {
+                          console.log(response);
+                        }
+                      );
+                      //If reached here, room creation is successful
+                      // Join newly created room, by changing vuex currentChatRoom. Variable is watched, onchange, chatroom is re-rendered
+                      this.setPlayerCurrentChatRoom(response.data["room_id"]);
+                      this.disableFields = true;
+                      this.fullScreenLoader = false;
+                    }.bind(this)
+                  )
+                  .catch(function(error) {
+                    console.log(error);
+                  });
+                break;
+            }
+          }.bind(this)
+        );
+        return true;
       }
     }
   }

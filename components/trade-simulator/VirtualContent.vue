@@ -95,17 +95,32 @@
                             item-text="name" 
                             item-value="id"
                             :items="portfolio" 
+                            dark                          
                             background-color="#03DAC5" 
                             label="Select Portfolio" 
                             v-on:change="getOpenPosition"
-                            dense solo flat>
-                            
-                            <template v-slot:append-item>
+                            dense solo>
+                 
+                            <template 
+                                v-slot:append-item
+                                background-color="#03DAC5"
+                            >
+                               <!-- <v-list-item                     
+                                :dark="lightSwitch == true"
+                                :style="{ background: cardbackground }"
+                                >
+                                     <v-list-item-content >
+                                         <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                     </v-list-item-content> 
+                                </v-list-item>-->
+
                                 <v-list-item
-                                ripple
+                                ripple 
+                                :dark="lightSwitch == true"
+                                :style="{ background: cardbackground }"
                                 @click.stop="showCreatePortForm=true"
                                 >   
-                                    <v-list-item-content>
+                                    <v-list-item-content >
                                         <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
                                     </v-list-item-content>
                                 </v-list-item>
@@ -118,13 +133,17 @@
                     color="#03dac5"
                     background-color="black"
                     :value="'tab-' + 1"
-                    style="background:transparent;"
+                    :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                 >
                     <v-container class="pa-0">
                         <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
                     </v-container>
                 </v-tab-item>
-                <v-tab-item dark color="#03dac5" background-color="transparent" :value="'tab-' + 2" style="background: transparent;">
+                <v-tab-item dark color="#03dac5" 
+                    background-color="transparent" 
+                    :value="'tab-' + 2" 
+                    :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
+                    >
                     <v-container class="pa-0">
                         <TradelogsContent :item="item" ref="tradelogsComponent" v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
                     </v-container>
@@ -174,6 +193,9 @@
             },
             cardbackground2: function() {
               return this.lightSwitch == 0 ? "1px solid #dadada" : "1px solid #172431";
+            },
+            tabsborder: function() {
+              return this.lightSwitch == 0 ? "1px solid #b6b6b6" : "1px solid #535358";
             },
     },
     watch: {
@@ -339,8 +361,9 @@
   bottom: -3px;
   z-index: 1;
   height: 4px;
-  background: #b6b6b6; 
+ /* background: #b6b6b6; */
 }
+
 .positive{
     color: #03DAC5;
 }
@@ -366,7 +389,7 @@
 
 .vt_realized:hover {
    /* background: #0c1a2b; */
-    box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.1), 0px 10px 15px 2px rgba(0, 0, 0, 0.12), 0px 3px 20px 2px rgba(0, 0, 0, 0.10) !important;
+    box-shadow: 0px 5px 6px -2px rgba(0, 0, 0, 0.1), 0px 10px 15px 2px rgba(0, 0, 0, 0.10), 0px 1px 5px 2px rgba(0, 0, 0, 0.10) !important;
 }
 .select_portfolio .v-input__slot {
     margin: 0;
