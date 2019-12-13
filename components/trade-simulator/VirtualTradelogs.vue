@@ -51,9 +51,9 @@
  
         <template v-slot:item.action="{ item }">
           <div v-show="menuShow" class="sidemenu_actions" :dark="lightSwitch == true" :style="{ background: cardbackground }" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
-            <v-btn small class="caption" text color="success">Details</v-btn>
-            <v-btn small class="caption" text color="success">Edit</v-btn>
-            <v-btn small class="caption" v-on:click="deleteLogs(item.action)" text color="success">Delete</v-btn>
+            <v-btn small class="caption btn_sidemenu" text >Details</v-btn>
+            <v-btn small class="caption btn_sidemenu" text >Edit</v-btn>
+            <v-btn small class="caption btn_sidemenu" v-on:click="deleteLogs(item.action)" text >Delete</v-btn>
           </div>
           <v-icon
             small
@@ -200,7 +200,7 @@ export default {
                       this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
                       this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
                       this.tradeLogs[i].action = this.tradeLogs[i].id;
-                      this.$emit('totalRealized', this.totalProfitLoss.toFixed(2));
+                      this.$emit('totalRealized', this.totalProfitLoss);
 
                        if(parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0) {
                           plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;
@@ -250,6 +250,7 @@ export default {
             return buyResult - dall;                    
     },
     deleteLogs: function(item){
+      console.log(item);
         const params ={
           user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         }
@@ -348,6 +349,9 @@ export default {
 }
   .negative{
       color: #fe4949;
+  }
+  .btn_sidemenu:hover {
+    color: #03DAC5;
   }
 </style>
 <style>

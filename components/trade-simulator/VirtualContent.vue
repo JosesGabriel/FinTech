@@ -1,4 +1,5 @@
 <template>
+
     <v-col cols="12" sm="12" md="12">
             <v-row class="mt-3 ml-0 mb-10 mr-2">
     
@@ -9,7 +10,7 @@
                     </v-row>
                     <v-row class="mt-1 mb-2">
                         <v-col md="12" :class="(this.realized > 0 ? 'positive' : this.realized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
-                            {{ this.realized }}
+                            {{ this.addcomma(this.realized) }}
                         </v-col> 
                     </v-row>
                     
@@ -20,7 +21,7 @@
                     </v-row>
                     <v-row class="mt-1">
                        <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : this.unrealized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
-                           {{ this.unrealized }}
+                           {{ this.addcomma(this.unrealized) }}
                         </v-col>
                     </v-row>
                 </v-col>
@@ -87,6 +88,7 @@
                
                 <v-row>
                     <v-col md="3" class="text-right caption px-2 ma-0" style="position:absolute; right:0; top: -26px; width: 180px;">
+                                                
                         <v-select offset-y="true" 
                             class="select_portfolio mt-2 black--text" 
                             item-color="success" 
@@ -95,14 +97,32 @@
                             item-text="name" 
                             item-value="id"
                             :items="portfolio" 
+                            dark 
+                            v-on:change="getOpenPosition"                     
                             background-color="#03DAC5" 
                             label="Select Portfolio" 
-                            v-on:change="getOpenPosition"
-                            dense solo flat>
+                            dense solo
+                            >
+                                    
+                             <!--  <template
+                                    slot="item" 
+                                    slot-scope="data"
+                                    
+                                >    
+                                
+                                        <v-list-item
+                                            :dark="lightSwitch == true"
+                                            :style="{ background: cardbackground }" 
+                                            @click.stop="getOpenPosition(data.item.id)"
+                                            >
+                                            
+                                            <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                            
+                                        </v-list-item>
+                                </template>-->
                             
                             <template 
                                 v-slot:append-item
-                                background-color="#03DAC5"
                                 :dark="lightSwitch == true"
                                 :style="{ background: cardbackground }"
                             >
@@ -118,6 +138,8 @@
                                 </v-list-item>
                             </template>
                         </v-select>
+                     
+                        
                     </v-col>
                 </v-row>
                 <v-tab-item
@@ -204,6 +226,7 @@
             }),
             getOpenPosition (selectObj) {
                 this.setSimulatorPortfolioID(selectObj);
+                this.default_port = selectObj;
             },
             Realized(value){
                 this.realized = value;

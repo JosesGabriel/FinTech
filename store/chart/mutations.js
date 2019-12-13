@@ -27,6 +27,11 @@ export default {
     state.stock = data;
   },
 
+  /* stock update */
+  SET_STOCK_OBJ(state, data) {
+    state.stock[Object.keys(data)] = Object.values(data);
+  },
+
   SET_BIDASK(state, data) {
     state.bidask = data;
   },

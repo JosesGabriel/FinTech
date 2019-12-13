@@ -122,7 +122,7 @@
                       </v-card>
                     </v-dialog>
 
-            <TradeModal :visible="EnterTradeModal" :OpenPosition="openposition" :Trade_Modal="trade_modal" @close="EnterTradeModal=false" />
+            <TradeModal  :visible="EnterTradeModal" :OpenPosition="openposition" :Trade_Modal="trade_modal" @close="EnterTradeModal=false" />
             <reset-modal :visible="showResetForm" @close="showResetForm=false" />
             <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
@@ -265,7 +265,7 @@ export default {
                                 notes: this.portfolioLogs[i].metas.notes
                               }       
 
-                             this.$emit('totalUnrealized', this.addcomma(this.totalProfitLoss));
+                             this.$emit('totalUnrealized', this.totalProfitLoss);
                              this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
                            
                           }.bind(this)

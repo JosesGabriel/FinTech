@@ -139,14 +139,14 @@ export default {
     }
   },
   mounted: function() {
-    this.loader = "primary";
+    this.loginVyndue();
     this.loadClient();
   },
   methods: {
     ...mapActions({
       setPlayerInGame: "game/setPlayerInGame"
     }),
-    loadClient() {
+    loginVyndue() {
       client
         .login("m.login.password", {
           user: "@lerroux:im.arbitrage.ph",
@@ -162,8 +162,11 @@ export default {
             break;
         }
       });
+    },
+    loadClient() {
+      // this.loader = "primary";
       const roomID = this.playerCurrentChatRoom;
-      // const roomID = "!lKZcuCSjsOohpjYObO:im.arbitrage.ph";
+      console.log("Load client at [" + roomID + "]");
       client.on(
         "Room.timeline",
         function(event, room, toStartOfTimeline, user) {

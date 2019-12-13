@@ -488,7 +488,7 @@ export default {
   },
   mounted() {
     this.loadPosts();
-    this.scroll();
+    if (this.$route.name == "index") this.scroll();
   },
   methods: {
     loadPosts() {
