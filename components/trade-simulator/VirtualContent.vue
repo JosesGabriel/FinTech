@@ -95,17 +95,25 @@
                             item-text="name" 
                             item-value="id"
                             :items="portfolio" 
+                            dark                          
                             background-color="#03DAC5" 
                             label="Select Portfolio" 
                             v-on:change="getOpenPosition"
-                            dense solo flat>
-                            
+                            dense solo>
+                 
                             <template 
                                 v-slot:append-item
                                 background-color="#03DAC5"
+                            >
+                               <!-- <v-list-item                     
                                 :dark="lightSwitch == true"
                                 :style="{ background: cardbackground }"
-                            >
+                                >
+                                     <v-list-item-content >
+                                         <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                     </v-list-item-content> 
+                                </v-list-item>-->
+
                                 <v-list-item
                                 ripple 
                                 :dark="lightSwitch == true"

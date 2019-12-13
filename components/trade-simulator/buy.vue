@@ -173,7 +173,7 @@ export default {
                              if(result.meta.logs[i].name == 'My Virtual Portfolio'){
                                 let avfunds = parseFloat(result.meta.logs[i].balance);    
                                 this.availableFunds = this.addcomma(avfunds);
-                                this.setSimulatorPortfolioID(result.meta.logs[i].id);
+                                //this.setSimulatorPortfolioID(result.meta.logs[i].id);
                                 this.defaultvalue = result.meta.logs[i].name;
                             }
                         }

@@ -122,7 +122,7 @@
                       </v-card>
                     </v-dialog>
 
-            <TradeModal :visible="EnterTradeModal" :OpenPosition="openposition" :Trade_Modal="trade_modal" @close="EnterTradeModal=false" />
+            <TradeModal  :visible="EnterTradeModal" :OpenPosition="openposition" :Trade_Modal="trade_modal" @close="EnterTradeModal=false" />
             <reset-modal :visible="showResetForm" @close="showResetForm=false" />
             <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-col>
