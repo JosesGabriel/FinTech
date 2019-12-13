@@ -1,7 +1,7 @@
 <template>
   <div>
     <GameLobby v-if="!playerInGame" class="gameGlobal" />
-    <GameView v-if="playerInGame" class="gameGlobal" />
+    <GameView v-else class="gameGlobal" />
   </div>
 </template>
 <style>
@@ -26,6 +26,9 @@
 }
 </style>
 <script>
+const sdk = require("matrix-js-sdk");
+const HSUrl = "https://im.arbitrage.ph";
+const client = sdk.createClient(HSUrl);
 import GameLobby from "~/components/game/GameLobby";
 import GameView from "~/components/game/GameView";
 import { mapActions, mapGetters } from "vuex";
@@ -41,16 +44,21 @@ export default {
   },
   computed: {
     ...mapGetters({
-      playerInGame: "game/getPlayerInGame"
+      playerInGame: "game/getPlayerInGame",
+      playerLoggedInVyndue: "game/getPlayerLoggedInVyndue"
     })
   },
   beforeMount: function() {
     this.checkPlayerAccount();
   },
+  mounted: function() {
+    // this.loginVyndueAcc();
+  },
   methods: {
     ...mapActions({
       setPlayerInGame: "game/setPlayerInGame",
-      setPlayerData: "game/setPlayerData"
+      setPlayerData: "game/setPlayerData",
+      setPlayerLoggedInVyndue: "game/setPlayerLoggedInVyndue"
     }),
     async checkPlayerAccount() {
       let token = localStorage["auth._token.local"];
@@ -81,6 +89,28 @@ export default {
         .catch(e => {
           return false;
         });
+    },
+    loginVyndueAcc() {
+      client
+        .login("m.login.password", {
+          user: "@lerroux:im.arbitrage.ph",
+          password: "angelus69"
+        })
+        .then(response => {
+          myToken = response.access_token;
+        });
+      client.startClient();
+      client.on(
+        "sync",
+        function(state, prevState, data) {
+          switch (state) {
+            case "PREPARED": {
+              this.setPlayerLoggedInVyndue(true);
+              break;
+            }
+          }
+        }.bind(this)
+      );
     },
     hasOnGoing() {
       return this.$api.game.ongoing
