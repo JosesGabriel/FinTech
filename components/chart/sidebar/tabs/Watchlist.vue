@@ -144,7 +144,8 @@ export default {
   methods: {
     onHoverEffect: function(value) {
       if (value == true) {
-        return this.lightSwitch == 0 ? "#e6e6e6" : "#142a46";
+        return "rgb(182, 182, 182, 0.2)";
+        //return this.lightSwitch == 0 ? "#e6e6e6" : "#142a46";
       }
     },
     showRemoveButton: function(item) {
