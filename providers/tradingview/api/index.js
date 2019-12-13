@@ -16,6 +16,7 @@ import moment from 'moment';
 
 //BASE CONSTANTS
 const BASE_URL = process.env.CHART_API_URL + "/charts";
+const STREAM_BASE_URL = process.env.STREAM_API_URL
 const TOKEN = process.env.CHART_CLIENT_SECRET;
 
 //URL LIST
@@ -26,11 +27,45 @@ const SEARCH_URL = `${BASE_URL}/tradingview/search`;
 const SERVER_TIME_URL = `${BASE_URL}/tradingview/time`;
 const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 
+//STREAM API
+const SSE_URL = `${STREAM_BASE_URL}/sse?stream=market-data`
+const MARKET_INFO_PREFIX = "M-D.INFO"
+
+var eventSource; //global event source variable
 var symbolInfoObj = {
 	exchange: ''
 }
 
+//INITIALIZE DEFAULTS                          
 axios.defaults.headers.common['Authorization'] = `Bearer ${TOKEN}`;
+
+function listenToEventSource(symbolId, resolution, onRealtimeCallback){
+	if (eventSource != null){
+		eventSource.close()
+	}
+
+	eventSource = new EventSource(SSE_URL);
+	eventSource.onopen = function(){
+        console.log("open sse")
+    }
+    eventSource.onerror = function(err){
+        console.log(err)
+    }
+    eventSource.addEventListener(`${MARKET_INFO_PREFIX}.${symbolId}`, function(event){
+		// execute real-time callback
+		// update bars
+		const objData = JSON.parse(event.data)
+
+		onRealtimeCallback({
+			time: objData.t * 1000, // needs to be in milliseconds
+			close: objData.c,
+			open: objData.o,
+			low: objData.l,
+			high: objData.h,
+			volume: objData.vol,
+		});
+    });
+}
 
 export default {
 	//onready is executed when the chart components are loaded and ready.
@@ -163,14 +198,13 @@ export default {
 			onErrorCallback([])
 		  });
 	},
-	//subscribebars is TODO hihi
+	//subscribebars connects to a stream for realtime update
 	subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscribeUID, onResetCacheNeededCallback) => {
-		console.log('=====subscribeBars runnning')
+		// listen to sse
+		listenToEventSource(symbolInfo.id, resolution, onRealtimeCallback)
 	},
-	//unsubscribebars is TODO hihi
-	unsubscribeBars: subscriberUID => {
-		console.log('=====unsubscribeBars running')
-	},
+	//unsubscribebars disconnects to a stream for realtime update
+	unsubscribeBars: subscriberUID => {},
 	//calculatehistorydepth is fired and related during resolvesymbol event
 	calculateHistoryDepth: (resolution, resolutionBack, intervalBack) => {
 		if (parseInt(resolution) > 0) {
@@ -214,7 +248,7 @@ export default {
 			onDataCallback([])
 		  });
 	},
-	//gerservertime is executed with onready event and used for time synchornization
+	//getServerTime is executed with onready event and used for time synchornization
 	getServerTime: cb => {
 		//get tradingview config			
 		axios.get(
