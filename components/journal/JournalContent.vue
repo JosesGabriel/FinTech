@@ -1,5 +1,5 @@
 <template>
-    <v-col class="pt-10 mt-5" cols="12" sm="12" md="12">
+    <v-col class="pt-3" cols="12" sm="12" md="12">
             <v-tabs
             color="#03dac5"
             background-color="transparent"
@@ -274,10 +274,10 @@ export default {
     watch: {
         renderPortfolioKey: function() {
             this.getUserPortfolioList();
+            this.getJournalCharts();
         },
         portfolioDropdownModel() {
             this.getUserPortfolioList();
-            this.getJournalCharts();
         }
     },
 };

@@ -10,7 +10,7 @@
             </v-card-title>
         </v-col>
         <div class="pt-3" id="chart">
-            <apexcharts type=bar height=300 :options="chartOptions" :series="series" />
+            <apexcharts ref="BuyValue" type=bar height=300 :options="chartOptions" :series="series" />
         </div>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-container>
@@ -20,20 +20,29 @@
   import VueApexCharts from 'vue-apexcharts'
   import shareModal from '~/components/modals/share'
   
+  import { mapGetters } from "vuex";
+  
   export default {
     components: {
       apexcharts: VueApexCharts,
       shareModal
+    },
+    computed: { 
+      ...mapGetters({
+          renderPortfolioKey: "journal/getRenderPortfolioKey",
+          defaultPortfolioId: "journal/getDefaultPortfolioId",
+          journalCharts: "journal/getJournalCharts",
+      })
     },
     data () {
       return {
         showScheduleForm: false,
         series: [{
           name: 'Loss',
-          data: [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,4]
+          data: [  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
         }],
         chartOptions: {
-          colors: ['#00FFC3','#f44336'],
+          colors: ['#03DAC5','#f44336'],
           plotOptions: {
             bar: {
               horizontal: false,
@@ -87,7 +96,7 @@
               style: {
                 colors: '#b6b6b6',
                 fontSize: '12px',
-                fontFamily: 'Karla',
+                fontFamily: "'Nunito' !important",
                 cssClass: 'apexcharts-xaxis-label',
               }
             },
@@ -111,8 +120,12 @@
               style: {
                   color: '#b6b6b6',
                   fontSize: '12px',
-                  fontFamily: 'Karla',
+                  fontFamily: "'Nunito' !important",
                   cssClass: 'apexcharts-yaxis-label',
+              },
+              formatter: function (value) {
+                let val = (value/1).toFixed(2).replace('.', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
             },
             lines: {
@@ -134,15 +147,16 @@
                 floating: true,
                 style: {
                     fontSize:  '14px',
-                    fontFamily: 'Karla',
+                    fontFamily: "'Nunito' !important",
                     color:  '#b6b6b6'
                 },
             },
           tooltip: {
             y: {
               show: false,
-              formatter: function (val) {
-                return val
+              formatter: function (value) {
+                let val = (value/1).toFixed(2).replace('.', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
             },
             x: {
@@ -156,11 +170,44 @@
             },
             theme: false,
             style: {
-              fontFamily: 'Karla'
+              fontFamily: "'Nunito' !important"
             }
           }
         }
       }
+    },
+    methods: {
+      getBuyValue() {
+        if(this.journalCharts != null){
+          const buyValue = this.journalCharts.meta.buy_value
+          const valueArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          if(buyValue.length != 0){
+            for ( let i = 0; i < buyValue.length; i++) {
+              buyValue[i] = parseFloat(buyValue[i])
+            }
+  
+            valueArray.unshift(...buyValue)
+            // load data series on column chart
+            this.$refs.BuyValue.updateSeries([
+                {
+                  data: valueArray.slice(0, 16)
+                }
+            ]);
+          }
+        }
+        this.componentKeys++;
+      }
+    },
+    mounted() {
+        this.getBuyValue();
+    },
+    watch: {
+        journalCharts: function() {
+            this.getBuyValue();
+        },
+        renderPortfolioKey: function() {
+            this.getBuyValue();
+        }
     }
   }
 </script>

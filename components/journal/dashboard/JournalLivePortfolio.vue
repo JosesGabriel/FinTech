@@ -3,9 +3,9 @@
         <v-card-title class="text-left justify-left px-0 py-3 pt-5">
             <h1 class="font-weight-regular subtitle-2" style="color:#fff;">OPEN POSITION/S (PHP)</h1>
             <v-spacer></v-spacer>
-            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" height="23">Reset</v-btn>
-            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" height="23">Trade</v-btn>
-            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" height="23">Fund</v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showResetForm=true" height="23"><span class="v-btn__content">Reset</span></v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showTradeViewForm=true" :disabled="ifVirtualShow" height="23"><span class="v-btn__content">Trade</span></v-btn>
+            <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize" @click.stop="showFundsForm=true" :disabled="fundsShow" height="23"><span class="v-btn__content">Fund</span></v-btn>
 
               <v-btn icon small @click.stop="showScheduleForm=true"> 
                   <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -37,19 +37,24 @@
           </div>
           <v-icon
             small
-            class="mr-2"
+            class="mr-2 secondary--text"
             @mouseover="menuLogsShow(item)"
           >
             mdi-dots-horizontal
           </v-icon>
         </template>
         </v-data-table>
-        <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
+        <v-row>
+          <v-col class="text-right font-weight-regular subtitle-2" width="100%" style="color:#fff;">
+          Total Profit/Loss as of {{date}}:<span class="ml-3" :class="(totalProfitLoss < 0 ? 'negative' : 'positive')">{{ totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span><span class="ml-2" :class="(totalProfitLoss < 0 ? 'negative' : 'positive')">{{ totalProfitLossPerf.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}%</span>
+          </v-col>
+        </v-row>
+        <v-card class="d-flex justify-space-between align-center" color="transparent" elevation="0">
           <v-card color="transparent" class="justify-center" elevation="0">
             <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
             <v-spacer></v-spacer>
             <v-text-field
-              :value="(portfolioLogs.length == 0 ? 0 : 5)"
+              :value="(portfolioLogs.length <= 5 ? portfolioLogs.length : 5)"
               type="number"
               min="5"
               max="10"
@@ -66,11 +71,6 @@
             <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
           </v-card>
         </v-card>
-        <v-row>
-          <v-col class="text-right font-weight-regular subtitle-2" width="100%" style="color:#fff;">
-          Total Profit/Loss as of {{date}}:<span class="ml-3" :class="(totalProfitLoss < 0 ? 'negative' : 'positive')">{{ totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span><span class="ml-2" :class="(totalProfitLoss < 0 ? 'negative' : 'positive')">{{ totalProfitLossPerf.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}%</span>
-          </v-col>
-        </v-row>
         <v-snackbar v-model="snackbar" class="black--text font-weight-bold" color="success" :timeout="timeoutNotification">
           You can only add Virtual Trade via the Trade Simulator Page.
           <v-btn color="black" class="text-capitalize font-weight-bold" text href="/trade-simulator">
@@ -229,7 +229,8 @@ export default {
                 this.portfolioLogs[i].market_value = results
 
                 this.portfolioLogs[i].total_value = resultsBuy
-                
+                this.portfolioLogs[i].fund = this.defaultPortfolioId
+                // console.log(this.portfolioLogs[i].fund)
                 this.portfolioLogs[i].profit = this.portfolioLogs[i].market_value - this.portfolioLogs[i].total_value
                 this.portfolioLogs[i].perf_percentage = this.portfolioLogs[i].profit / this.portfolioLogs[i].total_value * 100
                 this.portfolioLogs[i].stock_id = result.data.symbol
@@ -238,7 +239,6 @@ export default {
                 this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.portfolioLogs[i].perf_percentage);
                 this.portfolioLogsStock.push(this.portfolioLogs[i])
                 // this.portfolioLogsStock
-                
                 this.setOpenPosition(this.portfolioLogs)
 
                 this.livePortfolioLoading = false
@@ -280,6 +280,12 @@ export default {
     border: 1px solid rgb(0, 255, 195);
     border-radius: 4px;
   }
+  .rtf_top-btn .v-btn__content {
+    font-size: 12px!important;
+  }
+  .v-data-table.data_table-container tbody tr:hover:not(.v-data-table__expand-row) {
+    background: rgba(182, 182, 182, .20) !important;
+  }
 </style>
 <style>
   .data_table-container i.v-icon.v-data-table-header__icon.mdi.mdi-arrow-up {
@@ -295,7 +301,7 @@ export default {
     background: transparent
   }
   .show_rows {
-    border: 2px solid #00ffc3;
+    border: 2px solid #03DAC5;
     width: 45px;
   }
   .show_rows .v-input__control {
@@ -318,10 +324,10 @@ export default {
       width: 10px;
   }
   .lp_data_table-pagination {
-    color: #00ffc3;
+    color: #03DAC5;
   }
   .v-pagination.lp_data_table-pagination .v-pagination__item--active {
-    color: #00FFC3;
+    color: #03DAC5;
   }
   .lp_data_table-pagination i.v-icon {
     font-size: 11px
