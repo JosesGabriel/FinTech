@@ -134,8 +134,6 @@ export default {
   },
   watch: {
     lightSwitch(value) {
-      //   console.log("chart switch");
-      //   console.log(value);
       this.loadChart();
     },
     market_code(value, old) {
@@ -168,9 +166,8 @@ export default {
       // listen to ticker toggle
       this.$bus.$on("adjustChartView", data => {
         this.chartView;
-        //console.log(this.chartViewId);
-        //console.log(this.chartViewClass);
       });
+
       //! BEWARE: no trailing slash is expected in feed URL
       const widgetOptions = {
         //region overrides
@@ -283,16 +280,11 @@ export default {
           .chart()
           .onSymbolChanged()
           .subscribe(null, symbolInfo => {
-            // console.log(symbolInfo.full_name);
-            //that.setSymbolID(symbolInfo.id_str);
-            //TODO: call this function ralph, ito yung example nilagay ko lang dito
-            //TODO: need mo ipasa yung market_code completo, append mo
-            //TODO: <EXCHANGE>:<SYMBOL> or kunin mo sa response -> market_code
-            //TODO: author: kbaluyot
             const params = {
               symbolid: symbolInfo.id_str,
               market_code: symbolInfo.full_name
             };
+
             that.passTickerToChart(params);
           });
         //! endregion subscribe
