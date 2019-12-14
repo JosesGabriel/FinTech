@@ -62,7 +62,7 @@
                     <v-row class="mt-0">
                         <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
                             <v-row class="ma-0 pa-0 overline">
-                                <v-col :class="(this.daychangepercentage > 0 ? 'positive' : this.daychangepercentage < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
+                                <v-col :class="(this.daychange > 0 ? 'positive' : this.daychange < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
                                     ( {{ this.addcomma(this.daychangepercentage) }}%)
                                 </v-col>
                             </v-row>
@@ -150,7 +150,7 @@
                     :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                 >
                     <v-container class="pa-0">
-                        <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
+                        <VirtualLivePortfolio v-on:currentDayChange="currentChange" v-on:priorDayChange="priorChange" v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#03dac5" 
@@ -188,6 +188,8 @@
           daychange: 0,
           daychangepercentage: 0,
           equity: 0,
+          currentchange: 0,
+          priorchange: 0,
           item: {},
       }
     },
@@ -213,12 +215,26 @@
             },
     },
     watch: {
+      simulatorPortfolioID: function () {
+          this.realized = 0;
+          this.unrealized= 0;
+          this.totalmvalue= 0;
+          this.totalmax= 0;
+          this.balance= 0;
+          this.daychange= 0;
+          this.daychangepercentage= 0;
+          this.equity= 0;
+      },
       totalmvalue: function () {
         this.getBalance();
       },
       realized: function () {
         this.getBalance();
       },
+      priorchange: function(){
+          this.daychange = this.priorchange + this.currentchange;
+          this.daychangepercentage = (parseFloat(this.currentchange) / parseFloat(this.priorchange)) * 100;
+      }
     },
     methods: {
          ...mapActions({
@@ -241,10 +257,10 @@
                 this.totalmax = value;
             },
             DayChange(value){
-                this.daychange = value;
+                //this.daychange = value;
             },
             DayChangePercentage(value){
-                this.daychangepercentage = value;
+               // this.daychangepercentage = value;
             },
             portperf(){
                 let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
@@ -260,6 +276,12 @@
                 return n.toLocaleString().split(sep)[0]
                     + sep
                     + n.toFixed(2).split(sep)[1];
+            },
+            currentChange(value){
+                this.currentchange = value;
+            },
+            priorChange(value){
+                this.priorchange = value;
             },
             getBalance(){
                  const portfolioparams = {

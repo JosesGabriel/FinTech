@@ -274,10 +274,15 @@ export default {
                 }          
                  //this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
                 // this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
+                this.sortArray();
+                for(let x=0; x< this.portfolioLogs.length; x++){
+                console.log('Sorted - ' + this.portfolioLogs[x].metas.date);
+                }
+                this.getCurrentChange();
               }.bind(this)
             );   
 
-             this.$axios
+            /* this.$axios
             .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/daychange")
                   .then(response => {      
                       if (response.success) {
@@ -285,7 +290,7 @@ export default {
                           this.$emit('totalDayChange', response.data.change.change);  
                           this.$emit('totalDayChangePercentage', response.data.change.percentage);     
                       }
-              });
+              });*/
 
 
 
@@ -354,6 +359,86 @@ export default {
               + sep
               + n.toFixed(2).split(sep)[1];
       },
+      sortArray(){
+        function compare(a, b) {
+            var dateA = new Date(a.metas.date).getTime();
+            var dateB = new Date(b.metas.date).getTime();
+            return dateA < dateB ? 1 : -1;
+        }
+        return this.portfolioLogs.sort(compare);
+      },
+      getCurrentChange(){
+         let d = new Date,
+                    dformat = [d.getMonth()+1,
+                                d.getDate(),
+                                d.getFullYear()].join('/')+' '+
+                                [d.getHours(),
+                                d.getMinutes(),
+                                d.getSeconds()].join(':');
+         let today = dformat.split(' ')[0];
+         let currentProfitLoss = 0;
+         let priorProfitLoss = 0;
+         let curr_num = 0;
+         let prior = this.getPrior(dformat);
+        
+         for (let index = 0; index < this.portfolioLogs.length; index++) {
+              let fdate = this.portfolioLogs[index].metas.date.split(' ')[0];
+
+                    const params = {
+                          "symbol-id": this.portfolioLogs[index].metas.stock_id
+                        };
+                    this.$api.journal.portfolio.history(params).then(
+                        function(result) {
+                            let buyResult = this.portfolioLogs[index].position * parseFloat(result.data.last).toFixed(2);
+                            let mvalue = this.fees(buyResult);
+                            let tcost = this.portfolioLogs[index].position * this.portfolioLogs[index].average_price;
+                            let profit = parseFloat(mvalue) - parseFloat(tcost);
+                            if(this.portfolioLogs[index].position > 0){
+                              if(today == fdate){
+                                 currentProfitLoss = parseFloat(currentProfitLoss) + parseFloat(profit);
+                                 curr_num++;
+                                 //console.log('Current TOtal ProfitLoss - ' + currentProfitLoss);
+                              }else if(prior == fdate){      
+                                 priorProfitLoss = parseFloat(priorProfitLoss) + parseFloat(profit);    
+                                  //console.log('--bot--'+ index  + '=Date Prior -' + this.priordate);
+                              }
+                            }
+                            console.log('Prior Date:' + prior);
+                            console.log('Current TOtal ProfitLoss - ' + currentProfitLoss);
+                            console.log('Prior TOtal ProfitLoss - ' + priorProfitLoss);
+                            this.$emit('currentDayChange', currentProfitLoss);  
+                            this.$emit('priorDayChange', priorProfitLoss);
+                        }.bind(this)
+                    );                
+
+         } 
+      },
+      getPrior(curdate){
+          let current_date = curdate.split(' ')[0];
+          for (let index = 0; index < this.portfolioLogs.length; index++) {
+            let fdate = this.portfolioLogs[index].metas.date.split(' ')[0];
+            if(fdate != current_date){
+              return fdate;
+              break;
+            }
+          }
+      },
+     
+      fees(buyResult){
+            let dpartcommission = buyResult * 0.0025;
+            let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+            // TAX
+            let dtax = dcommission * 0.12;
+            // Transfer Fee
+            let dtransferfee = buyResult * 0.00005;
+            let dsell = buyResult * 0.006;
+            // SCCP
+            let dsccp = buyResult * 0.0001;      
+            let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+            return buyResult - dall;                
+    },
+
+
     },
     computed: {
             ...mapGetters({
