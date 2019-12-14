@@ -3,12 +3,23 @@
     <div id="headline">
       <div class="headline__arrow">
         <v-content>
-          <v-icon v-show="changetype == 1" size="60" class="arrow-icon increase"
-            >mdi-chevron-up</v-icon
-          >
-          <v-icon v-show="changetype == 2" size="60" class="arrow-icon decrease"
-            >mdi-chevron-down</v-icon
-          >
+          <v-slide-y-reverse-transition>
+            <v-icon
+              v-show="changetype == 1"
+              size="60"
+              class="arrow-icon increase"
+              >mdi-chevron-up</v-icon
+            >
+          </v-slide-y-reverse-transition>
+
+          <v-slide-y-transition>
+            <v-icon
+              v-show="changetype == 2"
+              size="60"
+              class="arrow-icon decrease"
+              >mdi-chevron-down</v-icon
+            >
+          </v-slide-y-transition>
         </v-content>
       </div>
       <div
