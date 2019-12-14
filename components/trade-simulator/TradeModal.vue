@@ -174,7 +174,7 @@
                                 @click="nextStep"
                                 class="text-capitalize black--text ml-1"
                                 light
-                                :disabled="(this.totalposition > 0 ? false : true)"
+                                :disabled="(this.totalposition > 0 || this.simulatorConfirmedBuySell == 'sell' ? false : true)"
                             >
                                 {{ (this.simulatorConfirmedBuySell == 'sell' ? 'Confirm' : 'Continue') }}
                             </v-btn>
@@ -185,9 +185,9 @@
                         <v-container class="pt-0">
                             <v-row no-gutters class="px-0 py-0">
                                 <v-col sm="12" md="12">
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="strategy" v-model="selectedstrategy" label="Enter Strategy" dense flat></v-select></div>
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1" :items="tradeplan" v-model="selectedtradeplan" label="Enter Trade Plan" dense flat></v-select></div>
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" :items="emotions" v-model="selectedemotions" label="Enter Emotions" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1 enter_strategy" :items="strategy" v-model="selectedstrategy" label="Enter Strategy" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1 enter_tplan" :items="tradeplan" v-model="selectedtradeplan" label="Enter Trade Plan" dense flat></v-select></div>
+                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="enter_emotion" :items="emotions" v-model="selectedemotions" label="Enter Emotions" dense flat></v-select></div>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12" class="pa-0 mt-3 justify-right d-flex align-center text-right">
                                     <v-textarea
@@ -321,9 +321,10 @@ import { mapActions, mapGetters } from "vuex";
                     this.sellSelected = false;
                     this.stock = this.stock2; 
                     this.GetSelectStock = '';
-                    this.setSimulatorConfirmedBuySell('buy');
                     this.quantity_reset = true;
                     this.totalposition = 0;
+                    this.dataVolume = 0;
+                    this.setSimulatorConfirmedBuySell('buy');
                 } 
             }
         },
@@ -362,21 +363,14 @@ import { mapActions, mapGetters } from "vuex";
                 console.log('buy');
                 this.setSimulatorConfirmedBuySell('buy');
                 console.log('Fund-id ' +this.simulatorPortfolioID);
+                this.totalposition = 0;
                 this.buySelected = true;
                 this.onreset = true,
                 this.sellSelected = false;
                 this.stock = [];
                 this.GetSelectStock = '';
                 this.stock = this.stock2; 
-                /*const params = {
-                    exchange: "PSE",
-                    status: "active"
-                    };
-                    this.$api.chart.stocks.list(params).then(
-                    function(result) {
-                        this.stock = result.data;                   
-                    }.bind(this)
-                    );*/
+                
             },
             btnSell(){
                 if(this.GetSelectStock != '' ? this.getDetails(this.GetSelectStock) : '');           
@@ -419,7 +413,7 @@ import { mapActions, mapGetters } from "vuex";
                                 d.getMinutes(),
                                 d.getSeconds()].join(':'); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
 
-                if(this.simulatorPositions != 0){
+               // if(this.simulatorPositions != 0){
 
                     // if Sell is selected
                 if(this.sellSelected){
@@ -438,7 +432,7 @@ import { mapActions, mapGetters } from "vuex";
                                     date: dformat
                                 }
                             }
-                        console.log('fund-id = '+this.simulatorPortfolioID);
+                       
                             this.$axios
                             .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ fund_id + "/sell/" + stock_id, sellparams)
                             .then(response => {      
@@ -451,7 +445,7 @@ import { mapActions, mapGetters } from "vuex";
                                     this.sellSelected = false;
                                     this.GetSelectStock = '';
                                 }
-                            });
+                            }); 
                         }else { // if selected stock is not in the list
                             console.log('unable to sell');
                         }
@@ -484,9 +478,9 @@ import { mapActions, mapGetters } from "vuex";
                             }
                         });    
                 }
-            }else {
-                console.log('please enter quantity');
-            }
+            //}else {
+               // console.log('please enter quantity');
+           // }
 
             },
             getDetails(selectObj) {
@@ -578,6 +572,8 @@ import { mapActions, mapGetters } from "vuex";
         color: #b6b6b6;
     }
 
+    
+
     .stock_selector .v-select__slot .v-label,
     .stock_selector .v-select__slot .v-icon {
         color: #03DAC5 !important;
@@ -629,5 +625,11 @@ import { mapActions, mapGetters } from "vuex";
     }
     .v-select__slot > .v-select__selections > .v-select__selection--comma {
        font-size: 13px; 
+    }
+    .select_stock > .v-input__control > .v-input__slot > .v-select__slot > label,
+    .enter_strategy > .v-input__control > .v-input__slot > .v-select__slot > label,
+    .enter_tplan > .v-input__control > .v-input__slot > .v-select__slot > label,
+    .enter_emotion > .v-input__control > .v-input__slot > .v-select__slot > label {
+        font-size: 13px;
     }
 </style>

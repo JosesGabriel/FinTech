@@ -1,4 +1,5 @@
 <template>
+
     <v-col cols="12" sm="12" md="12">
             <v-row class="mt-3 ml-0 mb-10 mr-2">
     
@@ -9,7 +10,7 @@
                     </v-row>
                     <v-row class="mt-1 mb-2">
                         <v-col md="12" :class="(this.realized > 0 ? 'positive' : this.realized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
-                            {{ this.realized }}
+                            {{ this.addcomma(this.realized) }}
                         </v-col> 
                     </v-row>
                     
@@ -20,7 +21,7 @@
                     </v-row>
                     <v-row class="mt-1">
                        <v-col md="12" :class="(this.unrealized > 0 ? 'positive' : this.unrealized < 0 ? 'negative' : 'neutral')" class="text-right pb-0 pl-0 pr-3">
-                           {{ this.unrealized }}
+                           {{ this.addcomma(this.unrealized) }}
                         </v-col>
                     </v-row>
                 </v-col>
@@ -61,7 +62,7 @@
                     <v-row class="mt-0">
                         <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
                             <v-row class="ma-0 pa-0 overline">
-                                <v-col :class="(this.daychangepercentage > 0 ? 'positive' : this.daychangepercentage < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
+                                <v-col :class="(this.daychange > 0 ? 'positive' : this.daychange < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
                                     ( {{ this.addcomma(this.daychangepercentage) }}%)
                                 </v-col>
                             </v-row>
@@ -87,6 +88,7 @@
                
                 <v-row>
                     <v-col md="3" class="text-right caption px-2 ma-0" style="position:absolute; right:0; top: -26px; width: 180px;">
+                                                
                         <v-select offset-y="true" 
                             class="select_portfolio mt-2 black--text" 
                             item-color="success" 
@@ -95,25 +97,35 @@
                             item-text="name" 
                             item-value="id"
                             :items="portfolio" 
-                            dark                          
+                            dark 
+                            v-on:change="getOpenPosition"                     
                             background-color="#03DAC5" 
                             label="Select Portfolio" 
-                            v-on:change="getOpenPosition"
-                            dense solo>
-                 
+                            dense solo
+                            >
+                                    
+                             <!--  <template
+                                    slot="item" 
+                                    slot-scope="data"
+                                    
+                                >    
+                                
+                                        <v-list-item
+                                            :dark="lightSwitch == true"
+                                            :style="{ background: cardbackground }" 
+                                            @click.stop="getOpenPosition(data.item.id)"
+                                            >
+                                            
+                                            <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                            
+                                        </v-list-item>
+                                </template>-->
+                            
                             <template 
                                 v-slot:append-item
-                                background-color="#03DAC5"
-                            >
-                               <!-- <v-list-item                     
                                 :dark="lightSwitch == true"
                                 :style="{ background: cardbackground }"
-                                >
-                                     <v-list-item-content >
-                                         <v-list-item-title>{{ item.name }}</v-list-item-title>
-                                     </v-list-item-content> 
-                                </v-list-item>-->
-
+                            >
                                 <v-list-item
                                 ripple 
                                 :dark="lightSwitch == true"
@@ -126,6 +138,8 @@
                                 </v-list-item>
                             </template>
                         </v-select>
+                     
+                        
                     </v-col>
                 </v-row>
                 <v-tab-item
@@ -136,7 +150,7 @@
                     :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                 >
                     <v-container class="pa-0">
-                        <VirtualLivePortfolio v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
+                        <VirtualLivePortfolio v-on:currentDayChange="currentChange" v-on:priorDayChange="priorChange" v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#03dac5" 
@@ -174,6 +188,8 @@
           daychange: 0,
           daychangepercentage: 0,
           equity: 0,
+          currentchange: 0,
+          priorchange: 0,
           item: {},
       }
     },
@@ -199,12 +215,26 @@
             },
     },
     watch: {
+      simulatorPortfolioID: function () {
+          this.realized = 0;
+          this.unrealized= 0;
+          this.totalmvalue= 0;
+          this.totalmax= 0;
+          this.balance= 0;
+          this.daychange= 0;
+          this.daychangepercentage= 0;
+          this.equity= 0;
+      },
       totalmvalue: function () {
         this.getBalance();
       },
       realized: function () {
         this.getBalance();
       },
+      priorchange: function(){
+          this.daychange = this.priorchange + this.currentchange;
+          this.daychangepercentage = (parseFloat(this.currentchange) / parseFloat(this.priorchange)) * 100;
+      }
     },
     methods: {
          ...mapActions({
@@ -212,6 +242,7 @@
             }),
             getOpenPosition (selectObj) {
                 this.setSimulatorPortfolioID(selectObj);
+                this.default_port = selectObj;
             },
             Realized(value){
                 this.realized = value;
@@ -226,10 +257,10 @@
                 this.totalmax = value;
             },
             DayChange(value){
-                this.daychange = value;
+                //this.daychange = value;
             },
             DayChangePercentage(value){
-                this.daychangepercentage = value;
+               // this.daychangepercentage = value;
             },
             portperf(){
                 let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
@@ -245,6 +276,12 @@
                 return n.toLocaleString().split(sep)[0]
                     + sep
                     + n.toFixed(2).split(sep)[1];
+            },
+            currentChange(value){
+                this.currentchange = value;
+            },
+            priorChange(value){
+                this.priorchange = value;
             },
             getBalance(){
                  const portfolioparams = {
