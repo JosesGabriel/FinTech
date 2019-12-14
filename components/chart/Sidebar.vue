@@ -69,8 +69,8 @@ export default {
       this.$api.chart.stocks.history(params).then(response => {
         this.data = response.data;
         this.setIndex(parseInt(this.data.value) > 0 ? false : true);
-        console.log("sidebar data");
-        console.log(this.data);
+        //console.log("sidebar data");
+        //console.log(this.data);
         this.setStock(this.data);
         this.setMarketCode(this.data.market_code);
         this.loading = null;
@@ -82,12 +82,12 @@ export default {
         this.counter = 0;
       }
 
-      //   this.sse = new EventSource(
-      //     "https://stream-api.arbitrage.ph/sse?stream=market-data"
-      //   );
       this.sse = new EventSource(
-        "http://localhost:8021/sse?stream=market-data"
+        "https://stream-api.arbitrage.ph/sse?stream=market-data"
       );
+      //   this.sse = new EventSource(
+      //     "http://localhost:8021/sse?stream=market-data"
+      //   );
 
       this.sse.onopen = function() {
         console.log("open sse");
