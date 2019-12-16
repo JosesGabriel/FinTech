@@ -21,11 +21,11 @@
           <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
           <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
           <v-spacer></v-spacer>
-          <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" height="23"><span class="v-btn__content">Record</span></v-btn>
+          <v-btn outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click.stop="showRecordTrade=true"  height="23"><span class="v-btn__content">Record</span></v-btn>
 
-            <v-btn icon small @click.stop="showScheduleForm=true"> 
-                <img src="/icon/journal-icons/share-icon.svg" width="15">
-            </v-btn>
+          <v-btn icon small @click.stop="showScheduleForm=true"> 
+              <img src="/icon/journal-icons/share-icon.svg" width="15">
+          </v-btn>
         </v-card-title>
         <v-data-table
           :headers="headers"
@@ -93,12 +93,14 @@
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
         <sell-delete :visible="showSellDelete" :itemDetails="itemDetails" @close="showSellDelete=false" />
         <sell-details :visible="showSellDetails" :itemDetails="itemDetails" @close="showSellDetails=false" />
+        <record-trade :visible="showRecordTrade" @close="showRecordTrade=false" />
     </v-col>
 </template>
 <script>
 import shareModal from '~/components/modals/share'
 import sellDelete from '~/components/modals/sellDelete'
 import sellDetails from '~/components/modals/sellDetails'
+import recordTrade from '~/components/modals/record'
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -106,7 +108,8 @@ export default {
   components: {
     shareModal,
     sellDelete,
-    sellDetails
+    sellDetails,
+    recordTrade
   },
   data () {
     return {
@@ -114,6 +117,7 @@ export default {
       showScheduleForm: false,
       showSellDelete: false,
       showSellDetails: false,
+      showRecordTrade: false,
       itemDetails: null,
 
       itemsPerPage: 5,

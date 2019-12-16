@@ -247,7 +247,7 @@ export default {
           }
         }.bind(this)
       );
-      this.componentKeys++;
+      // this.componentKeys++;
     }
   },
   computed: {
