@@ -19,23 +19,23 @@
                         <tbody>
                             <tr id="table_tr_snap-cont">
                                 <td class="item_position-prop caption px-1 py-2">Commisions</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ comm }}</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ formatPrice(parseFloat(comm)) }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                                 <td class="item_position-prop caption px-1 py-2">Value Added Tax</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ vadd }}</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ formatPrice(parseFloat(vadd)) }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                                 <td class="item_position-prop caption px-1 py-2">Transfer Fee</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ tfee }}</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ formatPrice(parseFloat(tfee)) }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                                 <td class="item_position-prop caption px-1 py-2">SCCP</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ sccp }}</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ formatPrice(parseFloat(sccp)) }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                                 <td class="item_position-prop caption px-1 py-2">Sales Tax</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ stax }}</td>
+                                <td class="item_position-prop caption text-right px-1 py-1">{{ formatPrice(parseFloat(stax)) }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -44,7 +44,7 @@
         </v-col>
         <v-col class="pa-0 pl-5" cols="8" sm="8" md="8">
             <div id="chart">
-                <apexcharts type=line height=230 :options="chartOptions" :series="series" />
+                <apexcharts ref="ExpenseReportTrades" type=line height=230 :options="chartOptions" :series="series" />
             </div>
         </v-col>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
@@ -55,23 +55,33 @@
 import VueApexCharts from 'vue-apexcharts'
 import shareModal from '~/components/modals/share'
 
+import { mapGetters } from "vuex";
+
 export default {
     components: {
         apexcharts: VueApexCharts,
         shareModal
     },
+    computed: { 
+        ...mapGetters({
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+            journalCharts: "journal/getJournalCharts",
+        })
+    },
     data () {
         return {
             showScheduleForm: false,
-            comm: '100,000,000.00',
-            vadd: '100,000,000.00',
-            tfee: '100,000,000.00',
-            sccp: '100,000,000.00',
-            stax: '100,000,000.00',
+            expenseReportArray: [],
+            comm: '0.00',
+            vadd: '0.00',
+            tfee: '0.00',
+            sccp: '0.00',
+            stax: '0.00',
         
             series: [{
                 name: "Expenses",
-                data: [30000, 35000, 25000, 20000, 5000, 10000, 15000, 40000, 30000, 35000, 25000, 20000, 5000, 10000, 15000]
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             }],
             chartOptions: {
                 chart: {
@@ -121,13 +131,13 @@ export default {
                     },
                 },
                 xaxis: {
-                    categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'],
+                    // categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15'],
                     labels: {
                         show: true,
                         style: {
                             colors: '#b6b6b6',
                             fontSize: '12px',
-                            fontFamily: 'Karla',
+                            fontFamily: "'Nunito' !important",
                             cssClass: 'apexcharts-xaxis-label',
                         }
                     },
@@ -143,7 +153,7 @@ export default {
                         offsetX: 0,
                         style: {
                             fontSize: 10,
-                            fontFamily: 'Karla',
+                            fontFamily: "'Nunito' !important",
                         },
                         theme: false,
                     },
@@ -155,8 +165,12 @@ export default {
                         style: {
                             color: '#b6b6b6',
                             fontSize: '12px',
-                            fontFamily: 'Karla',
+                            fontFamily: "'Nunito' !important",
                             cssClass: 'apexcharts-yaxis-label',
+                        },
+                        formatter: function (value) {
+                            let val = (value/1).toFixed(2).replace('.', '.')
+                            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
                     },
                     axisTicks: {
@@ -172,8 +186,9 @@ export default {
                     followCursor: false,
                     y: {
                         show: false,
-                        formatter: function (val) {
-                            return val
+                        formatter: function (value) {
+                            let val = (value/1).toFixed(2).replace('.', '.')
+                            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
                     },
                     x: {
@@ -187,7 +202,7 @@ export default {
                     },
                     theme: false,
                     style: {
-                        fontFamily: 'Karla'
+                        fontFamily: "'Nunito' !important"
                     },
                     items: {
                         display: 'flex',
@@ -199,6 +214,60 @@ export default {
                     },
                 }
             }
+        }
+    },
+    methods: {
+        getExpenseReport() {
+            if (this.journalCharts != null) {
+                const objExpenseReport = this.journalCharts.meta.expense_report
+                const objExpenseReportTrades = this.journalCharts.meta.expense_report_trades
+                const expenseReportArray = []
+                    Object.keys(objExpenseReport).forEach(function(key) {
+                        expenseReportArray.push({value: objExpenseReport[key], name: key});
+                        
+                    });
+                    this.expenseReportArray = expenseReportArray
+
+                    for( let i = 0; i < this.expenseReportArray.length; i++) {
+                        if(this.expenseReportArray[i].name == "commission"){
+                            this.comm = this.expenseReportArray[i].value
+                        } else if(this.expenseReportArray[i].name == "tax") {
+                            this.vadd = this.expenseReportArray[i].value
+                        } else if(this.expenseReportArray[i].name == "transfer_fee") {
+                            this.tfee = this.expenseReportArray[i].value
+                        } else if(this.expenseReportArray[i].name == "sccp") {
+                            this.sccp = this.expenseReportArray[i].value
+                        } else if(this.expenseReportArray[i].name == "sell_fee") {
+                            this.stax = this.expenseReportArray[i].value
+                        }
+
+                    }
+                    
+                    if(objExpenseReportTrades.length != 0) {
+                        // load data series on line chart
+                        this.$refs.ExpenseReportTrades.updateSeries([
+                            {
+                                data: objExpenseReportTrades.slice(0, 10)
+                            }
+                        ]);
+                    }
+            }
+            this.componentKeys++;
+        },
+        formatPrice(value) {
+            let val = (value/1).toFixed(2).replace('.', '.')
+            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        },
+    },
+    mounted() {
+        this.getExpenseReport();
+    },
+    watch: {
+        journalCharts: function() {
+            this.getExpenseReport();
+        },
+        renderPortfolioKey: function() {
+            this.getExpenseReport();
         }
     }
 }

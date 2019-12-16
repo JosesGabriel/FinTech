@@ -1,19 +1,22 @@
 <template>
     <v-container class="px-5">
         <v-row no-gutters>
-        <div class="small mx-8 pt-10">
-            <apexcharts height=270 type=donut :options="chartOptions" :series="series"></apexcharts>
-        </div>
+            
+        <v-col class="pa-0" cols="12">
+            <div class="small pt-5">
+                <apexcharts height=270 type=donut :options="chartOptions" :series="series"></apexcharts>
+            </div>
+        </v-col>
             <v-col class="pa-3" cols="12">
                 <v-simple-table :dense="true" dark id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
                             <tr id="table_tr_snap-cont">
-                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#00ffc3">mdi-circle</v-icon>Winning Strategy</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Winning Strategy</td>
                                 <td class="item_position-prop caption text-right px-1 py-1">{{ winStrategy }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#f44336">mdi-circle</v-icon>Lossing Strategy</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Lossing Strategy</td>
                                 <td class="item_position-prop caption text-right px-1 py-1">{{ lossStrategy }}</td>
                             </tr>
                         </tbody>
@@ -26,7 +29,7 @@
 <script>
 import VueApexCharts from 'vue-apexcharts'
 
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
     components: {
@@ -36,26 +39,15 @@ export default {
         ...mapGetters({
             renderPortfolioKey: "journal/getRenderPortfolioKey",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
+            journalCharts: "journal/getJournalCharts",
         })
-    },
-    props: {
-        strategyStat: {
-            type: Array
-        }
     },
     data () {
         return {
             winStrategy: '',
             lossStrategy: '',
-            series: [],
-            data_strat_rev: [],
-            data_strat_trend: [],
-            data_strat_break: [],
-            data_strat_bottom: [],
-            data_strat_first: [],
-            data_strat_name: [],
-            data_strat_value: [],
-            data_highest_value: [],
+            series: [5,3],
+            strategyArr: [],
             chartOptions: {
             chart: {
                 dropShadow: {
@@ -67,7 +59,7 @@ export default {
                 },
             },
             labels: ['Winning', 'Lossing'],
-            colors: ['#00FFC3','#f44336'],
+            colors: ['#03DAC5','#f44336'],
             legend: {
                 show: false
             },
@@ -146,54 +138,47 @@ export default {
     },
     methods: {
         getStrategyStat() {
-            
-            this.series = []
-            if(this.dataStrat[0].length != 0){
-                
-                if(this.dataStrat[0]['1-2-3 Reversal'] != undefined){
-                    this.data_highest_value = [{...this.dataStrat[0]['1-2-3 Reversal'], name: '1-2-3 Reversal'}]
-                }
-                if(this.dataStrat[0]['Trend Following'] != undefined){
-                    this.data_highest_value = [{...this.dataStrat[0]['Trend Following'], name: 'Trend Following'},...this.data_highest_value]
-                }
-                if(this.dataStrat[0]['Breakout Play'] != undefined){
-                    this.data_highest_value = [{...this.dataStrat[0]['Breakout Play'], name: 'Breakout Play'},...this.data_highest_value]
-                }
-                if(this.dataStrat[0]['Bottom Picking'] != undefined){
-                    this.data_highest_value = [{...this.dataStrat[0]['Bottom Picking'], name: 'Bottom Picking'},...this.data_highest_value]
-                }
-                if(this.dataStrat[0]['First Hour Breakout'] != undefined){
-                    this.data_highest_value = [{...this.dataStrat[0]['First Hour Breakout'], name: 'First Hour Breakout'},...this.data_highest_value]
-                }
-                
-                var resWin = Math.max.apply(Math,this.data_highest_value.map(function(o){return o.win;}))
-                var resLoss = Math.max.apply(Math,this.data_highest_value.map(function(o){return o.loss;}))
+            if( this.journalCharts != null ) {
+                const objStrategy = this.journalCharts.meta.strategy_statistics
+                const strategyArray = []
+                if(objStrategy.length != 0){
+                this.series = []
 
-                var objWin = this.data_highest_value.find(function(o){ return o.win == resWin; })
-                var objLoss = this.data_highest_value.find(function(o){ return o.loss == resLoss; })
+                    Object.keys(objStrategy).forEach(function(key) {
+                        strategyArray.push({...objStrategy[key], name: key});
+                    });
+                    this.strategyArr = strategyArray
+                    
+                    // load data series on donut
+                    const winResult = Math.max.apply(Math,this.strategyArr.map(function(o){return o.win;}))
+                    const lossResult = Math.max.apply(Math,this.strategyArr.map(function(o){return o.loss;}))
+                    // return obj
+                    const objWinResult = this.strategyArr.find(function(o){ return o.win == winResult; })
+                    const objLossResult = this.strategyArr.find(function(o){ return o.loss == lossResult; })
 
-                this.winStrategy = objWin.name
-                this.lossStrategy = objLoss.name
+                    // if (objLossResult.loss <= 0) {
+                    //     this.series.push(objWinResult.win)
+                    // } else if(objLossResult.loss > 0) {
+                    //     }
+                    this.series.push(objWinResult.win, objLossResult.loss)
 
-                this.series = [objWin.win,objLoss.loss,...this.series]
-
-                // console.log(this.winStrategy, this.lossStrategy)
-                // console.log(this.series)
-                // console.log(this.dataStrat[0]['1-2-3 Reversal'], this.dataStrat[0]['Trend Following'], this.dataStrat[0]['Breakout Play'])
-                // console.log(Math.max(...data_win_rev), Math.max(...data_loss_rev))
+                    this.winStrategy = objWinResult.name
+                    this.lossStrategy = objLossResult.name
+                }
             }
             this.componentKeys++;
         }
     },
-    watch: {
-        strategyStat() {
-            this.dataStrat = this.strategyStat
-            this.getStrategyStat();    
-            // console.log(this.dataStrat[0].length == 0)
-        }
-    },
     mounted() {
-        // this.getStrategyStat();
+        this.getStrategyStat();
+    },
+    watch: {
+        journalCharts: function() {
+            this.getStrategyStat();
+        },
+        renderPortfolioKey: function() {
+            this.getStrategyStat();
+        }
     }
 }
 </script>

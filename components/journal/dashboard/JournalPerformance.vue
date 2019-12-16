@@ -10,7 +10,7 @@
             </v-card-title>
         </v-col>
         <div class="pt-3" id="chart">
-            <apexcharts type=bar height=300 :options="chartOptions" :series="series" />
+            <apexcharts ref="Performance" type=bar height=300 :options="chartOptions" :series="series" />
         </div>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-container>
@@ -20,20 +20,30 @@
   import VueApexCharts from 'vue-apexcharts'
   import shareModal from '~/components/modals/share'
   
+  import { mapGetters } from "vuex";
+
   export default {
     components: {
       apexcharts: VueApexCharts,
       shareModal
     },
+    computed: { 
+      ...mapGetters({
+          renderPortfolioKey: "journal/getRenderPortfolioKey",
+          defaultPortfolioId: "journal/getDefaultPortfolioId",
+          journalCharts: "journal/getJournalCharts",
+      })
+    },
     data () {
       return {
         showScheduleForm: false,
+        performanceArray: [],
         series: [{
           name: 'Loss',
-          data: [2,3,4,5,4]
+          data: [0,0,0,0,0]
         }],
         chartOptions: {
-          colors: ['#00FFC3','#f44336'],
+          colors: ['#03DAC5','#F44336'],
           plotOptions: {
             bar: {
               horizontal: false,
@@ -87,7 +97,7 @@
               style: {
                 colors: '#b6b6b6',
                 fontSize: '12px',
-                fontFamily: 'Karla',
+                fontFamily: "'Nunito' !important",
                 cssClass: 'apexcharts-xaxis-label',
               }
             },
@@ -111,8 +121,12 @@
               style: {
                   color: '#b6b6b6',
                   fontSize: '12px',
-                  fontFamily: 'Karla',
+                  fontFamily: "'Nunito' !important",
                   cssClass: 'apexcharts-yaxis-label',
+              },
+              formatter: function (value) {
+                let val = (value/1).toFixed(2).replace('.', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
             },
             lines: {
@@ -134,15 +148,16 @@
                 floating: true,
                 style: {
                     fontSize:  '14px',
-                    fontFamily: 'Karla',
+                    fontFamily: "'Nunito' !important",
                     color:  '#b6b6b6'
                 },
             },
           tooltip: {
             y: {
               show: false,
-              formatter: function (val) {
-                return val
+              formatter: function (value) {
+                let val = (value/1).toFixed(2).replace('.', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
             },
             x: {
@@ -156,11 +171,47 @@
             },
             theme: false,
             style: {
-              fontFamily: 'Karla'
+              fontFamily: "'Nunito' !important"
             }
           }
         }
       }
+    },
+    methods: {
+      getPerformance() {
+        if(this.journalCharts != null) {
+          const objPerformance = this.journalCharts.meta.performance
+          const performanceArray = []
+          const lastArray = [ ,  ,  ,  ,  ]
+
+          Object.keys(objPerformance).forEach(function(key) {
+              performanceArray.push({value: objPerformance[key], name: key});
+          });
+
+          for(let i = 0; i < performanceArray.length; i++) {
+            lastArray.unshift(performanceArray[i].value)
+          }
+
+          this.$refs.Performance.updateSeries([
+              {
+                data: lastArray.slice(0,5).reverse()
+              }
+          ]);
+
+        }
+        this.componentKeys++;
+      }
+    },
+    mounted() {
+        this.getPerformance();
+    },
+    watch: {
+        journalCharts: function() {
+            this.getPerformance();
+        },
+        renderPortfolioKey: function() {
+            this.getPerformance();
+        }
     }
   }
 </script>

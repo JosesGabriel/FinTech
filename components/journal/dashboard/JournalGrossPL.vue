@@ -10,7 +10,7 @@
             </v-card-title>
         </v-col>
         <div class="pt-3" id="chart">
-            <apexcharts type=bar height=300 :options="chartOptions" :series="series" />
+            <apexcharts ref="GrossPL" type=bar height=300 :options="chartOptions" :series="series" />
         </div>
         <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
     </v-container>
@@ -22,147 +22,190 @@
 import VueApexCharts from 'vue-apexcharts'
 import shareModal from '~/components/modals/share'
 
+import { mapGetters } from "vuex";
+
 export default {
     components: {
         apexcharts: VueApexCharts,
         shareModal
     },
+    computed: { 
+      ...mapGetters({
+          renderPortfolioKey: "journal/getRenderPortfolioKey",
+          defaultPortfolioId: "journal/getDefaultPortfolioId",
+          journalCharts: "journal/getJournalCharts",
+      })
+    },
     data () {
-        return {
-            showScheduleForm: false,
-            
-            series: [{
-              name: 'Loss',
-              data: [1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,4]
-            }],
-          chartOptions: {
-            colors: ['#00FFC3','#f44336'],
-            plotOptions: {
-              bar: {
-                horizontal: false,
-                columnWidth: '50%',
-                endingShape: 'rounded',
-                dropShadow: {
-                    enabled: true,
-                    left: 2,
-                    top: 2,
-                    opacity: 1
-                }
-              },
-            },
-            chart: {
-              toolbar: {
-                show: false,
-                tools: {
-                  download: true,
-                  selection: true,
-                  zoom: true,
-                  zoomin: true,
-                  zoomout: true,
-                  pan: true
-                },
-                autoSelected: 'zoom' 
-              },
+      return {
+          showScheduleForm: false,
+          
+          series: [{
+            name: 'Loss',
+            data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+          }],
+        chartOptions: {
+          colors: ['#03DAC5','#f44336'],
+          plotOptions: {
+            bar: {
+              horizontal: false,
+              columnWidth: '50%',
+              endingShape: 'rounded',
               dropShadow: {
-                enabled: true,
-                opacity: 0.1,
-                blur: 2,
-                left: 3,
-                top: 3
-              },
-            },
-            dataLabels: {
-              enabled: false
-            },
-            stroke: {
-              show: true,
-              width: 2,
-              colors: ['transparent']
-            },
-            grid: {
-              show: true,
-              borderColor: 'transparent',
-            },
-            xaxis: {
-              categories: ['1','','','4','','','','8','','','','12','','','','16'],
-              labels: {
-                show: true,
-                style: {
-                  colors: '#b6b6b6',
-                  fontSize: '12px',
-                  fontFamily: 'Karla',
-                  cssClass: 'apexcharts-xaxis-label',
-                }
-              },
-              crosshairs: {
-                show: false,
-              },
-              lines: {
-                  show: false
-              },
-              axisTicks: {
-                  show: false,
-              },
-              axisBorder: {
-                  show: false
+                  enabled: true,
+                  left: 2,
+                  top: 2,
+                  opacity: 1
               }
             },
-            yaxis: {
-              labels: {
-                show: true,
-                align: 'right',
-                style: {
-                    color: '#b6b6b6',
-                    fontSize: '12px',
-                    fontFamily: 'Karla',
-                    cssClass: 'apexcharts-yaxis-label',
-                }
+          },
+          chart: {
+            toolbar: {
+              show: false,
+              tools: {
+                download: true,
+                selection: true,
+                zoom: true,
+                zoomin: true,
+                zoomout: true,
+                pan: true
               },
-              lines: {
-                  show: false
+              autoSelected: 'zoom' 
+            },
+            dropShadow: {
+              enabled: true,
+              opacity: 0.1,
+              blur: 2,
+              left: 3,
+              top: 3
+            },
+          },
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+          },
+          grid: {
+            show: true,
+            borderColor: 'transparent',
+          },
+          xaxis: {
+            categories: ['1','','','4','','','','8','','','','12','','','','16'],
+            labels: {
+              show: true,
+              style: {
+                colors: '#b6b6b6',
+                fontSize: '12px',
+                fontFamily: "'Nunito' !important",
+                cssClass: 'apexcharts-xaxis-label',
               }
             },
-            legend: {
+            crosshairs: {
               show: false,
             },
-            fill: {
-              opacity: 1
+            lines: {
+                show: false
             },
-            title: {
-                  text: 'Last 16 Trades',
-                  align: 'left',
-                  margin: 10,
-                  offsetX: 0,
-                  offsetY: 0,
-                  floating: true,
-                  style: {
-                      fontSize:  '14px',
-                      fontFamily: 'Karla',
-                      color:  '#b6b6b6'
-                  },
-              },
-            tooltip: {
-              y: {
+            axisTicks: {
                 show: false,
-                formatter: function (val) {
-                  return val
-                }
-              },
-              x: {
-                show: false,
-              },
-              marker: {
-                  show: false,
-              },
-              onDatasetHover: {
-                highlightDataSeries: false
-              },
-              theme: false,
+            },
+            axisBorder: {
+                show: false
+            }
+          },
+          yaxis: {
+            labels: {
+              show: true,
+              align: 'right',
               style: {
-                fontFamily: 'Karla'
+                  color: '#b6b6b6',
+                  fontSize: '12px',
+                  fontFamily: "'Nunito' !important",
+                  cssClass: 'apexcharts-yaxis-label',
+              },
+              formatter: function (value) {
+                let val = (value/1).toFixed(2).replace('.', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
+            },
+            lines: {
+                show: false
+            }
+          },
+          legend: {
+            show: false,
+          },
+          fill: {
+            opacity: 1
+          },
+          title: {
+                text: 'Last 16 Trades',
+                align: 'left',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 0,
+                floating: true,
+                style: {
+                    fontSize:  '14px',
+                    fontFamily: "'Nunito' !important",
+                    color:  '#b6b6b6'
+                },
+            },
+          tooltip: {
+            y: {
+              show: false,
+              formatter: function (value) {
+                let val = (value/1).toFixed(2).replace('.', '.')
+                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+            },
+            x: {
+              show: false,
+            },
+            marker: {
+                show: false,
+            },
+            onDatasetHover: {
+              highlightDataSeries: false
+            },
+            theme: false,
+            style: {
+              fontFamily: "'Nunito' !important"
             }
           }
+        }
+      }
+    },
+    methods: {
+      getGrossPL() {
+        if (this.journalCharts != null) {
+          const objGrosPL = this.journalCharts.meta.profit_loss
+          const lastArray = [ ,  ,  ,  ,  ]
+          if(objGrosPL.length != 0) {
+            lastArray.unshift(...objGrosPL)
+  
+            this.$refs.GrossPL.updateSeries([
+              {
+                data: lastArray.slice(0,16)
+              }
+            ]);
+          }
+        }
+        this.componentKeys++;
+      }
+    },
+    mounted() {
+        this.getGrossPL();
+    },
+    watch: {
+        journalCharts: function() {
+            this.getGrossPL();
+        },
+        renderPortfolioKey: function() {
+            this.getGrossPL();
         }
     }
 }

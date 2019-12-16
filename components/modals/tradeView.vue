@@ -320,9 +320,7 @@
                     <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostSellModel }}</v-card-title>
                   </v-row>
                 </v-col>
-                <!-- <v-text-field v-model="totalCostSellModel" label="Market Value" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field> -->
-                <!-- <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar> -->
-              </v-row>
+                </v-row>
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
@@ -341,9 +339,7 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-    <v-snackbar v-model="snackbarGo" :timeout="snackbarTimeout">Trade Successfully!<v-btn color="blue" text @click="snackbarGo = false">Close</v-btn></v-snackbar>
-    <v-snackbar v-model="snackbarNotGo" :timeout="snackbarTimeout">Please enter a valid value!<v-btn color="blue" text @click="snackbarNotGo = false">Close</v-btn></v-snackbar>
-  </v-dialog>
+    </v-dialog>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -380,6 +376,7 @@ export default {
 
       date: new Date().toISOString().substr(0, 10),
       dateModel: null,
+      YMDModel: null,
       menu: false,
       modal: false,
 
@@ -414,11 +411,6 @@ export default {
       showBuybtn: true,
       showSellbtn: false,
 
-      snackbar: false,
-      snackbarSell: false,
-      snackbarGo: false,
-      snackbarNotGo: false,
-      snackbarTimeout: 2000,
       stocklistBuy: [],
       quantityModel: null,
       avepriceSell: null
@@ -487,11 +479,14 @@ export default {
     }),
     initPortfolio(){
       var today = new Date(this.date);
+      var tim = new Date();
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      // var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      // var dateTime = date+' '+time;
-      this.dateModel = date
+      var dateTime = date+' '+time;
+      this.dateModel = dateTime
+      this.YMDModel = date
+
       this.getUserPortfolio();
     },
     buyListArray: function() {
@@ -563,8 +558,6 @@ export default {
         .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/sell/"+this.GetSelectStock,params)
         .then(response => {
           if (response.success) {
-            console.log(response)
-            this.snackbarGo = true
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
@@ -609,7 +602,6 @@ export default {
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
-          console.log(result)
           this.stockSymbolGet = result.data;
           
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
@@ -747,7 +739,6 @@ export default {
 
       if(parseInt(this.totalCostModel) >= parseInt(this.availableFundsModel)){
         this.continueBuyButtonDisable = true;
-        this.snackbar = true;
       } else {
         if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0 || this.portfolioDropdownModel == null) {
           this.continueBuyButtonDisable = true;
@@ -774,7 +765,6 @@ export default {
 
       if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)){
         this.confirmSellButtonDisable = true;
-        this.snackbarSell = true;
       } else {
         if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
           this.confirmSellButtonDisable = true;
@@ -786,11 +776,13 @@ export default {
     },
     dateWatch() {
       var today = new Date(this.date);
+      var tim = new Date();
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      // var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      // var dateTime = date+' '+time;
-      this.dateModel = date
+      var dateTime = date+' '+time;
+      this.dateModel = dateTime
+      this.YMDModel = date
     }
   }
 };
@@ -798,13 +790,13 @@ export default {
 <style>
 .stock_selector .v-select__slot .v-label,
 .stock_selector .v-select__slot .v-icon {
-  color: #00ffc3 !important;
+  color: #03DAC5 !important;
 }
 .stock_selector .v-input__slot {
   margin: 0;
 }
 .stock_selector .v-select__selection--comma {
-  color: #00ffc3;
+  color: #03DAC5;
   font-size: 12px;
 }
 .stock_selector .v-input__control {
@@ -822,16 +814,16 @@ export default {
   background-color: transparent;
 }
 .positive {
-  color: #00ffc3;
+  color: #03DAC5;
 }
 .negative {
-  color: #fe4949;
+  color: #F44336;
 }
 .neutral {
   color: #bdbdbd;
 }
 .buy_selector .v-select__selection--comma {
-  color: #00ffc3;
+  color: #03DAC5;
   font-size: 14px;
 }
 .buy_selector .v-input__control {
@@ -868,6 +860,6 @@ export default {
   background: #00121e !important;
 }
 .datepicker-container .v-date-picker-title__date {
-  color: #00ffc3 !important
+  color: #03DAC5 !important
 }
 </style>

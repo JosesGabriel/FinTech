@@ -1,8 +1,8 @@
 <template>
-    <v-container class="py-0">
+    <v-container class="pa-0">
         <v-col class="pa-0" cols="12" sm="12" md="12">
             <div id="chart">
-                <apexcharts type=bar height=230 :options="chartOptions" :series="series" />
+                <apexcharts ref="winnersChart" type=bar height=230 :options="chartOptions" :series="series" />
             </div>
         </v-col>
     </v-container>
@@ -12,15 +12,26 @@
 
 import VueApexCharts from 'vue-apexcharts'
 
+import { mapGetters } from "vuex";
+
 export default {
     components: {
         apexcharts: VueApexCharts
     },
+    computed: {
+        ...mapGetters({
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+            journalCharts: "journal/getJournalCharts",
+            stockList: "global/getStockList"
+        })
+    },
     data () {
         return {
+            winnersArray: [],
             series: [{
                 name: 'Winners',
-                data: [ 80, 53, 50, 44, 41, 40, 35]
+                data: [70, 60, 50, 40, 30, 20, 10]
             }],
             chartOptions: {
                 plotOptions: {
@@ -44,7 +55,7 @@ export default {
                         opacity: 1
                     }
                 },
-                colors: ['#00FFC3'],
+                colors: ['#03DAC5'],
                 dataLabels: {
                     enabled: false,
                     offsetX: 0,
@@ -78,7 +89,7 @@ export default {
                 xaxis: {
                     show: true,
                     type: 'category',
-                    categories: ['DD', 'DDPR', 'DELM', 'DFNN', 'DIZ', 'DMC', 'DMW'],
+                    categories: [' ', ' ', ' ', ' ', ' ', ' ', ' '],
                     labels: {
                         show: false
                     },
@@ -100,7 +111,7 @@ export default {
                         style: {
                             color: '#b6b6b6',
                             fontSize: '12px',
-                            fontFamily: 'Karla',
+                            fontFamily: "'Nunito' !important",
                             cssClass: 'apexcharts-yaxis-label',
                         },
                         offsetX: 410,
@@ -122,15 +133,16 @@ export default {
                     floating: true,
                     style: {
                         fontSize:  '14px',
-                        fontFamily: 'Karla',
+                        fontFamily: "'Nunito' !important",
                         color:  '#d8d8d8'
                     },
                 },
                 tooltip: {
                     y: {
                         show: false,
-                        formatter: function (val) {
-                            return val
+                        formatter: function (value) {
+                            let val = (value/1).toFixed(2).replace('.', '.')
+                            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
                     },
                     x: {
@@ -141,11 +153,75 @@ export default {
                     },
                     theme: false,
                     style: {
-                        fontFamily: 'Karla'
+                        fontFamily: "'Nunito' !important"
                     },
                     followCursor: true,
                 }
             }
+        }
+    },
+    methods: {
+        getTopWinners() {
+            if(this.journalCharts != null){ 
+                const objLossers = this.journalCharts.meta.top_stocks
+                const winnersArray = []
+                const positiveArr = []
+                let lastValueArray = [, , , , , , ]
+                let lastSymbolArray = [' ', ' ', ' ', ' ', ' ', ' ', ' ']
+                let filteredStocks = null
+
+                // map keys, from object make it array
+                Object.keys(objLossers).forEach(function(key) {
+                    winnersArray.push({stock_id: key, stock_sym: "", value: objLossers[key]});
+                });
+                this.winnersArray = winnersArray
+
+                for(let i = 0; i < this.winnersArray.length; i++){
+                    let toSeparate = this.winnersArray[i]
+
+                    // filter stock_id to stock symbol
+                    filteredStocks = this.stockList.data.filter((stock) => {
+                        return stock.id_str == this.winnersArray[i].stock_id;
+                    });
+                    toSeparate.stock_sym = filteredStocks[0].symbol
+
+                    // push positive value to array
+                    if(toSeparate.value > 0 ) {
+                        positiveArr.push(toSeparate)
+                    }
+                }
+
+                // loop the name and value push then to array
+                for (let x = 0; x < positiveArr.length; x++) {
+                    lastValueArray.unshift(positiveArr[x].value)
+                    lastSymbolArray.unshift(positiveArr[x].stock_sym)
+                }
+
+                // update chart series
+                this.$refs.winnersChart.updateSeries([
+                    {
+                        data: lastValueArray.slice(0, 7)
+                    }
+                ]);
+
+                // update chart category symbols
+                this.chartOptions = {
+                    ...this.chartOptions,...{ xaxis: { categories: [...lastSymbolArray,...this.chartOptions.xaxis.categories].slice(0, 7)}}
+                };
+
+            }
+            this.componentKeys++;
+        }
+    },
+    mounted() {
+        this.getTopWinners();
+    },
+    watch: {
+        journalCharts: function() {
+            this.getTopWinners();
+        },
+        renderPortfolioKey: function() {
+            this.getTopWinners();
         }
     }
 }
