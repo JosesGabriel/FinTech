@@ -28,8 +28,8 @@
             <template v-slot:item.AvgPrice="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.AvgPrice }}</span></template>
             <template v-slot:item.TotalCost="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.TotalCost }}</span></template>
             <template v-slot:item.MarketValue="{ item }"><span class="pl-3" :style="{ color: fontcolor2 }" >{{ item.MarketValue }}</span></template>
-            <template v-slot:item.Profit="{ item }"><span  :class="(item.Profit > 0 ? 'positive' : item.Profit < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
-            <template v-slot:item.Perf="{ item }"><span  :class="(item.Perf > 0 ? 'positive' : item.Perf < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
+            <template v-slot:item.Profit="{ item }"><span  :class="(parseFloat(item.Profit) > 0 ? 'positive' : parseFloat(item.Profit) < 0 ? 'negative' : '')">{{ item.Profit }}</span></template>
+            <template v-slot:item.Perf="{ item }"><span  :class="(parseFloat(item.Perf) > 0 ? 'positive' : parseFloat(item.Perf) < 0 ? 'negative' : '')">{{ item.Perf }}%</span></template>
             <template v-slot:item.action="{ item }">
                   <div v-show="menuShow" class="sidemenu_actions" :dark="lightSwitch == true" :style="{ background: cardbackground }" :id="`pl_${item.id}`" @mouseover="menuLogsShow(item)" @mouseleave="menuLogsHide(item)">
                     <v-btn small class="caption btn_sidemenu" @click.stop="showEditForm=true" v-on:click="details(item.action, 'details')" text >Details</v-btn>
@@ -48,7 +48,7 @@
         <v-row>
           <v-col style="font-size: 12px;" class="text-right font-weight-regular mr-10" width="100%" :style="{ color: fontcolor }">
           Total Profit/Loss as of {{ this.date }}: <span class="ml-3 mr-4" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.addcomma(this.totalProfitLoss) }}</span>
-          <span class="ml-12 mr-5" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.totalPerf.toFixed(2) }}%</span>
+          <span class="ml-12 mr-5" :class="(this.totalPerf < 0 ? 'negative' : 'positive')">{{ this.addcomma(this.totalPerf) }}%</span>
           </v-col>
         </v-row>
        <!-- <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
@@ -255,8 +255,8 @@ export default {
                             this.portfolioLogs[i].AvgPrice = this.portfolioLogs[i].average_price.toFixed(3);
                             this.portfolioLogs[i].TotalCost = this.addcomma(tcost);
                             this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
-                            this.portfolioLogs[i].Profit = profit.toFixed(2);
-                            this.portfolioLogs[i].Perf = perf.toFixed(2);
+                            this.portfolioLogs[i].Profit = this.addcomma(profit);
+                            this.portfolioLogs[i].Perf = this.addcomma(perf);
                             this.portfolioLogs[i].action = {
                                 id: result.data.stockidstr,
                                 strategy: this.portfolioLogs[i].metas.strategy,
@@ -265,19 +265,19 @@ export default {
                                 notes: this.portfolioLogs[i].metas.notes
                               }       
 
-                             this.$emit('totalUnrealized', this.addcomma(this.totalProfitLoss));
+                             this.$emit('totalUnrealized', this.totalProfitLoss);
                              this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
                            
                           }.bind(this)
                         ); 
                             
                 }          
-                 //this.$emit('totalUnrealized', this.totalProfitLoss.toFixed(3));
-                // this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
+                
+                this.getCurrentChange();
               }.bind(this)
             );   
 
-             this.$axios
+            /* this.$axios
             .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/daychange")
                   .then(response => {      
                       if (response.success) {
@@ -285,9 +285,7 @@ export default {
                           this.$emit('totalDayChange', response.data.change.change);  
                           this.$emit('totalDayChangePercentage', response.data.change.percentage);     
                       }
-              });
-
-
+              });*/
 
       },
       
@@ -354,6 +352,99 @@ export default {
               + sep
               + n.toFixed(2).split(sep)[1];
       },
+      /*sortArray(){
+        function compare(a, b) {
+            var dateA = new Date(a.metas.date).getTime();
+            var dateB = new Date(b.metas.date).getTime();
+            if (dateA > dateB) return -1;
+            if (dateA < dateB) return 1;
+            return 0;
+            //return dateA < dateB ? 1 : -1;
+        }
+        return this.portfolioLogs.sort(compare);
+      },*/
+      getCurrentChange(){
+         let d = new Date,
+                    dformat = [d.getMonth()+1,
+                                d.getDate(),
+                                d.getFullYear()].join('/')+' '+
+                                [d.getHours(),
+                                d.getMinutes(),
+                                d.getSeconds()].join(':');
+         let today = dformat.split(' ')[0];
+         let currentProfitLoss = 0;
+         let priorProfitLoss = 0;
+         let curr_num = 0;
+         let prior = this.getPrior(dformat);
+        
+         for (let index = 0; index < this.portfolioLogs.length; index++) {
+              let fdate = this.portfolioLogs[index].metas.date.split(' ')[0];
+
+                    const params = {
+                          "symbol-id": this.portfolioLogs[index].metas.stock_id
+                        };
+                    this.$api.journal.portfolio.history(params).then(
+                        function(result) {
+                            let buyResult = this.portfolioLogs[index].position * parseFloat(result.data.last).toFixed(2);
+                            let mvalue = this.fees(buyResult);
+                            let tcost = this.portfolioLogs[index].position * this.portfolioLogs[index].average_price;
+                            let profit = parseFloat(mvalue) - parseFloat(tcost);
+                            if(this.portfolioLogs[index].position > 0){
+                              if(today == fdate){
+                                 currentProfitLoss = parseFloat(currentProfitLoss) + parseFloat(profit);
+                                 curr_num++;
+                                 //console.log('Current TOtal ProfitLoss - ' + currentProfitLoss);
+                              }else if(prior == fdate){      
+                                 priorProfitLoss = parseFloat(priorProfitLoss) + parseFloat(profit);    
+                                  //console.log('--bot--'+ index  + '=Date Prior -' + this.priordate);
+                              }
+                            }
+                            console.log('Prior Date:' + prior);
+                            console.log('Current TOtal ProfitLoss - ' + currentProfitLoss);
+                            console.log('Prior TOtal ProfitLoss - ' + priorProfitLoss);
+                            this.$emit('currentDayChange', currentProfitLoss);  
+                            this.$emit('priorDayChange', priorProfitLoss);
+                        }.bind(this)
+                    );                
+
+         } 
+      },
+      getPrior(curdate){
+          let current_date = curdate.split(' ')[0];
+          let max_date = '';
+          let len = this.portfolioLogs.length, max = -Infinity;
+          for (let index = 0; index < this.portfolioLogs.length; index++) {
+            let fdate = this.portfolioLogs[index].metas.date.split(' ')[0];
+            let num_date = fdate.split('/')[1];
+            if(fdate != current_date){
+              //console.log('num-'+num_date);
+              //return fdate;
+              //break;
+                  if (num_date > max) {
+                    //console.log('Num date' + num_date + ' max -' + max);
+                    max = parseInt(num_date);
+                    max_date = fdate;
+                  }
+            }
+          }
+          return max_date;
+      },
+     
+      fees(buyResult){
+            let dpartcommission = buyResult * 0.0025;
+            let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+            // TAX
+            let dtax = dcommission * 0.12;
+            // Transfer Fee
+            let dtransferfee = buyResult * 0.00005;
+            let dsell = buyResult * 0.006;
+            // SCCP
+            let dsccp = buyResult * 0.0001;      
+            let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+            return buyResult - dall;                
+    },
+
+
     },
     computed: {
             ...mapGetters({

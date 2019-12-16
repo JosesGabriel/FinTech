@@ -34,6 +34,8 @@ export default {
   },
   data() {
     return {
+      counter: 0,
+      sse: null,
       data: {},
       loading: "#03dac5"
     };
@@ -67,23 +69,77 @@ export default {
       this.$api.chart.stocks.history(params).then(response => {
         this.data = response.data;
         this.setIndex(parseInt(this.data.value) > 0 ? false : true);
-        //  console.log(this.data);
+        //console.log("sidebar data");
+        //console.log(this.data);
         this.setStock(this.data);
         this.setMarketCode(this.data.market_code);
         this.loading = null;
       });
+    },
+    initSSE: function(symid) {
+      if (this.sse !== null) {
+        this.sse.close();
+        this.counter = 0;
+      }
+
+      this.sse = new EventSource(
+        "https://stream-api.arbitrage.ph/sse?stream=market-data"
+      );
+      //   this.sse = new EventSource(
+      //     "http://localhost:8021/sse?stream=market-data"
+      //   );
+
+      this.sse.onopen = function() {
+        console.log("open sse");
+      };
+
+      this.sse.onerror = function(err) {
+        console.log("error");
+        console.log(err);
+      };
+
+      const that = this;
+      this.sse.addEventListener(`M-D.INFO.${symid}`, function(e) {
+        const data = JSON.parse(e.data);
+        //console.log(e);
+        //console.log("sse");
+        //console.log(data);
+        that.counter++;
+        that.$store.commit("chart/SET_STOCK_OBJ", {
+          trades: parseInt(that.stock.trades) + parseInt(that.counter)
+        });
+
+        if (parseFloat(that.stock.weekyearlow) > parseFloat(data.l)) {
+          //console.log(that.stock.weekyearlow + " > " + data.l);
+          that.$store.commit("chart/SET_STOCK_OBJ", { weekyearlow: data.l });
+        }
+
+        if (parseFloat(that.stock.weekyearhigh) < parseFloat(data.l)) {
+          that.$store.commit("chart/SET_STOCK_OBJ", { weekyearhigh: data.h });
+        }
+
+        that.$store.commit("chart/SET_STOCK_OBJ", { last: data.c });
+        that.$store.commit("chart/SET_STOCK_OBJ", { volume: data.vol });
+        that.$store.commit("chart/SET_STOCK_OBJ", { value: data.val });
+        that.$store.commit("chart/SET_STOCK_OBJ", { change: data.chg });
+        that.$store.commit("chart/SET_STOCK_OBJ", {
+          changepercentage: data.chgpc
+        });
+        that.$store.commit("chart/SET_STOCK_OBJ", { high: data.h });
+        that.$store.commit("chart/SET_STOCK_OBJ", { low: data.l });
+        that.$store.commit("chart/SET_STOCK_OBJ", { open: data.o });
+        that.$store.commit("chart/SET_STOCK_OBJ", {
+          average: data.val / data.vol
+        });
+      });
     }
   },
   watch: {
-    symbolid(symid) {
-      //console.log("sidebar");
-      //console.log(symid);
-      //console.log(symid);
+    symbolid(symid, oldsymid) {
+      //console.log("sidebar watch");
+      console.log(symid);
       this.initStock(symid);
-    },
-    index(value) {
-      //console.log("index");
-      //console.log(value);
+      this.initSSE(symid);
     }
   },
   created() {
@@ -124,11 +180,13 @@ export default {
 }
 
 .theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {
-  background: #142a46;
+  /* background: #142a46; */
+  background-color: rgb(182, 182, 182, 0.2) !important;
 }
 
 .theme--light.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {
-  background: #b6b6b6;
+  /* background: #b6b6b6; */
+  background-color: rgb(182, 182, 182, 0.2) !important;
 }
 
 .theme--dark.v-data-table {
