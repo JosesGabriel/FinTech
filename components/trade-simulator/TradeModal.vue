@@ -617,9 +617,9 @@ import { mapActions, mapGetters } from "vuex";
     }
 </style>
 <style>
-   .v-menu__content > .v-select-list > .v-list.v-sheet {
-       /* background: #EAE8E8; */
-    }
+  /* .v-menu__content > .v-select-list > .v-list.v-sheet {
+        background: #EAE8E8; 
+    }*/
     .v-menu__content > .v-select-list > .v-list.v-sheet > .v-list-item > .v-list-item__content > .v-list-item__title{
        font-size: 13px;
     }

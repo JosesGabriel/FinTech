@@ -50,8 +50,8 @@
                         Equity
                     </v-row>
                     <v-row class="mt-1">
-                        <v-col md="12" :class="(this.equity > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
-                            {{ this.addcomma(this.equity) }}
+                        <v-col md="12" :class="((this.port_total + 100000) > 0 ? 'positive' : 'negative')" class="text-right pb-0 pl-0 pr-3">
+                            {{ this.addcomma(this.port_total + 100000) }}
                         </v-col> 
                     </v-row>
                 </v-col>
@@ -224,17 +224,16 @@
           this.daychange= 0;
           this.daychangepercentage= 0;
           this.equity= 0;
+          this.port_total = 0;
       },
       totalmvalue: function () {
         this.getBalance();
       },
-      realized: function () {
-        this.getBalance();
+      unrealized: function () {
+        //this.getBalance();
+         this.daychange = this.currentchange - this.priorchange;
+         this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
       },
-      priorchange: function(){
-          this.daychange = this.priorchange + this.currentchange;
-          this.daychangepercentage = (parseFloat(this.currentchange) / parseFloat(this.priorchange)) * 100;
-      }
     },
     methods: {
          ...mapActions({
@@ -257,14 +256,15 @@
                 this.totalmax = value;
             },
             DayChange(value){
-                //this.daychange = value;
+                //this.daychange = this.currentchange - this.priorchange;
             },
             DayChangePercentage(value){
-               // this.daychangepercentage = value;
+                //this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
             },
             portperf(){
-                let port = (parseFloat(this.realized) + parseFloat(this.unrealized)) / 100000;
-                return this.addcomma(port);
+                this.port_total = parseFloat(this.realized) + parseFloat(this.unrealized);
+                let portperf = (this.port_total / 100000) * 100;
+                return this.addcomma(portperf);
             },
             getTradeLogs(){
                 //this.bus.$emit('submit_tl')
@@ -282,6 +282,8 @@
             },
             priorChange(value){
                 this.priorchange = value;
+                this.daychange = this.currentchange - this.priorchange;
+                this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
             },
             getBalance(){
                  const portfolioparams = {
@@ -293,7 +295,7 @@
                                 if(result.meta.logs[i].type == 'virtual' && result.meta.logs[i].name != 'Default Virtual Portfolio'){                           
                                     if(result.meta.logs[i].id == this.simulatorPortfolioID){
                                         this.balance = parseFloat(result.meta.logs[i].balance).toFixed(2);
-                                        this.equity = (parseFloat(this.totalmvalue) + parseFloat(this.balance)) + parseFloat(this.realized);                                       
+                                        //this.equity = (parseFloat(this.totalmvalue) + parseFloat(this.balance)) + parseFloat(this.realized);                                       
                                     }
                                 }
                             }
@@ -419,10 +421,10 @@
 .v-text-field.v-text-field--solo .v-label {
     color: black;
 }
-.vt_realized {
-   /* border: 1px solid black;*/
-   /* background: #0c1a2b73; */
-}
+ /*.vt_realized {
+   border: 1px solid black;*/
+   /* background: #0c1a2b73; 
+}*/
 
 .vt_realized:hover {
    /* background: #0c1a2b; */
