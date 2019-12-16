@@ -62,7 +62,7 @@
                     <v-row class="mt-0">
                         <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
                             <v-row class="ma-0 pa-0 overline">
-                                <v-col :class="(this.daychange > 0 ? 'positive' : this.daychange < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
+                                <v-col :class="(this.daychangepercentage > 0 ? 'positive' : this.daychangepercentage < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
                                     ( {{ this.addcomma(this.daychangepercentage) }}%)
                                 </v-col>
                             </v-row>
@@ -150,7 +150,7 @@
                     :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                 >
                     <v-container class="pa-0">
-                        <VirtualLivePortfolio v-on:currentDayChange="currentChange" v-on:priorDayChange="priorChange" v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
+                        <VirtualLivePortfolio v-on:currentDayChange="currentChange" v-on:priorDayChange="priorChange" v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#03dac5" 
@@ -159,7 +159,7 @@
                     :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                     >
                     <v-container class="pa-0">
-                        <TradelogsContent :item="item" ref="tradelogsComponent" v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
+                        <TradelogsContent :item="item" ref="tradelogsComponent" v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax"/>
                     </v-container>
                 </v-tab-item>
             </v-tabs>
@@ -221,18 +221,21 @@
           this.totalmvalue= 0;
           this.totalmax= 0;
           this.balance= 0;
-          this.daychange= 0;
+          this.currentchange = 0;
+          this.priorchange = 0;
           this.daychangepercentage= 0;
-          this.equity= 0;
+          this.equity = 0;
           this.port_total = 0;
       },
       totalmvalue: function () {
-        this.getBalance();
+        //this.getBalance();
       },
       unrealized: function () {
         //this.getBalance();
          this.daychange = this.currentchange - this.priorchange;
-         this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+         if( this.daychange != 0 && this.priorchange != 0){
+             this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+         }
       },
     },
     methods: {
@@ -266,10 +269,7 @@
                 let portperf = (this.port_total / 100000) * 100;
                 return this.addcomma(portperf);
             },
-            getTradeLogs(){
-                //this.bus.$emit('submit_tl')
-                //this.$refs.tradelogsComponent.getTradeLogs();
-            },
+            
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
                 decimals = decimals || 2; // Default to 2 decimals
@@ -283,9 +283,11 @@
             priorChange(value){
                 this.priorchange = value;
                 this.daychange = this.currentchange - this.priorchange;
-                this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+                if( this.daychange != 0 && this.priorchange != 0){
+                    this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+                }
             },
-            getBalance(){
+            /*getBalance(){
                  const portfolioparams = {
                         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
                     };
@@ -301,7 +303,68 @@
                             }
                          }.bind(this)
                     ); 
+            }*/
+            //===============================================
+            /*
+            getTradeLogs(){
+            const tradelogsparams = {
+            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+            fund: this.simulatorPortfolioID
+            };
+            
+            this.totalProfitLoss = 0;
+            this.totalProfitLossPerf = 0;
+            this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+            function(result) {
+                //console.log(result);
+                this.tradeLogs = result.meta.logs;
+                this.tradelogs2 = this.tradeLogs;  
+                let plossperc = []; 
+                for(let i = 0; i < result.meta.logs.length; i++){   
+
+                    const params = {
+                            "symbol-id": this.tradeLogs[i].meta.stock_id
+                        };
+                        this.$api.chart.stocks.list(params).then(
+                            function(results) {                 
+                            this.tradeLogs[i].stock_id = results.data.symbol;
+                            let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
+                            let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}
+                            this.tradeLogs[i].meta = {...average_price}  
+                            this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value;
+                            this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100;      
+                            this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
+                            this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
+                            this.tradeLogs[i].action = this.tradeLogs[i].id;
+                            //this.$emit('totalRealized', this.totalProfitLoss);
+
+                            this.realized = this.totalProfitLoss;
+
+                            if(parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0) {
+                                plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;
+                                let maxx = this.arrayMax(plossperc);
+                                //this.$emit('MaxDrawdown', maxx.toFixed(2));
+                                this.totalmax = maxx.toFixed(2);
+                                }                    
+                            }.bind(this)
+                        );
+                }
+
+
+                                        
+            }.bind(this)
+            );
+
+            },*/
+        arrayMax(arr) {
+            var len = arr.length, min = Infinity;
+            while (len--) {
+                if (arr[len] < min) {
+                min = arr[len];
+                }
             }
+            return min;
+        },
     },
     mounted() {
         const portfolioparams = {
@@ -348,8 +411,8 @@
                   
                 }.bind(this)
             ); 
-
-        //this.getTradeLogs();
+        //this.$refs.tradelogsComponent.getTradeLogs();
+        //child.getTradeLogs();
     },
     components: {
         VirtualLivePortfolio,

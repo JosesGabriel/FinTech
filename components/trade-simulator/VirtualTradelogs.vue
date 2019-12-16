@@ -161,9 +161,9 @@ export default {
       simulatorPortfolioID: function () {
         this.getTradeLogs();
       },
-      simulatorOpenPosition: function () {
-        this.getTradeLogs();
-      },
+      //simulatorOpenPosition: function () {
+      //  this.getTradeLogs();
+      //},
   },
   methods: {
      ...mapActions({      

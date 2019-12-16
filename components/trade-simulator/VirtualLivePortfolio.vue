@@ -352,17 +352,7 @@ export default {
               + sep
               + n.toFixed(2).split(sep)[1];
       },
-      /*sortArray(){
-        function compare(a, b) {
-            var dateA = new Date(a.metas.date).getTime();
-            var dateB = new Date(b.metas.date).getTime();
-            if (dateA > dateB) return -1;
-            if (dateA < dateB) return 1;
-            return 0;
-            //return dateA < dateB ? 1 : -1;
-        }
-        return this.portfolioLogs.sort(compare);
-      },*/
+      
       getCurrentChange(){
          let d = new Date,
                     dformat = [d.getMonth()+1,
@@ -411,17 +401,17 @@ export default {
       },
       getPrior(curdate){
           let current_date = curdate.split(' ')[0];
-          let max_date = '';
+          let m_date = current_date.split('/')[0];
+          let y_date = current_date.split('/')[2];
+        let max_date = '';
           let len = this.portfolioLogs.length, max = -Infinity;
           for (let index = 0; index < this.portfolioLogs.length; index++) {
             let fdate = this.portfolioLogs[index].metas.date.split(' ')[0];
             let num_date = fdate.split('/')[1];
-            if(fdate != current_date){
-              //console.log('num-'+num_date);
-              //return fdate;
-              //break;
+            let mo_date = fdate.split('/')[0];
+            let yr_date = fdate.split('/')[2];
+            if(fdate != current_date && m_date == mo_date && y_date == yr_date){
                   if (num_date > max) {
-                    //console.log('Num date' + num_date + ' max -' + max);
                     max = parseInt(num_date);
                     max_date = fdate;
                   }
