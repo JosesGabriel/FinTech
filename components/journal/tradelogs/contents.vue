@@ -41,7 +41,7 @@
           class="data_table-container pl-10 secondary--text"
         >
         <template v-slot:item.stock_id="{ item }" ><span class="pl-2">{{ item.stock_id }}</span></template>
-        <template v-slot:item.date="{ item }" >{{ item.meta.date }}</template>
+        <template v-slot:item.date="{ item }" >{{ item.meta.date.slice(0,10) }}</template>
         <template v-slot:item.average_price="{ item }" >{{ formatAvePrice(item.meta.average_price) }}</template>
         <template v-slot:item.buy_value="{ item }" >{{ formatPrice(item.meta.buy_value) }}</template>
         <template v-slot:item.sell_price="{ item }" >{{ formatPrice(item.meta.sell_price) }}</template>

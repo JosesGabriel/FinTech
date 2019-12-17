@@ -331,6 +331,7 @@
                 light
                 @click.stop="show = false"
                 @click="sellListArray"
+                :disabled="confirmSellButtonDisable"
               >
                 Confirm
               </v-btn>
@@ -431,14 +432,43 @@ export default {
       set(value) {
         if (!value) {
           this.$emit("close");
+          this.priceModel = "0.00";
+          this.quantityModel = "0";
+          this.strategyModel = "";
+          this.tradeplanModel = "";
+          this.emotionsModel = "";
+          this.notesModel = "";
+          this.dateModel = new Date().toISOString().substr(0, 10);
+          this.e1 = 1;
+          this.portfolioDropdownModel = null
+          this.availableFundsModel = 0
+
+          this.cprice = "0.00";
+          this.change = "0.00";
+          this.cpercentage = "0.00";
+          this.bidask = 0;
+          this.dboard = 0;
+          this.prev = 0;
+          this.low = 0;
+          this.wklow = 0;
+          this.volm = 0;
+          this.trades = 0;
+          this.open = 0;
+          this.high = 0;
+          this.wkhigh = 0;
+          this.vole = 0;
+          this.ave = 0;
         }
       }
     },
   },
   watch: {
-    renderPortfolioKey: function() {
-      this.getUserPortfolio();
-    },
+    // renderPortfolioKey: function() {
+    //   this.getUserPortfolio();
+    // },
+    // defaultPortfolioId: function() {
+    //   this.getUserPortfolio();
+    // },
     stockList: function() {
       this.initPortfolio();
       
@@ -450,6 +480,7 @@ export default {
     },
     priceModel: function(newValue) {
       this.buyWatch();
+
       const result = parseFloat(newValue);
       this.priceModel = result;
     },
@@ -469,7 +500,10 @@ export default {
     }
   },
   mounted() {
+    this.stocklist = this.stockList.data;
+    this.stocklistBuy = this.stockList.data;
     
+    this.getUserPortfolio();
   },
   methods: {
     ...mapActions({
@@ -486,8 +520,6 @@ export default {
       var dateTime = date+' '+time;
       this.dateModel = dateTime
       this.YMDModel = date
-
-      this.getUserPortfolio();
     },
     buyListArray: function() {
       let params = {
@@ -520,6 +552,8 @@ export default {
             this.notesModel = "";
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
+            this.portfolioDropdownModel = null
+            this.availableFundsModel = 0
 
             this.cprice = "0.00";
             this.change = "0.00";
@@ -703,6 +737,7 @@ export default {
       this.componentKey++;
     },
     whereToSave() {
+      console.log(this.userPortfolio)
       for (let i = 0; i < this.userPortfolio.length; i++ ) {
           let portfolioListPush1 = this.userPortfolio[i]
           if (portfolioListPush1.id === this.portfolioDropdownModel) {
@@ -717,7 +752,6 @@ export default {
       }
     },
     selectWatch() {
-      this.GetSelectStock
       if (this.typePortfolioModel != null) {
         this.continueButtonDisable = true;
       } else {
@@ -737,14 +771,19 @@ export default {
       let dall = buyResult + dcommission + dtax + dtransferfee + dsccp;
       this.totalCostModel = dall.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      if(parseInt(this.totalCostModel) >= parseInt(this.availableFundsModel)){
+      if(parseFloat(this.totalCostModel) >= parseFloat(this.availableFundsModel)){
         this.continueBuyButtonDisable = true;
       } else {
         if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0 || this.portfolioDropdownModel == null) {
           this.continueBuyButtonDisable = true;
           this.totalCostModel = 0
         } else {
-          this.continueBuyButtonDisable = false;
+          let compareNum = parseFloat(this.totalCostModel.replace(/,/g, '')) >= parseFloat(this.availableFundsModel)
+          if(!compareNum) {
+            this.continueBuyButtonDisable = false;
+          } else {
+            this.continueBuyButtonDisable = true;
+          }
         }
       }
     },
@@ -763,14 +802,20 @@ export default {
       let result = sellResult - dall;
       this.totalCostSellModel = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
-      if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)){
+      let compareNum = parseInt(this.quantitySellModel) >= parseInt(this.boardLotModel)
+      if(!compareNum){
         this.confirmSellButtonDisable = true;
       } else {
         if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
           this.confirmSellButtonDisable = true;
           this.totalCostSellModel = 0
         }else {
-          this.confirmSellButtonDisable = false;
+          let compareNum1 = parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)
+          if(!compareNum1) {
+            this.confirmSellButtonDisable = false;
+          } else {
+            this.confirmSellButtonDisable = true;
+          }
         }
       }
     },

@@ -126,6 +126,7 @@ export default {
 
       ifVirtualShow: false,
       fundsShow: false,
+
       snackbar: false,
       timeoutNotification: 10000,
       
@@ -154,7 +155,14 @@ export default {
     }
   },
   mounted() {
-    if(this.defaultPortfolioId != 0 ?  this.getOpenPositions() : ''); 
+    if(this.defaultPortfolioId != 0 ?  this.getOpenPositions() : '');
+    if(!this.selectedPortfolio) {
+      if (this.selectedPortfolio.type === "virtual") {
+        this.ifVirtualShow = true
+      } else {
+        this.ifVirtualShow = false
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -195,6 +203,9 @@ export default {
       this.totalProfitLossPerf = 0;
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
+
+          this.livePortfolioLoading = false
+
           this.portfolioLogs = result.meta.open;
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
@@ -241,13 +252,12 @@ export default {
                 // this.portfolioLogsStock
                 this.setOpenPosition(this.portfolioLogs)
 
-                this.livePortfolioLoading = false
               }.bind(this)
             );
           }
         }.bind(this)
       );
-      // this.componentKeys++;
+      this.componentKeys++;
     }
   },
   computed: {
@@ -255,11 +265,22 @@ export default {
       defaultPortfolioId: "journal/getDefaultPortfolioId",
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       renderEditKey: "journal/getRenderEditKey",
+      selectedPortfolio: "journal/getSelectedPortfolio",
       userPortfolio: "journal/getUserPortfolio",
     })
   },
   watch: {
+    selectedPortfolio: function() {
+      if (this.selectedPortfolio.type === "virtual") {
+      this.ifVirtualShow = true
+      } else {
+      this.ifVirtualShow = false
+      }
+    },
     renderPortfolioKey: function() {
+      this.getOpenPositions();
+    },
+    defaultPortfolioId: function() {
       this.getOpenPositions();
     },
     renderEditKey: function() {
