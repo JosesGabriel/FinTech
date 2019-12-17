@@ -103,40 +103,43 @@
                             label="Select Portfolio" 
                             dense solo
                             >
-                                    
-                             <!--  <template
-                                    slot="item" 
-                                    slot-scope="data"
-                                    
-                                >    
+
+                                <template
+                                        slot="item" 
+                                        slot-scope="data"
+                                        
+                                    >    
+                                   
+                                            <v-list-item-content
+                                                :dark="lightSwitch == true"
+                                                :style="{ background: cardbackground }" 
+                                                style="padding: 12px 12px; margin: -16px;"
+                                                >
+                                                
+                                                <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                                
+                                            </v-list-item-content>
+                                    </template>
                                 
+                                    <template 
+                                        v-slot:append-item
+                                        :dark="lightSwitch == true"
+                                        :style="{ background: cardbackground }"
+                                    >
                                         <v-list-item
-                                            :dark="lightSwitch == true"
-                                            :style="{ background: cardbackground }" 
-                                            @click.stop="getOpenPosition(data.item.id)"
-                                            >
-                                            
-                                            <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                                            
+                                        ripple 
+                                        :dark="lightSwitch == true"
+                                        :style="{ background: cardbackground }"
+                                        @click.stop="showCreatePortForm=true"
+                                        >   
+                                            <v-list-item-content >
+                                                <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                            </v-list-item-content>
                                         </v-list-item>
-                                </template>-->
+                                    </template>
                             
-                            <template 
-                                v-slot:append-item
-                                :dark="lightSwitch == true"
-                                :style="{ background: cardbackground }"
-                            >
-                                <v-list-item
-                                ripple 
-                                :dark="lightSwitch == true"
-                                :style="{ background: cardbackground }"
-                                @click.stop="showCreatePortForm=true"
-                                >   
-                                    <v-list-item-content >
-                                        <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </template>
+                           
+                            
                         </v-select>
                      
                         
@@ -191,6 +194,7 @@
           currentchange: 0,
           priorchange: 0,
           item: {},
+          state: false,
       }
     },
     created() {
@@ -231,11 +235,12 @@
         //this.getBalance();
       },
       unrealized: function () {
-        //this.getBalance();
+         
          this.daychange = this.currentchange - this.priorchange;
          if( this.daychange != 0 && this.priorchange != 0){
              this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
          }
+         this.getTradeLogs();
       },
     },
     methods: {
@@ -245,6 +250,7 @@
             getOpenPosition (selectObj) {
                 this.setSimulatorPortfolioID(selectObj);
                 this.default_port = selectObj;
+                this.state = false;
             },
             Realized(value){
                 this.realized = value;
@@ -287,76 +293,45 @@
                     this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
                 }
             },
-            /*getBalance(){
-                 const portfolioparams = {
-                        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-                    };
-                this.$api.journal.portfolio.portfolio(portfolioparams).then(
-                    function(result) {
-                            for(let i=0; i< result.meta.logs.length; i++){
-                                if(result.meta.logs[i].type == 'virtual' && result.meta.logs[i].name != 'Default Virtual Portfolio'){                           
-                                    if(result.meta.logs[i].id == this.simulatorPortfolioID){
-                                        this.balance = parseFloat(result.meta.logs[i].balance).toFixed(2);
-                                        //this.equity = (parseFloat(this.totalmvalue) + parseFloat(this.balance)) + parseFloat(this.realized);                                       
-                                    }
-                                }
-                            }
-                         }.bind(this)
-                    ); 
-            }*/
+
             //===============================================
-            /*
+            
             getTradeLogs(){
             const tradelogsparams = {
-            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-            fund: this.simulatorPortfolioID
-            };
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: this.simulatorPortfolioID
+                };
             
-            this.totalProfitLoss = 0;
-            this.totalProfitLossPerf = 0;
-            this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
-            function(result) {
-                //console.log(result);
-                this.tradeLogs = result.meta.logs;
-                this.tradelogs2 = this.tradeLogs;  
+                let totalProfitLoss = 0;
+                let totalProfitLossPerf = 0;
+                this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+                function(result) {
+                
                 let plossperc = []; 
+                let profitLoss = 0;
+                let profitLossPer = 0;
                 for(let i = 0; i < result.meta.logs.length; i++){   
+                       
+                        let buyvalueResult = result.meta.logs[i].meta.average_price * result.meta.logs[i].amount;
+                        profitLoss = result.meta.logs[i].total_value - buyvalueResult;
+                        totalProfitLoss = totalProfitLoss + parseFloat(profitLoss);
+                        profitLossPer =   profitLoss / buyvalueResult * 100;
 
-                    const params = {
-                            "symbol-id": this.tradeLogs[i].meta.stock_id
-                        };
-                        this.$api.chart.stocks.list(params).then(
-                            function(results) {                 
-                            this.tradeLogs[i].stock_id = results.data.symbol;
-                            let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
-                            let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}
-                            this.tradeLogs[i].meta = {...average_price}  
-                            this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value;
-                            this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100;      
-                            this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
-                            this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
-                            this.tradeLogs[i].action = this.tradeLogs[i].id;
-                            //this.$emit('totalRealized', this.totalProfitLoss);
-
-                            this.realized = this.totalProfitLoss;
-
-                            if(parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0) {
-                                plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;
+                        this.realized = totalProfitLoss;
+                       
+                        if(parseFloat(profitLossPer) < 0) {
+                                plossperc[i] = profitLossPer;
                                 let maxx = this.arrayMax(plossperc);
-                                //this.$emit('MaxDrawdown', maxx.toFixed(2));
                                 this.totalmax = maxx.toFixed(2);
-                                }                    
-                            }.bind(this)
-                        );
-                }
+                        }                   
+                    }
+                                      
+                }.bind(this)
+                );
 
+            },
 
-                                        
-            }.bind(this)
-            );
-
-            },*/
-        arrayMax(arr) {
+            arrayMax(arr) {
             var len = arr.length, min = Infinity;
             while (len--) {
                 if (arr[len] < min) {
@@ -367,6 +342,7 @@
         },
     },
     mounted() {
+        
         const portfolioparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
             };
@@ -412,7 +388,8 @@
                 }.bind(this)
             ); 
         //this.$refs.tradelogsComponent.getTradeLogs();
-        //child.getTradeLogs();
+        //console.log('refs - ',this.$refs);
+        
     },
     components: {
         VirtualLivePortfolio,
@@ -426,7 +403,9 @@
 .v-select__slot .v-label, .v-select__slot .v-icon {
     color: #03DAC5 !important;
 }
-
+.v-menu__content > .v-select-list > .v-list {
+     padding: unset;
+}
 .select_portfolio > .v-input__control {
     padding-top: 16px !important;
 }
