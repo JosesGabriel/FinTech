@@ -141,6 +141,8 @@ export default {
         page: 1,
         pageCount: 0,
         menuShow: false,
+        sse: null,
+        counter: 0,
         headers: [
           { text: 'Stocks', value: 'stock_id', align: 'left', sortable: false },
           { text: 'Position', value: 'Position', align: 'right' },
@@ -176,6 +178,7 @@ export default {
         totalmvalue: 0,
         dayprior: 0,
         date: new Date().toISOString().substr(0, 10),
+        streamTrigger: 0,
       }
       
     },
@@ -193,6 +196,12 @@ export default {
       },
       EnterTradeModal: function(){
         this.trade_modal = this.EnterTradeModal;
+      },
+      streamTrigger: function(){
+        this.getOpenPositions();
+      },
+      stock: function(){
+        console.log(this.stock);
       }
     },
     methods: {
@@ -219,15 +228,15 @@ export default {
 
                 for (let i = 0; i < this.portfolioLogs.length; i++) {
                         this.openposition[i] = this.portfolioLogs[i].stock_id;
+                        //this.initSSE(this.portfolioLogs[i].stock_id);
                         const params = {
                           "symbol-id": this.portfolioLogs[i].stock_id
                         };
-                        //this.$api.chart.stocks.list(params).then(
+                        
                         this.$api.journal.portfolio.history(params).then(
                           function(result) {
                             this.portfolioLogs[i].stock_id = result.data.symbol;
-                            //console.log('last - ', result.data)
-                            // console.log('position - ' + this.portfolioLogs[i].position)
+                            
                             let buyResult = this.portfolioLogs[i].position * parseFloat(result.data.last).toFixed(2);
                             //console.log('Buy Result - '+ buyResult1)
                             let dpartcommission = buyResult * 0.0025;
@@ -277,15 +286,7 @@ export default {
               }.bind(this)
             );   
 
-            /* this.$axios
-            .$post(process.env.JOURNAL_API_URL + "/journal/funds/"+ this.simulatorPortfolioID +"/daychange")
-                  .then(response => {      
-                      if (response.success) {
-                          console.log('day change', response.data.change); 
-                          this.$emit('totalDayChange', response.data.change.change);  
-                          this.$emit('totalDayChangePercentage', response.data.change.percentage);     
-                      }
-              });*/
+            this.initSSE();
 
       },
       
@@ -352,17 +353,7 @@ export default {
               + sep
               + n.toFixed(2).split(sep)[1];
       },
-      /*sortArray(){
-        function compare(a, b) {
-            var dateA = new Date(a.metas.date).getTime();
-            var dateB = new Date(b.metas.date).getTime();
-            if (dateA > dateB) return -1;
-            if (dateA < dateB) return 1;
-            return 0;
-            //return dateA < dateB ? 1 : -1;
-        }
-        return this.portfolioLogs.sort(compare);
-      },*/
+      
       getCurrentChange(){
          let d = new Date,
                     dformat = [d.getMonth()+1,
@@ -411,17 +402,17 @@ export default {
       },
       getPrior(curdate){
           let current_date = curdate.split(' ')[0];
-          let max_date = '';
+          let m_date = current_date.split('/')[0];
+          let y_date = current_date.split('/')[2];
+        let max_date = '';
           let len = this.portfolioLogs.length, max = -Infinity;
           for (let index = 0; index < this.portfolioLogs.length; index++) {
             let fdate = this.portfolioLogs[index].metas.date.split(' ')[0];
             let num_date = fdate.split('/')[1];
-            if(fdate != current_date){
-              //console.log('num-'+num_date);
-              //return fdate;
-              //break;
+            let mo_date = fdate.split('/')[0];
+            let yr_date = fdate.split('/')[2];
+            if(fdate != current_date && m_date == mo_date && y_date == yr_date){
                   if (num_date > max) {
-                    //console.log('Num date' + num_date + ' max -' + max);
                     max = parseInt(num_date);
                     max_date = fdate;
                   }
@@ -443,6 +434,43 @@ export default {
             let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
             return buyResult - dall;                
     },
+    initSSE: function() {
+          if (this.sse !== null) {
+            this.sse.close();
+            this.counter = 0;
+          }
+          
+          this.sse = new EventSource(
+            "https://stream-api.arbitrage.ph/sse?stream=market-data"
+          );
+          
+          //   this.sse = new EventSource(
+          //     "http://localhost:8021/sse?stream=market-data"
+          //   );
+
+          this.sse.onopen = function() {
+            console.log("open sse");
+          };
+
+          this.sse.onerror = function(err) {
+            console.log("error");
+            //console.log(err);
+          };
+         
+          const that = this;
+          
+          for (let index = 0; index < this.openposition.length; index++) {
+            let symID = this.openposition[index];
+            this.sse.addEventListener(`M-D.INFO.${symID}`, function(e) {
+            const data = JSON.parse(e.data);    
+             this.streamTrigger = data.c;
+             that.$store.commit("chart/SET_STOCK_OBJ", { last: data.c });
+             console.log('Stream - '+ this.streamTrigger);
+            });
+            
+          }
+
+    }
 
 
     },
@@ -452,6 +480,7 @@ export default {
             simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
             simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
             lightSwitch: "global/getLightSwitch",
+            stock: "chart/stock",
             }),
 
             cardbackground: function() {

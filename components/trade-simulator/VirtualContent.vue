@@ -62,7 +62,7 @@
                     <v-row class="mt-0">
                         <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
                             <v-row class="ma-0 pa-0 overline">
-                                <v-col :class="(this.daychange > 0 ? 'positive' : this.daychange < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
+                                <v-col :class="(this.daychangepercentage > 0 ? 'positive' : this.daychangepercentage < 0 ? 'negative' : 'neutral')" class="ma-0 pa-0">
                                     ( {{ this.addcomma(this.daychangepercentage) }}%)
                                 </v-col>
                             </v-row>
@@ -103,40 +103,43 @@
                             label="Select Portfolio" 
                             dense solo
                             >
-                                    
-                             <!--  <template
-                                    slot="item" 
-                                    slot-scope="data"
-                                    
-                                >    
+
+                                <template
+                                        slot="item" 
+                                        slot-scope="data"
+                                        
+                                    >    
+                                   
+                                            <v-list-item-content
+                                                :dark="lightSwitch == true"
+                                                :style="{ background: cardbackground }" 
+                                                style="padding: 12px 12px; margin: -16px;"
+                                                >
+                                                
+                                                <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                                                
+                                            </v-list-item-content>
+                                    </template>
                                 
+                                    <template 
+                                        v-slot:append-item
+                                        :dark="lightSwitch == true"
+                                        :style="{ background: cardbackground }"
+                                    >
                                         <v-list-item
-                                            :dark="lightSwitch == true"
-                                            :style="{ background: cardbackground }" 
-                                            @click.stop="getOpenPosition(data.item.id)"
-                                            >
-                                            
-                                            <v-list-item-title v-html="data.item.name"></v-list-item-title>
-                                            
+                                        ripple 
+                                        :dark="lightSwitch == true"
+                                        :style="{ background: cardbackground }"
+                                        @click.stop="showCreatePortForm=true"
+                                        >   
+                                            <v-list-item-content >
+                                                <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                            </v-list-item-content>
                                         </v-list-item>
-                                </template>-->
+                                    </template>
                             
-                            <template 
-                                v-slot:append-item
-                                :dark="lightSwitch == true"
-                                :style="{ background: cardbackground }"
-                            >
-                                <v-list-item
-                                ripple 
-                                :dark="lightSwitch == true"
-                                :style="{ background: cardbackground }"
-                                @click.stop="showCreatePortForm=true"
-                                >   
-                                    <v-list-item-content >
-                                        <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            </template>
+                           
+                            
                         </v-select>
                      
                         
@@ -150,7 +153,7 @@
                     :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                 >
                     <v-container class="pa-0">
-                        <VirtualLivePortfolio v-on:currentDayChange="currentChange" v-on:priorDayChange="priorChange" v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" v-on:totalDayChange="DayChange" v-on:totalDayChangePercentage="DayChangePercentage" />                
+                        <VirtualLivePortfolio v-on:currentDayChange="currentChange" v-on:priorDayChange="priorChange" v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#03dac5" 
@@ -159,7 +162,7 @@
                     :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                     >
                     <v-container class="pa-0">
-                        <TradelogsContent :item="item" ref="tradelogsComponent" v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax" />
+                        <TradelogsContent :item="item" ref="tradelogsComponent" v-on:totalRealized="Realized" v-on:MaxDrawdown="TotalMax"/>
                     </v-container>
                 </v-tab-item>
             </v-tabs>
@@ -191,6 +194,7 @@
           currentchange: 0,
           priorchange: 0,
           item: {},
+          state: false,
       }
     },
     created() {
@@ -221,18 +225,22 @@
           this.totalmvalue= 0;
           this.totalmax= 0;
           this.balance= 0;
-          this.daychange= 0;
+          this.currentchange = 0;
+          this.priorchange = 0;
           this.daychangepercentage= 0;
-          this.equity= 0;
+          this.equity = 0;
           this.port_total = 0;
       },
       totalmvalue: function () {
-        this.getBalance();
+        //this.getBalance();
       },
       unrealized: function () {
-        //this.getBalance();
+         
          this.daychange = this.currentchange - this.priorchange;
-         this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+         if( this.daychange != 0 && this.priorchange != 0){
+             this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+         }
+         this.getTradeLogs();
       },
     },
     methods: {
@@ -242,6 +250,7 @@
             getOpenPosition (selectObj) {
                 this.setSimulatorPortfolioID(selectObj);
                 this.default_port = selectObj;
+                this.state = false;
             },
             Realized(value){
                 this.realized = value;
@@ -266,10 +275,7 @@
                 let portperf = (this.port_total / 100000) * 100;
                 return this.addcomma(portperf);
             },
-            getTradeLogs(){
-                //this.bus.$emit('submit_tl')
-                //this.$refs.tradelogsComponent.getTradeLogs();
-            },
+            
             addcomma(n, sep, decimals) {
                 sep = sep || "."; // Default to period as decimal separator
                 decimals = decimals || 2; // Default to 2 decimals
@@ -283,27 +289,60 @@
             priorChange(value){
                 this.priorchange = value;
                 this.daychange = this.currentchange - this.priorchange;
-                this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+                if( this.daychange != 0 && this.priorchange != 0){
+                    this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+                }
             },
-            getBalance(){
-                 const portfolioparams = {
-                        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-                    };
-                this.$api.journal.portfolio.portfolio(portfolioparams).then(
-                    function(result) {
-                            for(let i=0; i< result.meta.logs.length; i++){
-                                if(result.meta.logs[i].type == 'virtual' && result.meta.logs[i].name != 'Default Virtual Portfolio'){                           
-                                    if(result.meta.logs[i].id == this.simulatorPortfolioID){
-                                        this.balance = parseFloat(result.meta.logs[i].balance).toFixed(2);
-                                        //this.equity = (parseFloat(this.totalmvalue) + parseFloat(this.balance)) + parseFloat(this.realized);                                       
-                                    }
-                                }
-                            }
-                         }.bind(this)
-                    ); 
+
+            //===============================================
+            
+            getTradeLogs(){
+            const tradelogsparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: this.simulatorPortfolioID
+                };
+            
+                let totalProfitLoss = 0;
+                let totalProfitLossPerf = 0;
+                this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+                function(result) {
+                
+                let plossperc = []; 
+                let profitLoss = 0;
+                let profitLossPer = 0;
+                for(let i = 0; i < result.meta.logs.length; i++){   
+                       
+                        let buyvalueResult = result.meta.logs[i].meta.average_price * result.meta.logs[i].amount;
+                        profitLoss = result.meta.logs[i].total_value - buyvalueResult;
+                        totalProfitLoss = totalProfitLoss + parseFloat(profitLoss);
+                        profitLossPer =   profitLoss / buyvalueResult * 100;
+
+                        this.realized = totalProfitLoss;
+                       
+                        if(parseFloat(profitLossPer) < 0) {
+                                plossperc[i] = profitLossPer;
+                                let maxx = this.arrayMax(plossperc);
+                                this.totalmax = maxx.toFixed(2);
+                        }                   
+                    }
+                                      
+                }.bind(this)
+                );
+
+            },
+
+            arrayMax(arr) {
+            var len = arr.length, min = Infinity;
+            while (len--) {
+                if (arr[len] < min) {
+                min = arr[len];
+                }
             }
+            return min;
+        },
     },
     mounted() {
+        
         const portfolioparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
             };
@@ -348,8 +387,9 @@
                   
                 }.bind(this)
             ); 
-
-        //this.getTradeLogs();
+        //this.$refs.tradelogsComponent.getTradeLogs();
+        //console.log('refs - ',this.$refs);
+        
     },
     components: {
         VirtualLivePortfolio,
@@ -363,7 +403,9 @@
 .v-select__slot .v-label, .v-select__slot .v-icon {
     color: #03DAC5 !important;
 }
-
+.v-menu__content > .v-select-list > .v-list {
+     padding: unset;
+}
 .select_portfolio > .v-input__control {
     padding-top: 16px !important;
 }
