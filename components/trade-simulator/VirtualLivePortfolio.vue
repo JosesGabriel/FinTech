@@ -508,14 +508,15 @@ export default {
             let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
             currentProfitLoss =
               parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-            
-
+              console.log('Prior ProfitLoss -' + priorProfitLoss);
+              console.log('Currrent ProfitLoss -' + currentProfitLoss);
             let daychange =
               parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
            
             this.$emit("DayChange", daychange);
             let daychangeperf = (daychange / priorProfitLoss) * 100;
-            
+            console.log('DAY CAHNGE -' + daychange);
+            console.log('DAY CAHNGE PERC -' + daychangeperf);
             this.$emit("DayChangePerc", daychangeperf);
           }.bind(this)
         );
