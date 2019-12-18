@@ -1,26 +1,9 @@
 <template>
   <div>
-    <GameLobby class="gameGlobal" />
-    <!-- <GameView v-else class="gameGlobal" /> -->
+    <!-- <GameLobby class="gameGlobal" /> -->
+    <GameView class="gameGlobal" />
   </div>
 </template>
-<style>
-/* Custom Scrollbar */
-.gameGlobal ::-webkit-scrollbar {
-  width: 5px;
-}
-.gameGlobal ::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 10px;
-}
-.gameGlobal ::-webkit-scrollbar-thumb {
-  background: #03dac5;
-  border-radius: 20px;
-}
-.gameGlobal ::-webkit-scrollbar-thumb:hover {
-  background: #03dac5;
-}
-</style>
 <script>
 require("dotenv").config();
 import { myToken } from "~/assets/client.js";
@@ -117,3 +100,20 @@ export default {
   }
 };
 </script>
+<style>
+/* Custom Scrollbar */
+.gameGlobal ::-webkit-scrollbar {
+  width: 5px;
+}
+.gameGlobal ::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+.gameGlobal ::-webkit-scrollbar-thumb {
+  background: #03dac5;
+  border-radius: 20px;
+}
+.gameGlobal ::-webkit-scrollbar-thumb:hover {
+  background: #03dac5;
+}
+</style>
