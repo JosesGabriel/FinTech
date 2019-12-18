@@ -150,60 +150,6 @@
     </v-snackbar>
   </v-card>
 </template>
-<style>
-.postField__divider {
-  position: absolute;
-  width: 526px;
-  left: 0px;
-}
-.postField__preview img,
-.postField__preview video {
-  max-width: 100%;
-  max-height: 120px;
-}
-.postField__avatar {
-  position: absolute;
-}
-.postField__textareaContainer {
-  margin-left: 50px;
-}
-.postField__previewImage {
-  border-radius: 10px;
-}
-.postField__imageWrapper {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  width: 100%;
-}
-.postField__imageCard {
-  flex: 0 0 auto;
-}
-.postField__btn {
-  position: relative;
-  right: 30px;
-  text-transform: none;
-}
-.p-10 {
-  margin: 0 50px;
-}
-.postField__btn::before {
-  color: transparent;
-}
-.postField__imageWrapper--closebtn {
-  position: relative;
-  bottom: 96px;
-  right: 3px;
-  z-index: 1;
-}
-.postField__imageWrapper--image {
-  margin-left: -40px;
-}
-.postField__textarea {
-  position: relative;
-  bottom: 10px;
-}
-</style>
 <script>
 import { mapGetters } from "vuex";
 export default {
@@ -329,3 +275,58 @@ export default {
   }
 };
 </script>
+
+<style>
+.postField__divider {
+  position: absolute;
+  width: 526px;
+  left: 0px;
+}
+.postField__preview img,
+.postField__preview video {
+  max-width: 100%;
+  max-height: 120px;
+}
+.postField__avatar {
+  position: absolute;
+}
+.postField__textareaContainer {
+  margin-left: 50px;
+}
+.postField__previewImage {
+  border-radius: 10px;
+}
+.postField__imageWrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  width: 100%;
+}
+.postField__imageCard {
+  flex: 0 0 auto;
+}
+.postField__btn {
+  position: relative;
+  right: 30px;
+  text-transform: none;
+}
+.p-10 {
+  margin: 0 50px;
+}
+.postField__btn::before {
+  color: transparent;
+}
+.postField__imageWrapper--closebtn {
+  position: relative;
+  bottom: 96px;
+  right: 3px;
+  z-index: 1;
+}
+.postField__imageWrapper--image {
+  margin-left: -40px;
+}
+.postField__textarea {
+  position: relative;
+  bottom: 10px;
+}
+</style>

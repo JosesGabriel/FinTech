@@ -18,12 +18,6 @@
     </v-row>
   </v-container>
 </template>
-<style scoped>
-.index__container {
-  max-width: 1080px;
-  margin-top: 40px;
-}
-</style>
 <script>
 import NavbarJournal from "~/components/Navbar";
 import JournalContent from "~/components/journal/JournalContent";
@@ -60,3 +54,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.index__container {
+  max-width: 1080px;
+  margin-top: 40px;
+}
+</style>

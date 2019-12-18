@@ -29,10 +29,12 @@
                             <h1 class="font-weight-regular body-1" style="color:#00080E;">I THINK NOT</h1>
                         </v-card-title>
                     </v-col>
-                    <v-col class="pa-0" cols="7" sm="7" md="7" @click.stop="show=false" @click="resetNow">
-                        <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-not">
+                    <v-col class="pa-0" cols="7" sm="7" md="7">
+                        <v-btn @click.stop="show=false" @click="resetNow" :disabled="disableReset" class="pa-0" style="height: 100%;width: 100%;">
+                        <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-not" style="width: 100%;">
                             <h1 class="font-weight-regular body-1" style="color:#00FFC3;">I UNDERSTAND, DO IT</h1>
                         </v-card-title>
+                        </v-btn>
                     </v-col>
                 </v-row>
             </v-col>
@@ -57,6 +59,7 @@ export default {
       set (value) {
         if (!value) {
           this.$emit('close')
+          this.confirmResetModel = ''
         }
       }
     },
@@ -67,7 +70,8 @@ export default {
   },
   data() {
     return {
-        confirmResetModel: null
+        confirmResetModel: '',
+        disableReset: true,
     }
   },
   mounted() {
@@ -92,6 +96,16 @@ export default {
                     this.setRenderPortfolioKey(this.keyCreateCounter);
                 }
             });
+        }
+    }
+  },
+  watch: {
+    confirmResetModel: function() {
+        let confirmChecked = this.confirmResetModel.toUpperCase()
+        if (confirmChecked === "HELL YEAH") {
+            this.disableReset = false
+        } else {
+            this.disableReset = true
         }
     }
   }

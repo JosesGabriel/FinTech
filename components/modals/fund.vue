@@ -27,6 +27,7 @@
                           class="body-1 buy_selector quantity-input py-3"
                           v-model="enterAmount"
                           maxlength="15"
+                          type="number"
                       ></v-text-field>
                       <v-col class="pa-0">
                           <span class="custom-dropdown big">
@@ -60,6 +61,7 @@
                           class="body-1 buy_selector quantity-input py-3"
                           v-model="withrawAmount"
                           maxlength="15"
+                          type="number"
                       ></v-text-field>
                   </v-container>
                 </v-tab-item>
@@ -138,6 +140,7 @@ export default {
       hideWithdrawButton: false,
       hideDepositButton: true,
       availableFunds: '0.00',
+      fund: 0,
 
       snackbar: false,
       timeoutNotification: 10000,
@@ -148,15 +151,18 @@ export default {
       this.availableFunds = parseFloat(this.selectedPortfolio.balance);
       this.disableWithdrawButtonSave = true
     }
-    if(this.defaultPortfolioId != null ?  this.renderPortfolioKey1() : ''); 
   },
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
-    renderPortfolioKey1() {
-      if(this.defaultPortfolioId != null ?  this.availableFunds = parseFloat(this.selectedPortfolio.balance) : '');
+    availablefund() {
+      if(this.fund != 0) {
+        this.availableFunds = parseFloat(this.fund)
+      } else if (this.fund == 0){
+        if(this.defaultPortfolioId != null ?  this.availableFunds = parseFloat(this.selectedPortfolio.balance) : '');
+      } 
     },
     depositNow() {
         const depositparams  = {
@@ -168,15 +174,13 @@ export default {
         .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/transactions/deposit",depositparams)
         .then(response => {
           if (response.success) {
-            this.availableFunds = this.availableFunds + parseFloat(response.data.fund.balance);
-            console.log(response)
-            //   this.snackbar = true
+            this.fund = parseFloat(response.data.fund.balance);
             
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
             
-            this.enterAmount = 0.00,
+            this.enterAmount = '0.00',
             this.fundSourceModel = null,
             this.disableButtonSave = true,
             this.disableWithdrawButtonSave = true,
@@ -194,13 +198,13 @@ export default {
         .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/transactions/withdraw",depositparams)
         .then(response => {
           if (response.success) {
-            console.log(response)
-            //   this.snackbar = true
+            this.fund = parseFloat(response.data.fund.balance);
+            
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
             
-            this.enterAmount = 0.00,
+            this.withrawAmount = '0.00',
             this.fundSourceModel = null,
             this.disableButtonSave = true,
             this.disableWithdrawButtonSave = true,
@@ -215,7 +219,6 @@ export default {
         } else {
           this.disableButtonSave = true
         }
-        // this.availableFunds = this.availableFunds + parseFloat(this.enterAmount.replace(/,/g, ""))
     },
     fundSourceWatch: function() {
       if(parseFloat(this.enterAmount) > 0 && this.fundSourceModel != null && parseInt(this.availableFunds) > 0){
@@ -230,7 +233,6 @@ export default {
         } else {
           this.disableWithdrawButtonSave = true
         }
-        // this.availableFunds = this.availableFunds + parseFloat(this.withrawAmount.replace(/,/g, ""))
     },
     nFormatter(num) {
       if (num >= 1000000000000000) {
@@ -253,7 +255,7 @@ export default {
   },
   watch: {
     renderPortfolioKey: function() {
-        this.renderPortfolioKey1();
+      this.availablefund();
     },
     enterAmount: function(newValue) {
         const result = newValue;
@@ -278,12 +280,6 @@ export default {
     .v-text-field__details {
         display: none
     }
-    /* .v-menu__content .v-card, .v-menu__content .v-list {
-        background: #000 !important;
-    } */
-    /* .v-menu__content .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-        color: #00FFC3 !important;
-    } */
     .v-select__slot .v-label,
     .v-select__slot .v-icon
     {

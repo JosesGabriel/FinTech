@@ -18,7 +18,6 @@
     </v-row>
   </v-container>
 </template>
-
 <script>
 import NavBar from "~/components/Navbar";
 import VirtualContent from "~/components/trade-simulator/VirtualContent";
@@ -39,23 +38,9 @@ export default {
     toggle: function() {
       this.isOpen = !this.isOpen;
     }
-  },
-  head() {
-    return {
-      title: "Arbitrage",
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: "description",
-          name: "description",
-          content: "My custom description"
-        }
-      ]
-    };
   }
 };
 </script>
-
 <style scoped>
 .socialWall__container {
   max-width: 1080px;

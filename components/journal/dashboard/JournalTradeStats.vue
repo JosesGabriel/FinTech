@@ -18,10 +18,10 @@
                     <template v-slot:default>
                         <tbody>
                             <tr>
-                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#00ffc3">mdi-circle</v-icon>Win</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Win</td>
                                 <td class="item_position-prop caption text-right px-1 py-1">{{ win }}</td>
                                 
-                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#f44336">mdi-circle</v-icon>Loss</td>
+                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Loss</td>
                                 <td class="item_position-prop caption text-right px-1 py-1">{{ loss }}</td>
                             </tr>
                             <tr>
@@ -44,7 +44,7 @@
   import VueApexCharts from 'vue-apexcharts'
   import shareModal from '~/components/modals/share'
   
-  import { mapActions, mapGetters } from "vuex";
+  import { mapGetters } from "vuex";
 
   export default {
     components: {
@@ -89,7 +89,7 @@
               },
             },
             labels: ['Win', 'Loss'],
-            colors: ['#00FFC3','#f44336'],
+            colors: ['#03DAC5','#F44336'],
             legend: {
               show: false
             },
@@ -141,7 +141,7 @@
               intersect: false,
               inverseOrder: false,
               custom: undefined,
-              colors: '#00FFC3',
+              colors: '#03DAC5',
               theme: true,
               style: {
                 fontSize: '12px',
@@ -168,9 +168,9 @@
     },
     methods: {
       getJournalChart() {
-        this.tradeStaticsArr = this.journalCharts.meta
         this.journalchart = []
-        if (this.journalCharts.length != 0) {
+        if (this.journalCharts != null) {
+          this.tradeStaticsArr = this.journalCharts.meta
           if (this.tradeStaticsArr != undefined || this.tradeStaticsArr.trade_statistics != undefined) {
 
             for (let [key, value] of Object.entries(this.tradeStaticsArr.trade_statistics).slice(0, 2)) {
@@ -191,9 +191,12 @@
       this.getJournalChart();
     },
     watch: {
+      journalCharts: function() {
+        this.getJournalChart();
+      },
       renderPortfolioKey: function() {
         this.getJournalChart();
-      }
+      },
     },
   }
 </script>

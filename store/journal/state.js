@@ -1,6 +1,6 @@
 export default () => ({
     userPortfolio: [],
-    journalCharts: [],
+    journalCharts: null,
     renderPortfolioKey: 0,
     renderEditKey: 0,
     defaultPortfolioId: null,

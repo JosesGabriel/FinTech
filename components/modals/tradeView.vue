@@ -320,9 +320,7 @@
                     <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostSellModel }}</v-card-title>
                   </v-row>
                 </v-col>
-                <!-- <v-text-field v-model="totalCostSellModel" label="Market Value" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" readonly disabled></v-text-field> -->
-                <!-- <v-snackbar v-model="snackbarSell" :timeout="snackbarTimeout">Insufficient Board Lot<v-btn color="blue" text @click="snackbarSell = false">Close</v-btn></v-snackbar> -->
-              </v-row>
+                </v-row>
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
@@ -333,6 +331,7 @@
                 light
                 @click.stop="show = false"
                 @click="sellListArray"
+                :disabled="confirmSellButtonDisable"
               >
                 Confirm
               </v-btn>
@@ -341,9 +340,7 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-    <v-snackbar v-model="snackbarGo" :timeout="snackbarTimeout">Trade Successfully!<v-btn color="blue" text @click="snackbarGo = false">Close</v-btn></v-snackbar>
-    <v-snackbar v-model="snackbarNotGo" :timeout="snackbarTimeout">Please enter a valid value!<v-btn color="blue" text @click="snackbarNotGo = false">Close</v-btn></v-snackbar>
-  </v-dialog>
+    </v-dialog>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -380,6 +377,7 @@ export default {
 
       date: new Date().toISOString().substr(0, 10),
       dateModel: null,
+      YMDModel: null,
       menu: false,
       modal: false,
 
@@ -414,11 +412,6 @@ export default {
       showBuybtn: true,
       showSellbtn: false,
 
-      snackbar: false,
-      snackbarSell: false,
-      snackbarGo: false,
-      snackbarNotGo: false,
-      snackbarTimeout: 2000,
       stocklistBuy: [],
       quantityModel: null,
       avepriceSell: null
@@ -439,14 +432,43 @@ export default {
       set(value) {
         if (!value) {
           this.$emit("close");
+          this.priceModel = "0.00";
+          this.quantityModel = "0";
+          this.strategyModel = "";
+          this.tradeplanModel = "";
+          this.emotionsModel = "";
+          this.notesModel = "";
+          this.dateModel = new Date().toISOString().substr(0, 10);
+          this.e1 = 1;
+          this.portfolioDropdownModel = null
+          this.availableFundsModel = 0
+
+          this.cprice = "0.00";
+          this.change = "0.00";
+          this.cpercentage = "0.00";
+          this.bidask = 0;
+          this.dboard = 0;
+          this.prev = 0;
+          this.low = 0;
+          this.wklow = 0;
+          this.volm = 0;
+          this.trades = 0;
+          this.open = 0;
+          this.high = 0;
+          this.wkhigh = 0;
+          this.vole = 0;
+          this.ave = 0;
         }
       }
     },
   },
   watch: {
-    renderPortfolioKey: function() {
-      this.getUserPortfolio();
-    },
+    // renderPortfolioKey: function() {
+    //   this.getUserPortfolio();
+    // },
+    // defaultPortfolioId: function() {
+    //   this.getUserPortfolio();
+    // },
     stockList: function() {
       this.initPortfolio();
       
@@ -458,6 +480,7 @@ export default {
     },
     priceModel: function(newValue) {
       this.buyWatch();
+
       const result = parseFloat(newValue);
       this.priceModel = result;
     },
@@ -477,7 +500,10 @@ export default {
     }
   },
   mounted() {
+    this.stocklist = this.stockList.data;
+    this.stocklistBuy = this.stockList.data;
     
+    this.getUserPortfolio();
   },
   methods: {
     ...mapActions({
@@ -487,12 +513,13 @@ export default {
     }),
     initPortfolio(){
       var today = new Date(this.date);
+      var tim = new Date();
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      // var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      // var dateTime = date+' '+time;
-      this.dateModel = date
-      this.getUserPortfolio();
+      var dateTime = date+' '+time;
+      this.dateModel = dateTime
+      this.YMDModel = date
     },
     buyListArray: function() {
       let params = {
@@ -525,6 +552,8 @@ export default {
             this.notesModel = "";
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
+            this.portfolioDropdownModel = null
+            this.availableFundsModel = 0
 
             this.cprice = "0.00";
             this.change = "0.00";
@@ -563,8 +592,6 @@ export default {
         .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/sell/"+this.GetSelectStock,params)
         .then(response => {
           if (response.success) {
-            console.log(response)
-            this.snackbarGo = true
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
@@ -609,7 +636,6 @@ export default {
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
-          console.log(result)
           this.stockSymbolGet = result.data;
           
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
@@ -711,6 +737,7 @@ export default {
       this.componentKey++;
     },
     whereToSave() {
+      console.log(this.userPortfolio)
       for (let i = 0; i < this.userPortfolio.length; i++ ) {
           let portfolioListPush1 = this.userPortfolio[i]
           if (portfolioListPush1.id === this.portfolioDropdownModel) {
@@ -725,7 +752,6 @@ export default {
       }
     },
     selectWatch() {
-      this.GetSelectStock
       if (this.typePortfolioModel != null) {
         this.continueButtonDisable = true;
       } else {
@@ -745,15 +771,19 @@ export default {
       let dall = buyResult + dcommission + dtax + dtransferfee + dsccp;
       this.totalCostModel = dall.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      if(parseInt(this.totalCostModel) >= parseInt(this.availableFundsModel)){
+      if(parseFloat(this.totalCostModel) >= parseFloat(this.availableFundsModel)){
         this.continueBuyButtonDisable = true;
-        this.snackbar = true;
       } else {
         if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0 || this.portfolioDropdownModel == null) {
           this.continueBuyButtonDisable = true;
           this.totalCostModel = 0
         } else {
-          this.continueBuyButtonDisable = false;
+          let compareNum = parseFloat(this.totalCostModel.replace(/,/g, '')) >= parseFloat(this.availableFundsModel)
+          if(!compareNum) {
+            this.continueBuyButtonDisable = false;
+          } else {
+            this.continueBuyButtonDisable = true;
+          }
         }
       }
     },
@@ -772,25 +802,32 @@ export default {
       let result = sellResult - dall;
       this.totalCostSellModel = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 
-      if(parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)){
+      let compareNum = parseInt(this.quantitySellModel) >= parseInt(this.boardLotModel)
+      if(!compareNum){
         this.confirmSellButtonDisable = true;
-        this.snackbarSell = true;
       } else {
         if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
           this.confirmSellButtonDisable = true;
           this.totalCostSellModel = 0
         }else {
-          this.confirmSellButtonDisable = false;
+          let compareNum1 = parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)
+          if(!compareNum1) {
+            this.confirmSellButtonDisable = false;
+          } else {
+            this.confirmSellButtonDisable = true;
+          }
         }
       }
     },
     dateWatch() {
       var today = new Date(this.date);
+      var tim = new Date();
       var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      // var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      // var dateTime = date+' '+time;
-      this.dateModel = date
+      var dateTime = date+' '+time;
+      this.dateModel = dateTime
+      this.YMDModel = date
     }
   }
 };
@@ -798,13 +835,13 @@ export default {
 <style>
 .stock_selector .v-select__slot .v-label,
 .stock_selector .v-select__slot .v-icon {
-  color: #00ffc3 !important;
+  color: #03DAC5 !important;
 }
 .stock_selector .v-input__slot {
   margin: 0;
 }
 .stock_selector .v-select__selection--comma {
-  color: #00ffc3;
+  color: #03DAC5;
   font-size: 12px;
 }
 .stock_selector .v-input__control {
@@ -822,16 +859,16 @@ export default {
   background-color: transparent;
 }
 .positive {
-  color: #00ffc3;
+  color: #03DAC5;
 }
 .negative {
-  color: #fe4949;
+  color: #F44336;
 }
 .neutral {
   color: #bdbdbd;
 }
 .buy_selector .v-select__selection--comma {
-  color: #00ffc3;
+  color: #03DAC5;
   font-size: 14px;
 }
 .buy_selector .v-input__control {
@@ -868,6 +905,6 @@ export default {
   background: #00121e !important;
 }
 .datepicker-container .v-date-picker-title__date {
-  color: #00ffc3 !important
+  color: #03DAC5 !important
 }
 </style>

@@ -11,7 +11,7 @@
         </v-col>
         <v-col class="pa-0" cols="6" sm="6" md="6">
             <div id="chart">
-                <apexcharts type=bar height=200 :options="chartOptions" :series="series" />
+                <apexcharts ref="emotionalStatistics" type=bar height=200 :options="chartOptions" :series="series" />
             </div>
         </v-col>
         <v-col class="pa-0 pt-3" cols="6" sm="6" md="6">
@@ -27,12 +27,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in emo" :key="item.stats" id="table_tr_port-cont">
-                    <td class="item_position-prop caption px-1 py-2">{{ item.stats }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.trades }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.wins }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.losses }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.winrate }}</td>
+                    <tr v-for="item in emotionalArray" :key="item.name" id="table_tr_port-cont">
+                    <td class="item_position-prop caption px-1 py-2">{{ item.name }}</td>
+                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.win + item.loss }}</td>
+                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.win }}</td>
+                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.loss }}</td>
+                    <td class="item_position-prop caption text-right px-1 py-0">{{ ((item.win * 100) / (item.win + item.loss)).toFixed(2) }}%</td>
                     
                     </tr>
                 </tbody>
@@ -49,35 +49,24 @@
 import VueApexCharts from 'vue-apexcharts'
 import shareModal from '~/components/modals/share'
 
+import { mapGetters } from "vuex";
+
 export default {
     components: {
         apexcharts: VueApexCharts,
         shareModal
     },
+    computed: { 
+        ...mapGetters({
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+            journalCharts: "journal/getJournalCharts",
+        })
+    },
     data () {
         return {  
             showScheduleForm: false,
-            emo: [
-                {
-                stats: 'Neutral',
-                trades: 1,
-                wins: 1,
-                losses: 0,
-                winrate: '100.00%',
-                },{
-                stats: 'Greedy',
-                trades: 0,
-                wins: 0,
-                losses: 0,
-                winrate: '70.00%',
-                },{
-                stats: 'Fearful',
-                trades: 0,
-                wins: 0,
-                losses: 0,
-                winrate: '70.00%',
-                }
-            ],
+            emotionalArray: [],
             series: [{
                 name: 'Win',
                 data: [44, 55, 41]
@@ -105,7 +94,7 @@ export default {
                         show: false
                     },
                 },
-                colors: ['#00FFC3','#f44336'],
+                colors: ['#03DAC5','#F44336'],
                 dataLabels: {
                     enabled: false,
                     offsetX: 0,
@@ -138,13 +127,13 @@ export default {
                 },
                 xaxis: {
                     show: true,
-                    categories: ['Neutral', 'Greedy', 'Fearful'],
+                    categories: [' ', ' ', ' '],
                     labels: {
                         show: false,
                         style: {
                             colors: '#b6b6b6',
                             fontSize: '12px',
-                            fontFamily: "'Karla'",
+                            fontFamily: "'Nunito' !important",
                             cssClass: 'apexcharts-xaxis-label',
                         }
                     },
@@ -165,7 +154,7 @@ export default {
                         style: {
                             color: '#b6b6b6',
                             fontSize: '12px',
-                            fontFamily: 'Karla',
+                            fontFamily: "'Nunito' !important",
                             cssClass: 'apexcharts-yaxis-label',
                         },
                         offsetX: 57,
@@ -181,8 +170,9 @@ export default {
                 tooltip: {
                     y: {
                         show: false,
-                        formatter: function (val) {
-                            return val
+                        formatter: function (value) {
+                            let val = (value/1).toFixed(2).replace('.', '.')
+                            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
                     },
                     x: {
@@ -193,10 +183,60 @@ export default {
                     },
                     theme: false,
                     style: {
-                        fontFamily: 'Karla'
+                        fontFamily: "'Nunito' !important"
                     }
                 }
             }
+        }
+    },
+    methods: {
+        getEmotionalStats(){
+            if(this.journalCharts != null) {
+                const objStrategy = this.journalCharts.meta.emotional_statistics
+                const emotionalArray = []
+                if(objStrategy.length != 0) {
+                    Object.keys(objStrategy).forEach(function(key) {
+                        emotionalArray.push({...objStrategy[key], name: key});
+                    });
+                    this.emotionalArray = emotionalArray
+
+                    const winEmotional = [ , , , ]
+                    const lossEmotional = [ , , , ]
+                    const nameEmotional = [" ", " ", " ", " "]
+
+                    for (let i = 0; i < this.emotionalArray.length; i++) {
+                        winEmotional.unshift(this.emotionalArray[i].win)
+                        lossEmotional.unshift(this.emotionalArray[i].loss)
+                        nameEmotional.unshift(this.emotionalArray[i].name)
+                    }
+
+                    // load data series on bar graph
+                    this.$refs.emotionalStatistics.updateSeries([
+                        {
+                            data: winEmotional.slice(0, 3)
+                        },{
+                            data: lossEmotional.slice(0, 3)
+                        },
+                    ]);
+                    
+                    // load data names on bar graph
+                    this.chartOptions = {
+                        ...this.chartOptions,...{ xaxis: { categories: [...nameEmotional.slice(0, 3),...this.chartOptions.xaxis.categories].slice(0, 3)}}
+                    };
+                }
+            }
+            this.componentKeys++;
+        }
+    },
+    mounted() {
+        this.getEmotionalStats();
+    },
+    watch: {
+        journalCharts: function() {
+            this.getEmotionalStats();
+        },
+        renderPortfolioKey: function() {
+            this.getEmotionalStats();
         }
     }
 }

@@ -124,6 +124,11 @@
                     fontSize: '12px',
                     fontFamily: "'Nunito' !important",
                     color: '#d8d8d8',
+                    formatter: function (value) {
+                      let valuea = value.globals.seriesTotals[0]
+                      let val = (valuea/1).toFixed(2).replace('.', '.')
+                      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    }
                   }
                 }
               }

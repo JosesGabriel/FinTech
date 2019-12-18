@@ -598,18 +598,6 @@ export default {
       this.alertState = type;
       this.alertResponse = message;
     }
-  },
-  head() {
-    return {
-      title: "Arbitrage | Social Page",
-      meta: [
-        {
-          hid: "description",
-          name: "description",
-          content: "Arbitrage | Social Page"
-        }
-      ]
-    };
   }
 };
 </script>

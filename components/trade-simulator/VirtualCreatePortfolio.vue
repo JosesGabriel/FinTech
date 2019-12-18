@@ -101,14 +101,14 @@ export default {
         createPortfolio: function(){
              let convertedNumbers = this.initialCapitalModel.replace(/,/g, "");
             const createportfolioparams = {
-                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+               
                 currency_code: "PHP",
                 name: this.namePortfolioModel,
                 description: "My Virtual Portfolio",
                 type: "virtual",
                 balance: parseInt(convertedNumbers)
             };
-            console.log(createportfolioparams);
+            
             this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
                 function(result) {
                     if (result.success) {

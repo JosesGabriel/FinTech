@@ -133,6 +133,7 @@ export default {
       stock: "chart/stock",
       lightSwitch: "global/getLightSwitch"
     })
+<<<<<<< HEAD
   },
   watch: {
     stock(value) {
@@ -142,6 +143,8 @@ export default {
   mounted() {
     // console.log("status");
     // console.log(this.lightSwitch);
+=======
+>>>>>>> c19ec011808a38ce0103788ee60ad34b6021d53d
   }
 };
 </script>

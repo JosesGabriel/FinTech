@@ -35,7 +35,7 @@
           data: [0,0,0,0,0,0,0,0,0,0,0,0]
         }],
         chartOptions: {
-          colors: ['#00FFC3','#f44336'],
+          colors: ['#03DAC5','#F44336'],
           plotOptions: {
             bar: {
               horizontal: false,
@@ -172,19 +172,16 @@
     },
     methods: {
       getMPerformance() {
-        this.monthlyPerformance = this.journalCharts.meta
-        if (this.journalCharts.length != 0){
-          console.log(this.monthlyPerformance)
-          if (this.monthlyPerformance != undefined || this.monthlyPerformance.monthly_performance != undefined) {
-            let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance
-            this.$refs.monthlyPerformance.updateSeries([
-              {
-                data: monthlyPerformanceArr
-              }
-            ]);
-          }
+        if (this.journalCharts != null){
+          this.monthlyPerformance = this.journalCharts.meta
+          
+          let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance
+          this.$refs.monthlyPerformance.updateSeries([
+            {
+              data: monthlyPerformanceArr
+            }
+          ]);
         }
-      this.componentKeys++;
       },
       formatPrice(value) {
           let val = (value/1).toFixed(2).replace('.', '.')
@@ -195,9 +192,12 @@
       this.getMPerformance();
     },
     watch: {
+      journalCharts: function() {
+        this.getMPerformance();
+      },
       renderPortfolioKey: function() {
         this.getMPerformance();
-      }
+      },
     }
   }
 </script>

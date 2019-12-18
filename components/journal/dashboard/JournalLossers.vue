@@ -1,5 +1,5 @@
 <template>
-    <v-container class="py-0">
+    <v-container class="pa-0">
         <v-col class="pa-0" cols="12" sm="12" md="12">
             <div id="chart">
                 <apexcharts ref="lossersChart" type=bar height=230 :options="chartOptions" :series="series" />
@@ -12,7 +12,7 @@
 
 import VueApexCharts from 'vue-apexcharts'
 
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
     components: {
@@ -22,19 +22,16 @@ export default {
         ...mapGetters({
             renderPortfolioKey: "journal/getRenderPortfolioKey",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
+            journalCharts: "journal/getJournalCharts",
+            stockList: "global/getStockList"
         })
-    },
-    props: {
-        negaArr: {
-            type: Array
-        }
     },
     data () {
         return {
-            losserArr: [],
+            lossersArray: [],
             series: [{
                 name: 'Lossers',
-                data: [ 0, 0, 0, 0, 0, 0, 0]
+                data: [-70, -60, -50, -40, -30, -20, -10]
             }],
             chartOptions: {
                 plotOptions: {
@@ -90,7 +87,7 @@ export default {
                 xaxis: {
                     show: true,
                     type: 'category',
-                    categories: ['DD', 'DDPR', 'DELM', 'DFNN', 'DIZ', 'DMC', 'DMW'],
+                    categories: [' ', ' ', ' ', ' ', ' ', ' ', ' '],
                     labels: {
                         show: false
                     },
@@ -113,7 +110,7 @@ export default {
                         style: {
                             color: '#b6b6b6',
                             fontSize: '12px',
-                            fontFamily: 'Karla',
+                            fontFamily: "'Nunito' !important",
                             cssClass: 'apexcharts-yaxis-label',
                         },
                         offsetX: 0,
@@ -135,15 +132,16 @@ export default {
                     floating: true,
                     style: {
                         fontSize:  '14px',
-                        fontFamily: 'Karla',
+                        fontFamily: "'Nunito' !important",
                         color:  '#d8d8d8'
                     },
                 },
                 tooltip: {
                     y: {
                         show: false,
-                        formatter: function (val) {
-                            return val
+                        formatter: function (value) {
+                            let val = (value/1).toFixed(2).replace('.', '.')
+                            return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
                     },
                     x: {
@@ -154,7 +152,7 @@ export default {
                     },
                     theme: false,
                     style: {
-                        fontFamily: 'Karla'
+                        fontFamily: "'Nunito' !important"
                     },
                     followCursor: true,
                 }
@@ -163,28 +161,65 @@ export default {
     },
     methods: {
         getTopLossers() {
-            this.losserArr = []
-            if(this.negaArr.length != 0){
-                
-                for (let i = 0; i < this.negaArr.length; i++) {
-                    this.losserArr.push(parseFloat(this.negaArr[i].value))
+            if(this.journalCharts != null){
+            
+                const objLossers = this.journalCharts.meta.top_stocks
+                const lossersArray = []
+                const negativeArr = []
+                let lastValueArray = [, , , , , , ]
+                let lastSymbolArray = [' ', ' ', ' ', ' ', ' ', ' ', ' ']
+                let filteredStocks = null
+
+                // map keys, from object make it array
+                Object.keys(objLossers).forEach(function(key) {
+                    lossersArray.push({stock_id: key, stock_sym: "", value: objLossers[key]});
+                });
+                this.lossersArray = lossersArray
+
+                for(let i = 0; i < this.lossersArray.length; i++){
+                    let toSeparate = this.lossersArray[i]
+
+                    // filter stock_id to stock symbol
+                    filteredStocks = this.stockList.data.filter((stock) => {
+                        return stock.id_str == this.lossersArray[i].stock_id;
+                    });
+                    toSeparate.stock_sym = filteredStocks[0].symbol
+
+                    // push negative value to array
+                    if(toSeparate.value < 0 ) {
+                        negativeArr.push(toSeparate)
+                    }
+                }
+                // loop the name and value push to array
+                for (let x = 0; x < negativeArr.length; x++) {
+                    lastValueArray.unshift(negativeArr[x].value)
+                    lastSymbolArray.unshift(negativeArr[x].stock_sym)
                 }
                 
-                let data_loss = [...this.losserArr,...this.series[0].data].slice(0, 7);
+                // update chart series
                 this.$refs.lossersChart.updateSeries([
                     {
-                        data: data_loss
+                        data: lastValueArray.slice(0, 7)
                     }
                 ]);
+                
+                // update chart category symbols
+                this.chartOptions = {
+                    ...this.chartOptions,...{ xaxis: { categories: [...lastSymbolArray,...this.chartOptions.xaxis.categories].slice(0, 7)}}
+                };
 
-                console.log(data_loss)
-                console.log(this.losserArr)
-                console.log(this.series)
             }
+            this.componentKeys++;
         }
     },
+    mounted(){
+        this.getTopLossers();
+    },
     watch: {
-        negaArr() {
+        journalCharts: function() {
+            this.getTopLossers();
+        },
+        renderPortfolioKey: function() {
             this.getTopLossers();
         }
     }

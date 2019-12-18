@@ -69,8 +69,6 @@ export default {
       this.$api.chart.stocks.history(params).then(response => {
         this.data = response.data;
         this.setIndex(parseInt(this.data.value) > 0 ? false : true);
-        //console.log("sidebar data");
-        //console.log(this.data);
         this.setStock(this.data);
         this.setMarketCode(this.data.market_code);
         this.loading = null;
@@ -89,15 +87,11 @@ export default {
         "http://localhost:8021/sse?stream=market-data"
       );
 
-      this.sse.onopen = function() {
-        console.log("open sse");
-      };
+      this.sse.onopen = function() {};
 
-      this.sse.onerror = function(err) {
-        console.log("error");
-        console.log(err);
-      };
+      this.sse.onerror = function(err) {};
 
+<<<<<<< HEAD
       this.sse.addEventListener(
         `M-D.INFO.${symid}`,
         function(e) {
@@ -109,6 +103,16 @@ export default {
           this.$store.commit("chart/SET_STOCK_OBJ", {
             trades: parseInt(this.stock.trades) + parseInt(this.counter)
           });
+=======
+      const that = this;
+      this.sse.addEventListener(`M-D.INFO.${symid}`, function(e) {
+        const data = JSON.parse(e.data);
+
+        that.counter++;
+        that.$store.commit("chart/SET_STOCK_OBJ", {
+          trades: parseInt(that.stock.trades) + parseInt(that.counter)
+        });
+>>>>>>> c19ec011808a38ce0103788ee60ad34b6021d53d
 
           if (parseFloat(this.stock.weekyearlow) > parseFloat(data.l)) {
             //console.log(this.stock.weekyearlow + " > " + data.l);
@@ -138,22 +142,12 @@ export default {
   },
   watch: {
     symbolid(symid, oldsymid) {
-      //console.log("sidebar watch");
-      console.log(symid);
       this.initStock(symid);
       this.initSSE(symid);
     }
   },
   created() {
-    //this.setSymbolID("29235363595681792");
     this.setSymbolID("29235364749115392");
-    //this.setTicker(false);
-  },
-  mounted() {
-    // all stock
-    // this.$api.chart.stocks.list().then(response => {
-    // console.log(response);
-    // });
   }
 };
 </script>

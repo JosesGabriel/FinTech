@@ -1,30 +1,23 @@
 <template>
   <div>
+    {{ selectedRoom }}
     <v-data-table
+      v-model="selectedRoom"
       :loading="loader"
       :dark="lightSwitch == 0 ? false : true"
       :headers="playerCurrentChatRoom != defaultRoom ? headersJoined : headers"
       :items="items"
+      item-key="RoomNumber"
       hide-default-footer
       fixed-header
       height="calc(100vh - 450px)"
+      show-select
       class="elevation-1 lobby__table transparent__bg text__secondary--light"
       :footer-props="{
         disableItemsPerPage: true,
         disablePagination: true
       }"
     >
-      <!-- <template v-slot:item="props">
-        <tr @click="selectRoom(props.item)">
-          <td
-            v-for="(n, index) in Object.keys(props.item).length"
-            :key="n"
-            class="text-center font-weight-black"
-          >
-            {{ props.item[[Object.keys(props.item)[n - 1]]] }}
-          </td>
-        </tr>
-      </template> -->
     </v-data-table>
     <div class="table__footer">
       <v-btn
@@ -87,10 +80,7 @@ tr span {
 <script>
 require("dotenv").config();
 import { mapActions, mapGetters } from "vuex";
-const sdk = require("matrix-js-sdk");
-const HSUrl = "https://im.arbitrage.ph";
-const client = sdk.createClient(HSUrl);
-const roomID = "!OlWVatkysuERsuXfCS:im.arbitrage.ph";
+import { client } from "~/assets/client.js";
 export default {
   data() {
     return {
@@ -99,9 +89,9 @@ export default {
       itemKey: "",
       headers: [
         {
-          text: "ROOM #",
+          text: "ROOM ID",
           align: "center",
-          value: "RoomNumber",
+          value: "RoomID",
           class: "tableHeader"
         },
         {
@@ -179,7 +169,7 @@ export default {
       if (this.playerCurrentChatRoom == process.env.DEFAULT_CHAT_ROOM_ID) {
         this.loadDefaultRoom();
       } else {
-        this.loadLobby(this.playerCurrentChatRoom);
+        // this.loadLobby(this.playerCurrentChatRoom);
       }
     }
   },
@@ -199,14 +189,15 @@ export default {
       //create Vyndue Game Room first:
       // this.setplayerCurrentLobby(true);
     },
-    selectRoom(a) {
-      if (this.playerCurrentLobby == "") {
-        this.selectedRoom = Object.values(a);
-        console.log(this.selectedRoom[0]);
-      }
-    },
+    // selectRoom(a) {
+    //   if (this.playerCurrentLobby == "") {
+    //     this.selectedRoom = Object.values(a);
+    //     console.log(this.selectedRoom[0]);
+    //   }
+    // },
     loadLobby(id) {
       let room = client.getRoom(id);
+      console.log(room);
       if (room.currentState._joinedMemberCount == 1) {
         this.items[0].playerName = this.$auth.user.data.user.username;
         this.items[0].status = "READY";
@@ -214,15 +205,6 @@ export default {
     },
     loadDefaultRoom() {
       this.loader = true;
-      client
-        .login("m.login.password", {
-          user: "@lerroux:im.arbitrage.ph",
-          password: "angelus69"
-        })
-        .then(response => {
-          myToken = response.access_token;
-        });
-      client.startClient();
       client.on(
         "sync",
         function(state, prevState, data) {
@@ -235,7 +217,6 @@ export default {
                   let potMoney =
                     vyndueRooms[i].tags.Options.Players *
                     vyndueRooms[i].tags.Options.Stake;
-                  vyndueRooms[i].tags.Options["RoomNumber"] = i;
                   vyndueRooms[i].tags.Options["PotMoney"] = potMoney;
                   this.items.push(vyndueRooms[i].tags.Options);
                 }

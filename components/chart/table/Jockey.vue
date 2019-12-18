@@ -18,8 +18,8 @@
             <th
               colspan="4"
               class="text-left j_header"
-              @click="sortArray('buy_volume')"
               style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;"
+              @click="sortArray('buy_volume')"
             >
               Buying
             </th>
@@ -28,8 +28,8 @@
             <th
               colspan="4"
               class="text-left j_header"
-              @click="sortArray('sell_volume')"
               style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;"
+              @click="sortArray('sell_volume')"
             >
               Selling
             </th>
@@ -38,8 +38,8 @@
             <th
               colspan="2"
               class="text-left j_header"
-              @click="sortArray('net_volume')"
               style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;"
+              @click="sortArray('net_volume')"
             >
               Net
             </th>
@@ -179,18 +179,11 @@ export default {
   },
   watch: {
     symbolid(symid) {
-      //   console.log("time trade");
-      //console.log('stock id - '+symid);
       this.getCurrent(symid);
       this.initJockey(symid);
     },
-    fullscreen(value) {
-      console.log("fullscreen");
-      console.log(value);
-    },
+    fullscreen(value) {},
     ticker(value) {
-      // console.log("ticker");
-      // console.log(value);
       if (value) {
         this.max = "calc(100vh - 300px)";
       } else {

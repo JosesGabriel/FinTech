@@ -1,126 +1,233 @@
 <template>
-    <v-col class="pa-0">
-        <v-card-title class="text-left justify-center align-center px-0 py-3 pt-5">
-          <v-col class="pa-0 pr-3" cols="12" sm="3" md="3">
-            <v-text-field
-              v-model="search"
-              prepend-inner-icon="mdi-magnify"
-              label="Search"
-              outlined
-              dense
-              hide-details
-              :dark="lightSwitch == true"
-              :style="{ background: cardbackground }"
-              color="success"
-              class="tl_searchfields"
-            ></v-text-field>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-btn small dark text color="success" @click="filterDate('day')" class="body-2 text-capitalize" elevation="0">Day</v-btn>
-          <v-btn small dark text color="success" @click="filterDate('week')" class="body-2 text-capitalize" elevation="0">Week</v-btn>
-          <v-btn small dark text color="success" @click="filterDate('month')" class="body-2 text-capitalize" elevation="0">Month</v-btn>
-          <v-btn small dark text color="success" @click="filterDate('year')" class="body-2 text-capitalize" elevation="0">Year</v-btn>
-          <v-btn small dark text color="success" @click="filterDate('custom')" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
-          <v-spacer></v-spacer>
-          <!--<v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click ="EnterRecordModal=true" style="border-width: 2px" height="23">Record</v-btn>-->
-            <v-btn icon small @click.stop="showScheduleForm=true"> 
-                <img src="/icon/journal-icons/share-icon.svg" width="15">
-            </v-btn>
-        </v-card-title>
-        <v-data-table
-          :headers="headers"
-          :search="search"
-          :items="tradeLogs"
-          :page.sync="page"
-          :items-per-page="itemsPerPage"
-          hide-default-footer
-          @page-count="pageCount = $event"
+  <v-col class="pa-0">
+    <v-card-title class="text-left justify-center align-center px-0 py-3 pt-5">
+      <v-col class="pa-0 pr-3" cols="12" sm="3" md="3">
+        <v-text-field
+          v-model="search"
+          prepend-inner-icon="mdi-magnify"
+          label="Search"
+          outlined
+          dense
+          hide-details
           :dark="lightSwitch == true"
           :style="{ background: cardbackground }"
-          class="data_table-container pl-10 secondary--text"
-        >
-        <template v-slot:item.stock_id="{ item }" ><span :style="{ color: fontcolor2 }">{{ item.stock_id }}</span></template>
-        <template v-slot:item.date="{ item }" ><span :style="{ color: fontcolor2 }">{{ item.meta.date.split(' ')[0] }} </span></template>
-        <template v-slot:item.amount="{ item }" ><span :style="{ color: fontcolor2 }">{{ item.amount }} </span></template>
-        <template v-slot:item.average_price="{ item }" ><span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.average_price)) }}</span></template>
-        <template v-slot:item.buy_value="{ item }" ><span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.buy_value)) }}</span></template>
-        <template v-slot:item.sell_price="{ item }" ><span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.sell_price)) }}</span></template>
-        <template v-slot:item.total_value="{ item }" ><span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.total_value)) }}</span></template>
-        <template v-slot:item.profit_loss="{ item }" ><span :class="item.meta.profit_loss > 0 ? 'positive' : item.meta.profit_loss < 0 ? 'negative' : 'neutral' ">{{ addcomma(parseFloat(item.meta.profit_loss)) }}</span></template>
-        <template v-slot:item.profit_loss_percentage="{ item }" ><span :class="item.meta.profit_loss_percentage > 0 ? 'positive' : item.meta.profit_loss_percentage < 0 ? 'negative' : 'neutral' ">{{ addcomma(parseFloat(item.meta.profit_loss_percentage)) }}%</span></template>
- 
-        <template v-slot:item.action="{ item }">
-          <div v-show="menuShow" class="sidemenu_actions" :dark="lightSwitch == true" :style="{ background: cardbackground }" :id="`tl_${item.id}`" @mouseover="tradelogsmenuLogsShow(item)" @mouseleave="tradelogsmenuLogsHide(item)">
-            <v-btn small class="caption btn_sidemenu" text >Details</v-btn>
-            <v-btn small class="caption btn_sidemenu" text >Edit</v-btn>
-            <v-btn small class="caption btn_sidemenu" v-on:click="deleteLogs(item.action)" text >Delete</v-btn>
-          </div>
-          <v-icon
-            small
-            class="mr-2"
-            @mouseover="tradelogsmenuLogsShow(item)"
-            :style="{ color: fontcolor2 }"
-          >
-            mdi-dots-horizontal
-          </v-icon>
+          color="success"
+          class="tl_searchfields"
+        ></v-text-field>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('day')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Day</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('week')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Week</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('month')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Month</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('year')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Year</v-btn>
+      <v-dialog
+        ref="dialog"
+        v-model="modal"
+        :return-value.sync="date"
+        persistent
+        width="290px"
+        :dark="lightSwitch == true"
+        :style="{ background: cardbackground }"
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" text class="px-1" color="success">
+            <span class="text-capitalize">Custom</span>
+          </v-btn>
         </template>
-        </v-data-table>
-        <v-row>
-          <v-col style="font-size: 12px;" class="text-right font-weight-regular mr-10" width="100%" :style="{ color: fontcolor }">
-          Total Profit/Loss as of {{ this.date }}: <span class="ml-3" :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')">{{ this.totalProfitLoss.toFixed(2) }}</span>
-          <span class="ml-8 mr-1" :class="(this.totalProfitLossPerf < 0 ? 'negative' : 'positive')">{{ this.totalProfitLossPerf.toFixed(2) }}%</span>
-          </v-col>
-        </v-row>
-        <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
-          <v-card color="transparent" class="justify-center" elevation="0">
-            <v-card-title class="caption pa-0"><span :style="{ color: fontcolor2 }" >Show Rows</span>
-            <v-spacer></v-spacer>
-            <v-text-field
-              :value="itemsPerPage"
-              type="number"
-              min="5"
-              max="10"
-              @input="itemsPerPage = parseInt($event, 10)"
-              :dark="lightSwitch == true"
-              :style="{ background: cardbackground }"
-              class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
-              color="success"
-              dense
-            ></v-text-field>
-            <span class="pl-1" :style="{ color: fontcolor2 }" >of {{ tradeLogs.length }}</span>
-            </v-card-title>
-          </v-card>
-          <v-card color="transparent" elevation="0">
-            <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
-          </v-card>
-        </v-card>
-        <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
-       
-    </v-col>
+        <v-date-picker
+          v-model="date"
+          color="#00121e"
+          :dark="lightSwitch == true"
+          :style="{ background: cardbackground }"
+          class="datepicker-container"
+          scrollable
+        >
+          <v-spacer></v-spacer>
+          <v-btn text color="success" @click="modal = false">Cancel</v-btn>
+          <v-btn text color="success" @click="filterDate(date)">OK</v-btn>
+        </v-date-picker>
+      </v-dialog>
+      <v-spacer></v-spacer>
+      <v-btn icon small @click.stop="showScheduleForm=true">
+        <img src="/icon/journal-icons/share-icon.svg" width="15" />
+      </v-btn>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :search="search"
+      :items="tradeLogs"
+      :page.sync="page"
+      :items-per-page="itemsPerPage"
+      hide-default-footer
+      @page-count="pageCount = $event"
+      :dark="lightSwitch == true"
+      :style="{ background: cardbackground }"
+      class="data_table-container pl-10 secondary--text"
+    >
+      <template v-slot:item.stock_id="{ item }">
+        <span :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
+      </template>
+      <template v-slot:item.date="{ item }">
+        <span :style="{ color: fontcolor2 }">{{ item.meta.date.split(' ')[0] }}</span>
+      </template>
+      <template v-slot:item.amount="{ item }">
+        <span :style="{ color: fontcolor2 }">{{ item.amount }}</span>
+      </template>
+      <template v-slot:item.average_price="{ item }">
+        <span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.average_price)) }}</span>
+      </template>
+      <template v-slot:item.buy_value="{ item }">
+        <span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.buy_value)) }}</span>
+      </template>
+      <template v-slot:item.sell_price="{ item }">
+        <span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.sell_price)) }}</span>
+      </template>
+      <template v-slot:item.total_value="{ item }">
+        <span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.total_value)) }}</span>
+      </template>
+      <template v-slot:item.profit_loss="{ item }">
+        <span
+          :class="item.meta.profit_loss > 0 ? 'positive' : item.meta.profit_loss < 0 ? 'negative' : 'neutral' "
+        >{{ addcomma(parseFloat(item.meta.profit_loss)) }}</span>
+      </template>
+      <template v-slot:item.profit_loss_percentage="{ item }">
+        <span
+          :class="item.meta.profit_loss_percentage > 0 ? 'positive' : item.meta.profit_loss_percentage < 0 ? 'negative' : 'neutral' "
+        >{{ addcomma(parseFloat(item.meta.profit_loss_percentage)) }}%</span>
+      </template>
+
+      <template v-slot:item.action="{ item }">
+        <div
+          v-show="menuShow"
+          class="sidemenu_actions"
+          :dark="lightSwitch == true"
+          :style="{ background: cardbackground }"
+          :id="`tl_${item.id}`"
+          @mouseover="tradelogsmenuLogsShow(item)"
+          @mouseleave="tradelogsmenuLogsHide(item)"
+        >
+          <v-btn small class="caption btn_sidemenu" text>Details</v-btn>
+          <v-btn small class="caption btn_sidemenu" text>Edit</v-btn>
+          <v-btn small class="caption btn_sidemenu" v-on:click="deleteLogs(item.action)" text>Delete</v-btn>
+        </div>
+        <v-icon
+          small
+          class="mr-2"
+          @mouseover="tradelogsmenuLogsShow(item)"
+          :style="{ color: fontcolor2 }"
+        >mdi-dots-horizontal</v-icon>
+      </template>
+    </v-data-table>
+    <v-row>
+      <v-col
+        style="font-size: 12px;"
+        class="text-right font-weight-regular mr-10"
+        width="100%"
+        :style="{ color: fontcolor }"
+      >
+        Total Profit/Loss as of {{ this.date }}:
+        <span
+          class="ml-3"
+          :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')"
+        >{{ this.totalProfitLoss.toFixed(2) }}</span>
+        <span
+          class="ml-8 mr-1"
+          :class="(this.totalProfitLossPerf < 0 ? 'negative' : 'positive')"
+        >{{ this.totalProfitLossPerf.toFixed(2) }}%</span>
+      </v-col>
+    </v-row>
+    <v-card
+      class="d-flex justify-space-between align-center my-5"
+      color="transparent"
+      elevation="0"
+    >
+      <v-card color="transparent" class="justify-center" elevation="0">
+        <v-card-title class="caption pa-0">
+          <span :style="{ color: fontcolor2 }">Show Rows</span>
+          <v-spacer></v-spacer>
+          <v-text-field
+            :value="itemsPerPage"
+            type="number"
+            min="5"
+            max="10"
+            @input="itemsPerPage = parseInt($event, 10)"
+            :dark="lightSwitch == true"
+            :style="{ background: cardbackground }"
+            class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
+            color="success"
+            dense
+          ></v-text-field>
+          <span class="pl-1" :style="{ color: fontcolor2 }">of {{ tradeLogs.length }}</span>
+        </v-card-title>
+      </v-card>
+      <v-card color="transparent" elevation="0">
+        <v-pagination
+          class="d-flex flex-end lp_data_table-pagination"
+          color="transparent"
+          dark
+          v-model="page"
+          :length="pageCount"
+        ></v-pagination>
+      </v-card>
+    </v-card>
+    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+  </v-col>
 </template>
 <script>
-import shareModal from '~/components/modals/share'
+import shareModal from "~/components/modals/share";
 import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
-    shareModal,
+    shareModal
   },
   data: function() {
     return {
       showScheduleForm: false,
       itemsPerPage: 5,
-      search: '',
+      search: "",
       headers: [
-        { text: 'Stocks', value: 'stock_id' , align: 'left', sortable: false },
-        { text: 'Date', value: 'date', align: 'right' },
-        { text: 'Volume', value: 'amount', align: 'right' },
-        { text: 'Ave. Price', value: 'average_price', align: 'right' },
-        { text: 'Buy Value', value: 'buy_value', align: 'right' },
-        { text: 'Sell Price', value: 'sell_price', align: 'right' },
-        { text: 'Sell Value', value: 'total_value', align: 'right' },
-        { text: 'Profit/Loss', value: 'profit_loss', align: 'right' },
-        { text: 'Perf. (%)', value: 'profit_loss_percentage', align: 'right' },
-        { text: '', value: 'action', sortable: false, align: 'right' },
+        { text: "Stocks", value: "stock_id", align: "left", sortable: false },
+        { text: "Date", value: "date", align: "right" },
+        { text: "Volume", value: "amount", align: "right" },
+        { text: "Ave. Price", value: "average_price", align: "right" },
+        { text: "Buy Value", value: "buy_value", align: "right" },
+        { text: "Sell Price", value: "sell_price", align: "right" },
+        { text: "Sell Value", value: "total_value", align: "right" },
+        { text: "Profit/Loss", value: "profit_loss", align: "right" },
+        { text: "Perf. (%)", value: "profit_loss_percentage", align: "right" },
+        { text: "", value: "action", sortable: false, align: "right" }
       ],
       tradeLogs: [],
       filter: [],
@@ -134,136 +241,151 @@ export default {
       totalProfitLossPerf: 0,
       totalPerf: 0,
       date: new Date().toISOString().substr(0, 10),
-    }
+      modal: false
+    };
   },
-  props: ['item'],
-   computed: {
-      ...mapGetters({
+  props: ["item"],
+  computed: {
+    ...mapGetters({
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
       simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
-      lightSwitch: "global/getLightSwitch",
-      }),
-      cardbackground: function() {
-          return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-      },
-      fontcolor: function() {
-              return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
-            },
-      fontcolor2: function() {
-              return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
-            },
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
+    fontcolor: function() {
+      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+    },
+    fontcolor2: function() {
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+    }
+  },
   mounted() {
-     if(this.simulatorPortfolioID != 0 ?  this.getTradeLogs() : ''); 
-     //this.bus.$on('submit_tl', this.getTradeLogs);
+    if (this.simulatorPortfolioID != 0 ? this.getTradeLogs() : "");
   },
   watch: {
-      simulatorPortfolioID: function () {
-        this.getTradeLogs();
-      },
-      simulatorOpenPosition: function () {
-        this.getTradeLogs();
-      },
+    simulatorPortfolioID: function() {
+      this.getTradeLogs();
+    },
+    simulatorOpenPosition: function() {
+      this.getTradeLogs();
+    }
   },
   methods: {
-     ...mapActions({      
-            setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
-            setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
+    ...mapActions({
+      setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+      setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition"
     }),
-    getTradeLogs(){
+    getTradeLogs() {
       const tradelogsparams = {
-      user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-      fund: this.simulatorPortfolioID
-    };
-    
-    this.totalProfitLoss = 0;
-    this.totalProfitLossPerf = 0;
-    this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
-      function(result) {
-        console.log(result);
+        fund: this.simulatorPortfolioID
+      };
+
+      this.totalProfitLoss = 0;
+      this.totalProfitLossPerf = 0;
+      this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+        function(result) {
           this.tradeLogs = result.meta.logs;
-          this.tradelogs2 = this.tradeLogs;  
-          let plossperc = []; 
-          for(let i = 0; i < result.meta.logs.length; i++){   
-
+          this.tradelogs2 = this.tradeLogs;
+          let plossperc = [];
+          for (let i = 0; i < result.meta.logs.length; i++) {
             const params = {
-                    "symbol-id": this.tradeLogs[i].meta.stock_id
-                  };
-                  this.$api.chart.stocks.list(params).then(
-                    function(results) {                 
-                      this.tradeLogs[i].stock_id = results.data.symbol;
-                      let buyvalueResult = this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
-                      let average_price = {average_price: this.tradeLogs[i].meta.average_price, date: new Date().toISOString().substr(0, 10),...this.tradeLogs[i].meta, buy_value: buyvalueResult, profit_loss: 0, profit_loss_percentage: 0}
-                      this.tradeLogs[i].meta = {...average_price}  
-                      this.tradeLogs[i].meta.profit_loss = this.tradeLogs[i].total_value - this.tradeLogs[i].meta.buy_value;
-                      this.tradeLogs[i].meta.profit_loss_percentage = this.tradeLogs[i].meta.profit_loss / this.tradeLogs[i].meta.buy_value * 100;      
-                      this.totalProfitLoss = this.totalProfitLoss+ parseFloat(this.tradeLogs[i].meta.profit_loss);
-                      this.totalProfitLossPerf = this.totalProfitLossPerf+ parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
-                      this.tradeLogs[i].action = this.tradeLogs[i].id;
-                      this.$emit('totalRealized', this.totalProfitLoss);
+              "symbol-id": this.tradeLogs[i].meta.stock_id
+            };
+            this.$api.chart.stocks.list(params).then(
+              function(results) {
+                this.tradeLogs[i].stock_id = results.data.symbol;
+                let buyvalueResult =
+                  this.tradeLogs[i].meta.average_price *
+                  this.tradeLogs[i].amount;
+                let average_price = {
+                  average_price: this.tradeLogs[i].meta.average_price,
+                  date: new Date().toISOString().substr(0, 10),
+                  ...this.tradeLogs[i].meta,
+                  buy_value: buyvalueResult,
+                  profit_loss: 0,
+                  profit_loss_percentage: 0
+                };
+                this.tradeLogs[i].meta = { ...average_price };
+                this.tradeLogs[i].meta.profit_loss =
+                  this.tradeLogs[i].total_value -
+                  this.tradeLogs[i].meta.buy_value;
+                this.tradeLogs[i].meta.profit_loss_percentage =
+                  (this.tradeLogs[i].meta.profit_loss /
+                    this.tradeLogs[i].meta.buy_value) *
+                  100;
+                this.totalProfitLoss =
+                  this.totalProfitLoss +
+                  parseFloat(this.tradeLogs[i].meta.profit_loss);
+                this.totalProfitLossPerf =
+                  this.totalProfitLossPerf +
+                  parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
+                this.tradeLogs[i].action = this.tradeLogs[i].id;
+                this.$emit("totalRealized", this.totalProfitLoss);
 
-                       if(parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0) {
-                          plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;
-                          let maxx = this.arrayMax(plossperc);
-                          this.$emit('MaxDrawdown', maxx.toFixed(2));
-                        }                    
-                    }.bind(this)
-                  );
+                if (
+                  parseFloat(this.tradeLogs[i].meta.profit_loss_percentage) < 0
+                ) {
+                  plossperc[i] = this.tradeLogs[i].meta.profit_loss_percentage;
+                  let maxx = this.arrayMax(plossperc);
+                  this.$emit("MaxDrawdown", maxx.toFixed(2));
+                }
+              }.bind(this)
+            );
           }
-                                 
-      }.bind(this)
-    );
-
+        }.bind(this)
+      );
     },
     arrayMax(arr) {
-        var len = arr.length, min = Infinity;
-          while (len--) {
-            if (arr[len] < min) {
-              min = arr[len];
+      var len = arr.length,
+        min = Infinity;
+      while (len--) {
+        if (arr[len] < min) {
+          min = arr[len];
+        }
+      }
+      return min;
+    },
+    buyfees(buyResult) {
+      let dpartcommission = buyResult * 0.0025;
+      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
+      // TAX
+      let dtax = dcommission * 0.12;
+      // Transfer Fee
+      let dtransferfee = buyResult * 0.00005;
+      // SCCP
+      let dsccp = buyResult * 0.0001;
+      let dall = dcommission + dtax + dtransferfee + dsccp;
+      return buyResult + dall;
+    },
+    sellfees(buyResult) {
+      let dpartcommission = buyResult * 0.0025;
+      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
+      // TAX
+      let dtax = dcommission * 0.12;
+      // Transfer Fee
+      let dtransferfee = buyResult * 0.00005;
+      // SCCP
+      let dsccp = buyResult * 0.0001;
+      let dsell = buyResult * 0.006;
+      let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
+      return buyResult - dall;
+    },
+    deleteLogs(item) {
+      if (confirm("Do you really want to delete?")) {
+        this.$axios
+          .$post(
+            process.env.JOURNAL_API_URL +
+              "/journal/funds/tradelog/delete/" +
+              item
+          )
+          .then(response => {
+            if (response.success) {
+              this.getTradeLogs();
             }
-          }
-          return min;
-      },
-    buyfees(buyResult){
-            let dpartcommission = buyResult * 0.0025;
-            let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
-            // TAX
-            let dtax = dcommission * 0.12;
-            // Transfer Fee
-            let dtransferfee = buyResult * 0.00005;
-            // SCCP
-            let dsccp = buyResult * 0.0001;
-            let dall =  dcommission + dtax + dtransferfee + dsccp;
-            return buyResult + dall;               
-    },
-    sellfees(buyResult){
-            let dpartcommission = buyResult * 0.0025;
-            let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
-            // TAX
-            let dtax = dcommission * 0.12;
-            // Transfer Fee
-            let dtransferfee = buyResult * 0.00005;
-            // SCCP
-            let dsccp = buyResult * 0.0001;
-            let dsell = buyResult * 0.006;
-            let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
-            return buyResult - dall;                    
-    },
-    deleteLogs: function(item){
-      console.log(item);
-        const params ={
-          user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        }
-        if(confirm("Do you really want to delete?")){
-            this.$axios
-            .$post(process.env.JOURNAL_API_URL + "/journal/funds/tradelog/delete/"+ item , params)
-            .then(response => {      
-                if (response.success) {
-                    console.log('delete success');
-                    this.getTradeLogs();
-                }
-            });
-        }
+          });
+      }
     },
     tradelogsmenuLogsShow: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
@@ -274,92 +396,99 @@ export default {
       tl.style.display = "none";
     },
     addcomma(n, sep, decimals) {
-          sep = sep || "."; // Default to period as decimal separator
-          decimals = decimals || 2; // Default to 2 decimals
-          return n.toLocaleString().split(sep)[0]
-              + sep
-              + n.toFixed(2).split(sep)[1];
-      },
-    filterDate(data){
-        let d = new Date;
-        
-        let day = d.getDate();
-        let fweek = new Date(d.getTime() - (7 * 24 * 60 * 60 * 1000));
-        let fmonth = d.getMonth()+1;
-        let fyear = d.getFullYear();
-        this.tradeLogs = this.tradelogs2;
-        this.filter = this.tradeLogs;
-        this.tradeLogs = [];
-        let num = 0;
-        //let mnum = 0;
-        //let ynum = 0;
-            for(let i = 0; i < this.filter.length; i++){
-              let fil_date = this.filter[i].meta.date.split(' ')[0];
-              let today = fil_date.split('/')[1];
-              let month = fil_date.split('/')[0];
-              let year = fil_date.split('/')[2];
-                if(data == 'day'){
-                    if(day == today){
-                      this.tradeLogs[num] = this.filter[i];
-                      num++;
-                    }
-                }
-                if(data == 'month'){
-                    if(fmonth == month){
-                      this.tradeLogs[num] = this.filter[i];
-                      num++;
-                    }
-                }
-                if(data == 'year'){
-                    if(fyear == year){
-                      this.tradeLogs[num] = this.filter[i];
-                      num++;
-                    }
-                }
-                if(data == 'week'){
-                  let dayweek = fweek.getDate();
-                  let monthweek = fweek.getMonth()+1;
-                    if(today >= dayweek && month == monthweek){
-                      this.tradeLogs[num] = this.filter[i];
-                      num++;
-                    }
-                }
-            }
+      sep = sep || "."; // Default to period as decimal separator
+      decimals = decimals || 2; // Default to 2 decimals
+      return (
+        n.toLocaleString().split(sep)[0] + sep + n.toFixed(2).split(sep)[1]
+      );
     },
- 
-  },
-}
+    filterDate(data) {
+      let d = new Date();
+
+      let day = d.getDate();
+      let fweek = new Date(d.getTime() - 7 * 24 * 60 * 60 * 1000);
+      let fmonth = d.getMonth() + 1;
+      let fyear = d.getFullYear();
+      this.tradeLogs = this.tradelogs2;
+      this.filter = this.tradeLogs;
+      this.tradeLogs = [];
+      let num = 0;
+
+      for (let i = 0; i < this.filter.length; i++) {
+        let fil_date = this.filter[i].meta.date.split(" ")[0];
+        let today = fil_date.split("/")[1];
+        let month = fil_date.split("/")[0];
+        let year = fil_date.split("/")[2];
+        if (data == "day") {
+          if (day == today) {
+            this.tradeLogs[num] = this.filter[i];
+            num++;
+          }
+        } else if (data == "month") {
+          if (fmonth == month) {
+            this.tradeLogs[num] = this.filter[i];
+            num++;
+          }
+        } else if (data == "year") {
+          if (fyear == year) {
+            this.tradeLogs[num] = this.filter[i];
+            num++;
+          }
+        } else if (data == "week") {
+          let dayweek = fweek.getDate();
+          let monthweek = fweek.getMonth() + 1;
+          if (today >= dayweek && month == monthweek) {
+            this.tradeLogs[num] = this.filter[i];
+            num++;
+          }
+        } else {
+          let cyr = data.split("-")[0];
+          let cmo = data.split("-")[1];
+          let cday = data.split("-")[2];
+          if (year == cyr && month == cmo && today == cday) {
+            this.tradeLogs[num] = this.filter[i];
+            num++;
+          }
+          this.modal = false;
+        }
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
-  .data_table-container {
-    background: transparent
-  }
-  .sidemenu_actions {
-    position: absolute;
-    width: auto;
-    right: 0;
-    background: #00121e;
-    border: 1px solid #03DAC5;
-    border-radius: 4px;
-    margin-top: -6px;
-  }
-   .positive{
-    color: #03DAC5;
+.data_table-container {
+  background: transparent;
 }
-  .negative{
-      color: #fe4949;
-  }
-  .btn_sidemenu:hover {
-    color: #03DAC5;
-  }
+.sidemenu_actions {
+  position: absolute;
+  width: auto;
+  right: 0;
+  background: #00121e;
+  border: 1px solid #03dac5;
+  border-radius: 4px;
+  margin-top: -6px;
+}
+.positive {
+  color: #03dac5;
+}
+.negative {
+  color: #fe4949;
+}
+.btn_sidemenu:hover {
+  color: #03dac5;
+}
 </style>
 <style>
-  .tl_searchfields .v-input__slot {
-    margin: 0;
-  }
-  .tl_searchfields {
-    transform: scale(0.7);
-    transform-origin: left;
-  }
+.theme--dark.v-picker__body {
+  background: transparent;
+}
+.tl_searchfields .v-input__slot {
+  margin: 0;
+}
+.tl_searchfields {
+  transform: scale(0.7);
+  transform-origin: left;
+}
 </style>
