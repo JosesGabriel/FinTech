@@ -4,16 +4,42 @@
         <v-row no-gutters class="pa-3 pb-0">
             <v-col cols="12" sm="12" md="12">
                 <v-row no-gutters>
-                    <v-card-title :style="{ color: fontcolor2 }" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" style="font-size:13px !important;" class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title  v-model="availableFunds" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" class="subtitle-1 px-0 py-2 secondary--text" style="font-size:13px !important;">{{ this.availableFunds }}</v-card-title>
+                    <v-card-title 
+                        :style="{ color: fontcolor2 }" 
+                        :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" 
+                        style="font-size:13px !important;" 
+                        class="subtitle-1 px-0 py-2 secondary--text"
+                        >Available Funds
+                        </v-card-title>
+                        <v-spacer></v-spacer>
+                    <v-card-title  
+                        v-model="availableFunds" 
+                        :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" 
+                        class="subtitle-1 px-0 py-2 secondary--text" 
+                        style="font-size:13px !important;">
+                        {{ this.availableFunds }}
+                    </v-card-title>
                 </v-row>
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" :value="this.defaultvalue" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0 select_port" :items="portfolio" label="Select Portfolio" dense flat >
+                        <v-select 
+                            offset-y="true" 
+                            :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" 
+                            v-model="item" 
+                            :value="this.defaultvalue" 
+                            item-color="success" 
+                            item-value="item" 
+                            v-on:change="getBalance(item)" 
+                            append-icon="mdi-chevron-down" 
+                            color="success" 
+                            class="mt-0 py-3 pb-0 select_port" 
+                            :items="portfolio" 
+                            label="Select Portfolio" 
+                            dense flat >
                             <template
                                 slot="item" 
                                 slot-scope="data"  
-                            >    
-        
+                            >        
                                 <v-list-item-content
                                     :dark="lightSwitch == true"
                                     :style="{ background: cardbackground }" 

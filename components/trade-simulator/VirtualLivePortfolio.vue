@@ -280,20 +280,14 @@ export default {
                              this.$emit('totalMarketValue', this.totalmvalue.toFixed(2));
                            
                           }.bind(this)
-                        ); 
-                            
-                }          
-                
+                        );                      
+                }                      
                 this.getDayChange();
               }.bind(this)
             );   
-
             this.initSSE();
-
-      },
-      
-      deleteLive: function (item) {
-         
+      },  
+      deleteLive: function (item) {        
         console.log('delete-' + item);
           const params ={
                 user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
@@ -357,8 +351,16 @@ export default {
       },     
       getDayChange(){   
          let currentProfitLoss = 0;
-         let priorProfitLoss = 0;             
+         let priorProfitLoss = 0;  
+         let d = new Date,
+                    dformat = [d.getMonth()+1,
+                                d.getDate(),
+                                d.getFullYear()].join('/'); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
+         //let date_today = dformat.split(' ')[0];          
          for (let index = 0; index < this.portfolioLogs.length; index++) {
+                  
+                  let pdate = this.portfolioLogs[index].metas.date.split(' ')[0];
+
                     const params = {
                           "symbol-id": this.portfolioLogs[index].metas.stock_id,
                           "resolution": '1D',
@@ -367,15 +369,17 @@ export default {
                         this.$api.chart.charts.latest(params).then(
                         function(result) {
                           console.log('Day Prior Change - ',result.data.c[1]);
-                          let priorPrice = result.data.c[1];
-                          let priorbuyResult = this.portfolioLogs[index].position * parseFloat(priorPrice).toFixed(2);
-                          let priormvalue = this.fees(priorbuyResult);
                           let tcost = this.portfolioLogs[index].position * this.portfolioLogs[index].average_price;
-                          let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
+                          if(pdate != dformat){
+                            let priorPrice = result.data.c[1];
+                            let priorbuyResult = this.portfolioLogs[index].position * parseFloat(priorPrice).toFixed(2);
+                            let priormvalue = this.fees(priorbuyResult);
+                            let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
 
-                          priorProfitLoss = parseFloat(priorProfitLoss) + parseFloat(priorprofit);              
-                          console.log('Prior TOtal ProfitLoss - ' + priorProfitLoss);
-                                              
+                            priorProfitLoss = parseFloat(priorProfitLoss) + parseFloat(priorprofit);              
+                            console.log('Prior TOtal ProfitLoss - ' + priorProfitLoss);
+                          }
+                             
                           let currentPrice = result.data.c[0];
                           let currentbuyResult = this.portfolioLogs[index].position * parseFloat(currentPrice).toFixed(2);
                           let currentmvalue = this.fees(currentbuyResult);
