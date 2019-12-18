@@ -8,7 +8,22 @@
                 </v-row>
                 <v-row no-gutters class="px-0 py-0">
                     <v-col sm="12" md="12" class="pa-0">
-                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" :value="this.defaultvalue" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0 select_port" :items="portfolio" label="Select Portfolio" dense flat ></v-select>
+                        <v-select offset-y="true" :class="(this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : '')" v-model="item" :value="this.defaultvalue" item-color="success" item-value="item" v-on:change="getBalance(item)" append-icon="mdi-chevron-down" color="success" class="mt-0 py-3 pb-0 select_port" :items="portfolio" label="Select Portfolio" dense flat >
+                            <template
+                                slot="item" 
+                                slot-scope="data"  
+                            >    
+        
+                                <v-list-item-content
+                                    :dark="lightSwitch == true"
+                                    :style="{ background: cardbackground }" 
+                                    style="padding: 21px 12px; margin: -16px;"
+                                    >                
+                                    <v-list-item-title v-html="data.item"></v-list-item-title>
+                                    
+                                </v-list-item-content>
+                            </template>
+                        </v-select>
                     </v-col>
                     <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
                         <v-text-field

@@ -153,7 +153,7 @@
                     :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"                
                 >
                     <v-container class="pa-0">
-                        <VirtualLivePortfolio v-on:currentDayChange="currentChange" v-on:priorDayChange="priorChange" v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
+                        <VirtualLivePortfolio v-on:DayChange="DayChange" v-on:DayChangePerc="ChangePerc" v-on:totalUnrealized="Unrealized" v-on:totalMarketValue="TotalMValue" />                
                     </v-container>
                 </v-tab-item>
                 <v-tab-item dark color="#03dac5" 
@@ -225,8 +225,7 @@
           this.totalmvalue= 0;
           this.totalmax= 0;
           this.balance= 0;
-          this.currentchange = 0;
-          this.priorchange = 0;
+          this.daychange = 0;
           this.daychangepercentage= 0;
           this.equity = 0;
           this.port_total = 0;
@@ -236,10 +235,10 @@
       },
       unrealized: function () {
          
-         this.daychange = this.currentchange - this.priorchange;
-         if( this.daychange != 0 && this.priorchange != 0){
-             this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
-         }
+         //this.daychange = this.currentchange - this.priorchange;
+         //if( this.daychange != 0 && this.priorchange != 0){
+            // this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+         //}
          this.getTradeLogs();
       },
     },
@@ -265,10 +264,10 @@
                 this.totalmax = value;
             },
             DayChange(value){
-                //this.daychange = this.currentchange - this.priorchange;
+                this.daychange = value;
             },
-            DayChangePercentage(value){
-                //this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
+            ChangePerc(value){
+                this.daychangepercentage = value;
             },
             portperf(){
                 this.port_total = parseFloat(this.realized) + parseFloat(this.unrealized);
@@ -283,16 +282,7 @@
                     + sep
                     + n.toFixed(2).split(sep)[1];
             },
-            currentChange(value){
-                this.currentchange = value;
-            },
-            priorChange(value){
-                this.priorchange = value;
-                this.daychange = this.currentchange - this.priorchange;
-                if( this.daychange != 0 && this.priorchange != 0){
-                    this.daychangepercentage = (parseFloat(this.daychange) / parseFloat(this.priorchange)) * 100;
-                }
-            },
+           
 
             //===============================================
             

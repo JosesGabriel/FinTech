@@ -1,8 +1,18 @@
 <template>
-    <v-dialog v-model="show" max-width="450px">
-        <v-card color="#00121E">
+    <v-dialog 
+    v-model="show" 
+    max-width="450px"
+    :dark="lightSwitch == true"
+    :style="{ background: cardbackground }"
+
+    >
+        <v-card 
+        dark="lightSwitch == true"
+        :style="{ background: cardbackground }"
+        
+        >
             <v-card-title class="text-center justify-center px-5 pt-10">
-                <h1 class="font-weight-regular body-1" style="color:#fff;">This action is final and cannot be undone.<br>Give me <span style="color:#00FFC3;">HELL YEAH</span> to confirm.</h1>
+                <h1 class="font-weight-regular body-1">This action is final and cannot be undone.<br>Give me <span style="color:#00FFC3;">HELL YEAH</span> to confirm.</h1>
             </v-card-title>
             <v-card color="transparent" class="d-flex justify-center" elevation="0">
             </v-card>
@@ -13,9 +23,9 @@
                             label="Solo"
                             placeholder="HELL YEAH"
                             solo
-                            dark
+                            :dark="lightSwitch == true"
+                            :style="{ background: cardbackground }"
                             class="align-center justify-center headline font-weight-regular text-center white--text confirmation_message-reset"
-                            background-color="#000"
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -51,7 +61,11 @@ export default {
        ...mapGetters({
             simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
             simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
+            lightSwitch: "global/getLightSwitch",
         }),
+        cardbackground: function() {
+              return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+            },
     show: {
       get () {
         return this.visible
