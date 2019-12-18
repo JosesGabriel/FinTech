@@ -11,7 +11,6 @@
       hide-default-footer
       fixed-header
       height="calc(100vh - 450px)"
-      single-select
       show-select
       class="elevation-1 lobby__table transparent__bg text__secondary--light"
       :footer-props="{
