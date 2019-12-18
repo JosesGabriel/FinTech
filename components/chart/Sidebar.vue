@@ -98,7 +98,6 @@ export default {
         console.log(err);
       };
 
-      //  const that = this;
       this.sse.addEventListener(
         `M-D.INFO.${symid}`,
         function(e) {
