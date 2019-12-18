@@ -1,14 +1,10 @@
 <template>
   <div>
-    <GameLobby v-if="!playerInGame" class="gameGlobal" />
-    <GameView v-else class="gameGlobal" />
+    <GameLobby class="gameGlobal" />
+    <!-- <GameView v-else class="gameGlobal" /> -->
   </div>
 </template>
 <style>
-.leaderBoards__column {
-  /* position: relative;
-  bottom: 60px; */
-}
 /* Custom Scrollbar */
 .gameGlobal ::-webkit-scrollbar {
   width: 5px;
@@ -26,9 +22,8 @@
 }
 </style>
 <script>
-const sdk = require("matrix-js-sdk");
-const HSUrl = "https://im.arbitrage.ph";
-const client = sdk.createClient(HSUrl);
+require("dotenv").config();
+import { myToken } from "~/assets/client.js";
 import GameLobby from "~/components/game/GameLobby";
 import GameView from "~/components/game/GameView";
 import { mapActions, mapGetters } from "vuex";
@@ -44,38 +39,40 @@ export default {
   },
   computed: {
     ...mapGetters({
-      playerInGame: "game/getPlayerInGame",
-      playerLoggedInVyndue: "game/getPlayerLoggedInVyndue"
+      playerData: "game/getPlayerData",
+      playerCurrentChatRoom: "game/getPlayerCurrentChatRoom"
     })
   },
   beforeMount: function() {
-    this.checkPlayerAccount();
-  },
-  mounted: function() {
-    // this.loginVyndueAcc();
+    this.runChecks();
   },
   methods: {
     ...mapActions({
-      setPlayerInGame: "game/setPlayerInGame",
       setPlayerData: "game/setPlayerData",
-      setPlayerLoggedInVyndue: "game/setPlayerLoggedInVyndue"
+      setPlayerCurrentChatRoom: "game/setPlayerCurrentChatRoom"
     }),
-    async checkPlayerAccount() {
-      let token = localStorage["auth._token.local"];
-      this.$axios.setToken(token);
-      let playerHasAccount, playerHasOngoing, newlyRegistered;
+    async runChecks() {
+      let playerHasAccount, playerHasOngoing, newlyRegistered, currentChatRoom;
 
       playerHasAccount = this.loginGameAcc();
       playerHasOngoing = this.hasOnGoing();
-
+      currentChatRoom = this.checkCurrentRoom();
       if ((await playerHasAccount) == false) {
         newlyRegistered = this.registerGameAcc();
         console.log("Newly Registered: [" + (await newlyRegistered) + "]");
         playerHasAccount = this.loginGameAcc();
       }
 
-      console.log("Player has account: [" + (await playerHasAccount) + "]");
+      if ((await myToken) != "") {
+        console.log("Player is logged in Vyndue: [true] ");
+      } else {
+        console.log("Player is logged in Vyndue: [false]");
+      }
+      console.log(
+        "Player has Game account: [" + (await playerHasAccount) + "]"
+      );
       console.log("Player is in Game: [" + (await playerHasOngoing) + "]");
+      console.log("Player current Vyndue Room is: [" + currentChatRoom + "]");
     },
     loginGameAcc() {
       return this.$api.game.login
@@ -89,28 +86,6 @@ export default {
         .catch(e => {
           return false;
         });
-    },
-    loginVyndueAcc() {
-      client
-        .login("m.login.password", {
-          user: "@lerroux:im.arbitrage.ph",
-          password: "angelus69"
-        })
-        .then(response => {
-          myToken = response.access_token;
-        });
-      client.startClient();
-      client.on(
-        "sync",
-        function(state, prevState, data) {
-          switch (state) {
-            case "PREPARED": {
-              this.setPlayerLoggedInVyndue(true);
-              break;
-            }
-          }
-        }.bind(this)
-      );
     },
     hasOnGoing() {
       return this.$api.game.ongoing
@@ -133,6 +108,11 @@ export default {
         .catch(e => {
           return false;
         });
+    },
+    checkCurrentRoom() {
+      let currentChatRoom = localStorage.getItem("currentChatRoom");
+      this.setPlayerCurrentChatRoom(currentChatRoom);
+      return currentChatRoom;
     }
   }
 };

@@ -1,5 +1,8 @@
 <template>
-  <div class="container d-flex lobbySettings__wrap px-0">
+  <div
+    class="container d-flex lobbySettings__wrap px-0"
+    :class="lightSwitch == 0 ? 'transparent' : 'lobbySettings--dark'"
+  >
     <v-overlay :value="fullScreenLoader">
       <v-progress-circular
         color="success"
@@ -23,7 +26,7 @@
           hide-details
           dense
           outlined
-          dark
+          :dark="lightSwitch == 0 ? false : true"
           :disabled="disableFields"
         ></v-select>
       </div>
@@ -38,7 +41,8 @@
           type="number"
           color="success"
           class="stake__field"
-          dark
+          :dark="lightSwitch == 0 ? false : true"
+          :disabled="disableFields"
         ></v-text-field>
       </div>
       <div class="col-6 pa-0 pl-5">
@@ -55,7 +59,7 @@
           append-icon="mdi-chevron-down"
           outlined
           hide-details
-          dark
+          :dark="lightSwitch == 0 ? false : true"
           :disabled="disableFields"
         ></v-select>
       </div>
@@ -73,7 +77,7 @@
           outlined
           hide-details
           success
-          dark
+          :dark="lightSwitch == 0 ? false : true"
           :disabled="disableFields"
         ></v-select>
       </div>
@@ -81,7 +85,7 @@
         <span class="caption">Room Type</span>
         <v-radio-group
           v-model="roomTypeModel"
-          dark
+          :dark="lightSwitch == 0 ? false : true"
           row
           class="lobbySettings__select mt-0"
           color="success"
@@ -108,7 +112,7 @@
           append-icon="mdi-chevron-down"
           outlined
           hide-details
-          dark
+          :dark="lightSwitch == 0 ? false : true"
           :disabled="disableFields"
         ></v-select>
       </div>
@@ -117,20 +121,20 @@
         <v-switch
           class="lobbySettings__select pl-5 mt-0"
           label="Allow Player Invite"
-          dark
+          :dark="lightSwitch == 0 ? false : true"
           color="success"
           dense
           flat
           hide-details
           :disabled="disableFields"
         ></v-switch>
-        <v-btn text icon color="white">
+        <v-btn text icon :color="lightSwitch == 0 ? 'secondary' : 'white'">
           <v-icon>mdi-facebook-box</v-icon>
         </v-btn>
-        <v-btn text icon color="white">
+        <v-btn text icon :color="lightSwitch == 0 ? 'secondary' : 'white'">
           <v-icon>mdi-twitter-box</v-icon>
         </v-btn>
-        <v-btn text icon color="white">
+        <v-btn text icon :color="lightSwitch == 0 ? 'secondary  ' : 'white'">
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
       </div>
@@ -149,7 +153,7 @@
           dense
           outlined
           color="success"
-          @click="createGame()"
+          @click="createVyndueRoom()"
           >Start Game</v-btn
         >
         <v-btn
@@ -177,6 +181,8 @@
   padding: 15px;
   overflow: hidden;
   height: calc(100vh - 266px);
+}
+.lobbySettings--dark {
   background-color: #01202a;
 }
 .stake__field {
@@ -190,10 +196,8 @@
 </style>
 <script>
 require("dotenv").config();
-const sdk = require("matrix-js-sdk");
-const HSUrl = "https://im.arbitrage.ph";
-const client = sdk.createClient(HSUrl);
-const roomID = "!OlWVatkysuERsuXfCS:im.arbitrage.ph";
+// import { client, myToken } from "~/assets/client.js";
+const client = require("matrix-js-sdk").createClient("https://im.arbitrage.ph");
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
 export default {
@@ -228,16 +232,28 @@ export default {
       chartCount: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       limitModel: "",
       marketModel: "",
-      disableFields: false
+      disableFields: false,
+      vyndueRoomFlag: false
     };
   },
   computed: {
     ...mapGetters({
       playerIsHost: "game/getPlayerIsHost",
       playerInGame: "game/getPlayerInGame",
-      playerID: "game/getPlayerID",
-      playerCurrentChatRoom: "game/getPlayerCurrentChatRoom"
+      playerData: "game/getPlayerData",
+      playerCurrentChatRoom: "game/getPlayerCurrentChatRoom",
+      lightSwitch: "global/getLightSwitch"
     })
+  },
+  watch: {
+    vyndueRoomFlag: function() {
+      if (this.vyndueRoomFlag == true) {
+        this.createGame();
+      }
+    }
+  },
+  beforeMount: function() {
+    this.checkCurrentRoom();
   },
   methods: {
     ...mapActions({
@@ -246,11 +262,19 @@ export default {
       setPlayerInGame: "game/setPlayerInGame",
       setPlayerCurrentChatRoom: "game/setPlayerCurrentChatRoom"
     }),
+    checkCurrentRoom() {
+      let currentChatRoom = localStorage.getItem("currentChatRoom");
+      this.setPlayerCurrentChatRoom(currentChatRoom);
+    },
     leaveLobby() {
-      this.setPlayerCurrentLobby("");
+      // this.setPlayerCurrentLobby("");
       if (this.playerCurrentChatRoom != process.env.DEFAULT_CHAT_ROOM_ID) {
         client.leave(this.playerCurrentChatRoom);
         this.setPlayerCurrentChatRoom(process.env.DEFAULT_CHAT_ROOM_ID);
+        localStorage.setItem(
+          "currentChatRoom",
+          process.env.DEFAULT_CHAT_ROOM_ID
+        );
         this.$emit("showSettings");
       }
     },
@@ -271,6 +295,28 @@ export default {
       }
     },
     createGame() {
+      // let roomID = this.createVyndueRoom();
+      const params = {
+        mode: "practice",
+        market: this.marketModel,
+        time_limit: this.limitModel,
+        players: {
+          "0": this.playerData.user_id
+        },
+        meta: {
+          creator: this.playerData.user_id
+        },
+        channel_id: this.playerCurrentChatRoom
+      };
+      this.$axios
+        .$post(process.env.DEV_API_URL + "/game/series/", params)
+        .then(response => {
+          this.setPlayerInGame(true);
+          this.fullScreenLoader = false;
+        });
+    },
+    createVyndueRoom() {
+      this.fullScreenLoader = true;
       if (!this.checkFields) {
         console.log("alert");
       } else {
@@ -280,23 +326,6 @@ export default {
         let marketModel = this.marketModel;
         let roomTypeModel = this.roomTypeModel;
         let limitModel = this.limitModel;
-        this.fullScreenLoader = true;
-        // const params = {
-        //   mode: "practice",
-        //   market: this.marketModel,
-        //   time_limit: this.limitModel,
-        //   players: {
-        //     "0": this.playerID
-        //   },
-        //   meta: {
-        //     creator: this.playerID
-        //   }
-        // };
-        // this.$axios
-        //   .$post(process.env.DEV_API_URL + "/game/series/", params)
-        //   .then(response => {
-        //     this.setPlayerInGame(true);
-        //   });
         var myToken = "";
         client
           .login("m.login.password", {
@@ -307,19 +336,23 @@ export default {
             myToken = response.access_token;
           });
         client.startClient();
+
+        // Not supposed to login and startClient again because it's defined at client.js already
+        //  however, "sync" never hits 'PREPARED' state if using client.js. Permanently on 'SYNCING' state
+        //    Don't know why, refractor if possible
+
         client.on(
           "sync",
           function(state, prevState, data) {
             switch (state) {
-              case "PREPARED":
+              case "PREPARED": {
+                let randomString = Math.random()
+                  .toString(36)
+                  .substr(2, 5);
                 var options = {
                   preset: "public_chat",
-                  room_alias_name: Math.random()
-                    .toString(36)
-                    .substr(2, 5),
-                  name: Math.random()
-                    .toString(36)
-                    .substr(2, 5),
+                  room_alias_name: randomString,
+                  name: randomString,
                   topic: "Game Room",
                   creation_content: {
                     "m.federate": false
@@ -334,14 +367,14 @@ export default {
                   )
                   .then(
                     function(response) {
-                      // console.log(response.data["room_id"]);
                       var gameOptions = {
                         Players: playerCountModel,
                         Stake: stakeModel,
                         NumCharts: chartCountModel,
                         Market: marketModel,
                         Visibility: roomTypeModel,
-                        TimeLimit: limitModel
+                        TimeLimit: limitModel,
+                        RoomID: response.data["room_id"]
                       };
                       client.setRoomTag(
                         response.data["room_id"],
@@ -354,6 +387,10 @@ export default {
                       //If reached here, room creation is successful
                       // Join newly created room, by changing vuex currentChatRoom. Variable is watched, onchange, chatroom is re-rendered
                       this.setPlayerCurrentChatRoom(response.data["room_id"]);
+                      localStorage.setItem(
+                        "currentChatRoom",
+                        response.data["room_id"]
+                      );
                       this.disableFields = true;
                       this.fullScreenLoader = false;
                     }.bind(this)
@@ -362,10 +399,10 @@ export default {
                     console.log(error);
                   });
                 break;
+              }
             }
           }.bind(this)
         );
-        return true;
       }
     }
   }
