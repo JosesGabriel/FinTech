@@ -132,10 +132,6 @@ export default {
       stock: "chart/stock",
       lightSwitch: "global/getLightSwitch"
     })
-  },
-  mounted() {
-    // console.log("status");
-    // console.log(this.lightSwitch);
   }
 };
 </script>
