@@ -91,7 +91,7 @@
                         <v-col cols="12" sm="12" md="12" class="pa-0 mt-3 justify-right d-flex align-center text-right">
                                     <v-textarea
                                         color="white"
-                                        class="white--text trading_notes-textarea body-2"
+                                        class="white--text trading_notes-textarea body-2 mb-0 pb-0"
                                         v-model="notes"
                                         :readonly="(this.editDetails == 'edit' ? false : true)"
                                         :placeholder="(this.editDetails == 'edit' ? 'Enter Notes' : 'Notes')"
@@ -102,22 +102,24 @@
 
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn
-                            color="green darken-1"
-                            text
-                            @click="showEditForm = false"                       
-                          >
-                           {{ (this.editDetails == 'edit' ? 'Cancel' : 'Close') }}
-                          </v-btn>
+                            <v-btn
+                              color="success"
+                              class="text-capitalize black--text mt-0 mb-2"
+                              light
+                              @click="showEditForm = false"                       
+                            >
+                            {{ (this.editDetails == 'edit' ? 'Cancel' : 'Close') }}
+                            </v-btn>
 
-                          <v-btn
-                            color="green darken-1"
-                            text
-                            @click="editLive"
-                            :class="(this.editDetails == 'edit' ? '' : 'nodisplay')"
-                          >
-                            Save
-                          </v-btn>
+                            <v-btn
+                              color="success"
+                              class="text-capitalize black--text mt-0 mb-2"
+                              light
+                              @click="editLive"
+                              :class="(this.editDetails == 'edit' ? '' : 'nodisplay')"
+                            >
+                              Save
+                            </v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
@@ -130,7 +132,7 @@
 <script>
 import TradeModal from '~/components/trade-simulator/TradeModal'
 import resetModal from '~/components/trade-simulator/reset'
-import shareModal from '~/components/modals/share'
+import shareModal from '~/components/trade-simulator/share'
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -282,7 +284,7 @@ export default {
                             
                 }          
                 
-                this.getCurrentChange();
+                this.getDayChange();
               }.bind(this)
             );   
 
@@ -352,75 +354,46 @@ export default {
           return n.toLocaleString().split(sep)[0]
               + sep
               + n.toFixed(2).split(sep)[1];
-      },
-      
-      getCurrentChange(){
-         let d = new Date,
-                    dformat = [d.getMonth()+1,
-                                d.getDate(),
-                                d.getFullYear()].join('/')+' '+
-                                [d.getHours(),
-                                d.getMinutes(),
-                                d.getSeconds()].join(':');
-         let today = dformat.split(' ')[0];
+      },     
+      getDayChange(){   
          let currentProfitLoss = 0;
-         let priorProfitLoss = 0;
-         let curr_num = 0;
-         let prior = this.getPrior(dformat);
-        
+         let priorProfitLoss = 0;             
          for (let index = 0; index < this.portfolioLogs.length; index++) {
-              let fdate = this.portfolioLogs[index].metas.date.split(' ')[0];
-
                     const params = {
-                          "symbol-id": this.portfolioLogs[index].metas.stock_id
+                          "symbol-id": this.portfolioLogs[index].metas.stock_id,
+                          "resolution": '1D',
+                          "limit": 2
                         };
-                    this.$api.journal.portfolio.history(params).then(
+                        this.$api.chart.charts.latest(params).then(
                         function(result) {
-                            let buyResult = this.portfolioLogs[index].position * parseFloat(result.data.last).toFixed(2);
-                            let mvalue = this.fees(buyResult);
-                            let tcost = this.portfolioLogs[index].position * this.portfolioLogs[index].average_price;
-                            let profit = parseFloat(mvalue) - parseFloat(tcost);
-                            if(this.portfolioLogs[index].position > 0){
-                              if(today == fdate){
-                                 currentProfitLoss = parseFloat(currentProfitLoss) + parseFloat(profit);
-                                 curr_num++;
-                                 //console.log('Current TOtal ProfitLoss - ' + currentProfitLoss);
-                              }else if(prior == fdate){      
-                                 priorProfitLoss = parseFloat(priorProfitLoss) + parseFloat(profit);    
-                                  //console.log('--bot--'+ index  + '=Date Prior -' + this.priordate);
-                              }
-                            }
-                            console.log('Prior Date:' + prior);
-                            console.log('Current TOtal ProfitLoss - ' + currentProfitLoss);
-                            console.log('Prior TOtal ProfitLoss - ' + priorProfitLoss);
-                            this.$emit('currentDayChange', currentProfitLoss);  
-                            this.$emit('priorDayChange', priorProfitLoss);
+                          console.log('Day Prior Change - ',result.data.c[1]);
+                          let priorPrice = result.data.c[1];
+                          let priorbuyResult = this.portfolioLogs[index].position * parseFloat(priorPrice).toFixed(2);
+                          let priormvalue = this.fees(priorbuyResult);
+                          let tcost = this.portfolioLogs[index].position * this.portfolioLogs[index].average_price;
+                          let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
+
+                          priorProfitLoss = parseFloat(priorProfitLoss) + parseFloat(priorprofit);              
+                          console.log('Prior TOtal ProfitLoss - ' + priorProfitLoss);
+                                              
+                          let currentPrice = result.data.c[0];
+                          let currentbuyResult = this.portfolioLogs[index].position * parseFloat(currentPrice).toFixed(2);
+                          let currentmvalue = this.fees(currentbuyResult);
+                          let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
+                          currentProfitLoss = parseFloat(currentProfitLoss) + parseFloat(currentprofit);
+                          console.log('Current TOtal ProfitLoss - ' + currentProfitLoss);
+
+                          let daychange = parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
+                          console.log('DAY CHANGE - ' + daychange);
+                          this.$emit('DayChange', daychange);
+                          let daychangeperf = (daychange / priorProfitLoss) * 100;
+                          console.log('DAY CHANGE PERCENTAGE - ' + daychangeperf);
+                          this.$emit('DayChangePerc', daychangeperf);                       
                         }.bind(this)
                     );                
 
          } 
-      },
-      getPrior(curdate){
-          let current_date = curdate.split(' ')[0];
-          let m_date = current_date.split('/')[0];
-          let y_date = current_date.split('/')[2];
-        let max_date = '';
-          let len = this.portfolioLogs.length, max = -Infinity;
-          for (let index = 0; index < this.portfolioLogs.length; index++) {
-            let fdate = this.portfolioLogs[index].metas.date.split(' ')[0];
-            let num_date = fdate.split('/')[1];
-            let mo_date = fdate.split('/')[0];
-            let yr_date = fdate.split('/')[2];
-            if(fdate != current_date && m_date == mo_date && y_date == yr_date){
-                  if (num_date > max) {
-                    max = parseInt(num_date);
-                    max_date = fdate;
-                  }
-            }
-          }
-          return max_date;
-      },
-     
+      },     
       fees(buyResult){
             let dpartcommission = buyResult * 0.0025;
             let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
@@ -443,7 +416,7 @@ export default {
           this.sse = new EventSource(
             "https://stream-api.arbitrage.ph/sse?stream=market-data"
           );
-          
+
           //   this.sse = new EventSource(
           //     "http://localhost:8021/sse?stream=market-data"
           //   );
@@ -459,7 +432,7 @@ export default {
          
           const that = this;
           
-          for (let index = 0; index < this.openposition.length; index++) {
+          /*for (let index = 0; index < this.openposition.length; index++) {
             let symID = this.openposition[index];
             this.sse.addEventListener(`M-D.INFO.${symID}`, function(e) {
             const data = JSON.parse(e.data);    
@@ -468,7 +441,7 @@ export default {
              console.log('Stream - '+ this.streamTrigger);
             });
             
-          }
+          }*/
 
     }
 
@@ -573,10 +546,9 @@ export default {
   .v-data-table td {
       font-size: 12px;
   }
-  /*.theme--dark.v-data-table tbody tr:hover, .theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row){
-    background-color: #b6b6b6 !important;
-    opacity: 20%;
-  }*/
+  .v-input__control > .v-text-field__details {
+    display: none;
+  }
 
 .v-data-table.data_table-container .v-data-footer {
     border: none;

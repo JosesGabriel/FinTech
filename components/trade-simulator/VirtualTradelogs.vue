@@ -20,7 +20,27 @@
           <v-btn small dark text color="success" @click="filterDate('week')" class="body-2 text-capitalize" elevation="0">Week</v-btn>
           <v-btn small dark text color="success" @click="filterDate('month')" class="body-2 text-capitalize" elevation="0">Month</v-btn>
           <v-btn small dark text color="success" @click="filterDate('year')" class="body-2 text-capitalize" elevation="0">Year</v-btn>
-          <v-btn small dark text color="success" @click="filterDate('custom')" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
+          <!--<v-btn small dark text color="success" @click="filterDate('custom')" class="body-2 text-capitalize" elevation="0">Custom</v-btn>-->
+          <v-dialog
+                ref="dialog"
+                v-model="modal"
+                :return-value.sync="date"
+                persistent
+                width="290px"
+                :dark="lightSwitch == true"
+                :style="{ background: cardbackground }"
+            >
+            <template v-slot:activator="{ on }">
+                <v-btn v-on="on" text class="px-1" color="success">
+                    <span class="text-capitalize">Custom</span>
+                </v-btn>
+            </template>
+            <v-date-picker v-model="date" color="#00121e" :dark="lightSwitch == true" :style="{ background: cardbackground }" class="datepicker-container" scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="success" @click="modal = false">Cancel</v-btn>
+                <v-btn text color="success" @click="filterDate(date)">OK</v-btn>
+            </v-date-picker>
+            </v-dialog>
           <v-spacer></v-spacer>
           <!--<v-btn rounded outlined color="#03dac5" dark class="rtf_top-btn text-capitalize mr-2" @click ="EnterRecordModal=true" style="border-width: 2px" height="23">Record</v-btn>-->
             <v-btn icon small @click.stop="showScheduleForm=true"> 
@@ -134,6 +154,7 @@ export default {
       totalProfitLossPerf: 0,
       totalPerf: 0,
       date: new Date().toISOString().substr(0, 10),
+      modal: false,
     }
   },
   props: ['item'],
@@ -281,6 +302,8 @@ export default {
               + n.toFixed(2).split(sep)[1];
       },
     filterDate(data){
+
+        console.log(data);
         let d = new Date;
         
         let day = d.getDate();
@@ -303,26 +326,32 @@ export default {
                       this.tradeLogs[num] = this.filter[i];
                       num++;
                     }
-                }
-                if(data == 'month'){
+                }else if(data == 'month'){
                     if(fmonth == month){
                       this.tradeLogs[num] = this.filter[i];
                       num++;
                     }
-                }
-                if(data == 'year'){
+                }else if(data == 'year'){
                     if(fyear == year){
                       this.tradeLogs[num] = this.filter[i];
                       num++;
                     }
-                }
-                if(data == 'week'){
+                }else if(data == 'week'){
                   let dayweek = fweek.getDate();
                   let monthweek = fweek.getMonth()+1;
                     if(today >= dayweek && month == monthweek){
                       this.tradeLogs[num] = this.filter[i];
                       num++;
                     }
+                }else {
+                  let cyr = data.split('-')[0];
+                  let cmo = data.split('-')[1];
+                  let cday = data.split('-')[2];
+                    if(year == cyr && month == cmo && today == cday){
+                      this.tradeLogs[num] = this.filter[i];
+                      num++;
+                    }
+                  this.modal = false;
                 }
             }
     },
@@ -355,6 +384,9 @@ export default {
   }
 </style>
 <style>
+  .theme--dark.v-picker__body {
+      background: transparent;
+  }
   .tl_searchfields .v-input__slot {
     margin: 0;
   }

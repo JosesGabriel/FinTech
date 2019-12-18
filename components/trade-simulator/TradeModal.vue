@@ -45,7 +45,23 @@
                                                 v-model="GetSelectStock" 
                                                 v-on:change="getDetails"
                                                 label="Select Stock"
-                                                ></v-select>
+                                                >
+                                                    <template
+                                                        slot="item" 
+                                                        slot-scope="data"  
+                                                    >    
+                                
+                                                    <v-list-item-content
+                                                        :dark="lightSwitch == true"
+                                                        :style="{ background: cardbackground }" 
+                                                        style="padding: 21px 12px; margin: -16px;"
+                                                        >                
+                                                        <v-list-item-title v-html="data.item.symbol"></v-list-item-title>
+                                                        
+                                                    </v-list-item-content>
+                                                    </template>
+
+                                                </v-select>
                                         </v-col>
                                     </v-card-title>
 
@@ -185,18 +201,72 @@
                         <v-container class="pt-0">
                             <v-row no-gutters class="px-0 py-0">
                                 <v-col sm="12" md="12">
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1 enter_strategy" :items="strategy" v-model="selectedstrategy" label="Enter Strategy" dense flat></v-select></div>
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1 enter_tplan" :items="tradeplan" v-model="selectedtradeplan" label="Enter Trade Plan" dense flat></v-select></div>
-                                    <div><v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="enter_emotion" :items="emotions" v-model="selectedemotions" label="Enter Emotions" dense flat></v-select></div>
+                                    <div>
+                                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1 enter_strategy" :items="strategy" v-model="selectedstrategy" label="Enter Strategy" dense flat>
+                                            <template
+                                                slot="item" 
+                                                slot-scope="data"  
+                                            >    
+                        
+                                            <v-list-item-content
+                                                :dark="lightSwitch == true"
+                                                :style="{ background: cardbackground }" 
+                                                style="padding: 21px 12px; margin: -16px;"
+                                                >                
+                                                <v-list-item-title v-html="data.item"></v-list-item-title>
+                                                
+                                            </v-list-item-content>
+                                            </template>
+                                        </v-select>
+                                    </div>
+                                    <div>
+                                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="mb-1 enter_tplan" :items="tradeplan" v-model="selectedtradeplan" label="Enter Trade Plan" dense flat>
+                                            <template
+                                                slot="item" 
+                                                slot-scope="data"  
+                                            >    
+                        
+                                            <v-list-item-content
+                                                :dark="lightSwitch == true"
+                                                :style="{ background: cardbackground }" 
+                                                style="padding: 21px 12px; margin: -16px;"
+                                                >                
+                                                <v-list-item-title v-html="data.item"></v-list-item-title>
+                                                
+                                            </v-list-item-content>
+                                            </template>
+                                        </v-select>
+                                    </div>
+                                    <div>
+                                        <v-select offset-y="true" item-color="success" append-icon="mdi-chevron-down" class="enter_emotion" :items="emotions" v-model="selectedemotions" label="Enter Emotions" dense flat>
+                                            <template
+                                                slot="item" 
+                                                slot-scope="data"  
+                                            >    
+                        
+                                            <v-list-item-content
+                                                :dark="lightSwitch == true"
+                                                :style="{ background: cardbackground }" 
+                                                style="padding: 21px 12px; margin: -16px;"
+                                                >                
+                                                <v-list-item-title v-html="data.item"></v-list-item-title>
+                                                
+                                            </v-list-item-content>
+                                            </template>
+                                        </v-select>
+                                    </div>
                                 </v-col>
                                 <v-col cols="12" sm="12" md="12" class="pa-0 mt-3 justify-right d-flex align-center text-right">
                                     <v-textarea
-                                        color="white"
                                         class="white--text trading_notes-textarea body-2"
                                         v-model="notes"
                                         placeholder="Enter Notes"
                                         filled
-                                    ></v-textarea>
+                                        :dark="lightSwitch == true"
+                                        :style="{ background: cardbackground }"
+                                    >
+                                    
+                                    </v-textarea>
                                 </v-col>
                             </v-row> 
                         </v-container>
