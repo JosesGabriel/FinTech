@@ -11,17 +11,16 @@
             "
             style="font-size:13px !important;"
             class="subtitle-1 px-0 py-2 secondary--text"
-            >Available Funds</v-card-title
-          ><v-spacer></v-spacer
-          ><v-card-title
+          >Available Funds</v-card-title>
+          <v-spacer></v-spacer>
+          <v-card-title
             v-model="availableFunds"
             :class="
               this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : ''
             "
             class="subtitle-1 px-0 py-2 secondary--text"
             style="font-size:13px !important;"
-            >{{ this.availableFunds }}</v-card-title
-          >
+          >{{ this.availableFunds }}</v-card-title>
         </v-row>
         <v-row no-gutters class="px-0 py-0">
           <v-col sm="12" md="12" class="pa-0">
@@ -95,12 +94,12 @@
               type="number"
               v-model="quantity"
             ></v-text-field>
-            <v-btn @click="minusButton" text icon color="success"
-              ><v-icon>mdi-chevron-down</v-icon></v-btn
-            >
-            <v-btn @click="addButton" text icon color="success"
-              ><v-icon>mdi-chevron-up</v-icon></v-btn
-            >
+            <v-btn @click="minusButton" text icon color="success">
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+            <v-btn @click="addButton" text icon color="success">
+              <v-icon>mdi-chevron-up</v-icon>
+            </v-btn>
           </v-col>
           <v-col cols="12">
             <v-row no-gutters>
@@ -113,14 +112,13 @@
                     : 'boardlotbuy'
                 "
                 class="subtitle-1 pa-0 secondary--text"
-                >Board lot</v-card-title
-              ><v-spacer></v-spacer
-              ><v-card-title
+              >Board lot</v-card-title>
+              <v-spacer></v-spacer>
+              <v-card-title
                 :style="{ color: fontcolor2 }"
                 class="subtitle-1 pa-0 secondary--text"
                 style="font-size:13px !important"
-                >{{ this.BoardLot }}</v-card-title
-              >
+              >{{ this.BoardLot }}</v-card-title>
             </v-row>
           </v-col>
 
@@ -130,18 +128,19 @@
                 style="font-size:13px !important"
                 :style="{ color: fontcolor2 }"
                 class="subtitle-1 px-0 py-2 secondary--text"
-                >{{
-                  this.simulatorConfirmedBuySell == "sell"
-                    ? "Peso Value"
-                    : "Total Cost"
-                }}</v-card-title
-              ><v-spacer></v-spacer
-              ><v-card-title
+              >
+                {{
+                this.simulatorConfirmedBuySell == "sell"
+                ? "Peso Value"
+                : "Total Cost"
+                }}
+              </v-card-title>
+              <v-spacer></v-spacer>
+              <v-card-title
                 :style="{ color: fontcolor2 }"
                 class="subtitle-1 px-0 py-2 secondary--text"
                 style="font-size:13px !important"
-                >{{ this.totalCost }}</v-card-title
-              >
+              >{{ this.totalCost }}</v-card-title>
             </v-row>
           </v-col>
         </v-row>
@@ -206,15 +205,11 @@ export default {
   },
   watch: {
     simulatorConfirmedBuySell: function() {
-      //this.totalCost = 0;
       if (this.simulatorConfirmedBuySell == "sell") {
-        //this.quantity = this.Position;
         let tcost =
           parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
         this.totalCost = this.fees(tcost);
         this.totalCost = this.addcomma(this.totalCost);
-        console.log("Quantity - " + this.Position);
-        console.log("total cost - " + this.totalCost);
       } else {
         if (this.Reset == true ? (this.totalCost = 0) : "");
       }
@@ -233,16 +228,13 @@ export default {
     }
   },
   mounted() {
-    const portfolioparams = {
-      user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-    };
-    this.$api.journal.portfolio.portfolio(portfolioparams).then(
+    
+    this.$api.journal.portfolio.portfolio().then(
       function(result) {
-        console.log(result.meta.logs);
+       
         for (let i = 0; i < result.meta.logs.length; i++) {
           if (
-            result.meta.logs[i].type == "virtual" &&
-            result.meta.logs[i].name != "Default Virtual Portfolio"
+            result.meta.logs[i].type == "virtual" 
           ) {
             this.portfolio.push(result.meta.logs[i].name);
             if (result.meta.logs[i].name == "My Virtual Portfolio") {
@@ -332,14 +324,10 @@ export default {
       this.totalCost = this.addcomma(pressfees);
       this.$emit("totalPosition", this.quantity);
     },
-    getBalance: function(item) {
-      console.log(item);
-      const portfolioparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-      };
-      this.$api.journal.portfolio.portfolio(portfolioparams).then(
+    getBalance: function(item) { 
+      this.$api.journal.portfolio.portfolio().then(
         function(result) {
-          console.log(result.meta.logs);
+          
           for (let i = 0; i < result.meta.logs.length; i++) {
             if (result.meta.logs[i].name == item) {
               this.setSimulatorPortfolioID(result.meta.logs[i].id);
@@ -350,7 +338,7 @@ export default {
         }.bind(this)
       );
 
-      console.log("Portfolio ID - " + this.simulatorPortfolioID);
+      
     }
   }
 };
