@@ -124,7 +124,8 @@ export default {
   name: "Status",
   data() {
     return {
-      textcolor: "blue"
+      textcolor: "blue",
+      close: 0
     };
   },
   computed: {
@@ -132,6 +133,11 @@ export default {
       stock: "chart/stock",
       lightSwitch: "global/getLightSwitch"
     })
+  },
+  watch: {
+    stock(value) {
+      console.log(value);
+    }
   },
   mounted() {
     // console.log("status");

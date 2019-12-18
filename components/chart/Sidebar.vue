@@ -82,12 +82,12 @@ export default {
         this.counter = 0;
       }
 
-      this.sse = new EventSource(
-        "https://stream-api.arbitrage.ph/sse?stream=market-data"
-      );
       //   this.sse = new EventSource(
-      //     "http://localhost:8021/sse?stream=market-data"
+      //     "https://stream-api.arbitrage.ph/sse?stream=market-data"
       //   );
+      this.sse = new EventSource(
+        "http://localhost:8021/sse?stream=market-data"
+      );
 
       this.sse.onopen = function() {
         console.log("open sse");
@@ -98,40 +98,43 @@ export default {
         console.log(err);
       };
 
-      const that = this;
-      this.sse.addEventListener(`M-D.INFO.${symid}`, function(e) {
-        const data = JSON.parse(e.data);
-        //console.log(e);
-        //console.log("sse");
-        //console.log(data);
-        that.counter++;
-        that.$store.commit("chart/SET_STOCK_OBJ", {
-          trades: parseInt(that.stock.trades) + parseInt(that.counter)
-        });
+      //  const that = this;
+      this.sse.addEventListener(
+        `M-D.INFO.${symid}`,
+        function(e) {
+          const data = JSON.parse(e.data);
+          //console.log(e);
+          //console.log("sse");
+          //console.log(data);
+          this.counter++;
+          this.$store.commit("chart/SET_STOCK_OBJ", {
+            trades: parseInt(this.stock.trades) + parseInt(this.counter)
+          });
 
-        if (parseFloat(that.stock.weekyearlow) > parseFloat(data.l)) {
-          //console.log(that.stock.weekyearlow + " > " + data.l);
-          that.$store.commit("chart/SET_STOCK_OBJ", { weekyearlow: data.l });
-        }
+          if (parseFloat(this.stock.weekyearlow) > parseFloat(data.l)) {
+            //console.log(this.stock.weekyearlow + " > " + data.l);
+            this.$store.commit("chart/SET_STOCK_OBJ", { weekyearlow: data.l });
+          }
 
-        if (parseFloat(that.stock.weekyearhigh) < parseFloat(data.l)) {
-          that.$store.commit("chart/SET_STOCK_OBJ", { weekyearhigh: data.h });
-        }
+          if (parseFloat(this.stock.weekyearhigh) < parseFloat(data.l)) {
+            this.$store.commit("chart/SET_STOCK_OBJ", { weekyearhigh: data.h });
+          }
 
-        that.$store.commit("chart/SET_STOCK_OBJ", { last: data.c });
-        that.$store.commit("chart/SET_STOCK_OBJ", { volume: data.vol });
-        that.$store.commit("chart/SET_STOCK_OBJ", { value: data.val });
-        that.$store.commit("chart/SET_STOCK_OBJ", { change: data.chg });
-        that.$store.commit("chart/SET_STOCK_OBJ", {
-          changepercentage: data.chgpc
-        });
-        that.$store.commit("chart/SET_STOCK_OBJ", { high: data.h });
-        that.$store.commit("chart/SET_STOCK_OBJ", { low: data.l });
-        that.$store.commit("chart/SET_STOCK_OBJ", { open: data.o });
-        that.$store.commit("chart/SET_STOCK_OBJ", {
-          average: data.val / data.vol
-        });
-      });
+          this.$store.commit("chart/SET_STOCK_OBJ", { last: data.c });
+          this.$store.commit("chart/SET_STOCK_OBJ", { volume: data.vol });
+          this.$store.commit("chart/SET_STOCK_OBJ", { value: data.val });
+          this.$store.commit("chart/SET_STOCK_OBJ", { change: data.chg });
+          this.$store.commit("chart/SET_STOCK_OBJ", {
+            changepercentage: data.chgpc
+          });
+          this.$store.commit("chart/SET_STOCK_OBJ", { high: data.h });
+          this.$store.commit("chart/SET_STOCK_OBJ", { low: data.l });
+          this.$store.commit("chart/SET_STOCK_OBJ", { open: data.o });
+          this.$store.commit("chart/SET_STOCK_OBJ", {
+            average: data.val / data.vol
+          });
+        }.bind(this)
+      );
     }
   },
   watch: {
