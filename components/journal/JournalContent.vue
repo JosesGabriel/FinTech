@@ -57,7 +57,7 @@
                         <div class="separator"></div>
                         <JournalLivePortfolio/>
                         <div class="component_spacer"></div>
-                        <v-row no-gutters>
+                        <!-- <v-row no-gutters>
                             <JournalPortfolioSnapshot/>
                             <JournalCurrentAllocation/>
                         </v-row>
@@ -101,7 +101,7 @@
                             <v-col class="pa-0" cols="8" sm="8" md="8">
                                 <JournalGrossPL/>
                             </v-col>
-                        </v-row>
+                        </v-row> -->
                         <div class="component_spacer"></div>
                     </v-container>
                 </v-tab-item>
@@ -125,19 +125,19 @@
 <script>
 //Dashboard tab
 import JournalLivePortfolio from "~/components/journal/dashboard/JournalLivePortfolio";
-import JournalPortfolioSnapshot from "~/components/journal/dashboard/JournalPortfolioSnapshot";
-import JournalCurrentAllocation from "~/components/journal/dashboard/JournalCurrentAllocation";
-import JournalMonthlyPerfomance from "~/components/journal/dashboard/JournalMonthlyPerfomance";
-import JournalTradeStats from "~/components/journal/dashboard/JournalTradeStats";
-import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
-import JournalStrategyStats from "~/components/journal/dashboard/JournalStrategyStats";
-import JournalTopStocks from "~/components/journal/dashboard/JournalTopStocks";
-import JournalEmotionalStats from "~/components/journal/dashboard/JournalEmotionalStats";
-import JournalExpenseReport from "~/components/journal/dashboard/JournalExpenseReport";
-import JournalBuyVolume from "~/components/journal/dashboard/JournalBuyVolume";
-import JournalBuyValue from "~/components/journal/dashboard/JournalBuyValue";
-import JournalPerformance from "~/components/journal/dashboard/JournalPerformance";
-import JournalGrossPL from "~/components/journal/dashboard/JournalGrossPL";
+// import JournalPortfolioSnapshot from "~/components/journal/dashboard/JournalPortfolioSnapshot";
+// import JournalCurrentAllocation from "~/components/journal/dashboard/JournalCurrentAllocation";
+// import JournalMonthlyPerfomance from "~/components/journal/dashboard/JournalMonthlyPerfomance";
+// import JournalTradeStats from "~/components/journal/dashboard/JournalTradeStats";
+// import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
+// import JournalStrategyStats from "~/components/journal/dashboard/JournalStrategyStats";
+// import JournalTopStocks from "~/components/journal/dashboard/JournalTopStocks";
+// import JournalEmotionalStats from "~/components/journal/dashboard/JournalEmotionalStats";
+// import JournalExpenseReport from "~/components/journal/dashboard/JournalExpenseReport";
+// import JournalBuyVolume from "~/components/journal/dashboard/JournalBuyVolume";
+// import JournalBuyValue from "~/components/journal/dashboard/JournalBuyValue";
+// import JournalPerformance from "~/components/journal/dashboard/JournalPerformance";
+// import JournalGrossPL from "~/components/journal/dashboard/JournalGrossPL";
 
 //Ledger tab
 import TradelogsContent from "~/components/journal/tradelogs/contents";
@@ -153,19 +153,19 @@ export default {
     components: {
         //Dashboard tab
         JournalLivePortfolio,
-        JournalPortfolioSnapshot,
-        JournalCurrentAllocation,
-        JournalMonthlyPerfomance,
-        JournalTradeStats,
-        JournalEquityCurve,
-        JournalStrategyStats,
-        JournalTopStocks,
-        JournalEmotionalStats,
-        JournalExpenseReport,
-        JournalBuyVolume,
-        JournalBuyValue,
-        JournalPerformance,
-        JournalGrossPL,
+        // JournalPortfolioSnapshot,
+        // JournalCurrentAllocation,
+        // JournalMonthlyPerfomance,
+        // JournalTradeStats,
+        // JournalEquityCurve,
+        // JournalStrategyStats,
+        // JournalTopStocks,
+        // JournalEmotionalStats,
+        // JournalExpenseReport,
+        // JournalBuyVolume,
+        // JournalBuyValue,
+        // JournalPerformance,
+        // JournalGrossPL,
         //Ledger tab
         TradelogsContent,
         //Ledger tab
@@ -177,6 +177,7 @@ export default {
             tab: null,
             tabs: 3,
             portfolioListPush: [],
+            portfolioList: [],
             portfolioDropdownModel: null,
             selectedProfile: null,
             showCreatePortForm: false,
@@ -193,7 +194,7 @@ export default {
             setSelectedPortfolio: "journal/setSelectedPortfolio",
             setRenderPortfolioKey: "journal/setRenderPortfolioKey",
             setDefaultPortfolioId: "journal/setDefaultPortfolioId",
-            setJournalCharts: "journal/setJournalCharts",
+            // setJournalCharts: "journal/setJournalCharts",
         }),
         changePortfolio(obj){
             this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
@@ -213,27 +214,44 @@ export default {
             );
         },
         getUserPortfolioList() {
-            this.portfolioDropdownModel = this.defaultPortfolioId
             const params = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
             };
             this.$api.journal.portfolio.portfolio(params).then(
                 function(result) {
-                    
                     this.portfolioList = result.meta.logs;
-                    this.portfolioList = this.portfolioList.reverse();
                     this.setUserPortfolio(result.meta.logs);
-                    this.portfolioListPush = []
-                    if(this.portfolioList.length != 0) {
-                        this.portfolioListPush.push({header: 'Real Portfolio'});
-                        const toFindReal = "real" // what we want to count
-                        let defaultPort = false;
-                        for (let i = 0; i < this.portfolioList.length; i++ ) {
-                            let portfolioListPush1 = this.portfolioList[i]
-                            if (portfolioListPush1.type === toFindReal) {
-                                this.portfolioListPush.push(portfolioListPush1);
+    
+                    // this.portfolioListPush = []
+                    let defaultPort = false
+                    this.portfolioListPush.push({header: 'Real Portfolio'});
+                    for (let i = 0; i < this.portfolioList.length; i++ ) {
+                        if (this.portfolioList[i].type === "real") {
+                            this.portfolioListPush.push(this.portfolioList[i]);
+
+                            if (this.portfolioList[i].name === "My Portfolio" && this.portfolioList[i].type === "real") {
+                                this.setDefaultPortfolioId(this.portfolioList[i].id)
+                                this.portfolioDropdownModel = this.portfolioList[i].id
+                                defaultPort = true
                             }
                         }
+                    }
+                    if (!defaultPort) {
+                        const createportfolioparams = {
+                            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                            currency_code: "PHP",
+                            name: "My Portfolio",
+                            description: "My Portfolio",
+                            type: "real",
+                            balance: 100000
+                        };
+                        this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
+                            function(result) {
+                                if (result.success) {
+                                    console.log("created successfully")
+                                }
+                            }.bind(this)
+                        );
                     }
                     if(this.portfolioList.length != 0) {
                         
@@ -249,20 +267,20 @@ export default {
                     }
                 }.bind(this)
             );
-            this.componentKey++;
+            // this.componentKey++;
         },
-        getJournalCharts() {
-            if (this.portfolioDropdownModel != null) {
-                const journalchartsparams = {
-                    user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                    fund: this.portfolioDropdownModel,
-                };
-                this.$api.journal.portfolio.journalcharts(journalchartsparams)
-                .then( (response) => {
-                    this.setJournalCharts(response)
-                })
-            }
-        }
+        // getJournalCharts() {
+        //     if (this.portfolioDropdownModel != null) {
+        //         const journalchartsparams = {
+        //             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        //             fund: this.portfolioDropdownModel,
+        //         };
+        //         this.$api.journal.portfolio.journalcharts(journalchartsparams)
+        //         .then( (response) => {
+        //             this.setJournalCharts(response)
+        //         })
+        //     }
+        // }
     },
     computed: {
         ...mapGetters({
@@ -273,12 +291,12 @@ export default {
     },
     watch: {
         renderPortfolioKey: function() {
-            this.getUserPortfolioList();
-            this.getJournalCharts();
-        },
-        portfolioDropdownModel() {
-            this.getUserPortfolioList();
+            // this.getUserPortfolioList();
+            // this.getJournalCharts();
         }
+        // portfolioDropdownModel() {        
+        //     this.getUserPortfolioList();
+        // }
     },
 };
 </script>

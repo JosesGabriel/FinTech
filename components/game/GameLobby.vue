@@ -34,7 +34,6 @@ import Leaderboard from "~/components/game/lobby/Leaderboard";
 import ChatClient from "~/components/game/ChatClient";
 import AdCarousel from "~/components/game/lobby/AdCarousel";
 import LobbySettings from "~/components/game/lobby/LobbySettings";
-import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "game",
