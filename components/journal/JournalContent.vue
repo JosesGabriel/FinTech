@@ -226,62 +226,74 @@ export default {
             this.setRenderPortfolioKey(this.keyCreateCounter);
         },
         getUserPortfolioList() {
-          const params = {
-              user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-          };
-          this.$api.journal.portfolio.portfolio(params).then(
-              function(result) {
-                  this.portfolioList = result.meta.logs;
-                  this.setUserPortfolio(result.meta.logs);
-  
-                  // this.portfolioListPush = []
-                  let defaultPort = false
-                  this.portfolioListPush.push({header: 'Real Portfolio'});
-                  for (let i = 0; i < this.portfolioList.length; i++ ) {
-                      if (this.portfolioList[i].type === "real") {
-                          this.portfolioListPush.push(this.portfolioList[i]);
+            const params = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+            };
+            this.$api.journal.portfolio.portfolio(params).then(
+                function(result) {
+                    this.portfolioList = result.meta.logs;
+                    this.setUserPortfolio(result.meta.logs);
+    
+                    // this.portfolioListPush = []
+                    let defaultPort = false
+                    this.portfolioListPush.push({header: 'Real Portfolio'});
+                    for (let i = 0; i < this.portfolioList.length; i++ ) {
+                        if (this.portfolioList[i].type === "real") {
+                            this.portfolioListPush.push(this.portfolioList[i]);
 
-                          if (this.portfolioList[i].name === "My Portfolio" && this.portfolioList[i].type === "real") {
-                              this.setDefaultPortfolioId(this.portfolioList[i].id)
-                              this.portfolioDropdownModel = this.portfolioList[i].id
-                              defaultPort = true
-                          }
-                      }
-                  }
-                  if (!defaultPort) {
-                      const createportfolioparams = {
-                          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-                          currency_code: "PHP",
-                          name: "My Portfolio",
-                          description: "My Portfolio",
-                          type: "real",
-                          balance: 100000
-                      };
-                      this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
-                          function(result) {
-                              if (result.success) {
-                                  console.log("created successfully")
-                              }
-                          }.bind(this)
-                      );
-                  }
-                  if(this.portfolioList.length != 0) {
-                      
-                      this.portfolioListPush.push({ divider: true });
-                      this.portfolioListPush.push({header: 'Virtual Portfolio'});
-                      const toFindVirtual = "virtual" // what we want to count
-                      for (let i = 0; i < this.portfolioList.length; i++ ) {
-                          let portfolioListPush2 = this.portfolioList[i]
-                          if (portfolioListPush2.type === toFindVirtual) {
-                              this.portfolioListPush.push(portfolioListPush2);
-                          }
-                      }
-                  }
-              }.bind(this)
-          );
-          // this.componentKey++;
+                            if (this.portfolioList[i].name === "My Portfolio" && this.portfolioList[i].type === "real") {
+                                this.setDefaultPortfolioId(this.portfolioList[i].id)
+                                this.portfolioDropdownModel = this.portfolioList[i].id
+                                defaultPort = true
+                            }
+                        }
+                    }
+                    if (!defaultPort) {
+                        const createportfolioparams = {
+                            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                            currency_code: "PHP",
+                            name: "My Portfolio",
+                            description: "My Portfolio",
+                            type: "real",
+                            balance: 100000
+                        };
+                        this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
+                            function(result) {
+                                if (result.success) {
+                                    console.log("created successfully")
+                                }
+                            }.bind(this)
+                        );
+                    }
+                    if(this.portfolioList.length != 0) {
+                        
+                        this.portfolioListPush.push({ divider: true });
+                        this.portfolioListPush.push({header: 'Virtual Portfolio'});
+                        const toFindVirtual = "virtual" // what we want to count
+                        for (let i = 0; i < this.portfolioList.length; i++ ) {
+                            let portfolioListPush2 = this.portfolioList[i]
+                            if (portfolioListPush2.type === toFindVirtual) {
+                                this.portfolioListPush.push(portfolioListPush2);
+                            }
+                        }
+                    }
+                }.bind(this)
+            );
+            // this.componentKey++;
+          },
+        getJournalCharts() {
+            if (this.portfolioDropdownModel != null) {
+                const journalchartsparams = {
+                    user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                    fund: this.defaultPortfolioId,
+                };
+                this.$api.journal.portfolio.journalcharts(journalchartsparams)
+                .then( (response) => {
+                    this.setJournalCharts(response)
+                })
+            }
         }
-      },
+    },
     computed: {
         ...mapGetters({
             userPortfolio: "journal/getUserPortfolio",
