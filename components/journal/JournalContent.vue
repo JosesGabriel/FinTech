@@ -348,7 +348,6 @@ export default {
                     console.log("created successfully");
                   }
                 }.bind(this)
-<<<<<<< HEAD
             );
             // this.componentKey++;
         },
@@ -381,54 +380,6 @@ export default {
         //     this.getUserPortfolioList();
         // }
     },
-=======
-              );
-          }
-          if (this.portfolioList.length != 0) {
-            this.portfolioListPush.push({ divider: true });
-            this.portfolioListPush.push({ header: "Virtual Portfolio" });
-            const toFindVirtual = "virtual"; // what we want to count
-            for (let i = 0; i < this.portfolioList.length; i++) {
-              let portfolioListPush2 = this.portfolioList[i];
-              if (portfolioListPush2.type === toFindVirtual) {
-                this.portfolioListPush.push(portfolioListPush2);
-              }
-            }
-          }
-        }.bind(this)
-      );
-      // this.componentKey++;
-    }
-    // getJournalCharts() {
-    //     if (this.portfolioDropdownModel != null) {
-    //         const journalchartsparams = {
-    //             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-    //             fund: this.portfolioDropdownModel,
-    //         };
-    //         this.$api.journal.portfolio.journalcharts(journalchartsparams)
-    //         .then( (response) => {
-    //             this.setJournalCharts(response)
-    //         })
-    //     }
-    // }
-  },
-  computed: {
-    ...mapGetters({
-      userPortfolio: "journal/getUserPortfolio",
-      defaultPortfolioId: "journal/getDefaultPortfolioId",
-      renderPortfolioKey: "journal/getRenderPortfolioKey"
-    })
-  },
-  watch: {
-    renderPortfolioKey: function() {
-      // this.getUserPortfolioList();
-      // this.getJournalCharts();
-    }
-    // portfolioDropdownModel() {
-    //     this.getUserPortfolioList();
-    // }
-  }
->>>>>>> 235ee58a515096431250ce77b03d706b10389090
 };
 </script>
 <style scoped>
