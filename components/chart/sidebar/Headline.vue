@@ -35,24 +35,33 @@
           }}</span>
         </div>
         <div class="hcontainer_mid">
-          <span class="hlast">{{ stock.last | numeral("0,0.00") }}</span>
+          <span id="stock__last" class="hlast">{{
+            stock.last | numeral("0,0.00")
+          }}</span>
           <span
             class="hchange"
             :class="[
               { increase: changetype == 1 },
               { decrease: changetype == 2 }
             ]"
-            >{{ stock.change | numeral("0.00a") }} ({{
-              stock.changepercentage | numeral("0.00a")
-            }}%)</span
+          >
+            <span id="stock__change">{{
+              stock.change | numeral("0.00a")
+            }}</span>
+            (
+            <span id="stock__changepercentage"
+              >{{ stock.changepercentage | numeral("0.00a") }}%</span
+            >)</span
           >
         </div>
         <div class="hcontainer_bot">
           <span class="hmarcap"
             >Market Capitalization:
-            <span class="hmarcap text-uppercase font-weight-bold">{{
-              stock.marketcap | numeral("0.000a")
-            }}</span></span
+            <span
+              id="stock__marketcap"
+              class="hmarcap text-uppercase font-weight-bold"
+              >{{ stock.marketcap | numeral("0.000a") }}</span
+            ></span
           >
         </div>
       </div>
@@ -68,7 +77,11 @@ export default {
   computed: {
     ...mapGetters({
       stock: "chart/stock",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      stock_last: "chart/stock_last",
+      stock_change: "chart/stock_change",
+      stock_changepercentage: "chart/stock_changepercentage",
+      stock_marketcap: "chart/stock_marketcap"
     }),
     changetype() {
       let value = this.stock.change;
@@ -79,6 +92,29 @@ export default {
       } else {
         return 0;
       }
+    }
+  },
+  watch: {
+    stock_marketcap: function(value) {
+      this.updateEffect("stock__marketcap");
+    },
+    stock_last: function(value) {
+      this.updateEffect("stock__last");
+    },
+    stock_change: function(value) {
+      this.updateEffect("stock__change");
+    },
+    stock_changepercentage: function(value) {
+      this.updateEffect("stock__changepercentage");
+    }
+  },
+  methods: {
+    updateEffect: dom => {
+      const item = document.getElementById(dom);
+      item.style.background = "rgb(182,182,182,.2)";
+      setTimeout(function() {
+        item.style.background = "";
+      }, 100);
     }
   }
 };

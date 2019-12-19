@@ -11,7 +11,11 @@
         >
           <tr>
             <td class="tleft__label">Previous</td>
-            <td class="tleft__column">{{ stock.close | numeral("0,0.00") }}</td>
+            <td class="tleft__column">
+              <span id="stock__close">
+                {{ stock.close | numeral("0,0.00") }}
+              </span>
+            </td>
           </tr>
           <tr>
             <td class="tleft__label">Low</td>
@@ -22,7 +26,9 @@
                 decrease: stock.low < stock.close
               }"
             >
-              {{ stock.low | numeral("0,0.00") }}
+              <span id="stock__low">
+                {{ stock.low | numeral("0,0.00") }}
+              </span>
             </td>
           </tr>
           <tr>
@@ -34,18 +40,26 @@
                 decrease: stock.weekyearlow < stock.last
               }"
             >
-              {{ stock.weekyearlow | numeral("0,0.00") }}
+              <span id="stock__weekyearlow">
+                {{ stock.weekyearlow | numeral("0,0.00") }}
+              </span>
             </td>
           </tr>
           <tr>
             <td class="tleft__label">Volume</td>
             <td class="tleft__column">
-              {{ stock.volume | numeral("0.00a") }}
+              <span id="stock__volume">
+                {{ stock.volume | numeral("0.00a") }}
+              </span>
             </td>
           </tr>
           <tr>
             <td class="tleft__label">Trades</td>
-            <td class="tleft__column">{{ stock.trades | numeral("0,0") }}</td>
+            <td class="tleft__column">
+              <span id="stock__trades">
+                {{ stock.trades | numeral("0,0") }}
+              </span>
+            </td>
           </tr>
         </table>
       </div>
@@ -66,7 +80,9 @@
                 decrease: stock.open < stock.close
               }"
             >
-              {{ stock.open | numeral("0,0.00") }}
+              <span id="stock__open">
+                {{ stock.open | numeral("0,0.00") }}
+              </span>
             </td>
           </tr>
           <tr>
@@ -78,7 +94,9 @@
                 decrease: stock.high < stock.close
               }"
             >
-              {{ stock.high | numeral("0,0.00") }}
+              <span id="stock__high">
+                {{ stock.high | numeral("0,0.00") }}
+              </span>
             </td>
           </tr>
           <tr>
@@ -90,13 +108,17 @@
                 decrease: stock.weekyearhigh < stock.last
               }"
             >
-              {{ stock.weekyearhigh | numeral("0,0.00") }}
+              <span id="stock__weekyearhigh">
+                {{ stock.weekyearhigh | numeral("0,0.00") }}
+              </span>
             </td>
           </tr>
           <tr>
             <td class="tright__label">Value</td>
             <td class="tright__column">
-              {{ stock.value | numeral("0.00a") }}
+              <span id="stock__value">
+                {{ stock.value | numeral("0.00a") }}
+              </span>
             </td>
           </tr>
           <tr>
@@ -108,7 +130,9 @@
                 decrease: stock.average < stock.last
               }"
             >
-              {{ stock.average | numeral("0,0.00") }}
+              <span id="stock__average">
+                {{ stock.average | numeral("0,0.00") }}
+              </span>
             </td>
           </tr>
         </table>
@@ -130,8 +154,59 @@ export default {
   computed: {
     ...mapGetters({
       stock: "chart/stock",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      stock_close: "chart/stock_close",
+      stock_open: "chart/stock_open",
+      stock_low: "chart/stock_low",
+      stock_high: "chart/stock_high",
+      stock_volume: "chart/stock_volume",
+      stock_value: "chart/stock_value",
+      stock_average: "chart/stock_average",
+      stock_trades: "chart/stock_trades",
+      stock_weekyearlow: "chart/stock_weekyearlow",
+      stock_weekyearhigh: "chart/stock_weekyearhigh"
     })
+  },
+  watch: {
+    stock_close: function(value) {
+      this.updateEffect("stock__close");
+    },
+    stock_open: function(value) {
+      this.updateEffect("stock__open");
+    },
+    stock_low: function(value) {
+      this.updateEffect("stock__low");
+    },
+    stock_high: function(value) {
+      this.updateEffect("stock__high");
+    },
+    stock_volume: function(value) {
+      this.updateEffect("stock__volume");
+    },
+    stock_value: function(value) {
+      this.updateEffect("stock__value");
+    },
+    stock_average: function(value) {
+      this.updateEffect("stock__average");
+    },
+    stock_trades: function(value) {
+      this.updateEffect("stock__trades");
+    },
+    stock_weekyearlow: function(value) {
+      this.updateEffect("stock__weekyearlow");
+    },
+    stock_weekyearhigh: function(value) {
+      this.updateEffect("stock__weekyearhigh");
+    }
+  },
+  methods: {
+    updateEffect: dom => {
+      const item = document.getElementById(dom);
+      item.style.background = "rgb(182,182,182,.2)";
+      setTimeout(function() {
+        item.style.background = "";
+      }, 100);
+    }
   }
 };
 </script>

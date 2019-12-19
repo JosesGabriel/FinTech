@@ -8,6 +8,7 @@ export default () => ({
   symbolid: 0,
   market_code: null,
   index: true,
+
   stock: {
     average: 0,
     change: 0,
