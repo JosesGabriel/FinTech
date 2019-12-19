@@ -1,9 +1,9 @@
 
 <template>
     <v-dialog v-model="show" max-width="450px">
-        <v-card color="#00121E">
+        <v-card :dark="lightSwitch == true">
             <v-card-title class="text-center justify-center px-5 pt-10">
-                <h1 class="font-weight-regular body-1" style="color:#fff;">This action is final and cannot be undone.<br>Give me <span style="color:#00FFC3;">HELL YEAH</span> to confirm.</h1>
+                <h1 class="font-weight-regular body-1">This action is final and cannot be undone.<br>Give me <span class="success--text font-weight-bold">HELL YEAH</span> to confirm.</h1>
             </v-card-title>
             <v-card color="transparent" class="d-flex justify-center" elevation="0">
             </v-card>
@@ -15,9 +15,9 @@
                             placeholder="HELL YEAH"
                             v-model="confirmResetModel"
                             solo
-                            dark
-                            class="align-center justify-center headline font-weight-regular text-center white--text confirmation_message-reset"
-                            background-color="#000"
+                            :dark="lightSwitch == true"
+                            class="align-center justify-center headline font-weight-regular text-center confirmation_message-reset"
+                            :background-color="cardbackground"
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -31,8 +31,8 @@
                     </v-col>
                     <v-col class="pa-0" cols="7" sm="7" md="7">
                         <v-btn @click.stop="show=false" @click="resetNow" :disabled="disableReset" class="pa-0" style="height: 100%;width: 100%;">
-                        <v-card-title class="text-center justify-center px-5 py-3 confirmation_button-reset-not" style="width: 100%;">
-                            <h1 class="font-weight-regular body-1" style="color:#00FFC3;">I UNDERSTAND, DO IT</h1>
+                        <v-card-title class="text-center justify-center px-5 py-3" :class="cardbackgroundBtn" style="width: 100%;">
+                            <h1 class="font-weight-regular body-1 success--text">I UNDERSTAND, DO IT</h1>
                         </v-card-title>
                         </v-btn>
                     </v-col>
@@ -65,8 +65,15 @@ export default {
     },
     ...mapGetters({
         defaultPortfolioId: "journal/getDefaultPortfolioId",
-        renderPortfolioKey: "journal/getRenderPortfolioKey"
+        renderPortfolioKey: "journal/getRenderPortfolioKey",
+        lightSwitch: "global/getLightSwitch"
     }),
+    cardbackground: function() {
+        return this.lightSwitch == 0 ? "#DADADA" : "#0C1A2B";
+    },
+    cardbackgroundBtn: function() {
+        return this.lightSwitch == 0 ? "confirmation_button-reset-not-light" : "confirmation_button-reset-not";
+    },
   },
   data() {
     return {

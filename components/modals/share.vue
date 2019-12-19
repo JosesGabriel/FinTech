@@ -1,9 +1,9 @@
 
 <template>
     <v-dialog v-model="show" max-width="450px">
-        <v-card color="#00121E">
+        <v-card :dark="lightSwitch == true">
             <v-card-title class="text-center justify-center px-0 py-3 pt-5">
-                <h1 class="font-weight-regular subtitle-1" style="color:#00FFC3;">Promote Your Work</h1>
+                <h1 class="font-weight-regular subtitle-1 success--text">Promote Your Work</h1>
             </v-card-title>
             <v-card color="transparent" class="d-flex justify-center" elevation="0">
                 <router-link to="/" class="px-1">
@@ -23,7 +23,7 @@
                 </router-link>
             </v-card>
             <v-card-title class="text-center justify-center px-0 py-3 pt-5">
-                <h5 class="font-weight-thin caption" style="color:#00FFC3;">or Copy Link</h5>
+                <h5 class="font-weight-thin caption success--text">or Copy Link</h5>
             </v-card-title>
             <v-container>
                 <v-row>
@@ -34,7 +34,7 @@
                     <div class="copy_link-textfield-cont" color="transparent" elevation="0">
                         <div class="form-control d-flex textfield_copy-code">
                             <span class="body-2 grey--text copy_link-textfield-dis px-2">{{ testingCode }}</span>
-                            <span class="btn btn-info copy-btn ml-auto copy_link-textfield-btn caption px-2" @click.stop.prevent="copyTestingCode" style="color:#00FFC3;">Copy</span>
+                            <span class="btn btn-info copy-btn ml-auto copy_link-textfield-btn caption px-2 success--text" @click.stop.prevent="copyTestingCode">Copy</span>
                             <input type="hidden" id="testing-code" :value="testingCode">
                         </div>
                     </div>
@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   props: ['visible'],
   data() {
@@ -58,6 +60,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    }),
     show: {
       get () {
         return this.visible
@@ -90,7 +95,7 @@ export default {
 <style>
 .copy_link-textfield-cont,
 .copy_link-btn {
-    border: 2px solid #00f6bd;
+    border: 2px solid #03DAC5;
     border-radius: 0 !important;
     /* width: 100% */
 }
@@ -113,7 +118,7 @@ export default {
     border-radius: 10px
 }
 .copy_link-textfield-btn:active {
-    background:#00f6bd;
+    background:#03DAC5;
     color: #00121E !important;
     font-weight: 600
 }
