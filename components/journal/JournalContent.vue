@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD
     <v-col class="pt-3" cols="12" sm="12" md="12">
             <v-tabs
             color="#03dac5"
@@ -59,80 +58,6 @@
                         <JournalLivePortfolio/>
                         <div class="component_spacer"></div>
                         <v-row no-gutters>
-=======
-  <v-col class="pt-3" cols="12" sm="12" md="12">
-    <v-tabs color="#03dac5" background-color="transparent" dark>
-      <v-tab
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-1`"
-        >Dashboard</v-tab
-      >
-      <v-tab
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-2`"
-        >Tradelogs</v-tab
-      >
-      <v-tab
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-3`"
-        >Ledger</v-tab
-      >
-      <v-spacer></v-spacer>
-      <v-col sm="3" md="2" class="pa-0">
-        <v-select
-          v-model="portfolioDropdownModel"
-          offset-y="true"
-          class="select_portfolio mt-2 success--text"
-          item-color="success"
-          append-icon="mdi-chevron-down"
-          background-color="#00FFC3"
-          label="Select Portfolio"
-          color="grey"
-          dense
-          solo
-          flat
-          light
-          :items="portfolioListPush"
-          item-text="name"
-          item-value="id"
-          return-object
-          :menu-props="{ closeOnContentClick: true }"
-          @change="changePortfolio"
-        >
-          <template v-slot:append-item>
-            <v-list-item class="sumportfolio_real mt-1" @click="">
-              <v-list-item-content>
-                <v-list-item-title>Sum of Real Portfolio</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="">
-              <v-list-item-content>
-                <v-list-item-title>Sum of Virtual Portfolio</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item ripple @click.stop="showCreatePortForm = true">
-              <v-list-item-content>
-                <v-list-item-title
-                  >Create Portfolio
-                  <v-icon color="success" class="body-2"
-                    >mdi-plus-circle-outline</v-icon
-                  ></v-list-item-title
-                >
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-select>
-      </v-col>
-      <v-tab-item color="#03dac5" background-color="black" :value="'tab-' + 1">
-        <v-container class="pa-0">
-          <div class="separator"></div>
-          <JournalLivePortfolio />
-          <div class="component_spacer"></div>
-          <!-- <v-row no-gutters>
->>>>>>> 235ee58a515096431250ce77b03d706b10389090
                             <JournalPortfolioSnapshot/>
                             <JournalCurrentAllocation/>
                         </v-row>
@@ -176,7 +101,6 @@
                             <v-col class="pa-0" cols="8" sm="8" md="8">
                                 <JournalGrossPL/>
                             </v-col>
-<<<<<<< HEAD
                         </v-row>
                         <div class="component_spacer"></div>
                     </v-container>
@@ -197,41 +121,6 @@
             <create-modal :visible="showCreatePortForm" @close="showCreatePortForm=false" />
             <!-- <ChartTesting/> -->
     </v-col>
-=======
-                        </v-row> -->
-          <div class="component_spacer"></div>
-        </v-container>
-      </v-tab-item>
-      <v-tab-item
-        dark
-        color="#03dac5"
-        background-color="#0c1f33"
-        :value="'tab-' + 2"
-      >
-        <v-container class="pa-0">
-          <div class="separator"></div>
-          <TradelogsContent />
-        </v-container>
-      </v-tab-item>
-      <v-tab-item
-        dark
-        color="#03dac5"
-        background-color="#0c1f33"
-        :value="'tab-' + 3"
-      >
-        <v-container class="pa-0">
-          <div class="separator"></div>
-          <LedgerContent />
-        </v-container>
-      </v-tab-item>
-    </v-tabs>
-    <create-modal
-      :visible="showCreatePortForm"
-      @close="showCreatePortForm = false"
-    />
-    <!-- <ChartTesting/> -->
-  </v-col>
->>>>>>> 235ee58a515096431250ce77b03d706b10389090
 </template>
 <script>
 //Dashboard tab
