@@ -232,23 +232,6 @@
     </v-snackbar>
   </v-dialog>
 </template>
-<style>
-.loginButtons--wrapper {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 50px;
-}
-.loginCard--intro {
-  padding: 30px;
-}
-.w-100 {
-  width: 100%;
-}
-.remember--checkbox label {
-  font-size: 0.75rem;
-}
-</style>
 <script>
 import { mapGetters } from "vuex";
 export default {
@@ -380,3 +363,20 @@ export default {
   }
 };
 </script>
+<style>
+.loginButtons--wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 50px;
+}
+.loginCard--intro {
+  padding: 30px;
+}
+.w-100 {
+  width: 100%;
+}
+.remember--checkbox label {
+  font-size: 0.75rem;
+}
+</style>

@@ -77,11 +77,6 @@
     </v-snackbar>
   </div>
 </template>
-<style>
-header {
-  height: 0px !important; /* if present, naay empty header element na 64px */
-}
-</style>
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -156,7 +151,7 @@ export default {
       this.userStockData = this.shemes;
       for (let i = 0; i < this.userStockData.length; i++) {
         //Just converts stock_id to stock symbol
-        //INEFFECIENT AS FUCKK; todo Refractor and improve
+        //INEFFECIENT AS FUCK; todo Refractor and improve
         const params = {
           "symbol-id": this.userStockData[i].stock_id
         };
@@ -246,3 +241,8 @@ export default {
   }
 };
 </script>
+<style>
+  header {
+    height: 0px !important; /* if present, naay empty header element na 64px */
+  }
+</style>

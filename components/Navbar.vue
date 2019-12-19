@@ -46,7 +46,6 @@
                 <v-icon :color="active == 'social' ? 'success' : 'secondary'"
                   >mdi-account-supervisor-circle</v-icon
                 >
-                <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
               </v-list-item-icon>
               <v-list-item-content
                 ><v-list-item-title class="font-weight-black"
@@ -61,10 +60,6 @@
               :color="active == 'chart' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <!-- <v-icon color="#bfb538"
-                  >mdi-chart-bar</v-icon
-                > -->
-                <!-- <img src="/icon/navbar-icons/chart.svg" width="20" /> -->
                 <v-icon :color="active == 'chart' ? 'success' : 'secondary'"
                   >mdi-chart-bar</v-icon
                 >
@@ -86,7 +81,6 @@
                 <v-icon :color="active == 'journal' ? 'success' : 'secondary'"
                   >mdi-library-books</v-icon
                 >
-                <!-- <img src="/icon/navbar-icons/journal.svg" width="20"> -->
               </v-list-item-icon>
               <v-list-item-content
                 ><v-list-item-title class="font-weight-medium"
@@ -102,10 +96,6 @@
               :color="active == 'virtualtrade' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <!-- <img
-                  src="/icon/journal-icons/mdi-eye-plus-outline.svg"
-                  width="25"
-                /> -->
                 <v-icon
                   :color="active == 'virtualtrade' ? 'success' : 'secondary'"
                   >mdi-cloud-print-outline</v-icon
@@ -171,7 +161,6 @@
           </v-list-item-icon>
           <v-list-item @click.stop="buySellDialog = true">
             <v-list-item-icon class="mr-4">
-              <!-- <img src="/icon/navbar-icons/buySellCalculator.svg" width="25" /> -->
               <v-icon color="secondary">mdi-calculator-variant</v-icon>
             </v-list-item-icon>
 
@@ -201,10 +190,6 @@
           </v-list-item>
           <v-list-item @click.stop="averagePriceDialog = true">
             <v-list-item-icon class="mr-4">
-              <!-- <img
-                src="/icon/navbar-icons/averagePriceCalculator.svg"
-                width="25"
-              /> -->
               <v-icon color="secondary">mdi-set-center</v-icon>
             </v-list-item-icon>
 
@@ -233,24 +218,6 @@
     </v-navigation-drawer>
   </v-card>
 </template>
-<style scoped>
-.navbar__card {
-  position: fixed;
-}
-.navbar__links {
-  color: white;
-  text-decoration: none;
-}
-.v-list-item:hover::before {
-  opacity: 0;
-}
-.v-list-item--active::before {
-  opacity: 0;
-}
-.v-list-item--active .v-list-item__content .v-list-item__title {
-  font-weight: bold;
-}
-</style>
 <script>
 import { mapGetters } from "vuex";
 import BuySellCalculator from "~/components/calculators/BuySellCalculator";
@@ -300,3 +267,21 @@ export default {
   }
 };
 </script>
+<style scoped>
+.navbar__card {
+  position: fixed;
+}
+.navbar__links {
+  color: white;
+  text-decoration: none;
+}
+.v-list-item:hover::before {
+  opacity: 0;
+}
+.v-list-item--active::before {
+  opacity: 0;
+}
+.v-list-item--active .v-list-item__content .v-list-item__title {
+  font-weight: bold;
+}
+</style>

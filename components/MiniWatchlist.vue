@@ -56,18 +56,6 @@
     </v-card-text>
   </v-card>
 </template>
-<style>
-.watchlistCard__success--text,
-.watchlistCard__header--percent {
-  color: #03dac5;
-}
-.watchlistCard__error--text {
-  color: #f44336;
-}
-.watchlistCard__text--gray {
-  color: gray;
-}
-</style>
 <script>
 import VueApexCharts from "vue-apexcharts";
 import { mapGetters } from "vuex";
@@ -322,3 +310,15 @@ export default {
   }
 };
 </script>
+<style>
+.watchlistCard__success--text,
+.watchlistCard__header--percent {
+  color: #03dac5;
+}
+.watchlistCard__error--text {
+  color: #f44336;
+}
+.watchlistCard__text--gray {
+  color: gray;
+}
+</style>
