@@ -182,7 +182,7 @@ export default {
     }
   },
   props: {
-    position: {
+    Position: {
       default() {
         return "";
       }

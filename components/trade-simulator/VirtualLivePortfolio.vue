@@ -389,7 +389,7 @@ export default {
           this.getDayChange();
         }.bind(this)
       );
-      //this.initSSE();
+      this.initSSE();
     },
     deleteLive: function(item) {
       //TODO: use repo
@@ -461,7 +461,7 @@ export default {
       let currentProfitLoss = 0;
       let priorProfitLoss = 0;
       let d = new Date(),
-        dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
+        dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
 
       for (let index = 0; index < this.portfolioLogs.length; index++) {
         let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
@@ -473,7 +473,6 @@ export default {
         };
         this.$api.chart.charts.latest(params).then(
           function(result) {
-            console.log("Day Prior Change - ", result.data.c[1]);
             let tcost =
               this.portfolioLogs[index].position *
               this.portfolioLogs[index].average_price;
@@ -488,7 +487,6 @@ export default {
               priorProfitLoss =
                 parseFloat(priorProfitLoss) + parseFloat(priorprofit);
             }
-
             let currentPrice = result.data.c[0];
             let currentbuyResult =
               this.portfolioLogs[index].position *
@@ -497,19 +495,21 @@ export default {
             let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
             currentProfitLoss =
               parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-            console.log("Prior ProfitLoss -" + priorProfitLoss);
-            console.log("Currrent ProfitLoss -" + currentProfitLoss);
             let daychange =
               parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
 
             this.$emit("DayChange", daychange);
             let daychangeperf = (daychange / priorProfitLoss) * 100;
+            this.$emit("DayChangePerc", daychangeperf);
+
+            console.log("Prior ProfitLoss -" + priorProfitLoss);
+            console.log("Currrent ProfitLoss -" + currentProfitLoss);
             console.log("DAY CAHNGE -" + daychange);
             console.log("DAY CAHNGE PERC -" + daychangeperf);
-            this.$emit("DayChangePerc", daychangeperf);
           }.bind(this)
         );
       }
+      
     },
     fees(buyResult) {
       let dpartcommission = buyResult * 0.0025;
