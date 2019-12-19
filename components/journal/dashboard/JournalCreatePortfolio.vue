@@ -1,28 +1,28 @@
 <template>
   <v-dialog v-model="show" max-width="350px">
-    <v-card color="#00121E">
+    <v-card :dark="lightSwitch == true">
       <v-card-title
         class="text-left justify-left pa-3 px-5 success--text subtitle-1"
         >CREATE PORTFOLIO</v-card-title
       >
       <v-container class="px-8">
-        <v-card-title class="text-left justify-left px-0 secondary--text body-2"
+        <v-card-title class="text-left justify-left px-0 body-2"
           >Enter Portfolio Name</v-card-title
         >
         <v-text-field
           v-model="namePortfolioModel"
           color="success"
-          dark
-          class="stock_selector pa-0 pb-5 font-weight-bold body-2 white--text"
+          :dark="lightSwitch == true"
+          class="stock_selector pa-0 pb-5 font-weight-bold body-2"
         ></v-text-field>
-        <v-card-title class="text-left justify-left px-0 secondary--text body-2"
+        <v-card-title class="text-left justify-left px-0 body-2"
           >Initial Capital</v-card-title
         >
         <v-text-field
           v-model="initialCapitalModel"
           color="success"
-          dark
-          class="stock_selector pa-0 pb-5 font-weight-bold body-2 white--text"
+          :dark="lightSwitch == true"
+          class="stock_selector pa-0 pb-5 font-weight-bold body-2"
         ></v-text-field>
         <v-select
           v-model="typePortfolioModel"
@@ -33,7 +33,7 @@
           color="success"
           item-color="success"
           dense
-          dark
+          :dark="lightSwitch == true"
           append-icon="mdi-chevron-down"
         ></v-select>
       </v-container>
@@ -69,7 +69,8 @@ export default {
   props: ["visible"],
   computed: {
     ...mapGetters({
-      renderPortfolioKey: "journal/getRenderPortfolioKey"
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      lightSwitch: "global/getLightSwitch"
     }),
     show: {
       get() {

@@ -1,7 +1,7 @@
 <template>
     <v-col class="pa-0" cols="8" sm="8" md="8">
         <v-card-title class="text-left justify-left mx-3 px-0 pb-2 pt-5" style="border-bottom: 1px solid #000">
-            <h6 class="font-weight-regular white--text subtitle-2" style="color:#fff;">CURRENT ALLOCATION</h6>
+            <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">CURRENT ALLOCATION</h6>
             <v-spacer></v-spacer>
             <v-btn icon small @click.stop="showScheduleForm=true"> 
                 <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -14,8 +14,8 @@
                         <tbody>
                             <tr v-for="item in allodata.slice(0, 9)" :key="item.stocks" id="table_tr_snap-cont">
                             <v-icon class="pa-1 caption" :style="{ 'color': item.color}">mdi-circle</v-icon>
-                            <td class="item_position-prop caption text-capitalize px-1 py-1">{{ item.stock_id }}</td>
-                            <td class="item_position-prop caption text-right px-1 py-1" width="75%">{{ (item.position).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
+                            <td class="item_position-prop caption text-capitalize px-1 py-1" :style="{ color: fontColor }">{{ item.stock_id }}</td>
+                            <td class="item_position-prop caption text-right px-1 py-1" width="75%" :style="{ color: fontColor }">{{ (item.position).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</td>
                             </tr>
                         </tbody>
                     </template>
@@ -40,6 +40,17 @@
     components: {
       apexcharts: VueApexCharts,
       shareModal
+    },
+    computed: {
+      ...mapGetters({
+        renderPortfolioKey: "journal/getRenderPortfolioKey",
+        defaultPortfolioId: "journal/getDefaultPortfolioId",
+        stockList: "global/getStockList",
+        lightSwitch: "global/getLightSwitch"
+      }),
+      fontColor: function() {
+        return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+      },
     },
     data () {
       return {
@@ -167,13 +178,6 @@
         }
       }
     },
-    computed: {
-      ...mapGetters({
-        renderPortfolioKey: "journal/getRenderPortfolioKey",
-        defaultPortfolioId: "journal/getDefaultPortfolioId",
-        stockList: "global/getStockList"
-      }),
-    },
     mounted() {
       this.getAllocations();
     },
@@ -231,6 +235,9 @@
       },
       stockList: function() {
         this.getAllocations();
+      },
+      lightSwitch: function(){
+        console.log(this.lightSwitch)
       }
     }
   }

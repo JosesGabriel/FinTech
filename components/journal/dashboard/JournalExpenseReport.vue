@@ -277,7 +277,4 @@ export default {
 .theme--dark.v-data-table tbody tr:not(:last-child) td:not(.v-data-table__mobile-row) {
   border: none;
 }
-.item_position-prop {
-  color: #b6b6b6
-}
 </style>

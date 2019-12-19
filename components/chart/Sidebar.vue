@@ -145,14 +145,14 @@ export default {
 
 <style>
 /* light / dark mode */
-.theme--dark.v-data-table .v-data-table-header th.sortable {
+/* .theme--dark.v-data-table .v-data-table-header th.sortable {
   background: #00121e;
   font-size: 11px;
-}
-.theme--light.v-data-table .v-data-table-header th.sortable {
+} */
+/* .theme--light.v-data-table .v-data-table-header th.sortable {
   background: #f2f2f2;
   font-size: 11px;
-}
+} */
 
 .theme--dark.v-data-table.v-data-table--fixed-header thead th {
   background: #00121e;
