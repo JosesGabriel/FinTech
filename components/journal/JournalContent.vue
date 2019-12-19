@@ -1,76 +1,63 @@
 <template>
-  <v-col class="pt-3" cols="12" sm="12" md="12">
-    <v-tabs color="#03dac5" background-color="transparent" dark>
-      <v-tab
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-1`"
-        >Dashboard</v-tab
-      >
-      <v-tab
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-2`"
-        >Tradelogs</v-tab
-      >
-      <v-tab
-        color="#fff"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-3`"
-        >Ledger</v-tab
-      >
-      <v-spacer></v-spacer>
-      <v-col sm="3" md="2" class="pa-0">
-        <v-select
-          v-model="portfolioDropdownModel"
-          offset-y="true"
-          class="select_portfolio mt-2 success--text"
-          item-color="success"
-          append-icon="mdi-chevron-down"
-          background-color="#00FFC3"
-          label="Select Portfolio"
-          color="grey"
-          dense
-          solo
-          flat
-          light
-          :items="portfolioListPush"
-          item-text="name"
-          item-value="id"
-          return-object
-          :menu-props="{ closeOnContentClick: true }"
-          @change="changePortfolio"
-        >
-          <template v-slot:append-item>
-            <v-list-item class="sumportfolio_real mt-1" @click="">
-              <v-list-item-content>
-                <v-list-item-title>Sum of Real Portfolio</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item @click="">
-              <v-list-item-content>
-                <v-list-item-title>Sum of Virtual Portfolio</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item ripple @click.stop="showCreatePortForm = true">
-              <v-list-item-content>
-                <v-list-item-title
-                  >Create Portfolio
-                  <v-icon color="success" class="body-2"
-                    >mdi-plus-circle-outline</v-icon
-                  ></v-list-item-title
-                >
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-select>
-      </v-col>
-      <v-tab-item color="#03dac5" background-color="black" :value="'tab-' + 1">
-        <v-container class="pa-0">
-          <div class="separator"></div>
-          <JournalLivePortfolio />
-          <div class="component_spacer"></div>
-          <!-- <v-row no-gutters>
+    <v-col class="pt-3" cols="12" sm="12" md="12">
+            <v-tabs
+            color="#03dac5"
+            background-color="transparent"
+            dark
+            >
+                <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-1`">Dashboard</v-tab>
+                <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-2`">Tradelogs</v-tab>
+                <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#tab-3`">Ledger</v-tab>
+                <v-spacer></v-spacer>
+                <v-col sm="3" md="2" class="pa-0">
+                    <v-select
+                    offset-y="true"
+                    class="select_portfolio mt-2 success--text"
+                    item-color="success"
+                    append-icon="mdi-chevron-down"
+                    background-color="#00FFC3"
+                    label="Select Portfolio"
+                    color="grey"
+                    dense
+                    solo
+                    flat
+                    light
+                    :items="portfolioListPush"
+                    v-on:change="changePortfolio"
+                    v-model="portfolioDropdownModel"
+                    item-text="name"
+                    item-value="id"
+                    return-object
+                    :menu-props="{closeOnContentClick: true}"
+                    >
+                        <template v-slot:append-item>
+                            <v-list-item @click="setPortfolioReal()" class="sumportfolio_real mt-1">
+                                <v-list-item-content>
+                                    <v-list-item-title>Sum of Real Portfolio</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item @click="setPortfolioVirtual()">
+                                <v-list-item-content>
+                                    <v-list-item-title>Sum of Virtual Portfolio</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                            <v-list-item
+                            ripple
+                            @click.stop="showCreatePortForm=true"
+                            >
+                                <v-list-item-content>
+                                    <v-list-item-title>Create Portfolio <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon></v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
+                        </template>
+                    </v-select>
+                </v-col>
+                <v-tab-item color="#03dac5" background-color="black" :value="'tab-' + 1">
+                    <v-container class="pa-0">
+                        <div class="separator"></div>
+                        <JournalLivePortfolio/>
+                        <div class="component_spacer"></div>
+                        <v-row no-gutters>
                             <JournalPortfolioSnapshot/>
                             <JournalCurrentAllocation/>
                         </v-row>
@@ -114,56 +101,43 @@
                             <v-col class="pa-0" cols="8" sm="8" md="8">
                                 <JournalGrossPL/>
                             </v-col>
-                        </v-row> -->
-          <div class="component_spacer"></div>
-        </v-container>
-      </v-tab-item>
-      <v-tab-item
-        dark
-        color="#03dac5"
-        background-color="#0c1f33"
-        :value="'tab-' + 2"
-      >
-        <v-container class="pa-0">
-          <div class="separator"></div>
-          <TradelogsContent />
-        </v-container>
-      </v-tab-item>
-      <v-tab-item
-        dark
-        color="#03dac5"
-        background-color="#0c1f33"
-        :value="'tab-' + 3"
-      >
-        <v-container class="pa-0">
-          <div class="separator"></div>
-          <LedgerContent />
-        </v-container>
-      </v-tab-item>
-    </v-tabs>
-    <create-modal
-      :visible="showCreatePortForm"
-      @close="showCreatePortForm = false"
-    />
-    <!-- <ChartTesting/> -->
-  </v-col>
+                        </v-row>
+                        <div class="component_spacer"></div>
+                    </v-container>
+                </v-tab-item>
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2">
+                    <v-container class="pa-0">
+                        <div class="separator"></div>
+                        <TradelogsContent/>
+                    </v-container>
+                </v-tab-item>
+                <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 3">
+                    <v-container class="pa-0">
+                        <div class="separator"></div>
+                        <LedgerContent/>
+                    </v-container>
+                </v-tab-item>
+            </v-tabs>
+            <create-modal :visible="showCreatePortForm" @close="showCreatePortForm=false" />
+            <!-- <ChartTesting/> -->
+    </v-col>
 </template>
 <script>
 //Dashboard tab
 import JournalLivePortfolio from "~/components/journal/dashboard/JournalLivePortfolio";
-// import JournalPortfolioSnapshot from "~/components/journal/dashboard/JournalPortfolioSnapshot";
-// import JournalCurrentAllocation from "~/components/journal/dashboard/JournalCurrentAllocation";
-// import JournalMonthlyPerfomance from "~/components/journal/dashboard/JournalMonthlyPerfomance";
-// import JournalTradeStats from "~/components/journal/dashboard/JournalTradeStats";
-// import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
-// import JournalStrategyStats from "~/components/journal/dashboard/JournalStrategyStats";
-// import JournalTopStocks from "~/components/journal/dashboard/JournalTopStocks";
-// import JournalEmotionalStats from "~/components/journal/dashboard/JournalEmotionalStats";
-// import JournalExpenseReport from "~/components/journal/dashboard/JournalExpenseReport";
-// import JournalBuyVolume from "~/components/journal/dashboard/JournalBuyVolume";
-// import JournalBuyValue from "~/components/journal/dashboard/JournalBuyValue";
-// import JournalPerformance from "~/components/journal/dashboard/JournalPerformance";
-// import JournalGrossPL from "~/components/journal/dashboard/JournalGrossPL";
+import JournalPortfolioSnapshot from "~/components/journal/dashboard/JournalPortfolioSnapshot";
+import JournalCurrentAllocation from "~/components/journal/dashboard/JournalCurrentAllocation";
+import JournalMonthlyPerfomance from "~/components/journal/dashboard/JournalMonthlyPerfomance";
+import JournalTradeStats from "~/components/journal/dashboard/JournalTradeStats";
+import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
+import JournalStrategyStats from "~/components/journal/dashboard/JournalStrategyStats";
+import JournalTopStocks from "~/components/journal/dashboard/JournalTopStocks";
+import JournalEmotionalStats from "~/components/journal/dashboard/JournalEmotionalStats";
+import JournalExpenseReport from "~/components/journal/dashboard/JournalExpenseReport";
+import JournalBuyVolume from "~/components/journal/dashboard/JournalBuyVolume";
+import JournalBuyValue from "~/components/journal/dashboard/JournalBuyValue";
+import JournalPerformance from "~/components/journal/dashboard/JournalPerformance";
+import JournalGrossPL from "~/components/journal/dashboard/JournalGrossPL";
 
 //Ledger tab
 import TradelogsContent from "~/components/journal/tradelogs/contents";
@@ -175,159 +149,167 @@ import createModal from "~/components/journal/dashboard/JournalCreatePortfolio";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  layout: "main",
-  components: {
-    //Dashboard tab
-    JournalLivePortfolio,
-    // JournalPortfolioSnapshot,
-    // JournalCurrentAllocation,
-    // JournalMonthlyPerfomance,
-    // JournalTradeStats,
-    // JournalEquityCurve,
-    // JournalStrategyStats,
-    // JournalTopStocks,
-    // JournalEmotionalStats,
-    // JournalExpenseReport,
-    // JournalBuyVolume,
-    // JournalBuyValue,
-    // JournalPerformance,
-    // JournalGrossPL,
-    //Ledger tab
-    TradelogsContent,
-    //Ledger tab
-    LedgerContent,
-    createModal
-  },
-  data() {
-    return {
-      tab: null,
-      tabs: 3,
-      portfolioListPush: [],
-      portfolioList: [],
-      portfolioDropdownModel: null,
-      selectedProfile: null,
-      showCreatePortForm: false,
-      componentKey: 0,
-      showSelect: false
-    };
-  },
-  mounted() {
-    this.getUserPortfolioList();
-  },
-  methods: {
-    ...mapActions({
-      setUserPortfolio: "journal/setUserPortfolio",
-      setSelectedPortfolio: "journal/setSelectedPortfolio",
-      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
-      // setJournalCharts: "journal/setJournalCharts",
-    }),
-    changePortfolio(obj) {
-      this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
-      const openparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        fund: this.portfolioDropdownModel.id
-      };
-      this.$api.journal.portfolio.open(openparams).then(
-        function(result) {
-          if (result.success) {
+    layout: "main",
+    components: {
+        //Dashboard tab
+        JournalLivePortfolio,
+        JournalPortfolioSnapshot,
+        JournalCurrentAllocation,
+        JournalMonthlyPerfomance,
+        JournalTradeStats,
+        JournalEquityCurve,
+        JournalStrategyStats,
+        JournalTopStocks,
+        JournalEmotionalStats,
+        JournalExpenseReport,
+        JournalBuyVolume,
+        JournalBuyValue,
+        JournalPerformance,
+        JournalGrossPL,
+        //Ledger tab
+        TradelogsContent,
+        //Ledger tab
+        LedgerContent,
+        createModal
+    },
+    data() {
+        return {
+            tab: null,
+            tabs: 3,
+            portfolioListPush: [],
+            portfolioList: [],
+            portfolioDropdownModel: null,
+            selectedProfile: null,
+            showCreatePortForm: false,
+            componentKey: 0,
+            showSelect: false
+        }
+    },
+    mounted() {
+        this.getUserPortfolioList();
+    },
+    methods: {
+        ...mapActions({
+            setUserPortfolio: "journal/setUserPortfolio",
+            setSelectedPortfolio: "journal/setSelectedPortfolio",
+            setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+            setDefaultPortfolioId: "journal/setDefaultPortfolioId",
+            setJournalCharts: "journal/setJournalCharts",
+        }),
+        changePortfolio(obj){
+            this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
+            const openparams = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                fund: this.portfolioDropdownModel.id
+            };
+            this.$api.journal.portfolio.open(openparams).then(
+                function(result) {
+                    if(result.success) {
+                        this.keyCreateCounter = this.renderPortfolioKey;
+                        this.keyCreateCounter++;
+                        this.setRenderPortfolioKey(this.keyCreateCounter);
+                        this.setSelectedPortfolio(obj);
+                    }
+                }.bind(this)
+            );
+        },
+        setPortfolioReal() {
+            this.setDefaultPortfolioId("real");
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setSelectedPortfolio(obj);
-          }
-        }.bind(this)
-      );
-    },
-    getUserPortfolioList() {
-      const params = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-      };
-      this.$api.journal.portfolio.portfolio(params).then(
-        function(result) {
-          this.portfolioList = result.meta.logs;
-          this.setUserPortfolio(result.meta.logs);
-
-          // this.portfolioListPush = []
-          let defaultPort = false;
-          this.portfolioListPush.push({ header: "Real Portfolio" });
-          for (let i = 0; i < this.portfolioList.length; i++) {
-            if (this.portfolioList[i].type === "real") {
-              this.portfolioListPush.push(this.portfolioList[i]);
-
-              if (
-                this.portfolioList[i].name === "My Portfolio" &&
-                this.portfolioList[i].type === "real"
-              ) {
-                this.setDefaultPortfolioId(this.portfolioList[i].id);
-                this.portfolioDropdownModel = this.portfolioList[i].id;
-                defaultPort = true;
-              }
-            }
-          }
-          if (!defaultPort) {
-            const createportfolioparams = {
-              user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-              currency_code: "PHP",
-              name: "My Portfolio",
-              description: "My Portfolio",
-              type: "real",
-              balance: 100000
+        },
+        setPortfolioVirtual() {
+            this.setDefaultPortfolioId("virtual");
+            this.keyCreateCounter = this.renderPortfolioKey;
+            this.keyCreateCounter++;
+            this.setRenderPortfolioKey(this.keyCreateCounter);
+        },
+        getUserPortfolioList() {
+            const params = {
+                user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
             };
-            this.$api.journal.portfolio
-              .createportfolio(createportfolioparams)
-              .then(
+            this.$api.journal.portfolio.portfolio(params).then(
                 function(result) {
-                  if (result.success) {
-                    console.log("created successfully");
-                  }
+                    this.portfolioList = result.meta.logs;
+                    this.setUserPortfolio(result.meta.logs);
+    
+                    // this.portfolioListPush = []
+                    let defaultPort = false
+                    this.portfolioListPush.push({header: 'Real Portfolio'});
+                    for (let i = 0; i < this.portfolioList.length; i++ ) {
+                        if (this.portfolioList[i].type === "real") {
+                            this.portfolioListPush.push(this.portfolioList[i]);
+
+                            if (this.portfolioList[i].name === "My Portfolio" && this.portfolioList[i].type === "real") {
+                                this.setDefaultPortfolioId(this.portfolioList[i].id)
+                                this.portfolioDropdownModel = this.portfolioList[i].id
+                                defaultPort = true
+                            }
+                        }
+                    }
+                    if (!defaultPort) {
+                        const createportfolioparams = {
+                            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                            currency_code: "PHP",
+                            name: "My Portfolio",
+                            description: "My Portfolio",
+                            type: "real",
+                            balance: 100000
+                        };
+                        this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
+                            function(result) {
+                                if (result.success) {
+                                    console.log("created successfully")
+                                }
+                            }.bind(this)
+                        );
+                    }
+                    if(this.portfolioList.length != 0) {
+                        
+                        this.portfolioListPush.push({ divider: true });
+                        this.portfolioListPush.push({header: 'Virtual Portfolio'});
+                        const toFindVirtual = "virtual" // what we want to count
+                        for (let i = 0; i < this.portfolioList.length; i++ ) {
+                            let portfolioListPush2 = this.portfolioList[i]
+                            if (portfolioListPush2.type === toFindVirtual) {
+                                this.portfolioListPush.push(portfolioListPush2);
+                            }
+                        }
+                    }
                 }.bind(this)
-              );
-          }
-          if (this.portfolioList.length != 0) {
-            this.portfolioListPush.push({ divider: true });
-            this.portfolioListPush.push({ header: "Virtual Portfolio" });
-            const toFindVirtual = "virtual"; // what we want to count
-            for (let i = 0; i < this.portfolioList.length; i++) {
-              let portfolioListPush2 = this.portfolioList[i];
-              if (portfolioListPush2.type === toFindVirtual) {
-                this.portfolioListPush.push(portfolioListPush2);
-              }
+            );
+            // this.componentKey++;
+          },
+        getJournalCharts() {
+            if (this.portfolioDropdownModel != null) {
+                const journalchartsparams = {
+                    user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+                    fund: this.defaultPortfolioId,
+                };
+                this.$api.journal.portfolio.journalcharts(journalchartsparams)
+                .then( (response) => {
+                    this.setJournalCharts(response)
+                })
             }
-          }
-        }.bind(this)
-      );
-      // this.componentKey++;
-    }
-    // getJournalCharts() {
-    //     if (this.portfolioDropdownModel != null) {
-    //         const journalchartsparams = {
-    //             user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-    //             fund: this.portfolioDropdownModel,
-    //         };
-    //         this.$api.journal.portfolio.journalcharts(journalchartsparams)
-    //         .then( (response) => {
-    //             this.setJournalCharts(response)
-    //         })
-    //     }
-    // }
-  },
-  computed: {
-    ...mapGetters({
-      userPortfolio: "journal/getUserPortfolio",
-      defaultPortfolioId: "journal/getDefaultPortfolioId",
-      renderPortfolioKey: "journal/getRenderPortfolioKey"
-    })
-  },
-  watch: {
-    renderPortfolioKey: function() {
-      // this.getUserPortfolioList();
-      // this.getJournalCharts();
-    }
-    // portfolioDropdownModel() {
-    //     this.getUserPortfolioList();
-    // }
-  }
+        }
+    },
+    computed: {
+        ...mapGetters({
+            userPortfolio: "journal/getUserPortfolio",
+            defaultPortfolioId: "journal/getDefaultPortfolioId",
+            renderPortfolioKey: "journal/getRenderPortfolioKey"
+        })
+    },
+    watch: {
+        defaultPortfolioId: function() {
+            // this.getUserPortfolioList();
+            this.getJournalCharts();
+        },
+        // portfolioDropdownModel() {        
+        //     this.getUserPortfolioList();
+        // }
+    },
 };
 </script>
 <style scoped>

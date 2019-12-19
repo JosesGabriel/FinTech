@@ -24,7 +24,7 @@
           class="data_table-container pl-10 secondary--text"
         >
         <template v-slot:item.stock_id="{ item }" ><span class="pl-2">{{ item.stock_id }}</span></template>
-        <template v-slot:item.average_price="{ item }" >{{ item.average_price.toFixed(3) }}</template>
+        <template v-slot:item.average_price="{ item }" >{{ formatPriceAvePrice(item.average_price) }}</template>
         <template v-slot:item.total_value="{ item }" >{{ formatPrice(item.total_value) }}</template>
         <template v-slot:item.market_value="{ item }" >{{ formatPrice(item.market_value) }}</template>
         <template v-slot:item.profit="{ item }" ><span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.profit) }}</span></template>
@@ -156,13 +156,13 @@ export default {
   },
   mounted() {
     if(this.defaultPortfolioId != 0 ?  this.getOpenPositions() : '');
-    if(!this.selectedPortfolio) {
-      if (this.selectedPortfolio.type === "virtual") {
-        this.ifVirtualShow = true
-      } else {
-        this.ifVirtualShow = false
-      }
-    }
+    // if(!this.selectedPortfolio) {
+    //   if (this.selectedPortfolio.type === "virtual") {
+    //     this.ifVirtualShow = true
+    //   } else {
+    //     this.ifVirtualShow = false
+    //   }
+    // }
   },
   methods: {
     ...mapActions({
@@ -191,6 +191,10 @@ export default {
     },
     formatPrice(value) {
         let val = (value/1).toFixed(2).replace('.', '.')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    },
+    formatPriceAvePrice(value) {
+        let val = (value/1).toFixed(3).replace('.', '.')
         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     },
     getOpenPositions() {
@@ -271,15 +275,15 @@ export default {
   },
   watch: {
     selectedPortfolio: function() {
-      if (this.selectedPortfolio.type === "virtual") {
-      this.ifVirtualShow = true
-      } else {
-      this.ifVirtualShow = false
-      }
+      // if (this.selectedPortfolio.type === "virtual") {
+      // this.ifVirtualShow = true
+      // } else {
+      // this.ifVirtualShow = false
+      // }
     },
-    renderPortfolioKey: function() {
-      this.getOpenPositions();
-    },
+    // renderPortfolioKey: function() {
+    //   this.getOpenPositions();
+    // },
     defaultPortfolioId: function() {
       this.getOpenPositions();
     },
