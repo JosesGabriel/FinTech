@@ -235,7 +235,7 @@ export default {
         }
     },
     watch: {
-        renderPortfolioKey: function() {
+        defaultPortfolioId: function() {
             this.getEquityCurve();
         }
     }

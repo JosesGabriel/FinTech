@@ -226,7 +226,7 @@
       },
     },
     watch: {
-      renderPortfolioKey: function() {
+      defaultPortfolioId: function() {
         this.getAllocations();
       },
       stockList: function() {

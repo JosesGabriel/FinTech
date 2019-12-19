@@ -177,6 +177,9 @@
         }
       }
     },
+    mounted() {
+        this.getPerformance();
+    },
     methods: {
       getPerformance() {
         if(this.journalCharts != null) {
@@ -202,14 +205,11 @@
         this.componentKeys++;
       }
     },
-    mounted() {
-        this.getPerformance();
-    },
     watch: {
         journalCharts: function() {
             this.getPerformance();
         },
-        renderPortfolioKey: function() {
+        defaultPortfolioId: function() {
             this.getPerformance();
         }
     }

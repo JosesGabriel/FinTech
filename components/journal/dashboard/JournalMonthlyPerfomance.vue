@@ -170,11 +170,13 @@
             journalCharts: "journal/getJournalCharts"
         })
     },
+    mounted() {
+      this.getMPerformance();
+    },
     methods: {
       getMPerformance() {
         if (this.journalCharts != null){
           this.monthlyPerformance = this.journalCharts.meta
-          
           let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance
           this.$refs.monthlyPerformance.updateSeries([
             {
@@ -182,22 +184,20 @@
             }
           ]);
         }
+        this.componentKeys++;
       },
       formatPrice(value) {
           let val = (value/1).toFixed(2).replace('.', '.')
           return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       }
     },
-    mounted() {
-      this.getMPerformance();
-    },
     watch: {
       journalCharts: function() {
         this.getMPerformance();
       },
-      renderPortfolioKey: function() {
+      defaultPortfolioId: function() {
         this.getMPerformance();
-      },
+      }
     }
   }
 </script>

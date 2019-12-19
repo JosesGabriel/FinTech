@@ -106,9 +106,6 @@
                     </v-card-title>
                   </v-row>
 
-                  <!-- <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
-                                        <v-spacer></v-spacer>
-                  <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span :class="(change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral')" class="caption">{{ change }}</span> <span :class="(cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral')" class="caption">({{ cpercentage }}%)</span></p>-->
                   <v-row no-gutters class="mt-2">
                     <v-col class="pa-0" cols="6" sm="6" md="6">
                       <v-simple-table
@@ -397,12 +394,12 @@ export default {
       stock: [],
       stock2: [],
       prev: "0",
-      low: 122,
+      low: 0,
       wklow: 0,
       volm: "0",
       trades: "0",
       open: "0",
-      high: 121,
+      high: 0,
       wkhigh: "0",
       vole: "0",
       ave: "0",
@@ -451,10 +448,10 @@ export default {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     fontcolor: function() {
-      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
+      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; 
     },
     fontcolor2: function() {
-      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; 
     },
 
     show: {
@@ -523,9 +520,8 @@ export default {
       this.totalposition = value;
     },
     btnBuy() {
-      console.log("buy");
+      
       this.setSimulatorConfirmedBuySell("buy");
-      console.log("Fund-id " + this.simulatorPortfolioID);
       this.totalposition = 0;
       this.buySelected = true;
       (this.onreset = true), (this.sellSelected = false);
@@ -563,7 +559,7 @@ export default {
     },
     //----Confirm Buy/Sell Button----------
     confirm() {
-      console.log("confirm - " + this.simulatorPortfolioID);
+      
       const stock_id = this.stock_id;
       let fund_id = this.simulatorPortfolioID;
       let d = new Date(),
@@ -572,15 +568,13 @@ export default {
           " " +
           [d.getHours(), d.getMinutes(), d.getSeconds()].join(":"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
 
-      // if(this.simulatorPositions != 0){
-
+      
       // if Sell is selected
       if (this.sellSelected) {
-        console.log("sell confirmed - " + this.avprice);
+        
         if (this.avprice != 0) {
           // if selected stock exist in Live Portfolio
           const sellparams = {
-            user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
             position: this.simulatorPositions,
             stock_price: this.cprice,
             transaction_meta: {
@@ -604,7 +598,7 @@ export default {
             )
             .then(response => {
               if (response.success) {
-                console.log("sell success");
+               
                 this.setSimulatorOpenPosition(this.OpenPosition);
                 this.e1 = 1;
                 this.onreset = false;
@@ -613,15 +607,12 @@ export default {
                 this.GetSelectStock = "";
               }
             });
-        } else {
-          // if selected stock is not in the list
-          console.log("unable to sell");
         }
       } else {
         // if Buy is selected
 
         const buyparams = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+         
           position: this.simulatorPositions,
           stock_price: this.cprice,
           transaction_meta: {
@@ -644,7 +635,7 @@ export default {
           )
           .then(response => {
             if (response.success) {
-              console.log(response.message);
+              
               this.setSimulatorOpenPosition(this.OpenPosition);
               this.e1 = 1;
               this.onreset = false;
@@ -654,9 +645,7 @@ export default {
             }
           });
       }
-      //}else {
-      // console.log('please enter quantity');
-      // }
+     
     },
     getDetails(selectObj) {
       const params = {
@@ -664,7 +653,7 @@ export default {
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
-          //console.log('data -- ',result);
+         
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.dboard = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
@@ -683,7 +672,6 @@ export default {
 
           if (this.sellSelected) {
             const sellparams = {
-              user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
               fund: this.simulatorPortfolioID
             };
             this.$api.journal.portfolio.open(sellparams).then(
@@ -699,7 +687,6 @@ export default {
             );
           } else {
             this.volm = this.nFormatter(result.data.volume);
-            //this.dataVolume = result.data.volume;
           }
           this.buyprice = result.data.last;
           this.boardlot = this.dboard;
