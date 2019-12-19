@@ -337,12 +337,10 @@ export default {
             this.setRenderPortfolioKey(this.keyCreateCounter);
         },
         getUserPortfolioList() {
-            const params = {
+            const createportfolioparams = {
                 user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
             };
-            this.$api.journal.portfolio
-              .createportfolio(createportfolioparams)
-              .then(
+            this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
                 function(result) {
                   if (result.success) {
                     console.log("created successfully");
