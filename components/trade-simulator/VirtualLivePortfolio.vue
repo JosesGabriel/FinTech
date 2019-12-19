@@ -300,8 +300,7 @@ export default {
     },
     streamTrigger: function() {
       this.getOpenPositions();
-    },
-   
+    }
   },
   methods: {
     ...mapActions({
@@ -311,9 +310,7 @@ export default {
         "tradesimulator/setSimulatorConfirmedBuySell"
     }),
     getOpenPositions() {
-     
       const openparams2 = {
-        
         fund: this.simulatorPortfolioID
       };
       this.totalProfitLoss = 0;
@@ -323,12 +320,11 @@ export default {
       let lastprice = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
-         
           this.portfolioLogs = result.meta.open;
 
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.openposition[i] = this.portfolioLogs[i].stock_id;
-           
+
             const params = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };
@@ -340,7 +336,7 @@ export default {
                 let buyResult =
                   this.portfolioLogs[i].position *
                   parseFloat(result.data.last).toFixed(2);
-               
+
                 let dpartcommission = buyResult * 0.0025;
                 let dcommission = dpartcommission > 20 ? dpartcommission : 20;
                 // TAX
@@ -396,7 +392,6 @@ export default {
       this.initSSE();
     },
     deleteLive: function(item) {
-     
       //TODO: use repo
       if (confirm("Do you really want to delete?")) {
         this.$axios
@@ -405,19 +400,16 @@ export default {
               "/journal/funds/" +
               this.simulatorPortfolioID +
               "/delete/" +
-              item.id,
-           
+              item.id
           )
           .then(response => {
             if (response.success) {
-              
               this.getOpenPositions();
             }
           });
       }
     },
     details: function(item, edit) {
-     
       this.editDetails = edit;
       this.selectedstrategy = item.strategy;
       this.selectedtradeplan = item.tradeplan;
@@ -426,7 +418,6 @@ export default {
       this.edit_id = item.id;
     },
     editLive: function() {
-      
       const editparams = {
         strategy: this.selectedstrategy,
         plan: this.selectedtradeplan,
@@ -444,7 +435,6 @@ export default {
         )
         .then(response => {
           if (response.success) {
-           
             this.showEditForm = false;
             this.getOpenPositions();
           }
@@ -471,8 +461,8 @@ export default {
       let currentProfitLoss = 0;
       let priorProfitLoss = 0;
       let d = new Date(),
-        dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
-     
+        dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
+
       for (let index = 0; index < this.portfolioLogs.length; index++) {
         let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
 
@@ -483,7 +473,6 @@ export default {
         };
         this.$api.chart.charts.latest(params).then(
           function(result) {
-            console.log("Day Prior Change - ", result.data.c[1]);
             let tcost =
               this.portfolioLogs[index].position *
               this.portfolioLogs[index].average_price;
@@ -497,9 +486,7 @@ export default {
 
               priorProfitLoss =
                 parseFloat(priorProfitLoss) + parseFloat(priorprofit);
-              
             }
-
             let currentPrice = result.data.c[0];
             let currentbuyResult =
               this.portfolioLogs[index].position *
@@ -508,19 +495,21 @@ export default {
             let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
             currentProfitLoss =
               parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-              console.log('Prior ProfitLoss -' + priorProfitLoss);
-              console.log('Currrent ProfitLoss -' + currentProfitLoss);
             let daychange =
               parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
-           
+
             this.$emit("DayChange", daychange);
             let daychangeperf = (daychange / priorProfitLoss) * 100;
-            console.log('DAY CAHNGE -' + daychange);
-            console.log('DAY CAHNGE PERC -' + daychangeperf);
             this.$emit("DayChangePerc", daychangeperf);
+
+            console.log("Prior ProfitLoss -" + priorProfitLoss);
+            console.log("Currrent ProfitLoss -" + currentProfitLoss);
+            console.log("DAY CAHNGE -" + daychange);
+            console.log("DAY CAHNGE PERC -" + daychangeperf);
           }.bind(this)
         );
       }
+      
     },
     fees(buyResult) {
       let dpartcommission = buyResult * 0.0025;

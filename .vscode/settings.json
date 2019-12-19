@@ -18,5 +18,8 @@
     "vetur.validation.template": false,
     "workbench.colorCustomizations": {
       
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
     }
   }
