@@ -111,7 +111,7 @@ export default {
         this.getSnapshot();
     },
     watch: {
-        renderPortfolioKey: function() {
+        defaultPortfolioId: function() {
             this.getSnapshot();
         },
         renderEditKey: function() {

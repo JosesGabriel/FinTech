@@ -39,7 +39,7 @@
         showScheduleForm: false,
         series: [{
           name: 'Loss',
-          data: [  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
+          data: [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ]
         }],
         chartOptions: {
           colors: ['#03DAC5','#F44336'],
@@ -180,7 +180,7 @@
       getBuyVolume() {
         if (this.journalCharts != null) {
           const buyVolumeArray = this.journalCharts.meta.buy_volume
-          const volumeArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          const volumeArray = [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ]
           if(buyVolumeArray.length != 0) {
             for ( let i = 0; i < buyVolumeArray.length; i++) {
               buyVolumeArray[i] = parseFloat(buyVolumeArray[i])

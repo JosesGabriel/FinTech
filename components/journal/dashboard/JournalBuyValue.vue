@@ -39,7 +39,7 @@
         showScheduleForm: false,
         series: [{
           name: 'Loss',
-          data: [  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0]
+          data: [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ]
         }],
         chartOptions: {
           colors: ['#03DAC5','#f44336'],
@@ -176,11 +176,14 @@
         }
       }
     },
+    mounted() {
+        this.getBuyValue();
+    },
     methods: {
       getBuyValue() {
         if(this.journalCharts != null){
           const buyValue = this.journalCharts.meta.buy_value
-          const valueArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          const valueArray = [  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ]
           if(buyValue.length != 0){
             for ( let i = 0; i < buyValue.length; i++) {
               buyValue[i] = parseFloat(buyValue[i])
@@ -198,14 +201,11 @@
         this.componentKeys++;
       }
     },
-    mounted() {
-        this.getBuyValue();
-    },
     watch: {
         journalCharts: function() {
             this.getBuyValue();
         },
-        renderPortfolioKey: function() {
+        defaultPortfolioId: function() {
             this.getBuyValue();
         }
     }

@@ -179,11 +179,14 @@ export default {
         }
       }
     },
+    mounted() {
+        this.getGrossPL();
+    },
     methods: {
       getGrossPL() {
         if (this.journalCharts != null) {
           const objGrosPL = this.journalCharts.meta.profit_loss
-          const lastArray = [ ,  ,  ,  ,  ]
+          const lastArray = [ ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ]
           if(objGrosPL.length != 0) {
             lastArray.unshift(...objGrosPL)
   
@@ -197,14 +200,11 @@ export default {
         this.componentKeys++;
       }
     },
-    mounted() {
-        this.getGrossPL();
-    },
     watch: {
         journalCharts: function() {
             this.getGrossPL();
         },
-        renderPortfolioKey: function() {
+        defaultPortfolioId: function() {
             this.getGrossPL();
         }
     }
