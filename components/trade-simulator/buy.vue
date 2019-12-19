@@ -192,12 +192,12 @@ export default {
         return "";
       }
     },
-    buyPrice: {
+    BuyPrice: {
       default() {
         return "";
       }
     },
-    boardLot: {
+    BoardLot: {
       default() {
         return "";
       }
@@ -228,13 +228,16 @@ export default {
     }
   },
   mounted() {
-    
-    this.$api.journal.portfolio.portfolio().then(
+    const openparams = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+      };
+    this.$api.journal.portfolio.portfolio(openparams).then(
       function(result) {
        
         for (let i = 0; i < result.meta.logs.length; i++) {
           if (
-            result.meta.logs[i].type == "virtual" 
+            result.meta.logs[i].type == "virtual" &&
+            result.meta.logs[i].name != "Default Virtual Portfolio" 
           ) {
             this.portfolio.push(result.meta.logs[i].name);
             if (result.meta.logs[i].name == "My Virtual Portfolio") {
@@ -325,7 +328,10 @@ export default {
       this.$emit("totalPosition", this.quantity);
     },
     getBalance: function(item) { 
-      this.$api.journal.portfolio.portfolio().then(
+      const params = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+      };
+      this.$api.journal.portfolio.portfolio(params).then(
         function(result) {
           
           for (let i = 0; i < result.meta.logs.length; i++) {
