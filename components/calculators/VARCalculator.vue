@@ -145,14 +145,6 @@
     </v-snackbar>
   </v-card>
 </template>
-<style>
-.error--text {
-  color: #f44336;
-}
-.text--gray {
-  color: gray;
-}
-</style>
 <script>
 let numeral = require("numeral");
 import { mapGetters, mapActions } from "vuex";
@@ -193,7 +185,6 @@ export default {
   },
   watch: {
     stocksDropdownModel: function(e) {
-      //   alert(e);
       const params = {
         exchange: "PSE",
         "symbol-id": e

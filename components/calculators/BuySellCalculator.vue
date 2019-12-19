@@ -108,7 +108,7 @@
                   ? 'success--text'
                   : parseInt(netProfitPercentage) < 0
                   ? 'error--text'
-                  : 'text--gray'
+                  : 'text--secondary'
               "
               >₱{{ netProfit }} ({{ netProfitPercentage }})</span
             >
@@ -118,11 +118,6 @@
     </v-container>
   </v-card>
 </template>
-<style>
-.text--gray {
-  color: gray;
-}
-</style>
 <script>
 import { mapGetters } from "vuex";
 let numeral = require("numeral");
@@ -250,61 +245,6 @@ export default {
       this.netProfit = numeral(netProfit).format("0,0.00");
       this.netProfitPercentage =
         numeral(netProfitPercentage).format("0,0.00") + "%";
-
-      //Color net profit
-      //   if (this.buyTotal > this.sellTotal) {
-      //     jQuery(".textchangecolor").addClass("arbredtxt");
-      //     jQuery(".textchangecolor").removeClass("arbgreentxt");
-      //   } else {
-      //     jQuery(".textchangecolor").addClass("arbgreentxt");
-      //     jQuery(".textchangecolor").removeClass("arbredtxt");
-      //   }
-
-      /*Breakeven*/
-
-      //   var vrbrkevnflat1 = this.buyPrice * 0.011;
-      //   var vrbrkevnflat2 = Number(this.buyPrice) + Number(vrbrkevnflat1);
-      //   jQuery("#brkevnflat").html(numeral(vrbrkevnflat2).format("0,0.00"));
-
-      //   var vrbrkevn2001 = Number(vrbrkevnflat2) * 0.2;
-      //   var vrbrkevn2002 = Number(vrbrkevnflat2) + Number(vrbrkevn2001);
-      //   jQuery("#brkevn200").html(numeral(vrbrkevn2002).format("0,0.00"));
-
-      //   var vrbrkevn1001 = Number(vrbrkevnflat2) * 0.1;
-      //   var vrbrkevn1002 = Number(vrbrkevnflat2) + Number(vrbrkevn1001);
-      //   jQuery("#brkevn100").html(numeral(vrbrkevn1002).format("0,0.00"));
-
-      //   var vrbrkevn751 = Number(vrbrkevnflat2) * 0.075;
-      //   var vrbrkevn752 = Number(vrbrkevnflat2) + Number(vrbrkevn751);
-      //   jQuery("#brkevn75").html(numeral(vrbrkevn752).format("0,0.00"));
-
-      //   var vrbrkevn501 = Number(vrbrkevnflat2) * 0.05;
-      //   var vrbrkevn502 = Number(vrbrkevnflat2) + Number(vrbrkevn501);
-      //   jQuery("#brkevn50").html(numeral(vrbrkevn502).format("0,0.00"));
-
-      //   var vrbrkevn251 = Number(vrbrkevnflat2) * 0.025;
-      //   var vrbrkevn252 = Number(vrbrkevnflat2) + Number(vrbrkevn251);
-      //   jQuery("#brkevn25").html(numeral(vrbrkevn252).format("0,0.00"));
-
-      //   var vrnegbrkevn251 = Number(vrbrkevnflat2) * 0.025;
-      //   var vrnegbrkevn252 = Number(vrbrkevnflat2) - Number(vrnegbrkevn251);
-      //   jQuery("#negbrkevn25").html(numeral(vrnegbrkevn252).format("0,0.00"));
-
-      //   var vrnegbrkevn501 = Number(vrbrkevnflat2) * 0.05;
-      //   var vrnegbrkevn502 = Number(vrbrkevnflat2) - Number(vrnegbrkevn501);
-      //   jQuery("#negbrkevn50").html(numeral(vrnegbrkevn502).format("0,0.00"));
-
-      //   var vrnegbrkevn751 = Number(vrbrkevnflat2) * 0.075;
-      //   var vrnegbrkevn752 = Number(vrbrkevnflat2) - Number(vrnegbrkevn751);
-      //   jQuery("#negbrkevn75").html(numeral(vrnegbrkevn752).format("0,0.00"));
-
-      //   var vrnegbrkevn1001 = Number(vrbrkevnflat2) * 0.1;
-      //   var vrnegbrkevn1002 = Number(vrbrkevnflat2) - Number(vrnegbrkevn1001);
-      //   jQuery("#negbrkevn100").html(numeral(vrnegbrkevn1002).format("0,0.00"));
-
-      //   var vrnegbrkevn2001 = Number(vrbrkevnflat2) * 0.2;
-      //   var vrnegbrkevn2002 = Number(vrbrkevnflat2) - Number(vrnegbrkevn2001);
-      //   jQuery("#negbrkevn200").html(numeral(vrnegbrkevn2002).format("0,0.00"));
     }
   }
 };

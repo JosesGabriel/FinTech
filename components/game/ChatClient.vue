@@ -109,10 +109,8 @@
 }
 </style>
 <script>
+import { client } from "~/assets/client.js";
 import { mapActions, mapGetters } from "vuex";
-const sdk = require("matrix-js-sdk");
-const HSUrl = "https://im.arbitrage.ph";
-const client = sdk.createClient(HSUrl);
 export default {
   layout: "main",
   data() {
@@ -126,7 +124,8 @@ export default {
     ...mapGetters({
       playerInGame: "game/getPlayerInGame",
       lightSwitch: "global/getLightSwitch",
-      playerCurrentChatRoom: "game/getPlayerCurrentChatRoom"
+      playerCurrentChatRoom: "game/getPlayerCurrentChatRoom",
+      playerLoggedInVyndue: "game/getPlayerLoggedInVyndue"
     })
   },
   watch: {
@@ -138,35 +137,24 @@ export default {
       this.loadClient();
     }
   },
+  beforeMount: function() {
+    this.checkCurrentRoom();
+  },
   mounted: function() {
-    this.loginVyndue();
     this.loadClient();
   },
   methods: {
     ...mapActions({
-      setPlayerInGame: "game/setPlayerInGame"
+      setPlayerInGame: "game/setPlayerInGame",
+      setPlayerCurrentChatRoom: "game/setPlayerCurrentChatRoom"
     }),
-    loginVyndue() {
-      client
-        .login("m.login.password", {
-          user: "@lerroux:im.arbitrage.ph",
-          password: "angelus69"
-        })
-        .then(response => {
-          myToken = response.access_token;
-        });
-      client.startClient();
-      client.on("sync", function(state, prevState, data) {
-        switch (state) {
-          case "PREPARED":
-            break;
-        }
-      });
+    checkCurrentRoom() {
+      let currentChatRoom = localStorage.getItem("currentChatRoom");
+      this.setPlayerCurrentChatRoom(currentChatRoom);
     },
     loadClient() {
       // this.loader = "primary";
       const roomID = this.playerCurrentChatRoom;
-      console.log("Load client at [" + roomID + "]");
       client.on(
         "Room.timeline",
         function(event, room, toStartOfTimeline, user) {

@@ -19,14 +19,6 @@
     </v-row>
   </v-container>
 </template>
-<style>
-.gameLobby__container {
-  margin-top: 40px;
-}
-.bordered__component {
-  border: 2px solid #0c1a2b;
-}
-</style>
 <script>
 import UserProfileCard from "~/components/game/lobby/UserProfileCard";
 import LobbyTable from "~/components/game/lobby/LobbyTable";
@@ -34,7 +26,6 @@ import Leaderboard from "~/components/game/lobby/Leaderboard";
 import ChatClient from "~/components/game/ChatClient";
 import AdCarousel from "~/components/game/lobby/AdCarousel";
 import LobbySettings from "~/components/game/lobby/LobbySettings";
-import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "game",
@@ -54,3 +45,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.gameLobby__container {
+  margin-top: 40px;
+}
+.bordered__component {
+  border: 2px solid #0c1a2b;
+}
+</style>

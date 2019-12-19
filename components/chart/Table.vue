@@ -15,22 +15,8 @@
         @click="toggleTabsFullscreen"
       >
         <v-icon class="icon-flipped-y">mdi-window-maximize</v-icon>
-        <!-- :color="maximize && !fullscreen ? '#03dac5' : '#BBB'" -->
-        <!-- <v-icon class="icon-flipped-y">{{
-          !fullscreen ? "mdi-window-maximize" : "mdi-window-minimize"
-        }}</v-icon> -->
+       
       </v-btn>
-
-      <!-- <v-btn
-        v-show="!maximize && !fullscreen"
-        small
-        icon
-        color="#03dac5"
-        title="Expand Up"
-        @click="toggleTabs(0)"
-      >
-        <v-icon>mdi-arrow-expand-up</v-icon>
-      </v-btn> -->
 
       <v-btn
         small
@@ -65,8 +51,8 @@
         :key="item.id"
         :href="`#tab-${item.id}`"
         class="text-capitalize subtitle-1"
-        @click="toggleTabs(item.id)"
         style="font-size: .8rem !important;"
+        @click="toggleTabs(item.id)"
       >
         {{ item.title }}
       </v-tab>

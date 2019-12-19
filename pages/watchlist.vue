@@ -43,12 +43,6 @@
     </v-row>
   </v-container>
 </template>
-<style scoped>
-.socialWall__container {
-  max-width: 1080px;
-  margin-top: 40px;
-}
-</style>
 <script>
 import Navbar from "~/components/Navbar";
 import WatchCard from "~/components/watchers/WatchCard.vue";
@@ -96,7 +90,6 @@ export default {
     getUserWatchList() {
       //Params won't be needed in the future, user token only
 
-      // let userData = {};
       let userData = {
         user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
       };
@@ -108,19 +101,12 @@ export default {
         }.bind(this)
       );
     }
-  },
-  head() {
-    return {
-      title: "Arbitrage",
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: "description",
-          name: "description",
-          content: "My custom description"
-        }
-      ]
-    };
   }
 };
 </script>
+<style scoped>
+.socialWall__container {
+  max-width: 1080px;
+  margin-top: 40px;
+}
+</style>

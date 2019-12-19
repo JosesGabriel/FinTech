@@ -15,14 +15,7 @@
     </span>
   </v-card>
 </template>
-<style>
-.investagram_bulok {
-  margin-top: 250px;
-}
-</style>
 <script>
-import axios from "~/node_modules/axios";
-
 export default {
   layout: "main",
 
@@ -33,28 +26,15 @@ export default {
       isOpen: true
     };
   },
-  mounted() {
-    axios
-      .get("https://dev-api.arbitrage.ph/api/social/posts/33937358302875648")
-      .then(response => (this.info = response.data));
-  },
   methods: {
     toggle: function() {
       this.isOpen = !this.isOpen;
     }
-  },
-  head() {
-    return {
-      title: "Arbitrage",
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        {
-          hid: "description",
-          name: "description",
-          content: "My custom description"
-        }
-      ]
-    };
   }
 };
 </script>
+<style>
+.investagram_bulok {
+  margin-top: 250px;
+}
+</style>
