@@ -219,7 +219,13 @@
           <v-icon>mdi-comment-text-outline</v-icon>
         </v-btn>
         <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
-        <v-btn icon fab x-small color="secondary">
+        <v-btn
+          icon
+          fab
+          x-small
+          color="secondary"
+          @click="showShareModal(postsObject[n - 1].id)"
+        >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
         <span class="caption">1000</span>
@@ -391,6 +397,11 @@
         Close
       </v-btn>
     </v-snackbar>
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
   </v-col>
 </template>
 <style>
@@ -430,10 +441,12 @@
 <script>
 import { mapGetters } from "vuex";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
+import Share from "~/components/modals/share";
 export default {
   name: "Newsfeed",
   components: {
-    PhotoCarousel
+    PhotoCarousel,
+    Share
   },
   props: {
     newPost: {
@@ -455,7 +468,9 @@ export default {
       currentPost: "",
       deleteDialog: false,
       editPostMode: false,
-      postOptionsMode: false
+      postOptionsMode: false,
+      showShare: false,
+      sharePostID: ""
     };
   },
   computed: {
@@ -491,6 +506,10 @@ export default {
     if (this.$route.name == "index") this.scroll();
   },
   methods: {
+    showShareModal(postid) {
+      this.sharePostID = postid;
+      this.showShare = true;
+    },
     loadPosts() {
       const params = {
         page: this.pageCount
