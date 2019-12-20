@@ -454,6 +454,12 @@ export default {
         return [];
       },
       type: Object
+    },
+    postid: {
+      default: function() {
+        return "";
+      },
+      type: String
     }
   },
   data() {
@@ -502,13 +508,28 @@ export default {
     }
   },
   mounted() {
-    this.loadPosts();
+    // console.log(this.postid);
+    if (this.postid) {
+      this.searchPost();
+    } else {
+      this.loadPosts();
+    }
     if (this.$route.name == "index") this.scroll();
   },
   methods: {
     showShareModal(postid) {
       this.sharePostID = postid;
       this.showShare = true;
+    },
+    searchPost() {
+      this.$api.social.searchPost
+        .show(this.postid)
+        .then(response => {
+          this.postsObject = this.postsObject.concat(response.data.post);
+        })
+        .catch(e => {
+          console.log(e);
+        });
     },
     loadPosts() {
       const params = {
