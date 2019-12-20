@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" max-width="450px">
+  <v-dialog v-model="show" max-width="450px" persistent>
     <v-card :dark="lightSwitch == true">
       <v-card-title class="text-center justify-center px-0 py-3 pt-5">
         <h1 class="font-weight-regular subtitle-1 success--text">
@@ -13,7 +13,7 @@
           </v-btn>
         </router-link>
         <router-link to="/" class="px-1 routerlink_facebook-link">
-          <v-btn icon>
+          <v-btn icon @click="shareToFb">
             <v-icon color="#B6B6B6" class="facebook_box-icon display-1" flat
               >mdi-facebook-box</v-icon
             >
@@ -43,7 +43,7 @@
               color="transparent"
               elevation="0"
             >
-              <div class="form-control d-flex textfield_copy-code">
+              <div class="form-control d-flex textfield_copy-code flex-grow">
                 <span class="body-2 grey--text copy_link-textfield-dis px-2">{{
                   testingCode
                 }}</span>
@@ -60,15 +60,23 @@
       </v-container>
 
       <v-card-actions>
-        <v-btn color="primary" @click.stop="closeEmit">Close</v-btn>
+        <v-btn
+          class="shareModal__button--close"
+          icon
+          color="success"
+          @click.stop="closeEmit"
+        >
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
+<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
+require("dotenv").config();
 import { mapActions, mapGetters } from "vuex";
-
 export default {
   props: {
     postid: {
@@ -78,24 +86,39 @@ export default {
   },
   data() {
     return {
-      testingCode:
-        "https://www.figma.com/file/5mU1WZVN6cShIg9wMWT6qL/arbitrage-v2?node-id=553%3A1959"
+      show: true,
+      testingCode: process.env.CURRENT_DOMAIN + "/post?id=" + this.postid
     };
   },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
-    }),
-    show: {
-      get() {
-        return this.visible;
-      },
-      set(value) {
-        if (!value) {
-          this.$emit("close");
-        }
+    })
+  },
+  mounted: function() {
+    console.log(this.$route);
+  },
+  created: function() {
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId: "407039123333666",
+        autoLogAppEvents: true,
+        xfbml: true,
+        version: "v5.0"
+      });
+    };
+
+    (function(d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
       }
-    }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
   },
   methods: {
     copyTestingCode() {
@@ -113,11 +136,27 @@ export default {
     },
     closeEmit() {
       this.$emit("closeModal");
+    },
+    shareToFb() {
+      FB.ui(
+        {
+          method: "share",
+          href: "https://developers.facebook.com/docs/"
+        },
+        function(response) {
+          console.log(response);
+        }
+      );
     }
   }
 };
 </script>
 <style>
+.shareModal__button--close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
 .copy_link-textfield-cont,
 .copy_link-btn {
   border: 2px solid #03dac5;
