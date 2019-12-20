@@ -8,7 +8,7 @@
     <div id="top">
       <!-- top -->
       <v-content>
-        <v-row class="ml-1 mr-1 mt-1 mb-3">
+        <v-row class="ml-1 mr-1 mt-1 mb-1">
           <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
             <v-row class="mt-1 pl-3 caption">
               Position
@@ -76,67 +76,11 @@
           </v-col>
         </v-row>
       </v-content>
+    </div>
 
-      <!-- mid -->
-
+    <v-content class="mx-1">
       <span class="subtitle-1 ml-3">Trade History</span>
       <v-divider></v-divider>
-      <v-content class="my-1">
-        <v-btn
-          small
-          :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-          depressed
-          :dark="lightSwitch == 1"
-          class="caption font-weight-bold text-capitalize increase"
-          >Filter</v-btn
-        >
-
-        <v-btn
-          small
-          :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-          depressed
-          :dark="lightSwitch == 1"
-          class="caption ml-12 font-weight-bold text-capitalize"
-          >Day</v-btn
-        >
-
-        <v-btn
-          small
-          :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-          depressed
-          :dark="lightSwitch == 1"
-          class="caption font-weight-bold text-capitalize"
-          >Week</v-btn
-        >
-
-        <v-btn
-          small
-          :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-          depressed
-          :dark="lightSwitch == 1"
-          class="caption font-weight-bold text-capitalize"
-          >Month</v-btn
-        >
-
-        <v-btn
-          small
-          :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-          depressed
-          :dark="lightSwitch == 1"
-          class="caption font-weight-bold text-capitalize"
-          >Year</v-btn
-        >
-        <v-btn
-          small
-          :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-          depressed
-          :dark="lightSwitch == 1"
-          class="caption font-weight-bold text-capitalize increase"
-          >Custom</v-btn
-        >
-      </v-content>
-    </div>
-    <v-content class="mx-1">
       <v-data-table
         :headers="headers"
         :items="items"
@@ -203,8 +147,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      min: "100px",
-      max: "calc(100vh - 300px)",
+      min: "140px",
+      max: "calc(100vh - 260px)",
       headers: [
         {
           text: "Date",
@@ -695,7 +639,11 @@ export default {
     ...mapGetters({
       fullscreen: "chart/getTableFullscreen",
       ticker: "chart/getTicker",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      stock: "chart/stock",
+      symbolid: "chart/symbolid",
+      index: "chart/index",
+      market_code: "chart/market_code"
     }),
     tablesize: function() {
       return this.fullscreen ? this.max : this.min;
@@ -705,6 +653,10 @@ export default {
     }
   },
   watch: {
+    symbolid(value) {
+      console.log("symbols");
+      console.log(value);
+    },
     fullscreen(value) {
       console.log("fullscreen");
       console.log(value);
@@ -713,11 +665,22 @@ export default {
       // console.log("ticker");
       // console.log(value);
       if (value) {
-        this.max = "calc(100vh - 300px)";
+        this.max = "calc(100vh - 260px)";
       } else {
-        this.max = "calc(100vh - 250px)";
+        this.max = "calc(100vh - 210px)";
       }
     }
+  },
+  mounted() {
+    this.$api.journal.portfolio
+      .open({
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: "real"
+      })
+      .then(response => {
+        console.log("real funds");
+        console.log(response);
+      });
   }
 };
 </script>
@@ -725,10 +688,10 @@ export default {
 <style scoped>
 #top {
   /* background: red; */
-  height: 150px;
+  height: 85px;
 }
 .tr_custom {
-  line-height: 2.0rem !important;
+  line-height: 2rem !important;
   cursor: pointer;
 }
 .positive {

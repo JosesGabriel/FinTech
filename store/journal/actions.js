@@ -24,5 +24,5 @@ export default {
   // Set Journal Charts
   async setJournalCharts({ commit }, data) {
     await commit("SET_JOURNALCHARTS", data);
-  },
+  }
 };
