@@ -86,7 +86,7 @@ export default {
   },
   data() {
     return {
-      show: true,
+      show: false,
       testingCode: process.env.CURRENT_DOMAIN + "/post?id=" + this.postid
     };
   },

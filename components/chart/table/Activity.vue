@@ -672,13 +672,26 @@ export default {
     }
   },
   mounted() {
+    console.log(this.symbolid);
+
     this.$api.journal.portfolio
       .open({
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: "real"
       })
       .then(response => {
-        console.log("real funds");
+        console.log("open real funds");
+        console.log(response);
+      });
+
+
+    this.$api.journal.portfolio
+      .tradelogs({
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: "real"
+      })
+      .then(response => {
+        console.log("tradelogs real funds");
         console.log(response);
       });
   }
