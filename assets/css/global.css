@@ -19,3 +19,6 @@
 .pa-05 {
     padding: 2px !important;
   }
+.v-list-item {
+    user-select: text !important;
+}

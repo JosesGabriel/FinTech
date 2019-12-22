@@ -45,14 +45,14 @@
             >
               <div class="form-control d-flex textfield_copy-code flex-grow">
                 <span class="body-2 grey--text copy_link-textfield-dis px-2">{{
-                  testingCode
+                  shareURL
                 }}</span>
                 <span
                   class="btn btn-info copy-btn ml-auto copy_link-textfield-btn caption px-2 success--text"
-                  @click.stop.prevent="copyTestingCode"
+                  @click.stop.prevent="copyshareURL"
                   >Copy</span
                 >
-                <input id="testing-code" type="hidden" :value="testingCode" />
+                <input id="testing-code" type="hidden" :value="shareURL" />
               </div>
             </div>
           </v-card>
@@ -87,7 +87,7 @@ export default {
   data() {
     return {
       show: false,
-      testingCode: process.env.CURRENT_DOMAIN + "/post?id=" + this.postid
+      shareURL: process.env.CURRENT_DOMAIN + "/post?id=" + this.postid
     };
   },
   computed: {
@@ -96,7 +96,7 @@ export default {
     })
   },
   mounted: function() {
-    console.log(this.$route);
+    if (this.postid) this.show = true;
   },
   created: function() {
     window.fbAsyncInit = function() {
@@ -121,17 +121,17 @@ export default {
     })(document, "script", "facebook-jssdk");
   },
   methods: {
-    copyTestingCode() {
-      let testingCodeToCopy = document.querySelector("#testing-code");
-      testingCodeToCopy.setAttribute("type", "text");
-      testingCodeToCopy.select();
+    copyshareURL() {
+      let shareURLToCopy = document.querySelector("#testing-code");
+      shareURLToCopy.setAttribute("type", "text");
+      shareURLToCopy.select();
 
       try {
         var successful = document.execCommand("copy");
       } catch (err) {}
 
       /* unselect the range */
-      testingCodeToCopy.setAttribute("type", "hidden");
+      shareURLToCopy.setAttribute("type", "hidden");
       window.getSelection().removeAllRanges();
     },
     closeEmit() {
@@ -141,7 +141,7 @@ export default {
       FB.ui(
         {
           method: "share",
-          href: "https://developers.facebook.com/docs/"
+          href: this.shareURL
         },
         function(response) {
           console.log(response);
