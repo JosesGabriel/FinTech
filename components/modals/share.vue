@@ -140,8 +140,9 @@ export default {
     shareToFb() {
       FB.ui(
         {
-          method: "share",
-          href: this.shareURL
+          method: "dialog",
+          href:
+            "https://ph.news.yahoo.com/cancelled-flights-dec-25-due-045913131.html"
         },
         function(response) {
           console.log(response);
