@@ -89,6 +89,18 @@ export default {
       setTicker: "chart/setTicker",
       setSidebar: "chart/setSidebar"
     })
+  },
+  head() {
+    return {
+      title: "Interactive Chart - Lyduz | Free Stock Trading Platform",
+      meta: [
+        {
+          //   hid: "og emman description",
+          //   name: "og karl description",
+          //   content: "og My custom description"
+        }
+      ]
+    };
   }
 };
 </script>

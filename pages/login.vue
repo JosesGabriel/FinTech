@@ -3,15 +3,16 @@
     <span class="display-4 text-center d-inline-block">
       <marquee behavior="scroll" direction="left" scrollamount="50"
         ><iframe
-          src="https://www.youtube.com/embed/2g2bBK3ucRg?autoplay=1"
+          src="https://www.youtube.com/embed/7d3QJ48Gzmc?autoplay=1"
         ></iframe
       ></marquee>
-      Bawal ang #MajorGaya
+      🤠
+      <span class="font-weight-thin rainbow--text"
+        >Merry Christmas mga ate at koya </span
+      >🤠
       <marquee behavior="scroll" direction="right" scrollamount="50"
-        ><img
-          src="https://www.dairyqueen.com/Global/Food/Hot-Dogs_8-to-1_470x500.jpg?width=&height=810"
-          width="100px"
-      /></marquee>
+        ><iframe src="https://www.youtube.com/embed/d51-EetcL8M?mute=1"></iframe
+      ></marquee>
     </span>
   </v-card>
 </template>
@@ -35,6 +36,19 @@ export default {
 </script>
 <style>
 .investagram_bulok {
-  margin-top: 250px;
+  margin-top: 150px;
+}
+.rainbow--text {
+  background: linear-gradient(
+    to right,
+    orange,
+    yellow,
+    green,
+    cyan,
+    blue,
+    violet
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 </style>

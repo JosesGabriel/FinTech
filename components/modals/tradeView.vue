@@ -1,134 +1,165 @@
 <template>
   <v-dialog v-model="show" max-width="320px" class="gameGlobal">
-    <v-card color="#00121E">
+    <v-card :dark="lightSwitch == true">
       <v-card-title
         class="text-left justify-left pa-5 pb-0 px-5 success--text subtitle-1 font-weight-bold"
-        ><span>TRADE</span>
+      >
+        <span>TRADE</span>
         <v-spacer></v-spacer>
-            <v-dialog
-                ref="dialog"
-                v-model="modal"
-                :return-value.sync="date"
-                persistent
-                width="290px"
-            >
-            <template v-slot:activator="{ on }">
-                <v-btn v-on="on" text class="px-1" color="#00FFC3">
-                    <span class="text-capitalize">Date: </span>
-                    <v-card-text class="pa-0" v-html="date"></v-card-text>
-                    <v-icon>mdi-chevron-down</v-icon>
-                </v-btn>
-            </template>
-            <v-date-picker v-model="date" color="#00121e" dark class="datepicker-container" scrollable>
-                <v-spacer></v-spacer>
-                <v-btn text color="success" @click="modal = false">Cancel</v-btn>
-                <v-btn text color="success" @click="$refs.dialog.save(date)">OK</v-btn>
-            </v-date-picker>
-            </v-dialog>
-        </v-card-title>
+        <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" text class="px-1" color="#03DAC5">
+              <span class="text-capitalize">Date:</span>
+              <v-card-text class="pa-0" v-html="date"></v-card-text>
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+          </template>
+          <v-date-picker
+            v-model="date"
+            :dark="lightSwitch == true"
+            :class="fontColorDate"
+            scrollable
+          >
+            <v-spacer></v-spacer>
+            <v-btn text color="success" @click="modal = false">Cancel</v-btn>
+            <v-btn text color="success" @click="$refs.dialog.save(date)">OK</v-btn>
+          </v-date-picker>
+        </v-dialog>
+      </v-card-title>
       <v-stepper id="stepper_container" v-model="e1" dark>
         <v-stepper-items>
           <!-- -----First View of Trade Modal----- -->
           <v-stepper-content step="1" class="pt-0">
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters>
-                
-                <v-tabs color="#03dac5" background-color="#00121E" dark grow>
-                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" @click="toBuy">Buy</v-tab>
-                  <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1 px-0" @click="toSell">Sell</v-tab>
+                <v-tabs
+                  color="#03dac5"
+                  background-color="transparent"
+                  :dark="lightSwitch == true"
+                  grow
+                >
+                  <v-tab
+                    :style="{ color: fontColor }"
+                    class="tab_menu-top text-capitalize subtitle-1 px-0"
+                    @click="toBuy"
+                  >Buy</v-tab>
+                  <v-tab
+                    :style="{ color: fontColor }"
+                    class="tab_menu-top text-capitalize subtitle-1 px-0"
+                    @click="toSell"
+                  >Sell</v-tab>
                 </v-tabs>
-                <v-col cols="12" sm="12" md="12" class="pt-3">
-                  <v-select v-model="GetSelectStock" offset-y="true" item-color="success" color="success" class="pa-0 ma-0" append-icon="mdi-chevron-down" :items="stocklist" item-text="symbol" item-value="id_str" label="Select Stock" @change="getStockDetails" ></v-select>
-                  <!-- <p class="text-left ma-0 caption" style="color:#b6b6b6">Current Price</p>
-                  <v-spacer></v-spacer>
-                  <p class="text-right ma-0 body-1 current_price-field" style="color:#b6b6b6">{{ cprice }} <span class="caption" :class=" change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral' " >{{ change }}</span>
-                  <span class="caption" :class=" cpercentage > 0 ? 'positive' : cpercentage < 0 ? 'negative' : 'neutral' ">({{ cpercentage }}%)</span >
-                  </p> -->
-                  
+                <v-col cols="12" sm="12" md="12" class="pt-3 mt-2">
+                  <v-select
+                    v-model="GetSelectStock"
+                    offset-y="true"
+                    item-color="success"
+                    color="success"
+                    class="pa-0 ma-0"
+                    append-icon="mdi-chevron-down"
+                    :items="stocklist"
+                    item-text="symbol"
+                    item-value="id_str"
+                    label="Select Stock"
+                    @change="getStockDetails"
+                    :light="lightSwitch == false"
+                  ></v-select>
+
                   <v-col cols="12" class="pa-0">
                     <v-row no-gutters>
-                      <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Current Price</v-card-title>
+                      <v-card-title class="subtitle-1 px-0 py-2">Current Price</v-card-title>
                       <v-spacer></v-spacer>
-                      <v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ cprice }}<span class="caption pl-1" :class=" change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral' " > {{ change }} ({{ cpercentage }}%)</span ></v-card-title>
+                      <v-card-title class="subtitle-1 px-0 py-2">
+                        {{ cprice }}
+                        <span
+                          class="caption pl-1"
+                          :class=" change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral' "
+                        >{{ change }} ({{ cpercentage }}%)</span>
+                      </v-card-title>
                     </v-row>
                   </v-col>
                   <v-row no-gutters class="mt-2">
                     <v-col class="pa-0" cols="12" sm="6" md="6">
                       <v-simple-table
                         id="liveportfolio-table"
+                        :class="fontColorTable"
                         :dense="true"
-                        dark
+                        :dark="lightSwitch == true"
                       >
                         <template v-slot:default>
                           <tbody>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Previous</td>
-                              <td class="item_position-prop body-2 text-right pa-0 px-1" >
-                                {{ prev }}
-                              </td>
+                              <td class="item_position-prop body-2 text-right pa-0 px-1">{{ prev }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Low</td>
-                              <td class="body-2 text-right py-1 px-1" :class=" low > open ? 'positive' : low < open ? 'negative' : 'neutral' ">
-                                {{ low }}
-                              </td>
+                              <td
+                                class="body-2 text-right py-1 px-1 item_position-prop"
+                                :class=" low > open ? 'positive' : low < open ? 'negative' : 'neutral' "
+                              >{{ low }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">52WKLow</td>
-                              <td class="body-2 text-right py-1 px-1" :class=" wklow > open ? 'positive' : wklow < open ? 'negative' : 'neutral'">
-                                {{ wklow }}
-                              </td>
+                              <td
+                                class="body-2 text-right py-1 px-1 item_position-prop"
+                                :class=" wklow > open ? 'positive' : wklow < open ? 'negative' : 'neutral'"
+                              >{{ wklow }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Volume</td>
-                              <td class="item_position-prop body-2 text-right py-1 px-1">
-                                {{ volm }}
-                              </td>
+                              <td class="item_position-prop body-2 text-right py-1 px-1">{{ volm }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Trades</td>
-                              <td class="item_position-prop body-2 text-right py-1 px-1">
-                                {{ trades }}
-                              </td>
+                              <td
+                                class="item_position-prop body-2 text-right py-1 px-1"
+                              >{{ trades }}</td>
                             </tr>
                           </tbody>
                         </template>
                       </v-simple-table>
                     </v-col>
                     <v-col class="pa-0" cols="12" sm="6" md="6">
-                      <v-simple-table id="liveportfolio-table" :dense="true" dark>
+                      <v-simple-table
+                        id="liveportfolio-table"
+                        :class="fontColorTable"
+                        :dense="true"
+                        :dark="lightSwitch == true"
+                      >
                         <template v-slot:default>
                           <tbody>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Open</td>
-                              <td class="body-2 text-right py-1 px-1" :class=" open > prev ? 'positive' : open < prev ? 'negative' : 'neutral' ">
-                                {{ open }}
-                              </td>
+                              <td
+                                class="body-2 text-right py-1 px-1 item_position-prop"
+                                :class=" open > prev ? 'positive' : open < prev ? 'negative' : 'neutral' "
+                              >{{ open }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">High</td>
-                              <td class="body-2 text-right py-1 px-1" :class=" high > open ? 'positive' : high < open ? 'negative' : 'neutral' ">
-                                {{ high }}
-                              </td>
+                              <td
+                                class="body-2 text-right py-1 px-1 item_position-prop"
+                                :class=" high > open ? 'positive' : high < open ? 'negative' : 'neutral' "
+                              >{{ high }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">52WKHigh</td>
                               <td
-                                class="body-2 text-right py-1 px-1" :class=" wkhigh > open ? 'positive' : wkhigh < open ? 'negative' : 'neutral' " >
-                                {{ wkhigh }}
-                              </td>
+                                class="body-2 text-right py-1 px-1 item_position-prop"
+                                :class=" wkhigh > open ? 'positive' : wkhigh < open ? 'negative' : 'neutral' "
+                              >{{ wkhigh }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Value</td>
-                              <td class="item_position-prop body-2 text-right py-1 px-1">
-                                {{ vole }}
-                              </td>
+                              <td class="item_position-prop body-2 text-right py-1 px-1">{{ vole }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Average</td>
-                              <td class="body-2 text-right py-1 px-1" :class=" ave > open ? 'positive' : ave < open ? 'negative' : 'neutral' " >
-                                {{ ave }}
-                              </td>
+                              <td
+                                class="body-2 text-right py-1 px-1 item_position-prop"
+                                :class=" ave > open ? 'positive' : ave < open ? 'negative' : 'neutral' "
+                              >{{ ave }}</td>
                             </tr>
                           </tbody>
                         </template>
@@ -136,86 +167,150 @@
                     </v-col>
                   </v-row>
                   <div class="px-3">
-                    <v-card-title class="pa-0 justify-center mt-3 font-weight-thin caption white--text">Bid/ Ask Bar</v-card-title>
-                    <v-progress-linear :value="bidask" background-color="#F44336" color="#00FFC3" height="5px" class="mt-1" ></v-progress-linear>
-                    <v-card-title class="pa-0 justify-center mt-3 font-weight-thin caption white--text">Members Sentiments</v-card-title>
-                    <v-progress-linear value="50" background-color="#F44336" color="#00FFC3" height="5px" class="mt-1 mb-1" ></v-progress-linear>
+                    <v-card-title
+                      class="pa-0 justify-center mt-3 font-weight-thin caption"
+                    >Bid/ Ask Bar</v-card-title>
+                    <v-progress-linear
+                      :value="bidask"
+                      background-color="#F44336"
+                      color="#03DAC5"
+                      height="5px"
+                      class="mt-1"
+                    ></v-progress-linear>
+                    <v-card-title
+                      class="pa-0 justify-center mt-3 font-weight-thin caption"
+                    >Members Sentiments</v-card-title>
+                    <v-progress-linear
+                      value="50"
+                      background-color="#F44336"
+                      color="#03DAC5"
+                      height="5px"
+                      class="mt-1 mb-1"
+                    ></v-progress-linear>
                   </div>
                 </v-col>
               </v-row>
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
-              <v-btn text class="text-capitalize" @click.stop="show = false">Close</v-btn>
-              <v-btn color="success ml-1" class="text-capitalize black--text buy" :disabled="continueButtonDisable" v-show="continuebuyBtn" light @click="e1 = 2">
-                Continue
-              </v-btn>
-              <v-btn color="success ml-1" class="text-capitalize black--text sell" :disabled="continueButtonDisable" v-show="continuesellBtn" light @click="e1 = 4">
-                Continue
-              </v-btn>
+              <v-btn text class="text-capitalize" :color="fontColor" @click.stop="show = false">Close</v-btn>
+              <v-btn
+                color="success ml-1"
+                class="text-capitalize black--text buy"
+                :disabled="continueButtonDisable"
+                v-show="continuebuyBtn"
+                light
+                @click="e1 = 2"
+              >Continue</v-btn>
+              <v-btn
+                color="success ml-1"
+                class="text-capitalize black--text sell"
+                :disabled="continueButtonDisable"
+                v-show="continuesellBtn"
+                light
+                @click="e1 = 4"
+              >Continue</v-btn>
             </v-row>
           </v-stepper-content>
-          
+
           <v-stepper-content step="2" class="pt-2">
             <!-- -----Second View of Trade Modal----- -->
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters class="px-0 py-0">
                 <v-col sm="12" md="12" class="pa-0">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ nFormatter(availableFundsModel) }}</v-card-title>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title>
+                    <v-spacer></v-spacer>
+                    <v-card-title
+                      class="subtitle-1 px-0 py-2 secondary--text"
+                    >{{ nFormatter(availableFundsModel) }}</v-card-title>
                   </v-row>
                   <v-select
-                  :items="selectPortfolioModel"
-                  v-model="portfolioDropdownModel"
-                  item-text="name"
-                  item-value="id"
-                  append-icon="mdi-chevron-down"
-                  @change="whereToSave"
-                  label="Select Portfolio"
-                  color="#00FFC3"
-                  item-color="success"
-                  dense
-                  dark
-                  class="enter_amount-deposit-select ma-0"
+                    :items="selectPortfolioModel"
+                    v-model="portfolioDropdownModel"
+                    item-text="name"
+                    item-value="id"
+                    append-icon="mdi-chevron-down"
+                    @change="whereToSave"
+                    label="Select Portfolio"
+                    color="#00FFC3"
+                    item-color="success"
+                    dense
+                    :dark="lightSwitch == true"
+                    class="enter_amount-deposit-select ma-0"
                   ></v-select>
                 </v-col>
-                <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
-                  <v-text-field v-model="priceModel" label="Buy Price" placeholder="Enter Buy Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
+                <v-col
+                  cols="12"
+                  sm="12"
+                  md="12"
+                  class="py-0 justify-right d-flex align-center text-right"
+                >
+                  <v-text-field
+                    v-model="priceModel"
+                    label="Buy Price"
+                    placeholder="Enter Buy Price"
+                    color="#00FFC3"
+                    style="color: #00FFC3"
+                    :dark="lightSwitch == true"
+                    class="body-2 buy_selector quantity-input py-3"
+                  ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="12" md="12" class="py-0 justify-right d-flex align-center text-right" >
-                  <v-text-field v-model="quantityModel" label="Quantity" placeholder="Enter Quantity" type="number" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3" ></v-text-field>
-                  <v-btn 
-                      @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotQuantity"
-                      text 
-                      icon 
-                      color="success"
-                  ><v-icon>mdi-chevron-down</v-icon></v-btn>
-                  <v-btn 
-                      @click="quantityModel += boardLotQuantity"
-                      text 
-                      icon 
-                      color="success"
-                  ><v-icon>mdi-chevron-up</v-icon></v-btn>
+                <v-col
+                  cols="12"
+                  sm="12"
+                  md="12"
+                  class="py-0 justify-right d-flex align-center text-right"
+                >
+                  <v-text-field
+                    v-model="quantityModel"
+                    label="Quantity"
+                    placeholder="Enter Quantity"
+                    type="number"
+                    color="#00FFC3"
+                    style="color: #00FFC3"
+                    :dark="lightSwitch == true"
+                    class="body-2 buy_selector buy_price-input py-3"
+                  ></v-text-field>
+                  <v-btn
+                    @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotQuantity"
+                    text
+                    icon
+                    color="success"
+                  >
+                    <v-icon>mdi-chevron-down</v-icon>
+                  </v-btn>
+                  <v-btn @click="quantityModel += boardLotQuantity" text icon color="success">
+                    <v-icon>mdi-chevron-up</v-icon>
+                  </v-btn>
                 </v-col>
                 <v-col cols="12">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title>
+                    <v-spacer></v-spacer>
+                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pb-5">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Total Cost</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostModel }}</v-card-title>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Total Cost</v-card-title>
+                    <v-spacer></v-spacer>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostModel }}</v-card-title>
                   </v-row>
                 </v-col>
-
               </v-row>
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
               <v-btn text class="text-capitalize" @click="e1 = 1">Back</v-btn>
-              <v-btn color="success" v-show="showBuybtn" class="text-capitalize black--text ml-1" :disabled="continueBuyButtonDisable" light @click="e1 = 3">
-                Continue
-              </v-btn>
+              <v-btn
+                color="success"
+                v-show="showBuybtn"
+                class="text-capitalize black--text ml-1"
+                :disabled="continueBuyButtonDisable"
+                light
+                @click="e1 = 3"
+              >Continue</v-btn>
             </v-row>
           </v-stepper-content>
           <v-stepper-content step="3" class="pt-2">
@@ -286,41 +381,61 @@
                 light
                 @click.stop="show = false"
                 @click="buyListArray"
-              >
-                Confirm
-              </v-btn>
+              >Confirm</v-btn>
             </v-row>
           </v-stepper-content>
           <v-stepper-content step="4" class="pt-2">
             <v-container class="pa-0">
               <v-row no-gutters class="pt-3 pa-0">
-                <v-text-field v-model="priceSellModel" label="Sell Price" placeholder="Enter Sell Price" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector quantity-input py-3" ></v-text-field>
-                <v-col sm="12" md="12"  class="py-0 justify-right d-flex align-center text-right" >
-                  <v-text-field v-model="quantitySellModel" label="Quantity" placeholder="Enter Quantity" type="number" color="#00FFC3" style="color: #00FFC3" dark class="body-2 buy_selector buy_price-input py-3 quatity_number"></v-text-field>
-                  <v-btn 
+                <v-text-field
+                  v-model="priceSellModel"
+                  label="Sell Price"
+                  placeholder="Enter Sell Price"
+                  color="#00FFC3"
+                  style="color: #00FFC3"
+                  :dark="lightSwitch == true"
+                  class="body-2 buy_selector quantity-input py-3"
+                ></v-text-field>
+                <v-col sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
+                  <v-text-field
+                    v-model="quantitySellModel"
+                    label="Quantity"
+                    placeholder="Enter Quantity"
+                    type="number"
+                    color="#00FFC3"
+                    style="color: #00FFC3"
+                    :dark="lightSwitch == true"
+                    class="body-2 buy_selector buy_price-input py-3 quatity_number"
+                  ></v-text-field>
+                  <v-btn
                     @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= boardLotQuantity"
-                    text 
-                    icon 
+                    text
+                    icon
                     color="success"
-                  ><v-icon>mdi-chevron-down</v-icon></v-btn>
-                  <v-btn 
-                    @click="quantitySellModel += boardLotQuantity"
-                    text 
-                    icon 
-                    color="success"
-                  ><v-icon>mdi-chevron-up</v-icon></v-btn>
+                  >
+                    <v-icon>mdi-chevron-down</v-icon>
+                  </v-btn>
+                  <v-btn @click="quantitySellModel += boardLotQuantity" text icon color="success">
+                    <v-icon>mdi-chevron-up</v-icon>
+                  </v-btn>
                 </v-col>
                 <v-col cols="12">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title>
+                    <v-spacer></v-spacer>
+                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pb-5">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title><v-spacer></v-spacer><v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostSellModel }}</v-card-title>
+                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title>
+                    <v-spacer></v-spacer>
+                    <v-card-title
+                      class="subtitle-1 px-0 py-2 secondary--text"
+                    >{{ totalCostSellModel }}</v-card-title>
                   </v-row>
                 </v-col>
-                </v-row>
+              </v-row>
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
@@ -332,15 +447,13 @@
                 @click.stop="show = false"
                 @click="sellListArray"
                 :disabled="confirmSellButtonDisable"
-              >
-                Confirm
-              </v-btn>
+              >Confirm</v-btn>
             </v-row>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
     </v-card>
-    </v-dialog>
+  </v-dialog>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -367,7 +480,12 @@ export default {
       vole: 0,
       ave: 0,
       GetSelectStock: null,
-      strategy: [ "Bottom Picking", "Breakout Play", "Trend Following", "1-2-3 Reversal" ],
+      strategy: [
+        "Bottom Picking",
+        "Breakout Play",
+        "Trend Following",
+        "1-2-3 Reversal"
+      ],
       strategyModel: null,
       tradeplan: ["Day Trade", "Swing Trade", "Investments"],
       tradeplanModel: null,
@@ -384,13 +502,13 @@ export default {
       selectPortfolioModel: [],
       portfolioDropdownModel: null,
       portfolioDropdownModelId: null,
-      
+
       availableFundsModel: "0.00",
       boardLotModel: 0,
       average_price: 0,
       priceModel: "0.00",
       priceSellModel: "0.00",
-      quantityModel: 0.00,
+      quantityModel: 0.0,
       quantitySellModel: 0,
       totalCostModel: 0,
       totalCostSellModel: 0,
@@ -405,10 +523,10 @@ export default {
       continueButtonDisable: true,
       continueBuyButtonDisable: true,
       confirmSellButtonDisable: true,
-      
+
       continuesellBtn: false,
       continuebuyBtn: true,
-      
+
       showBuybtn: true,
       showSellbtn: false,
 
@@ -423,8 +541,18 @@ export default {
       userPortfolio: "journal/getUserPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       openPosition: "journal/getOpenPosition",
-      stockList: "global/getStockList"
+      stockList: "global/getStockList",
+      lightSwitch: "global/getLightSwitch"
     }),
+    fontColor: function() {
+      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+    },
+    fontColorTable: function() {
+      return this.lightSwitch == 0 ? "data_table-container" : "data_table-container-dark";
+    },
+    fontColorDate: function() {
+      return this.lightSwitch == 0 ? "datepicker-container-light" : "datepicker-container";
+    },
     show: {
       get() {
         return this.visible;
@@ -440,8 +568,8 @@ export default {
           this.notesModel = "";
           this.dateModel = new Date().toISOString().substr(0, 10);
           this.e1 = 1;
-          this.portfolioDropdownModel = null
-          this.availableFundsModel = 0
+          this.portfolioDropdownModel = null;
+          this.availableFundsModel = 0;
 
           this.cprice = "0.00";
           this.change = "0.00";
@@ -460,7 +588,7 @@ export default {
           this.ave = 0;
         }
       }
-    },
+    }
   },
   watch: {
     // renderPortfolioKey: function() {
@@ -471,7 +599,7 @@ export default {
     // },
     stockList: function() {
       this.initPortfolio();
-      
+
       this.stocklist = this.stockList.data;
       this.stocklistBuy = this.stockList.data;
     },
@@ -502,7 +630,7 @@ export default {
   mounted() {
     this.stocklist = this.stockList.data;
     this.stocklistBuy = this.stockList.data;
-    
+
     this.getUserPortfolio();
   },
   methods: {
@@ -511,22 +639,28 @@ export default {
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
       setStockList: "global/setStockList"
     }),
-    initPortfolio(){
+    initPortfolio() {
       var today = new Date(this.date);
       var tim = new Date();
-      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      var time =
+        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var dateTime = date+' '+time;
-      this.dateModel = dateTime
-      this.YMDModel = date
+      var dateTime = date + " " + time;
+      this.dateModel = dateTime;
+      this.YMDModel = date;
     },
     buyListArray: function() {
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseFloat(this.quantityModel),
         stock_price: parseFloat(this.priceModel),
-        transaction_meta : {
+        transaction_meta: {
           strategy: this.strategyModel,
           plan: this.tradeplanModel,
           emotion: this.emotionsModel,
@@ -535,10 +669,15 @@ export default {
         }
       };
       this.$axios
-        .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.portfolioDropdownModel+"/buy/"+this.GetSelectStock,params)
+        .$post(
+          "https://dev-api.arbitrage.ph/api/journal/funds/" +
+            this.portfolioDropdownModel +
+            "/buy/" +
+            this.GetSelectStock,
+          params
+        )
         .then(response => {
           if (response.success) {
-            
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
@@ -552,8 +691,8 @@ export default {
             this.notesModel = "";
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
-            this.portfolioDropdownModel = null
-            this.availableFundsModel = 0
+            this.portfolioDropdownModel = null;
+            this.availableFundsModel = 0;
 
             this.cprice = "0.00";
             this.change = "0.00";
@@ -574,22 +713,30 @@ export default {
         });
     },
     sellListArray: function() {
-      let aveprice = parseFloat(this.quantitySellModel) / parseFloat(this.totalCostSellModel.replace(/,/g, ''))
+      let aveprice =
+        parseFloat(this.quantitySellModel) /
+        parseFloat(this.totalCostSellModel.replace(/,/g, ""));
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseFloat(this.quantitySellModel),
         stock_price: parseFloat(this.priceSellModel),
-        transaction_meta : {
-          strategy : this.strategySellModel,
-          average_price : this.avepriceSell,
-          plan : this.tradeplanSellModel,
-          emotion : this.emotionsSellModel,
+        transaction_meta: {
+          strategy: this.strategySellModel,
+          average_price: this.avepriceSell,
+          plan: this.tradeplanSellModel,
+          emotion: this.emotionsSellModel,
           notes: this.notesSellModel,
-          date : this.dateModel
+          date: this.dateModel
         }
       };
       this.$axios
-        .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.defaultPortfolioId+"/sell/"+this.GetSelectStock,params)
+        .$post(
+          "https://dev-api.arbitrage.ph/api/journal/funds/" +
+            this.defaultPortfolioId +
+            "/sell/" +
+            this.GetSelectStock,
+          params
+        )
         .then(response => {
           if (response.success) {
             this.keyCreateCounter = this.renderPortfolioKey;
@@ -621,14 +768,14 @@ export default {
         });
     },
     toBuy() {
-      this.stocklist = this.stocklistBuy
-      this.continuesellBtn = false
-      this.continuebuyBtn = true
+      this.stocklist = this.stocklistBuy;
+      this.continuesellBtn = false;
+      this.continuebuyBtn = true;
     },
     toSell() {
-      this.stocklist = this.openPosition
-      this.continuebuyBtn = false
-      this.continuesellBtn = true
+      this.stocklist = this.openPosition;
+      this.continuebuyBtn = false;
+      this.continuesellBtn = true;
     },
     getStockDetails(Obj) {
       const params = {
@@ -637,7 +784,7 @@ export default {
       this.$api.chart.stocks.history(params).then(
         function(result) {
           this.stockSymbolGet = result.data;
-          
+
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.boardLotModel = 1000000;
             this.boardLotQuantity = 1000000;
@@ -675,23 +822,26 @@ export default {
           this.ave = result.data.average.toFixed(2);
           this.priceModel = result.data.last;
 
-          if(this.openPosition != null){
+          if (this.openPosition != null) {
             for (let i = 0; i < this.openPosition.length; i++) {
-              let findOpenPosition = this.openPosition[i]
-              if(parseInt(findOpenPosition.stockid) == this.stockSymbolGet.stockid){
-                this.priceSellModel = findOpenPosition.last
-                this.avepriceSell = findOpenPosition.average_price
-                this.quantitySellModel = findOpenPosition.position
-                this.strategySellModel = findOpenPosition.metas.strategy
-                this.tradeplanSellModel = findOpenPosition.metas.plan
-                this.emotionsSellModel = findOpenPosition.metas.emotion
-                this.notesSellModel = findOpenPosition.metas.notes
-                this.quantityModel = 0
+              let findOpenPosition = this.openPosition[i];
+              if (
+                parseInt(findOpenPosition.stockid) ==
+                this.stockSymbolGet.stockid
+              ) {
+                this.priceSellModel = findOpenPosition.last;
+                this.avepriceSell = findOpenPosition.average_price;
+                this.quantitySellModel = findOpenPosition.position;
+                this.strategySellModel = findOpenPosition.metas.strategy;
+                this.tradeplanSellModel = findOpenPosition.metas.plan;
+                this.emotionsSellModel = findOpenPosition.metas.emotion;
+                this.notesSellModel = findOpenPosition.metas.notes;
+                this.quantityModel = 0;
               }
             }
           } else {
-            this.quantitySellModel = 0
-            this.quantityModel = 0
+            this.quantitySellModel = 0;
+            this.quantityModel = 0;
           }
         }.bind(this)
       );
@@ -715,40 +865,40 @@ export default {
     },
     getUserPortfolio() {
       const params = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
       };
       this.$api.journal.portfolio.portfolio(params).then(
-          function(result) {
-              this.portfolioList = result.meta.logs;
-              this.portfolioList = this.portfolioList.reverse();
-              this.selectPortfolioModel = []
-              if(this.portfolioList.length != 0) {
-                this.selectPortfolioModel.push({header: 'Real Portfolio'});
-                const toFindReal = "real" // what we want to count
-                for (let i = 0; i < this.portfolioList.length; i++ ) {
-                    let portfolioListPush1 = this.portfolioList[i]
-                    if (portfolioListPush1.type === toFindReal) {
-                      this.selectPortfolioModel.push(portfolioListPush1);
-                    }
-                }
+        function(result) {
+          this.portfolioList = result.meta.logs;
+          this.portfolioList = this.portfolioList.reverse();
+          this.selectPortfolioModel = [];
+          if (this.portfolioList.length != 0) {
+            this.selectPortfolioModel.push({ header: "Real Portfolio" });
+            const toFindReal = "real"; // what we want to count
+            for (let i = 0; i < this.portfolioList.length; i++) {
+              let portfolioListPush1 = this.portfolioList[i];
+              if (portfolioListPush1.type === toFindReal) {
+                this.selectPortfolioModel.push(portfolioListPush1);
               }
-          }.bind(this)
+            }
+          }
+        }.bind(this)
       );
       this.componentKey++;
     },
     whereToSave() {
-      console.log(this.userPortfolio)
-      for (let i = 0; i < this.userPortfolio.length; i++ ) {
-          let portfolioListPush1 = this.userPortfolio[i]
-          if (portfolioListPush1.id === this.portfolioDropdownModel) {
-            this.availableFundsModel = parseInt(portfolioListPush1.balance)
-            this.portfolioDropdownModel = portfolioListPush1.id
-            this.keyCreateCounter = this.renderPortfolioKey;
-            this.keyCreateCounter++;
-            this.setRenderPortfolioKey(this.keyCreateCounter);
-            
-            this.setDefaultPortfolioId(portfolioListPush1.id)
-          }
+      console.log(this.userPortfolio);
+      for (let i = 0; i < this.userPortfolio.length; i++) {
+        let portfolioListPush1 = this.userPortfolio[i];
+        if (portfolioListPush1.id === this.portfolioDropdownModel) {
+          this.availableFundsModel = parseInt(portfolioListPush1.balance);
+          this.portfolioDropdownModel = portfolioListPush1.id;
+          this.keyCreateCounter = this.renderPortfolioKey;
+          this.keyCreateCounter++;
+          this.setRenderPortfolioKey(this.keyCreateCounter);
+
+          this.setDefaultPortfolioId(portfolioListPush1.id);
+        }
       }
     },
     selectWatch() {
@@ -759,9 +909,10 @@ export default {
       }
     },
     buyWatch(newValue) {
-      let buyResult = parseFloat(this.priceModel) * parseFloat(this.quantityModel)
+      let buyResult =
+        parseFloat(this.priceModel) * parseFloat(this.quantityModel);
       let dpartcommission = buyResult * 0.0025;
-      let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
       // TAX
       let dtax = dcommission * 0.12;
       // Transfer Fee
@@ -769,17 +920,29 @@ export default {
       // SCCP
       let dsccp = buyResult * 0.0001;
       let dall = buyResult + dcommission + dtax + dtransferfee + dsccp;
-      this.totalCostModel = dall.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      this.totalCostModel = dall
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      if(parseFloat(this.totalCostModel) >= parseFloat(this.availableFundsModel)){
+      if (
+        parseFloat(this.totalCostModel) >= parseFloat(this.availableFundsModel)
+      ) {
         this.continueBuyButtonDisable = true;
       } else {
-        if (this.priceModel == "0.00" || this.priceModel <= 0 || this.quantityModel == "0.00" || this.quantityModel <= 0 || this.portfolioDropdownModel == null) {
+        if (
+          this.priceModel == "0.00" ||
+          this.priceModel <= 0 ||
+          this.quantityModel == "0.00" ||
+          this.quantityModel <= 0 ||
+          this.portfolioDropdownModel == null
+        ) {
           this.continueBuyButtonDisable = true;
-          this.totalCostModel = 0
+          this.totalCostModel = 0;
         } else {
-          let compareNum = parseFloat(this.totalCostModel.replace(/,/g, '')) >= parseFloat(this.availableFundsModel)
-          if(!compareNum) {
+          let compareNum =
+            parseFloat(this.totalCostModel.replace(/,/g, "")) >=
+            parseFloat(this.availableFundsModel);
+          if (!compareNum) {
             this.continueBuyButtonDisable = false;
           } else {
             this.continueBuyButtonDisable = true;
@@ -788,9 +951,10 @@ export default {
       }
     },
     sellWatch(newValue) {
-      let sellResult = parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel)
+      let sellResult =
+        parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
       let dpartcommission = sellResult * 0.0025;
-      let dcommission = (dpartcommission > 20 ? dpartcommission : 20);
+      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
       // TAX
       let dtax = dcommission * 0.12;
       // Transfer Fee
@@ -798,20 +962,29 @@ export default {
       // SCCP
       let dsccp = sellResult * 0.0001;
       let dsell = sellResult * 0.006;
-      let dall =  dcommission + dtax + dtransferfee + dsccp + dsell;
+      let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
       let result = sellResult - dall;
-      this.totalCostSellModel = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      this.totalCostSellModel = result
+        .toFixed(2)
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      let compareNum = parseInt(this.quantitySellModel) >= parseInt(this.boardLotModel)
-      if(!compareNum){
+      let compareNum =
+        parseInt(this.quantitySellModel) >= parseInt(this.boardLotModel);
+      if (!compareNum) {
         this.confirmSellButtonDisable = true;
       } else {
-        if(this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0){
+        if (
+          this.priceSellModel == "0.00" ||
+          this.priceSellModel <= 0 ||
+          this.quantitySellModel == "0.00" ||
+          this.quantitySellModel <= 0
+        ) {
           this.confirmSellButtonDisable = true;
-          this.totalCostSellModel = 0
-        }else {
-          let compareNum1 = parseInt(this.quantitySellModel) > parseInt(this.boardLotModel)
-          if(!compareNum1) {
+          this.totalCostSellModel = 0;
+        } else {
+          let compareNum1 =
+            parseInt(this.quantitySellModel) > parseInt(this.boardLotModel);
+          if (!compareNum1) {
             this.confirmSellButtonDisable = false;
           } else {
             this.confirmSellButtonDisable = true;
@@ -822,26 +995,43 @@ export default {
     dateWatch() {
       var today = new Date(this.date);
       var tim = new Date();
-      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      var time =
+        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var dateTime = date+' '+time;
-      this.dateModel = dateTime
-      this.YMDModel = date
+      var dateTime = date + " " + time;
+      this.dateModel = dateTime;
+      this.YMDModel = date;
     }
   }
 };
 </script>
+<style scoped>
+.tab_menu-top.v-tab--active {
+  color: #03dac5 !important;
+}
+</style>
 <style>
+.data_table-container.v-data-table td, .total_bottom {
+  font-size: 12px !important;
+}
+.data_table-container-dark.v-data-table td, .total_bottom {
+  font-size: 12px !important;
+}
 .stock_selector .v-select__slot .v-label,
 .stock_selector .v-select__slot .v-icon {
-  color: #03DAC5 !important;
+  color: #03dac5 !important;
 }
 .stock_selector .v-input__slot {
   margin: 0;
 }
 .stock_selector .v-select__selection--comma {
-  color: #03DAC5;
+  color: #03dac5;
   font-size: 12px;
 }
 .stock_selector .v-input__control {
@@ -858,24 +1048,30 @@ export default {
   box-shadow: none;
   background-color: transparent;
 }
-.positive {
-  color: #03DAC5;
+.data_table-container tr td.positive, .data_table-container-dark tr td.positive  {
+  color: #03dac5;
 }
-.negative {
-  color: #F44336;
+.data_table-container tr td.negative, .data_table-container-dark tr td.negative {
+  color: #f44336;
 }
-.neutral {
-  color: #bdbdbd;
+.data_table-container td.item_position-prop, .data_table-container-dark td.item_position-prop {
+  color: #000;
+}
+.data_table-container-dark td.item_position-prop {
+  color: #B6B6B6;
+}
+.data_table-container td.item_position-prop  {
+  color: #535358;
 }
 .buy_selector .v-select__selection--comma {
-  color: #03DAC5;
+  color: #03dac5;
   font-size: 14px;
 }
 .buy_selector .v-input__control {
   min-height: auto !important;
 }
 .buy_selector-font-size .v-label {
-  font-size: 14px;  
+  font-size: 14px;
 }
 .separator {
   display: block;
@@ -901,10 +1097,18 @@ export default {
   background: #123;
 }
 /* datepicker */
-.datepicker-container.v-card, .datepicker-container .v-picker__body {
+.datepicker-container.v-card,
+.datepicker-container .v-picker__body {
   background: #00121e !important;
 }
-.datepicker-container .v-date-picker-title__date {
-  color: #03DAC5 !important
+.datepicker-container-light.v-card,
+.datepicker-container-light .v-picker__body {
+  background: #f2f2f2 !important;
+}
+.theme--light.datepicker-container-light .v-picker__title {
+    background: #f2f2f2 !important;
+}
+.datepicker-container .v-date-picker-title__date, .theme--light.datepicker-container-light .v-date-picker-title__date {
+  color: #03dac5 !important;
 }
 </style>

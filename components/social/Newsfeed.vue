@@ -219,7 +219,13 @@
           <v-icon>mdi-comment-text-outline</v-icon>
         </v-btn>
         <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
-        <v-btn icon fab x-small color="secondary">
+        <v-btn
+          icon
+          fab
+          x-small
+          color="secondary"
+          @click="showShareModal(postsObject[n - 1].id)"
+        >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
         <span class="caption">1000</span>
@@ -391,6 +397,11 @@
         Close
       </v-btn>
     </v-snackbar>
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
   </v-col>
 </template>
 <style>
@@ -430,10 +441,12 @@
 <script>
 import { mapGetters } from "vuex";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
+import Share from "~/components/modals/share";
 export default {
   name: "Newsfeed",
   components: {
-    PhotoCarousel
+    PhotoCarousel,
+    Share
   },
   props: {
     newPost: {
@@ -441,6 +454,12 @@ export default {
         return [];
       },
       type: Object
+    },
+    postid: {
+      default: function() {
+        return "";
+      },
+      type: String
     }
   },
   data() {
@@ -455,7 +474,9 @@ export default {
       currentPost: "",
       deleteDialog: false,
       editPostMode: false,
-      postOptionsMode: false
+      postOptionsMode: false,
+      showShare: false,
+      sharePostID: ""
     };
   },
   computed: {
@@ -487,10 +508,29 @@ export default {
     }
   },
   mounted() {
-    this.loadPosts();
+    // console.log(this.postid);
+    if (this.postid) {
+      this.searchPost();
+    } else {
+      this.loadPosts();
+    }
     if (this.$route.name == "index") this.scroll();
   },
   methods: {
+    showShareModal(postid) {
+      this.sharePostID = postid;
+      this.showShare = true;
+    },
+    searchPost() {
+      this.$api.social.searchPost
+        .show(this.postid)
+        .then(response => {
+          this.postsObject = this.postsObject.concat(response.data.post);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
     loadPosts() {
       const params = {
         page: this.pageCount

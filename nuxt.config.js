@@ -48,11 +48,12 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    "~/plugins/bus",
-    "~/plugins/repository",
-    "~/plugins/global-method",
-    "~/plugins/numeral",
-    "~/plugins/vue-screen-size",
+    { src: "~/plugins/bus", ssr: false },
+    { src: "~/plugins/repository", ssr: false },
+    { src: "~/plugins/global-method", ssr: true },
+    { src: "~/plugins/BootstrapVue", ssr: true },
+    { src: "~/plugins/numeral", ssr: false },
+    { src: "~/plugins/vue-screen-size", ssr: false },
     { src: "~/plugins/tradingview", ssr: false },
     { src: "~/plugins/vue-numeral-filter", ssr: false }
   ],

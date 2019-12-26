@@ -1,13 +1,13 @@
 
 <template>
     <v-dialog v-model="show" max-width="320px">
-        <v-card color="#00121E">
+        <v-card :dark="lightSwitch == true">
             <v-card-title class="text-left justify-left pa-3 px-5 success--text subtitle-1 font-weight-bold">FUND</v-card-title>
             <v-tabs
             color="#03dac5"
-            background-color="#00121E"
+            background-color="transparent"
             class="px-7"
-            dark
+            :dark="lightSwitch == true"
             grow
             >
                 <v-tab color="#fff" class="tab_menu-top text-capitalize subtitle-1" :href="`#funds-1`" @click="hideWithdrawButton = false, hideDepositButton = true">Deposit</v-tab>
@@ -23,7 +23,7 @@
                           label="Enter Amount"
                           color="#00FFC3"
                           style="color: #00FFC3"
-                          dark
+                          :dark="lightSwitch == true"
                           class="body-1 buy_selector quantity-input py-3"
                           v-model="enterAmount"
                           maxlength="15"
@@ -31,18 +31,18 @@
                       ></v-text-field>
                       <v-col class="pa-0">
                           <span class="custom-dropdown big">
-                              <v-select
-                              :items="items"
-                              v-model="fundSourceModel"
-                              item-text="name"
-                              item-value="funds_source"
-                              label="Fund Source"
-                              color="#00FFC3"
-                              item-color="success"
-                              dense
-                              dark
-                              class="enter_amount-deposit-select ma-0"
-                              ></v-select>
+                            <v-select
+                            :items="items"
+                            v-model="fundSourceModel"
+                            item-text="name"
+                            item-value="funds_source"
+                            label="Fund Source"
+                            color="#00FFC3"
+                            item-color="success"
+                            dense
+                            :dark="lightSwitch == true"
+                            class="enter_amount-deposit-select ma-0"
+                            ></v-select>
                           </span>
                       </v-col>
                   </v-container>
@@ -57,7 +57,7 @@
                           label="Enter Amount"
                           color="#00FFC3"
                           style="color: #00FFC3"
-                          dark
+                          :dark="lightSwitch == true"
                           class="body-1 buy_selector quantity-input py-3"
                           v-model="withrawAmount"
                           maxlength="15"
@@ -69,18 +69,18 @@
             <v-card-actions class="pa-5">
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="white"
                     class="text-capitalize"
                     text
+                    :dark="lightSwitch == true"
                     @click.stop="show = false"
                     >Close</v-btn
                 >
                     <!-- @click.stop="show=false" -->
                 <v-btn
-                    color="#03dac5"
+                    color="success"
                     class="text-capitalize"
                     depressed
-                    light
+                    :light="lightSwitch == true"
                     v-show="hideDepositButton"
                     @click="depositNow"
                     @click.stop="show = false"
@@ -88,10 +88,10 @@
                     >Deposit</v-btn
                 >
                 <v-btn
-                    color="#03dac5"
+                    color="success"
                     class="text-capitalize"
                     depressed
-                    light
+                    :light="lightSwitch == true"
                     v-show="hideWithdrawButton"
                     @click="withdrawNow"
                     @click.stop="show = false"
@@ -120,11 +120,11 @@ export default {
       }
     },
     ...mapGetters({
-        defaultPortfolioId: "journal/getDefaultPortfolioId",
-        renderPortfolioKey: "journal/getRenderPortfolioKey",
-        selectedPortfolio: "journal/getSelectedPortfolio"
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      selectedPortfolio: "journal/getSelectedPortfolio",
+      lightSwitch: "global/getLightSwitch"
     }),
-    
   },
   data() {
     return {
@@ -283,7 +283,7 @@ export default {
     .v-select__slot .v-label,
     .v-select__slot .v-icon
     {
-        color: #00FFC3 !important;
+        color: #03DAC5 !important;
     }
     .enter_amount-deposit.stock_selector {
         font-family: 'Karla' !important

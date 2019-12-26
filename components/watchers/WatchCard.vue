@@ -306,7 +306,6 @@ export default {
       };
       this.$api.chart.stocks.list(params2).then(
         function(result) {
-          // console.log(result.data, "test");
           this.stockExchange = result.data.exchange;
           this.stockSymbol = result.data.symbol;
           this.$refs.closePriceChart.updateSeries([

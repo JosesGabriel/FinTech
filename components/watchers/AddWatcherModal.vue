@@ -172,7 +172,7 @@ export default {
       }
     },
     addWatch() {
-      this.watchCardModalLoading = "success";
+      this.watchCardModalLoading = "success"
       let stockExists = false;
       for (let i = 0; i < this.userWatchedStocks.length; i++) {
         if (this.userWatchedStocks[i].stock_id == this.stocksDropdownModel) {
@@ -181,7 +181,6 @@ export default {
       }
       if (!stockExists) {
         let params = {
-          user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000",
           stock_id: this.stocksDropdownModel,
           entry_price: this.entryPriceModel,
           take_profit: this.takeProfitModel,

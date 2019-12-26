@@ -66,35 +66,6 @@
     <LoginRegister v-model="registerDialogModel" />
   </v-toolbar>
 </template>
-<style scoped>
-.header__searchbar {
-  transform: scale(0.5);
-  transform-origin: top right;
-}
-.social__router {
-  text-decoration: none;
-  display: inline-flex;
-  height: 0;
-}
-.header__toolbar {
-  position: fixed;
-  width: 100%;
-  z-index: 100;
-  background-color: #00121e;
-  border-bottom: 1px white;
-}
-.lightMode {
-  background-color: #f2f2f2;
-}
-.darkMode {
-  background-color: #00121e;
-}
-.header__button {
-  text-transform: none;
-  font-weight: 600;
-  font-size: 0.75em;
-}
-</style>
 <script>
 import { mapActions, mapGetters } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
@@ -121,7 +92,7 @@ export default {
   },
   mounted() {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
-    if(this.stockList.length == 0 ){
+    if (this.stockList.length == 0 ){
       const params = {
         exchange: "PSE",
         status: "active",
@@ -155,3 +126,32 @@ export default {
   }
 };
 </script>
+<style scoped>
+.header__searchbar {
+  transform: scale(0.5);
+  transform-origin: top right;
+}
+.social__router {
+  text-decoration: none;
+  display: inline-flex;
+  height: 0;
+}
+.header__toolbar {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  background-color: #00121e;
+  border-bottom: 1px white;
+}
+.lightMode {
+  background-color: #f2f2f2;
+}
+.darkMode {
+  background-color: #00121e;
+}
+.header__button {
+  text-transform: none;
+  font-weight: 600;
+  font-size: 0.75em;
+}
+</style>

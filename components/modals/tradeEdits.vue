@@ -1,6 +1,6 @@
 <template>
     <v-dialog v-model="show" max-width="320px">
-        <v-card color="#00121E">
+        <v-card :dark="lightSwitch == true">
             <v-card-title class="text-left justify-left pa-3 px-5 success--text text-uppercase subtitle-1 font-weight-bold">Edit Details</v-card-title>
             <v-container class="px-5">
                 <v-row no-gutters>
@@ -16,7 +16,7 @@
                             label="Select Strategy"
                             dense
                             flat
-                            dark
+                            :dark="lightSwitch == true"
                             ></v-select>
                         </div>
                         <div>
@@ -30,7 +30,7 @@
                             label="Select Trade Plan"
                             dense
                             flat
-                            dark
+                            :dark="lightSwitch == true"
                             ></v-select>
                         </div>
                         <div>
@@ -43,7 +43,7 @@
                             label="Select Emotions"
                             dense
                             flat
-                            dark
+                            :dark="lightSwitch == true"
                             ></v-select>
                         </div>
                         <div>
@@ -53,7 +53,7 @@
                             v-model="notesModel"
                             placeholder="Trading Notes"
                             filled
-                            dark
+                            :dark="lightSwitch == true"
                             ></v-textarea>
                         </div>
                     </v-col>
@@ -101,7 +101,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            renderEditKey: "journal/getRenderEditKey"
+            renderEditKey: "journal/getRenderEditKey",
+            lightSwitch: "global/getLightSwitch"
         }),
         show: {
             get () {

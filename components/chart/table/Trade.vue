@@ -73,6 +73,14 @@
             flat
             :dark="lightSwitch == 1"
           >
+            <v-content class="text-right">
+              <span
+                id="span__close"
+                class="mr-3 mt-1"
+                @click="setTradeLogin(false)"
+                >x</span
+              >
+            </v-content>
             <v-content class="content__broker text-center">
               <v-card
                 id="card__broker"
@@ -135,6 +143,7 @@
                     </span>
                   </v-content>
                 </v-col>
+                <v-content class="text-center caption font-weight-bold"> Not yet ready </v-content>
                 <v-col cols="12 pa-0 text-center">
                   <v-btn
                     class="mt-10"
@@ -143,6 +152,7 @@
                     text
                     rounded
                     block
+                    disabled=""
                     @click="setTradeLogin(false)"
                     >LOGIN</v-btn
                   >
@@ -424,6 +434,9 @@ export default {
 </style>
 
 <style scoped>
+#span__close {
+  cursor: pointer;
+}
 .col___left {
   /* background: red; */
 }

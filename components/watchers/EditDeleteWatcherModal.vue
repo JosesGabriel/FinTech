@@ -37,15 +37,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- <v-snackbar
-      v-model="watchList__alert"
-      :color="watchList__alertState ? 'success' : 'error'"
-    >
-      {{ post__responseMsg }}
-      <v-btn color="white" text @click="watchList__alert = false">
-        Close
-      </v-btn>
-    </v-snackbar> -->
   </div>
 </template>
 <script>
