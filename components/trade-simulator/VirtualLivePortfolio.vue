@@ -593,8 +593,7 @@ export default {
       for(let i =0; i< this.stockSym.length; i++){
           if(this.stockSym[i] == symbol){
             this.getOpenPositions();
-            //console.log('-' + this.stockSym[i]);
-            //return true;
+            
           }
       }
     },
