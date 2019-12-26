@@ -255,6 +255,7 @@ export default {
       ],
       portfolioLogs: [],
       openposition: [],
+      stockSym: [],
       items: [{ title: "Note" }, { title: "Delete" }],
       EnterTradeModal: false,
       trade_modal: false,
@@ -280,7 +281,7 @@ export default {
       totalmvalue: 0,
       dayprior: 0,
       date: new Date().toISOString().substr(0, 10),
-      streamTrigger: 0
+      streamTrigger: '',
     };
   },
   components: {
@@ -298,9 +299,10 @@ export default {
     EnterTradeModal: function() {
       this.trade_modal = this.EnterTradeModal;
     },
-    streamTrigger: function() {
-      this.getOpenPositions();
-    }
+    streamTrigger: function(){
+      console.log('Stream-Symbol: '+ this.streamTrigger);
+    },
+    
   },
   methods: {
     ...mapActions({
@@ -316,12 +318,13 @@ export default {
       this.totalProfitLoss = 0;
       this.totalPerf = 0;
       this.openposition = [];
+      this.stockSym = [];
       this.totalmvalue = 0;
       let lastprice = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
           this.portfolioLogs = result.meta.open;
-
+          //console.log('Port-', result);
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.openposition[i] = this.portfolioLogs[i].stock_id;
 
@@ -332,7 +335,7 @@ export default {
             this.$api.journal.portfolio.history(params).then(
               function(result) {
                 this.portfolioLogs[i].stock_id = result.data.symbol;
-
+                this.stockSym[i] = this.portfolioLogs[i].stock_id;
                 let buyResult =
                   this.portfolioLogs[i].position *
                   parseFloat(result.data.last).toFixed(2);
@@ -389,7 +392,8 @@ export default {
           this.getDayChange();
         }.bind(this)
       );
-      this.initSSE();
+      //this.savetoLocal();
+      //this.initSSE();
     },
     deleteLive: function(item) {
       //TODO: use repo
@@ -460,8 +464,8 @@ export default {
     getDayChange() {
       let currentProfitLoss = 0;
       let priorProfitLoss = 0;
-      let d = new Date(),
-        dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
+      //let d = new Date(),
+       // dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
 
       for (let index = 0; index < this.portfolioLogs.length; index++) {
         let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
@@ -473,20 +477,27 @@ export default {
         };
         this.$api.chart.charts.latest(params).then(
           function(result) {
+
+           // console.log('Day Cahnge -', result);                    
+            let prior_date = new Date(result.data.t[1]*1000);
+            let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
             let tcost =
               this.portfolioLogs[index].position *
               this.portfolioLogs[index].average_price;
-            if (pdate != dformat) {
+
+            if (dformat_prior != pdate) {                      
+               
               let priorPrice = result.data.c[1];
               let priorbuyResult =
                 this.portfolioLogs[index].position *
                 parseFloat(priorPrice).toFixed(2);
               let priormvalue = this.fees(priorbuyResult);
               let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
-
               priorProfitLoss =
-                parseFloat(priorProfitLoss) + parseFloat(priorprofit);
+                parseFloat(priorProfitLoss) + parseFloat(priorprofit);             
+               // this.savetoLocal(this.simulatorPortfolioID,dformat_prior,priorProfitLoss);         
             }
+
             let currentPrice = result.data.c[0];
             let currentbuyResult =
               this.portfolioLogs[index].position *
@@ -495,6 +506,8 @@ export default {
             let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
             currentProfitLoss =
               parseFloat(currentProfitLoss) + parseFloat(currentprofit);
+
+            
             let daychange =
               parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
 
@@ -502,10 +515,10 @@ export default {
             let daychangeperf = (daychange / priorProfitLoss) * 100;
             this.$emit("DayChangePerc", daychangeperf);
 
-            console.log("Prior ProfitLoss -" + priorProfitLoss);
-            console.log("Currrent ProfitLoss -" + currentProfitLoss);
-            console.log("DAY CAHNGE -" + daychange);
-            console.log("DAY CAHNGE PERC -" + daychangeperf);
+            //console.log("Prior ProfitLoss -" + priorProfitLoss);
+            //console.log("Currrent ProfitLoss -" + currentProfitLoss);
+            //console.log("DAY CAHNGE -" + daychange);
+            //console.log("DAY CAHNGE PERC -" + daychangeperf);
           }.bind(this)
         );
       }
@@ -525,6 +538,25 @@ export default {
       return buyResult - dall;
     },
 
+    savetoLocal(id,date,prior){
+
+         var daypriorObject = { 'pID': id, 'date': date, 'Prior': prior };
+        //console.log('typeof testObject: ' + typeof daypriorObject);
+        //console.log('testObject properties:');
+        //for (var prop in daypriorObject) {
+           // console.log('  ' + prop + ': ' + daypriorObject[prop]);
+       // }
+
+        // Put the object into storage
+        localStorage.setItem('daypriorObject', JSON.stringify(daypriorObject));
+
+        // Retrieve the object from storage
+        var retrievedObject = localStorage.getItem('daypriorObject');
+
+        console.log('typeof retrievedObject: ' + typeof retrievedObject);
+        console.log('Value of retrievedObject: ', JSON.parse(retrievedObject));
+    },
+
     initSSE: function() {
       if (this.sse !== null) {
         this.sse.close();
@@ -532,7 +564,7 @@ export default {
       }
 
       this.sse = new EventSource(
-        "https://stream-api.arbitrage.ph/sse?stream=market-data"
+        "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
       );
 
       //   this.sse = new EventSource(
@@ -547,20 +579,24 @@ export default {
         console.log("error");
         //console.log(err);
       };
-
+      let len = this.stockSym.length;
       const that = this;
+      
+      this.sse.addEventListener("trade",function(e) {
+           const data = JSON.parse(e.data);  
+           that.trigger(data.sym);
 
-      /*for (let index = 0; index < this.openposition.length; index++) {
-            let symID = this.openposition[index];
-            this.sse.addEventListener(`M-D.INFO.${symID}`, function(e) {
-            const data = JSON.parse(e.data);    
-             this.streamTrigger = data.c;
-             that.$store.commit("chart/SET_STOCK_OBJ", { last: data.c });
-             console.log('Stream - '+ this.streamTrigger);
-            });
+      });
+     
+    },
+    trigger: function(symbol){
+      for(let i =0; i< this.stockSym.length; i++){
+          if(this.stockSym[i] == symbol){
+            this.getOpenPositions();
             
-          }*/
-    }
+          }
+      }
+    },
   },
   computed: {
     ...mapGetters({
@@ -583,6 +619,7 @@ export default {
   },
   mounted() {
     if (this.simulatorPortfolioID != 0 ? this.getOpenPositions() : "");
+    this.initSSE();
   }
 };
 </script>
