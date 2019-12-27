@@ -234,16 +234,16 @@ export default {
     this.$api.journal.portfolio.portfolio(openparams).then(
       function(result) {
        
-        for (let i = 0; i < result.meta.logs.length; i++) {
+        for (let i = 0; i < result.data.logs.length; i++) {
           if (
-            result.meta.logs[i].type == "virtual" &&
-            result.meta.logs[i].name != "Default Virtual Portfolio" 
+            result.data.logs[i].type == "virtual" &&
+            result.data.logs[i].name != "Default Virtual Portfolio" 
           ) {
-            this.portfolio.push(result.meta.logs[i].name);
-            if (result.meta.logs[i].name == "My Virtual Portfolio") {
-              let avfunds = parseFloat(result.meta.logs[i].balance);
+            this.portfolio.push(result.data.logs[i].name);
+            if (result.data.logs[i].name == "My Virtual Portfolio") {
+              let avfunds = parseFloat(result.data.logs[i].balance);
               this.availableFunds = this.addcomma(avfunds);
-              this.defaultvalue = result.meta.logs[i].name;
+              this.defaultvalue = result.data.logs[i].name;
             }
           }
         }
@@ -334,10 +334,10 @@ export default {
       this.$api.journal.portfolio.portfolio(params).then(
         function(result) {
           
-          for (let i = 0; i < result.meta.logs.length; i++) {
-            if (result.meta.logs[i].name == item) {
-              this.setSimulatorPortfolioID(result.meta.logs[i].id);
-              let avfunds = parseFloat(result.meta.logs[i].balance);
+          for (let i = 0; i < result.data.logs.length; i++) {
+            if (result.data.logs[i].name == item) {
+              this.setSimulatorPortfolioID(result.data.logs[i].id);
+              let avfunds = parseFloat(result.data.logs[i].balance);
               this.availableFunds = this.addcomma(avfunds);
             }
           }

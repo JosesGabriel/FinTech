@@ -699,6 +699,9 @@ export default {
 .v-application .pl-4 {
   height: 24px;
 }
+.v-data-table thead tr th {
+    padding-left: 10px !important;
+}
 .v-data-table td {
   font-size: 12px;
 }
