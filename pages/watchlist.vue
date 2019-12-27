@@ -14,7 +14,26 @@
         <Navbar :data="navbarMiniVariantSetter" active="watchlist" />
       </v-col>
       <v-col xs="11" sm="11" md="11" lg="11" class="pl-8">
+        <v-container>
+          <v-row>
+            <v-col cols="3">
+              <PSEICard :data="pseData" />
+            </v-col>
+            <v-col cols="5">
+              <SectorIndexList @pseiData="getPSEIData" />
+            </v-col>
+            <v-col cols="4">
+              <MostWatchedStocks />
+            </v-col>
+          </v-row>
+        </v-container>
         <v-container class="pt-0" fluid>
+          <span
+            class="body-1"
+            :style="lightSwitch == 0 ? 'color: black' : 'color: white'"
+            >Watchlist</span
+          >
+          <v-divider class="mb-2" :dark="lightSwitch == 0 ? false : true" />
           <div v-if="loadingBar" class="text-center">
             <v-progress-circular
               :size="50"
@@ -48,6 +67,9 @@ import Navbar from "~/components/Navbar";
 import WatchCard from "~/components/watchers/WatchCard.vue";
 import AddWatcherModal from "~/components/watchers/AddWatcherModal.vue";
 import EditDeleteWatcherModal from "~/components/watchers/EditDeleteWatcherModal.vue";
+import PSEICard from "~/components/watchers/PSEICard.vue";
+import SectorIndexList from "~/components/watchers/SectorIndexList.vue";
+import MostWatchedStocks from "~/components/watchers/MostWatchedStocks.vue";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -56,7 +78,10 @@ export default {
     Navbar,
     WatchCard,
     AddWatcherModal,
-    EditDeleteWatcherModal
+    EditDeleteWatcherModal,
+    PSEICard,
+    SectorIndexList,
+    MostWatchedStocks
   },
   data() {
     return {
@@ -64,7 +89,8 @@ export default {
       isDarkMode: 0,
       watchListObject: "",
       navbarMiniVariantSetter: true,
-      loadingBar: true
+      loadingBar: true,
+      pseData: []
     };
   },
   computed: {
@@ -85,8 +111,12 @@ export default {
   methods: {
     ...mapActions({
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
-      setRenderChartKey: "watchers/setRenderChartKey"
+      setRenderChartKey: "watchers/setRenderChartKey",
+      lightSwitch: "global/getLightSwitch"
     }),
+    getPSEIData(value) {
+      this.pseData = value;
+    },
     getUserWatchList() {
       //Params won't be needed in the future, user token only
 

@@ -291,7 +291,6 @@ export default {
       };
       this.$api.chart.charts.latest(params).then(
         function(result) {
-          console.log(result.data.c, "test");
           this.$refs.closePriceChart.updateSeries([
             {
               data: result.data.c.reverse()

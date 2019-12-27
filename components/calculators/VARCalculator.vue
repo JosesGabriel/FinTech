@@ -54,7 +54,6 @@
               v-model="riskTolerance"
               type="number"
               label="Risk Tolerance (%)"
-              prefix="₱"
               dense
               hide-details
               color="success"
@@ -65,7 +64,6 @@
               v-model="targetProfit"
               type="number"
               label="Target Profit (%)"
-              prefix="₱"
               dense
               hide-details
               color="success"
