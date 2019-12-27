@@ -362,20 +362,21 @@ export default {
       };
     this.$api.journal.portfolio.portfolio(openparams).then(
       function(result) {
+        //console.log('Portfolio', result);
         let defaultPort = false;
-        for (let i = 0; i < result.meta.logs.length; i++) {
+        for (let i = 0; i < result.data.logs.length; i++) {
           if (
-            result.meta.logs[i].type == "virtual" &&
-            result.meta.logs[i].name != "Default Virtual Portfolio"
+            result.data.logs[i].type == "virtual" &&
+            result.data.logs[i].name != "Default Virtual Portfolio"
           ) {
             let portfolio_params = {
-              name: result.meta.logs[i].name,
-              id: result.meta.logs[i].id
+              name: result.data.logs[i].name,
+              id: result.data.logs[i].id
             };
             this.portfolio.push(portfolio_params);
-            if (result.meta.logs[i].name == "My Virtual Portfolio") {
-              this.setSimulatorPortfolioID(result.meta.logs[i].id);
-              this.default_port = result.meta.logs[i].id;
+            if (result.data.logs[i].name == "My Virtual Portfolio") {
+              this.setSimulatorPortfolioID(result.data.logs[i].id);
+              this.default_port = result.data.logs[i].id;
               defaultPort = true;
             }
           }

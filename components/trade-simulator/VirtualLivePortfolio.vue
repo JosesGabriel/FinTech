@@ -323,7 +323,7 @@ export default {
       let lastprice = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
-          this.portfolioLogs = result.meta.open;
+          this.portfolioLogs = result.data.open;
           //console.log('Port-', result);
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.openposition[i] = this.portfolioLogs[i].stock_id;
@@ -592,6 +592,7 @@ export default {
     trigger: function(symbol){
       for(let i =0; i< this.stockSym.length; i++){
           if(this.stockSym[i] == symbol){
+            console.log('Symbol - ' + symbol);
             this.getOpenPositions();
             
           }
