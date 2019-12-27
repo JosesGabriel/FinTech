@@ -177,11 +177,11 @@ export default {
 }
 
 .theme--dark.v-data-table {
-  color: #b6b6b6;
+  color: #e5e5e5;
 }
 
 .theme--light.v-data-table {
-  color: #535358;
+  color: #494949;
 }
 
 /* remove border */

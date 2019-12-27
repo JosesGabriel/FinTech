@@ -42,7 +42,7 @@
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="portfolioLogsStock"
+      :items="portfolioLogs"
       :page.sync="page"
       :items-per-page="itemsPerPage"
       :dark="lightSwitch == true"
@@ -52,8 +52,11 @@
       loading-text="Loading..."
       class="data_table-container pl-10 secondary--text"
     >
-      <template v-slot:item.stock_id="{ item }">
-       <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
+      <template v-slot:item.stock_symbol="{ item }">
+       <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_symbol }}</span>
+      </template>
+      <template v-slot:item.position="{ item }">
+       <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.position }}</span>
       </template>
       <template v-slot:item.average_price="{ item }">
         <span class="pl-3" :style="{ color: fontcolor2 }">{{ formatPriceAvePrice(item.average_price) }}</span>
@@ -64,11 +67,11 @@
       <template v-slot:item.market_value="{ item }">
         <span class="pl-3" :style="{ color: fontcolor2 }">{{ formatPrice(item.market_value) }}</span>
       </template>
-      <template v-slot:item.profit="{ item }">
-        <span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.profit) }}</span>
+      <template v-slot:item.profit_loss="{ item }">
+        <span :class="item.profit_loss > 0 ? 'positive' : item.profit_loss < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.profit_loss) }}</span>
       </template>
-      <template v-slot:item.perf_percentage="{ item }">
-        <span :class="item.profit > 0 ? 'positive' : item.profit < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.perf_percentage) }}%</span>
+      <template v-slot:item.pl_percentage="{ item }">
+        <span :class="item.pl_percentage > 0 ? 'positive' : item.pl_percentage < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.pl_percentage) }}%</span>
       </template>
       <template v-slot:item.action="{ item }">
         <div
@@ -216,17 +219,16 @@ export default {
       itemsPerPage: 5,
       search: "",
       headers: [
-        { text: "Stocks", value: "stock_id", align: "left", sortable: false },
+        { text: "Stocks", value: "stock_symbol", align: "left", sortable: false },
         { text: "Position", value: "position", align: "right" },
         { text: "Avg. Price", value: "average_price", align: "right" },
         { text: "Total Cost", value: "total_value", align: "right" },
         { text: "Market Value", value: "market_value", align: "right" },
-        { text: "Profit", value: "profit", align: "right" },
-        { text: "Perf. (%)", value: "perf_percentage", align: "right" },
+        { text: "Profit", value: "profit_loss", align: "right" },
+        { text: "Perf. (%)", value: "pl_percentage", align: "right" },
         { text: "", value: "action", sortable: false, align: "right" }
       ],
       portfolioLogs: [],
-      portfolioLogsStock: [],
       page: 1,
       pageCount: 0,
       menuShow: false,
@@ -257,14 +259,14 @@ export default {
     }
   },
   mounted() {
-    if (this.defaultPortfolioId != 0 ? this.getOpenPositions() : "");
-    // if(!this.selectedPortfolio) {
-    //   if (this.selectedPortfolio.type === "virtual") {
-    //     this.ifVirtualShow = true
-    //   } else {
-    //     this.ifVirtualShow = false
-    //   }
-    // }
+    if (this.defaultPortfolioId != null ? this.getOpenPositions() : "");
+    if(!this.selectedPortfolio) {
+      if (this.selectedPortfolio.type === "virtual") {
+        this.ifVirtualShow = true
+      } else {
+        this.ifVirtualShow = false
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -300,94 +302,40 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     getOpenPositions() {
-      this.portfolioLogsStock = [];
+
+      this.totalProfitLoss = 0;
+      this.totalProfitLossPerf = 0;
+
       const openparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: this.defaultPortfolioId
       };
-      this.totalProfitLoss = 0;
-      this.totalProfitLossPerf = 0;
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
-          this.livePortfolioLoading = false;
+          this.portfolioLogs = result.data.open;
+          this.setOpenPosition(this.portfolioLogs);
 
-          this.portfolioLogs = result.meta.open;
           for (let i = 0; i < this.portfolioLogs.length; i++) {
-            this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
-
-            const historyparams = {
-              "symbol-id": this.portfolioLogs[i].stock_id
-            };
-            this.$api.journal.portfolio.history(historyparams).then(
-              function(result) {
-                let portfolioLogsfinal = result.data;
-
-                let market_value = { market_value: 0 };
-                let profit = { profit: 0 };
-                let perf_percentage = { perf_percentage: 0, id_str: null };
-                this.portfolioLogs[i] = {
-                  ...this.portfolioLogs[i],
-                  ...portfolioLogsfinal,
-                  ...market_value,
-                  ...profit,
-                  ...perf_percentage
-                };
-
-                let buyResult =
-                  parseFloat(this.portfolioLogs[i].last) *
-                  parseFloat(this.portfolioLogs[i].position);
-                let dpartcommission = buyResult * 0.0025;
-                let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-                // TAX
-                let dtax = dcommission * 0.12;
-                // Transfer Fee
-                let dtransferfee = buyResult * 0.00005;
-                // SCCP
-                let dsccp = buyResult * 0.0001;
-                let dsell = buyResult * 0.006;
-                let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
-                let dbuyall = dcommission + dtax + dtransferfee + dsccp;
-                let results = buyResult - dall;
-                let resultsBuy = buyResult + dbuyall;
-
-                this.portfolioLogs[i].market_value = results;
-
-                this.portfolioLogs[i].total_value = resultsBuy;
-                this.portfolioLogs[i].fund = this.defaultPortfolioId;
-                // console.log(this.portfolioLogs[i].fund)
-                this.portfolioLogs[i].profit =
-                  this.portfolioLogs[i].market_value -
-                  this.portfolioLogs[i].total_value;
-                this.portfolioLogs[i].perf_percentage =
-                  (this.portfolioLogs[i].profit /
-                    this.portfolioLogs[i].total_value) *
-                  100;
-                this.portfolioLogs[i].stock_id = result.data.symbol;
-                this.portfolioLogs[i].id_str = result.data.stockidstr;
-                this.totalProfitLoss =
-                  this.totalProfitLoss +
-                  parseFloat(this.portfolioLogs[i].profit);
-                this.totalProfitLossPerf =
-                  this.totalProfitLossPerf +
-                  parseFloat(this.portfolioLogs[i].perf_percentage);
-                this.portfolioLogsStock.push(this.portfolioLogs[i]);
-                // this.portfolioLogsStock
-                this.setOpenPosition(this.portfolioLogs);
-              }.bind(this)
-            );
+            this.totalProfitLoss = this.totalProfitLoss + parseFloat(this.portfolioLogs[i].profit_loss);
+            this.totalProfitLossPerf = this.totalProfitLossPerf + parseFloat(this.portfolioLogs[i].pl_percentage);
+            // this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
           }
+          // Loading on table
+          this.livePortfolioLoading = false
         }.bind(this)
       );
-      this.componentKeys++;
     }
   },
   watch: {
     selectedPortfolio: function() {
-      // if (this.selectedPortfolio.type === "virtual") {
-      // this.ifVirtualShow = true
-      // } else {
-      // this.ifVirtualShow = false
-      // }
+      if (this.selectedPortfolio.type === "virtual") {
+      this.ifVirtualShow = true
+      } else {
+      this.ifVirtualShow = false
+      }
+    },
+    renderPortfolioKey: function() {
+      this.getOpenPositions();
     },
     defaultPortfolioId: function() {
       this.getOpenPositions();
@@ -399,9 +347,6 @@ export default {
 };
 </script>
 <style scoped>
-.data_table-container {
-  background: transparent;
-}
 .sidemenu_actions {
   position: absolute;
   width: auto;
@@ -413,11 +358,11 @@ export default {
 .rtf_top-btn .v-btn__content {
   font-size: 12px !important;
 }
-.data_table-container.theme--light.v-data-table thead tr th {
-  color: #494949;
-}
 .btn_sidemenu:hover {
   color: #03dac5;
+}
+.data_table-container {
+  background: transparent;
 }
 </style>
 <style>

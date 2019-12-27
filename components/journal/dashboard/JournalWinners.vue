@@ -23,7 +23,8 @@ export default {
             renderPortfolioKey: "journal/getRenderPortfolioKey",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
             journalCharts: "journal/getJournalCharts",
-            stockList: "global/getStockList"
+            stockList: "global/getStockList",
+            lightSwitch: "global/getLightSwitch"
         })
     },
     data () {
@@ -211,10 +212,32 @@ export default {
 
             }
             this.componentKeys++;
+        },
+        lightSwitcher() {
+            if (this.lightSwitch == 0) {
+                this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                    theme: {
+                    mode: "light"
+                    }
+                }
+                };
+            } else if (this.lightSwitch == 1) {
+                this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                    theme: {
+                    mode: "dark"
+                    }
+                }
+                };
+            }
         }
     },
     mounted() {
         this.getTopWinners();
+        this.lightSwitcher();
     },
     watch: {
         journalCharts: function() {
@@ -222,6 +245,9 @@ export default {
         },
         renderPortfolioKey: function() {
             this.getTopWinners();
+        },
+        lightSwitch: function() {
+            this.lightSwitcher();
         }
     }
 }

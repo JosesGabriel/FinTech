@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="show" max-width="350px">
+  <v-dialog v-model="show" max-width="320px">
     <v-card :dark="lightSwitch == true">
       <v-card-title
         class="text-left justify-left pa-3 px-5 success--text subtitle-1"

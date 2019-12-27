@@ -1,212 +1,267 @@
 <template>
-    <v-container class="pa-0 pl-10">
-        <v-col class="pa-0" cols="12">
-            <v-card-title class="text-left justify-left ml-2 px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
-                <h6 class="font-weight-regular subtitle-2" style="color:#fff;">GROSS PROFIT AND LOSS</h6>
-                <v-spacer></v-spacer>
-                    <v-btn icon small @click.stop="showScheduleForm=true"> 
-                        <img src="/icon/journal-icons/share-icon.svg" width="15">
-                    </v-btn>
-            </v-card-title>
-        </v-col>
-        <div class="pt-3" id="chart">
-            <apexcharts ref="GrossPL" type=bar height=300 :options="chartOptions" :series="series" />
-        </div>
-        <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
-    </v-container>
+  <v-container class="pa-0 pl-10">
+    <v-col class="pa-0" cols="12">
+      <v-card-title class="text-left justify-left ml-2 px-0 pb-2 pt-0" :style="borderColor">
+        <h6
+          class="font-weight-regular subtitle-2"
+          :style="{ color: fontColor }"
+        >GROSS PROFIT AND LOSS</h6>
+        <v-spacer></v-spacer>
+        <v-btn icon small @click.stop="showScheduleForm=true">
+          <img src="/icon/journal-icons/share-icon.svg" width="15" />
+        </v-btn>
+      </v-card-title>
+    </v-col>
+    <div class="pt-3" id="chart">
+      <apexcharts ref="GrossPL" type="bar" height="300" :options="chartOptions" :series="series" />
+    </div>
+    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+  </v-container>
 </template>
 
 
 <script>
-
-import VueApexCharts from 'vue-apexcharts'
-import shareModal from '~/components/modals/share'
+import VueApexCharts from "vue-apexcharts";
+import shareModal from "~/components/modals/share";
 
 import { mapGetters } from "vuex";
 
 export default {
-    components: {
-        apexcharts: VueApexCharts,
-        shareModal
+  components: {
+    apexcharts: VueApexCharts,
+    shareModal
+  },
+  computed: {
+    ...mapGetters({
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      journalCharts: "journal/getJournalCharts",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    fontColor: function() {
+      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    computed: { 
-      ...mapGetters({
-          renderPortfolioKey: "journal/getRenderPortfolioKey",
-          defaultPortfolioId: "journal/getDefaultPortfolioId",
-          journalCharts: "journal/getJournalCharts",
-      })
-    },
-    data () {
-      return {
-          showScheduleForm: false,
-          
-          series: [{
-            name: 'Loss',
-            data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-          }],
-        chartOptions: {
-          colors: ['#03DAC5','#f44336'],
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '50%',
-              endingShape: 'rounded',
-              dropShadow: {
-                  enabled: true,
-                  left: 2,
-                  top: 2,
-                  opacity: 1
-              }
-            },
-          },
-          chart: {
-            toolbar: {
-              show: false,
-              tools: {
-                download: true,
-                selection: true,
-                zoom: true,
-                zoomin: true,
-                zoomout: true,
-                pan: true
-              },
-              autoSelected: 'zoom' 
-            },
+    borderColor: function() {
+      return this.lightSwitch == 0
+        ? "border-bottom: 1px solid #b6b6b6"
+        : "border-bottom: 1px solid #535358";
+    }
+  },
+  data() {
+    return {
+      showScheduleForm: false,
+
+      series: [
+        {
+          name: "Loss",
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
+      ],
+      chartOptions: {
+        colors: ["#03DAC5", "#f44336"],
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: "50%",
+            endingShape: "rounded",
             dropShadow: {
               enabled: true,
-              opacity: 0.1,
-              blur: 2,
-              left: 3,
-              top: 3
-            },
-          },
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-          },
-          grid: {
-            show: true,
-            borderColor: 'transparent',
-          },
-          xaxis: {
-            categories: ['1','','','4','','','','8','','','','12','','','','16'],
-            labels: {
-              show: true,
-              style: {
-                colors: '#b6b6b6',
-                fontSize: '12px',
-                fontFamily: "'Nunito' !important",
-                cssClass: 'apexcharts-xaxis-label',
-              }
-            },
-            crosshairs: {
-              show: false,
-            },
-            lines: {
-                show: false
-            },
-            axisTicks: {
-                show: false,
-            },
-            axisBorder: {
-                show: false
-            }
-          },
-          yaxis: {
-            labels: {
-              show: true,
-              align: 'right',
-              style: {
-                  color: '#b6b6b6',
-                  fontSize: '12px',
-                  fontFamily: "'Nunito' !important",
-                  cssClass: 'apexcharts-yaxis-label',
-              },
-              formatter: function (value) {
-                let val = (value/1).toFixed(2).replace('.', '.')
-                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-            },
-            lines: {
-                show: false
-            }
-          },
-          legend: {
-            show: false,
-          },
-          fill: {
-            opacity: 1
-          },
-          title: {
-                text: 'Last 16 Trades',
-                align: 'left',
-                margin: 10,
-                offsetX: 0,
-                offsetY: 0,
-                floating: true,
-                style: {
-                    fontSize:  '14px',
-                    fontFamily: "'Nunito' !important",
-                    color:  '#b6b6b6'
-                },
-            },
-          tooltip: {
-            y: {
-              show: false,
-              formatter: function (value) {
-                let val = (value/1).toFixed(2).replace('.', '.')
-                return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-            },
-            x: {
-              show: false,
-            },
-            marker: {
-                show: false,
-            },
-            onDatasetHover: {
-              highlightDataSeries: false
-            },
-            theme: false,
-            style: {
-              fontFamily: "'Nunito' !important"
+              left: 2,
+              top: 2,
+              opacity: 1
             }
           }
-        }
-      }
-    },
-    mounted() {
-        this.getGrossPL();
-    },
-    methods: {
-      getGrossPL() {
-        if (this.journalCharts != null) {
-          const objGrosPL = this.journalCharts.meta.profit_loss
-          const lastArray = [ ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ,  ]
-          if(objGrosPL.length != 0) {
-            lastArray.unshift(...objGrosPL)
-  
-            this.$refs.GrossPL.updateSeries([
-              {
-                data: lastArray.slice(0,16)
-              }
-            ]);
-          }
-        }
-        this.componentKeys++;
-      }
-    },
-    watch: {
-        journalCharts: function() {
-            this.getGrossPL();
         },
-        defaultPortfolioId: function() {
-            this.getGrossPL();
+        chart: {
+          toolbar: {
+            show: false,
+            tools: {
+              download: true,
+              selection: true,
+              zoom: true,
+              zoomin: true,
+              zoomout: true,
+              pan: true
+            },
+            autoSelected: "zoom"
+          },
+          dropShadow: {
+            enabled: true,
+            opacity: 0.1,
+            blur: 2,
+            left: 3,
+            top: 3
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"]
+        },
+        grid: {
+          show: true,
+          borderColor: "transparent"
+        },
+        xaxis: {
+          categories: [
+            "1",
+            "",
+            "",
+            "4",
+            "",
+            "",
+            "",
+            "8",
+            "",
+            "",
+            "",
+            "12",
+            "",
+            "",
+            "",
+            "16"
+          ],
+          labels: {
+            show: true,
+            style: {
+              colors: "#b6b6b6",
+              fontSize: "12px",
+              fontFamily: "'Nunito' !important",
+              cssClass: "apexcharts-xaxis-label"
+            }
+          },
+          crosshairs: {
+            show: false
+          },
+          lines: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          axisBorder: {
+            show: false
+          }
+        },
+        yaxis: {
+          labels: {
+            show: true,
+            align: "right",
+            style: {
+              color: "#b6b6b6",
+              fontSize: "12px",
+              fontFamily: "'Nunito' !important",
+              cssClass: "apexcharts-yaxis-label"
+            },
+            formatter: function(value) {
+              let val = (value / 1).toFixed(2).replace(".", ".");
+              return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+          },
+          lines: {
+            show: false
+          }
+        },
+        legend: {
+          show: false
+        },
+        fill: {
+          opacity: 1
+        },
+        title: {
+          text: "Last 16 Trades",
+          align: "left",
+          margin: 10,
+          offsetX: 0,
+          offsetY: 0,
+          floating: true,
+          style: {
+            fontSize: "14px",
+            fontFamily: "'Nunito' !important",
+            color: "#b6b6b6"
+          }
+        },
+        tooltip: {
+          y: {
+            show: false,
+            formatter: function(value) {
+              let val = (value / 1).toFixed(2).replace(".", ".");
+              return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+          },
+          x: {
+            show: false
+          },
+          marker: {
+            show: false
+          },
+          onDatasetHover: {
+            highlightDataSeries: false
+          },
+          theme: false,
+          style: {
+            fontFamily: "'Nunito' !important"
+          }
         }
+      }
+    };
+  },
+  mounted() {
+    this.getGrossPL();
+    this.lightSwitcher();
+  },
+  methods: {
+    getGrossPL() {
+      if (this.journalCharts != null) {
+        const objGrosPL = this.journalCharts.meta.profit_loss;
+        const lastArray = [ , , , , , , , , , , , , , , ];
+        if (objGrosPL.length != 0) {
+          lastArray.unshift(...objGrosPL);
+
+          this.$refs.GrossPL.updateSeries([
+            {
+              data: lastArray.slice(0, 16)
+            }
+          ]);
+        }
+      }
+      this.componentKeys++;
+    },
+    lightSwitcher() {
+      if (this.lightSwitch == 0) {
+        this.chartOptions = {
+          ...this.chartOptions,
+          ...{
+            theme: {
+              mode: "light"
+            }
+          }
+        };
+      } else if (this.lightSwitch == 1) {
+        this.chartOptions = {
+          ...this.chartOptions,
+          ...{
+            theme: {
+              mode: "dark"
+            }
+          }
+        };
+      }
     }
-}
+  },
+  watch: {
+    journalCharts: function() {
+      this.getGrossPL();
+    },
+    defaultPortfolioId: function() {
+      this.getGrossPL();
+    },
+    lightSwitch: function() {
+      this.lightSwitcher();
+    }
+  }
+};
 </script>

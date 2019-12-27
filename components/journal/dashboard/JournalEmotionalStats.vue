@@ -1,8 +1,8 @@
 <template>
     <v-row no-gutters>
         <v-col cols="12">
-            <v-card-title class="text-left justify-left px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
-                <h6 class="font-weight-regular subtitle-2" style="color:#fff;">EMOTIONAL STATISTICS</h6>
+            <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+                <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">EMOTIONAL STATISTICS</h6>
                 <v-spacer></v-spacer>
                 <v-btn icon small @click.stop="showScheduleForm=true"> 
                     <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -15,24 +15,24 @@
             </div>
         </v-col>
         <v-col class="pa-0 pt-3" cols="6" sm="6" md="6">
-            <v-simple-table :dense="true" dark id="liveportfolio-table">
+            <v-simple-table :dense="true" :dark="lightSwitch == true" id="liveportfolio-table">
                 <template v-slot:default>
                 <thead>
                     <tr>
-                    <th class="item_caption white--text text-left px-1">Emotions</th>
-                    <th class="item_caption white--text text-right px-1">Trade</th>
-                    <th class="item_caption white--text text-right px-1">Wins</th>
-                    <th class="item_caption white--text text-right px-1">Losses</th>
-                    <th class="item_caption white--text text-right px-1">Win Rate</th>
+                    <th class="item_caption text-left px-1">Emotions</th>
+                    <th class="item_caption text-right px-1">Trade</th>
+                    <th class="item_caption text-right px-1">Wins</th>
+                    <th class="item_caption text-right px-1">Losses</th>
+                    <th class="item_caption text-right px-1">Win Rate</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in emotionalArray" :key="item.name" id="table_tr_port-cont">
-                    <td class="item_position-prop caption px-1 py-2">{{ item.name }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.win + item.loss }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.win }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.loss }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ ((item.win * 100) / (item.win + item.loss)).toFixed(2) }}%</td>
+                    <td class="caption px-1 py-2">{{ item.name }}</td>
+                    <td class="caption text-right px-1 py-0">{{ item.win + item.loss }}</td>
+                    <td class="caption text-right px-1 py-0">{{ item.win }}</td>
+                    <td class="caption text-right px-1 py-0">{{ item.loss }}</td>
+                    <td class="caption text-right px-1 py-0">{{ ((item.win * 100) / (item.win + item.loss)).toFixed(2) }}%</td>
                     
                     </tr>
                 </tbody>
@@ -61,7 +61,16 @@ export default {
             renderPortfolioKey: "journal/getRenderPortfolioKey",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
             journalCharts: "journal/getJournalCharts",
-        })
+            lightSwitch: "global/getLightSwitch"
+        }),
+        fontColor: function() {
+            return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+        },
+        borderColor: function() {
+            return this.lightSwitch == 0
+            ? "border-bottom: 1px solid #b6b6b6"
+            : "border-bottom: 1px solid #535358";
+        },
     },
     data () {
         return {  
@@ -69,10 +78,10 @@ export default {
             emotionalArray: [],
             series: [{
                 name: 'Win',
-                data: [44, 55, 41]
+                data: [  ,  ,  ]
             }, {
                 name: 'loss',
-                data: [53, 32, 33]
+                data: [  ,  ,  ]
             }],
             chartOptions: {
                 plotOptions: {
@@ -226,10 +235,32 @@ export default {
                 }
             }
             this.componentKeys++;
+        },
+        lightSwitcher() {
+            if (this.lightSwitch == 0) {
+                this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                    theme: {
+                    mode: "light"
+                    }
+                }
+                };
+            } else if (this.lightSwitch == 1) {
+                this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                    theme: {
+                    mode: "dark"
+                    }
+                }
+                };
+            }
         }
     },
     mounted() {
         this.getEmotionalStats();
+        this.lightSwitcher();
     },
     watch: {
         journalCharts: function() {
@@ -237,6 +268,9 @@ export default {
         },
         renderPortfolioKey: function() {
             this.getEmotionalStats();
+        },
+        lightSwitch: function() {
+            this.lightSwitcher();
         }
     }
 }

@@ -28,7 +28,7 @@
       </v-card-title>
       <v-stepper id="stepper_container" v-model="e1" dark>
         <v-stepper-items>
-          <!-- -----First View of Trade Modal----- -->
+          <!-- -----First View of Buy Modal----- -->
           <v-stepper-content step="1" class="pt-0">
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters>
@@ -213,8 +213,8 @@
             </v-row>
           </v-stepper-content>
 
+          <!-- -----Second View of Buy Modal----- -->
           <v-stepper-content step="2" class="pt-2">
-            <!-- -----Second View of Trade Modal----- -->
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters class="px-0 py-0">
                 <v-col sm="12" md="12" class="pa-0">
@@ -313,6 +313,8 @@
               >Continue</v-btn>
             </v-row>
           </v-stepper-content>
+
+          <!-- -----Third View of Buy Modal----- -->
           <v-stepper-content step="3" class="pt-2">
             <v-container class="pt-0">
               <v-row no-gutters class="px-0 py-0">
@@ -379,11 +381,13 @@
                 color="success"
                 class="text-capitalize black--text ml-1"
                 light
-                @click.stop="show = false"
                 @click="buyListArray"
+                @click.stop="show = false"
               >Confirm</v-btn>
             </v-row>
           </v-stepper-content>
+          
+          <!-- -----First View of Sell Modal----- -->
           <v-stepper-content step="4" class="pt-2">
             <v-container class="pa-0">
               <v-row no-gutters class="pt-3 pa-0">
@@ -444,8 +448,8 @@
                 color="success"
                 class="text-capitalize black--text ml-1"
                 light
-                @click.stop="show = false"
                 @click="sellListArray"
+                @click.stop="show = false"
                 :disabled="confirmSellButtonDisable"
               >Confirm</v-btn>
             </v-row>
@@ -544,15 +548,6 @@ export default {
       stockList: "global/getStockList",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
-      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
-    },
-    fontColorTable: function() {
-      return this.lightSwitch == 0 ? "data_table-container" : "data_table-container-dark";
-    },
-    fontColorDate: function() {
-      return this.lightSwitch == 0 ? "datepicker-container-light" : "datepicker-container";
-    },
     show: {
       get() {
         return this.visible;
@@ -588,15 +583,21 @@ export default {
           this.ave = 0;
         }
       }
+    },
+    fontColor: function() {
+      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+    },
+    fontColorTable: function() {
+      return this.lightSwitch == 0 ? "data_table-container" : "data_table-container-dark";
+    },
+    fontColorDate: function() {
+      return this.lightSwitch == 0 ? "datepicker-container-light" : "datepicker-container";
     }
   },
   watch: {
-    // renderPortfolioKey: function() {
-    //   this.getUserPortfolio();
-    // },
-    // defaultPortfolioId: function() {
-    //   this.getUserPortfolio();
-    // },
+    openPosition: function() {
+      this.getSellItems();
+    },
     stockList: function() {
       this.initPortfolio();
 
@@ -625,6 +626,9 @@ export default {
     },
     date: function() {
       this.dateWatch();
+    },
+    userPortfolio() {
+      this.getUserPortfolio();
     }
   },
   mounted() {
@@ -637,7 +641,6 @@ export default {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
-      setStockList: "global/setStockList"
     }),
     initPortfolio() {
       var today = new Date(this.date);
@@ -655,7 +658,7 @@ export default {
       this.dateModel = dateTime;
       this.YMDModel = date;
     },
-    buyListArray: function() {
+    buyListArray() {
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseFloat(this.quantityModel),
@@ -669,13 +672,7 @@ export default {
         }
       };
       this.$axios
-        .$post(
-          "https://dev-api.arbitrage.ph/api/journal/funds/" +
-            this.portfolioDropdownModel +
-            "/buy/" +
-            this.GetSelectStock,
-          params
-        )
+        .$post("https://dev-api.arbitrage.ph/api/journal/funds/" + this.portfolioDropdownModel + "/buy/" + this.GetSelectStock, params)
         .then(response => {
           if (response.success) {
             this.keyCreateCounter = this.renderPortfolioKey;
@@ -777,6 +774,11 @@ export default {
       this.continuebuyBtn = false;
       this.continuesellBtn = true;
     },
+    getSellItems() {
+      for(let i = 0; i < this.openPosition.length; i++) {
+        this.openPosition[i] = {...this.openPosition[i], id_str: this.openPosition[i].stock_id, symbol: this.openPosition[i].stock_symbol}
+      }
+    },
     getStockDetails(Obj) {
       const params = {
         "symbol-id": Obj
@@ -822,29 +824,28 @@ export default {
           this.ave = result.data.average.toFixed(2);
           this.priceModel = result.data.last;
 
-          if (this.openPosition != null) {
-            for (let i = 0; i < this.openPosition.length; i++) {
-              let findOpenPosition = this.openPosition[i];
-              if (
-                parseInt(findOpenPosition.stockid) ==
-                this.stockSymbolGet.stockid
-              ) {
-                this.priceSellModel = findOpenPosition.last;
-                this.avepriceSell = findOpenPosition.average_price;
-                this.quantitySellModel = findOpenPosition.position;
-                this.strategySellModel = findOpenPosition.metas.strategy;
-                this.tradeplanSellModel = findOpenPosition.metas.plan;
-                this.emotionsSellModel = findOpenPosition.metas.emotion;
-                this.notesSellModel = findOpenPosition.metas.notes;
-                this.quantityModel = 0;
-              }
-            }
-          } else {
-            this.quantitySellModel = 0;
-            this.quantityModel = 0;
-          }
+          
         }.bind(this)
       );
+
+      if ( this.openPosition != null) {
+        for (let i = 0; i < this.openPosition.length; i++) {
+          let stockDataList = this.openPosition[i];
+
+          if(stockDataList.stock_id == Obj) {
+            console.log(stockDataList)
+            this.priceSellModel = stockDataList.metas.buy_price;
+            this.avepriceSell = stockDataList.average_price;
+            this.quantitySellModel = stockDataList.position;
+            if(stockDataList.metas.strategy || stockDataList.metas.plan || stockDataList.metas.emotion || stockDataList.metas.notes) {
+              this.strategySellModel = stockDataList.metas.strategy;
+              this.tradeplanSellModel = stockDataList.metas.plan;
+              this.emotionsSellModel = stockDataList.metas.emotion;
+              this.notesSellModel = stockDataList.metas.notes;
+            }
+          }
+        }
+      }
       this.$api.chart.stocks.fulldepth(params).then(
         function(result) {
           this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);
@@ -864,40 +865,29 @@ export default {
       return num;
     },
     getUserPortfolio() {
-      const params = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-      };
-      this.$api.journal.portfolio.portfolio(params).then(
-        function(result) {
-          this.portfolioList = result.meta.logs;
-          this.portfolioList = this.portfolioList.reverse();
-          this.selectPortfolioModel = [];
-          if (this.portfolioList.length != 0) {
-            this.selectPortfolioModel.push({ header: "Real Portfolio" });
-            const toFindReal = "real"; // what we want to count
-            for (let i = 0; i < this.portfolioList.length; i++) {
-              let portfolioListPush1 = this.portfolioList[i];
-              if (portfolioListPush1.type === toFindReal) {
-                this.selectPortfolioModel.push(portfolioListPush1);
-              }
-            }
+      this.selectPortfolioModel = [];
+      if (this.userPortfolio.length != 0) {
+        this.selectPortfolioModel.push({ header: "Real Portfolio" });
+        const toFindReal = "real"; // what we want to count
+        for (let i = 0; i < this.userPortfolio.length; i++) {
+          let portfolioListPush1 = this.userPortfolio[i];
+          if (portfolioListPush1.type === toFindReal) {
+            this.selectPortfolioModel.push(portfolioListPush1);
           }
-        }.bind(this)
-      );
-      this.componentKey++;
+        }
+      }
     },
     whereToSave() {
-      console.log(this.userPortfolio);
       for (let i = 0; i < this.userPortfolio.length; i++) {
         let portfolioListPush1 = this.userPortfolio[i];
         if (portfolioListPush1.id === this.portfolioDropdownModel) {
           this.availableFundsModel = parseInt(portfolioListPush1.balance);
-          this.portfolioDropdownModel = portfolioListPush1.id;
-          this.keyCreateCounter = this.renderPortfolioKey;
-          this.keyCreateCounter++;
-          this.setRenderPortfolioKey(this.keyCreateCounter);
 
-          this.setDefaultPortfolioId(portfolioListPush1.id);
+          // this.keyCreateCounter = this.renderPortfolioKey;
+          // this.keyCreateCounter++;
+          // this.setRenderPortfolioKey(this.keyCreateCounter);
+
+          // this.setDefaultPortfolioId(portfolioListPush1.id);
         }
       }
     },
@@ -939,9 +929,7 @@ export default {
           this.continueBuyButtonDisable = true;
           this.totalCostModel = 0;
         } else {
-          let compareNum =
-            parseFloat(this.totalCostModel.replace(/,/g, "")) >=
-            parseFloat(this.availableFundsModel);
+          let compareNum = parseFloat(this.totalCostModel.replace(/,/g, "")) >= parseFloat(this.availableFundsModel);
           if (!compareNum) {
             this.continueBuyButtonDisable = false;
           } else {
@@ -968,25 +956,23 @@ export default {
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      let compareNum =
-        parseInt(this.quantitySellModel) >= parseInt(this.boardLotModel);
+      let compareNum = parseInt(this.quantitySellModel) >= parseInt(this.boardLotModel);
       if (!compareNum) {
         this.confirmSellButtonDisable = true;
+        console.log(this.boardLotModel, 'igit')
       } else {
-        if (
-          this.priceSellModel == "0.00" ||
-          this.priceSellModel <= 0 ||
-          this.quantitySellModel == "0.00" ||
-          this.quantitySellModel <= 0
-        ) {
+        if ( this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0 ) {
+          console.log(this.boardLotModel, 'tubol')
           this.confirmSellButtonDisable = true;
           this.totalCostSellModel = 0;
         } else {
-          let compareNum1 =
-            parseInt(this.quantitySellModel) > parseInt(this.boardLotModel);
+          let compareNum1 = parseInt(this.quantitySellModel) > parseInt(this.boardLotModel);
+          console.log(this.boardLotModel, 'tae')
           if (!compareNum1) {
+          console.log('ihi')
             this.confirmSellButtonDisable = false;
           } else {
+          console.log('kiki')
             this.confirmSellButtonDisable = true;
           }
         }
