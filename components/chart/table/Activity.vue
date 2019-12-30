@@ -1,15 +1,15 @@
 <template>
   <v-content
     :class="[
-      { darkmode__text: lightSwitch == 1 },
-      { lightmode__text: lightSwitch == 0 }
+      { 'white--text': lightSwitch == 1 },
+      { 'black--text': lightSwitch == 0 }
     ]"
   >
     <div id="top">
       <!-- top -->
       <v-content>
-        <v-row class="ml-1 mr-1 mt-1 mb-1">
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+        <v-row class="ml-3 mr-1 mt-7 mb-1">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Position
             </v-row>
@@ -20,7 +20,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Ave. Price
             </v-row>
@@ -31,7 +31,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Total Cost
             </v-row>
@@ -42,7 +42,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Market Value
             </v-row>
@@ -53,7 +53,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Profit
             </v-row>
@@ -64,7 +64,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-1 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Perf. (%)
             </v-row>
@@ -79,7 +79,7 @@
     </div>
 
     <v-content class="mx-1">
-      <span class="subtitle-1 ml-3">Trade History</span>
+      <span class="subtitle-2 ml-2">Trade History</span>
       <v-divider></v-divider>
       <v-data-table
         :headers="headers"
@@ -147,8 +147,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      min: "140px",
-      max: "calc(100vh - 260px)",
+      min: "105px",
+      max: "calc(100vh - 295px)",
       headers: [
         {
           text: "Date",
@@ -665,9 +665,9 @@ export default {
       // console.log("ticker");
       // console.log(value);
       if (value) {
-        this.max = "calc(100vh - 260px)";
+        this.max = "calc(100vh - 295px)";
       } else {
-        this.max = "calc(100vh - 210px)";
+        this.max = "calc(100vh - 245px)";
       }
     }
   },
@@ -684,11 +684,11 @@ export default {
         console.log(response);
       });
 
-
     this.$api.journal.portfolio
       .tradelogs({
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        fund: "real"
+        fund: "75396425114062848",
+        stock: "29235363423715328"
       })
       .then(response => {
         console.log("tradelogs real funds");
@@ -701,7 +701,7 @@ export default {
 <style scoped>
 #top {
   /* background: red; */
-  height: 85px;
+  height: 120px;
 }
 .tr_custom {
   line-height: 2rem !important;
@@ -715,7 +715,8 @@ export default {
 }
 .vt_realized {
   /* background: #0c1a2b73; */
-  border: #b6b6b6 1px solid;
+  /* border: #b6b6b6 1px solid; */
+  border: rgb(182, 182, 182, 0.2) 1px solid;
 }
 /* .vt_realized:hover {
   background: #0c1a2b;

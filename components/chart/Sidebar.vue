@@ -80,24 +80,30 @@ export default {
         this.counter = 0;
       }
 
-      this.sse = new EventSource(
-        "https://stream-api.arbitrage.ph/sse?stream=market-data"
-      );
       //   this.sse = new EventSource(
-      //     "http://localhost:8021/sse?stream=market-data"
+      //     "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
       //   );
 
-      this.sse.onopen = function() {};
+      this.sse = new EventSource(
+        "http://localhost:8021/sse/market-data/pse/" + symid
+      );
 
-      this.sse.onerror = function(err) {};
+      this.sse.onopen = function() {
+        //console.log("open sse");
+      };
+
+      this.sse.onerror = function(err) {
+        // console.log("open err");
+        // console.log(err);
+      };
 
       this.sse.addEventListener(
-        `M-D.INFO.${symid}`,
+        "info",
         function(e) {
           const data = JSON.parse(e.data);
-          //console.log(e);
-          //console.log("sse");
-          //console.log(data);
+          //   console.log(e);
+          //   console.log("sse");
+          //   console.log(data);
           this.counter++;
           this.$store.commit("chart/SET_STOCK_OBJ", {
             trades: parseInt(this.stock.trades) + parseInt(this.counter)
@@ -129,6 +135,16 @@ export default {
           });
         }.bind(this)
       );
+
+      //   this.sse.addEventListener("bidask", function(event) {
+      //     console.log("bidask");
+      //     console.log(JSON.parse(event.data));
+      //   });
+
+      this.sse.addEventListener("trade", function(event) {
+        console.log("trade");
+        console.log(JSON.parse(event.data));
+      });
     }
   },
   watch: {
@@ -139,6 +155,7 @@ export default {
   },
   created() {
     this.setSymbolID("29235364749115392");
+    //this.setSymbolID("29235363960586240") // ayala
   }
 };
 </script>

@@ -244,7 +244,7 @@ export default {
           "symbol-id": id
         })
         .then(response => {
-          console.log("data response", response.data);
+          //console.log("data response", response.data);
           this.jockey = response.data;
           for (let i = 0; i < response.data.length; i++) {
             this.jockey[i].broker_code = this.jockey[i].broker_code;
