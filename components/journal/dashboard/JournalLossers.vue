@@ -1,17 +1,22 @@
 <template>
-    <v-container class="pa-0">
-        <v-col class="pa-0" cols="12" sm="12" md="12">
-            <div id="chart">
-                <apexcharts ref="lossersChart" type=bar height=230 :options="chartOptions" :series="series" />
-            </div>
-        </v-col>
-    </v-container>
+  <v-container class="pa-0">
+    <v-col class="pa-0" cols="12" sm="12" md="12">
+      <div id="chart">
+        <apexcharts
+          ref="lossersChart"
+          type="bar"
+          height="230"
+          :options="chartOptions"
+          :series="series"
+        />
+      </div>
+    </v-col>
+  </v-container>
 </template>
 
 <script>
 
 import VueApexCharts from 'vue-apexcharts'
-
 import { mapGetters } from "vuex";
 
 export default {
@@ -23,7 +28,8 @@ export default {
             renderPortfolioKey: "journal/getRenderPortfolioKey",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
             journalCharts: "journal/getJournalCharts",
-            stockList: "global/getStockList"
+            stockList: "global/getStockList",
+            lightSwitch: "global/getLightSwitch"
         })
     },
     data () {
@@ -31,7 +37,7 @@ export default {
             lossersArray: [],
             series: [{
                 name: 'Lossers',
-                data: [-70, -60, -50, -40, -30, -20, -10]
+                data: [ ,  ,  ,  ,  ,  ,  ]
             }],
             chartOptions: {
                 plotOptions: {
@@ -210,17 +216,42 @@ export default {
 
             }
             this.componentKeys++;
+        },
+        lightSwitcher() {
+            if (this.lightSwitch == 0) {
+                this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                    theme: {
+                    mode: "light"
+                    }
+                }
+                };
+            } else if (this.lightSwitch == 1) {
+                this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                    theme: {
+                    mode: "dark"
+                    }
+                }
+                };
+            }
         }
     },
     mounted(){
         this.getTopLossers();
+        this.lightSwitcher();
     },
     watch: {
         journalCharts: function() {
             this.getTopLossers();
         },
-        renderPortfolioKey: function() {
+        defaultPortfolioId: function() {
             this.getTopLossers();
+        },
+        lightSwitch: function() {
+            this.lightSwitcher();
         }
     }
 }

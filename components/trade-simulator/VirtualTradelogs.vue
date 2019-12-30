@@ -286,10 +286,11 @@ export default {
       this.totalProfitLossPerf = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
-          this.tradeLogs = result.meta.logs;
+         // if(result.meta.logs.length != 0){
+          this.tradeLogs = result.data.logs;
           this.tradelogs2 = this.tradeLogs;
           let plossperc = [];
-          for (let i = 0; i < result.meta.logs.length; i++) {
+          for (let i = 0; i <  this.tradeLogs.length; i++) {
             const params = {
               "symbol-id": this.tradeLogs[i].meta.stock_id
             };
@@ -334,6 +335,9 @@ export default {
               }.bind(this)
             );
           }
+
+         // }
+
         }.bind(this)
       );
     },

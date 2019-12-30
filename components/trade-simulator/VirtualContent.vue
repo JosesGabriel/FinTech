@@ -122,7 +122,7 @@
         >
           <v-select
             offset-y="true"
-            class="select_portfolio mt-2 black--text"
+            class="select_portfolio mt-2 black--text text-uppercase"
             item-color="success"
             append-icon="mdi-chevron-down"
             :value="this.default_port"
@@ -142,7 +142,7 @@
                 :style="{ background: cardbackground }"
                 style="padding: 12px 12px; margin: -16px;"
               >
-                <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
               </v-list-item-content>
             </template>
 
@@ -158,7 +158,7 @@
                 @click.stop="showCreatePortForm=true"
               >
                 <v-list-item-content>
-                  <v-list-item-title>
+                  <v-list-item-title class="text-uppercase">
                     Create Portfolio
                     <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon>
                   </v-list-item-title>
@@ -321,14 +321,15 @@ export default {
       let totalProfitLossPerf = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
+          //console.log('Result', result.data);
           let plossperc = [];
           let profitLoss = 0;
           let profitLossPer = 0;
-          for (let i = 0; i < result.meta.logs.length; i++) {
+          for (let i = 0; i < result.data.logs.length; i++) {
             let buyvalueResult =
-              result.meta.logs[i].meta.average_price *
-              result.meta.logs[i].amount;
-            profitLoss = result.meta.logs[i].total_value - buyvalueResult;
+              result.data.logs[i].meta.average_price *
+              result.data.logs[i].amount;
+            profitLoss = result.data.logs[i].total_value - buyvalueResult;
             totalProfitLoss = totalProfitLoss + parseFloat(profitLoss);
             profitLossPer = (profitLoss / buyvalueResult) * 100;
 
@@ -361,20 +362,21 @@ export default {
       };
     this.$api.journal.portfolio.portfolio(openparams).then(
       function(result) {
+        //console.log('Portfolio', result);
         let defaultPort = false;
-        for (let i = 0; i < result.meta.logs.length; i++) {
+        for (let i = 0; i < result.data.logs.length; i++) {
           if (
-            result.meta.logs[i].type == "virtual" &&
-            result.meta.logs[i].name != "Default Virtual Portfolio"
+            result.data.logs[i].type == "virtual" &&
+            result.data.logs[i].name != "Default Virtual Portfolio"
           ) {
             let portfolio_params = {
-              name: result.meta.logs[i].name,
-              id: result.meta.logs[i].id
+              name: result.data.logs[i].name,
+              id: result.data.logs[i].id
             };
             this.portfolio.push(portfolio_params);
-            if (result.meta.logs[i].name == "My Virtual Portfolio") {
-              this.setSimulatorPortfolioID(result.meta.logs[i].id);
-              this.default_port = result.meta.logs[i].id;
+            if (result.data.logs[i].name == "My Virtual Portfolio") {
+              this.setSimulatorPortfolioID(result.data.logs[i].id);
+              this.default_port = result.data.logs[i].id;
               defaultPort = true;
             }
           }

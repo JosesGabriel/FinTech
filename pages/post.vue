@@ -17,6 +17,7 @@
 import { mapGetters } from "vuex";
 import Newsfeed from "~/components/social/Newsfeed";
 export default {
+  auth: false,
   layout: "main",
   components: {
     Newsfeed

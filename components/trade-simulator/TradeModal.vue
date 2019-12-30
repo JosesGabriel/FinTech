@@ -612,7 +612,7 @@ export default {
         // if Buy is selected
 
         const buyparams = {
-         
+          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
           position: this.simulatorPositions,
           stock_price: this.cprice,
           transaction_meta: {
@@ -623,6 +623,9 @@ export default {
             date: dformat
           }
         };
+        console.log('Buy Params', buyparams);
+        console.log('Fund ID -'+ fund_id);
+        console.log('Stock ID -'+ stock_id);
 
         this.$axios
           .$post(
@@ -676,11 +679,11 @@ export default {
             };
             this.$api.journal.portfolio.open(sellparams).then(
               function(results) {
-                for (let i = 0; i < results.meta.open.length; i++) {
-                  if (selectObj == results.meta.open[i].stock_id) {
-                    this.volm = this.nFormatter(results.meta.open[i].position);
-                    this.dataVolume = results.meta.open[i].position;
-                    this.avprice = results.meta.open[i].average_price;
+                for (let i = 0; i < results.data.open.length; i++) {
+                  if (selectObj == results.data.open[i].stock_id) {
+                    this.volm = this.nFormatter(results.data.open[i].position);
+                    this.dataVolume = results.data.open[i].position;
+                    this.avprice = results.data.open[i].average_price;
                   }
                 }
               }.bind(this)

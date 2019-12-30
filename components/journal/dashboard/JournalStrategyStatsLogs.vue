@@ -3,24 +3,24 @@
         <div id="chart">
             <apexcharts ref="stratStatsChart" type=bar height=240 :options="chartOptions" :series="series" />
         </div>
-        <v-simple-table :dense="true" dark id="liveportfolio-table">
+        <v-simple-table :dense="true" :dark="lightSwitch == true" id="liveportfolio-table">
             <template v-slot:default>
             <thead>
                 <tr>
-                <th class="item_position-prop white--text caption text-left px-1">Strategy</th>
-                <th class="item_position-prop white--text caption text-right px-1">Trades</th>
-                <th class="item_position-prop white--text caption text-right px-1">Wins</th>
-                <th class="item_position-prop white--text caption text-right px-1">Losses</th>
-                <th class="item_position-prop white--text caption text-right px-1">Win Rate</th>
+                <th class="caption text-left px-1">Strategy</th>
+                <th class="caption text-right px-1">Trades</th>
+                <th class="caption text-right px-1">Wins</th>
+                <th class="caption text-right px-1">Losses</th>
+                <th class="caption text-right px-1">Win Rate</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="item in strategyArr.slice(0, 4)" :key="item.name" id="table_tr_port-cont">
-                    <td class="item_position-prop caption px-1 py-1">{{ item.name }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.win + item.loss }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.win }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ item.loss }}</td>
-                    <td class="item_position-prop caption text-right px-1 py-0">{{ ((item.win * 100) / (item.win + item.loss)).toFixed(2) }}%</td>
+                    <td class="caption px-1 py-1">{{ item.name }}</td>
+                    <td class="caption text-right px-1 py-0">{{ item.win + item.loss }}</td>
+                    <td class="caption text-right px-1 py-0">{{ item.win }}</td>
+                    <td class="caption text-right px-1 py-0">{{ item.loss }}</td>
+                    <td class="caption text-right px-1 py-0">{{ ((item.win * 100) / (item.win + item.loss)).toFixed(2) }}%</td>
                 </tr>
             </tbody>
             </template>
@@ -43,6 +43,7 @@ export default {
             renderPortfolioKey: "journal/getRenderPortfolioKey",
             defaultPortfolioId: "journal/getDefaultPortfolioId",
             journalCharts: "journal/getJournalCharts",
+            lightSwitch: "global/getLightSwitch"
         })
     },
     data () {
@@ -50,10 +51,10 @@ export default {
             strategyArr: [],
             series: [{
                 name: 'Win',
-                data: [0,0,0,0]
+                data: [ , , , ]
             }, {
                 name: 'loss',
-                data: [0,0,0,0]
+                data: [ , , , ]
             }],
             chartOptions: {
                 plotOptions: {
@@ -209,10 +210,32 @@ export default {
                 }
             }
             this.componentKeys++;
+        },
+        lightSwitcher() {
+            if (this.lightSwitch == 0) {
+                this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                    theme: {
+                    mode: "light"
+                    }
+                }
+                };
+            } else if (this.lightSwitch == 1) {
+                this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                    theme: {
+                    mode: "dark"
+                    }
+                }
+                };
+        }
         }
     },
     mounted() {
         this.getStrategyStat();
+        this.lightSwitcher();
     },
     watch: {
         journalCharts: function() {
@@ -220,6 +243,9 @@ export default {
         },
         renderPortfolioKey: function() {
             this.getStrategyStat();
+        },
+        lightSwitch: function() {
+            this.lightSwitcher();
         }
     }
 }
@@ -231,5 +257,8 @@ export default {
 }
 .item_position-prop {
   color: #b6b6b6
+}
+.theme--light.v-data-table thead tr th {
+    color: #494949
 }
 </style>
