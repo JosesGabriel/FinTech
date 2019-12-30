@@ -36,6 +36,10 @@ export default {
     state.bidask = data;
   },
 
+  SET_TRADES(state, data) {
+    state.trades = data;
+  },
+
   SET_INDEX(state, data) {
     state.index = data;
   },

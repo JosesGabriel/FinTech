@@ -37,7 +37,9 @@ export default {
       counter: 0,
       sse: null,
       data: {},
-      loading: "#03dac5"
+      loading: "#03dac5",
+      temp_trades: [],
+      ctr_trades: 0
     };
   },
   computed: {
@@ -46,6 +48,7 @@ export default {
       symbolid: "chart/symbolid",
       index: "chart/index",
       market_code: "chart/market_code",
+      trades: "chart/trades",
       lightSwitch: "global/getLightSwitch"
     }),
     cardbackground: function() {
@@ -59,7 +62,8 @@ export default {
       setSymbolID: "chart/setSymbolID",
       setIndex: "chart/setIndex",
       setMarketCode: "chart/setMarketCode",
-      setTicker: "chart/setTicker"
+      setTicker: "chart/setTicker",
+      setTrades: "chart/setTrades"
     }),
     initStock: function(symid) {
       this.loading = "#03dac5";
@@ -141,10 +145,33 @@ export default {
       //     console.log(JSON.parse(event.data));
       //   });
 
-      this.sse.addEventListener("trade", function(event) {
-        console.log("trade");
-        console.log(JSON.parse(event.data));
-      });
+      this.temp_trades = this.trades;
+      this.sse.addEventListener(
+        "trade",
+        function(event) {
+          const trades = JSON.parse(event.data);
+          this.temp_trades.unshift({
+            id: `${trades.t}_${this.ctr_trades++}`,
+            id_str: String(`${trades.t}_${this.ctr_trades++}`),
+            timestamp: trades.t,
+            date: null,
+            datetime: null,
+            executed_price: trades.exp,
+            executed_volume: trades.exvol,
+            buyer: trades.b,
+            seller: trades.s
+          });
+
+          if (this.trades.length !== undefined && this.trades.length > 0) {
+            // console.log(this.trades);
+            // console.log(this.temp_trades);
+            if (this.temp_trades.length > 99) {
+              this.temp_trades.pop();
+            }
+            this.setTrades(this.temp_trades);
+          }
+        }.bind(this)
+      );
     }
   },
   watch: {

@@ -44,6 +44,7 @@ export default () => ({
     weekyearlowstring: 0
   },
   bidask: {},
+  trades: [],
   tabs_sidebar: [
     {
       id: 1,
