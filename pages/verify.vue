@@ -10,6 +10,7 @@ require("dotenv").config();
 export default {
   layout: "main",
   components: {},
+  auth: false,
   data() {
     return {};
   },

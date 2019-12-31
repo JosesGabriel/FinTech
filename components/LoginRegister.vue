@@ -159,26 +159,19 @@
                           hide-details
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="12">
                         <v-text-field
                           v-model="password"
                           :rules="passwordRules"
+                          :append-icon="
+                            showPassword ? 'mdi-eye' : 'mdi-eye-off'
+                          "
+                          :type="showPassword ? 'text' : 'password'"
                           label="Password"
                           color="primary"
-                          type="password"
                           dense
                           hide-details
-                        ></v-text-field>
-                      </v-col>
-                      <v-col cols="6">
-                        <v-text-field
-                          v-model="confirmPassword"
-                          :rules="confirmPasswordRules"
-                          label="Confirm Password"
-                          color="primary"
-                          dense
-                          hide-details
-                          type="password"
+                          @click:append="showPassword = !showPassword"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -240,6 +233,7 @@ export default {
   },
   data() {
     return {
+      showPassword: false,
       register__model: false,
       firstName: "",
       lastName: "",
@@ -313,6 +307,7 @@ export default {
       this.alertMessage = message;
     },
     signUp() {
+      this.confirmPassword = this.password;
       this.registerLoading = "primary";
       let params = {
         first_name: this.firstName,
@@ -322,12 +317,13 @@ export default {
         password: this.password,
         password_confirmation: this.confirmPassword
       };
-      this.$axios
-        .$post("https://dev-api.arbitrage.ph/api/register", params)
+      this.$api.authentication.register
+        .create(params)
         .then(response => {
           this.registerLoading = false;
           if (response.success) {
             this.showAlert(true, response.message);
+            console.log(response);
             setTimeout(
               function() {
                 this.show = false;

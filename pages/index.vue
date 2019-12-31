@@ -50,15 +50,7 @@ export default {
       newPost: {}
     };
   },
-  mounted() {
-    //Force everyone to logout for the memes lol, remove after christmas.
-    //Delete Localstorage value too
-    if (!localStorage.getItem("josescute")) {
-      localStorage.setItem("josescute", true);
-      this.$auth.logout();
-    }
-    // localStorage.setItem('josescute', true);
-  },
+  mounted() {},
   methods: {
     toggle: function() {
       this.isOpen = !this.isOpen;

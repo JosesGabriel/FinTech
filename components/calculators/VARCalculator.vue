@@ -1,6 +1,6 @@
 <template>
   <v-card
-    :color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+    :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
     :dark="lightSwitch == 0 ? false : true"
     :loading="loader"
     class="px-2"
@@ -356,14 +356,13 @@ export default {
     addToWatchlist() {
       this.loader = "primary";
       let params = {
-        user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000",
         stock_id: this.stocksDropdownModel,
         entry_price: this.identifiedEntryPrice,
         take_profit: this.takeProfitPrice,
         stop_loss: this.stoplossPrice
       };
-      this.$axios
-        .$post(process.env.DEV_API_URL + "/journal/watchlist", params)
+      this.$api.watchlist.watchlists
+        .create(params)
         .then(response => {
           this.watchCardModalLoading = false;
           if (response.success) {
