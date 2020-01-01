@@ -132,7 +132,8 @@
               :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'watchlist' ? 'success' : 'secondary'"
+                ><v-icon
+                  :color="active == 'watchlist' ? 'success' : 'secondary'"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
@@ -169,7 +170,7 @@
                 >Buy/Sell Calculator</v-list-item-title
               >
             </v-list-item-content>
-            <v-dialog v-model="buySellDialog" max-width="290">
+            <v-dialog v-model="buySellDialog" max-width="500">
               <BuySellCalculator />
             </v-dialog>
           </v-list-item>

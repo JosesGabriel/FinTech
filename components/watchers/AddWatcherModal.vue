@@ -181,6 +181,7 @@ export default {
       }
       if (!stockExists) {
         let params = {
+          user_id: this.$auth.user.data.user.uuid, //temporary, remind backend about bearer token auth, no need for user_id
           stock_id: this.stocksDropdownModel,
           entry_price: this.entryPriceModel,
           take_profit: this.takeProfitModel,
