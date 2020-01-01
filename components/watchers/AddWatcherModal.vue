@@ -172,7 +172,7 @@ export default {
       }
     },
     addWatch() {
-      this.watchCardModalLoading = "success"
+      this.watchCardModalLoading = "success";
       let stockExists = false;
       for (let i = 0; i < this.userWatchedStocks.length; i++) {
         if (this.userWatchedStocks[i].stock_id == this.stocksDropdownModel) {

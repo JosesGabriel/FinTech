@@ -85,7 +85,6 @@ export default {
   },
   watch: {
     symbolid(value) {
-      //console.log(value);
       this.active_tab = "tab-1";
       this.first_load = false;
     }

@@ -5,6 +5,10 @@ export default {
   //region stock data
   getStockList(state) {
     return state.stockList;
-  }
+  },
   //end region stock data
+
+  favicon: state => {
+    return state.favicon;
+  }
 };

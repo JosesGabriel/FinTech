@@ -23,6 +23,7 @@ import Headline from "../chart/sidebar/Headline";
 import Status from "../chart/sidebar/Status";
 import Sentiment from "../chart/sidebar/Sentiment";
 import Tabs from "../chart/sidebar/Tabs";
+import { async } from "q";
 
 export default {
   name: "Sidebar",
@@ -84,13 +85,13 @@ export default {
         this.counter = 0;
       }
 
-      //   this.sse = new EventSource(
-      //     "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
-      //   );
-
       this.sse = new EventSource(
-        "http://localhost:8021/sse/market-data/pse/" + symid
+        "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
       );
+
+      //   this.sse = new EventSource(
+      //     "http://localhost:8021/sse/market-data/pse/" + symid
+      //   );
 
       this.sse.onopen = function() {
         //console.log("open sse");
@@ -137,6 +138,12 @@ export default {
           this.$store.commit("chart/SET_STOCK_OBJ", {
             average: data.val / data.vol
           });
+
+          // create a tick sound for every update in sse
+          const beepSound = new Audio("audio/vk_notification.mp3");
+          beepSound.play();
+
+          // update meta for every update in sse
         }.bind(this)
       );
 
@@ -181,8 +188,32 @@ export default {
     }
   },
   created() {
-    this.setSymbolID("29235364749115392");
-    //this.setSymbolID("29235363960586240") // ayala
+    if (this.$route.params.id) {
+      this.$api.chart.stocks
+        .list({
+          exchange: "PSE",
+          symbol: this.$route.params.id.toUpperCase()
+        })
+        .then(response => {
+          if (parseInt(response.data.id) > 0) {
+            this.setSymbolID(response.data.id_str);
+          }
+        });
+    } else {
+      this.setSymbolID("29235364749115392"); // PSE
+    }
+  },
+  mounted() {
+    /*this.$api.watchlist.watchlists
+      .index()
+      .then(response => {
+        console.log("watchlist");
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      */
   }
 };
 </script>

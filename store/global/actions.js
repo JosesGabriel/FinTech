@@ -5,6 +5,9 @@ export default {
   //region stock data
   async setStockList({ commit }, data) {
     await commit("SET_STOCKLIST", data);
-  }
+  },
   //end region stock data
+  async setFavicon({ commit }, data) {
+    await commit("SET_FAVICON", data);
+  }
 };

@@ -5,6 +5,9 @@ export default {
   //region stock data
   SET_STOCKLIST(state, data) {
     state.stockList = data;
-  }
+  },
   //end region stock data
+  SET_FAVICON(state, data) {
+    state.favicon = data;
+  }
 };

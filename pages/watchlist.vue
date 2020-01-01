@@ -128,6 +128,10 @@ export default {
           this.watchListObject = response.data.watchlist;
           this.setUserWatchedStocks(response.data.watchlist);
           this.loadingBar = false;
+          let ctr = 1;
+          response.data.watchlist.forEach(element => {
+            console.log(`${ctr++} - ${element.user_id}`);
+          });
         }.bind(this)
       );
     }
