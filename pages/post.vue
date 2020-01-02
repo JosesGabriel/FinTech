@@ -17,6 +17,15 @@
 import { mapGetters } from "vuex";
 import Newsfeed from "~/components/social/Newsfeed";
 export default {
+  head() {
+    return {
+      title: "Test Title share",
+      meta: [
+        { property: "og:title", content: "og title" },
+        { property: "og:image", content: "https://lyduz.com/logo-dark.svg" }
+      ]
+    };
+  },
   auth: false,
   layout: "main",
   components: {
