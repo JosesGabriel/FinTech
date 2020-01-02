@@ -22,7 +22,12 @@ export default {
       title: "Test Title share",
       meta: [
         { property: "og:title", content: "og title" },
-        { property: "og:image", content: "https://lyduz.com/logo-dark.svg" }
+        { property: "og:image", content: "https://lyduz.com/logo-dark.svg" },
+        {
+          hid: "description",
+          name: "description",
+          content: "My custom description"
+        }
       ]
     };
   },
