@@ -309,7 +309,7 @@ export default {
         channel_id: this.playerCurrentChatRoom
       };
       this.$axios
-        .$post(process.env.DEV_API_URL + "/game/series/", params)
+        .$post(process.env.API_URL + "/game/series/", params)
         .then(response => {
           this.setPlayerInGame(true);
           this.fullScreenLoader = false;

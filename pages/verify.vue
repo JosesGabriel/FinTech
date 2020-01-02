@@ -21,7 +21,7 @@ export default {
     retrieveParams() {
       let param = this.$route.fullPath.indexOf("?");
       this.$axios
-        .$get(process.env.DEV_API_URL + this.$route.fullPath.substr(param))
+        .$get(process.env.API_URL + this.$route.fullPath.substr(param))
         .then(response => {
           console.log(response);
         });
