@@ -8,7 +8,7 @@
       </v-card-title>
       <v-card color="transparent" class="d-flex justify-center" elevation="0">
         <router-link to="/" class="px-1">
-          <v-btn icon>
+          <v-btn icon @click="shareToTwitter()">
             <img src="/icon/journal-icons/twitter.svg" width="25" />
           </v-btn>
         </router-link>
@@ -144,6 +144,17 @@ export default {
           href: this.shareURL
         },
         function(response) {}
+      );
+    },
+    shareToTwitter() {
+      let twitterURL =
+        "https://twitter.com/intent/tweet?url=" +
+        this.shareURL +
+        "&via=arbitrageph&hashtags=arbitrageph";
+      window.open(
+        twitterURL,
+        "mywindow",
+        "menubar=1,resizable=1,width=350,height=250"
       );
     }
   }

@@ -589,7 +589,7 @@ export default {
 
           this.$axios
             .$post(
-              process.env.JOURNAL_API_URL +
+              process.env.API_URL +
                 "/journal/funds/" +
                 fund_id +
                 "/sell/" +
@@ -629,7 +629,7 @@ export default {
 
         this.$axios
           .$post(
-            process.env.JOURNAL_API_URL +
+            process.env.API_URL +
               "/journal/funds/" +
               fund_id +
               "/buy/" +

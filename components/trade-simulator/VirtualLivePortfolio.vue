@@ -400,7 +400,7 @@ export default {
       if (confirm("Do you really want to delete?")) {
         this.$axios
           .$post(
-            process.env.JOURNAL_API_URL +
+            process.env.API_URL +
               "/journal/funds/" +
               this.simulatorPortfolioID +
               "/delete/" +
@@ -430,7 +430,7 @@ export default {
       };
       this.$axios
         .$post(
-          process.env.JOURNAL_API_URL +
+          process.env.API_URL +
             "/journal/funds/" +
             this.simulatorPortfolioID +
             "/update/" +

@@ -380,7 +380,7 @@ export default {
       if (confirm("Do you really want to delete?")) {
         this.$axios
           .$post(
-            process.env.JOURNAL_API_URL +
+            process.env.API_URL +
               "/journal/funds/tradelog/delete/" +
               item
           )

@@ -17,6 +17,38 @@
 import { mapGetters } from "vuex";
 import Newsfeed from "~/components/social/Newsfeed";
 export default {
+  head() {
+    return {
+      title: "Test Title share",
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          property: "description",
+          name: "description",
+          hid: "description",
+          content: "My post page"
+        },
+        { property: "og:title", name: "og:title", content: `My Post` },
+        {
+          property: "og:description",
+          name: "og:description",
+          content: "My post page"
+        },
+        { property: "og:type", name: "og:type", content: "website" },
+        {
+          property: "og:url",
+          name: "og:url",
+          content: `http://euro-travel-example.com/thumbnail.jpg`
+        },
+        {
+          property: "og:image",
+          name: "og:image",
+          content: `http://euro-travel-example.com/thumbnail.jpg`
+        }
+      ]
+    };
+  },
   auth: false,
   layout: "main",
   components: {
