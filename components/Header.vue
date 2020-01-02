@@ -10,7 +10,7 @@
       ><router-link to="/">
         <img
           class="pl-2 pt-1"
-          :src="lightSwitch == 0 ? 'logo-light.svg' : 'logo-dark.svg'"
+          :src="lightSwitch == 0 ? '/logo-light.svg' : '/logo-dark.svg'"
           alt=""
           width="85"
           height="85"
@@ -92,7 +92,7 @@ export default {
   },
   mounted() {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
-    if (this.stockList.length == 0 ){
+    if (this.stockList.length == 0) {
       const params = {
         exchange: "PSE",
         status: "active",
@@ -100,7 +100,7 @@ export default {
       };
       this.$api.chart.stocks.list(params).then(
         function(result) {
-          this.setStockList(result)
+          this.setStockList(result);
         }.bind(this)
       );
     }

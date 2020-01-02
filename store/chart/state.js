@@ -43,7 +43,10 @@ export default () => ({
     weekyearlow: 0,
     weekyearlowstring: 0
   },
-  bidask: {},
+  bidask: {
+    bids: [],
+    asks: []
+  },
   trades: [],
   tabs_sidebar: [
     {

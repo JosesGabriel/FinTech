@@ -36,6 +36,14 @@ export default {
     state.bidask = data;
   },
 
+  SET_BIDS(state, data) {
+    state.bidask.bids = data;
+  },
+
+  SET_ASKS(state, data) {
+    state.bidask.asks = data;
+  },
+
   SET_TRADES(state, data) {
     state.trades = data;
   },

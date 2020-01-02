@@ -6,9 +6,21 @@
     ]"
   >
     <div id="top">
+      <v-content class="pr-3 text-right">
+        <v-icon
+          id="icon__share"
+          small
+          :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]"
+          @click="shareActivity"
+          >mdi-share-variant</v-icon
+        >
+      </v-content>
       <!-- top -->
       <v-content>
-        <v-row class="ml-3 mr-1 mt-7 mb-1">
+        <v-row class="ml-3 mr-1 mt-1 mb-1">
           <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Position
@@ -654,12 +666,12 @@ export default {
   },
   watch: {
     symbolid(value) {
-      console.log("symbols");
-      console.log(value);
+      // console.log("symbols");
+      // console.log(value);
     },
     fullscreen(value) {
-      console.log("fullscreen");
-      console.log(value);
+      // console.log("fullscreen");
+      // console.log(value);
     },
     ticker(value) {
       // console.log("ticker");
@@ -671,8 +683,13 @@ export default {
       }
     }
   },
+  methods: {
+    shareActivity: function() {
+      console.log("share");
+    }
+  },
   mounted() {
-    console.log(this.symbolid);
+    // console.log(this.symbolid);
 
     this.$api.journal.portfolio
       .open({
@@ -680,8 +697,8 @@ export default {
         fund: "real"
       })
       .then(response => {
-        console.log("open real funds");
-        console.log(response);
+        //  console.log("open real funds");
+        //  console.log(response);
       });
 
     this.$api.journal.portfolio
@@ -691,8 +708,8 @@ export default {
         stock: "29235363423715328"
       })
       .then(response => {
-        console.log("tradelogs real funds");
-        console.log(response);
+        //  console.log("tradelogs real funds");
+        //  console.log(response);
       });
   }
 };
@@ -703,8 +720,15 @@ export default {
   /* background: red; */
   height: 120px;
 }
+#icon__share {
+  cursor: pointer;
+}
+#div__share {
+  position: absolute;
+  right: 8px;
+}
 .tr_custom {
-  line-height: 2rem !important;
+  line-height: 1.7rem !important;
   cursor: pointer;
 }
 .positive {

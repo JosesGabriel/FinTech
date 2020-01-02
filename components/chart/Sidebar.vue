@@ -23,7 +23,6 @@ import Headline from "../chart/sidebar/Headline";
 import Status from "../chart/sidebar/Status";
 import Sentiment from "../chart/sidebar/Sentiment";
 import Tabs from "../chart/sidebar/Tabs";
-import { async } from "q";
 
 export default {
   name: "Sidebar",
@@ -50,7 +49,8 @@ export default {
       index: "chart/index",
       market_code: "chart/market_code",
       trades: "chart/trades",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      bidask: "chart/bidask"
     }),
     cardbackground: function() {
       //return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e"; e3e9ed
@@ -64,7 +64,8 @@ export default {
       setIndex: "chart/setIndex",
       setMarketCode: "chart/setMarketCode",
       setTicker: "chart/setTicker",
-      setTrades: "chart/setTrades"
+      setTrades: "chart/setTrades",
+      setBidask: "chart/setBidask"
     }),
     initStock: function(symid) {
       this.loading = "#03dac5";
@@ -94,21 +95,18 @@ export default {
       //   );
 
       this.sse.onopen = function() {
-        //console.log("open sse");
+        // console.log("open sse");
       };
 
       this.sse.onerror = function(err) {
         // console.log("open err");
-        // console.log(err);
+        //console.log(err);
       };
 
       this.sse.addEventListener(
         "info",
         function(e) {
           const data = JSON.parse(e.data);
-          //   console.log(e);
-          //   console.log("sse");
-          //   console.log(data);
           this.counter++;
           this.$store.commit("chart/SET_STOCK_OBJ", {
             trades: parseInt(this.stock.trades) + parseInt(this.counter)
@@ -140,17 +138,34 @@ export default {
           });
 
           // create a tick sound for every update in sse
-          const beepSound = new Audio("audio/vk_notification.mp3");
+          const beepSound = new Audio("/audio/vk_notification.mp3");
           beepSound.play();
-
-          // update meta for every update in sse
         }.bind(this)
       );
 
-      //   this.sse.addEventListener("bidask", function(event) {
-      //     console.log("bidask");
-      //     console.log(JSON.parse(event.data));
-      //   });
+      this.sse.addEventListener(
+        "bidask",
+        function(event) {
+          // console.log("bidask");
+          if (
+            this.bidask.asks !== undefined &&
+            this.bidask.bids !== undefined
+          ) {
+            const data = JSON.parse(event.data);
+            //console.log(this.bidask.bids);
+            if (data.ov == "B") {
+              // bid
+              //   $scope.bids = $scope.updateBidAndAsks($scope.bids, data);
+              //   $scope.bids = $filter("orderBy")($scope.bids, "-price");
+            } else if (data.ov == "S") {
+              // ask
+              //console.log("asks");
+              const asks = this.updateBidAndAsks(this.bidask.asks, data);
+              //console.log(asks);
+            }
+          }
+        }.bind(this)
+      );
 
       this.temp_trades = this.trades;
       this.sse.addEventListener(
@@ -170,8 +185,6 @@ export default {
           });
 
           if (this.trades.length !== undefined && this.trades.length > 0) {
-            // console.log(this.trades);
-            // console.log(this.temp_trades);
             if (this.temp_trades.length > 99) {
               this.temp_trades.pop();
             }
@@ -179,6 +192,13 @@ export default {
           }
         }.bind(this)
       );
+    },
+    // For Bid and Asks
+    updateBidAndAsks: function(list, data) {
+      const index = list.findIndex(function(item) {
+        return item.id == data.id;
+      });
+      return index;
     }
   },
   watch: {
@@ -204,6 +224,7 @@ export default {
     }
   },
   mounted() {
+    //console.log(this.$route);
     /*this.$api.watchlist.watchlists
       .index()
       .then(response => {

@@ -115,9 +115,7 @@ export default {
   },
   data() {
     return {
-      loading: "#03dac5",
-      asks: {},
-      bids: {}
+      loading: "#03dac5"
     };
   },
   computed: {
@@ -134,8 +132,6 @@ export default {
   watch: {
     symbolid(symid) {
       this.initBidask(symid);
-      this.asks = {};
-      this.bids = {};
     }
   },
   methods: {
@@ -170,20 +166,25 @@ export default {
           limit: 10
         })
         .then(response => {
-          this.asks = Object.values(response.data.asks);
-          this.bids = Object.values(response.data.bids);
-          const limit = Math.max(this.asks.length, this.bids.length);
+          const asks = Object.values(response.data.asks);
+          const bids = Object.values(response.data.bids);
+          const limit = Math.max(asks.length, bids.length);
           const bidask = {
-            asks: this.asks,
-            bids: this.bids,
+            asks,
+            bids,
             limit
           };
+          //console.log("bidask");
           //console.log(bidask);
           this.setBidask(bidask);
-          this.loading = null;
+          this.setBid(bids);
+          this.setAsk(asks);
         })
         .catch(error => {
-          console.log(error);
+          //console.log(error);
+        })
+        .finally(() => {
+          this.loading = null;
         });
     }
   },
