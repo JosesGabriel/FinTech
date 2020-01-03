@@ -62,7 +62,8 @@ export default {
         {
           property: "og:image",
           name: "og:image",
-          content: "https://lyduz.com/lyduz_png.png"
+          content:
+            "https://arbitrage.ph/wp-content/themes/arbitnew/images/ogimage_mage.png"
         },
         {
           property: "fb:app_id",
