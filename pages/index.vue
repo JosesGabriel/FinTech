@@ -33,6 +33,38 @@ import MiniWatchlist from "~/components/MiniWatchlist";
 import Bulletin from "~/components/Bulletin";
 
 export default {
+  head() {
+    return {
+      title: "INDEX",
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          property: "description",
+          name: "description",
+          hid: "description",
+          content: "My post page"
+        },
+        { property: "og:title", name: "og:title", content: `My Post` },
+        {
+          property: "og:description",
+          name: "og:description",
+          content: "INDEX PAGE"
+        },
+        { property: "og:type", name: "og:type", content: "website" },
+        {
+          property: "og:url",
+          name: "og:url",
+          content: `http://euro-travel-example.com/thumbnail.jpg`
+        },
+        {
+          property: "og:image",
+          name: "og:image",
+          content: `http://euro-travel-example.com/thumbnail.jpg`
+        }
+      ]
+    };
+  },
   layout: "main",
   components: {
     Navbar,
