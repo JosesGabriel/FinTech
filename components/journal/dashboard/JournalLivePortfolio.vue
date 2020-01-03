@@ -318,12 +318,13 @@ export default {
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.totalProfitLoss = this.totalProfitLoss + parseFloat(this.portfolioLogs[i].profit_loss);
             this.totalProfitLossPerf = this.totalProfitLossPerf + parseFloat(this.portfolioLogs[i].pl_percentage);
-            // this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
+            this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
           }
           // Loading on table
           this.livePortfolioLoading = false
         }.bind(this)
       );
+      this.componentKeys++;
     }
   },
   watch: {

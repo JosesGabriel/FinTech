@@ -221,7 +221,7 @@ export default {
           fund: this.defaultPortfolioId
         };
         this.$api.journal.portfolio.open(openparams).then(response => {
-          this.allodata = response.meta.allocations;
+          this.allodata = response.data.allocations;
 
           this.chartOptions.labels = ["Cash"];
           for (let i = 1; i < this.allodata.length; i++) {

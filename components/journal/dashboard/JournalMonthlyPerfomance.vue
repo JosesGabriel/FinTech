@@ -1,9 +1,6 @@
 <template>
   <v-col class="pa-0" cols="7" sm="7" md="7">
-    <v-card-title
-      class="text-left justify-left px-0 pb-2 pt-0"
-      :style="borderColor"
-    >
+    <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
       <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">MONTHLY PERFORMANCE</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click.stop="showScheduleForm=true">
@@ -214,8 +211,8 @@ export default {
   methods: {
     getMPerformance() {
       if (this.journalCharts != null) {
-        console.log(this.journalCharts)
-        // this.monthlyPerformance = this.journalCharts.meta;
+      // console.log(this.journalCharts);
+        // this.monthlyPerformance = this.journalCharts.data;
         // let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance;
         // this.$refs.monthlyPerformance.updateSeries([
         //   {

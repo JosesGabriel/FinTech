@@ -273,14 +273,14 @@
                     class="body-2 buy_selector buy_price-input py-3"
                   ></v-text-field>
                   <v-btn
-                    @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotQuantity"
+                    @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotModel"
                     text
                     icon
                     color="success"
                   >
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
-                  <v-btn @click="quantityModel += boardLotQuantity" text icon color="success">
+                  <v-btn @click="quantityModel += boardLotModel" text icon color="success">
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
                 </v-col>
@@ -396,6 +396,7 @@
                   label="Sell Price"
                   placeholder="Enter Sell Price"
                   color="#00FFC3"
+                  type="number"
                   style="color: #00FFC3"
                   :dark="lightSwitch == true"
                   class="body-2 buy_selector quantity-input py-3"
@@ -412,14 +413,14 @@
                     class="body-2 buy_selector buy_price-input py-3 quatity_number"
                   ></v-text-field>
                   <v-btn
-                    @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= boardLotQuantity"
+                    @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= boardLotModel"
                     text
                     icon
                     color="success"
                   >
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
-                  <v-btn @click="quantitySellModel += boardLotQuantity" text icon color="success">
+                  <v-btn @click="quantitySellModel += boardLotModel" text icon color="success">
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
                 </v-col>
@@ -516,7 +517,7 @@ export default {
       quantitySellModel: 0,
       totalCostModel: 0,
       totalCostSellModel: 0,
-      boardLotQuantity: 0,
+      AvailableBoardLot: 0,
 
       strategySellModel: null,
       tradeplanSellModel: null,
@@ -636,6 +637,7 @@ export default {
     this.stocklistBuy = this.stockList.data;
 
     this.getUserPortfolio();
+    this.initPortfolio();
   },
   methods: {
     ...mapActions({
@@ -643,22 +645,25 @@ export default {
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
     }),
     initPortfolio() {
-      var today = new Date(this.date);
       var tim = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      var time =
-        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var dateTime = date + " " + time;
+      var today = new Date(this.date),
+        month = '' + (today.getMonth() + 1),
+        day = '' + today.getDate(),
+        year = today.getFullYear();
+
+      if (month.length < 2) 
+          month = '0' + month;
+      if (day.length < 2) 
+          day = '0' + day;
+
+      var dateTime = [year, month, day].join('-') + " " + time;
       this.dateModel = dateTime;
-      this.YMDModel = date;
+      this.YMDModel = [year, month, day].join('-');
     },
     buyListArray() {
+      let totalCost = parseFloat(this.quantityModel) * parseFloat(this.priceModel);
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseFloat(this.quantityModel),
@@ -678,7 +683,6 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setDefaultPortfolioId(this.portfolioDropdownModel);
             this.GetSelectStock = "";
             this.priceModel = "0.00";
             this.quantityModel = "0";
@@ -689,7 +693,7 @@ export default {
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
             this.portfolioDropdownModel = null;
-            this.availableFundsModel = 0;
+            this.availableFundsModel = 0
 
             this.cprice = "0.00";
             this.change = "0.00";
@@ -710,6 +714,8 @@ export default {
         });
     },
     sellListArray: function() {
+      console.log(this.dateModel)
+      console.log(this.YMDModel)
       let aveprice =
         parseFloat(this.quantitySellModel) /
         parseFloat(this.totalCostSellModel.replace(/,/g, ""));
@@ -739,7 +745,6 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setDefaultPortfolioId(this.defaultPortfolioId);
             this.GetSelectStock = "";
             this.priceSellModel = "0.00";
             this.quantitySellModel = "0";
@@ -789,25 +794,18 @@ export default {
 
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.boardLotModel = 1000000;
-            this.boardLotQuantity = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
             this.boardLotModel = 100000;
-            this.boardLotQuantity = 100000;
           } else if (result.data.last >= 0.05 && result.data.last <= 0.495) {
             this.boardLotModel = 10000;
-            this.boardLotQuantity = 10000;
           } else if (result.data.last >= 0.5 && result.data.last <= 4.99) {
             this.boardLotModel = 1000;
-            this.boardLotQuantity = 1000;
           } else if (result.data.last >= 5 && result.data.last <= 49.95) {
             this.boardLotModel = 100;
-            this.boardLotQuantity = 100;
           } else if (result.data.last >= 50 && result.data.last <= 999.5) {
             this.boardLotModel = 10;
-            this.boardLotQuantity = 10;
           } else if (result.data.last >= 1000) {
             this.boardLotModel = 5;
-            this.boardLotQuantity = 5;
           }
           this.cprice = result.data.last;
           this.cpercentage = result.data.changepercentage.toFixed(2);
@@ -833,10 +831,10 @@ export default {
           let stockDataList = this.openPosition[i];
 
           if(stockDataList.stock_id == Obj) {
-            console.log(stockDataList)
             this.priceSellModel = stockDataList.metas.buy_price;
             this.avepriceSell = stockDataList.average_price;
             this.quantitySellModel = stockDataList.position;
+            this.AvailableBoardLot = stockDataList.position;
             if(stockDataList.metas.strategy || stockDataList.metas.plan || stockDataList.metas.emotion || stockDataList.metas.notes) {
               this.strategySellModel = stockDataList.metas.strategy;
               this.tradeplanSellModel = stockDataList.metas.plan;
@@ -877,19 +875,18 @@ export default {
         }
       }
     },
-    whereToSave() {
-      for (let i = 0; i < this.userPortfolio.length; i++) {
-        let portfolioListPush1 = this.userPortfolio[i];
-        if (portfolioListPush1.id === this.portfolioDropdownModel) {
-          this.availableFundsModel = parseInt(portfolioListPush1.balance);
-
-          // this.keyCreateCounter = this.renderPortfolioKey;
-          // this.keyCreateCounter++;
-          // this.setRenderPortfolioKey(this.keyCreateCounter);
-
-          // this.setDefaultPortfolioId(portfolioListPush1.id);
-        }
-      }
+    whereToSave(obj) {
+      const portfoliofundsparams = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: obj
+      };
+      this.$api.journal.portfolio.portfoliofunds(portfoliofundsparams).then(
+        function(result) {
+          if (result.success) {
+            this.availableFundsModel = parseFloat(result.data.funds.balance);
+          }
+        }.bind(this)
+      );
     },
     selectWatch() {
       if (this.typePortfolioModel != null) {
@@ -913,7 +910,6 @@ export default {
       this.totalCostModel = dall
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
       if (
         parseFloat(this.totalCostModel) >= parseFloat(this.availableFundsModel)
       ) {
@@ -939,8 +935,7 @@ export default {
       }
     },
     sellWatch(newValue) {
-      let sellResult =
-        parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
+      let sellResult = parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
       let dpartcommission = sellResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
       // TAX
@@ -956,24 +951,16 @@ export default {
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      let compareNum = parseInt(this.quantitySellModel) >= parseInt(this.boardLotModel);
-      if (!compareNum) {
+      if (this.priceSellModel == "0.00" && this.priceSellModel <= 0 && this.quantitySellModel == "0.00" && this.quantitySellModel <= 0) {
         this.confirmSellButtonDisable = true;
-        console.log(this.boardLotModel, 'igit')
       } else {
-        if ( this.priceSellModel == "0.00" || this.priceSellModel <= 0 || this.quantitySellModel == "0.00" || this.quantitySellModel <= 0 ) {
-          console.log(this.boardLotModel, 'tubol')
+        if(parseFloat(this.quantitySellModel) > parseFloat(this.AvailableBoardLot)) {
           this.confirmSellButtonDisable = true;
-          this.totalCostSellModel = 0;
         } else {
-          let compareNum1 = parseInt(this.quantitySellModel) > parseInt(this.boardLotModel);
-          console.log(this.boardLotModel, 'tae')
-          if (!compareNum1) {
-          console.log('ihi')
-            this.confirmSellButtonDisable = false;
-          } else {
-          console.log('kiki')
+          if (this.priceSellModel == NaN || this.priceSellModel <= 0 || this.quantitySellModel == NaN || this.quantitySellModel <= 0) {
             this.confirmSellButtonDisable = true;
+          } else {
+            this.confirmSellButtonDisable = false;
           }
         }
       }
@@ -987,8 +974,7 @@ export default {
         (today.getMonth() + 1) +
         "-" +
         today.getDate();
-      var time =
-        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
       var dateTime = date + " " + time;
       this.dateModel = dateTime;
