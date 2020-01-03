@@ -6,7 +6,6 @@ export default ({ store }, inject) => {
     format: "json",
     reconnection: process.env.WEBSOCKET_RECONNECT,
     reconnectionAttempts: process.env.WEBSOCKET_RECONNECT_ATTEMPTS,
-    reconnectionDelay: process.env.WEBSOCKET_RECONNECT_DELAY,
-    store: store
+    reconnectionDelay: process.env.WEBSOCKET_RECONNECT_DELAY
   });
 };
