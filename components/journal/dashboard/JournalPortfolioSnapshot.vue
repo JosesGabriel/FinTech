@@ -126,7 +126,7 @@ export default {
           fund: this.defaultPortfolioId
         };
         this.$api.journal.portfolio.snapshot(snapshotparams).then(response => {
-          let snapshot = response.meta.snapshot;
+          let snapshot = response.data.snapshot;
           this.startingCapital = snapshot.capital;
           this.yearTDPL = snapshot.PL;
           this.portfolioTDPL = snapshot.PL_percentage;

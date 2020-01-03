@@ -65,11 +65,11 @@
           <div class="separator"></div>
           <JournalLivePortfolio />
           <div class="component_spacer"></div>
-          <!-- <v-row no-gutters>
+          <v-row no-gutters>
             <JournalPortfolioSnapshot />
             <JournalCurrentAllocation />
           </v-row>
-          <div class="component_spacer"></div>
+          <!-- <div class="component_spacer"></div>
           <v-row no-gutters>
             <JournalEquityCurve />
           </v-row>
@@ -110,7 +110,7 @@
               <JournalGrossPL />
             </v-col>
           </v-row> 
-          <div class="component_spacer"></div>-->
+          <div class="component_spacer"></div> -->
         </v-container>
       </v-tab-item>
       <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2">
@@ -133,11 +133,11 @@
 <script>
 //Dashboard tab
 import JournalLivePortfolio from "~/components/journal/dashboard/JournalLivePortfolio";
-// import JournalPortfolioSnapshot from "~/components/journal/dashboard/JournalPortfolioSnapshot";
-// import JournalCurrentAllocation from "~/components/journal/dashboard/JournalCurrentAllocation";
+import JournalPortfolioSnapshot from "~/components/journal/dashboard/JournalPortfolioSnapshot";
+import JournalCurrentAllocation from "~/components/journal/dashboard/JournalCurrentAllocation";
+// import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
 // import JournalMonthlyPerfomance from "~/components/journal/dashboard/JournalMonthlyPerfomance";
 // import JournalTradeStats from "~/components/journal/dashboard/JournalTradeStats";
-// import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
 // import JournalStrategyStats from "~/components/journal/dashboard/JournalStrategyStats";
 // import JournalTopStocks from "~/components/journal/dashboard/JournalTopStocks";
 // import JournalEmotionalStats from "~/components/journal/dashboard/JournalEmotionalStats";
@@ -161,11 +161,11 @@ export default {
   components: {
     //Dashboard tab
     JournalLivePortfolio,
-    // JournalPortfolioSnapshot,
-    // JournalCurrentAllocation,
+    JournalPortfolioSnapshot,
+    JournalCurrentAllocation,
+    // JournalEquityCurve,
     // JournalMonthlyPerfomance,
     // JournalTradeStats,
-    // JournalEquityCurve,
     // JournalStrategyStats,
     // JournalTopStocks,
     // JournalEmotionalStats,
@@ -199,7 +199,6 @@ export default {
   methods: {
     ...mapActions({
       setUserPortfolio: "journal/setUserPortfolio",
-      setSelectedPortfolio: "journal/setSelectedPortfolio",
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
       setJournalCharts: "journal/setJournalCharts"
@@ -216,7 +215,6 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setSelectedPortfolio(obj);
           }
         }.bind(this)
       );
@@ -295,17 +293,16 @@ export default {
       // this.componentKey++;
     },
     getJournalCharts() {
-      if (this.portfolioDropdownModel != null) {
-        const journalchartsparams = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-          fund: this.defaultPortfolioId
-        };
-        this.$api.journal.portfolio
-          .journalcharts(journalchartsparams)
-          .then(response => {
-            this.setJournalCharts(response);
-          });
-      }
+      // if (this.portfolioDropdownModel != null) {
+      //   let journalchartsparams = {
+      //     user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      //     fund: this.defaultPortfolioId
+      //   };
+      //   this.$api.journal.portfolio.journalcharts(journalchartsparams).then(response => {
+      //     // console.log(response)
+      //     this.setJournalCharts(response);
+      //   });
+      // }
     }
   },
   computed: {

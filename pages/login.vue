@@ -2,13 +2,13 @@
   <v-card class="investagram_bulok text-center" color="transparent" dark flat>
     <span class="display-4 text-center d-inline-block">
       <span class="font-weight-thin">
-        <img
+        <!-- <img
           class="pl-2 pt-1"
           src="lyduz_loader.gif"
           alt=""
           width="285"
           height="285"
-        />
+        /> -->
       </span>
     </span>
   </v-card>
@@ -27,20 +27,20 @@ export default {
           content:
             "Lyduz is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
         },
-        { property: "og:title", name: "og:title", content: "Lyduz" },
+        { property: "og:title", content: "Lyduz" },
         {
           property: "og:description",
           content:
             "Lyduz is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
         },
-        { property: "og:type", name: "og:type", content: "website" },
+        { property: "og:type", content: "website" },
         {
           property: "og:url",
           content: "https://lyduz.com/login"
         },
         {
           property: "og:image",
-          content: "https://lyduz.com/lyduz_png.png"
+          content: "https://lyduz.com/user_default.png"
         },
         {
           property: "fb:app_id",

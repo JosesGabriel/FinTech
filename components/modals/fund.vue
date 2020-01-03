@@ -147,10 +147,6 @@ export default {
     }
   },
   mounted() {
-    if(!this.selectedPortfolio){
-      this.availableFunds = parseFloat(this.selectedPortfolio.balance);
-      this.disableWithdrawButtonSave = true
-    }
   },
   methods: {
     ...mapActions({
@@ -158,11 +154,18 @@ export default {
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
     availablefund() {
-      if(this.fund != 0) {
-        this.availableFunds = parseFloat(this.fund)
-      } else if (this.fund == 0){
-        if(this.defaultPortfolioId != null ?  this.availableFunds = parseFloat(this.selectedPortfolio.balance) : '');
-      } 
+      const portfoliofundsparams = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: this.defaultPortfolioId
+      };
+      this.$api.journal.portfolio.portfoliofunds(portfoliofundsparams).then(
+        function(result) {
+          if (result.success) {
+            this.availableFunds = parseFloat(result.data.funds.balance);
+          }
+        }.bind(this)
+      );
+      this.componentKeys++;
     },
     depositNow() {
         const depositparams  = {
@@ -254,6 +257,9 @@ export default {
     },
   },
   watch: {
+    defaultPortfolioId: function() {
+      this.availablefund();
+    },
     renderPortfolioKey: function() {
       this.availablefund();
     },

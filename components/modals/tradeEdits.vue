@@ -141,6 +141,7 @@ export default {
                 .$post("https://dev-api.arbitrage.ph/api/journal/funds/"+this.fund+"/update/"+this.stockid,edittradeparams)
                 .then(response => {
                     if (response.success) {
+                        console.log(response)
                         this.keyCreateCounter = this.renderEditKey;
                         this.keyCreateCounter++;
                         this.setRenderEditKey(this.keyCreateCounter);
