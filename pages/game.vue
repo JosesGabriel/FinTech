@@ -1,24 +1,33 @@
 <template>
-  <div>
-    <!-- <GameLobby class="gameGlobal" /> -->
-    <GameView class="gameGlobal" />
-  </div>
+  <v-container fill-height fluid>
+    <v-row align="center" justify="center">
+      <LogoLoader v-if="isLoading" />
+      <div v-else>
+        <!-- <GameLobby class="gameGlobal" /> -->
+        <GameView class="gameGlobal" />
+      </div>
+    </v-row>
+  </v-container>
 </template>
 <script>
 require("dotenv").config();
 import { myToken } from "~/assets/client.js";
 import GameLobby from "~/components/game/GameLobby";
 import GameView from "~/components/game/GameView";
+import LogoLoader from "~/components/LogoLoader";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "game",
   components: {
     GameLobby,
-    GameView
+    GameView,
+    LogoLoader
   },
   data() {
-    return {};
+    return {
+      isLoading: true
+    };
   },
   computed: {
     ...mapGetters({
@@ -56,6 +65,7 @@ export default {
       );
       console.log("Player is in Game: [" + (await playerHasOngoing) + "]");
       console.log("Player current Vyndue Room is: [" + currentChatRoom + "]");
+      this.isLoading = false;
     },
     loginGameAcc() {
       return this.$api.game.login
