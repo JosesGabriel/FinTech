@@ -41,7 +41,6 @@ export default {
         { name: "viewport", content: "width=device-width, initial-scale=1" },
         {
           property: "description",
-          name: "description",
           hid: "description",
           content:
             "Arbitrage is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
@@ -49,25 +48,20 @@ export default {
         { property: "og:title", name: "og:title", content: "Lyduz" },
         {
           property: "og:description",
-          name: "og:description",
           content:
             "Arbitrage is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
         },
         { property: "og:type", name: "og:type", content: "website" },
         {
           property: "og:url",
-          name: "og:url",
           content: "https://lyduz.com/login"
         },
         {
           property: "og:image",
-          name: "og:image",
-          content:
-            "https://arbitrage.ph/wp-content/themes/arbitnew/images/ogimage_mage.png"
+          content: "https://lyduz.com/lyduz_png.png"
         },
         {
           property: "fb:app_id",
-          name: "fb:app_id",
           content: "407039123333666"
         }
       ]
