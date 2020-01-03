@@ -7,7 +7,7 @@
     <v-row class="mb-5" no-gutters>
       <v-col class="hidden-xs-only px-3" sm="2" md="2" lg="3"> </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
-        <Newsfeed :postid="$route.query.id" />
+        <Newsfeed :postid="$route.query.id" @postData="parsePost" />
       </v-col>
       <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3"> </v-col>
     </v-row>
@@ -23,17 +23,10 @@ export default {
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
-        {
-          property: "description",
-          hid: "description",
-          content:
-            "Lyduz is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
-        },
-        { property: "og:title", content: "Lyduz" },
+        { property: "og:title", content: this.post },
         {
           property: "og:description",
-          content:
-            "Lyduz is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
+          content: this.post
         },
         { property: "og:type", content: "website" },
         {
@@ -42,7 +35,7 @@ export default {
         },
         {
           property: "og:image",
-          content: "https://lyduz.com/user_default.png"
+          content: this.postImage
         },
         {
           property: "fb:app_id",
@@ -58,13 +51,23 @@ export default {
   },
   data() {
     return {
-      post: ""
+      post: "",
+      postImage: "https://lyduz.com/png_logo.png"
     };
   },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     })
+  },
+  mounted() {},
+  methods: {
+    parsePost(object) {
+      this.post = object[0].content;
+      if (object[0].attachments_count > 0) {
+        this.postImage = object[0].attachments[0].url;
+      }
+    }
   }
 };
 </script>
