@@ -54,7 +54,8 @@ export default {
     { src: "~/plugins/numeral", ssr: false },
     { src: "~/plugins/tradingview", ssr: false },
     { src: "~/plugins/vue-numeral-filter", ssr: false },
-    { src: "~/plugins/components/chart/vue-apexcharts", mode: "client" }
+    { src: "~/plugins/components/chart/vue-apexcharts", mode: "client" },
+    { src: "~/plugins/vue-native-websocket", mode: "client", ssr: false }
   ],
   /*
    ** Nuxt.js dev-modules
