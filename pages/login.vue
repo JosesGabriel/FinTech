@@ -40,7 +40,7 @@ export default {
         },
         {
           property: "og:image",
-          content: "https://w.wallhaven.cc/full/39/wallhaven-39gxd3.png"
+          content: "https://lyduz.com/user_default.png"
         },
         {
           property: "fb:app_id",
