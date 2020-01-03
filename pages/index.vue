@@ -62,7 +62,7 @@ export default {
         {
           property: "og:image",
           name: "og:image",
-          content: "https://lyduz.com/logo-dark.svg"
+          content: "https://lyduz.com/lyduz_png.png"
         },
         {
           property: "fb:app_id",
