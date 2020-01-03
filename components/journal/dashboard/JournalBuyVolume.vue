@@ -1,30 +1,45 @@
 <template>
   <v-container class="pa-0">
     <v-col class="pa-0" cols="12">
-      <v-card-title class="text-left justify-left mr-3 px-0 pb-2 pt-0" :style="borderColor">
-        <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">BUY VOLUME</h6>
+      <v-card-title
+        class="text-left justify-left mr-3 px-0 pb-2 pt-0"
+        :style="borderColor"
+      >
+        <h6
+          class="font-weight-regular subtitle-2"
+          :style="{ color: fontColor }"
+        >
+          BUY VOLUME
+        </h6>
         <v-spacer></v-spacer>
-        <v-btn icon small @click.stop="showScheduleForm=true">
+        <v-btn icon small @click.stop="showScheduleForm = true">
           <img src="/icon/journal-icons/share-icon.svg" width="15" />
         </v-btn>
       </v-card-title>
     </v-col>
-    <div class="pt-3" id="chart">
-      <apexcharts ref="BuyVolume" type="bar" height="300" :options="chartOptions" :series="series" />
+    <div id="chart" class="pt-3">
+      <apexcharts
+        ref="BuyVolume"
+        type="bar"
+        height="300"
+        :options="chartOptions"
+        :series="series"
+      />
     </div>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      :visible="showScheduleForm"
+      @close="showScheduleForm = false"
+    />
   </v-container>
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
 import shareModal from "~/components/modals/share";
 
 import { mapGetters } from "vuex";
 
 export default {
   components: {
-    apexcharts: VueApexCharts,
     shareModal
   },
   computed: {
@@ -204,6 +219,17 @@ export default {
       }
     };
   },
+  watch: {
+    journalCharts: function() {
+      this.getBuyVolume();
+    },
+    renderPortfolioKey: function() {
+      this.getBuyVolume();
+    },
+    lightSwitch: function() {
+      this.lightSwitcher();
+    }
+  },
   mounted() {
     this.getBuyVolume();
     this.lightSwitcher();
@@ -249,17 +275,6 @@ export default {
           }
         };
       }
-    }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getBuyVolume();
-    },
-    renderPortfolioKey: function() {
-      this.getBuyVolume();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };

@@ -57,12 +57,8 @@
   </v-card>
 </template>
 <script>
-import VueApexCharts from "vue-apexcharts";
 import { mapGetters } from "vuex";
 export default {
-  components: {
-    apexcharts: VueApexCharts
-  },
   props: ["data"],
   data: function() {
     return {

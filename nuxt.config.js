@@ -3,7 +3,7 @@ import colors from "vuetify/es5/util/colors";
 require("dotenv").config();
 
 export default {
-  mode: "spa",
+  mode: "universal",
   server: {
     port: process.env.SERVER_PORT, // default: 3000
     host: process.env.SERVER_HOST // default: localhost
@@ -53,7 +53,8 @@ export default {
     { src: "~/plugins/global-method", ssr: true },
     { src: "~/plugins/numeral", ssr: false },
     { src: "~/plugins/tradingview", ssr: false },
-    { src: "~/plugins/vue-numeral-filter", ssr: false }
+    { src: "~/plugins/vue-numeral-filter", ssr: false },
+    { src: "~/plugins/components/chart/vue-apexcharts", mode: "client" }
   ],
   /*
    ** Nuxt.js dev-modules

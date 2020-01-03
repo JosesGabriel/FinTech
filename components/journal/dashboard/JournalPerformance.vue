@@ -5,14 +5,19 @@
         class="text-left justify-left mr-3 px-0 pb-2 pt-0"
         :style="borderColor"
       >
-        <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">PERFORMANCE</h6>
+        <h6
+          class="font-weight-regular subtitle-2"
+          :style="{ color: fontColor }"
+        >
+          PERFORMANCE
+        </h6>
         <v-spacer></v-spacer>
-        <v-btn icon small @click.stop="showScheduleForm=true">
+        <v-btn icon small @click.stop="showScheduleForm = true">
           <img src="/icon/journal-icons/share-icon.svg" width="15" />
         </v-btn>
       </v-card-title>
     </v-col>
-    <div class="pt-3" id="chart">
+    <div id="chart" class="pt-3">
       <apexcharts
         ref="Performance"
         type="bar"
@@ -21,19 +26,20 @@
         :series="series"
       />
     </div>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      :visible="showScheduleForm"
+      @close="showScheduleForm = false"
+    />
   </v-container>
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
 import shareModal from "~/components/modals/share";
 
 import { mapGetters } from "vuex";
 
 export default {
   components: {
-    apexcharts: VueApexCharts,
     shareModal
   },
   computed: {
@@ -59,7 +65,7 @@ export default {
       series: [
         {
           name: "Loss",
-          data: [ , , , , ]
+          data: [, , , ,]
         }
       ],
       chartOptions: {
@@ -197,6 +203,17 @@ export default {
       }
     };
   },
+  watch: {
+    journalCharts: function() {
+      this.getPerformance();
+    },
+    defaultPortfolioId: function() {
+      this.getPerformance();
+    },
+    lightSwitch: function() {
+      this.lightSwitcher();
+    }
+  },
   mounted() {
     this.getPerformance();
     this.lightSwitcher();
@@ -206,7 +223,7 @@ export default {
       if (this.journalCharts != null) {
         const objPerformance = this.journalCharts.meta.performance;
         const performanceArray = [];
-        const lastArray = [ , , , , ];
+        const lastArray = [, , , ,];
 
         Object.keys(objPerformance).forEach(function(key) {
           performanceArray.push({ value: objPerformance[key], name: key });
@@ -244,17 +261,6 @@ export default {
           }
         };
       }
-    }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getPerformance();
-    },
-    defaultPortfolioId: function() {
-      this.getPerformance();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };
