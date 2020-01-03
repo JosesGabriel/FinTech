@@ -24,6 +24,7 @@
     "request-promise": "^4.2.5",
     "sass-loader": "^8.0.0",
     "vue-apexcharts": "^1.5.1",
+    "vue-native-websocket": "^2.0.13",
     "vue-numeral-filter": "^1.1.1",
     "vue-toasted": "^1.1.27"
   },
