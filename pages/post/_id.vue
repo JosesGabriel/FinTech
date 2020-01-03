@@ -7,7 +7,7 @@
     <v-row class="mb-5" no-gutters>
       <v-col class="hidden-xs-only px-3" sm="2" md="2" lg="3"> </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
-        <Newsfeed :postid="$route.query.id" @postData="parsePost" />
+        <Newsfeed :postid="$route.params.id" @postData="parsePost" />
       </v-col>
       <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3"> </v-col>
     </v-row>
@@ -60,7 +60,9 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
-  mounted() {},
+  mounted() {
+    console.log(this.$route.params.id);
+  },
   methods: {
     parsePost(object) {
       this.post = object[0].content;
