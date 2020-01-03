@@ -35,7 +35,7 @@ export default {
       playerCurrentChatRoom: "game/getPlayerCurrentChatRoom"
     })
   },
-  beforeMount: function() {
+  beforeMount() {
     this.runChecks();
   },
   methods: {
@@ -94,7 +94,7 @@ export default {
     },
     registerGameAcc() {
       return this.$api.game.login
-        .$create()
+        .create()
         .then(response => {
           return true;
         })
