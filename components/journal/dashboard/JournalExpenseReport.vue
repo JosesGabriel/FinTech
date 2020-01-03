@@ -60,14 +60,12 @@
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
 import shareModal from "~/components/modals/share";
 
 import { mapGetters } from "vuex";
 
 export default {
   components: {
-    apexcharts: VueApexCharts,
     shareModal
   },
   computed: {

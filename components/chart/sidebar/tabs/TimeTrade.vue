@@ -36,10 +36,15 @@
             <th class="font-weight-bold"></th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="item in trades" :key="item.id" class="tr_custom">
+        <tbody id="tbody__trades">
+          <tr
+            v-for="item in trades"
+            :id="item.id"
+            :key="item.id"
+            class="tr_custom"
+          >
             <td class="pl-2" style="width:40px;">
-              {{ $moment(item.timestamp).format("HH:mm") }}
+              {{ $moment.unix(item.timestamp).format("HH:mm") }}
             </td>
             <td class="text-right" style="width:40px;">
               {{ item.executed_volume | numeral("0.0a") }}
@@ -62,13 +67,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "TimeTrade",
   data() {
     return {
-      trades: [],
       loading: "#03dac5"
     };
   },
@@ -77,7 +81,8 @@ export default {
       symbolid: "chart/symbolid",
       index: "chart/index",
       lightSwitch: "global/getLightSwitch",
-      responsive_height: "chart/responsive_height"
+      responsive_height: "chart/responsive_height",
+      trades: "chart/trades"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -88,6 +93,14 @@ export default {
       //   console.log("time trade");
       //   console.log(this.index);
       this.initTimetrade(symid);
+    },
+    trades(value) {
+      setTimeout(
+        function() {
+          this.updateEffect(value[0].id);
+        }.bind(this),
+        100
+      );
     }
   },
   mounted() {
@@ -96,6 +109,9 @@ export default {
     this.initTimetrade(this.symbolid);
   },
   methods: {
+    ...mapActions({
+      setTrades: "chart/setTrades"
+    }),
     initTimetrade: function(symid) {
       this.loading = "#03dac5";
       this.$api.chart.stocks
@@ -106,13 +122,22 @@ export default {
           limit: 100
         })
         .then(response => {
-          this.trades = response.data;
-          //console.log(this.trades);
+          this.setTrades(response.data);
+          //   console.log("set trades");
+          //   console.log(response.data);
           this.loading = false;
         })
         .catch(error => {
           // console.log(error);
         });
+    },
+    updateEffect: dom => {
+      const item = document.getElementById(dom);
+      if (item == null) return;
+      item.style.background = "rgb(182,182,182,.2)";
+      setTimeout(function() {
+        item.style.background = "";
+      }, 50);
     }
   }
 };

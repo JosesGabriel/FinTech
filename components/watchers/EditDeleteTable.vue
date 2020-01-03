@@ -151,7 +151,7 @@ export default {
       this.userStockData = this.shemes;
       for (let i = 0; i < this.userStockData.length; i++) {
         //Just converts stock_id to stock symbol
-        //INEFFECIENT AS FUCK; todo Refractor and improve
+        //INEFFICIENT AS FUCK; todo Refactor and improve
         const params = {
           "symbol-id": this.userStockData[i].stock_id
         };
@@ -212,13 +212,8 @@ export default {
           take_profit: this.editedItem.take_profit,
           stop_loss: this.editedItem.stop_loss
         };
-        this.$axios
-          .$put(
-            process.env.DEV_API_URL +
-              "/journal/watchlist/" +
-              this.userWatchedStocks[this.editedIndex].id,
-            params
-          )
+        this.$api.watchlist.watchlists
+          .put(this.userWatchedStocks[this.editedIndex].id, params)
           .then(response => {
             if (response.success) {
               this.watchList__alert = true;
@@ -242,7 +237,7 @@ export default {
 };
 </script>
 <style>
-  header {
-    height: 0px !important; /* if present, naay empty header element na 64px */
-  }
+header {
+  height: 0px !important; /* if present, naay empty header element na 64px */
+}
 </style>

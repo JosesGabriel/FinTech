@@ -23,6 +23,9 @@ export default {
   async setBidask({ commit }, data) {
     await commit("SET_BIDASK", data);
   },
+  async setTrades({ commit }, data) {
+    await commit("SET_TRADES", data);
+  },
   async setIndex({ commit }, data) {
     await commit("SET_INDEX", data);
   },

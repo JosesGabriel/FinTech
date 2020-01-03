@@ -3,7 +3,6 @@
     <v-dialog v-model="dialog" persistent dark max-width="320px">
       <template v-slot:activator="{ on }">
         <v-btn
-          rounded
           outlined
           color="#03dac5"
           dark
@@ -172,7 +171,7 @@ export default {
       }
     },
     addWatch() {
-      this.watchCardModalLoading = "success"
+      this.watchCardModalLoading = "success";
       let stockExists = false;
       for (let i = 0; i < this.userWatchedStocks.length; i++) {
         if (this.userWatchedStocks[i].stock_id == this.stocksDropdownModel) {
@@ -181,6 +180,7 @@ export default {
       }
       if (!stockExists) {
         let params = {
+          user_id: this.$auth.user.data.user.uuid, //temporary, remind backend about bearer token auth, no need for user_id
           stock_id: this.stocksDropdownModel,
           entry_price: this.entryPriceModel,
           take_profit: this.takeProfitModel,

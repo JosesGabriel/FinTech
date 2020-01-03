@@ -37,7 +37,9 @@ export default {
       counter: 0,
       sse: null,
       data: {},
-      loading: "#03dac5"
+      loading: "#03dac5",
+      temp_trades: [],
+      ctr_trades: 0
     };
   },
   computed: {
@@ -46,7 +48,9 @@ export default {
       symbolid: "chart/symbolid",
       index: "chart/index",
       market_code: "chart/market_code",
-      lightSwitch: "global/getLightSwitch"
+      trades: "chart/trades",
+      lightSwitch: "global/getLightSwitch",
+      bidask: "chart/bidask"
     }),
     cardbackground: function() {
       //return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e"; e3e9ed
@@ -59,7 +63,9 @@ export default {
       setSymbolID: "chart/setSymbolID",
       setIndex: "chart/setIndex",
       setMarketCode: "chart/setMarketCode",
-      setTicker: "chart/setTicker"
+      setTicker: "chart/setTicker",
+      setTrades: "chart/setTrades",
+      setBidask: "chart/setBidask"
     }),
     initStock: function(symid) {
       this.loading = "#03dac5";
@@ -81,23 +87,26 @@ export default {
       }
 
       this.sse = new EventSource(
-        "https://stream-api.arbitrage.ph/sse?stream=market-data"
+        "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
       );
+
       //   this.sse = new EventSource(
-      //     "http://localhost:8021/sse?stream=market-data"
+      //     "http://localhost:8021/sse/market-data/pse/" + symid
       //   );
 
-      this.sse.onopen = function() {};
+      this.sse.onopen = function() {
+        // console.log("open sse");
+      };
 
-      this.sse.onerror = function(err) {};
+      this.sse.onerror = function(err) {
+        // console.log("open err");
+        //console.log(err);
+      };
 
       this.sse.addEventListener(
-        `M-D.INFO.${symid}`,
+        "info",
         function(e) {
           const data = JSON.parse(e.data);
-          //console.log(e);
-          //console.log("sse");
-          //console.log(data);
           this.counter++;
           this.$store.commit("chart/SET_STOCK_OBJ", {
             trades: parseInt(this.stock.trades) + parseInt(this.counter)
@@ -127,8 +136,69 @@ export default {
           this.$store.commit("chart/SET_STOCK_OBJ", {
             average: data.val / data.vol
           });
+
+          // create a tick sound for every update in sse
+          const beepSound = new Audio("/audio/vk_notification.mp3");
+          beepSound.play();
         }.bind(this)
       );
+
+      this.sse.addEventListener(
+        "bidask",
+        function(event) {
+          // console.log("bidask");
+          if (
+            this.bidask.asks !== undefined &&
+            this.bidask.bids !== undefined
+          ) {
+            const data = JSON.parse(event.data);
+            //console.log(this.bidask.bids);
+            if (data.ov == "B") {
+              // bid
+              //   $scope.bids = $scope.updateBidAndAsks($scope.bids, data);
+              //   $scope.bids = $filter("orderBy")($scope.bids, "-price");
+            } else if (data.ov == "S") {
+              // ask
+              //console.log("asks");
+              const asks = this.updateBidAndAsks(this.bidask.asks, data);
+              //console.log(asks);
+            }
+          }
+        }.bind(this)
+      );
+
+      this.temp_trades = this.trades;
+      this.sse.addEventListener(
+        "trade",
+        function(event) {
+          const trades = JSON.parse(event.data);
+          this.temp_trades.unshift({
+            id: `${trades.t}_${this.ctr_trades++}`,
+            id_str: String(`${trades.t}_${this.ctr_trades++}`),
+            timestamp: trades.t,
+            date: null,
+            datetime: null,
+            executed_price: trades.exp,
+            executed_volume: trades.exvol,
+            buyer: trades.b,
+            seller: trades.s
+          });
+
+          if (this.trades.length !== undefined && this.trades.length > 0) {
+            if (this.temp_trades.length > 99) {
+              this.temp_trades.pop();
+            }
+            this.setTrades(this.temp_trades);
+          }
+        }.bind(this)
+      );
+    },
+    // For Bid and Asks
+    updateBidAndAsks: function(list, data) {
+      const index = list.findIndex(function(item) {
+        return item.id == data.id;
+      });
+      return index;
     }
   },
   watch: {
@@ -138,7 +208,33 @@ export default {
     }
   },
   created() {
-    this.setSymbolID("29235364749115392");
+    if (this.$route.params.id) {
+      this.$api.chart.stocks
+        .list({
+          exchange: "PSE",
+          symbol: this.$route.params.id.toUpperCase()
+        })
+        .then(response => {
+          if (parseInt(response.data.id) > 0) {
+            this.setSymbolID(response.data.id_str);
+          }
+        });
+    } else {
+      this.setSymbolID("29235364749115392"); // PSE
+    }
+  },
+  mounted() {
+    //console.log(this.$route);
+    /*this.$api.watchlist.watchlists
+      .index()
+      .then(response => {
+        console.log("watchlist");
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      */
   }
 };
 </script>

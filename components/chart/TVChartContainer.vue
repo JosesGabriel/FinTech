@@ -137,7 +137,7 @@ export default {
       this.loadChart();
     },
     market_code(value, old) {
-      if (old == null) return;
+      if (old == null && this.$route.params.id == undefined) return;
       const params = {
         symbolid: null,
         market_code: value

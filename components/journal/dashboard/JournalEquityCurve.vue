@@ -1,15 +1,60 @@
 <template>
   <v-col class="pa-0" cols="12" sm="12" md="12">
-    <v-card-title class="text-left justify-left px-0 pb-2 pt-5" :style="borderColor">
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">EQUITY CURVE</h6>
+    <v-card-title
+      class="text-left justify-left px-0 pb-2 pt-5"
+      :style="borderColor"
+    >
+      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">
+        EQUITY CURVE
+      </h6>
       <v-spacer></v-spacer>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Week</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        class="body-2 text-capitalize"
+        elevation="0"
+        >Day</v-btn
+      >
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        class="body-2 text-capitalize"
+        elevation="0"
+        >Week</v-btn
+      >
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        class="body-2 text-capitalize"
+        elevation="0"
+        >Month</v-btn
+      >
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        class="body-2 text-capitalize"
+        elevation="0"
+        >Year</v-btn
+      >
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        class="body-2 text-capitalize"
+        elevation="0"
+        >Custom</v-btn
+      >
       <v-spacer></v-spacer>
-      <v-btn icon small @click.stop="showScheduleForm=true">
+      <v-btn icon small @click.stop="showScheduleForm = true">
         <img src="/icon/journal-icons/share-icon.svg" width="15" />
       </v-btn>
     </v-card-title>
@@ -24,18 +69,19 @@
         />
       </div>
     </v-col>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      :visible="showScheduleForm"
+      @close="showScheduleForm = false"
+    />
   </v-col>
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
 import shareModal from "~/components/modals/share";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
-    apexcharts: VueApexCharts,
     shareModal
   },
   computed: {
@@ -215,6 +261,14 @@ export default {
       }
     };
   },
+  watch: {
+    defaultPortfolioId: function() {
+      this.getEquityCurve();
+    },
+    lightSwitch: function() {
+      this.lightSwitcher();
+    }
+  },
   mounted() {
     this.getEquityCurve();
     this.lightSwitcher();
@@ -278,14 +332,6 @@ export default {
           }
         };
       }
-    }
-  },
-  watch: {
-    defaultPortfolioId: function() {
-      this.getEquityCurve();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };

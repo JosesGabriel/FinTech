@@ -9,6 +9,13 @@
       max-height="245"
       :loading="watchCardLoading"
     >
+      <div class="watchlistCard__head">
+        <strong class="caption">{{ stockExchange }}: {{ stockSymbol }}</strong
+        ><br />
+        <span class="watchlistCard__stockDescription d-block">{{
+          stockDescription
+        }}</span>
+      </div>
       <apexcharts
         ref="closePriceChart"
         type="line"
@@ -18,7 +25,6 @@
       />
       <v-card-actions class="watchlistCard__items caption">
         <div>
-          <strong>{{ stockExchange }}: {{ stockSymbol }}</strong>
           <span class="float-right">
             ₱{{ stockCurrentPrice }} |
             <span
@@ -33,6 +39,7 @@
               {{ stockCurrentChange }}%</span
             >
           </span>
+          <br />
         </div>
         <div>
           <span>Entry Price: </span>
@@ -67,6 +74,15 @@
   </v-hover>
 </template>
 <style>
+.watchlistCard__head {
+  /* position: absolute; */
+}
+.watchlistCard__stockDescription {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 8px;
+}
 .watchCard--unfocused {
   opacity: 0.5;
 }
@@ -105,13 +121,9 @@
 }
 </style>
 <script>
-import VueApexCharts from "vue-apexcharts";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  components: {
-    apexcharts: VueApexCharts
-  },
   props: ["data"],
   data: function() {
     return {
@@ -119,6 +131,7 @@ export default {
       stockCurrentPrice: "",
       stockCurrentChange: "",
       stockExchange: "",
+      stockDescription: "",
       watchCardLoading: "primary",
       isLightMode: 0,
       series: [
@@ -305,6 +318,7 @@ export default {
       };
       this.$api.chart.stocks.list(params2).then(
         function(result) {
+          this.stockDescription = result.data.description;
           this.stockExchange = result.data.exchange;
           this.stockSymbol = result.data.symbol;
           this.$refs.closePriceChart.updateSeries([

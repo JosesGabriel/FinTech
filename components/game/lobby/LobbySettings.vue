@@ -309,7 +309,7 @@ export default {
         channel_id: this.playerCurrentChatRoom
       };
       this.$axios
-        .$post(process.env.DEV_API_URL + "/game/series/", params)
+        .$post(process.env.API_URL + "/game/series/", params)
         .then(response => {
           this.setPlayerInGame(true);
           this.fullScreenLoader = false;
@@ -339,7 +339,7 @@ export default {
 
         // Not supposed to login and startClient again because it's defined at client.js already
         //  however, "sync" never hits 'PREPARED' state if using client.js. Permanently on 'SYNCING' state
-        //    Don't know why, refractor if possible
+        //    Don't know why, refactor if possible
 
         client.on(
           "sync",

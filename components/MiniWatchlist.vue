@@ -57,12 +57,8 @@
   </v-card>
 </template>
 <script>
-import VueApexCharts from "vue-apexcharts";
 import { mapGetters } from "vuex";
 export default {
-  components: {
-    apexcharts: VueApexCharts
-  },
   props: ["data"],
   data: function() {
     return {
@@ -228,84 +224,79 @@ export default {
   },
   methods: {
     watchCardMount() {
-      let userData = {
-        user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
-      };
-      this.$axios
-        .$get(process.env.DEV_API_URL + "/journal/watchlist", userData)
-        .then(response => {
-          this.watchListObject = response.data.watchlist;
-          //If watchlist is more than 5, pop excess data from array
-          if (this.watchListObject.length > 5) {
-            let popAmount = this.watchListObject.length - 5;
-            for (let i = 0; i < popAmount; i++) this.watchListObject.pop();
-          }
-          for (let i = 0; i < this.watchListObject.length; i++) {
-            this.stockData.push({
-              stockSym: "",
-              data: [],
-              currentPrice: "",
-              change: ""
-            });
-            // GET Closing Price from Stock History API
-            const params = {
-              "symbol-id": this.watchListObject[i].stock_id,
-              resolution: "1D",
-              limit: "5"
-            };
-            this.$api.chart.charts.latest(params).then(
-              function(result) {
-                this.$refs.closePriceChart[i].updateSeries([
-                  {
-                    data: result.data.c.reverse()
-                  }
-                ]);
-              }.bind(this)
-            );
-
-            // GET Stock Symbol + Stock Exchange from Stock Info API
-            const params2 = {
-              "symbol-id": this.watchListObject[i].stock_id
-            };
-            this.$api.chart.stocks.list(params2).then(
-              function(result) {
-                this.stockData[i].stockSym = result.data.symbol;
-                this.$refs.closePriceChart[i].updateSeries([
-                  {
-                    name: result.data.symbol
-                  }
-                ]);
-              }.bind(this)
-            );
-
-            // GET Current Price + Current Change from Stock History API
-            const params3 = {
-              "symbol-id": this.watchListObject[i].stock_id
-            };
-            this.$api.chart.stocks.history(params3).then(
-              function(result) {
-                this.stockData[i].currentPrice = result.data.last;
-                this.stockData[i].change = result.data.changepercentage.toFixed(
-                  2
-                );
-                if (this.stockData[i].change > 0) {
-                  this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#00FFC3"]
-                  });
-                } else if (this.stockData[i].change < 0) {
-                  this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#f44336"]
-                  });
-                } else {
-                  this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#808080"]
-                  });
+      this.$api.watchlist.watchlists.index().then(response => {
+        this.watchListObject = response.data.watchlist;
+        //If watchlist is more than 5, pop excess data from array
+        if (this.watchListObject.length > 5) {
+          let popAmount = this.watchListObject.length - 5;
+          for (let i = 0; i < popAmount; i++) this.watchListObject.pop();
+        }
+        for (let i = 0; i < this.watchListObject.length; i++) {
+          this.stockData.push({
+            stockSym: "",
+            data: [],
+            currentPrice: "",
+            change: ""
+          });
+          // GET Closing Price from Stock History API
+          const params = {
+            "symbol-id": this.watchListObject[i].stock_id,
+            resolution: "1D",
+            limit: "5"
+          };
+          this.$api.chart.charts.latest(params).then(
+            function(result) {
+              this.$refs.closePriceChart[i].updateSeries([
+                {
+                  data: result.data.c.reverse()
                 }
-              }.bind(this)
-            );
-            this.watchCardLoading = false;
-          }
-        });
+              ]);
+            }.bind(this)
+          );
+
+          // GET Stock Symbol + Stock Exchange from Stock Info API
+          const params2 = {
+            "symbol-id": this.watchListObject[i].stock_id
+          };
+          this.$api.chart.stocks.list(params2).then(
+            function(result) {
+              this.stockData[i].stockSym = result.data.symbol;
+              this.$refs.closePriceChart[i].updateSeries([
+                {
+                  name: result.data.symbol
+                }
+              ]);
+            }.bind(this)
+          );
+
+          // GET Current Price + Current Change from Stock History API
+          const params3 = {
+            "symbol-id": this.watchListObject[i].stock_id
+          };
+          this.$api.chart.stocks.history(params3).then(
+            function(result) {
+              this.stockData[i].currentPrice = result.data.last;
+              this.stockData[i].change = result.data.changepercentage.toFixed(
+                2
+              );
+              if (this.stockData[i].change > 0) {
+                this.$refs.closePriceChart[i].updateOptions({
+                  colors: ["#00FFC3"]
+                });
+              } else if (this.stockData[i].change < 0) {
+                this.$refs.closePriceChart[i].updateOptions({
+                  colors: ["#f44336"]
+                });
+              } else {
+                this.$refs.closePriceChart[i].updateOptions({
+                  colors: ["#808080"]
+                });
+              }
+            }.bind(this)
+          );
+          this.watchCardLoading = false;
+        }
+      });
     }
   }
 };

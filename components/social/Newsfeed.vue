@@ -452,8 +452,7 @@ export default {
     newPost: {
       default: function() {
         return [];
-      },
-      type: Object
+      }
     },
     postid: {
       default: function() {
@@ -526,6 +525,7 @@ export default {
         .show(this.postid)
         .then(response => {
           this.postsObject = this.postsObject.concat(response.data.post);
+          this.$emit("postData", this.postsObject);
         })
         .catch(e => {
           console.log(e);
@@ -540,7 +540,6 @@ export default {
         .then(response => {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
-            console.log(this.postsObject);
             this.loader = false;
           }
         })

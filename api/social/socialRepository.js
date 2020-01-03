@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const baseURL = process.env.DEV_API_URL + "/social";
+const baseURL = process.env.API_URL + "/social";
 let token = localStorage["auth._token.local"];
 
 export default $axios => ({

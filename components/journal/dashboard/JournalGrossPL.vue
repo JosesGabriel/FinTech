@@ -1,34 +1,45 @@
 <template>
   <v-container class="pa-0 pl-10">
     <v-col class="pa-0" cols="12">
-      <v-card-title class="text-left justify-left ml-2 px-0 pb-2 pt-0" :style="borderColor">
+      <v-card-title
+        class="text-left justify-left ml-2 px-0 pb-2 pt-0"
+        :style="borderColor"
+      >
         <h6
           class="font-weight-regular subtitle-2"
           :style="{ color: fontColor }"
-        >GROSS PROFIT AND LOSS</h6>
+        >
+          GROSS PROFIT AND LOSS
+        </h6>
         <v-spacer></v-spacer>
-        <v-btn icon small @click.stop="showScheduleForm=true">
+        <v-btn icon small @click.stop="showScheduleForm = true">
           <img src="/icon/journal-icons/share-icon.svg" width="15" />
         </v-btn>
       </v-card-title>
     </v-col>
-    <div class="pt-3" id="chart">
-      <apexcharts ref="GrossPL" type="bar" height="300" :options="chartOptions" :series="series" />
+    <div id="chart" class="pt-3">
+      <apexcharts
+        ref="GrossPL"
+        type="bar"
+        height="300"
+        :options="chartOptions"
+        :series="series"
+      />
     </div>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      :visible="showScheduleForm"
+      @close="showScheduleForm = false"
+    />
   </v-container>
 </template>
 
-
 <script>
-import VueApexCharts from "vue-apexcharts";
 import shareModal from "~/components/modals/share";
 
 import { mapGetters } from "vuex";
 
 export default {
   components: {
-    apexcharts: VueApexCharts,
     shareModal
   },
   computed: {
@@ -209,6 +220,17 @@ export default {
       }
     };
   },
+  watch: {
+    journalCharts: function() {
+      this.getGrossPL();
+    },
+    defaultPortfolioId: function() {
+      this.getGrossPL();
+    },
+    lightSwitch: function() {
+      this.lightSwitcher();
+    }
+  },
   mounted() {
     this.getGrossPL();
     this.lightSwitcher();
@@ -217,7 +239,7 @@ export default {
     getGrossPL() {
       if (this.journalCharts != null) {
         const objGrosPL = this.journalCharts.meta.profit_loss;
-        const lastArray = [ , , , , , , , , , , , , , , ];
+        const lastArray = [, , , , , , , , , , , , , ,];
         if (objGrosPL.length != 0) {
           lastArray.unshift(...objGrosPL);
 
@@ -250,17 +272,6 @@ export default {
           }
         };
       }
-    }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getGrossPL();
-    },
-    defaultPortfolioId: function() {
-      this.getGrossPL();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };
