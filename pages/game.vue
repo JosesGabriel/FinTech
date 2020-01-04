@@ -3,7 +3,11 @@
     <v-row align="center" justify="center">
       <LogoLoader v-if="isLoading" :status-text="statusText" />
       <div v-else>
-        <GameView v-if="playerHasOngoingGame" class="gameGlobal" />
+        <GameView
+          v-if="playerHasOngoingGame"
+          :series-data="seriesData"
+          class="gameGlobal"
+        />
         <GameLobby v-else class="gameGlobal" />
       </div>
     </v-row>
@@ -28,6 +32,7 @@ export default {
     return {
       isLoading: true,
       playerHasOngoingGame: false,
+      seriesData: null,
       statusText: ""
     };
   },
@@ -72,6 +77,7 @@ export default {
       return this.$api.game.ongoing.index().then(response => {
         if (response.success) {
           this.playerHasOngoingGame = true;
+          this.seriesData = response.data.series;
         }
       });
     },
