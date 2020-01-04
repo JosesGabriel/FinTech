@@ -1,24 +1,35 @@
 <template>
-  <div>
-    <!-- <GameLobby class="gameGlobal" /> -->
-    <GameView class="gameGlobal" />
-  </div>
+  <v-container fill-height fluid>
+    <v-row align="center" justify="center">
+      <LogoLoader v-if="isLoading" :status-text="statusText" />
+      <div v-else>
+        <GameView v-if="playerHasOngoingGame" class="gameGlobal" />
+        <GameLobby v-else class="gameGlobal" />
+      </div>
+    </v-row>
+  </v-container>
 </template>
 <script>
 require("dotenv").config();
 import { myToken } from "~/assets/client.js";
 import GameLobby from "~/components/game/GameLobby";
 import GameView from "~/components/game/GameView";
+import LogoLoader from "~/components/LogoLoader";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "game",
   components: {
     GameLobby,
-    GameView
+    GameView,
+    LogoLoader
   },
   data() {
-    return {};
+    return {
+      isLoading: true,
+      playerHasOngoingGame: false,
+      statusText: ""
+    };
   },
   computed: {
     ...mapGetters({
@@ -26,7 +37,7 @@ export default {
       playerCurrentChatRoom: "game/getPlayerCurrentChatRoom"
     })
   },
-  beforeMount: function() {
+  beforeMount() {
     this.runChecks();
   },
   methods: {
@@ -35,61 +46,45 @@ export default {
       setPlayerCurrentChatRoom: "game/setPlayerCurrentChatRoom"
     }),
     async runChecks() {
-      let playerHasAccount, playerHasOngoing, newlyRegistered, currentChatRoom;
-
-      playerHasAccount = this.loginGameAcc();
-      playerHasOngoing = this.hasOnGoing();
-      currentChatRoom = this.checkCurrentRoom();
-      if ((await playerHasAccount) == false) {
-        newlyRegistered = this.registerGameAcc();
-        console.log("Newly Registered: [" + (await newlyRegistered) + "]");
-        playerHasAccount = this.loginGameAcc();
-      }
+      this.loginGameAcc()
+        .catch(this.registerGameAcc)
+        .then(this.hasOnGoing)
+        .finally(() => {
+          this.isLoading = false;
+        });
 
       if ((await myToken) != "") {
         console.log("Player is logged in Vyndue: [true] ");
       } else {
         console.log("Player is logged in Vyndue: [false]");
       }
-      console.log(
-        "Player has Game account: [" + (await playerHasAccount) + "]"
-      );
-      console.log("Player is in Game: [" + (await playerHasOngoing) + "]");
-      console.log("Player current Vyndue Room is: [" + currentChatRoom + "]");
     },
     loginGameAcc() {
-      return this.$api.game.login
-        .index()
-        .then(response => {
-          if (response.success) {
-            this.setPlayerData(response.data.player);
-            return true;
-          }
-        })
-        .catch(e => {
-          return false;
-        });
+      this.statusText = "Checking User Account...";
+      return this.$api.game.login.index().then(response => {
+        if (response.success) {
+          this.setPlayerData(response.data.player);
+        }
+      });
     },
     hasOnGoing() {
-      return this.$api.game.ongoing
-        .index()
-        .then(response => {
-          if (response.success) {
-            return true;
-          }
-        })
-        .catch(e => {
-          return false;
-        });
+      this.statusText = "Checking Game Data...";
+      return this.$api.game.ongoing.index().then(response => {
+        if (response.success) {
+          this.playerHasOngoingGame = true;
+        }
+      });
     },
     registerGameAcc() {
+      this.statusText = "Creating User Account...";
       return this.$api.game.login
-        .$create()
+        .create()
         .then(response => {
-          return true;
+          this.setPlayerData(response.data.player);
         })
         .catch(e => {
-          return false;
+          this.statusText =
+            "An error has occurred while creating Game Account...";
         });
     },
     checkCurrentRoom() {
