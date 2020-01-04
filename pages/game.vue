@@ -80,7 +80,8 @@ export default {
           this.setPlayerData(response.data.player);
         })
         .catch(e => {
-          return false;
+          this.statusText =
+            "An error has occurred while creating Game Account...";
         });
     },
     checkCurrentRoom() {
