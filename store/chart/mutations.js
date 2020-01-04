@@ -36,6 +36,10 @@ export default {
     state.bidask = data;
   },
 
+  SET_BIDASK_LIMIT(state, data) {
+    state.bidask.limit = data;
+  },
+
   SET_BIDS(state, data) {
     state.bidask.bids = data;
   },

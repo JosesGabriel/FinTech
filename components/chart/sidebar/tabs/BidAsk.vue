@@ -163,7 +163,7 @@ export default {
         .bidask({
           "symbol-id": symid,
           "filter-by-last": true,
-          limit: 10
+          limit: 2
         })
         .then(response => {
           const asks = Object.values(response.data.asks);

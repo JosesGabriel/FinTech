@@ -73,6 +73,7 @@ export default {
         "symbol-id": symid
       };
       this.$api.chart.stocks.history(params).then(response => {
+        console.log(response);
         this.data = response.data;
         this.setIndex(parseInt(this.data.value) > 0 ? false : true);
         this.setStock(this.data);
@@ -86,13 +87,13 @@ export default {
         this.counter = 0;
       }
 
-      this.sse = new EventSource(
-        "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
-      );
-
       //   this.sse = new EventSource(
-      //     "http://localhost:8021/sse/market-data/pse/" + symid
+      //     "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
       //   );
+
+      this.sse = new EventSource(
+        "http://localhost:8021/sse/market-data/pse/" + symid
+      );
 
       this.sse.onopen = function() {
         // console.log("open sse");
@@ -143,30 +144,6 @@ export default {
         }.bind(this)
       );
 
-      this.sse.addEventListener(
-        "bidask",
-        function(event) {
-          // console.log("bidask");
-          if (
-            this.bidask.asks !== undefined &&
-            this.bidask.bids !== undefined
-          ) {
-            const data = JSON.parse(event.data);
-            //console.log(this.bidask.bids);
-            if (data.ov == "B") {
-              // bid
-              //   $scope.bids = $scope.updateBidAndAsks($scope.bids, data);
-              //   $scope.bids = $filter("orderBy")($scope.bids, "-price");
-            } else if (data.ov == "S") {
-              // ask
-              //console.log("asks");
-              const asks = this.updateBidAndAsks(this.bidask.asks, data);
-              //console.log(asks);
-            }
-          }
-        }.bind(this)
-      );
-
       this.temp_trades = this.trades;
       this.sse.addEventListener(
         "trade",
@@ -192,36 +169,162 @@ export default {
           }
         }.bind(this)
       );
+
+      this.sse.addEventListener(
+        "bidask",
+        function(event) {
+          if (
+            this.bidask.asks !== undefined &&
+            this.bidask.bids !== undefined
+          ) {
+            const data = JSON.parse(event.data);
+
+            if (data.ov == "B") {
+              // bid
+              const bids = this.updateBidAndAsks(this.bidask.bids, data);
+              this.$store.commit(
+                "chart/SET_BIDS",
+                bids.sort(this.sortBy("price", "desc"))
+              );
+            } else if (data.ov == "S") {
+              // ask
+              if (data.ty != "a") return;
+              const asks = this.updateBidAndAsks(this.bidask.asks, data);
+              this.$store.commit(
+                "chart/SET_ASKS",
+                asks.sort(this.sortBy("price", "desc"))
+              );
+            }
+            // console.log(this.bidask);
+          }
+        }.bind(this)
+      );
     },
+
     // For Bid and Asks
     updateBidAndAsks: function(list, data) {
       const index = list.findIndex(function(item) {
         return item.id == data.id;
       });
-      return index;
+
+      if (data.ty == "a") {
+        if (typeof list[index] !== "undefined") {
+          list[index].count++;
+          list[index].volume += data.vol;
+        } else {
+          list.push(this.addToBidAskList(data.id, data));
+          const limit = Math.max(
+            this.bidask.asks.length,
+            this.bidask.bids.length
+          );
+          this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
+        }
+      } else if (data.ty == "au") {
+        // decrement data.id's count by 1, if count is zero, remove from list
+        list = this.updateBidAskCount(list, index, -1, data.vol);
+        // add new data.idn to list
+        list.push(this.addToBidAskList(data.idn, data));
+        const limit = Math.max(
+          this.bidask.asks.length,
+          this.bidask.bids.length
+        );
+        this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
+      } else if (data.ty == "d") {
+        // decrement data.id's count by 1, if count is zero, remove from list
+        list = this.updateBidAskCount(list, index, -1, data.vol);
+      } else if (data.ty == "u") {
+        // same as au but drop the data.id entirely and add data.idn to list
+        if (typeof list[index] !== "undefined") {
+          list = list.filter((item, key) => {
+            return key != index;
+          });
+        }
+        list.push(this.addToBidAskList(data.idn, data));
+        const limit = Math.max(
+          this.bidask.asks.length,
+          this.bidask.bids.length
+        );
+        this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
+      } else if (data.ty == "fd") {
+        // decrement data.id's count by 1, if count is zero, remove from list
+        list = this.updateBidAskCount(list, index, -1, 0);
+
+        list = this.updateBidAskVolume(list, index, -1 * data.vol);
+      } else if (data.ty == "pd") {
+        list = this.updateBidAskVolume(list, index, data.vol);
+      }
+      return list;
+    },
+    updateBidAskCount: function(list, id, increment, volume) {
+      if (typeof list[id] !== "undefined") {
+        list[id].count += increment;
+        list[id].volume += volume * increment;
+        if (list[id].count <= 0) {
+          list = list.filter((item, key) => {
+            return key != id;
+          });
+        }
+      }
+      return list;
+    },
+    updateBidAskVolume: function(list, id, increment) {
+      if (typeof list[id] !== "undefined") {
+        list[id].volume += increment;
+      }
+      return list;
+    },
+    addToBidAskList: function(id, data) {
+      return {
+        count: 1,
+        id: id,
+        price: data.p,
+        volume: data.vol
+      };
+    },
+    sortBy: function(key, order = "asc") {
+      return function innerSort(a, b) {
+        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+          // property doesn't exist on either object
+          return 0;
+        }
+
+        const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
+        const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
+
+        let comparison = 0;
+        if (varA > varB) {
+          comparison = 1;
+        } else if (varA < varB) {
+          comparison = -1;
+        }
+        return order === "desc" ? comparison * -1 : comparison;
+      };
     }
   },
   watch: {
     symbolid(symid, oldsymid) {
+      console.log("change");
+      console.log(symid);
       this.initStock(symid);
       this.initSSE(symid);
     }
   },
   created() {
-    if (this.$route.params.id) {
-      this.$api.chart.stocks
-        .list({
-          exchange: "PSE",
-          symbol: this.$route.params.id.toUpperCase()
-        })
-        .then(response => {
-          if (parseInt(response.data.id) > 0) {
-            this.setSymbolID(response.data.id_str);
-          }
-        });
-    } else {
-      this.setSymbolID("29235364749115392"); // PSE
-    }
+    this.setSymbolID("29235364749115392"); // PSE
+    // if (this.$route.params.id) {
+    //   this.$api.chart.stocks
+    //     .list({
+    //       exchange: "PSE",
+    //       symbol: this.$route.params.id.toUpperCase()
+    //     })
+    //     .then(response => {
+    //       if (parseInt(response.data.id) > 0) {
+    //         this.setSymbolID(response.data.id_str);
+    //       }
+    //     });
+    // } else {
+    //   this.setSymbolID("29235364749115392"); // PSE
+    // }
   },
   mounted() {
     //console.log(this.$route);

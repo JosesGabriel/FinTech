@@ -87,6 +87,12 @@ export default {
     symbolid(value) {
       this.active_tab = "tab-1";
       this.first_load = false;
+    },
+    index(value) {
+      if (value == true) {
+        this.active_tab = "tab-2";
+        this.first_load = true;
+      }
     }
   }
 };
