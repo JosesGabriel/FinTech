@@ -48,7 +48,10 @@ export default {
     async runChecks() {
       this.loginGameAcc()
         .catch(this.registerGameAcc)
-        .then(this.hasOnGoing);
+        .then(this.hasOnGoing)
+        .finally(() => {
+          this.isLoading = false;
+        });
 
       if ((await myToken) != "") {
         console.log("Player is logged in Vyndue: [true] ");
