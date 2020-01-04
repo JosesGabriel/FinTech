@@ -77,7 +77,7 @@ export default {
       return this.$api.game.login
         .create()
         .then(response => {
-          return true;
+          this.setPlayerData(response.data.player);
         })
         .catch(e => {
           return false;
