@@ -3,7 +3,7 @@
     <v-row align="center" justify="center">
       <LogoLoader v-if="isLoading" :status-text="statusText" />
       <div v-else>
-        <!-- <GameLobby class="gameGlobal" /> -->
+        <GameLobby class="gameGlobal" />
         <GameView class="gameGlobal" />
       </div>
     </v-row>
