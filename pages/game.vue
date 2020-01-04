@@ -1,7 +1,7 @@
 <template>
   <v-container fill-height fluid>
     <v-row align="center" justify="center">
-      <LogoLoader v-if="isLoading" />
+      <LogoLoader v-if="isLoading" :status-text="statusText" />
       <div v-else>
         <!-- <GameLobby class="gameGlobal" /> -->
         <GameView class="gameGlobal" />
@@ -26,7 +26,8 @@ export default {
   },
   data() {
     return {
-      isLoading: true
+      isLoading: true,
+      statusText: ""
     };
   },
   computed: {
@@ -68,6 +69,7 @@ export default {
       this.isLoading = false;
     },
     loginGameAcc() {
+      this.statusText = "Checking User Account...";
       return this.$api.game.login
         .index()
         .then(response => {
@@ -81,6 +83,7 @@ export default {
         });
     },
     hasOnGoing() {
+      this.statusText = "Checking Game Data...";
       return this.$api.game.ongoing
         .index()
         .then(response => {
@@ -93,6 +96,7 @@ export default {
         });
     },
     registerGameAcc() {
+      this.statusText = "Creating User Account...";
       return this.$api.game.login
         .create()
         .then(response => {
