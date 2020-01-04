@@ -45,42 +45,23 @@ export default {
       setPlayerCurrentChatRoom: "game/setPlayerCurrentChatRoom"
     }),
     async runChecks() {
-      let playerHasAccount, playerHasOngoing, newlyRegistered, currentChatRoom;
-
-      playerHasAccount = this.loginGameAcc();
-      playerHasOngoing = this.hasOnGoing();
-      currentChatRoom = this.checkCurrentRoom();
-      if ((await playerHasAccount) == false) {
-        newlyRegistered = this.registerGameAcc();
-        console.log("Newly Registered: [" + (await newlyRegistered) + "]");
-        playerHasAccount = this.loginGameAcc();
-      }
+      this.loginGameAcc()
+        .catch(this.registerGameAcc)
+        .then(this.hasOnGoing);
 
       if ((await myToken) != "") {
         console.log("Player is logged in Vyndue: [true] ");
       } else {
         console.log("Player is logged in Vyndue: [false]");
       }
-      console.log(
-        "Player has Game account: [" + (await playerHasAccount) + "]"
-      );
-      console.log("Player is in Game: [" + (await playerHasOngoing) + "]");
-      console.log("Player current Vyndue Room is: [" + currentChatRoom + "]");
-      this.isLoading = false;
     },
     loginGameAcc() {
       this.statusText = "Checking User Account...";
-      return this.$api.game.login
-        .index()
-        .then(response => {
-          if (response.success) {
-            this.setPlayerData(response.data.player);
-            return true;
-          }
-        })
-        .catch(e => {
-          return false;
-        });
+      return this.$api.game.login.index().then(response => {
+        if (response.success) {
+          this.setPlayerData(response.data.player);
+        }
+      });
     },
     hasOnGoing() {
       this.statusText = "Checking Game Data...";
