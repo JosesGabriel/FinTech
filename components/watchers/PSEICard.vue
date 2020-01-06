@@ -108,6 +108,9 @@ export default {
           axisBorder: {
             show: false
           },
+          axisTicks: {
+            show: false
+          },
           tooltip: {
             enabled: false,
             formatter: undefined,
@@ -132,14 +135,7 @@ export default {
         },
         yaxis: {
           labels: {
-            show: true,
-            align: "right",
-            style: {
-              color: "#fff",
-              fontSize: "12px",
-              fontFamily: "Karla",
-              cssClass: "apexcharts-yaxis-label"
-            }
+            show: false
           },
           axisTicks: {
             show: false

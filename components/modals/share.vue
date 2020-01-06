@@ -20,8 +20,8 @@
           </v-btn>
         </router-link>
         <router-link to="/login" class="px-1">
-          <v-btn icon>
-            <img src="/icon/journal-icons/instagram.svg" width="25" />
+          <v-btn icon @click="shareToLyduz">
+            <img src="/icon/lyduz-icon.svg" width="25" />
           </v-btn>
         </router-link>
       </v-card>
@@ -156,7 +156,8 @@ export default {
         "mywindow",
         "menubar=1,resizable=1,width=350,height=250"
       );
-    }
+    },
+    shareToLyduz() {}
   }
 };
 </script>

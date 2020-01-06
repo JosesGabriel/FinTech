@@ -143,6 +143,9 @@ export default {
             },
             theme: false
           },
+          axisTicks: {
+            show: false
+          },
           crosshairs: {
             show: true,
             width: 1,
@@ -157,7 +160,7 @@ export default {
         },
         yaxis: {
           labels: {
-            show: true,
+            show: false,
             align: "right",
             style: {
               color: "#fff",
@@ -203,6 +206,9 @@ export default {
             offsetX: 20,
             offsetY: -10
           }
+        },
+        legend: {
+          show: false
         }
       }
     };

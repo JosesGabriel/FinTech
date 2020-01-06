@@ -221,11 +221,14 @@ export default {
               width: 2,
               dashArray: 0
             }
+          },
+          axisTicks: {
+            show: false
           }
         },
         yaxis: {
           labels: {
-            show: true,
+            show: false,
             align: "right",
             style: {
               color: "#fff",
