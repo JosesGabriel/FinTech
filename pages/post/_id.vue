@@ -15,7 +15,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import axios from "axios";
+import axios from "axios"; //temporary. 'this' keyword is not accessible on asyncData method
 import Newsfeed from "~/components/social/Newsfeed";
 export default {
   components: {
@@ -53,10 +53,6 @@ export default {
         },
         { property: "og:type", content: "website" },
         {
-          property: "og:url",
-          content: "https://lyduz.com/login"
-        },
-        {
           property: "og:image",
           content:
             this.post.attachments_count > 0
@@ -72,9 +68,7 @@ export default {
   },
   auth: false,
   layout: "main",
-  mounted() {
-    console.log(this.$route.params.id);
-  },
+  mounted() {},
   methods: {
     parsePost(object) {
       this.post = object[0].content;
