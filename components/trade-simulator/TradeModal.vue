@@ -623,10 +623,7 @@ export default {
             date: dformat
           }
         };
-        console.log('Buy Params', buyparams);
-        console.log('Fund ID -'+ fund_id);
-        console.log('Stock ID -'+ stock_id);
-
+        
         this.$axios
           .$post(
             process.env.JOURNAL_API_URL +

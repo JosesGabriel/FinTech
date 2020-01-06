@@ -60,30 +60,6 @@
             class="py-0 justify-right d-flex align-center text-right"
           >
             <v-text-field
-              :label="
-                this.simulatorConfirmedBuySell == 'sell'
-                  ? 'Sell Price'
-                  : 'Buy Price'
-              "
-              :placeholder="
-                this.simulatorConfirmedBuySell == 'sell'
-                  ? 'Enter Sell Price'
-                  : 'Enter Buy Price'
-              "
-              color="#00FFC3"
-              :style="{ color: fontcolor2 }"
-              class="body-2 buy_selector quantity-input py-3"
-              readonly
-              :value="this.BuyPrice"
-            ></v-text-field>
-          </v-col>
-          <v-col
-            cols="12"
-            sm="12"
-            md="12"
-            class="py-0 justify-right d-flex align-center text-right"
-          >
-            <v-text-field
               label="Quantity"
               placeholder="Enter Quantity"
               @keyup="keypress"
@@ -100,6 +76,30 @@
             <v-btn @click="addButton" text icon color="success">
               <v-icon>mdi-chevron-up</v-icon>
             </v-btn>
+          </v-col>
+          <v-col
+            cols="12"
+            sm="12"
+            md="12"
+            class="py-0 justify-right d-flex align-center text-right"
+          >
+            <v-text-field
+              :label="
+                this.simulatorConfirmedBuySell == 'sell'
+                  ? 'Sell Price'
+                  : 'Buy Price'
+              "
+              :placeholder="
+                this.simulatorConfirmedBuySell == 'sell'
+                  ? 'Enter Sell Price'
+                  : 'Enter Buy Price'
+              "
+              color="#00FFC3"
+              :style="{ color: fontcolor2 }"
+              class="body-2 buy_selector quantity-input py-3"
+              readonly
+              :value="this.BuyPrice"
+            ></v-text-field>
           </v-col>
           <v-col cols="12">
             <v-row no-gutters>
