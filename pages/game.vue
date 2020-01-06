@@ -2,14 +2,14 @@
   <v-container fill-height fluid>
     <v-row align="center" justify="center">
       <LogoLoader v-if="isLoading" :status-text="statusText" />
-      <div v-else>
+      <template v-else>
         <GameView
           v-if="playerHasOngoingGame"
           :series-data="seriesData"
           class="gameGlobal"
         />
         <GameLobby v-else class="gameGlobal" />
-      </div>
+      </template>
     </v-row>
   </v-container>
 </template>
