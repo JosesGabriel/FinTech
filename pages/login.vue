@@ -40,7 +40,7 @@ export default {
         },
         {
           property: "og:image",
-          content: "https://lyduz.com/user_default.png"
+          content: this.postImage
         },
         {
           property: "fb:app_id",
@@ -55,7 +55,8 @@ export default {
   components: {},
   data() {
     return {
-      isOpen: true
+      isOpen: true,
+      postImage: "https://lyduz.com/png_logo.png"
     };
   },
   methods: {
