@@ -34,7 +34,7 @@
         >
       </v-col>
     </v-row>
-    <v-dialog v-model="buyselldialog" width="300">
+    <v-dialog v-model="buySellDialog" width="300">
       <v-card :dark="lightSwitch == 0 ? false : true" transparent>
         <v-card-title>
           <span class="subtitle-1 font-weight-light" style="color: #03dac5"
@@ -77,7 +77,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn depressed color="transparent" @click="dialog = false"
+          <v-btn depressed color="transparent" @click="buySellDialog = false"
             >Close</v-btn
           >
           <v-btn color="#03dac5" light depressed @click="addWatch()"
@@ -102,7 +102,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      buyselldialog: false,
+      buySellDialog: false,
       modalTypeText: ""
     };
   },
@@ -124,7 +124,7 @@ export default {
       audio.play();
     },
     openBuySellModal(type) {
-      this.buyselldialog = true;
+      this.buySellDialog = true;
       if (type === "buy") {
         this.modalTypeText = "Buy";
       } else if (type === "sell") {
