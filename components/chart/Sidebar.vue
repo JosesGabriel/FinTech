@@ -50,7 +50,8 @@ export default {
       market_code: "chart/market_code",
       trades: "chart/trades",
       lightSwitch: "global/getLightSwitch",
-      bidask: "chart/bidask"
+      bidask: "chart/bidask",
+      favicon: "global/favicon"
     }),
     cardbackground: function() {
       //return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e"; e3e9ed
@@ -67,19 +68,45 @@ export default {
       setTrades: "chart/setTrades",
       setBidask: "chart/setBidask"
     }),
-    initStock: function(symid) {
+    tickSoundFavicon: function(change) {
+      //console.log("tickSoundFavicon");
+      //console.log(change);
+
+      const beepSound = new Audio("/audio/vk_notification.mp3");
+
+      //   if (change > 0) {
+      //     this.$store.commit("global/SET_FAVICON", "/favicon/arrow_up.ico");
+      //   } else if (change < 0) {
+      //     this.$store.commit("global/SET_FAVICON", "/favicon/arrow_down.ico");
+      //   } else {
+      //     this.$store.commit("global/SET_FAVICON", "/_favicon.ico");
+      //   }
+
+      beepSound.play();
+
+      //   setTimeout(
+      //     function() {
+      //       //console.log("set time out");
+      //       this.$store.commit("global/SET_FAVICON", "/_favicon.ico");
+      //     }.bind(this),
+      //     2000
+      //   );
+    },
+    initStock: async function(symid) {
       this.loading = "#03dac5";
-      const params = {
-        "symbol-id": symid
-      };
-      this.$api.chart.stocks.history(params).then(response => {
-        console.log(response);
+      try {
+        const response = await this.$api.chart.stocks.history({
+          "symbol-id": symid
+        });
         this.data = response.data;
         this.setIndex(parseInt(this.data.value) > 0 ? false : true);
         this.setStock(this.data);
         this.setMarketCode(this.data.market_code);
-        this.loading = null;
-      });
+      } catch (error) {
+        //console.log('error dito');
+        //console.log(error);
+      }
+      this.loading = null;
     },
     initSSE: function(symid) {
       if (this.sse !== null) {
@@ -87,13 +114,13 @@ export default {
         this.counter = 0;
       }
 
-      //   this.sse = new EventSource(
-      //     "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
-      //   );
-
       this.sse = new EventSource(
-        "http://localhost:8021/sse/market-data/pse/" + symid
+        "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
       );
+
+      //   this.sse = new EventSource(
+      //     "http://localhost:8021/sse/market-data/pse/" + symid
+      //   );
 
       this.sse.onopen = function() {
         // console.log("open sse");
@@ -138,9 +165,8 @@ export default {
             average: data.val / data.vol
           });
 
-          // create a tick sound for every update in sse
-          const beepSound = new Audio("/audio/vk_notification.mp3");
-          beepSound.play();
+          // create a tick sound and favicon for every update in sse
+          this.tickSoundFavicon(data.chg);
         }.bind(this)
       );
 
@@ -188,7 +214,7 @@ export default {
               );
             } else if (data.ov == "S") {
               // ask
-              if (data.ty != "a") return;
+              //              if (data.ty != "a" || data.ty != "au") return;
               const asks = this.updateBidAndAsks(this.bidask.asks, data);
               this.$store.commit(
                 "chart/SET_ASKS",
@@ -203,48 +229,32 @@ export default {
 
     // For Bid and Asks
     updateBidAndAsks: function(list, data) {
-      const index = list.findIndex(function(item) {
-        return item.id == data.id;
-      });
-
+      const index = list.findIndex(item => item.id === data.id);
+      //   console.log("update bidask", data.ty);
+      //   console.log(index);
+      //   console.log(list);
+      //   console.log(data);
       if (data.ty == "a") {
         if (typeof list[index] !== "undefined") {
           list[index].count++;
           list[index].volume += data.vol;
         } else {
           list.push(this.addToBidAskList(data.id, data));
-          const limit = Math.max(
-            this.bidask.asks.length,
-            this.bidask.bids.length
-          );
-          this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
         }
       } else if (data.ty == "au") {
         // decrement data.id's count by 1, if count is zero, remove from list
         list = this.updateBidAskCount(list, index, -1, data.vol);
         // add new data.idn to list
         list.push(this.addToBidAskList(data.idn, data));
-        const limit = Math.max(
-          this.bidask.asks.length,
-          this.bidask.bids.length
-        );
-        this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
       } else if (data.ty == "d") {
         // decrement data.id's count by 1, if count is zero, remove from list
         list = this.updateBidAskCount(list, index, -1, data.vol);
       } else if (data.ty == "u") {
         // same as au but drop the data.id entirely and add data.idn to list
         if (typeof list[index] !== "undefined") {
-          list = list.filter((item, key) => {
-            return key != index;
-          });
+          list = list.filter((item, key) => key !== index);
         }
         list.push(this.addToBidAskList(data.idn, data));
-        const limit = Math.max(
-          this.bidask.asks.length,
-          this.bidask.bids.length
-        );
-        this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
       } else if (data.ty == "fd") {
         // decrement data.id's count by 1, if count is zero, remove from list
         list = this.updateBidAskCount(list, index, -1, 0);
@@ -253,16 +263,18 @@ export default {
       } else if (data.ty == "pd") {
         list = this.updateBidAskVolume(list, index, data.vol);
       }
+
+      const limit = Math.max(this.bidask.asks.length, this.bidask.bids.length);
+      this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
       return list;
     },
     updateBidAskCount: function(list, id, increment, volume) {
       if (typeof list[id] !== "undefined") {
         list[id].count += increment;
         list[id].volume += volume * increment;
+        // if count less than 0, remove from the list
         if (list[id].count <= 0) {
-          list = list.filter((item, key) => {
-            return key != id;
-          });
+          list = list.filter((item, key) => key !== id);
         }
       }
       return list;
@@ -303,11 +315,14 @@ export default {
   },
   watch: {
     symbolid(symid, oldsymid) {
-      console.log("change");
-      console.log(symid);
+      //console.log("change");
+      //console.log(symid);
       this.initStock(symid);
       this.initSSE(symid);
     }
+  },
+  beforeDestroy() {
+    //console.log("before destroy");
   },
   created() {
     this.setSymbolID("29235364749115392"); // PSE
@@ -327,6 +342,28 @@ export default {
     // }
   },
   mounted() {
+    //this.$store.commit("global/SET_FAVICON", "/favicon/arrow_up.ico");
+    console.log("open all stock sse");
+    //      "http://localhost:8021/sse/market-data/pse/all"
+    //"https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+    const evtSource = new EventSource(
+      "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+    );
+
+    evtSource.onopen = function() {
+      // console.log("open sse");
+    };
+
+    evtSource.onerror = function(err) {
+      // console.log("open err");
+      //console.log(err);
+    };
+
+    evtSource.addEventListener("all", function(e) {
+      console.log("all");
+      console.log(e);
+    });
+
     //console.log(this.$route);
     /*this.$api.watchlist.watchlists
       .index()

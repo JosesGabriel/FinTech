@@ -108,11 +108,12 @@ export default {
     },
     stock_change: function(value) {
       this.updateEffect("stock__change");
-      const change = this.stock.change;
+      const change = this.stock.change[0];
+      if (change === undefined) return;
       if (change > 0) {
-        this.$store.commit("global/SET_FAVICON", "/favicon/up.ico");
+        this.$store.commit("global/SET_FAVICON", "/favicon/arrow_up.ico");
       } else if (change < 0) {
-        this.$store.commit("global/SET_FAVICON", "/favicon/down.ico");
+        this.$store.commit("global/SET_FAVICON", "/favicon/arrow_down.ico");
       } else {
         this.$store.commit("global/SET_FAVICON", "/_favicon.ico");
       }

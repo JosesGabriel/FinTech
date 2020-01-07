@@ -20,7 +20,7 @@
     >
       <v-data-table
         :headers="headers"
-        :items="stocks"
+        :items="allstocks"
         class="data_table-container custom_table"
         dense
         :dark="lightSwitch == 1"
@@ -35,6 +35,7 @@
         </template> -->
         <template v-slot:item="props">
           <tr
+            :id="props.item.stockidstr"
             class="tr_custom"
             :class="[
               { darkmode__text: lightSwitch == 1 },
@@ -121,17 +122,22 @@ export default {
         exchange: "PSE"
       })
       .then(response => {
-        // console.log("all stock");
-        // console.log(response.data);
-        // this.stocks = response.data
-        this.stocks = response.data.filter(data => parseInt(data.value) > 0);
+        const filtered = response.data.filter(data => parseInt(data.value) > 0);
+        // console.log("all stocks");
+        // filtered.forEach(element => {
+        //   const el = element.stockidstr;
+        //   this.stocks.push(el);
+        // });
+        // console.log(this.stocks);
+        this.setAllstocks(filtered);
         this.loading = false;
       });
   },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      responsive_height: "chart/responsive_height"
+      responsive_height: "chart/responsive_height",
+      allstocks: "chart/allstocks"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -139,7 +145,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSymbolID: "chart/setSymbolID"
+      setSymbolID: "chart/setSymbolID",
+      setAllstocks: "chart/setAllstocks"
     })
   }
 };

@@ -52,6 +52,10 @@ export default {
     state.trades = data;
   },
 
+  SET_ALLSTOCKS(state, data) {
+    state.allstocks = data;
+  },
+
   SET_INDEX(state, data) {
     state.index = data;
   },
