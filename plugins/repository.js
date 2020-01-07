@@ -33,6 +33,10 @@ export default (ctx, inject) => {
       login: initApiRepository("/game/players"),
       ongoing: initApiRepository("/game/series/ongoing"),
       leaderboards: initApiRepository("/game/players/leaderboard?page=1")
+    },
+    authentication: {
+      register: initApiRepository("/register"),
+      verify: initApiRepository("/verify")
     }
   };
 

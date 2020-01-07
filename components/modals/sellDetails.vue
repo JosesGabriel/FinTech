@@ -11,14 +11,14 @@
                         <v-card-title class="subtitle-1 pa-0 my-2 secondary--text"><span>Outcome</span></v-card-title>
                     </v-col>
                     <v-col cols="12" sm="12" md="6">
-                        <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2 secondary--text"><span>{{ visible ? details.meta.strategy : '' }}</span></v-card-title>
-                        <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2 secondary--text"><span>{{ visible ? details.meta.plan : '' }}</span></v-card-title>
-                        <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2 secondary--text"><span>{{ visible ? details.meta.emotion : '' }}</span></v-card-title>
+                        <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2 secondary--text"><span>{{ visible ? details.meta.strategy ? details.meta.strategy : "-" : "" }}</span></v-card-title>
+                        <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2 secondary--text"><span>{{ visible ? details.meta.plan ? details.meta.plan : "-" : "" }}</span></v-card-title>
+                        <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2 secondary--text"><span>{{ visible ? details.meta.emotion ? details.meta.emotion : "-" : "" }}</span></v-card-title>
                         <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2 secondary--text"><span :class=" visible ? outcome > 0 ? 'positive' : outcome < 0 ? 'negative' : 'neutral' : '' ">{{ visible ? outcome > 0 ? "Gain" : outcome < 0 ? 'Loss' : '' : '' }}</span></v-card-title>
                     </v-col>
                     <v-col class="pa-2 mt-2 trading_notes" cols="12" sm="12" md="12">
                         <v-card-title class="subtitle-2 pa-0 secondary--text"><span>Trading Notes</span></v-card-title>
-                        <v-card-title class="caption pa-0 secondary--text notes_text"><span>{{ visible ? details.meta.notes : '' }}</span></v-card-title>
+                        <v-card-title class="caption pa-0 secondary--text notes_text"><span>{{ visible ? details.meta.notes ? details.meta.notes : "..." : '' }}</span></v-card-title>
                     </v-col>
                 </v-row>
                 <v-row no-gutters>
@@ -50,7 +50,7 @@ export default {
                 if (this.visible){
                     console.log(this.itemDetails)
                     this.details = this.itemDetails
-                    this.outcome = this.itemDetails.total_value - this.itemDetails.meta.buy_value
+                    this.outcome = parseFloat(this.itemDetails.total_value) - parseFloat(this.itemDetails.buy_value)
                 }
                 return this.visible
             },

@@ -85,7 +85,7 @@ export default {
     resetLive() {
       this.$axios
         .$post(
-          process.env.JOURNAL_API_URL +
+          process.env.API_URL +
             "/journal/funds/" +
             this.simulatorPortfolioID +
             "/reset/"

@@ -16,6 +16,10 @@ export default $axios => ({
         $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio/open${query.length > 0 ? "?" + query : ""}`);
     },
+    portfoliofunds(portfoliofundsparams) {
+        let query = buildParams(portfoliofundsparams);
+        return $axios.$get(`${baseURL}/portfolio/funds/${query.length > 0 ? "?" + query : ""}`);
+    },
     tradelogs(tradelogsparams) {
         let query = buildParams(tradelogsparams);
         $axios.setToken(token);
@@ -42,8 +46,7 @@ export default $axios => ({
         return $axios.$post(`${baseURL}/funds`, createportfolioparams);
     },
     recordtrade(recordtradeparams) {
-        $axios.setToken(token);
-        return $axios.$post(`${baseURL}/funds/`+ recordtradeparams);
+        return $axios.$post(`${baseURL}/funds/` + recordtradeparams);
     },
     history(historyparams) {
         let query = buildParams(historyparams);
@@ -62,7 +65,7 @@ export default $axios => ({
     },
     deposit(depositparams) {
         return $axios.$post(`${baseURL}/funds/`, depositparams);
-    },
+    }
 });
 
 function buildParams(args) {
@@ -79,24 +82,26 @@ function buildParams(args) {
     let historyparams = "";
     let listparams = "";
     let depositparams = "";
-    let edittrade = "";
+    let edittradeparams = "";
+    let portfoliofundsparams = "";
     if (args != undefined) {
-      for (const [key, value] of Object.entries(args)) {
-        bld.push(`${key}=${value}`);
-      }
-      params = bld.join("&");
-      openparams = bld.join("&");
-      tradelogsparams = bld.join("&");
-      snapshotparams = bld.join("&");
-      journalchartsparams = bld.join("&");
-      equitycurveparams = bld.join("&");
-      createportfolioparams = bld.join("&");
-      recordtradeparams = bld.join("&");
-      historyparams = bld.join("&");
-      listparams = bld.join("&");
-      depositparams = bld.join("&");
-      ledgerparams = bld.join("&");
-      edittrade = bld.join("&");
+        for (const [key, value] of Object.entries(args)) {
+            bld.push(`${key}=${value}`);
+        }
+        params = bld.join("&");
+        openparams = bld.join("&");
+        tradelogsparams = bld.join("&");
+        snapshotparams = bld.join("&");
+        journalchartsparams = bld.join("&");
+        equitycurveparams = bld.join("&");
+        createportfolioparams = bld.join("&");
+        recordtradeparams = bld.join("&");
+        historyparams = bld.join("&");
+        listparams = bld.join("&");
+        depositparams = bld.join("&");
+        ledgerparams = bld.join("&");
+        edittradeparams = bld.join("&");
+        portfoliofundsparams = bld.join("&");
     }
-    return params, openparams, tradelogsparams, snapshotparams, journalchartsparams, equitycurveparams, ledgerparams, createportfolioparams, historyparams, depositparams, edittrade, listparams, recordtradeparams;
+    return params, openparams, tradelogsparams, snapshotparams, journalchartsparams, equitycurveparams, ledgerparams, createportfolioparams, historyparams, depositparams, edittradeparams, portfoliofundsparams, listparams, recordtradeparams;
 }

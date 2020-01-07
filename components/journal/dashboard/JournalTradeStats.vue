@@ -1,7 +1,7 @@
 <template>
     <v-col class="pa-0 pl-10" cols="5" sm="5" md="5">
-        <v-card-title class="text-left justify-left px-0 pb-2 pt-0" style="border-bottom: 1px solid #000">
-            <h6 class="font-weight-regular subtitle-2" style="color:#fff;">TRADE STATISTICS</h6>
+        <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+            <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">TRADE STATISTICS</h6>
             <v-spacer></v-spacer>
             <v-btn icon small @click.stop="showScheduleForm=true"> 
                 <img src="/icon/journal-icons/share-icon.svg" width="15">
@@ -14,22 +14,22 @@
                 </div>
             </v-col>
             <v-col class="pa-0" cols="12">
-                <v-simple-table :dense="true" dark id="liveportfolio-table">
+                <v-simple-table :dense="true" :dark="lightSwitch == true" id="liveportfolio-table">
                     <template v-slot:default>
                         <tbody>
                             <tr>
-                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Win</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ win }}</td>
+                                <td class="caption px-1 py-1"><v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Win</td>
+                                <td class="caption text-right px-1 py-1">{{ win }}</td>
                                 
-                                <td class="item_position-prop caption px-1 py-1"><v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Loss</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ loss }}</td>
+                                <td class="caption px-1 py-1"><v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Loss</td>
+                                <td class="caption text-right px-1 py-1">{{ loss }}</td>
                             </tr>
                             <tr>
-                                <td class="item_position-prop caption px-1 py-1">Total Trades</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ winlossresult }}</td>
+                                <td class="caption px-1 py-1">Total Trades</td>
+                                <td class="caption text-right px-1 py-1">{{ winlossresult }}</td>
                                 
-                                <td class="item_position-prop caption px-1 py-1">Win Rate</td>
-                                <td class="item_position-prop caption text-right px-1 py-1">{{ winrateresult }}%</td>
+                                <td class="caption px-1 py-1">Win Rate</td>
+                                <td class="caption text-right px-1 py-1">{{ winrateresult }}%</td>
                             </tr>
                         </tbody>
                     </template>
@@ -56,7 +56,16 @@
         renderPortfolioKey: "journal/getRenderPortfolioKey",
         defaultPortfolioId: "journal/getDefaultPortfolioId",
         journalCharts: "journal/getJournalCharts",
+        lightSwitch: "global/getLightSwitch"
       }),
+      fontColor: function() {
+        return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+      },
+      borderColor: function() {
+        return this.lightSwitch == 0
+          ? "border-bottom: 1px solid #b6b6b6"
+          : "border-bottom: 1px solid #535358";
+      },
       winlossresult: function() {
         return this.result = parseInt(this.win) + parseInt(this.loss);
       },

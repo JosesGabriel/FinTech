@@ -309,7 +309,7 @@ export default {
         channel_id: this.playerCurrentChatRoom
       };
       this.$axios
-        .$post(process.env.DEV_API_URL + "/game/series/", params)
+        .$post(process.env.API_URL + "/game/series/", params)
         .then(response => {
           this.setPlayerInGame(true);
           this.fullScreenLoader = false;
@@ -339,70 +339,65 @@ export default {
 
         // Not supposed to login and startClient again because it's defined at client.js already
         //  however, "sync" never hits 'PREPARED' state if using client.js. Permanently on 'SYNCING' state
-        //    Don't know why, refractor if possible
+        //    Don't know why, refactor if possible
 
-        client.on(
-          "sync",
-          function(state, prevState, data) {
-            switch (state) {
-              case "PREPARED": {
-                let randomString = Math.random()
-                  .toString(36)
-                  .substr(2, 5);
-                var options = {
-                  preset: "public_chat",
-                  room_alias_name: randomString,
-                  name: randomString,
-                  topic: "Game Room",
-                  creation_content: {
-                    "m.federate": false
-                  }
-                };
-                axios.defaults.headers.common["Authorization"] =
-                  `Bearer ` + myToken;
-                axios
-                  .post(
-                    "https://im.arbitrage.ph/_matrix/client/r0/createRoom",
-                    options
-                  )
-                  .then(
+        client.on("sync", (state, prevState, data) => {
+          switch (state) {
+            case "PREPARED": {
+              let randomString = Math.random()
+                .toString(36)
+                .substr(2, 5);
+              var options = {
+                preset: "public_chat",
+                room_alias_name: randomString,
+                name: randomString,
+                topic: "Game Room",
+                creation_content: {
+                  "m.federate": false
+                }
+              };
+              axios.defaults.headers.common["Authorization"] =
+                `Bearer ` + myToken;
+              axios
+                .post(
+                  "https://im.arbitrage.ph/_matrix/client/r0/createRoom",
+                  options
+                )
+                .then(response => {
+                  var gameOptions = {
+                    Players: playerCountModel,
+                    Stake: stakeModel,
+                    NumCharts: chartCountModel,
+                    Market: marketModel,
+                    Visibility: roomTypeModel,
+                    TimeLimit: limitModel,
+                    RoomID: response.data["room_id"]
+                  };
+                  client.setRoomTag(
+                    response.data["room_id"],
+                    "Options",
+                    gameOptions,
                     function(response) {
-                      var gameOptions = {
-                        Players: playerCountModel,
-                        Stake: stakeModel,
-                        NumCharts: chartCountModel,
-                        Market: marketModel,
-                        Visibility: roomTypeModel,
-                        TimeLimit: limitModel,
-                        RoomID: response.data["room_id"]
-                      };
-                      client.setRoomTag(
-                        response.data["room_id"],
-                        "Options",
-                        gameOptions,
-                        function(response) {
-                          console.log(response);
-                        }
-                      );
-                      //If reached here, room creation is successful
-                      // Join newly created room, by changing vuex currentChatRoom. Variable is watched, onchange, chatroom is re-rendered
-                      this.setPlayerCurrentChatRoom(response.data["room_id"]);
-                      localStorage.setItem(
-                        "currentChatRoom",
-                        response.data["room_id"]
-                      );
-                      this.disableFields = true;
-                      this.fullScreenLoader = false;
-                    }.bind(this)
-                  )
-                  .catch(function(error) {
-                    console.log(error);
-                  });
-                break;
-              }
+                      console.log(response);
+                    }
+                  );
+                  //If reached here, room creation is successful
+                  // Join newly created room, by changing vuex currentChatRoom. Variable is watched, onchange, chatroom is re-rendered
+                  this.setPlayerCurrentChatRoom(response.data["room_id"]);
+                  localStorage.setItem(
+                    "currentChatRoom",
+                    response.data["room_id"]
+                  );
+                  this.disableFields = true;
+                  this.fullScreenLoader = false;
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+              break;
             }
-          }.bind(this)
-        );
+          }
+        });
       }
     }
   }

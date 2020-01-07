@@ -8,7 +8,7 @@
       </v-card-title>
       <v-card color="transparent" class="d-flex justify-center" elevation="0">
         <router-link to="/" class="px-1">
-          <v-btn icon>
+          <v-btn icon @click="shareToTwitter()">
             <img src="/icon/journal-icons/twitter.svg" width="25" />
           </v-btn>
         </router-link>
@@ -20,8 +20,8 @@
           </v-btn>
         </router-link>
         <router-link to="/login" class="px-1">
-          <v-btn icon>
-            <img src="/icon/journal-icons/instagram.svg" width="25" />
+          <v-btn icon @click="shareToLyduz">
+            <img src="/icon/lyduz-icon.svg" width="25" />
           </v-btn>
         </router-link>
       </v-card>
@@ -87,7 +87,7 @@ export default {
   data() {
     return {
       show: false,
-      shareURL: process.env.CURRENT_DOMAIN + "/post?id=" + this.postid
+      shareURL: process.env.CURRENT_DOMAIN + "/post/" + this.postid
     };
   },
   computed: {
@@ -140,15 +140,24 @@ export default {
     shareToFb() {
       FB.ui(
         {
-          method: "dialog",
-          href:
-            "https://ph.news.yahoo.com/cancelled-flights-dec-25-due-045913131.html"
+          method: "share",
+          href: this.shareURL
         },
-        function(response) {
-          console.log(response);
-        }
+        function(response) {}
       );
-    }
+    },
+    shareToTwitter() {
+      let twitterURL =
+        "https://twitter.com/intent/tweet?url=" +
+        this.shareURL +
+        "&via=arbitrageph&hashtags=arbitrageph";
+      window.open(
+        twitterURL,
+        "mywindow",
+        "menubar=1,resizable=1,width=350,height=250"
+      );
+    },
+    shareToLyduz() {}
   }
 };
 </script>

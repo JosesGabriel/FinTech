@@ -3,7 +3,7 @@ import colors from "vuetify/es5/util/colors";
 require("dotenv").config();
 
 export default {
-  mode: "spa",
+  mode: "universal",
   server: {
     port: process.env.SERVER_PORT, // default: 3000
     host: process.env.SERVER_HOST // default: localhost
@@ -23,7 +23,7 @@ export default {
         content: process.env.npm_package_description || ""
       }
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon/lyduz.ico" }],
     script: [
       {
         src: "/vendor/charting_library/charting_library.min.js",
@@ -51,11 +51,11 @@ export default {
     { src: "~/plugins/bus", ssr: false },
     { src: "~/plugins/repository", ssr: false },
     { src: "~/plugins/global-method", ssr: true },
-    { src: "~/plugins/BootstrapVue", ssr: true },
     { src: "~/plugins/numeral", ssr: false },
-    { src: "~/plugins/vue-screen-size", ssr: false },
     { src: "~/plugins/tradingview", ssr: false },
-    { src: "~/plugins/vue-numeral-filter", ssr: false }
+    { src: "~/plugins/vue-numeral-filter", ssr: false },
+    { src: "~/plugins/components/chart/vue-apexcharts", mode: "client" },
+    { src: "~/plugins/vue-native-websocket", mode: "client", ssr: false }
   ],
   /*
    ** Nuxt.js dev-modules

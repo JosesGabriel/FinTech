@@ -28,6 +28,10 @@ export default {
     return state.bidask;
   },
 
+  trades: state => {
+    return state.trades;
+  },
+
   index: state => {
     return state.index;
   },

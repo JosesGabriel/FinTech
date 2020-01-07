@@ -28,7 +28,7 @@
       </v-card-title>
       <v-stepper id="stepper_container" v-model="e1" dark>
         <v-stepper-items>
-          <!-- -----First View of Trade Modal----- -->
+          <!-- -----First View of Buy Modal----- -->
           <v-stepper-content step="1" class="pt-0">
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters>
@@ -213,8 +213,8 @@
             </v-row>
           </v-stepper-content>
 
+          <!-- -----Second View of Buy Modal----- -->
           <v-stepper-content step="2" class="pt-2">
-            <!-- -----Second View of Trade Modal----- -->
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters class="px-0 py-0">
                 <v-col sm="12" md="12" class="pa-0">
@@ -273,14 +273,14 @@
                     class="body-2 buy_selector buy_price-input py-3"
                   ></v-text-field>
                   <v-btn
-                    @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotQuantity"
+                    @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotModel"
                     text
                     icon
                     color="success"
                   >
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
-                  <v-btn @click="quantityModel += boardLotQuantity" text icon color="success">
+                  <v-btn @click="quantityModel += boardLotModel" text icon color="success">
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
                 </v-col>
@@ -313,6 +313,8 @@
               >Continue</v-btn>
             </v-row>
           </v-stepper-content>
+
+          <!-- -----Third View of Buy Modal----- -->
           <v-stepper-content step="3" class="pt-2">
             <v-container class="pt-0">
               <v-row no-gutters class="px-0 py-0">
@@ -379,11 +381,13 @@
                 color="success"
                 class="text-capitalize black--text ml-1"
                 light
-                @click.stop="show = false"
                 @click="buyListArray"
+                @click.stop="show = false"
               >Confirm</v-btn>
             </v-row>
           </v-stepper-content>
+          
+          <!-- -----First View of Sell Modal----- -->
           <v-stepper-content step="4" class="pt-2">
             <v-container class="pa-0">
               <v-row no-gutters class="pt-3 pa-0">
@@ -392,6 +396,7 @@
                   label="Sell Price"
                   placeholder="Enter Sell Price"
                   color="#00FFC3"
+                  type="number"
                   style="color: #00FFC3"
                   :dark="lightSwitch == true"
                   class="body-2 buy_selector quantity-input py-3"
@@ -408,14 +413,14 @@
                     class="body-2 buy_selector buy_price-input py-3 quatity_number"
                   ></v-text-field>
                   <v-btn
-                    @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= boardLotQuantity"
+                    @click="quantitySellModel == 0 ? quantitySellModel = 0 : quantitySellModel -= boardLotModel"
                     text
                     icon
                     color="success"
                   >
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
-                  <v-btn @click="quantitySellModel += boardLotQuantity" text icon color="success">
+                  <v-btn @click="quantitySellModel += boardLotModel" text icon color="success">
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
                 </v-col>
@@ -444,8 +449,8 @@
                 color="success"
                 class="text-capitalize black--text ml-1"
                 light
-                @click.stop="show = false"
                 @click="sellListArray"
+                @click.stop="show = false"
                 :disabled="confirmSellButtonDisable"
               >Confirm</v-btn>
             </v-row>
@@ -512,7 +517,7 @@ export default {
       quantitySellModel: 0,
       totalCostModel: 0,
       totalCostSellModel: 0,
-      boardLotQuantity: 0,
+      AvailableBoardLot: 0,
 
       strategySellModel: null,
       tradeplanSellModel: null,
@@ -544,15 +549,6 @@ export default {
       stockList: "global/getStockList",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
-      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
-    },
-    fontColorTable: function() {
-      return this.lightSwitch == 0 ? "data_table-container" : "data_table-container-dark";
-    },
-    fontColorDate: function() {
-      return this.lightSwitch == 0 ? "datepicker-container-light" : "datepicker-container";
-    },
     show: {
       get() {
         return this.visible;
@@ -588,15 +584,21 @@ export default {
           this.ave = 0;
         }
       }
+    },
+    fontColor: function() {
+      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+    },
+    fontColorTable: function() {
+      return this.lightSwitch == 0 ? "data_table-container" : "data_table-container-dark";
+    },
+    fontColorDate: function() {
+      return this.lightSwitch == 0 ? "datepicker-container-light" : "datepicker-container";
     }
   },
   watch: {
-    // renderPortfolioKey: function() {
-    //   this.getUserPortfolio();
-    // },
-    // defaultPortfolioId: function() {
-    //   this.getUserPortfolio();
-    // },
+    openPosition: function() {
+      this.getSellItems();
+    },
     stockList: function() {
       this.initPortfolio();
 
@@ -625,6 +627,9 @@ export default {
     },
     date: function() {
       this.dateWatch();
+    },
+    userPortfolio() {
+      this.getUserPortfolio();
     }
   },
   mounted() {
@@ -632,30 +637,33 @@ export default {
     this.stocklistBuy = this.stockList.data;
 
     this.getUserPortfolio();
+    this.initPortfolio();
   },
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
-      setStockList: "global/setStockList"
     }),
     initPortfolio() {
-      var today = new Date(this.date);
       var tim = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      var time =
-        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var dateTime = date + " " + time;
+      var today = new Date(this.date),
+        month = '' + (today.getMonth() + 1),
+        day = '' + today.getDate(),
+        year = today.getFullYear();
+
+      if (month.length < 2) 
+          month = '0' + month;
+      if (day.length < 2) 
+          day = '0' + day;
+
+      var dateTime = [year, month, day].join('-') + " " + time;
       this.dateModel = dateTime;
-      this.YMDModel = date;
+      this.YMDModel = [year, month, day].join('-');
     },
-    buyListArray: function() {
+    buyListArray() {
+      let totalCost = parseFloat(this.quantityModel) * parseFloat(this.priceModel);
       let params = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         position: parseFloat(this.quantityModel),
@@ -669,19 +677,12 @@ export default {
         }
       };
       this.$axios
-        .$post(
-          "https://dev-api.arbitrage.ph/api/journal/funds/" +
-            this.portfolioDropdownModel +
-            "/buy/" +
-            this.GetSelectStock,
-          params
-        )
+        .$post("https://dev-api.arbitrage.ph/api/journal/funds/" + this.portfolioDropdownModel + "/buy/" + this.GetSelectStock, params)
         .then(response => {
           if (response.success) {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setDefaultPortfolioId(this.portfolioDropdownModel);
             this.GetSelectStock = "";
             this.priceModel = "0.00";
             this.quantityModel = "0";
@@ -692,7 +693,7 @@ export default {
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
             this.portfolioDropdownModel = null;
-            this.availableFundsModel = 0;
+            this.availableFundsModel = 0
 
             this.cprice = "0.00";
             this.change = "0.00";
@@ -713,6 +714,8 @@ export default {
         });
     },
     sellListArray: function() {
+      console.log(this.dateModel)
+      console.log(this.YMDModel)
       let aveprice =
         parseFloat(this.quantitySellModel) /
         parseFloat(this.totalCostSellModel.replace(/,/g, ""));
@@ -742,7 +745,6 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setDefaultPortfolioId(this.defaultPortfolioId);
             this.GetSelectStock = "";
             this.priceSellModel = "0.00";
             this.quantitySellModel = "0";
@@ -777,6 +779,11 @@ export default {
       this.continuebuyBtn = false;
       this.continuesellBtn = true;
     },
+    getSellItems() {
+      for(let i = 0; i < this.openPosition.length; i++) {
+        this.openPosition[i] = {...this.openPosition[i], id_str: this.openPosition[i].stock_id, symbol: this.openPosition[i].stock_symbol}
+      }
+    },
     getStockDetails(Obj) {
       const params = {
         "symbol-id": Obj
@@ -787,25 +794,18 @@ export default {
 
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.boardLotModel = 1000000;
-            this.boardLotQuantity = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
             this.boardLotModel = 100000;
-            this.boardLotQuantity = 100000;
           } else if (result.data.last >= 0.05 && result.data.last <= 0.495) {
             this.boardLotModel = 10000;
-            this.boardLotQuantity = 10000;
           } else if (result.data.last >= 0.5 && result.data.last <= 4.99) {
             this.boardLotModel = 1000;
-            this.boardLotQuantity = 1000;
           } else if (result.data.last >= 5 && result.data.last <= 49.95) {
             this.boardLotModel = 100;
-            this.boardLotQuantity = 100;
           } else if (result.data.last >= 50 && result.data.last <= 999.5) {
             this.boardLotModel = 10;
-            this.boardLotQuantity = 10;
           } else if (result.data.last >= 1000) {
             this.boardLotModel = 5;
-            this.boardLotQuantity = 5;
           }
           this.cprice = result.data.last;
           this.cpercentage = result.data.changepercentage.toFixed(2);
@@ -822,29 +822,28 @@ export default {
           this.ave = result.data.average.toFixed(2);
           this.priceModel = result.data.last;
 
-          if (this.openPosition != null) {
-            for (let i = 0; i < this.openPosition.length; i++) {
-              let findOpenPosition = this.openPosition[i];
-              if (
-                parseInt(findOpenPosition.stockid) ==
-                this.stockSymbolGet.stockid
-              ) {
-                this.priceSellModel = findOpenPosition.last;
-                this.avepriceSell = findOpenPosition.average_price;
-                this.quantitySellModel = findOpenPosition.position;
-                this.strategySellModel = findOpenPosition.metas.strategy;
-                this.tradeplanSellModel = findOpenPosition.metas.plan;
-                this.emotionsSellModel = findOpenPosition.metas.emotion;
-                this.notesSellModel = findOpenPosition.metas.notes;
-                this.quantityModel = 0;
-              }
-            }
-          } else {
-            this.quantitySellModel = 0;
-            this.quantityModel = 0;
-          }
+          
         }.bind(this)
       );
+
+      if ( this.openPosition != null) {
+        for (let i = 0; i < this.openPosition.length; i++) {
+          let stockDataList = this.openPosition[i];
+
+          if(stockDataList.stock_id == Obj) {
+            this.priceSellModel = stockDataList.metas.buy_price;
+            this.avepriceSell = stockDataList.average_price;
+            this.quantitySellModel = stockDataList.position;
+            this.AvailableBoardLot = stockDataList.position;
+            if(stockDataList.metas.strategy || stockDataList.metas.plan || stockDataList.metas.emotion || stockDataList.metas.notes) {
+              this.strategySellModel = stockDataList.metas.strategy;
+              this.tradeplanSellModel = stockDataList.metas.plan;
+              this.emotionsSellModel = stockDataList.metas.emotion;
+              this.notesSellModel = stockDataList.metas.notes;
+            }
+          }
+        }
+      }
       this.$api.chart.stocks.fulldepth(params).then(
         function(result) {
           this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);
@@ -864,42 +863,30 @@ export default {
       return num;
     },
     getUserPortfolio() {
-      const params = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
+      this.selectPortfolioModel = [];
+      if (this.userPortfolio.length != 0) {
+        this.selectPortfolioModel.push({ header: "Real Portfolio" });
+        const toFindReal = "real"; // what we want to count
+        for (let i = 0; i < this.userPortfolio.length; i++) {
+          let portfolioListPush1 = this.userPortfolio[i];
+          if (portfolioListPush1.type === toFindReal) {
+            this.selectPortfolioModel.push(portfolioListPush1);
+          }
+        }
+      }
+    },
+    whereToSave(obj) {
+      const portfoliofundsparams = {
+        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+        fund: obj
       };
-      this.$api.journal.portfolio.portfolio(params).then(
+      this.$api.journal.portfolio.portfoliofunds(portfoliofundsparams).then(
         function(result) {
-          this.portfolioList = result.meta.logs;
-          this.portfolioList = this.portfolioList.reverse();
-          this.selectPortfolioModel = [];
-          if (this.portfolioList.length != 0) {
-            this.selectPortfolioModel.push({ header: "Real Portfolio" });
-            const toFindReal = "real"; // what we want to count
-            for (let i = 0; i < this.portfolioList.length; i++) {
-              let portfolioListPush1 = this.portfolioList[i];
-              if (portfolioListPush1.type === toFindReal) {
-                this.selectPortfolioModel.push(portfolioListPush1);
-              }
-            }
+          if (result.success) {
+            this.availableFundsModel = parseFloat(result.data.funds.balance);
           }
         }.bind(this)
       );
-      this.componentKey++;
-    },
-    whereToSave() {
-      console.log(this.userPortfolio);
-      for (let i = 0; i < this.userPortfolio.length; i++) {
-        let portfolioListPush1 = this.userPortfolio[i];
-        if (portfolioListPush1.id === this.portfolioDropdownModel) {
-          this.availableFundsModel = parseInt(portfolioListPush1.balance);
-          this.portfolioDropdownModel = portfolioListPush1.id;
-          this.keyCreateCounter = this.renderPortfolioKey;
-          this.keyCreateCounter++;
-          this.setRenderPortfolioKey(this.keyCreateCounter);
-
-          this.setDefaultPortfolioId(portfolioListPush1.id);
-        }
-      }
     },
     selectWatch() {
       if (this.typePortfolioModel != null) {
@@ -923,7 +910,6 @@ export default {
       this.totalCostModel = dall
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
       if (
         parseFloat(this.totalCostModel) >= parseFloat(this.availableFundsModel)
       ) {
@@ -939,9 +925,7 @@ export default {
           this.continueBuyButtonDisable = true;
           this.totalCostModel = 0;
         } else {
-          let compareNum =
-            parseFloat(this.totalCostModel.replace(/,/g, "")) >=
-            parseFloat(this.availableFundsModel);
+          let compareNum = parseFloat(this.totalCostModel.replace(/,/g, "")) >= parseFloat(this.availableFundsModel);
           if (!compareNum) {
             this.continueBuyButtonDisable = false;
           } else {
@@ -951,8 +935,7 @@ export default {
       }
     },
     sellWatch(newValue) {
-      let sellResult =
-        parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
+      let sellResult = parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
       let dpartcommission = sellResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
       // TAX
@@ -968,26 +951,16 @@ export default {
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      let compareNum =
-        parseInt(this.quantitySellModel) >= parseInt(this.boardLotModel);
-      if (!compareNum) {
+      if (this.priceSellModel == "0.00" && this.priceSellModel <= 0 && this.quantitySellModel == "0.00" && this.quantitySellModel <= 0) {
         this.confirmSellButtonDisable = true;
       } else {
-        if (
-          this.priceSellModel == "0.00" ||
-          this.priceSellModel <= 0 ||
-          this.quantitySellModel == "0.00" ||
-          this.quantitySellModel <= 0
-        ) {
+        if(parseFloat(this.quantitySellModel) > parseFloat(this.AvailableBoardLot)) {
           this.confirmSellButtonDisable = true;
-          this.totalCostSellModel = 0;
         } else {
-          let compareNum1 =
-            parseInt(this.quantitySellModel) > parseInt(this.boardLotModel);
-          if (!compareNum1) {
-            this.confirmSellButtonDisable = false;
-          } else {
+          if (this.priceSellModel == NaN || this.priceSellModel <= 0 || this.quantitySellModel == NaN || this.quantitySellModel <= 0) {
             this.confirmSellButtonDisable = true;
+          } else {
+            this.confirmSellButtonDisable = false;
           }
         }
       }
@@ -1001,8 +974,7 @@ export default {
         (today.getMonth() + 1) +
         "-" +
         today.getDate();
-      var time =
-        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
       var dateTime = date + " " + time;
       this.dateModel = dateTime;

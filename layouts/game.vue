@@ -2,7 +2,7 @@
   <v-app class="game__container">
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <rbHeader />
-      <v-container class="maxwidth pa-0 mx-0">
+      <v-container fill-height class="maxwidth pa-0 mx-0">
         <nuxt />
       </v-container>
     </v-content>
@@ -14,7 +14,7 @@
 }
 .darkMode {
   /* background: radial-gradient(50% 50% at 50% 50%, #0d2641 0%, #00121e 88.54%); */
-   background-color: #00121e;
+  background-color: #00121e;
 }
 .lightMode {
   background-color: #f2f2f2;

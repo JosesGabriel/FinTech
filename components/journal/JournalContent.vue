@@ -69,7 +69,7 @@
             <JournalPortfolioSnapshot />
             <JournalCurrentAllocation />
           </v-row>
-          <div class="component_spacer"></div>
+          <!-- <div class="component_spacer"></div>
           <v-row no-gutters>
             <JournalEquityCurve />
           </v-row>
@@ -109,8 +109,8 @@
             <v-col class="pa-0" cols="8" sm="8" md="8">
               <JournalGrossPL />
             </v-col>
-          </v-row>
-          <div class="component_spacer"></div>
+          </v-row> 
+          <div class="component_spacer"></div> -->
         </v-container>
       </v-tab-item>
       <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2">
@@ -135,17 +135,17 @@
 import JournalLivePortfolio from "~/components/journal/dashboard/JournalLivePortfolio";
 import JournalPortfolioSnapshot from "~/components/journal/dashboard/JournalPortfolioSnapshot";
 import JournalCurrentAllocation from "~/components/journal/dashboard/JournalCurrentAllocation";
-import JournalMonthlyPerfomance from "~/components/journal/dashboard/JournalMonthlyPerfomance";
-import JournalTradeStats from "~/components/journal/dashboard/JournalTradeStats";
-import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
-import JournalStrategyStats from "~/components/journal/dashboard/JournalStrategyStats";
-import JournalTopStocks from "~/components/journal/dashboard/JournalTopStocks";
-import JournalEmotionalStats from "~/components/journal/dashboard/JournalEmotionalStats";
-import JournalExpenseReport from "~/components/journal/dashboard/JournalExpenseReport";
-import JournalBuyVolume from "~/components/journal/dashboard/JournalBuyVolume";
-import JournalBuyValue from "~/components/journal/dashboard/JournalBuyValue";
-import JournalPerformance from "~/components/journal/dashboard/JournalPerformance";
-import JournalGrossPL from "~/components/journal/dashboard/JournalGrossPL";
+// import JournalEquityCurve from "~/components/journal/dashboard/JournalEquityCurve";
+// import JournalMonthlyPerfomance from "~/components/journal/dashboard/JournalMonthlyPerfomance";
+// import JournalTradeStats from "~/components/journal/dashboard/JournalTradeStats";
+// import JournalStrategyStats from "~/components/journal/dashboard/JournalStrategyStats";
+// import JournalTopStocks from "~/components/journal/dashboard/JournalTopStocks";
+// import JournalEmotionalStats from "~/components/journal/dashboard/JournalEmotionalStats";
+// import JournalExpenseReport from "~/components/journal/dashboard/JournalExpenseReport";
+// import JournalBuyVolume from "~/components/journal/dashboard/JournalBuyVolume";
+// import JournalBuyValue from "~/components/journal/dashboard/JournalBuyValue";
+// import JournalPerformance from "~/components/journal/dashboard/JournalPerformance";
+// import JournalGrossPL from "~/components/journal/dashboard/JournalGrossPL";
 
 //Ledger tab
 import TradelogsContent from "~/components/journal/tradelogs/contents";
@@ -163,17 +163,17 @@ export default {
     JournalLivePortfolio,
     JournalPortfolioSnapshot,
     JournalCurrentAllocation,
-    JournalMonthlyPerfomance,
-    JournalTradeStats,
-    JournalEquityCurve,
-    JournalStrategyStats,
-    JournalTopStocks,
-    JournalEmotionalStats,
-    JournalExpenseReport,
-    JournalBuyVolume,
-    JournalBuyValue,
-    JournalPerformance,
-    JournalGrossPL,
+    // JournalEquityCurve,
+    // JournalMonthlyPerfomance,
+    // JournalTradeStats,
+    // JournalStrategyStats,
+    // JournalTopStocks,
+    // JournalEmotionalStats,
+    // JournalExpenseReport,
+    // JournalBuyVolume,
+    // JournalBuyValue,
+    // JournalPerformance,
+    // JournalGrossPL,
     //Ledger tab
     TradelogsContent,
     //Ledger tab
@@ -199,7 +199,6 @@ export default {
   methods: {
     ...mapActions({
       setUserPortfolio: "journal/setUserPortfolio",
-      setSelectedPortfolio: "journal/setSelectedPortfolio",
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
       setJournalCharts: "journal/setJournalCharts"
@@ -216,7 +215,6 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setSelectedPortfolio(obj);
           }
         }.bind(this)
       );
@@ -239,22 +237,23 @@ export default {
       };
       this.$api.journal.portfolio.portfolio(params).then(
         function(result) {
-          this.portfolioList = result.meta.logs;
-          this.setUserPortfolio(result.meta.logs);
+          this.portfolioList = result.data.logs;
+          this.setUserPortfolio(result.data.logs);
 
           // this.portfolioListPush = []
           let defaultPort = false;
           this.portfolioListPush.push({ header: "Real Portfolio" });
           for (let i = 0; i < this.portfolioList.length; i++) {
-            if (this.portfolioList[i].type === "real") {
-              this.portfolioListPush.push(this.portfolioList[i]);
+            let portfolioListPush1 = this.portfolioList[i];
+            if (portfolioListPush1.type === "real") {
+              this.portfolioListPush.push(portfolioListPush1);
 
               if (
-                this.portfolioList[i].name === "My Portfolio" &&
-                this.portfolioList[i].type === "real"
+                portfolioListPush1.name === "My Portfolio" &&
+                portfolioListPush1.type === "real"
               ) {
-                this.setDefaultPortfolioId(this.portfolioList[i].id);
-                this.portfolioDropdownModel = this.portfolioList[i].id;
+                this.setDefaultPortfolioId(portfolioListPush1.id);
+                this.portfolioDropdownModel = portfolioListPush1.id;
                 defaultPort = true;
               }
             }
@@ -294,17 +293,16 @@ export default {
       // this.componentKey++;
     },
     getJournalCharts() {
-      if (this.portfolioDropdownModel != null) {
-        const journalchartsparams = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-          fund: this.defaultPortfolioId
-        };
-        this.$api.journal.portfolio
-          .journalcharts(journalchartsparams)
-          .then(response => {
-            this.setJournalCharts(response);
-          });
-      }
+      // if (this.portfolioDropdownModel != null) {
+      //   let journalchartsparams = {
+      //     user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      //     fund: this.defaultPortfolioId
+      //   };
+      //   this.$api.journal.portfolio.journalcharts(journalchartsparams).then(response => {
+      //     // console.log(response)
+      //     this.setJournalCharts(response);
+      //   });
+      // }
     }
   },
   computed: {
@@ -355,12 +353,20 @@ export default {
         opacity: 1 !important;
         color: #fff !important;
     } */
-.apexcharts-tooltip-series-group {
+.apexcharts-tooltip-series-group,
+.apexcharts-tooltip.dark,
+.apexcharts-tooltip.light {
   color: #fff;
   background-color: rgba(0, 0, 0, 0.5) !important;
 }
-.apexcharts-svg {
-  /* overflow: visible !important; */
+.apexcharts-tooltip {
+  box-shadow: none;
+}
+span.apexcharts-tooltip-text-label {
+  display: none;
+}
+.apexcharts-tooltip.light {
+  border: none;
 }
 #table_tr_port-cont:hover {
   background: rgb(9, 26, 43);
@@ -402,16 +408,24 @@ export default {
   min-height: auto !important;
   border-radius: unset;
 }
-.apexcharts-tooltip {
-  box-shadow: none;
-}
-span.apexcharts-tooltip-text-label {
-  display: none;
-}
-
 .v-subheader.theme--light {
   color: #b6b6b6;
   font-weight: 600;
   padding-left: 16px;
+}
+.apexcharts-canvas.dark {
+  background: transparent !important;
+}
+.apexcharts-canvas.light svg .apexcharts-datalabel-label,
+.apexcharts-canvas.light svg .apexcharts-datalabel-value,
+.apexcharts-canvas.light svg .apexcharts-yaxis-label,
+.apexcharts-canvas.light svg .apexcharts-xaxis-label {
+  fill: #494949;
+}
+.apexcharts-canvas.dark svg .apexcharts-datalabel-label,
+.apexcharts-canvas.dark svg .apexcharts-datalabel-value,
+.apexcharts-canvas.dark svg .apexcharts-yaxis-label,
+.apexcharts-canvas.dark svg .apexcharts-xaxis-label {
+  fill: #e5e5e5;
 }
 </style>

@@ -1,15 +1,27 @@
 <template>
   <v-content
     :class="[
-      { darkmode__text: lightSwitch == 1 },
-      { lightmode__text: lightSwitch == 0 }
+      { 'white--text': lightSwitch == 1 },
+      { 'black--text': lightSwitch == 0 }
     ]"
   >
     <div id="top">
+      <v-content class="pr-3 text-right">
+        <v-icon
+          id="icon__share"
+          small
+          :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]"
+          @click="shareActivity"
+          >mdi-share-variant</v-icon
+        >
+      </v-content>
       <!-- top -->
       <v-content>
-        <v-row class="ml-1 mr-1 mt-1 mb-1">
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+        <v-row class="ml-3 mr-1 mt-1 mb-1">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Position
             </v-row>
@@ -20,7 +32,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Ave. Price
             </v-row>
@@ -31,7 +43,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Total Cost
             </v-row>
@@ -42,7 +54,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Market Value
             </v-row>
@@ -53,7 +65,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Profit
             </v-row>
@@ -64,7 +76,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-1 mb-0 py-0 vt_realized" style="width:20%;">
+          <v-col class="mr-1 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Perf. (%)
             </v-row>
@@ -79,7 +91,7 @@
     </div>
 
     <v-content class="mx-1">
-      <span class="subtitle-1 ml-3">Trade History</span>
+      <span class="subtitle-2 ml-2">Trade History</span>
       <v-divider></v-divider>
       <v-data-table
         :headers="headers"
@@ -147,8 +159,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      min: "140px",
-      max: "calc(100vh - 260px)",
+      min: "105px",
+      max: "calc(100vh - 295px)",
       headers: [
         {
           text: "Date",
@@ -654,25 +666,30 @@ export default {
   },
   watch: {
     symbolid(value) {
-      console.log("symbols");
-      console.log(value);
+      // console.log("symbols");
+      // console.log(value);
     },
     fullscreen(value) {
-      console.log("fullscreen");
-      console.log(value);
+      // console.log("fullscreen");
+      // console.log(value);
     },
     ticker(value) {
       // console.log("ticker");
       // console.log(value);
       if (value) {
-        this.max = "calc(100vh - 260px)";
+        this.max = "calc(100vh - 295px)";
       } else {
-        this.max = "calc(100vh - 210px)";
+        this.max = "calc(100vh - 245px)";
       }
     }
   },
+  methods: {
+    shareActivity: function() {
+      console.log("share");
+    }
+  },
   mounted() {
-    console.log(this.symbolid);
+    // console.log(this.symbolid);
 
     this.$api.journal.portfolio
       .open({
@@ -680,19 +697,19 @@ export default {
         fund: "real"
       })
       .then(response => {
-        console.log("open real funds");
-        console.log(response);
+        //  console.log("open real funds");
+        //  console.log(response);
       });
-
 
     this.$api.journal.portfolio
       .tradelogs({
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        fund: "real"
+        fund: "75396425114062848",
+        stock: "29235363423715328"
       })
       .then(response => {
-        console.log("tradelogs real funds");
-        console.log(response);
+        //  console.log("tradelogs real funds");
+        //  console.log(response);
       });
   }
 };
@@ -701,10 +718,17 @@ export default {
 <style scoped>
 #top {
   /* background: red; */
-  height: 85px;
+  height: 120px;
+}
+#icon__share {
+  cursor: pointer;
+}
+#div__share {
+  position: absolute;
+  right: 8px;
 }
 .tr_custom {
-  line-height: 2rem !important;
+  line-height: 1.7rem !important;
   cursor: pointer;
 }
 .positive {
@@ -715,7 +739,8 @@ export default {
 }
 .vt_realized {
   /* background: #0c1a2b73; */
-  border: #b6b6b6 1px solid;
+  /* border: #b6b6b6 1px solid; */
+  border: rgb(182, 182, 182, 0.2) 1px solid;
 }
 /* .vt_realized:hover {
   background: #0c1a2b;

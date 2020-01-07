@@ -9,7 +9,7 @@
               outlined
               dense
               hide-details
-              dark
+              :dark="lightSwitch == true"
               color="success"
               class="tl_searchfields"
             ></v-text-field>
@@ -33,20 +33,33 @@
           :items-per-page="itemsPerPage"
           hide-default-footer
           @page-count="pageCount = $event"
-          dark
+          :dark="lightSwitch == true"
           :loading="liveLedgerLoading"
           loading-text="Loading..."
           class="data_table-container pl-10 secondary--text"
         >
-        <template v-slot:item.count="{ item }">{{ item.count }}</template>
-        <template v-slot:item.created_at="{ item }">{{ item.created_at }}</template>
-        <template v-slot:item.debit="{ item }">{{ item.debit }}</template>
-        <template v-slot:item.credit="{ item }">{{ item.credit }}</template>
-        <template v-slot:item.balance="{ item }">{{ formatPrice(item.balance) }}</template>
+        <template v-slot:item.count="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.count }}</span>
+        </template>
+        <template v-slot:item.created_at="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.created_at }}</span>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.action }}</span>
+        </template>
+        <template v-slot:item.debit="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.debit }}</span>
+        </template>
+        <template v-slot:item.credit="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.credit }}</span>
+        </template>
+        <template v-slot:item.balance="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ formatPrice(item.balance) }}</span>
+        </template>
         <template slot="footer">
           <v-row no-gutters class="mt-3">
             <v-spacer></v-spacer>
-            <span style="width: 190px" class="text-right subtitle-2">Total Funds:</span>
+            <span style="width: 190px" class="text-right subtitle-2" :style="{ color: fontcolor2 }">Total Funds:</span>
             <span style="width: 190px" class="text-right subtitle-2" :class="(totalDebit < 0 ? 'negative' : 'positive')">{{ formatPrice(totalDebit) }}</span>
             <span style="width: 190px" class="text-right subtitle-2" :class="(totalCredit < 0 ? 'negative' : 'positive')">{{ formatPrice(totalCredit) }}</span>
             <span style="width: 190px;" class="text-right subtitle-2" >  </span>
@@ -54,16 +67,16 @@
         </template>
         </v-data-table>
         <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
-          <v-card color="transparent" class="justify-center" elevation="0">
-            <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
+          <v-card color="transparent" :dark="lightSwitch == true" class="justify-center" elevation="0">
+            <v-card-title class="caption pa-0"><span>Show Rows</span>
             <v-spacer></v-spacer>
             <v-text-field
-              :value="itemsPerPage"
+              :value="(ledgerContent.length <= 5 ? ledgerContent.length : 5)"
               type="number"
               min="5"
               max="10"
               @input="itemsPerPage = parseInt($event, 10)"
-              dark
+              :dark="lightSwitch == true"
               class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
               color="success"
               dense
@@ -112,8 +125,18 @@ export default {
   computed: {
     ...mapGetters({
       defaultPortfolioId: "journal/getDefaultPortfolioId",
-      renderPortfolioKey: "journal/getRenderPortfolioKey"
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      lightSwitch: "global/getLightSwitch"
     }),
+    fontColor: function() {
+      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+    },
+    fontcolor2: function() {
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+    },
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   mounted() {
     if(this.defaultPortfolioId != 0 ?  this.getLedgerLogs() : '');
@@ -131,10 +154,9 @@ export default {
       this.debit = 0;
       this.count = 0;
       this.$api.journal.portfolio.ledger(ledgerparams).then(response => {
-      this.ledgerContent = response.meta.ledger
+      this.ledgerContent = response.data.ledger
         for (let i = 0; i < this.ledgerContent.length; i++) {
           this.ledgerContent[i].created_at = this.ledgerContent[i].created_at.slice(0, 10)
-          console.log(this.ledgerContent[i])
           let ledgerArray = {transaction: this.ledgerContent[i].action, balance: 0, counter: 1, count: 0}
           this.ledgerContent[i] = {...ledgerArray,...this.ledgerContent[i]}
 
