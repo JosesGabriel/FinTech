@@ -33,40 +33,6 @@ import MiniWatchlist from "~/components/MiniWatchlist";
 import Bulletin from "~/components/Bulletin";
 
 export default {
-  head() {
-    return {
-      title: "Test Title share",
-      meta: [
-        { charset: "utf-8" },
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
-        {
-          property: "description",
-          hid: "description",
-          content:
-            "Lyduz is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
-        },
-        { property: "og:title", content: "Lyduz" },
-        {
-          property: "og:description",
-          content:
-            "Lyduz is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
-        },
-        { property: "og:type", content: "website" },
-        {
-          property: "og:url",
-          content: "https://lyduz.com/login"
-        },
-        {
-          property: "og:image",
-          content: "https://lyduz.com/user_default.png"
-        },
-        {
-          property: "fb:app_id",
-          content: "407039123333666"
-        }
-      ]
-    };
-  },
   layout: "main",
   components: {
     Navbar,

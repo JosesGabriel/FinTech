@@ -11,7 +11,9 @@
           class="avatar__border"
           alt="Avatar"
           :src="
-            $auth.loggedIn ? $auth.user.data.user.profile_image : 'default.png'
+            $auth.user.data.user.profile_image
+              ? $auth.user.data.user.profile_image
+              : 'default.png'
           "
         />
       </v-avatar>
@@ -198,7 +200,7 @@ export default {
             this.clearInputs("error");
           });
       } else {
-        // can't reuse axios code above bc its asynchronous. Suggestions on how to improve r welcome
+        // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
         const params = {
           content: this.postFieldModel,
           visibility: "public",

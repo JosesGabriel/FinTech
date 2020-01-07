@@ -357,10 +357,10 @@ export default {
     }
   },
   mounted() {
-    const openparams = {
+    /*const openparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-      };
-    this.$api.journal.portfolio.portfolio(openparams).then(
+      };*/
+    this.$api.journal.portfolio.portfolio().then(
       function(result) {
         //console.log('Portfolio', result);
         let defaultPort = false;
@@ -416,6 +416,7 @@ export default {
 }
 .v-menu__content > .v-select-list > .v-list {
   padding: unset;
+  border: 1px solid rgb(23, 36, 49);
 }
 .select_portfolio > .v-input__control {
   padding-top: 16px !important;
@@ -443,7 +444,7 @@ export default {
   > .v-select__selection--comma {
   color: black;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 100;
 }
 
 .select_portfolio > .v-input__control > .v-input__slot > .v-select__slot {

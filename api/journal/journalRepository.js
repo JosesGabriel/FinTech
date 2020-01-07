@@ -2,17 +2,20 @@ require("dotenv").config();
 
 const baseURL = process.env.API_URL + "/journal";
 const baseChartURL = process.env.CHART_API_URL + "/stocks";
-const token = process.env.CHART_CLIENT_SECRET;
+//const token = process.env.CHART_CLIENT_SECRET;
+let token = localStorage["auth._token.local"];
 
 export default $axios => ({
   portfolio(params) {
     let query = buildParams(params);
+    $axios.setToken(token);
     return $axios.$get(
       `${baseURL}/portfolio${query.length > 0 ? "?" + query : ""}`
     );
   },
   open(openparams) {
     let query = buildParams(openparams);
+    $axios.setToken(token);
     return $axios.$get(
       `${baseURL}/portfolio/open${query.length > 0 ? "?" + query : ""}`
     );
@@ -25,6 +28,7 @@ export default $axios => ({
   },
   tradelogs(tradelogsparams) {
     let query = buildParams(tradelogsparams);
+    $axios.setToken(token);
     return $axios.$get(
       `${baseURL}/portfolio/logs${query.length > 0 ? "?" + query : ""}`
     );
@@ -54,6 +58,7 @@ export default $axios => ({
     );
   },
   createportfolio(createportfolioparams) {
+    $axios.setToken(token);
     return $axios.$post(`${baseURL}/funds`, createportfolioparams);
   },
   recordtrade(recordtradeparams) {
@@ -61,7 +66,8 @@ export default $axios => ({
   },
   history(historyparams) {
     let query = buildParams(historyparams);
-    $axios.setToken(token, "Bearer");
+    //$axios.setToken(token, "Bearer");
+    $axios.setToken(token);
     return $axios.$get(
       `${baseChartURL}/history/latest${query.length > 0 ? "?" + query : ""}`
     );

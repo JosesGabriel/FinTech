@@ -23,6 +23,7 @@
         <img src="/icon/journal-icons/share-icon.svg" width="15" />
       </v-btn>
     </v-card-title>
+
     <v-data-table
       :headers="headers"
       :items="portfolioLogs"
@@ -32,61 +33,63 @@
       :dark="lightSwitch == true"
       :style="{ background: cardbackground }"
       class="data_table-container pl-10 secondary--text"
-    >
-      <template v-slot:item.stock_id="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
-      </template>
-      <template v-slot:item.Position="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.Position }}</span>
-      </template>
-      <template v-slot:item.AvgPrice="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.AvgPrice }}</span>
-      </template>
-      <template v-slot:item.TotalCost="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.TotalCost }}</span>
-      </template>
-      <template v-slot:item.MarketValue="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.MarketValue }}</span>
-      </template>
-      <template v-slot:item.Profit="{ item }">
-        <span
-          :class="(parseFloat(item.Profit) > 0 ? 'positive' : parseFloat(item.Profit) < 0 ? 'negative' : '')"
-        >{{ item.Profit }}</span>
-      </template>
-      <template v-slot:item.Perf="{ item }">
-        <span
-          :class="(parseFloat(item.Perf) > 0 ? 'positive' : parseFloat(item.Perf) < 0 ? 'negative' : '')"
-        >{{ item.Perf }}%</span>
-      </template>
-      <template v-slot:item.action="{ item }">
-        <div
-          v-show="menuShow"
-          class="sidemenu_actions"
-          :dark="lightSwitch == true"
-          :style="{ background: cardbackground }"
-          :id="`pl_${item.id}`"
-          @mouseover="menuLogsShow(item)"
-          @mouseleave="menuLogsHide(item)"
-        >
-          <v-btn
-            small
-            class="caption btn_sidemenu"
-            @click.stop="showEditForm=true"
-            v-on:click="details(item.action, 'details')"
-            text
-          >Details</v-btn>
-          <v-btn
-            small
-            class="caption btn_sidemenu"
-            v-on:click="details(item.action, 'edit')"
-            @click.stop="showEditForm=true"
-            text
-          >Edit</v-btn>
-          <v-btn small class="caption btn_sidemenu" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
-        </div>
-        <v-icon small class="mr-2" @mouseover="menuLogsShow(item)">mdi-dots-horizontal</v-icon>
-      </template>
+    >  
+            <template v-slot:item.stock_id="{ item }">
+              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
+            </template>
+            <template v-slot:item.Position="{ item }">
+              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.Position }}</span>
+            </template>
+            <template v-slot:item.AvgPrice="{ item }">
+              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.AvgPrice }}</span>
+            </template>
+            <template v-slot:item.TotalCost="{ item }">
+              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.TotalCost }}</span>
+            </template>
+            <template v-slot:item.MarketValue="{ item }" >
+              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.MarketValue }}</span>
+            </template>
+            <template v-slot:item.Profit="{ item }">
+              <span
+                :class="(parseFloat(item.Profit) > 0 ? 'positive' : parseFloat(item.Profit) < 0 ? 'negative' : '')"
+              >{{ item.Profit }}</span>
+            </template>
+            <template v-slot:item.Perf="{ item }">
+              <span
+                :class="(parseFloat(item.Perf) > 0 ? 'positive' : parseFloat(item.Perf) < 0 ? 'negative' : '')"
+              >{{ item.Perf }}%</span>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <div
+                v-show="menuShow"
+                class="sidemenu_actions"
+                :dark="lightSwitch == true"
+                :style="{ background: cardbackground }"
+                :id="`pl_${item.id}`"
+                @mouseover="menuLogsShow(item)"
+                @mouseleave="menuLogsHide(item)"
+              >
+                <v-btn
+                  small
+                  class="caption btn_sidemenu"
+                  @click.stop="showEditForm=true"
+                  v-on:click="details(item.action, 'details')"
+                  text
+                >Details</v-btn>
+                <v-btn
+                  small
+                  class="caption btn_sidemenu"
+                  v-on:click="details(item.action, 'edit')"
+                  @click.stop="showEditForm=true"
+                  text
+                >Edit</v-btn>
+                <v-btn small class="caption btn_sidemenu" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
+              </div>
+              <v-icon small class="mr-2" @mouseover="menuLogsShow(item)">mdi-dots-horizontal</v-icon>
+            </template>    
     </v-data-table>
+
+
     <v-row>
       <v-col
         style="font-size: 12px;"
@@ -105,28 +108,7 @@
         >{{ this.addcomma(this.totalPerf) }}%</span>
       </v-col>
     </v-row>
-    <!-- <v-card class="d-flex justify-space-between align-center my-5" color="transparent" elevation="0">
-            <v-card color="transparent" class="justify-center" elevation="0">
-                  <v-card-title class="white--text caption pa-0"><span>Show Rows</span>
-                  <v-spacer></v-spacer>
-                  <v-text-field
-                    :value="itemsPerPage"
-                    type="number"
-                    min="5"
-                    max="10"
-                    @input="itemsPerPage = parseInt($event, 10)"
-                    dark
-                    class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
-                    color="success"
-                    dense
-                  ></v-text-field>
-                  <span class="pl-1">of {{ portfolioLogs.length }}</span>
-                  </v-card-title>
-                </v-card>
-                <v-card color="transparent" elevation="0">
-              <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
-            </v-card>
-    </v-card>-->
+    
     <v-dialog
       v-model="showEditForm"
       max-width="290"
@@ -256,6 +238,8 @@ export default {
       portfolioLogs: [],
       openposition: [],
       stockSym: [],
+      portfolioLogsrealtime: [],
+      realtime: false,
       items: [{ title: "Note" }, { title: "Delete" }],
       EnterTradeModal: false,
       trade_modal: false,
@@ -282,6 +266,7 @@ export default {
       dayprior: 0,
       date: new Date().toISOString().substr(0, 10),
       streamTrigger: '',
+      filtered: '',
     };
   },
   components: {
@@ -299,10 +284,8 @@ export default {
     EnterTradeModal: function() {
       this.trade_modal = this.EnterTradeModal;
     },
-    streamTrigger: function(){
-      console.log('Stream-Symbol: '+ this.streamTrigger);
-    },
-    
+       
+
   },
   methods: {
     ...mapActions({
@@ -324,17 +307,16 @@ export default {
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
           this.portfolioLogs = result.data.open;
-          //console.log('Port-', result);
+          console.log('Port-', result);
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.openposition[i] = this.portfolioLogs[i].stock_id;
-
             const params = {
               "symbol-id": this.portfolioLogs[i].stock_id
             };
-
-            this.$api.journal.portfolio.history(params).then(
+            this.$api.chart.stocks.history(params).then(
+            //this.$api.journal.portfolio.history(params).then(
               function(result) {
-                this.portfolioLogs[i].stock_id = result.data.symbol;
+                this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol; //result.data.symbol;
                 this.stockSym[i] = this.portfolioLogs[i].stock_id;
                 let buyResult =
                   this.portfolioLogs[i].position *
@@ -392,8 +374,7 @@ export default {
           this.getDayChange();
         }.bind(this)
       );
-      //this.savetoLocal();
-      //this.initSSE();
+      
     },
     deleteLive: function(item) {
       //TODO: use repo
@@ -464,11 +445,13 @@ export default {
     getDayChange() {
       let currentProfitLoss = 0;
       let priorProfitLoss = 0;
-      //let d = new Date(),
-       // dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
+      //let initDchange = true;
+      let d = new Date();
+      let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
 
       for (let index = 0; index < this.portfolioLogs.length; index++) {
         let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
+        //let initDchange = (dformat != pdate ? false : true);
 
         const params = {
           "symbol-id": this.portfolioLogs[index].metas.stock_id,
@@ -495,7 +478,7 @@ export default {
               let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
               priorProfitLoss =
                 parseFloat(priorProfitLoss) + parseFloat(priorprofit);             
-               // this.savetoLocal(this.simulatorPortfolioID,dformat_prior,priorProfitLoss);         
+                     
             }
 
             let currentPrice = result.data.c[0];
@@ -507,18 +490,18 @@ export default {
             currentProfitLoss =
               parseFloat(currentProfitLoss) + parseFloat(currentprofit);
 
-            
-            let daychange =
-              parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
+            /*if(initDchange){
+              let daychange = 0;
+              let daychangeperf = 0;
+            }else{*/
+              let daychange =
+                parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
+              let daychangeperf = (daychange / priorProfitLoss) * 100;
+            //}
 
             this.$emit("DayChange", daychange);
-            let daychangeperf = (daychange / priorProfitLoss) * 100;
             this.$emit("DayChangePerc", daychangeperf);
 
-            //console.log("Prior ProfitLoss -" + priorProfitLoss);
-            //console.log("Currrent ProfitLoss -" + currentProfitLoss);
-            //console.log("DAY CAHNGE -" + daychange);
-            //console.log("DAY CAHNGE PERC -" + daychangeperf);
           }.bind(this)
         );
       }
@@ -537,26 +520,7 @@ export default {
       let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
       return buyResult - dall;
     },
-
-    savetoLocal(id,date,prior){
-
-         var daypriorObject = { 'pID': id, 'date': date, 'Prior': prior };
-        //console.log('typeof testObject: ' + typeof daypriorObject);
-        //console.log('testObject properties:');
-        //for (var prop in daypriorObject) {
-           // console.log('  ' + prop + ': ' + daypriorObject[prop]);
-       // }
-
-        // Put the object into storage
-        localStorage.setItem('daypriorObject', JSON.stringify(daypriorObject));
-
-        // Retrieve the object from storage
-        var retrievedObject = localStorage.getItem('daypriorObject');
-
-        console.log('typeof retrievedObject: ' + typeof retrievedObject);
-        console.log('Value of retrievedObject: ', JSON.parse(retrievedObject));
-    },
-
+     
     initSSE: function() {
       if (this.sse !== null) {
         this.sse.close();
@@ -564,12 +528,9 @@ export default {
       }
 
       this.sse = new EventSource(
+        //"http://localhost:8021/sse/market-data/pse/all"
         "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
       );
-
-      //   this.sse = new EventSource(
-      //     "http://localhost:8021/sse?stream=market-data"
-      //   );
 
       this.sse.onopen = function() {
         console.log("open sse"); //
@@ -584,20 +545,65 @@ export default {
       
       this.sse.addEventListener("trade",function(e) {
            const data = JSON.parse(e.data);  
-           that.trigger(data.sym);
-
+           //that.trigger(data.sym);
+          for(let i =0; i< that.stockSym.length; i++){
+            if(that.stockSym[i] == data.sym){
+                that.trigger(data.sym, data.exp);
+            }
+          }
       });
      
     },
-    trigger: function(symbol){
-      for(let i =0; i< this.stockSym.length; i++){
-          if(this.stockSym[i] == symbol){
-            console.log('Symbol - ' + symbol);
-            this.getOpenPositions();
-            
-          }
-      }
+ 
+    trigger: function(symbol, lprice){
+              
+        let profit = 0;
+        let perf = 0;
+        let tploss = 0;
+        let tplossperf = 0;
+        let tmvalue = 0;
+       
+        for (let i = 0; i < this.portfolioLogs.length; i++) {
+            if(this.portfolioLogs[i].stock_id == symbol){
+                
+                let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
+                let mvalue = this.fees(buyResult);
+                let tcost = this.portfolioLogs[i].position *
+                            this.portfolioLogs[i].average_price; //this.portfolioLogs[i].TotalCost;
+                profit = parseFloat(mvalue) - parseFloat(tcost);
+                perf = (profit / tcost) * 100;
+
+                //console.log('Market Value - ' + mvalue);
+                this.filtered = mvalue;
+                this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
+                this.portfolioLogs[i].Profit = this.addcomma(profit);
+                this.portfolioLogs[i].Perf = this.addcomma(perf);
+                tmvalue = parseFloat(tmvalue) + parseFloat(mvalue);   
+                //console.log('Market Value - ' + this.portfolioLogs[i].MarketValue);
+                let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
+                this.portfolioLogs.splice(i, 1, updatedItem);
+                //this.realtime = true;
+            }else{
+                profit = parseFloat(this.portfolioLogs[i].Profit);
+                perf = parseFloat(this.portfolioLogs[i].Perf);
+                tmvalue = parseFloat(tmvalue) + parseFloat(this.portfolioLogs[i].MarketValue);
+                
+            }
+                //console.log('PROFIT' + i + ' - ' + parseFloat(profit));
+                tploss = parseFloat(tploss) + parseFloat(profit);
+                //console.log( tploss + ' + ' + profit + ' = ' + tploss);
+                tplossperf = parseFloat(tplossperf) + parseFloat(perf);  
+                //console.log('TPLOSS' + i + ' - ' + tploss);
+
+                this.totalProfitLoss = tploss;
+                this.totalPerf = tplossperf;   
+                this.totalmvalue = tmvalue;
+                this.$emit("totalUnrealized", this.totalProfitLoss);
+                this.$emit("totalMarketValue", this.totalmvalue.toFixed(2)); 
+        } 
+       
     },
+
   },
   computed: {
     ...mapGetters({
@@ -607,7 +613,7 @@ export default {
       lightSwitch: "global/getLightSwitch",
       stock: "chart/stock"
     }),
-
+    
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
@@ -616,12 +622,18 @@ export default {
     },
     fontcolor2: function() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
-    }
+    },
+   
   },
+  created (){
+      
+  }, 
   mounted() {
     if (this.simulatorPortfolioID != 0 ? this.getOpenPositions() : "");
     this.initSSE();
-  }
+    
+  },
+    
 };
 </script>
 <style scoped>
