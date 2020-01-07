@@ -273,7 +273,8 @@ export default {
   computed: {
     ...mapGetters({
       userWatchedStocks: "watchers/getUserWatchedStocks",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      loginModalState: "login/getLoginModalState"
     }),
     show: {
       //show dialog toggle
@@ -287,6 +288,14 @@ export default {
     passwordConfirmationRule() {
       return () =>
         this.password === this.confirmPassword || "Password must match";
+    }
+  },
+  watch: {
+    loginModalState: function() {
+      if (this.loginModalState) {
+        this.show = true;
+        this.showAlert(true, "Successfully Verified User");
+      }
     }
   },
   mounted() {

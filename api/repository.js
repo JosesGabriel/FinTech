@@ -7,6 +7,7 @@ export default $axios => resource => ({
     return $axios.$get(`${resource}`);
   },
   show(id) {
+    $axios.setToken(token);
     return $axios.$get(`${resource}/${id}`);
   },
 

@@ -14,6 +14,7 @@
   </v-card>
 </template>
 <script>
+import { mapActions } from "vuex";
 export default {
   head() {
     return {
@@ -50,7 +51,6 @@ export default {
     };
   },
   layout: "main",
-
   middleware: ["auth"],
   components: {},
   data() {
@@ -59,9 +59,18 @@ export default {
       postImage: "https://lyduz.com/png_logo.png"
     };
   },
+  mounted: function() {
+    this.retrieveParams();
+  },
   methods: {
-    toggle: function() {
-      this.isOpen = !this.isOpen;
+    ...mapActions({
+      setLoginModalState: "login/setLoginModalState"
+    }),
+    retrieveParams() {
+      let param = this.$route.fullPath;
+      if (param.includes("redirected=true")) {
+        this.setLoginModalState(true);
+      }
     }
   }
 };

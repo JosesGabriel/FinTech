@@ -1,7 +1,12 @@
 <template>
   <v-container dark>
     <v-row class="mb-5" no-gutters>
-      hahaha
+      <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
+        {{ alertContent }}
+        <v-btn color="white" text @click="alert = false">
+          Close
+        </v-btn>
+      </v-snackbar>
     </v-row>
   </v-container>
 </template>
@@ -12,7 +17,11 @@ export default {
   components: {},
   auth: false,
   data() {
-    return {};
+    return {
+      alert: false,
+      alertState: "",
+      alertContent: ""
+    };
   },
   mounted: function() {
     this.retrieveParams();
@@ -23,7 +32,9 @@ export default {
       this.$axios
         .$get(process.env.API_URL + this.$route.fullPath.substr(param))
         .then(response => {
-          console.log(response);
+          if (response.success) {
+            this.$router.push("login?redirected=true");
+          }
         });
     }
   }
