@@ -7,7 +7,9 @@
     <v-row class="mb-5" no-gutters>
       <v-col class="hidden-xs-only px-3" sm="2" md="2" lg="3"> </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
-        <Newsfeed :postid="$route.params.id" @postData="parsePost" />
+        <v-dialog v-model="newsFeedModal" persistent max-width="520">
+          <Newsfeed :postid="$route.params.id" @postData="parsePost" />
+        </v-dialog>
       </v-col>
       <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3"> </v-col>
     </v-row>
@@ -17,6 +19,7 @@
 import { mapGetters } from "vuex";
 import axios from "axios"; //temporary. 'this' keyword is not accessible on asyncData method
 import Newsfeed from "~/components/social/Newsfeed";
+
 export default {
   components: {
     Newsfeed
@@ -24,7 +27,8 @@ export default {
   data() {
     return {
       post: "",
-      postImage: "https://lyduz.com/png_logo.png"
+      postImage: "https://lyduz.com/png_logo.png",
+      newsFeedModal: true
     };
   },
 

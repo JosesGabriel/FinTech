@@ -9,6 +9,8 @@ export default () => ({
   market_code: null,
   index: true,
 
+  allstocks: [],
+
   stock: {
     average: 0,
     change: 0,

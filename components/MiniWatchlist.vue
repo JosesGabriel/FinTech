@@ -46,10 +46,12 @@
           </div>
         </v-list-item>
         <router-link
+          v-if="watchListObject.length == 0"
+          class="d-block mWatchlist__text--noData px-5 success--text overline no-transform"
           to="/watchlist"
-          class="caption"
-          style="text-decoration: none;"
+          >Add symbols to your watchlist.</router-link
         >
+        <router-link to="/watchlist" class="caption no-transform">
           Show more
         </router-link>
       </v-list>
@@ -233,6 +235,9 @@ export default {
       this.$api.watchlist.watchlists.index().then(response => {
         this.watchListObject = response.data.watchlist;
         //If watchlist is more than 5, pop excess data from array
+        if (this.watchListObject.length == 0) {
+          this.watchCardLoading = false;
+        }
         if (this.watchListObject.length > 5) {
           let popAmount = this.watchListObject.length - 5;
           for (let i = 0; i < popAmount; i++) this.watchListObject.pop();
@@ -308,14 +313,8 @@ export default {
 };
 </script>
 <style>
-.watchlistCard__success--text,
-.watchlistCard__header--percent {
-  color: #03dac5;
-}
-.watchlistCard__error--text {
-  color: #f44336;
-}
-.watchlistCard__text--gray {
-  color: gray;
+.mWatchlist__text--noData {
+  padding-top: 45px;
+  padding-bottom: 45px;
 }
 </style>

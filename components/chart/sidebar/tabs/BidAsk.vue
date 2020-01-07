@@ -138,7 +138,7 @@ export default {
     ...mapActions({
       setBidask: "chart/setBidask"
     }),
-    formatItem(item, key = null) {
+    formatItem: function(item, key = null) {
       if (item == undefined) return;
       let result = null;
       switch (key) {
@@ -157,35 +157,29 @@ export default {
       }
       return result;
     },
-    initBidask: function(symid) {
+    initBidask: async function(symid) {
       this.loading = "#03dac5";
-      this.$api.chart.stocks
-        .bidask({
+      //console.log("bidask");
+      try {
+        const response = await this.$api.chart.stocks.bidask({
           "symbol-id": symid,
           "filter-by-last": true,
           limit: 10
-        })
-        .then(response => {
-          const asks = Object.values(response.data.asks);
-          const bids = Object.values(response.data.bids);
-          const limit = Math.max(asks.length, bids.length);
-          const bidask = {
-            asks,
-            bids,
-            limit
-          };
-          //console.log("bidask");
-          //console.log(bidask);
-          this.setBidask(bidask);
-          this.setBid(bids);
-          this.setAsk(asks);
-        })
-        .catch(error => {
-          //console.log(error);
-        })
-        .finally(() => {
-          this.loading = null;
         });
+        const asks = Object.values(response.data.asks);
+        const bids = Object.values(response.data.bids);
+        const limit = Math.max(asks.length, bids.length);
+        const bidask = {
+          asks,
+          bids,
+          limit
+        };
+        this.setBidask(bidask);
+       // console.log("bidask response", bidask);
+      } catch (error) {
+        //console.log("bidask error", error);
+      }
+      this.loading = null;
     }
   },
   mounted() {

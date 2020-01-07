@@ -132,7 +132,6 @@
             dark
             v-on:change="getOpenPosition"
             background-color="#03DAC5"
-            label="Select Portfolio"
             dense
             solo
           >
@@ -228,13 +227,15 @@ export default {
       currentchange: 0,
       priorchange: 0,
       item: {},
-      state: false
+      state: false,
+      port_capital: 0,
     };
   },
   created() {},
   computed: {
     ...mapGetters({
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+      RenderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
     cardbackground: function() {
@@ -264,7 +265,9 @@ export default {
       this.equity = 0;
       this.port_total = 0;
     },
-
+    RenderPortfolioKey: function(){
+      this.getPorfolio();
+    },
     unrealized: function() {
       this.getTradeLogs();
     }
@@ -274,6 +277,10 @@ export default {
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
     }),
     getOpenPosition(selectObj) {
+      //let fundid = selectObj.split('|')[0];
+      //this.port_capital = selectObj.split('|')[1];
+      console.log('ID - ' + selectObj);
+       //console.log('Capital - ' + this.port_capital);
       this.setSimulatorPortfolioID(selectObj);
       this.default_port = selectObj;
       this.state = false;
@@ -354,53 +361,56 @@ export default {
         }
       }
       return min;
+    },
+    getPorfolio(){
+        this.$api.journal.portfolio.portfolio().then(
+          function(result) {
+            console.log('Portfolio', result);
+            let defaultPort = false;
+            for (let i = 0; i < result.data.logs.length; i++) {
+              if (
+                result.data.logs[i].type == "virtual"
+              ) {
+
+                //let id_bal = result.data.logs[i].id + '|' + result.data.logs[i].capital;
+                let portfolio_params = {
+                  name: result.data.logs[i].name,
+                  id: result.data.logs[i].id,
+                  capital: result.data.logs[i].capital
+                };
+                this.portfolio.push(portfolio_params);
+                if (result.data.logs[i].name == "My Virtual Portfolio") {
+                  this.setSimulatorPortfolioID(result.data.logs[i].id);
+                  this.default_port = result.data.logs[i].id;
+                  this.port_capital = result.data.logs[i].capital;
+                  defaultPort = true;
+                }
+              }
+            }
+            if (!defaultPort) {
+              const createportfolioparams = {
+                currency_code: "PHP",
+                name: "My Virtual Portfolio",
+                description: "My Virtual Portfolio",
+                type: "virtual",
+                balance: 100000
+              };
+              this.$api.journal.portfolio
+                .createportfolio(createportfolioparams)
+                .then(
+                  function(result) {
+                    if (result.success) {
+                      //TODO: snack bar
+                    }
+                  }.bind(this)
+                );
+            }
+          }.bind(this)
+        );
     }
   },
   mounted() {
-    const openparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-      };
-    this.$api.journal.portfolio.portfolio(openparams).then(
-      function(result) {
-        //console.log('Portfolio', result);
-        let defaultPort = false;
-        for (let i = 0; i < result.data.logs.length; i++) {
-          if (
-            result.data.logs[i].type == "virtual" &&
-            result.data.logs[i].name != "Default Virtual Portfolio"
-          ) {
-            let portfolio_params = {
-              name: result.data.logs[i].name,
-              id: result.data.logs[i].id
-            };
-            this.portfolio.push(portfolio_params);
-            if (result.data.logs[i].name == "My Virtual Portfolio") {
-              this.setSimulatorPortfolioID(result.data.logs[i].id);
-              this.default_port = result.data.logs[i].id;
-              defaultPort = true;
-            }
-          }
-        }
-        if (!defaultPort) {
-          const createportfolioparams = {
-            currency_code: "PHP",
-            name: "My Virtual Portfolio",
-            description: "My Virtual Portfolio",
-            type: "virtual",
-            balance: 100000
-          };
-          this.$api.journal.portfolio
-            .createportfolio(createportfolioparams)
-            .then(
-              function(result) {
-                if (result.success) {
-                  //TODO: snack bar
-                }
-              }.bind(this)
-            );
-        }
-      }.bind(this)
-    );
+      this.getPorfolio();
   },
   components: {
     VirtualLivePortfolio,
@@ -416,6 +426,7 @@ export default {
 }
 .v-menu__content > .v-select-list > .v-list {
   padding: unset;
+  border: 1px solid rgb(23, 36, 49);
 }
 .select_portfolio > .v-input__control {
   padding-top: 16px !important;
@@ -442,8 +453,11 @@ export default {
   > .v-select__selections
   > .v-select__selection--comma {
   color: black;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif !important;
+  font-style: normal;
+  line-height: 106.5%;
 }
 
 .select_portfolio > .v-input__control > .v-input__slot > .v-select__slot {

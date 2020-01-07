@@ -18,7 +18,7 @@
                 <v-img
                   class="avatar__border"
                   :src="
-                    $auth.loggedIn
+                    $auth.user.data.user.profile_image
                       ? $auth.user.data.user.profile_image
                       : 'default.png'
                   "

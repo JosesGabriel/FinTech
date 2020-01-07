@@ -226,7 +226,7 @@
   </v-dialog>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: {
     value: Boolean
@@ -273,7 +273,8 @@ export default {
   computed: {
     ...mapGetters({
       userWatchedStocks: "watchers/getUserWatchedStocks",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      loginModalState: "login/getLoginModalState"
     }),
     show: {
       //show dialog toggle
@@ -289,10 +290,23 @@ export default {
         this.password === this.confirmPassword || "Password must match";
     }
   },
+  watch: {
+    loginModalState: function() {
+      if (this.loginModalState) {
+        this.show = true;
+        this.showAlert(true, "Successfully Verified User");
+      } else if (!this.loginModalState) {
+        this.show = false;
+      }
+    }
+  },
   mounted() {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
+    ...mapActions({
+      setLoginModalState: "login/setLoginModalState"
+    }),
     clearFields() {
       (this.firstName = ""),
         (this.lastName = ""),
@@ -351,6 +365,7 @@ export default {
         });
         this.card__loader = false;
         this.showAlert(true, "Successfully Logged In");
+        this.setLoginModalState(false);
       } catch (error) {
         this.card__loader = false;
         this.showAlert(false, "Invalid Credentials");

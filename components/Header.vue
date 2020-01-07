@@ -49,6 +49,7 @@
       </router-link>
       <a class="social__router">
         <v-btn
+          ref="accountBtn"
           class="header__button"
           text
           @click="

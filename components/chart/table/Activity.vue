@@ -26,52 +26,60 @@
               Position
             </v-row>
             <v-row class="mt-1 mb-1">
-              <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
-                1,000.00
+              <v-col md="12" class="text-right pb-0 pl-0 pr-3">
+                {{ open.position | numeral("0,0.00") }}
               </v-col>
             </v-row>
           </v-col>
 
           <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
-              Ave. Price
+              Ave. Price (<span class="caption">PHP</span>)
             </v-row>
             <v-row class="mt-1 mb-1">
               <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-                <span class="overline">PHP</span>16.04
+                {{ open.average_price | numeral("0,0.00") }}
               </v-col>
             </v-row>
           </v-col>
 
           <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
-              Total Cost
+              Total Cost (<span class="caption">PHP</span>)
             </v-row>
             <v-row class="mt-1 mb-1">
               <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-                <span class="overline">PHP</span>16,047.20
+                {{ open.total_cost | numeral("0,0.00") }}
               </v-col>
             </v-row>
           </v-col>
 
           <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
-              Market Value
+              Market Value (<span class="caption">PHP</span>)
             </v-row>
             <v-row class="mt-1 mb-1">
               <v-col md="12" class="text-right pb-0 pl-0 pr-3">
-                <span class="overline">PHP</span>200,000.00
+                {{ open.market_value | numeral("0,0.00") }}
               </v-col>
             </v-row>
           </v-col>
 
           <v-col class="mr-12 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
-              Profit
+              Profit (<span class="caption">PHP</span>)
             </v-row>
             <v-row class="mt-1 mb-1">
-              <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
-                <span class="overline">PHP</span>661.90
+              <v-col
+                md="12"
+                class="text-right pb-0 pl-0 pr-3"
+                :class="[
+                  { increase: changetype(open.profit_loss) == 1 },
+                  { decrease: changetype(open.profit_loss) == 2 },
+                  { neutral: changetype(open.profit_loss) == 0 }
+                ]"
+              >
+                {{ open.profit_loss | numeral("0.00a") }}
               </v-col>
             </v-row>
           </v-col>
@@ -81,8 +89,16 @@
               Perf. (%)
             </v-row>
             <v-row class="mt-1 mb-1">
-              <v-col md="12" class="text-right pb-0 pl-0 pr-3 positive">
-                4.12
+              <v-col
+                md="12"
+                class="text-right pb-0 pl-0 pr-3"
+                :class="[
+                  { increase: changetype(open.pl_percentage) == 1 },
+                  { decrease: changetype(open.pl_percentage) == 2 },
+                  { neutral: changetype(open.pl_percentage) == 0 }
+                ]"
+              >
+                {{ open.pl_percentage | numeral("0.00a") }}
               </v-col>
             </v-row>
           </v-col>
@@ -109,22 +125,24 @@
         <template v-slot:item="props">
           <tr class="tr_custom">
             <td class="text-left pl-2" style="width:10%">
-              <span>{{ props.item.date }}</span>
+              <span>{{ props.item.meta.date }}</span>
             </td>
             <td class="text-right" style="width:10%">
-              <span>{{ props.item.volume }}</span>
+              <span>{{ props.item.amount }}</span>
             </td>
             <td class="text-right" style="width:13%">
-              <span>{{ props.item.aveprice }}</span>
+              <span>{{
+                props.item.meta.average_price | numeral("0,0.000")
+              }}</span>
             </td>
             <td class="text-right" style="width:13%">
-              <span>{{ props.item.buyvalue }}</span>
+              <span>{{ displayBuyValue(props.item) | numeral("0,0.00") }}</span>
             </td>
             <td class="text-right" style="width:13%">
-              <span>{{ props.item.sellprice }}</span>
+              <span>{{ props.item.meta.sell_price | numeral("0,0.00") }}</span>
             </td>
             <td class="text-right" style="width:13%">
-              <span>{{ props.item.sellvalue }}</span>
+              <span>{{ props.item.total_value | numeral("0,0.00") }}</span>
             </td>
             <td class="text-right" style="width:13%">
               <span
@@ -133,7 +151,7 @@
                   { decrease: props.item.changestatus == 2 },
                   { neutral: props.item.changestatus == 0 }
                 ]"
-                >{{ props.item.profitloss }}</span
+                >{{ displayProfLoss(props.item) | numeral("0,0.00") }}</span
               >
             </td>
             <td class="text-right pr-2" style="width:13%">
@@ -143,7 +161,7 @@
                   { decrease: props.item.changestatus == 2 },
                   { neutral: props.item.changestatus == 0 }
                 ]"
-                >{{ props.item.percentage }}</span
+                >{{ displayPercentage(props.item) | numeral("0,0.00") }}</span
               >
             </td>
           </tr>
@@ -159,6 +177,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      open: [],
       min: "105px",
       max: "calc(100vh - 295px)",
       headers: [
@@ -205,444 +224,23 @@ export default {
       ],
       items: [
         {
-          date: "2019-10-22",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-21",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-20",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-19",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-18",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-17",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-16",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-15",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-14",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-14",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-22",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-21",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-20",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-19",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-18",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-17",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-16",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-15",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-14",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-14",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-22",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-21",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-20",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-19",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-18",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-17",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-16",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-15",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-14",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-14",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-22",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-21",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-20",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-19",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-18",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-17",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-16",
-          volume: "8,098",
-          aveprice: "13.41",
-          buyvalue: "108,594.18",
-          sellprice: "2.4",
-          sellvalue: "19,234.90",
-          profitloss: "89,158.89",
-          percentage: "82.%",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-15",
-          volume: "9,590",
-          aveprice: "7.69",
-          buyvalue: "73,747.10",
-          sellprice: "14.11",
-          sellvalue: "135,314.90",
-          profitloss: "-61,597.80",
-          percentage: "-83.49",
-          changestatus: 2
-        },
-        {
-          date: "2019-10-14",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
-        },
-        {
-          date: "2019-10-14",
-          volume: "6,187",
-          aveprice: "7.06",
-          buyvalue: "43,680.22",
-          sellprice: "5.57",
-          sellvalue: "34,461.59",
-          profitloss: "9,218.63",
-          percentage: "21.10",
-          changestatus: 1
+          id: null,
+          transactionable_id: null,
+          transactionable_type: null,
+          action: null,
+          amount: null,
+          total_value: null,
+          meta: {
+            strategy: null,
+            average_price: null,
+            plan: null,
+            emotion: null,
+            notes: null,
+            date: null,
+            stock_id: null,
+            sell_price: null,
+            user_stock: null
+          }
         }
       ]
     };
@@ -665,9 +263,10 @@ export default {
     }
   },
   watch: {
-    symbolid(value) {
+    symbolid(symbolid) {
       // console.log("symbols");
       // console.log(value);
+      this.initActivity(symbolid);
     },
     fullscreen(value) {
       // console.log("fullscreen");
@@ -683,34 +282,57 @@ export default {
       }
     }
   },
+  mounted() {
+    this.initActivity(this.symbolid);
+  },
   methods: {
     shareActivity: function() {
       console.log("share");
+    },
+    initActivity: function(symid) {
+      this.$api.journal.portfolio
+        .open({
+          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+          fund: "real",
+          stock_id: symid
+        })
+        .then(response => {
+          this.open = response.data.open;
+        });
+
+      this.$api.journal.portfolio
+        .tradelogs({
+          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+          fund: "real",
+          stock: symid
+        })
+        .then(response => {
+          console.log("tradelogs");
+          this.items = response.data.logs;
+          console.log(this.items);
+        });
+    },
+    changetype: function(value) {
+      if (value > 0) {
+        return 1;
+      } else if (value < 0) {
+        return 2;
+      } else {
+        return 0;
+      }
+    },
+    displayBuyValue: function(item) {
+      return item.meta.average_price * item.amount;
+    },
+    displayProfLoss: function(item) {
+      const bv = item.meta.average_price * item.amount;
+      return item.total_value - bv;
+    },
+    displayPercentage: function(item) {
+      const bv = item.meta.average_price * item.amount;
+      const pl = item.total_value - bv;
+      return (pl / bv) * 100;
     }
-  },
-  mounted() {
-    // console.log(this.symbolid);
-
-    this.$api.journal.portfolio
-      .open({
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        fund: "real"
-      })
-      .then(response => {
-        //  console.log("open real funds");
-        //  console.log(response);
-      });
-
-    this.$api.journal.portfolio
-      .tradelogs({
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
-        fund: "75396425114062848",
-        stock: "29235363423715328"
-      })
-      .then(response => {
-        //  console.log("tradelogs real funds");
-        //  console.log(response);
-      });
   }
 };
 </script>
