@@ -37,7 +37,7 @@ export default {
             lossersArray: [],
             series: [{
                 name: 'Lossers',
-                data: [ ,  ,  ,  ,  ,  ,  ]
+                data: [ 0,  0,  0,  0,  0,  0,  0]
             }],
             chartOptions: {
                 plotOptions: {
@@ -169,10 +169,10 @@ export default {
         getTopLossers() {
             if(this.journalCharts != null){
             
-                const objLossers = this.journalCharts.meta.top_stocks
+                const objLossers = this.journalCharts.data.top_stocks
                 const lossersArray = []
                 const negativeArr = []
-                let lastValueArray = [, , , , , , ]
+                let lastValueArray = [ 0, 0, 0, 0, 0, 0, 0]
                 let lastSymbolArray = [' ', ' ', ' ', ' ', ' ', ' ', ' ']
                 let filteredStocks = null
 

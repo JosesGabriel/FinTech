@@ -1,0 +1,30 @@
+<template>
+  <v-container class="socialWall__container" dark>
+    <ProfileCover />
+
+    <v-row no-gutters>
+      <v-col cols="12">
+        <ProfileTimeline />
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+<script>
+import ProfileCover from "~/components/profile/ProfileCover";
+import ProfileTimeline from "~/components/profile/ProfileTimeline";
+
+export default {
+  layout: "main",
+  components: {
+    ProfileCover,
+    ProfileTimeline
+  }
+};
+</script>
+
+<style scoped>
+.socialWall__container {
+  max-width: 1080px;
+  margin-top: 40px;
+}
+</style>

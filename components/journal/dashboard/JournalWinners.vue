@@ -161,13 +161,17 @@ export default {
             }
         }
     },
+    mounted() {
+        this.getTopWinners();
+        this.lightSwitcher();
+    },
     methods: {
         getTopWinners() {
             if(this.journalCharts != null){ 
-                const objLossers = this.journalCharts.meta.top_stocks
+                const objLossers = this.journalCharts.data.top_stocks
                 const winnersArray = []
                 const positiveArr = []
-                let lastValueArray = [, , , , , , ]
+                let lastValueArray = [0, 0, 0, 0, 0, 0, 0]
                 let lastSymbolArray = [' ', ' ', ' ', ' ', ' ', ' ', ' ']
                 let filteredStocks = null
 
@@ -235,12 +239,11 @@ export default {
             }
         }
     },
-    mounted() {
-        this.getTopWinners();
-        this.lightSwitcher();
-    },
     watch: {
         journalCharts: function() {
+            this.getTopWinners();
+        },
+        defaultPortfolioId: function() {
             this.getTopWinners();
         },
         renderPortfolioKey: function() {

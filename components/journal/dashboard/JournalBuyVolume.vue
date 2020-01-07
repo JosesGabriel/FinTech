@@ -223,6 +223,9 @@ export default {
     journalCharts: function() {
       this.getBuyVolume();
     },
+    defaultPortfolioId: function() {
+      this.getBuyVolume();
+    },
     renderPortfolioKey: function() {
       this.getBuyVolume();
     },
@@ -237,8 +240,8 @@ export default {
   methods: {
     getBuyVolume() {
       if (this.journalCharts != null) {
-        const buyVolumeArray = this.journalCharts.meta.buy_volume;
-        const volumeArray = [, , , , , , , , , , , , , , ,];
+        const buyVolumeArray = this.journalCharts.data.buy_volume;
+        const volumeArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         if (buyVolumeArray.length != 0) {
           for (let i = 0; i < buyVolumeArray.length; i++) {
             buyVolumeArray[i] = parseFloat(buyVolumeArray[i]);

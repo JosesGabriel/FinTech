@@ -179,7 +179,7 @@
       getJournalChart() {
         this.journalchart = []
         if (this.journalCharts != null) {
-          this.tradeStaticsArr = this.journalCharts.meta
+          this.tradeStaticsArr = this.journalCharts.data
           if (this.tradeStaticsArr != undefined || this.tradeStaticsArr.trade_statistics != undefined) {
 
             for (let [key, value] of Object.entries(this.tradeStaticsArr.trade_statistics).slice(0, 2)) {
@@ -201,6 +201,9 @@
     },
     watch: {
       journalCharts: function() {
+        this.getJournalChart();
+      },
+      defaultPortfolioId: function() {
         this.getJournalChart();
       },
       renderPortfolioKey: function() {

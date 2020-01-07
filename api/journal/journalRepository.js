@@ -2,46 +2,52 @@ require("dotenv").config();
 
 const baseURL = process.env.API_URL + "/journal";
 const baseChartURL = process.env.CHART_API_URL + "/stocks";
-const token = process.env.CHART_CLIENT_SECRET;
+let token = localStorage["auth._token.local"];
 
 export default $axios => ({
     portfolio(params) {
         let query = buildParams(params);
+        $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio${query.length > 0 ? "?" + query : ""}`);
     },
     open(openparams) {
         let query = buildParams(openparams);
+        $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio/open${query.length > 0 ? "?" + query : ""}`);
     },
     portfoliofunds(portfoliofundsparams) {
         let query = buildParams(portfoliofundsparams);
+        $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio/funds/${query.length > 0 ? "?" + query : ""}`);
     },
     tradelogs(tradelogsparams) {
         let query = buildParams(tradelogsparams);
+        $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio/logs${query.length > 0 ? "?" + query : ""}`);
     },
     ledger(ledgerparams) {
         let query = buildParams(ledgerparams);
+        $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio/ledger${query.length > 0 ? "?" + query : ""}`);
     },
     snapshot(snapshotparams) {
         let query = buildParams(snapshotparams);
+        $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio/snapshot${query.length > 0 ? "?" + query : ""}`);
     },
-    journalcharts(journalchartsparams) {
-        let query = buildParams(journalchartsparams);
+    journalcharts(params) {
+        let query = buildParams(params);
+        $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio/charts${query.length > 0 ? "?" + query : ""}`);
     },
     equitycurve(equitycurveparams) {
         let query = buildParams(equitycurveparams);
+        $axios.setToken(token);
         return $axios.$get(`${baseURL}/portfolio/equitycurve${query.length > 0 ? "?" + query : ""}`);
     },
     createportfolio(createportfolioparams) {
+        $axios.setToken(token);
         return $axios.$post(`${baseURL}/funds`, createportfolioparams);
-    },
-    recordtrade(recordtradeparams) {
-        return $axios.$post(`${baseURL}/funds/` + recordtradeparams);
     },
     history(historyparams) {
         let query = buildParams(historyparams);
@@ -57,9 +63,59 @@ export default $axios => ({
     edittrade(edittradeparams) {
         return $axios.$post(`${baseURL}/funds/`, edittradeparams);
     },
-    deposit(depositparams) {
-        return $axios.$post(`${baseURL}/funds/`, depositparams);
-    }
+    deposit(portfolio_id, params) {
+        let query = buildParams(params);
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/${portfolio_id}/transactions/deposit${
+            query.length > 0 ? "?" + query : ""
+            }`
+        );
+    },
+    withdraw(portfolio_id, params) {
+        let query = buildParams(params);
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/${portfolio_id}/transactions/withdraw${
+            query.length > 0 ? "?" + query : ""
+            }`
+        );
+    },
+    record(portfolio_id, payload) {
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/${portfolio_id}/register`, payload);
+    },
+    reset(portfolio_id) {
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/${portfolio_id}/reset`);
+    },
+    selldelete(transaction_id) {
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/tradelog/delete/${transaction_id}`);
+    },
+    buydelete(fund_id, stock_id) {
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/${fund_id}/delete/${stock_id}`);
+    },
+    tradesell(portfolio_id, stock, payload) {
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/${portfolio_id}/sell/${stock}`, payload);
+    },
+    tradebuy(portfolio_id, stock, payload) {
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/${portfolio_id}/buy/${stock}`, payload);
+    },
+    tradeedit(fund_id, stock_id, params) {
+        $axios.setToken(token.substr(7), "Bearer");
+        return $axios.$post(
+            `${baseURL}/funds/${fund_id}/update/${stock_id}`, params);
+    },
 });
 
 function buildParams(args) {
@@ -69,13 +125,10 @@ function buildParams(args) {
     let tradelogsparams = "";
     let ledgerparams = "";
     let snapshotparams = "";
-    let journalchartsparams = "";
     let equitycurveparams = "";
     let createportfolioparams = "";
-    let recordtradeparams = "";
     let historyparams = "";
     let listparams = "";
-    let depositparams = "";
     let edittradeparams = "";
     let portfoliofundsparams = "";
     if (args != undefined) {
@@ -86,16 +139,13 @@ function buildParams(args) {
         openparams = bld.join("&");
         tradelogsparams = bld.join("&");
         snapshotparams = bld.join("&");
-        journalchartsparams = bld.join("&");
         equitycurveparams = bld.join("&");
         createportfolioparams = bld.join("&");
-        recordtradeparams = bld.join("&");
         historyparams = bld.join("&");
         listparams = bld.join("&");
-        depositparams = bld.join("&");
         ledgerparams = bld.join("&");
         edittradeparams = bld.join("&");
         portfoliofundsparams = bld.join("&");
     }
-    return params, openparams, tradelogsparams, snapshotparams, journalchartsparams, equitycurveparams, ledgerparams, createportfolioparams, historyparams, depositparams, edittradeparams, portfoliofundsparams, listparams, recordtradeparams;
+    return params, openparams, tradelogsparams, snapshotparams, equitycurveparams, ledgerparams, createportfolioparams, historyparams, edittradeparams, portfoliofundsparams, listparams;
 }

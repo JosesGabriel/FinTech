@@ -65,7 +65,7 @@ export default {
       series: [
         {
           name: "Loss",
-          data: [, , , ,]
+          data: [0, 0, 0, 0, 0]
         }
       ],
       chartOptions: {
@@ -221,9 +221,9 @@ export default {
   methods: {
     getPerformance() {
       if (this.journalCharts != null) {
-        const objPerformance = this.journalCharts.meta.performance;
+        const objPerformance = this.journalCharts.data.performance;
         const performanceArray = [];
-        const lastArray = [, , , ,];
+        const lastArray = [0, 0, 0, 0, 0];
 
         Object.keys(objPerformance).forEach(function(key) {
           performanceArray.push({ value: objPerformance[key], name: key });

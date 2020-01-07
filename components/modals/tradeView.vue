@@ -193,7 +193,12 @@
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
-              <v-btn text class="text-capitalize" :color="fontColor" @click.stop="show = false">Close</v-btn>
+              <v-btn
+                text
+                class="text-capitalize"
+                :color="fontColor"
+                @click.stop="show = false"
+              >Close</v-btn>
               <v-btn
                 color="success ml-1"
                 class="text-capitalize black--text buy"
@@ -386,7 +391,7 @@
               >Confirm</v-btn>
             </v-row>
           </v-stepper-content>
-          
+
           <!-- -----First View of Sell Modal----- -->
           <v-stepper-content step="4" class="pt-2">
             <v-container class="pa-0">
@@ -564,6 +569,7 @@ export default {
           this.notesModel = "";
           this.dateModel = new Date().toISOString().substr(0, 10);
           this.e1 = 1;
+          this.GetSelectStock = null;
           this.portfolioDropdownModel = null;
           this.availableFundsModel = 0;
 
@@ -663,9 +669,10 @@ export default {
       this.YMDModel = [year, month, day].join('-');
     },
     buyListArray() {
+      let portfolio_id = this.defaultPortfolioId;
+      let stock = this.GetSelectStock;
       let totalCost = parseFloat(this.quantityModel) * parseFloat(this.priceModel);
-      let params = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      let payload = {
         position: parseFloat(this.quantityModel),
         stock_price: parseFloat(this.priceModel),
         transaction_meta: {
@@ -676,14 +683,14 @@ export default {
           date: this.dateModel
         }
       };
-      this.$axios
-        .$post("https://dev-api.arbitrage.ph/api/journal/funds/" + this.portfolioDropdownModel + "/buy/" + this.GetSelectStock, params)
+      this.$api.journal.portfolio
+        .tradebuy(portfolio_id, stock, payload)
         .then(response => {
           if (response.success) {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.GetSelectStock = "";
+            this.GetSelectStock = null;
             this.priceModel = "0.00";
             this.quantityModel = "0";
             this.strategyModel = "";
@@ -714,13 +721,12 @@ export default {
         });
     },
     sellListArray: function() {
-      console.log(this.dateModel)
-      console.log(this.YMDModel)
+      let portfolio_id = this.defaultPortfolioId;
+      let stock = this.GetSelectStock;
       let aveprice =
         parseFloat(this.quantitySellModel) /
         parseFloat(this.totalCostSellModel.replace(/,/g, ""));
-      let params = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      let payload = {
         position: parseFloat(this.quantitySellModel),
         stock_price: parseFloat(this.priceSellModel),
         transaction_meta: {
@@ -732,20 +738,14 @@ export default {
           date: this.dateModel
         }
       };
-      this.$axios
-        .$post(
-          "https://dev-api.arbitrage.ph/api/journal/funds/" +
-            this.defaultPortfolioId +
-            "/sell/" +
-            this.GetSelectStock,
-          params
-        )
+      this.$api.journal.portfolio
+        .tradesell(portfolio_id, stock, payload)
         .then(response => {
           if (response.success) {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.GetSelectStock = "";
+            this.GetSelectStock = null;
             this.priceSellModel = "0.00";
             this.quantitySellModel = "0";
             this.dateModel = new Date().toISOString().substr(0, 10);
@@ -877,7 +877,6 @@ export default {
     },
     whereToSave(obj) {
       const portfoliofundsparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: obj
       };
       this.$api.journal.portfolio.portfoliofunds(portfoliofundsparams).then(
@@ -966,19 +965,22 @@ export default {
       }
     },
     dateWatch() {
-      var today = new Date(this.date);
       var tim = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
       var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var dateTime = date + " " + time;
+      var today = new Date(this.date),
+        month = '' + (today.getMonth() + 1),
+        day = '' + today.getDate(),
+        year = today.getFullYear();
+
+      if (month.length < 2) 
+          month = '0' + month;
+      if (day.length < 2) 
+          day = '0' + day;
+
+      var dateTime = [year, month, day].join('-') + " " + time;
       this.dateModel = dateTime;
-      this.YMDModel = date;
+      this.YMDModel = [year, month, day].join('-');
     }
   }
 };
@@ -989,10 +991,12 @@ export default {
 }
 </style>
 <style>
-.data_table-container.v-data-table td, .total_bottom {
+.data_table-container.v-data-table td,
+.total_bottom {
   font-size: 12px !important;
 }
-.data_table-container-dark.v-data-table td, .total_bottom {
+.data_table-container-dark.v-data-table td,
+.total_bottom {
   font-size: 12px !important;
 }
 .stock_selector .v-select__slot .v-label,
@@ -1020,19 +1024,22 @@ export default {
   box-shadow: none;
   background-color: transparent;
 }
-.data_table-container tr td.positive, .data_table-container-dark tr td.positive  {
+.data_table-container tr td.positive,
+.data_table-container-dark tr td.positive {
   color: #03dac5;
 }
-.data_table-container tr td.negative, .data_table-container-dark tr td.negative {
+.data_table-container tr td.negative,
+.data_table-container-dark tr td.negative {
   color: #f44336;
 }
-.data_table-container td.item_position-prop, .data_table-container-dark td.item_position-prop {
+.data_table-container td.item_position-prop,
+.data_table-container-dark td.item_position-prop {
   color: #000;
 }
 .data_table-container-dark td.item_position-prop {
-  color: #B6B6B6;
+  color: #b6b6b6;
 }
-.data_table-container td.item_position-prop  {
+.data_table-container td.item_position-prop {
   color: #535358;
 }
 .buy_selector .v-select__selection--comma {
@@ -1078,9 +1085,10 @@ export default {
   background: #f2f2f2 !important;
 }
 .theme--light.datepicker-container-light .v-picker__title {
-    background: #f2f2f2 !important;
+  background: #f2f2f2 !important;
 }
-.datepicker-container .v-date-picker-title__date, .theme--light.datepicker-container-light .v-date-picker-title__date {
+.datepicker-container .v-date-picker-title__date,
+.theme--light.datepicker-container-light .v-date-picker-title__date {
   color: #03dac5 !important;
 }
 </style>

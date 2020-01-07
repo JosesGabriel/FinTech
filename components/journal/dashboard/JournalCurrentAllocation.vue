@@ -164,9 +164,17 @@ export default {
                   color: "",
                   fontFamily: "'Nunito' !important",
                   formatter: function(value) {
-                    let valuea = value.globals.seriesTotals[0];
-                    let val = (valuea / 1).toFixed(2).replace(".", ".");
-                    return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    const formattedResult = value.globals.seriesTotals.reduce(
+                      (a, b) => {
+                        let result = a + b;
+                        let val = (result / 1).toFixed(2).replace(".", ".");
+                        return parseFloat(val.replace(/,/g, ""));
+                      },
+                      0
+                    );
+                    return formattedResult
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                   }
                 }
               }
@@ -215,7 +223,6 @@ export default {
       this.updateLabels = [];
       if (this.defaultPortfolioId != null) {
         const openparams = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
           fund: this.defaultPortfolioId
         };
         this.$api.journal.portfolio.open(openparams).then(response => {
@@ -280,6 +287,9 @@ export default {
   },
   watch: {
     defaultPortfolioId: function() {
+      this.getAllocations();
+    },
+    renderPortfolioKey: function() {
       this.getAllocations();
     },
     stockList: function() {

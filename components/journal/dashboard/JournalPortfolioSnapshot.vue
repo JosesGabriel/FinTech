@@ -122,7 +122,6 @@ export default {
     getSnapshot() {
       if (this.defaultPortfolioId != null) {
         const snapshotparams = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
           fund: this.defaultPortfolioId
         };
         this.$api.journal.portfolio.snapshot(snapshotparams).then(response => {

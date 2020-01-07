@@ -307,7 +307,6 @@ export default {
       this.totalProfitLossPerf = 0;
 
       const openparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: this.defaultPortfolioId
       };
       this.$api.journal.portfolio.open(openparams).then(
@@ -316,6 +315,7 @@ export default {
           this.setOpenPosition(this.portfolioLogs);
 
           for (let i = 0; i < this.portfolioLogs.length; i++) {
+            this.portfolioLogs[i].fund = this.defaultPortfolioId;
             this.totalProfitLoss = this.totalProfitLoss + parseFloat(this.portfolioLogs[i].profit_loss);
             this.totalProfitLossPerf = this.totalProfitLossPerf + parseFloat(this.portfolioLogs[i].pl_percentage);
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
