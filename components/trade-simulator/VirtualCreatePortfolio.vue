@@ -89,7 +89,7 @@ export default {
     },
     methods: {
         ...mapActions({
-            setRenderPortfolioKey: "journal/setRenderPortfolioKey"
+            setRenderPortfolioKey: "journal/setRenderPortfolioKey",
         }),
         fieldsWatch() {
             if ( this.typePortfolioModel != "" || this.initialCapital != "" || this.namePortfolioModel != "" ) {
