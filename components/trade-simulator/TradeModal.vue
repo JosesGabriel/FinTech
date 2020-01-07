@@ -586,7 +586,8 @@ export default {
               date: dformat
             }
           };
-
+          let token = localStorage["auth._token.local"];
+          this.$axios.setToken(token);
           this.$axios
             .$post(
               process.env.JOURNAL_API_URL +
@@ -612,7 +613,7 @@ export default {
         // if Buy is selected
 
         const buyparams = {
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+         // user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
           position: this.simulatorPositions,
           stock_price: this.cprice,
           transaction_meta: {
@@ -623,7 +624,8 @@ export default {
             date: dformat
           }
         };
-        
+        let token = localStorage["auth._token.local"];
+        this.$axios.setToken(token);
         this.$axios
           .$post(
             process.env.JOURNAL_API_URL +

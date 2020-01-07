@@ -357,10 +357,10 @@ export default {
     }
   },
   mounted() {
-    const openparams = {
+    /*const openparams = {
         user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-      };
-    this.$api.journal.portfolio.portfolio(openparams).then(
+      };*/
+    this.$api.journal.portfolio.portfolio().then(
       function(result) {
         //console.log('Portfolio', result);
         let defaultPort = false;
