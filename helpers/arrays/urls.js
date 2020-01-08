@@ -1,3 +1,4 @@
+// returns a boolean result if url is found in urls, regardless of the exactness of string
 export function IsInArray(urls, url) {
   let isFound;
 
