@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const baseURL = process.env.CHART_API_URL + "/charts";
-const token = localStorage["auth._token.local"];
+const token = process.env.CHART_CLIENT_SECRET;
 
 export default $axios => ({
   history(params) {
