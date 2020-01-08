@@ -1,6 +1,6 @@
 <template>
   <v-container
-    class="socialWall__container"
+    class="page__wrapper"
     :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
     dark
   >
@@ -61,9 +61,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.socialWall__container {
-  max-width: 1080px;
-  margin-top: 40px;
-}
-</style>

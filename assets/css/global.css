@@ -17,6 +17,10 @@
     text-transform: none !important;
     text-decoration: none !important;
 }
+.page__wrapper {
+    max-width: 1080px !important;
+    margin-top: 40px !important;
+}
 .pa-05 {
     padding: 2px !important;
   }
