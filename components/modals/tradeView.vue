@@ -595,10 +595,14 @@ export default {
       return this.lightSwitch == 0 ? "#000000" : "#ffffff";
     },
     fontColorTable: function() {
-      return this.lightSwitch == 0 ? "data_table-container" : "data_table-container-dark";
+      return this.lightSwitch == 0
+        ? "data_table-container"
+        : "data_table-container-dark";
     },
     fontColorDate: function() {
-      return this.lightSwitch == 0 ? "datepicker-container-light" : "datepicker-container";
+      return this.lightSwitch == 0
+        ? "datepicker-container-light"
+        : "datepicker-container";
     }
   },
   watch: {
@@ -648,30 +652,30 @@ export default {
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-      setDefaultPortfolioId: "journal/setDefaultPortfolioId",
+      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
     initPortfolio() {
       var tim = new Date();
-      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time =
+        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
       var today = new Date(this.date),
-        month = '' + (today.getMonth() + 1),
-        day = '' + today.getDate(),
+        month = "" + (today.getMonth() + 1),
+        day = "" + today.getDate(),
         year = today.getFullYear();
 
-      if (month.length < 2) 
-          month = '0' + month;
-      if (day.length < 2) 
-          day = '0' + day;
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
 
-      var dateTime = [year, month, day].join('-') + " " + time;
+      var dateTime = [day, month, year].join("-") + " " + time;
       this.dateModel = dateTime;
-      this.YMDModel = [year, month, day].join('-');
+      this.YMDModel = [day, month, year].join("-");
     },
     buyListArray() {
       let portfolio_id = this.defaultPortfolioId;
       let stock = this.GetSelectStock;
-      let totalCost = parseFloat(this.quantityModel) * parseFloat(this.priceModel);
+      let totalCost =
+        parseFloat(this.quantityModel) * parseFloat(this.priceModel);
       let payload = {
         position: parseFloat(this.quantityModel),
         stock_price: parseFloat(this.priceModel),
@@ -691,16 +695,16 @@ export default {
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
             this.GetSelectStock = null;
-            this.priceModel = "0.00";
-            this.quantityModel = "0";
-            this.strategyModel = "";
-            this.tradeplanModel = "";
-            this.emotionsModel = "";
-            this.notesModel = "";
+            this.priceModel = 0;
+            this.quantityModel = 0;
+            this.strategyModel = null;
+            this.tradeplanModel = null;
+            this.emotionsModel = null;
+            this.notesModel = null;
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
             this.portfolioDropdownModel = null;
-            this.availableFundsModel = 0
+            this.availableFundsModel = 0;
 
             this.cprice = "0.00";
             this.change = "0.00";
@@ -735,7 +739,7 @@ export default {
           plan: this.tradeplanSellModel,
           emotion: this.emotionsSellModel,
           notes: this.notesSellModel,
-          date: this.dateModel
+          date: this.YMDModel
         }
       };
       this.$api.journal.portfolio
@@ -746,8 +750,8 @@ export default {
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
             this.GetSelectStock = null;
-            this.priceSellModel = "0.00";
-            this.quantitySellModel = "0";
+            this.priceSellModel = 0;
+            this.quantitySellModel = 0;
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
 
@@ -780,8 +784,12 @@ export default {
       this.continuesellBtn = true;
     },
     getSellItems() {
-      for(let i = 0; i < this.openPosition.length; i++) {
-        this.openPosition[i] = {...this.openPosition[i], id_str: this.openPosition[i].stock_id, symbol: this.openPosition[i].stock_symbol}
+      for (let i = 0; i < this.openPosition.length; i++) {
+        this.openPosition[i] = {
+          ...this.openPosition[i],
+          id_str: this.openPosition[i].stock_id,
+          symbol: this.openPosition[i].stock_symbol
+        };
       }
     },
     getStockDetails(Obj) {
@@ -821,21 +829,25 @@ export default {
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
           this.priceModel = result.data.last;
-
-          
+          this.priceSellModel = parseFloat(result.data.last);
         }.bind(this)
       );
 
-      if ( this.openPosition != null) {
+      if (this.openPosition != null) {
         for (let i = 0; i < this.openPosition.length; i++) {
           let stockDataList = this.openPosition[i];
 
-          if(stockDataList.stock_id == Obj) {
-            this.priceSellModel = stockDataList.metas.buy_price;
+          if (stockDataList.stock_id == Obj) {
+            // this.priceSellModel = stockDataList.metas.buy_price;
             this.avepriceSell = stockDataList.average_price;
             this.quantitySellModel = stockDataList.position;
             this.AvailableBoardLot = stockDataList.position;
-            if(stockDataList.metas.strategy || stockDataList.metas.plan || stockDataList.metas.emotion || stockDataList.metas.notes) {
+            if (
+              stockDataList.metas.strategy ||
+              stockDataList.metas.plan ||
+              stockDataList.metas.emotion ||
+              stockDataList.metas.notes
+            ) {
               this.strategySellModel = stockDataList.metas.strategy;
               this.tradeplanSellModel = stockDataList.metas.plan;
               this.emotionsSellModel = stockDataList.metas.emotion;
@@ -924,7 +936,9 @@ export default {
           this.continueBuyButtonDisable = true;
           this.totalCostModel = 0;
         } else {
-          let compareNum = parseFloat(this.totalCostModel.replace(/,/g, "")) >= parseFloat(this.availableFundsModel);
+          let compareNum =
+            parseFloat(this.totalCostModel.replace(/,/g, "")) >=
+            parseFloat(this.availableFundsModel);
           if (!compareNum) {
             this.continueBuyButtonDisable = false;
           } else {
@@ -934,7 +948,8 @@ export default {
       }
     },
     sellWatch(newValue) {
-      let sellResult = parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
+      let sellResult =
+        parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
       let dpartcommission = sellResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
       // TAX
@@ -950,13 +965,26 @@ export default {
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      if (this.priceSellModel == "0.00" && this.priceSellModel <= 0 && this.quantitySellModel == "0.00" && this.quantitySellModel <= 0) {
+      if (
+        this.priceSellModel == "0.00" &&
+        this.priceSellModel <= 0 &&
+        this.quantitySellModel == "0.00" &&
+        this.quantitySellModel <= 0
+      ) {
         this.confirmSellButtonDisable = true;
       } else {
-        if(parseFloat(this.quantitySellModel) > parseFloat(this.AvailableBoardLot)) {
+        if (
+          parseFloat(this.quantitySellModel) >
+          parseFloat(this.AvailableBoardLot)
+        ) {
           this.confirmSellButtonDisable = true;
         } else {
-          if (this.priceSellModel == NaN || this.priceSellModel <= 0 || this.quantitySellModel == NaN || this.quantitySellModel <= 0) {
+          if (
+            this.priceSellModel == NaN ||
+            this.priceSellModel <= 0 ||
+            this.quantitySellModel == NaN ||
+            this.quantitySellModel <= 0
+          ) {
             this.confirmSellButtonDisable = true;
           } else {
             this.confirmSellButtonDisable = false;
@@ -966,21 +994,20 @@ export default {
     },
     dateWatch() {
       var tim = new Date();
-      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time =
+        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
       var today = new Date(this.date),
-        month = '' + (today.getMonth() + 1),
-        day = '' + today.getDate(),
+        month = "" + (today.getMonth() + 1),
+        day = "" + today.getDate(),
         year = today.getFullYear();
 
-      if (month.length < 2) 
-          month = '0' + month;
-      if (day.length < 2) 
-          day = '0' + day;
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
 
-      var dateTime = [year, month, day].join('-') + " " + time;
+      var dateTime = [day, month, year].join("-") + " " + time;
       this.dateModel = dateTime;
-      this.YMDModel = [year, month, day].join('-');
+      this.YMDModel = [day, month, year].join("-");
     }
   }
 };

@@ -3,21 +3,16 @@
     <v-card :dark="lightSwitch == true">
       <v-card-title
         class="text-left justify-left pa-3 px-5 success--text subtitle-1"
-        >CREATE PORTFOLIO</v-card-title
-      >
+      >CREATE PORTFOLIO</v-card-title>
       <v-container class="px-8">
-        <v-card-title class="text-left justify-left px-0 body-2"
-          >Enter Portfolio Name</v-card-title
-        >
+        <v-card-title class="text-left justify-left px-0 body-2">Enter Portfolio Name</v-card-title>
         <v-text-field
           v-model="namePortfolioModel"
           color="success"
           :dark="lightSwitch == true"
           class="stock_selector pa-0 pb-5 font-weight-bold body-2"
         ></v-text-field>
-        <v-card-title class="text-left justify-left px-0 body-2"
-          >Initial Capital</v-card-title
-        >
+        <v-card-title class="text-left justify-left px-0 body-2">Initial Capital</v-card-title>
         <v-text-field
           v-model="initialCapitalModel"
           color="success"
@@ -39,14 +34,7 @@
       </v-container>
       <v-card-actions class="pa-3">
         <v-spacer></v-spacer>
-        <v-btn
-          color="white"
-          class="text-capitalize"
-          text
-          light
-          @click.stop="show = false"
-          >Close</v-btn
-        >
+        <v-btn color="white" class="text-capitalize" text light @click.stop="show = false">Close</v-btn>
         <v-btn
           color="#03dac5"
           class="text-capitalize"
@@ -55,8 +43,7 @@
           :disabled="saveButtonDisable"
           @click.stop="show = false"
           @click="createPortfolio()"
-          >Save</v-btn
-        >
+        >Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -84,7 +71,10 @@ export default {
     }
   },
   data: () => ({
-    portfolio: [{type: "Real Portfolio",value: "real"}, {type: "Virtual Portfolio",value: "virtual"}],
+    portfolio: [
+      { type: "Real Portfolio", value: "real" },
+      { type: "Virtual Portfolio", value: "virtual" }
+    ],
     portfolioModel: "",
     saveButtonDisable: true,
     namePortfolioModel: "",
@@ -113,7 +103,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setRenderPortfolioKey: "journal/setRenderPortfolioKey"
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
     fieldsWatch() {
       if (
@@ -135,16 +126,16 @@ export default {
         type: this.typePortfolioModel,
         balance: parseInt(convertedNumbers)
       };
-      this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
-        function(result) {
-          if (result.success) {
+      this.$api.journal.portfolio
+        .createportfolio(createportfolioparams)
+        .then(response => {
+          if (response.success) {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.setDefaultPortfolioId(result.data.fund.id);
+            // this.setDefaultPortfolioId(response.data.fund.id);
           }
-        }.bind(this)
-      );
+        });
     }
   }
 };

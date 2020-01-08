@@ -39,7 +39,7 @@
           :menu-props="{closeOnContentClick: true}"
         >
           <template v-slot:append-item>
-            <v-list-item @click="setPortfolioReal()" class="sumportfolio_real mt-1">
+            <v-list-item @click="setPortfolioReal(item)" class="sumportfolio_real mt-1">
               <v-list-item-content>
                 <v-list-item-title>Sum of Real Portfolio</v-list-item-title>
               </v-list-item-content>
@@ -218,13 +218,13 @@ export default {
         }.bind(this)
       );
     },
-    setPortfolioReal() {
+    setPortfolioReal(item) {
       this.setDefaultPortfolioId("real");
       this.keyCreateCounter = this.renderPortfolioKey;
       this.keyCreateCounter++;
       this.setRenderPortfolioKey(this.keyCreateCounter);
 
-      this.portfolioDropdownModel = "Sum of Real Portfolio"
+      console.log(item)
     },
     setPortfolioVirtual() {
       this.setDefaultPortfolioId("virtual");

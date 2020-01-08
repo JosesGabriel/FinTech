@@ -140,11 +140,12 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
   },
-  mounted() {
-    this.getSnapshot();
-  },
+  mounted() {},
   watch: {
     defaultPortfolioId: function() {
+      this.getSnapshot();
+    },
+    renderPortfolioKey: function() {
       this.getSnapshot();
     },
     renderEditKey: function() {

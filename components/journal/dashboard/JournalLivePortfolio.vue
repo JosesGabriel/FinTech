@@ -56,7 +56,7 @@
        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_symbol }}</span>
       </template>
       <template v-slot:item.position="{ item }">
-       <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.position }}</span>
+       <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
       </template>
       <template v-slot:item.average_price="{ item }">
         <span class="pl-3" :style="{ color: fontcolor2 }">{{ formatPriceAvePrice(item.average_price) }}</span>
