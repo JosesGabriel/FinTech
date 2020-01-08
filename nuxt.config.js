@@ -54,6 +54,7 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '~/plugins/axios',
     { src: "~/plugins/bus", ssr: false },
     { src: "~/plugins/repository", mode: "client", ssr: false },
     { src: "~/plugins/global-method", ssr: true },
