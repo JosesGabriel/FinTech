@@ -32,6 +32,19 @@ export default {
     Sentiment,
     Tabs
   },
+  head() {
+    return {
+      title: this.stock.description,
+      meta: [
+        {
+          hid: this.stock.market_code,
+          name: this.stock.description,
+          content: this.stock.description
+        }
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
+    };
+  },
   data() {
     return {
       counter: 0,
@@ -69,28 +82,25 @@ export default {
       setBidask: "chart/setBidask"
     }),
     tickSoundFavicon: function(change) {
-      //console.log("tickSoundFavicon");
-      //console.log(change);
-
       const beepSound = new Audio("/audio/vk_notification.mp3");
-
-      //   if (change > 0) {
-      //     this.$store.commit("global/SET_FAVICON", "/favicon/arrow_up.ico");
-      //   } else if (change < 0) {
-      //     this.$store.commit("global/SET_FAVICON", "/favicon/arrow_down.ico");
-      //   } else {
-      //     this.$store.commit("global/SET_FAVICON", "/_favicon.ico");
-      //   }
-
       beepSound.play();
 
-      //   setTimeout(
-      //     function() {
-      //       //console.log("set time out");
-      //       this.$store.commit("global/SET_FAVICON", "/_favicon.ico");
-      //     }.bind(this),
-      //     2000
-      //   );
+      if (change > 0) {
+        this.$store.commit(
+          "global/SET_FAVICON",
+          `${process.env.CURRENT_DOMAIN}/favicon/up.ico`
+        );
+      } else if (change < 0) {
+        this.$store.commit(
+          "global/SET_FAVICON",
+          `${process.env.CURRENT_DOMAIN}/favicon/down.ico`
+        );
+      } else {
+        this.$store.commit(
+          "global/SET_FAVICON",
+          `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
+        );
+      }
     },
     initStock: async function(symid) {
       this.loading = "#03dac5";
@@ -103,7 +113,6 @@ export default {
         this.setStock(this.data);
         this.setMarketCode(this.data.market_code);
       } catch (error) {
-        //console.log('error dito');
         //console.log(error);
       }
       this.loading = null;
@@ -114,13 +123,13 @@ export default {
         this.counter = 0;
       }
 
-      this.sse = new EventSource(
-        "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
-      );
-
       //   this.sse = new EventSource(
-      //     "http://localhost:8021/sse/market-data/pse/" + symid
+      //     "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
       //   );
+
+      this.sse = new EventSource(
+        "http://localhost:8021/sse/market-data/pse/" + symid
+      );
 
       this.sse.onopen = function() {
         // console.log("open sse");
@@ -315,55 +324,30 @@ export default {
   },
   watch: {
     symbolid(symid, oldsymid) {
-      //console.log("change");
-      //console.log(symid);
       this.initStock(symid);
       this.initSSE(symid);
     }
   },
   beforeDestroy() {
-    //console.log("before destroy");
+    this.sse.close();
   },
   created() {
-    this.setSymbolID("29235364749115392"); // PSE
-    // if (this.$route.params.id) {
-    //   this.$api.chart.stocks
-    //     .list({
-    //       exchange: "PSE",
-    //       symbol: this.$route.params.id.toUpperCase()
-    //     })
-    //     .then(response => {
-    //       if (parseInt(response.data.id) > 0) {
-    //         this.setSymbolID(response.data.id_str);
-    //       }
-    //     });
-    // } else {
-    //   this.setSymbolID("29235364749115392"); // PSE
-    // }
+    if (this.$route.params.id) {
+      this.$api.chart.stocks
+        .list({
+          exchange: "PSE",
+          symbol: this.$route.params.id.toUpperCase()
+        })
+        .then(response => {
+          if (parseInt(response.data.id) > 0) {
+            this.setSymbolID(response.data.id_str);
+          }
+        });
+    } else {
+      this.setSymbolID("29235364749115392"); // PSE
+    }
   },
   mounted() {
-    //this.$store.commit("global/SET_FAVICON", "/favicon/arrow_up.ico");
-    console.log("open all stock sse");
-    //      "http://localhost:8021/sse/market-data/pse/all"
-    //"https://stream-api.arbitrage.ph/sse/market-data/pse/all"
-    const evtSource = new EventSource(
-      "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
-    );
-
-    evtSource.onopen = function() {
-      // console.log("open sse");
-    };
-
-    evtSource.onerror = function(err) {
-      // console.log("open err");
-      //console.log(err);
-    };
-
-    evtSource.addEventListener("all", function(e) {
-      console.log("all");
-      console.log(e);
-    });
-
     //console.log(this.$route);
     /*this.$api.watchlist.watchlists
       .index()

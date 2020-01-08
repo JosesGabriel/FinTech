@@ -82,7 +82,6 @@ export default {
       stock_change: "chart/stock_change",
       stock_changepercentage: "chart/stock_changepercentage",
       stock_marketcap: "chart/stock_marketcap",
-      favicon: "global/favicon"
     }),
     changetype() {
       let value = this.stock.change;
@@ -96,10 +95,6 @@ export default {
     }
   },
   watch: {
-    stock: function(value) {
-      //console.log("stock");
-      //console.log(value.description);
-    },
     stock_marketcap: function(value) {
       this.updateEffect("stock__marketcap");
     },
@@ -108,22 +103,6 @@ export default {
     },
     stock_change: function(value) {
       this.updateEffect("stock__change");
-      const change = this.stock.change[0];
-      if (change === undefined) return;
-      if (change > 0) {
-        this.$store.commit("global/SET_FAVICON", "/favicon/arrow_up.ico");
-      } else if (change < 0) {
-        this.$store.commit("global/SET_FAVICON", "/favicon/arrow_down.ico");
-      } else {
-        this.$store.commit("global/SET_FAVICON", "/_favicon.ico");
-      }
-      setTimeout(
-        function() {
-          //console.log("set time out");
-          this.$store.commit("global/SET_FAVICON", "/_favicon.ico");
-        }.bind(this),
-        2000
-      );
     },
     stock_changepercentage: function(value) {
       this.updateEffect("stock__changepercentage");
@@ -137,19 +116,6 @@ export default {
         item.style.background = "";
       }, 100);
     }
-  },
-  head() {
-    return {
-      title: this.stock.description,
-      meta: [
-        {
-          hid: this.stock.market_code,
-          name: this.stock.description,
-          content: this.stock.description
-        }
-      ],
-      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
-    };
   }
 };
 </script>

@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 export default () => ({
   //region configs
   lightSwitch: 0,
@@ -6,5 +8,5 @@ export default () => ({
   //region stock data
   stockList: [],
   //endregion stock data
-  favicon: "/favicon/lyduz.ico"
+  favicon: `${process.env.CURRENT_DOMAIN}/lyduz.ico`
 });

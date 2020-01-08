@@ -73,6 +73,7 @@ export default {
   },
   data() {
     return {
+      first_load: true,
       widget: null,
       tvWidget: null,
       chartViewId: 0,
@@ -137,12 +138,23 @@ export default {
       this.loadChart();
     },
     market_code(value, old) {
-      if (old == null && this.$route.params.id == undefined) return;
       const params = {
         symbolid: null,
         market_code: value
       };
-      this.passTickerToChart(params);
+
+      // wait for chart to load for 1 sec before run the code
+      if (this.$route.params.id) {
+        setTimeout(() => {
+          this.passTickerToChart(params);
+          return;
+        }, 1000);
+      }
+
+      if (this.first_load === false) {
+        this.passTickerToChart(params);
+      }
+      this.first_load = false;
     }
   },
   mounted() {
