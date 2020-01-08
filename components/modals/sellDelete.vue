@@ -62,7 +62,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setRenderEditKey: "journal/setRenderEditKey"
+      setRenderEditKey: "journal/setRenderEditKey",
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
     deleteNow() {
       let transaction_id = this.transaction_id;
@@ -71,6 +72,7 @@ export default {
           this.keyCreateCounter = this.renderEditKey;
           this.keyCreateCounter++;
           this.setRenderEditKey(this.keyCreateCounter);
+          this.setRenderPortfolioKey(this.keyCreateCounter);
         }
       });
     }
