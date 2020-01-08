@@ -363,6 +363,7 @@ export default {
             password: this.login__password
           }
         });
+
         this.card__loader = false;
         this.showAlert(true, "Successfully Logged In");
         this.setLoginModalState(false);
