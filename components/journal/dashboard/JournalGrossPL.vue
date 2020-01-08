@@ -238,8 +238,8 @@ export default {
   methods: {
     getGrossPL() {
       if (this.journalCharts != null) {
-        const objGrosPL = this.journalCharts.meta.profit_loss;
-        const lastArray = [, , , , , , , , , , , , , ,];
+        const objGrosPL = this.journalCharts.data.profit_loss;
+        const lastArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         if (objGrosPL.length != 0) {
           lastArray.unshift(...objGrosPL);
 

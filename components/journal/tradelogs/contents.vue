@@ -256,12 +256,10 @@ export default {
     },
     getTradeLogs() {
       const tradelogsparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: this.defaultPortfolioId
       };
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
-          console.log(result.data.logs);
           this.tradeLogs = result.data.logs;
 
           this.totalProfitLoss = 0;

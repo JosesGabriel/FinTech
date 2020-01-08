@@ -237,8 +237,8 @@ export default {
   methods: {
     getBuyValue() {
       if (this.journalCharts != null) {
-        const buyValue = this.journalCharts.meta.buy_value;
-        const valueArray = [, , , , , , , , , , , , , , ,];
+        const buyValue = this.journalCharts.data.buy_value;
+        const valueArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0];
         if (buyValue.length != 0) {
           for (let i = 0; i < buyValue.length; i++) {
             buyValue[i] = parseFloat(buyValue[i]);

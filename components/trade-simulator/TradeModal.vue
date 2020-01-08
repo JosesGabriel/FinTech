@@ -586,8 +586,7 @@ export default {
               date: dformat
             }
           };
-          let token = localStorage["auth._token.local"];
-          this.$axios.setToken(token);
+     
           this.$axios
             .$post(
               process.env.API_URL +
@@ -624,8 +623,7 @@ export default {
             date: dformat
           }
         };
-        let token = localStorage["auth._token.local"];
-        this.$axios.setToken(token);
+     
         this.$axios
           .$post(
             process.env.API_URL +

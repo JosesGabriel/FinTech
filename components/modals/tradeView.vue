@@ -193,7 +193,12 @@
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
-              <v-btn text class="text-capitalize" :color="fontColor" @click.stop="show = false">Close</v-btn>
+              <v-btn
+                text
+                class="text-capitalize"
+                :color="fontColor"
+                @click.stop="show = false"
+              >Close</v-btn>
               <v-btn
                 color="success ml-1"
                 class="text-capitalize black--text buy"
@@ -386,7 +391,7 @@
               >Confirm</v-btn>
             </v-row>
           </v-stepper-content>
-          
+
           <!-- -----First View of Sell Modal----- -->
           <v-stepper-content step="4" class="pt-2">
             <v-container class="pa-0">
@@ -564,6 +569,7 @@ export default {
           this.notesModel = "";
           this.dateModel = new Date().toISOString().substr(0, 10);
           this.e1 = 1;
+          this.GetSelectStock = null;
           this.portfolioDropdownModel = null;
           this.availableFundsModel = 0;
 
@@ -589,10 +595,14 @@ export default {
       return this.lightSwitch == 0 ? "#000000" : "#ffffff";
     },
     fontColorTable: function() {
-      return this.lightSwitch == 0 ? "data_table-container" : "data_table-container-dark";
+      return this.lightSwitch == 0
+        ? "data_table-container"
+        : "data_table-container-dark";
     },
     fontColorDate: function() {
-      return this.lightSwitch == 0 ? "datepicker-container-light" : "datepicker-container";
+      return this.lightSwitch == 0
+        ? "datepicker-container-light"
+        : "datepicker-container";
     }
   },
   watch: {
@@ -642,30 +652,31 @@ export default {
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-      setDefaultPortfolioId: "journal/setDefaultPortfolioId",
+      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
     initPortfolio() {
       var tim = new Date();
-      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time =
+        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
       var today = new Date(this.date),
-        month = '' + (today.getMonth() + 1),
-        day = '' + today.getDate(),
+        month = "" + (today.getMonth() + 1),
+        day = "" + today.getDate(),
         year = today.getFullYear();
 
-      if (month.length < 2) 
-          month = '0' + month;
-      if (day.length < 2) 
-          day = '0' + day;
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
 
-      var dateTime = [year, month, day].join('-') + " " + time;
+      var dateTime = [day, month, year].join("-") + " " + time;
       this.dateModel = dateTime;
-      this.YMDModel = [year, month, day].join('-');
+      this.YMDModel = [day, month, year].join("-");
     },
     buyListArray() {
-      let totalCost = parseFloat(this.quantityModel) * parseFloat(this.priceModel);
-      let params = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      let portfolio_id = this.defaultPortfolioId;
+      let stock = this.GetSelectStock;
+      let totalCost =
+        parseFloat(this.quantityModel) * parseFloat(this.priceModel);
+      let payload = {
         position: parseFloat(this.quantityModel),
         stock_price: parseFloat(this.priceModel),
         transaction_meta: {
@@ -676,24 +687,24 @@ export default {
           date: this.dateModel
         }
       };
-      this.$axios
-        .$post("https://dev-api.arbitrage.ph/api/journal/funds/" + this.portfolioDropdownModel + "/buy/" + this.GetSelectStock, params)
+      this.$api.journal.portfolio
+        .tradebuy(portfolio_id, stock, payload)
         .then(response => {
           if (response.success) {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.GetSelectStock = "";
-            this.priceModel = "0.00";
-            this.quantityModel = "0";
-            this.strategyModel = "";
-            this.tradeplanModel = "";
-            this.emotionsModel = "";
-            this.notesModel = "";
+            this.GetSelectStock = null;
+            this.priceModel = 0;
+            this.quantityModel = 0;
+            this.strategyModel = null;
+            this.tradeplanModel = null;
+            this.emotionsModel = null;
+            this.notesModel = null;
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
             this.portfolioDropdownModel = null;
-            this.availableFundsModel = 0
+            this.availableFundsModel = 0;
 
             this.cprice = "0.00";
             this.change = "0.00";
@@ -714,13 +725,12 @@ export default {
         });
     },
     sellListArray: function() {
-      console.log(this.dateModel)
-      console.log(this.YMDModel)
+      let portfolio_id = this.defaultPortfolioId;
+      let stock = this.GetSelectStock;
       let aveprice =
         parseFloat(this.quantitySellModel) /
         parseFloat(this.totalCostSellModel.replace(/,/g, ""));
-      let params = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
+      let payload = {
         position: parseFloat(this.quantitySellModel),
         stock_price: parseFloat(this.priceSellModel),
         transaction_meta: {
@@ -729,25 +739,19 @@ export default {
           plan: this.tradeplanSellModel,
           emotion: this.emotionsSellModel,
           notes: this.notesSellModel,
-          date: this.dateModel
+          date: this.YMDModel
         }
       };
-      this.$axios
-        .$post(
-          "https://dev-api.arbitrage.ph/api/journal/funds/" +
-            this.defaultPortfolioId +
-            "/sell/" +
-            this.GetSelectStock,
-          params
-        )
+      this.$api.journal.portfolio
+        .tradesell(portfolio_id, stock, payload)
         .then(response => {
           if (response.success) {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.GetSelectStock = "";
-            this.priceSellModel = "0.00";
-            this.quantitySellModel = "0";
+            this.GetSelectStock = null;
+            this.priceSellModel = 0;
+            this.quantitySellModel = 0;
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
 
@@ -780,8 +784,12 @@ export default {
       this.continuesellBtn = true;
     },
     getSellItems() {
-      for(let i = 0; i < this.openPosition.length; i++) {
-        this.openPosition[i] = {...this.openPosition[i], id_str: this.openPosition[i].stock_id, symbol: this.openPosition[i].stock_symbol}
+      for (let i = 0; i < this.openPosition.length; i++) {
+        this.openPosition[i] = {
+          ...this.openPosition[i],
+          id_str: this.openPosition[i].stock_id,
+          symbol: this.openPosition[i].stock_symbol
+        };
       }
     },
     getStockDetails(Obj) {
@@ -821,21 +829,25 @@ export default {
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
           this.priceModel = result.data.last;
-
-          
+          this.priceSellModel = parseFloat(result.data.last);
         }.bind(this)
       );
 
-      if ( this.openPosition != null) {
+      if (this.openPosition != null) {
         for (let i = 0; i < this.openPosition.length; i++) {
           let stockDataList = this.openPosition[i];
 
-          if(stockDataList.stock_id == Obj) {
-            this.priceSellModel = stockDataList.metas.buy_price;
+          if (stockDataList.stock_id == Obj) {
+            // this.priceSellModel = stockDataList.metas.buy_price;
             this.avepriceSell = stockDataList.average_price;
             this.quantitySellModel = stockDataList.position;
             this.AvailableBoardLot = stockDataList.position;
-            if(stockDataList.metas.strategy || stockDataList.metas.plan || stockDataList.metas.emotion || stockDataList.metas.notes) {
+            if (
+              stockDataList.metas.strategy ||
+              stockDataList.metas.plan ||
+              stockDataList.metas.emotion ||
+              stockDataList.metas.notes
+            ) {
               this.strategySellModel = stockDataList.metas.strategy;
               this.tradeplanSellModel = stockDataList.metas.plan;
               this.emotionsSellModel = stockDataList.metas.emotion;
@@ -877,7 +889,6 @@ export default {
     },
     whereToSave(obj) {
       const portfoliofundsparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
         fund: obj
       };
       this.$api.journal.portfolio.portfoliofunds(portfoliofundsparams).then(
@@ -925,7 +936,9 @@ export default {
           this.continueBuyButtonDisable = true;
           this.totalCostModel = 0;
         } else {
-          let compareNum = parseFloat(this.totalCostModel.replace(/,/g, "")) >= parseFloat(this.availableFundsModel);
+          let compareNum =
+            parseFloat(this.totalCostModel.replace(/,/g, "")) >=
+            parseFloat(this.availableFundsModel);
           if (!compareNum) {
             this.continueBuyButtonDisable = false;
           } else {
@@ -935,7 +948,8 @@ export default {
       }
     },
     sellWatch(newValue) {
-      let sellResult = parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
+      let sellResult =
+        parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
       let dpartcommission = sellResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
       // TAX
@@ -951,13 +965,26 @@ export default {
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      if (this.priceSellModel == "0.00" && this.priceSellModel <= 0 && this.quantitySellModel == "0.00" && this.quantitySellModel <= 0) {
+      if (
+        this.priceSellModel == "0.00" &&
+        this.priceSellModel <= 0 &&
+        this.quantitySellModel == "0.00" &&
+        this.quantitySellModel <= 0
+      ) {
         this.confirmSellButtonDisable = true;
       } else {
-        if(parseFloat(this.quantitySellModel) > parseFloat(this.AvailableBoardLot)) {
+        if (
+          parseFloat(this.quantitySellModel) >
+          parseFloat(this.AvailableBoardLot)
+        ) {
           this.confirmSellButtonDisable = true;
         } else {
-          if (this.priceSellModel == NaN || this.priceSellModel <= 0 || this.quantitySellModel == NaN || this.quantitySellModel <= 0) {
+          if (
+            this.priceSellModel == NaN ||
+            this.priceSellModel <= 0 ||
+            this.quantitySellModel == NaN ||
+            this.quantitySellModel <= 0
+          ) {
             this.confirmSellButtonDisable = true;
           } else {
             this.confirmSellButtonDisable = false;
@@ -966,19 +993,21 @@ export default {
       }
     },
     dateWatch() {
-      var today = new Date(this.date);
       var tim = new Date();
-      var date =
-        today.getFullYear() +
-        "-" +
-        (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
-      var time = tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
+      var time =
+        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var dateTime = date + " " + time;
+      var today = new Date(this.date),
+        month = "" + (today.getMonth() + 1),
+        day = "" + today.getDate(),
+        year = today.getFullYear();
+
+      if (month.length < 2) month = "0" + month;
+      if (day.length < 2) day = "0" + day;
+
+      var dateTime = [day, month, year].join("-") + " " + time;
       this.dateModel = dateTime;
-      this.YMDModel = date;
+      this.YMDModel = [day, month, year].join("-");
     }
   }
 };
@@ -989,10 +1018,12 @@ export default {
 }
 </style>
 <style>
-.data_table-container.v-data-table td, .total_bottom {
+.data_table-container.v-data-table td,
+.total_bottom {
   font-size: 12px !important;
 }
-.data_table-container-dark.v-data-table td, .total_bottom {
+.data_table-container-dark.v-data-table td,
+.total_bottom {
   font-size: 12px !important;
 }
 .stock_selector .v-select__slot .v-label,
@@ -1020,19 +1051,22 @@ export default {
   box-shadow: none;
   background-color: transparent;
 }
-.data_table-container tr td.positive, .data_table-container-dark tr td.positive  {
+.data_table-container tr td.positive,
+.data_table-container-dark tr td.positive {
   color: #03dac5;
 }
-.data_table-container tr td.negative, .data_table-container-dark tr td.negative {
+.data_table-container tr td.negative,
+.data_table-container-dark tr td.negative {
   color: #f44336;
 }
-.data_table-container td.item_position-prop, .data_table-container-dark td.item_position-prop {
+.data_table-container td.item_position-prop,
+.data_table-container-dark td.item_position-prop {
   color: #000;
 }
 .data_table-container-dark td.item_position-prop {
-  color: #B6B6B6;
+  color: #b6b6b6;
 }
-.data_table-container td.item_position-prop  {
+.data_table-container td.item_position-prop {
   color: #535358;
 }
 .buy_selector .v-select__selection--comma {
@@ -1078,9 +1112,10 @@ export default {
   background: #f2f2f2 !important;
 }
 .theme--light.datepicker-container-light .v-picker__title {
-    background: #f2f2f2 !important;
+  background: #f2f2f2 !important;
 }
-.datepicker-container .v-date-picker-title__date, .theme--light.datepicker-container-light .v-date-picker-title__date {
+.datepicker-container .v-date-picker-title__date,
+.theme--light.datepicker-container-light .v-date-picker-title__date {
   color: #03dac5 !important;
 }
 </style>

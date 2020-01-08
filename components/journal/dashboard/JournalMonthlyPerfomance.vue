@@ -209,14 +209,13 @@ export default {
   methods: {
     getMPerformance() {
       if (this.journalCharts != null) {
-      // console.log(this.journalCharts);
-        // this.monthlyPerformance = this.journalCharts.data;
-        // let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance;
-        // this.$refs.monthlyPerformance.updateSeries([
-        //   {
-        //     data: monthlyPerformanceArr
-        //   }
-        // ]);
+        this.monthlyPerformance = this.journalCharts.data;
+        let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance;
+        this.$refs.monthlyPerformance.updateSeries([
+          {
+            data: monthlyPerformanceArr
+          }
+        ]);
       }
       this.componentKeys++;
     },

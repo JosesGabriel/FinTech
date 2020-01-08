@@ -47,6 +47,11 @@ export default {
       alertMessage: ""
     };
   },
+  head() {
+    return {
+      link: [{ rel: "icon", type: "image/x-icon", href: "/lyduz.ico" }]
+    };
+  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"

@@ -3,35 +3,22 @@
     <v-row no-gutters>
       <v-col class="pa-0" cols="12">
         <div class="small pt-5">
-          <apexcharts
-            height="270"
-            type="donut"
-            :options="chartOptions"
-            :series="series"
-          ></apexcharts>
+          <apexcharts height="270" type="donut" :options="chartOptions" :series="series"></apexcharts>
         </div>
       </v-col>
       <v-col class="pa-3" cols="12">
-        <v-simple-table
-          id="liveportfolio-table"
-          :dense="true"
-          :dark="lightSwitch == true"
-        >
+        <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
           <template v-slot:default>
             <tbody>
               <tr id="table_tr_snap-cont">
                 <td class="caption px-1 py-1">
-                  <v-icon class="pr-1 caption" color="#03DAC5"
-                    >mdi-circle</v-icon
-                  >Winning Strategy
+                  <v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Winning Strategy
                 </td>
                 <td class="caption text-right px-1 py-1">{{ winStrategy }}</td>
               </tr>
               <tr id="table_tr_snap-cont">
                 <td class="caption px-1 py-1">
-                  <v-icon class="pr-1 caption" color="#F44336"
-                    >mdi-circle</v-icon
-                  >Lossing Strategy
+                  <v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Lossing Strategy
                 </td>
                 <td class="caption text-right px-1 py-1">{{ lossStrategy }}</td>
               </tr>
@@ -150,21 +137,13 @@ export default {
       }
     };
   },
-  watch: {
-    journalCharts: function() {
-      this.getStrategyStat();
-    },
-    defaultPortfolioId: function() {
-      this.getStrategyStat();
-    }
-  },
   mounted() {
     this.getStrategyStat();
   },
   methods: {
     getStrategyStat() {
       if (this.journalCharts != null) {
-        const objStrategy = this.journalCharts.meta.strategy_statistics;
+        const objStrategy = this.journalCharts.data.strategy_statistics;
         const strategyArray = [];
         if (objStrategy.length != 0) {
           this.series = [];
@@ -202,7 +181,18 @@ export default {
       }
       this.componentKeys++;
     }
-  }
+  },
+  watch: {
+    journalCharts: function() {
+      this.getStrategyStat();
+    },
+    defaultPortfolioId: function() {
+      this.getStrategyStat();
+    },
+    renderPortfolioKey: function() {
+      this.getStrategyStat();
+    }
+  },
 };
 </script>
 <style scoped>

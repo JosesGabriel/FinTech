@@ -1,26 +1,22 @@
 require("dotenv").config();
 
 const baseURL = process.env.API_URL + "/social";
-let token = localStorage["auth._token.local"];
 
 export default $axios => ({
   get(params) {
     let query = buildParams(params);
-    $axios.setToken(token);
+    
     return $axios.$get(
       `${baseURL}/posts${query.length > 0 ? "?" + query : ""}`
     );
   },
   postComment(params, payload) {
-    $axios.setToken(token);
     return $axios.$post(`${baseURL}/posts/` + params + `/comments`, payload);
   },
   bearish(params) {
-    $axios.setToken(token);
     return $axios.$post(`${baseURL}/posts/` + params + `/bear`);
   },
-  bullish(params) {
-    $axios.setToken(token);
+  bullish(params) {  
     return $axios.$post(`${baseURL}/posts/` + params + `/bull`);
   }
 

@@ -144,7 +144,6 @@ export default {
   methods: {
     getLedgerLogs() {
       const ledgerparams = {
-          user_id : "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
 	      fund: this.defaultPortfolioId
       }
       this.totalCredit = 0;
@@ -207,12 +206,12 @@ export default {
     },
   },
   watch: {
+    defaultPortfolioId: function() {
+      this.getLedgerLogs();
+    },
     renderPortfolioKey: function() {
       this.getLedgerLogs();
     },
-    defaultPortfolioId: function() {
-      this.getLedgerLogs();
-    }
   }
 }
 </script>

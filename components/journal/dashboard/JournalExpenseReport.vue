@@ -260,8 +260,8 @@ export default {
     },
     getExpenseReport() {
       if (this.journalCharts != null) {
-        const objExpenseReport = this.journalCharts.meta.expense_report;
-        const objExpenseReportTrades = this.journalCharts.meta
+        const objExpenseReport = this.journalCharts.data.expense_report;
+        const objExpenseReportTrades = this.journalCharts.data
           .expense_report_trades;
         const expenseReportArray = [];
         Object.keys(objExpenseReport).forEach(function(key) {

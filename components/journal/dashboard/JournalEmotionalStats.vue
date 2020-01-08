@@ -78,10 +78,10 @@ export default {
             emotionalArray: [],
             series: [{
                 name: 'Win',
-                data: [  ,  ,  ]
+                data: [  0,  0,  0]
             }, {
                 name: 'loss',
-                data: [  ,  ,  ]
+                data: [  0,  0,  0]
             }],
             chartOptions: {
                 plotOptions: {
@@ -201,7 +201,7 @@ export default {
     methods: {
         getEmotionalStats(){
             if(this.journalCharts != null) {
-                const objStrategy = this.journalCharts.meta.emotional_statistics
+                const objStrategy = this.journalCharts.data.emotional_statistics
                 const emotionalArray = []
                 if(objStrategy.length != 0) {
                     Object.keys(objStrategy).forEach(function(key) {
@@ -209,8 +209,8 @@ export default {
                     });
                     this.emotionalArray = emotionalArray
 
-                    const winEmotional = [ , , , ]
-                    const lossEmotional = [ , , , ]
+                    const winEmotional = [ 0, 0, 0, 0]
+                    const lossEmotional = [ 0, 0, 0, 0]
                     const nameEmotional = [" ", " ", " ", " "]
 
                     for (let i = 0; i < this.emotionalArray.length; i++) {
@@ -264,6 +264,9 @@ export default {
     },
     watch: {
         journalCharts: function() {
+            this.getEmotionalStats();
+        },
+        defaultPortfolioId: function() {
             this.getEmotionalStats();
         },
         renderPortfolioKey: function() {
