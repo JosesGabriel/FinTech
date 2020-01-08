@@ -66,9 +66,9 @@
         <v-row class="mt-1">
           <v-col
             md="12"
-            :class="((this.port_total + 100000) > 0 ? 'positive' : 'negative')"
+            :class="((this.port_total + parseFloat(this.port_capital)) > 0 ? 'positive' : 'negative')"
             class="text-right pb-0 pl-0 pr-3"
-          >{{ this.addcomma(this.port_total + 100000) }}</v-col>
+          >{{ this.addcomma(this.port_total + parseFloat(this.port_capital)) }}</v-col>
         </v-row>
       </v-col>
       <v-col
@@ -264,9 +264,11 @@ export default {
       this.daychangepercentage = 0;
       this.equity = 0;
       this.port_total = 0;
+      this.default_port = this.simulatorPortfolioID;
+      this.getPorfolio('newdata');
     },
     RenderPortfolioKey: function(){
-      this.getPorfolio();
+      //this.getPorfolio('newdata');
     },
     unrealized: function() {
       this.getTradeLogs();
@@ -277,13 +279,21 @@ export default {
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
     }),
     getOpenPosition(selectObj) {
-      //let fundid = selectObj.split('|')[0];
-      //this.port_capital = selectObj.split('|')[1];
-      console.log('ID - ' + selectObj);
-       //console.log('Capital - ' + this.port_capital);
+      this.getCapital(selectObj);
       this.setSimulatorPortfolioID(selectObj);
       this.default_port = selectObj;
       this.state = false;
+    },
+    getCapital(id){
+          this.$api.journal.portfolio.portfolio().then(
+            function(result) {             
+                for (let i = 0; i < result.data.logs.length; i++) {
+                  if(id == result.data.logs[i].id){
+                    this.port_capital = result.data.logs[i].capital; 
+                  }              
+                }
+            }.bind(this)
+          );
     },
     Realized(value) {
       this.realized = value;
@@ -362,7 +372,8 @@ export default {
       }
       return min;
     },
-    getPorfolio(){
+    getPorfolio(key){
+     
         this.$api.journal.portfolio.portfolio().then(
           function(result) {
             console.log('Portfolio', result);
@@ -379,12 +390,20 @@ export default {
                   capital: result.data.logs[i].capital
                 };
                 this.portfolio.push(portfolio_params);
-                if (result.data.logs[i].name == "My Virtual Portfolio") {
-                  this.setSimulatorPortfolioID(result.data.logs[i].id);
-                  this.default_port = result.data.logs[i].id;
-                  this.port_capital = result.data.logs[i].capital;
-                  defaultPort = true;
-                }
+                if(key == 'initial'){
+                    if (result.data.logs[i].name == "My Virtual Portfolio") {
+                      this.setSimulatorPortfolioID(result.data.logs[i].id);
+                      this.default_port = result.data.logs[i].id;
+                      this.port_capital = result.data.logs[i].capital;
+                      defaultPort = true;
+                    }
+                 }else{
+                    if(this.simulatorPortfolioID == result.data.logs[i].id){
+                      this.default_port = result.data.logs[i].id;
+                      this.port_capital = result.data.logs[i].capital;
+                      defaultPort = true;
+                    }
+                 }
               }
             }
             if (!defaultPort) {
@@ -410,7 +429,7 @@ export default {
     }
   },
   mounted() {
-      this.getPorfolio();
+      this.getPorfolio('initial');
   },
   components: {
     VirtualLivePortfolio,

@@ -90,6 +90,7 @@ export default {
     methods: {
         ...mapActions({
             setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+            setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
         }),
         fieldsWatch() {
             if ( this.typePortfolioModel != "" || this.initialCapital != "" || this.namePortfolioModel != "" ) {
@@ -112,13 +113,31 @@ export default {
             this.$api.journal.portfolio.createportfolio(createportfolioparams).then(
                 function(result) {
                     if (result.success) {
+                        this.getPorfolio();
                         this.keyCreateCounter = this.renderPortfolioKey;
                         this.keyCreateCounter++;
-                        this.setRenderPortfolioKey(this.keyCreateCounter);
+                        this.setRenderPortfolioKey(this.keyCreateCounter);                
                     }
                 }.bind(this)
             );
         },
+        getPorfolio(){
+            let num = 0;
+            this.$api.journal.portfolio.portfolio().then(
+            function(result) {             
+                for (let i = 0; i < result.data.logs.length; i++) {
+                if (
+                    result.data.logs[i].type == "virtual"
+                ) {
+                    if(this.namePortfolioModel == result.data.logs[i].name){
+                        this.setSimulatorPortfolioID(result.data.logs[i].id); 
+                    }                               
+                  }
+                }
+               
+            }.bind(this)
+            );
+        }
     },
      mounted() {
                  

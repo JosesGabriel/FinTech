@@ -307,7 +307,7 @@ export default {
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
           this.portfolioLogs = result.data.open;
-          console.log('Port-', result);
+          //console.log('Port-', result);
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.openposition[i] = this.portfolioLogs[i].stock_id;
             const params = {
@@ -461,15 +461,16 @@ export default {
         this.$api.chart.charts.latest(params).then(
           function(result) {
 
-           // console.log('Day Cahnge -', result);                    
+            //console.log('Day Cahnge -', result);                    
             let prior_date = new Date(result.data.t[1]*1000);
             let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
             let tcost =
               this.portfolioLogs[index].position *
               this.portfolioLogs[index].average_price;
-
-            if (dformat_prior != pdate) {                      
-               
+              //console.log('Date Current -' + pdate);
+              //console.log('Date Prior -' + dformat_prior);
+            //if (dformat_prior != pdate) {                      
+             if (dformat_prior != dformat) {   
               let priorPrice = result.data.c[1];
               let priorbuyResult =
                 this.portfolioLogs[index].position *
@@ -494,6 +495,8 @@ export default {
               let daychange = 0;
               let daychangeperf = 0;
             }else{*/
+              //console.log('Current -' + currentProfitLoss);
+             // console.log('Prior -' + priorProfitLoss);
               let daychange =
                 parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
               let daychangeperf = (daychange / priorProfitLoss) * 100;
