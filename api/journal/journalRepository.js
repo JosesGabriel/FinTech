@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const baseURL = process.env.API_URL + "/journal";
 const baseChartURL = process.env.CHART_API_URL + "/stocks";
-let token = localStorage["auth._token.local"];
+const token = localStorage["auth._token.local"];
 
 export default $axios => ({
     portfolio(params) {

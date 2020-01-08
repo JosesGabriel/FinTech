@@ -1,5 +1,5 @@
 <template>
-  <v-container class="socialWall__container" dark>
+  <v-container class="page__wrapper" dark>
     <ProfileCover />
 
     <v-row no-gutters>
@@ -21,10 +21,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.socialWall__container {
-  max-width: 1080px;
-  margin-top: 40px;
-}
-</style>

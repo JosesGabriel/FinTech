@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const baseURL = process.env.CHART_API_URL + "/stocks";
-const token = process.env.CHART_CLIENT_SECRET;
+const token = localStorage["auth._token.local"];
 
 export default $axios => ({
   list(params) {

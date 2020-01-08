@@ -1,5 +1,5 @@
 <template>
-  <v-container class="socialWall__container" dark>
+  <v-container class="page__wrapper" dark>
     <v-row no-gutters>
       <v-col class="px-2" cols="12" sm="12" md="12" lg="12">
         <v-tabs color="success" background-color="transparent" dark>
