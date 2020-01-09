@@ -121,15 +121,19 @@ export default {
       if (this.sse !== null) {
         this.sse.close();
         this.counter = 0;
+        this.$store.commit(
+          "global/SET_FAVICON",
+          `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
+        );
       }
 
-      //   this.sse = new EventSource(
-      //     "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
-      //   );
-
       this.sse = new EventSource(
-        "http://localhost:8021/sse/market-data/pse/" + symid
+        "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
       );
+
+      //   this.sse = new EventSource(
+      //     "http://localhost:8021/sse/market-data/pse/" + symid
+      //   );
 
       this.sse.onopen = function() {
         // console.log("open sse");
