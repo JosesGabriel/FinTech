@@ -317,7 +317,7 @@ export default {
             //this.$api.journal.portfolio.history(params).then(
               function(result) {
                 this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol; //result.data.symbol;
-                this.stockSym[i] = this.portfolioLogs[i].stock_id;
+                this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
                 let buyResult =
                   this.portfolioLogs[i].position *
                   parseFloat(result.data.last).toFixed(2);
@@ -548,9 +548,8 @@ export default {
       
       this.sse.addEventListener("trade",function(e) {
            const data = JSON.parse(e.data);  
-           //that.trigger(data.sym);
-          for(let i =0; i< that.stockSym.length; i++){
-            if(that.stockSym[i] == data.sym){
+          for(let i =0; i< that.stockSym.length; i++){ 
+            if(that.stockSym[i] == data.sym_id){
                 that.trigger(data.sym, data.exp);
             }
           }
