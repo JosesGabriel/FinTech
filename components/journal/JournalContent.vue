@@ -5,6 +5,7 @@
         class="tab_menu-top text-capitalize subtitle-1"
         :style="{ color: fontColor }"
         :href="`#tab-1`"
+        @click="dashboardClicked()"
       >Dashboard</v-tab>
       <v-tab
         class="tab_menu-top text-capitalize subtitle-1"
@@ -223,6 +224,11 @@ export default {
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
       setJournalCharts: "journal/setJournalCharts"
     }),
+    dashboardClicked() {
+      this.keyCreateCounter = this.renderPortfolioKey;
+      this.keyCreateCounter++;
+      this.setRenderPortfolioKey(this.keyCreateCounter);
+    },
     changePortfolio(obj) {
       this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
       const openparams = {

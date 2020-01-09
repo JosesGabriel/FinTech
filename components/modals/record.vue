@@ -299,6 +299,7 @@ export default {
     ...mapGetters({
       defaultPortfolioId: "journal/getDefaultPortfolioId",
       renderEditKey: "journal/getRenderEditKey",
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
       stockList: "global/getStockList"
     }),
     show: {
@@ -505,8 +506,11 @@ export default {
 
           this.keyCreateCounter = this.renderEditKey;
           this.keyCreateCounter++;
+
+          this.keyCreateCounter1 = this.renderPortfolioKey;
+          this.keyCreateCounter1++;
           this.setRenderEditKey(this.keyCreateCounter);
-          this.setRenderPortfolioKey(this.keyCreateCounter);
+          this.setRenderPortfolioKey(this.keyCreateCounter1);
         });
     },
     formatPrice(value) {
