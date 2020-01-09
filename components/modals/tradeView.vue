@@ -52,7 +52,7 @@
                 <v-col cols="12" sm="12" md="12" class="pt-3 mt-2">
                   <v-select
                     v-model="GetSelectStock"
-                    offset-y="true"
+                    :offset-y="true"
                     item-color="success"
                     color="success"
                     class="pa-0 ma-0"
@@ -63,6 +63,7 @@
                     label="Select Stock"
                     @change="getStockDetails"
                     :light="lightSwitch == false"
+                    :menu-props="{offsetY: true}"
                   ></v-select>
 
                   <v-col cols="12" class="pa-0">
@@ -333,7 +334,6 @@
                       class="mb-1"
                       :items="strategy"
                       label="Select Strategy"
-                      dense
                       flat
                     ></v-select>
                   </div>
@@ -346,7 +346,6 @@
                       class="mb-1"
                       :items="tradeplan"
                       label="Select Trade Plan"
-                      dense
                       flat
                     ></v-select>
                   </div>
@@ -358,7 +357,6 @@
                       append-icon="mdi-chevron-down"
                       :items="emotions"
                       label="Select Emotions"
-                      dense
                       flat
                     ></v-select>
                   </div>
@@ -561,8 +559,9 @@ export default {
       set(value) {
         if (!value) {
           this.$emit("close");
-          this.priceModel = "0.00";
-          this.quantityModel = "0";
+          this.priceModel = 0;
+          this.quantityModel = null;
+          this.quantitySellModel = null;
           this.strategyModel = "";
           this.tradeplanModel = "";
           this.emotionsModel = "";
@@ -696,7 +695,7 @@ export default {
             this.setRenderPortfolioKey(this.keyCreateCounter);
             this.GetSelectStock = null;
             this.priceModel = 0;
-            this.quantityModel = 0;
+            this.quantityModel = null;
             this.strategyModel = null;
             this.tradeplanModel = null;
             this.emotionsModel = null;
@@ -751,7 +750,7 @@ export default {
             this.setRenderPortfolioKey(this.keyCreateCounter);
             this.GetSelectStock = null;
             this.priceSellModel = 0;
-            this.quantitySellModel = 0;
+            this.quantitySellModel = null;
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
 
@@ -1016,6 +1015,9 @@ export default {
 .tab_menu-top.v-tab--active {
   color: #03dac5 !important;
 }
+/* .menuable__content__active {
+  top: 180px !important;
+} */
 </style>
 <style>
 .data_table-container.v-data-table td,

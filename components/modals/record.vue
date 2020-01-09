@@ -182,7 +182,6 @@
                         class="mb-1"
                         :items="strategy"
                         label="Select Strategy"
-                        dense
                         flat
                       ></v-select>
                     </div>
@@ -195,7 +194,6 @@
                         class="mb-1"
                         :items="tradeplan"
                         label="Select Trade Plan"
-                        dense
                         flat
                       ></v-select>
                     </div>
@@ -207,7 +205,6 @@
                         append-icon="mdi-chevron-down"
                         :items="emotions"
                         label="Select Emotions"
-                        dense
                         flat
                       ></v-select>
                     </div>
@@ -396,7 +393,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setRenderEditKey: "journal/setRenderEditKey"
+      setRenderEditKey: "journal/setRenderEditKey",
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
     getSelectStock() {
       let filteredStocks = null;
@@ -444,28 +442,29 @@ export default {
       }
     },
     recordNow() {
-      let buydate = new Date(this.buyDate);
-      let selldate = new Date(this.sellDate);
-
-      let tim = new Date();
-      let time =
+      var tim = new Date();
+      var time =
         tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      let finalbuydate =
-        buydate.getDate() +
-        "/" +
-        (buydate.getMonth() + 1) +
-        "/" +
-        buydate.getFullYear();
-      let finalselldate =
-        selldate.getDate() +
-        "/" +
-        (selldate.getMonth() + 1) +
-        "/" +
-        selldate.getFullYear();
+      var finalbuydate = new Date(this.buyDate),
+        buymonth = "" + (finalbuydate.getMonth() + 1),
+        buyday = "" + finalbuydate.getDate(),
+        buyyear = finalbuydate.getFullYear();
 
-      let buydateformatted = finalbuydate + " " + time;
-      let selldateformatted = finalselldate + " " + time;
+      if (buymonth.length < 2) buymonth = "0" + buymonth;
+      if (buyday.length < 2) buyday = "0" + buyday;
+
+      let buydateformatted = [buyday, buymonth, buyyear].join("-");
+
+      var finalselldate = new Date(this.sellDate),
+        sellmonth = "" + (finalselldate.getMonth() + 1),
+        sellday = "" + finalselldate.getDate(),
+        sellyear = finalselldate.getFullYear();
+
+      if (sellmonth.length < 2) sellmonth = "0" + sellmonth;
+      if (sellday.length < 2) sellday = "0" + sellday;
+
+      let selldateformatted = [sellday, sellmonth, sellyear].join("-");
 
       let portfolio_id = this.defaultPortfolioId;
       const payload = {
@@ -507,6 +506,7 @@ export default {
           this.keyCreateCounter = this.renderEditKey;
           this.keyCreateCounter++;
           this.setRenderEditKey(this.keyCreateCounter);
+          this.setRenderPortfolioKey(this.keyCreateCounter);
         });
     },
     formatPrice(value) {
