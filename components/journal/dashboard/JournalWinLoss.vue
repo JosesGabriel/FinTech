@@ -6,7 +6,7 @@
           <apexcharts height="270" type="donut" :options="chartOptions" :series="series"></apexcharts>
         </div>
       </v-col>
-      <v-col class="pa-3" cols="12">
+      <v-col class="pa-3 px-10" cols="12">
         <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
           <template v-slot:default>
             <tbody>

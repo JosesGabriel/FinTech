@@ -181,7 +181,7 @@ export default {
     };
   },
   methods: {
-    getStrategyStat() {
+    getStrategyStat() { 
       if (this.journalCharts != null) {
         const objStrategy = this.journalCharts.data.strategy_statistics;
         const strategyArray = [];

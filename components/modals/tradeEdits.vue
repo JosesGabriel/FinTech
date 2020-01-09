@@ -16,7 +16,6 @@
                 class="mb-1"
                 :items="strategy"
                 label="Select Strategy"
-                dense
                 flat
                 :dark="lightSwitch == true"
               ></v-select>
@@ -30,7 +29,6 @@
                 class="mb-1"
                 :items="tradeplan"
                 label="Select Trade Plan"
-                dense
                 flat
                 :dark="lightSwitch == true"
               ></v-select>
@@ -43,7 +41,6 @@
                 append-icon="mdi-chevron-down"
                 :items="emotions"
                 label="Select Emotions"
-                dense
                 flat
                 :dark="lightSwitch == true"
               ></v-select>
@@ -149,6 +146,7 @@ export default {
       this.$api.journal.portfolio
         .tradeedit(fund_id, stock_id, params)
         .then(response => {
+          console.log(response)
           if (response.success) {
             this.keyCreateCounter = this.renderEditKey;
             this.keyCreateCounter++;

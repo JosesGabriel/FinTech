@@ -5,6 +5,7 @@
         class="tab_menu-top text-capitalize subtitle-1"
         :style="{ color: fontColor }"
         :href="`#tab-1`"
+        @click="dashboardClicked()"
       >Dashboard</v-tab>
       <v-tab
         class="tab_menu-top text-capitalize subtitle-1"
@@ -19,8 +20,9 @@
       <v-spacer></v-spacer>
       <v-col sm="3" md="2" class="pa-0">
         <v-select
+          :dark="lightSwitch == true"
           offset-y="true"
-          class="select_portfolio mt-2 success--text"
+          class="select_portfolio selectjournal_portfolio mt-2 success--text"
           item-color="success"
           append-icon="mdi-chevron-down"
           background-color="#03DAC5"
@@ -38,6 +40,11 @@
           return-object
           :menu-props="{closeOnContentClick: true}"
         >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content>
+              <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
+            </v-list-item-content>
+          </template>
           <template v-slot:append-item>
             <v-list-item @click="setPortfolioReal(item)" class="sumportfolio_real mt-1">
               <v-list-item-content>
@@ -109,7 +116,7 @@
             <v-col class="pa-0" cols="8" sm="8" md="8">
               <JournalGrossPL />
             </v-col>
-          </v-row> 
+          </v-row>
           <div class="component_spacer"></div>
         </v-container>
       </v-tab-item>
@@ -193,6 +200,20 @@ export default {
       showSelect: false
     };
   },
+  computed: {
+    ...mapGetters({
+      userPortfolio: "journal/getUserPortfolio",
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    fontColor: function() {
+      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+    },
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
+  },
   mounted() {
     this.getUserPortfolioList();
   },
@@ -203,6 +224,11 @@ export default {
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
       setJournalCharts: "journal/setJournalCharts"
     }),
+    dashboardClicked() {
+      this.keyCreateCounter = this.renderPortfolioKey;
+      this.keyCreateCounter++;
+      this.setRenderPortfolioKey(this.keyCreateCounter);
+    },
     changePortfolio(obj) {
       this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
       const openparams = {
@@ -223,8 +249,6 @@ export default {
       this.keyCreateCounter = this.renderPortfolioKey;
       this.keyCreateCounter++;
       this.setRenderPortfolioKey(this.keyCreateCounter);
-
-      console.log(item)
     },
     setPortfolioVirtual() {
       this.setDefaultPortfolioId("virtual");
@@ -232,7 +256,7 @@ export default {
       this.keyCreateCounter++;
       this.setRenderPortfolioKey(this.keyCreateCounter);
 
-      this.portfolioDropdownModel = "Sum of Virtual Portfolio"
+      this.portfolioDropdownModel = "Sum of Virtual Portfolio";
     },
     getUserPortfolioList() {
       this.$api.journal.portfolio.portfolio().then(
@@ -305,24 +329,13 @@ export default {
       this.componentKeys++;
     }
   },
-  computed: {
-    ...mapGetters({
-      userPortfolio: "journal/getUserPortfolio",
-      defaultPortfolioId: "journal/getDefaultPortfolioId",
-      renderPortfolioKey: "journal/getRenderPortfolioKey",
-      lightSwitch: "global/getLightSwitch"
-    }),
-    fontColor: function() {
-      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
-    }
-  },
   watch: {
     defaultPortfolioId: function() {
       this.getJournalCharts();
     },
     renderPortfolioKey: function() {
       this.getJournalCharts();
-    },
+    }
   }
 };
 </script>
@@ -338,6 +351,13 @@ export default {
 }
 </style>
 <style>
+.select_portfolio.selectjournal_portfolio .v-input__control {
+  padding: 0 !important;
+}
+.v-menu__content
+  .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+  color: #03dac5 !important;
+}
 /* reset trade fund css */
 .rtf_top-btn.v-btn--outlined:hover,
 .rtf_top-btn.v-btn--outlined:active,
@@ -410,11 +430,11 @@ span.apexcharts-tooltip-text-label {
   min-height: auto !important;
   border-radius: unset;
 }
-.v-subheader.theme--light {
-  color: #b6b6b6;
+/* .v-subheader.theme--light {
+  background: #00121e;
   font-weight: 600;
   padding-left: 16px;
-}
+} */
 .apexcharts-canvas.dark {
   background: transparent !important;
 }

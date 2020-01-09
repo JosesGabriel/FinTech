@@ -135,7 +135,7 @@
           <span>Show Rows</span>
           <v-spacer></v-spacer>
           <v-text-field
-            :value="(tradeLogs.length <= 5 ? tradeLogs.length : 5)"
+            :value="(tradeLogs.length <= 10 ? tradeLogs.length : 10)"
             type="number"
             min="5"
             max="10"
@@ -196,7 +196,7 @@ export default {
       showRecordTrade: false,
       itemDetails: null,
 
-      itemsPerPage: 5,
+      itemsPerPage: 10,
       search: "",
       headers: [
         { text: "Stocks", value: "stock_id", align: "left", sortable: false },

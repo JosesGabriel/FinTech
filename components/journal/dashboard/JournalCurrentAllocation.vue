@@ -8,7 +8,7 @@
       </v-btn>
     </v-card-title>
     <v-row no-gutters>
-      <v-col class="pa-0 pt-3 px-5" cols="6" sm="6" md="6">
+      <v-col class="pa-0 pt-3 pl-5 pr-10" cols="6" sm="6" md="6">
         <v-simple-table :dense="true" dark id="liveportfolio-table">
           <template v-slot:default>
             <tbody>
@@ -82,16 +82,17 @@ export default {
       chartOptions: {
         labels: [],
         colors: [
+          "#1CDECB",
           "#03DAC5",
-          "#05CCB4",
-          "#04BFA9",
-          "#04B29D",
-          "#04A592",
-          "#049987",
-          "#038C7C",
-          "#037F70",
-          "#037265",
-          "#02665A"
+          "#03C4B1",
+          "#02AE9E",
+          "#02998A",
+          "#028376",
+          "#026D63",
+          "#01574F",
+          "#01413B",
+          "#012C27",
+          "#001614"
         ],
         legend: {
           show: false
@@ -194,6 +195,13 @@ export default {
           style: {
             fontSize: "12px",
             fontFamily: "'Nunito' !important"
+          },
+          y: {
+            show: false,
+            formatter: function(value) {
+              let val = (value / 1).toFixed(2).replace(".", ".");
+              return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
           },
           fixed: {
             enabled: false,
