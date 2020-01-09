@@ -132,6 +132,7 @@
             dark
             v-on:change="getOpenPosition"
             background-color="#03DAC5"
+            label="Select Portfolio"
             dense
             solo
           >

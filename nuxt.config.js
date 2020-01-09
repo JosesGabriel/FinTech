@@ -3,7 +3,7 @@ import colors from "vuetify/es5/util/colors";
 require("dotenv").config();
 
 export default {
-  mode: "spa",
+  mode: "universal",
   server: {
     port: process.env.SERVER_PORT, // default: 3000
     host: process.env.SERVER_HOST // default: localhost
@@ -54,7 +54,7 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    '~/plugins/axios',
+    "~/plugins/axios",
     { src: "~/plugins/bus", ssr: false },
     { src: "~/plugins/repository", mode: "client", ssr: false },
     { src: "~/plugins/global-method", ssr: true },
