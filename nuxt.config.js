@@ -23,7 +23,13 @@ export default {
         content: process.env.npm_package_description || ""
       }
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon/lyduz.ico" }],
+    link: [
+      {
+        rel: "icon",
+        type: "image/x-icon",
+        href: `${process.env.CURRENT_DOMAIN}/lyduz.ico`
+      }
+    ],
     script: [
       {
         src: "/vendor/charting_library/charting_library.min.js",
@@ -48,6 +54,7 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
+    '~/plugins/axios',
     { src: "~/plugins/bus", ssr: false },
     { src: "~/plugins/repository", mode: "client", ssr: false },
     { src: "~/plugins/global-method", ssr: true },
