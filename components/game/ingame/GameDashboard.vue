@@ -84,7 +84,7 @@
         </v-col>
         <!-- <v-col cols="1"></v-col> -->
         <v-col class="pa-0 controller__wrapper" cols="3">
-          <GameController />
+          <Controller />
         </v-col>
       </v-row>
     </v-container>
@@ -111,11 +111,11 @@
 </style>
 <script>
 import { mapGetters } from "vuex";
-import GameController from "~/components/game/ingame/GameController";
+import Controller from "~/components/game/ingame/controller/Controller";
 export default {
   layout: "game",
   components: {
-    GameController
+    Controller
   },
   computed: {
     ...mapGetters({

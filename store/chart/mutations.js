@@ -19,6 +19,10 @@ export default {
     state.sidebar = data;
   },
 
+  SET_HEADLINE_LOADING(state, data) {
+    state.headline_loading = data;
+  },
+
   SET_SYMBOLID(state, data) {
     state.symbolid = data;
   },

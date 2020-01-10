@@ -121,7 +121,6 @@ export default {
   computed: {
     ...mapGetters({
       symbolid: "chart/symbolid",
-      index: "chart/index",
       bidask: "chart/bidask",
       lightSwitch: "global/getLightSwitch"
     }),
@@ -132,6 +131,13 @@ export default {
   watch: {
     symbolid(symid) {
       this.initBidask(symid);
+    },
+    loading: function(value) {
+      if (value === false) {
+        setTimeout(() => {
+          this.sse.addEventListener("info", this.sseInfo);
+        }, 2000);
+      }
     }
   },
   methods: {
@@ -175,16 +181,35 @@ export default {
           limit
         };
         this.setBidask(bidask);
-       // console.log("bidask response", bidask);
+        this.loading = false;
+        // console.log("bidask response", bidask);
       } catch (error) {
         //console.log("bidask error", error);
       }
-      this.loading = null;
+    },
+    sseBidask: function(e) {
+      if (this.bidask.asks !== undefined && this.bidask.bids !== undefined) {
+        const data = JSON.parse(event.data);
+
+        if (data.ov == "B") {
+          // bid
+          const bids = this.updateBidAndAsks(this.bidask.bids, data);
+          this.$store.commit(
+            "chart/SET_BIDS",
+            bids.sort(this.sortBy("price", "desc"))
+          );
+        } else if (data.ov == "S") {
+          // ask
+          //              if (data.ty != "a" || data.ty != "au") return;
+          const asks = this.updateBidAndAsks(this.bidask.asks, data);
+          this.$store.commit(
+            "chart/SET_ASKS",
+            asks.sort(this.sortBy("price", "desc"))
+          );
+        }
+        // console.log(this.bidask);
+      }
     }
-  },
-  mounted() {
-    //this.initBidask("29235363595681792");
-    this.initBidask(this.symbolid);
   }
 };
 </script>

@@ -3,7 +3,7 @@ import colors from "vuetify/es5/util/colors";
 require("dotenv").config();
 
 export default {
-  mode: "universal",
+  mode: "spa",
   server: {
     port: process.env.SERVER_PORT, // default: 3000
     host: process.env.SERVER_HOST // default: localhost

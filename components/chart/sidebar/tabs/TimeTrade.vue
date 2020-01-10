@@ -73,7 +73,9 @@ export default {
   name: "TimeTrade",
   data() {
     return {
-      loading: "#03dac5"
+      loading: "#03dac5",
+      temp_trades: [],
+      ctr_trades: 0
     };
   },
   computed: {
@@ -82,7 +84,8 @@ export default {
       index: "chart/index",
       lightSwitch: "global/getLightSwitch",
       responsive_height: "chart/responsive_height",
-      trades: "chart/trades"
+      trades: "chart/trades",
+      sse: "global/sse"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -101,12 +104,15 @@ export default {
         }.bind(this),
         100
       );
+    },
+    loading(value) {
+      if (value === false) {
+        this.temp_trades = this.trades;
+        setTimeout(() => {
+          this.sse.addEventListener("trade", this.sseTrade);
+        }, 2000);
+      }
     }
-  },
-  mounted() {
-    //console.log("responsive height");
-    //console.log(this.responsive_height);
-    this.initTimetrade(this.symbolid);
   },
   methods: {
     ...mapActions({
@@ -131,13 +137,41 @@ export default {
           // console.log(error);
         });
     },
+    sseTrade: function(e) {
+      try {
+        if (this.symbolid == undefined) return;
+        const trades = JSON.parse(e.data);
+        if (this.symbolid !== trades.sym_id) return;
+        this.temp_trades.unshift({
+          id: `${trades.t}_${this.ctr_trades++}`,
+          id_str: String(`${trades.t}_${this.ctr_trades++}`),
+          timestamp: trades.t,
+          date: null,
+          datetime: null,
+          executed_price: trades.exp,
+          executed_volume: trades.exvol,
+          buyer: trades.b,
+          seller: trades.s
+        });
+
+        if (this.trades.length !== undefined && this.trades.length > 0) {
+          if (this.temp_trades.length > 99) {
+            this.temp_trades.pop();
+          }
+          this.setTrades(this.temp_trades);
+        }
+      } catch (err) {
+        console.log("error");
+        console.log(err);
+      }
+    },
     updateEffect: dom => {
       const item = document.getElementById(dom);
       if (item == null) return;
       item.style.background = "rgb(182,182,182,.2)";
       setTimeout(function() {
         item.style.background = "";
-      }, 50);
+      }, 100);
     }
   }
 };
