@@ -495,13 +495,15 @@ export default {
                       currentProfitLoss =
                         parseFloat(currentProfitLoss) + parseFloat(currentprofit);
 
-                        //console.log('Current -' + currentProfitLoss);
-                        //console.log('Prior -' + this.priorProfitLoss);
+                        console.log('Current -' + currentProfitLoss);
+                        console.log('Prior -' + this.priorProfitLoss);
+                        
                         let daychange =
-                           parseFloat(this.priorProfitLoss) - parseFloat(currentProfitLoss);
+                           parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
                         if(this.priorProfitLoss != 0 ){  
-                          //console.log('Capital - '+ this.Capital);
+                          console.log('Capital - '+ this.Capital);
                           let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
+                          console.log('Prior Equity -' + dperf);
                           daychangeperf = (daychange / dperf) * 100;
                           //daychangeperf = (daychange / this.priorProfitLoss) * 100;
                         }                     
@@ -604,7 +606,7 @@ export default {
               //========================================================================
                 let daychangeperf = 0;
                 let daychange =
-                    parseFloat(this.priorProfitLoss) - parseFloat(tploss);
+                    parseFloat(tploss) - parseFloat(this.priorProfitLoss);
                   if(this.priorProfitLoss != 0 ){  
                     //daychangeperf = (daychange / this.priorProfitLoss) * 100;
                     let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
