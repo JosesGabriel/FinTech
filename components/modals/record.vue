@@ -49,6 +49,7 @@
                     dense
                     dark
                     flat
+                    :menu-props="{offsetY: true}"
                   ></v-select>
                   <v-text-field
                     label="Buy Price"
@@ -443,6 +444,7 @@ export default {
       }
     },
     recordNow() {
+      this.el = 1;
       var tim = new Date();
       var time =
         tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
@@ -455,7 +457,7 @@ export default {
       if (buymonth.length < 2) buymonth = "0" + buymonth;
       if (buyday.length < 2) buyday = "0" + buyday;
 
-      let buydateformatted = [buyday, buymonth, buyyear].join("-");
+      let buydateformatted = [buyday, buymonth, buyyear].join("-") + " " + time;
 
       var finalselldate = new Date(this.sellDate),
         sellmonth = "" + (finalselldate.getMonth() + 1),
@@ -465,7 +467,8 @@ export default {
       if (sellmonth.length < 2) sellmonth = "0" + sellmonth;
       if (sellday.length < 2) sellday = "0" + sellday;
 
-      let selldateformatted = [sellday, sellmonth, sellyear].join("-");
+      let selldateformatted =
+        [sellday, sellmonth, sellyear].join("-") + " " + time;
 
       let portfolio_id = this.defaultPortfolioId;
       const payload = {
@@ -488,7 +491,6 @@ export default {
         .then(response => {
           console.log(response);
           this.buyDate = new Date().toISOString().substr(0, 10);
-          this.el = 1;
           this.buyMenu = false;
           this.buyPrice = "0.00";
           this.buyQuantity = 0;

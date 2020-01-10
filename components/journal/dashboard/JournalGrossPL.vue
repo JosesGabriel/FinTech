@@ -65,7 +65,7 @@ export default {
       series: [
         {
           name: "Loss",
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
         }
       ],
       chartOptions: {
@@ -80,6 +80,15 @@ export default {
               left: 2,
               top: 2,
               opacity: 1
+            },
+            colors: {
+              ranges: [
+                {
+                  from: -10000000000000000000000000,
+                  to: 0,
+                  color: "#F44336"
+                }
+              ]
             }
           }
         },
@@ -239,7 +248,7 @@ export default {
     getGrossPL() {
       if (this.journalCharts != null) {
         const objGrosPL = this.journalCharts.data.profit_loss;
-        const lastArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        const lastArray = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
         if (objGrosPL.length != 0) {
           lastArray.unshift(...objGrosPL);
 

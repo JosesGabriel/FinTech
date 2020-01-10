@@ -264,6 +264,7 @@ export default {
       totalPerf: 0,
       totalmvalue: 0,
       dayprior: 0,
+      priorProfitLoss: 0,
       date: new Date().toISOString().substr(0, 10),
       streamTrigger: '',
       filtered: '',
@@ -273,6 +274,13 @@ export default {
     TradeModal,
     resetModal,
     shareModal
+  },
+  props: {
+    Capital: {
+      default() {
+        return "";
+      }
+    }
   },
   watch: {
     simulatorOpenPosition: function() {
@@ -427,7 +435,6 @@ export default {
     },
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
-
       pl.style.display = "block";
     },
     menuLogsHide: function(item) {
@@ -444,69 +451,67 @@ export default {
     },
     getDayChange() {
       let currentProfitLoss = 0;
-      let priorProfitLoss = 0;
-      //let initDchange = true;
+      this.priorProfitLoss = 0;
+      let daychangeperf = 0;
+
       let d = new Date();
       let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
 
       for (let index = 0; index < this.portfolioLogs.length; index++) {
         let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
-        //let initDchange = (dformat != pdate ? false : true);
+       // console.log('DayChange Date -' + pdate);
+                  const params = {
+                    "symbol-id": this.portfolioLogs[index].metas.stock_id,
+                    resolution: "1D",
+                    limit: 2
+                  };
+                  this.$api.chart.charts.latest(params).then(
+                    function(result) {
+                      //console.log('Day Cahnge -', result);                    
+                      let prior_date = new Date(result.data.t[1]*1000);
+                      let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
+                      let tcost =
+                        this.portfolioLogs[index].position *
+                        this.portfolioLogs[index].average_price;
+                        //console.log('Date Current -' + pdate);
+                        //console.log('Date Prior -' + dformat_prior);                     
+                      if (pdate != dformat) {                        
+                        let priorPrice = result.data.c[1];
+                        let priorbuyResult =
+                          this.portfolioLogs[index].position *
+                          parseFloat(priorPrice).toFixed(2);
+                        let priormvalue = this.fees(priorbuyResult);
+                        let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
+                        this.priorProfitLoss =
+                          parseFloat(this.priorProfitLoss) + parseFloat(priorprofit);                              
+                      }
+                              
+                      let currentPrice = result.data.c[0];
+                      let currentbuyResult =
+                        this.portfolioLogs[index].position *
+                        parseFloat(currentPrice).toFixed(2);
+                      let currentmvalue = this.fees(currentbuyResult);
+                      let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
+                      currentProfitLoss =
+                        parseFloat(currentProfitLoss) + parseFloat(currentprofit);
 
-        const params = {
-          "symbol-id": this.portfolioLogs[index].metas.stock_id,
-          resolution: "1D",
-          limit: 2
-        };
-        this.$api.chart.charts.latest(params).then(
-          function(result) {
+                        console.log('Current -' + currentProfitLoss);
+                        console.log('Prior -' + this.priorProfitLoss);
+                        
+                        let daychange =
+                           parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
+                        if(this.priorProfitLoss != 0 ){  
+                          console.log('Capital - '+ this.Capital);
+                          let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
+                          console.log('Prior Equity -' + dperf);
+                          daychangeperf = (daychange / dperf) * 100;
+                          //daychangeperf = (daychange / this.priorProfitLoss) * 100;
+                        }                     
+                      this.$emit("DayChange", daychange);
+                      this.$emit("DayChangePerc", daychangeperf);
 
-            //console.log('Day Cahnge -', result);                    
-            let prior_date = new Date(result.data.t[1]*1000);
-            let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
-            let tcost =
-              this.portfolioLogs[index].position *
-              this.portfolioLogs[index].average_price;
-              //console.log('Date Current -' + pdate);
-              //console.log('Date Prior -' + dformat_prior);
-            //if (dformat_prior != pdate) {                      
-             if (dformat_prior != dformat) {   
-              let priorPrice = result.data.c[1];
-              let priorbuyResult =
-                this.portfolioLogs[index].position *
-                parseFloat(priorPrice).toFixed(2);
-              let priormvalue = this.fees(priorbuyResult);
-              let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
-              priorProfitLoss =
-                parseFloat(priorProfitLoss) + parseFloat(priorprofit);             
-                     
-            }
-
-            let currentPrice = result.data.c[0];
-            let currentbuyResult =
-              this.portfolioLogs[index].position *
-              parseFloat(currentPrice).toFixed(2);
-            let currentmvalue = this.fees(currentbuyResult);
-            let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
-            currentProfitLoss =
-              parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-
-            /*if(initDchange){
-              let daychange = 0;
-              let daychangeperf = 0;
-            }else{*/
-              //console.log('Current -' + currentProfitLoss);
-             // console.log('Prior -' + priorProfitLoss);
-              let daychange =
-                parseFloat(currentProfitLoss) - parseFloat(priorProfitLoss);
-              let daychangeperf = (daychange / priorProfitLoss) * 100;
-            //}
-
-            this.$emit("DayChange", daychange);
-            this.$emit("DayChangePerc", daychangeperf);
-
-          }.bind(this)
-        );
+                    }.bind(this)
+                  );
       }
       
     },
@@ -575,33 +580,40 @@ export default {
                 profit = parseFloat(mvalue) - parseFloat(tcost);
                 perf = (profit / tcost) * 100;
 
-                //console.log('Market Value - ' + mvalue);
                 this.filtered = mvalue;
                 this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
                 this.portfolioLogs[i].Profit = this.addcomma(profit);
                 this.portfolioLogs[i].Perf = this.addcomma(perf);
                 tmvalue = parseFloat(tmvalue) + parseFloat(mvalue);   
-                //console.log('Market Value - ' + this.portfolioLogs[i].MarketValue);
+                
                 let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
                 this.portfolioLogs.splice(i, 1, updatedItem);
-                //this.realtime = true;
+               
             }else{
                 profit = parseFloat(this.portfolioLogs[i].Profit);
                 perf = parseFloat(this.portfolioLogs[i].Perf);
                 tmvalue = parseFloat(tmvalue) + parseFloat(this.portfolioLogs[i].MarketValue);
                 
             }
-                //console.log('PROFIT' + i + ' - ' + parseFloat(profit));
                 tploss = parseFloat(tploss) + parseFloat(profit);
-                //console.log( tploss + ' + ' + profit + ' = ' + tploss);
                 tplossperf = parseFloat(tplossperf) + parseFloat(perf);  
-                //console.log('TPLOSS' + i + ' - ' + tploss);
-
+                
                 this.totalProfitLoss = tploss;
                 this.totalPerf = tplossperf;   
                 this.totalmvalue = tmvalue;
                 this.$emit("totalUnrealized", this.totalProfitLoss);
                 this.$emit("totalMarketValue", this.totalmvalue.toFixed(2)); 
+              //========================================================================
+                let daychangeperf = 0;
+                let daychange =
+                    parseFloat(tploss) - parseFloat(this.priorProfitLoss);
+                  if(this.priorProfitLoss != 0 ){  
+                    //daychangeperf = (daychange / this.priorProfitLoss) * 100;
+                    let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
+                      daychangeperf = (daychange / dperf) * 100;
+                  }                     
+                this.$emit("DayChange", daychange);
+                this.$emit("DayChangePerc", daychangeperf);
         } 
        
     },

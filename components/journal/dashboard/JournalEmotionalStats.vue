@@ -78,10 +78,10 @@ export default {
             emotionalArray: [],
             series: [{
                 name: 'Win',
-                data: [  0,  0,  0]
+                data: [  null,  null,  null]
             }, {
                 name: 'loss',
-                data: [  0,  0,  0]
+                data: [  null,  null,  null]
             }],
             chartOptions: {
                 plotOptions: {
@@ -206,11 +206,12 @@ export default {
                 if(objStrategy.length != 0) {
                     Object.keys(objStrategy).forEach(function(key) {
                         emotionalArray.push({...objStrategy[key], name: key});
+                        console.log(emotionalArray)
                     });
                     this.emotionalArray = emotionalArray
 
-                    const winEmotional = [ 0, 0, 0, 0]
-                    const lossEmotional = [ 0, 0, 0, 0]
+                    const winEmotional = [  null,  null,  null, null]
+                    const lossEmotional = [  null,  null,  null, null]
                     const nameEmotional = [" ", " ", " ", " "]
 
                     for (let i = 0; i < this.emotionalArray.length; i++) {

@@ -39,7 +39,7 @@ export default {
       series: [
         {
           name: "Loss",
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          data: [null, null, null, null, null, null, null, null, null, null, null, null]
         }
       ],
       chartOptions: {
@@ -58,7 +58,7 @@ export default {
             colors: {
               ranges: [
                 {
-                  from: -100,
+                  from: -1000000000000000000000000000000000000000000000,
                   to: 0,
                   color: "#F44336"
                 }

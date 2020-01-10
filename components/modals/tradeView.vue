@@ -738,7 +738,7 @@ export default {
           plan: this.tradeplanSellModel,
           emotion: this.emotionsSellModel,
           notes: this.notesSellModel,
-          date: this.YMDModel
+          date: this.dateModel
         }
       };
       this.$api.journal.portfolio
