@@ -1,7 +1,7 @@
 <template>
   <v-content :style="{ background: cardbackground }">
     <v-card
-      :loading="loading"
+      :loading="headline_loading"
       style="height:220px"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       flat
@@ -32,39 +32,11 @@ export default {
     Sentiment,
     Tabs
   },
-  head() {
-    return {
-      title: this.stock.description,
-      meta: [
-        {
-          hid: this.stock.market_code,
-          name: this.stock.description,
-          content: this.stock.description
-        }
-      ],
-      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
-    };
-  },
-  data() {
-    return {
-      counter: 0,
-      sse: null,
-      data: {},
-      loading: "#03dac5",
-      temp_trades: [],
-      ctr_trades: 0
-    };
-  },
   computed: {
     ...mapGetters({
-      stock: "chart/stock",
       symbolid: "chart/symbolid",
-      index: "chart/index",
-      market_code: "chart/market_code",
-      trades: "chart/trades",
       lightSwitch: "global/getLightSwitch",
-      bidask: "chart/bidask",
-      favicon: "global/favicon"
+      headline_loading: "chart/headline_loading"
     }),
     cardbackground: function() {
       //return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e"; e3e9ed
@@ -77,263 +49,28 @@ export default {
       setSymbolID: "chart/setSymbolID",
       setIndex: "chart/setIndex",
       setMarketCode: "chart/setMarketCode",
-      setTicker: "chart/setTicker",
-      setTrades: "chart/setTrades",
-      setBidask: "chart/setBidask"
+      setHeadlineLoading: "chart/setHeadlineLoading"
     }),
-    tickSoundFavicon: function(change) {
-      const beepSound = new Audio("/audio/vk_notification.mp3");
-      beepSound.play();
-
-      if (change > 0) {
-        this.$store.commit(
-          "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/up.ico`
-        );
-      } else if (change < 0) {
-        this.$store.commit(
-          "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/down.ico`
-        );
-      } else {
-        this.$store.commit(
-          "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
-        );
-      }
-    },
     initStock: async function(symid) {
-      this.loading = "#03dac5";
+      this.setHeadlineLoading("#03dac5");
       try {
         const response = await this.$api.chart.stocks.history({
           "symbol-id": symid
         });
-        this.data = response.data;
-        this.setIndex(parseInt(this.data.value) > 0 ? false : true);
-        this.setStock(this.data);
-        this.setMarketCode(this.data.market_code);
+        const data = response.data;
+        this.setIndex(parseInt(data.value) > 0 ? false : true);
+        this.setStock(data);
+        this.setMarketCode(data.market_code);
+        this.setHeadlineLoading(false);
       } catch (error) {
         //console.log(error);
       }
-      this.loading = null;
-    },
-    initSSE: function(symid) {
-      if (this.sse !== null) {
-        this.sse.close();
-        this.counter = 0;
-        this.$store.commit(
-          "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
-        );
-      }
-
-      this.sse = new EventSource(
-        "https://stream-api.arbitrage.ph/sse/market-data/pse/" + symid
-      );
-
-      //   this.sse = new EventSource(
-      //     "http://localhost:8021/sse/market-data/pse/" + symid
-      //   );
-
-      this.sse.onopen = function() {
-        // console.log("open sse");
-      };
-
-      this.sse.onerror = function(err) {
-        // console.log("open err");
-        //console.log(err);
-      };
-
-      this.sse.addEventListener(
-        "info",
-        function(e) {
-          const data = JSON.parse(e.data);
-          this.counter++;
-          this.$store.commit("chart/SET_STOCK_OBJ", {
-            trades: parseInt(this.stock.trades) + parseInt(this.counter)
-          });
-
-          if (parseFloat(this.stock.weekyearlow) > parseFloat(data.l)) {
-            //console.log(this.stock.weekyearlow + " > " + data.l);
-            this.$store.commit("chart/SET_STOCK_OBJ", { weekyearlow: data.l });
-          }
-
-          if (parseFloat(this.stock.weekyearhigh) < parseFloat(data.l)) {
-            this.$store.commit("chart/SET_STOCK_OBJ", { weekyearhigh: data.h });
-          }
-
-          //this.$store.commit("chart/SET_STOCK_OBJ", { marketcap: data.c });
-
-          this.$store.commit("chart/SET_STOCK_OBJ", { last: data.c });
-          this.$store.commit("chart/SET_STOCK_OBJ", { volume: data.vol });
-          this.$store.commit("chart/SET_STOCK_OBJ", { value: data.val });
-          this.$store.commit("chart/SET_STOCK_OBJ", { change: data.chg });
-          this.$store.commit("chart/SET_STOCK_OBJ", {
-            changepercentage: data.chgpc
-          });
-          this.$store.commit("chart/SET_STOCK_OBJ", { high: data.h });
-          this.$store.commit("chart/SET_STOCK_OBJ", { low: data.l });
-          this.$store.commit("chart/SET_STOCK_OBJ", { open: data.o });
-          this.$store.commit("chart/SET_STOCK_OBJ", {
-            average: data.val / data.vol
-          });
-
-          // create a tick sound and favicon for every update in sse
-          this.tickSoundFavicon(data.chg);
-        }.bind(this)
-      );
-
-      this.temp_trades = this.trades;
-      this.sse.addEventListener(
-        "trade",
-        function(event) {
-          const trades = JSON.parse(event.data);
-          this.temp_trades.unshift({
-            id: `${trades.t}_${this.ctr_trades++}`,
-            id_str: String(`${trades.t}_${this.ctr_trades++}`),
-            timestamp: trades.t,
-            date: null,
-            datetime: null,
-            executed_price: trades.exp,
-            executed_volume: trades.exvol,
-            buyer: trades.b,
-            seller: trades.s
-          });
-
-          if (this.trades.length !== undefined && this.trades.length > 0) {
-            if (this.temp_trades.length > 99) {
-              this.temp_trades.pop();
-            }
-            this.setTrades(this.temp_trades);
-          }
-        }.bind(this)
-      );
-
-      this.sse.addEventListener(
-        "bidask",
-        function(event) {
-          if (
-            this.bidask.asks !== undefined &&
-            this.bidask.bids !== undefined
-          ) {
-            const data = JSON.parse(event.data);
-
-            if (data.ov == "B") {
-              // bid
-              const bids = this.updateBidAndAsks(this.bidask.bids, data);
-              this.$store.commit(
-                "chart/SET_BIDS",
-                bids.sort(this.sortBy("price", "desc"))
-              );
-            } else if (data.ov == "S") {
-              // ask
-              //              if (data.ty != "a" || data.ty != "au") return;
-              const asks = this.updateBidAndAsks(this.bidask.asks, data);
-              this.$store.commit(
-                "chart/SET_ASKS",
-                asks.sort(this.sortBy("price", "desc"))
-              );
-            }
-            // console.log(this.bidask);
-          }
-        }.bind(this)
-      );
-    },
-
-    // For Bid and Asks
-    updateBidAndAsks: function(list, data) {
-      const index = list.findIndex(item => item.id === data.id);
-      //   console.log("update bidask", data.ty);
-      //   console.log(index);
-      //   console.log(list);
-      //   console.log(data);
-      if (data.ty == "a") {
-        if (typeof list[index] !== "undefined") {
-          list[index].count++;
-          list[index].volume += data.vol;
-        } else {
-          list.push(this.addToBidAskList(data.id, data));
-        }
-      } else if (data.ty == "au") {
-        // decrement data.id's count by 1, if count is zero, remove from list
-        list = this.updateBidAskCount(list, index, -1, data.vol);
-        // add new data.idn to list
-        list.push(this.addToBidAskList(data.idn, data));
-      } else if (data.ty == "d") {
-        // decrement data.id's count by 1, if count is zero, remove from list
-        list = this.updateBidAskCount(list, index, -1, data.vol);
-      } else if (data.ty == "u") {
-        // same as au but drop the data.id entirely and add data.idn to list
-        if (typeof list[index] !== "undefined") {
-          list = list.filter((item, key) => key !== index);
-        }
-        list.push(this.addToBidAskList(data.idn, data));
-      } else if (data.ty == "fd") {
-        // decrement data.id's count by 1, if count is zero, remove from list
-        list = this.updateBidAskCount(list, index, -1, 0);
-
-        list = this.updateBidAskVolume(list, index, -1 * data.vol);
-      } else if (data.ty == "pd") {
-        list = this.updateBidAskVolume(list, index, data.vol);
-      }
-
-      const limit = Math.max(this.bidask.asks.length, this.bidask.bids.length);
-      this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
-      return list;
-    },
-    updateBidAskCount: function(list, id, increment, volume) {
-      if (typeof list[id] !== "undefined") {
-        list[id].count += increment;
-        list[id].volume += volume * increment;
-        // if count less than 0, remove from the list
-        if (list[id].count <= 0) {
-          list = list.filter((item, key) => key !== id);
-        }
-      }
-      return list;
-    },
-    updateBidAskVolume: function(list, id, increment) {
-      if (typeof list[id] !== "undefined") {
-        list[id].volume += increment;
-      }
-      return list;
-    },
-    addToBidAskList: function(id, data) {
-      return {
-        count: 1,
-        id: id,
-        price: data.p,
-        volume: data.vol
-      };
-    },
-    sortBy: function(key, order = "asc") {
-      return function innerSort(a, b) {
-        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-          // property doesn't exist on either object
-          return 0;
-        }
-
-        const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
-        const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
-
-        let comparison = 0;
-        if (varA > varB) {
-          comparison = 1;
-        } else if (varA < varB) {
-          comparison = -1;
-        }
-        return order === "desc" ? comparison * -1 : comparison;
-      };
     }
   },
   watch: {
     symbolid(symid, oldsymid) {
       this.initStock(symid);
-      this.initSSE(symid);
     }
-  },
-  beforeDestroy() {
-    this.sse.close();
   },
   created() {
     if (this.$route.params.id) {
@@ -350,19 +87,6 @@ export default {
     } else {
       this.setSymbolID("29235364749115392"); // PSE
     }
-  },
-  mounted() {
-    //console.log(this.$route);
-    /*this.$api.watchlist.watchlists
-      .index()
-      .then(response => {
-        console.log("watchlist");
-        console.log(response);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-      */
   }
 };
 </script>

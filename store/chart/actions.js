@@ -14,6 +14,11 @@ export default {
   async setSidebar({ commit }, data) {
     await commit("SET_SIDEBAR", data);
   },
+
+  async setHeadlineLoading({ commit }, data) {
+    await commit("SET_HEADLINE_LOADING", data);
+  },
+
   async setSymbolID({ commit }, data) {
     await commit("SET_SYMBOLID", data);
   },

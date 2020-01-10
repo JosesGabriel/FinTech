@@ -74,14 +74,36 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Headline",
+  data() {
+    return {
+      counter: 0
+    };
+  },
+  head() {
+    return {
+      title: this.stock.description,
+      meta: [
+        {
+          hid: this.stock.market_code,
+          name: this.stock.description,
+          content: this.stock.description
+        }
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
+    };
+  },
   computed: {
     ...mapGetters({
+      symbolid: "chart/symbolid",
       stock: "chart/stock",
       lightSwitch: "global/getLightSwitch",
       stock_last: "chart/stock_last",
       stock_change: "chart/stock_change",
       stock_changepercentage: "chart/stock_changepercentage",
       stock_marketcap: "chart/stock_marketcap",
+      headline_loading: "chart/headline_loading",
+      favicon: "global/favicon",
+      sse: "global/sse"
     }),
     changetype() {
       let value = this.stock.change;
@@ -95,6 +117,13 @@ export default {
     }
   },
   watch: {
+    headline_loading: function(value) {
+      if (value === false) {
+        setTimeout(() => {
+          this.sse.addEventListener("info", this.sseInfo);
+        }, 2000);
+      }
+    },
     stock_marketcap: function(value) {
       this.updateEffect("stock__marketcap");
     },
@@ -115,6 +144,63 @@ export default {
       setTimeout(function() {
         item.style.background = "";
       }, 100);
+    },
+    tickSoundFavicon: function(change) {
+      const beepSound = new Audio("/audio/vk_notification.mp3");
+      beepSound.play();
+
+      if (change > 0) {
+        this.$store.commit(
+          "global/SET_FAVICON",
+          `${process.env.CURRENT_DOMAIN}/favicon/up.ico`
+        );
+      } else if (change < 0) {
+        this.$store.commit(
+          "global/SET_FAVICON",
+          `${process.env.CURRENT_DOMAIN}/favicon/down.ico`
+        );
+      } else {
+        this.$store.commit(
+          "global/SET_FAVICON",
+          `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
+        );
+      }
+    },
+    sseInfo: function(e) {
+      try {
+        if (this.symbolid == undefined) return;
+        const data = JSON.parse(e.data);
+        if (this.symbolid !== data.sym_id) return;
+        this.counter++;
+        this.$store.commit("chart/SET_STOCK_OBJ", {
+          trades: parseInt(this.stock.trades) + parseInt(this.counter)
+        });
+        if (parseFloat(this.stock.weekyearlow) > parseFloat(data.l)) {
+          //console.log(this.stock.weekyearlow + " > " + data.l);
+          this.$store.commit("chart/SET_STOCK_OBJ", { weekyearlow: data.l });
+        }
+        if (parseFloat(this.stock.weekyearhigh) < parseFloat(data.l)) {
+          this.$store.commit("chart/SET_STOCK_OBJ", { weekyearhigh: data.h });
+        }
+        //this.$store.commit("chart/SET_STOCK_OBJ", { marketcap: data.c });
+        this.$store.commit("chart/SET_STOCK_OBJ", { last: data.c });
+        this.$store.commit("chart/SET_STOCK_OBJ", { volume: data.vol });
+        this.$store.commit("chart/SET_STOCK_OBJ", { value: data.val });
+        this.$store.commit("chart/SET_STOCK_OBJ", { change: data.chg });
+        this.$store.commit("chart/SET_STOCK_OBJ", {
+          changepercentage: data.chgpc
+        });
+        this.$store.commit("chart/SET_STOCK_OBJ", { high: data.h });
+        this.$store.commit("chart/SET_STOCK_OBJ", { low: data.l });
+        this.$store.commit("chart/SET_STOCK_OBJ", { open: data.o });
+        this.$store.commit("chart/SET_STOCK_OBJ", {
+          average: data.val / data.vol
+        });
+        // create a tick sound and favicon for every update in sse
+        this.tickSoundFavicon(data.chg);
+      } catch (error) {
+        //console.log(error);
+      }
     }
   }
 };

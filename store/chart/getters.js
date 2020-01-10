@@ -16,6 +16,10 @@ export default {
     return state.sidebar;
   },
 
+  headline_loading: state => {
+    return state.headline_loading;
+  },
+
   symbolid: state => {
     return state.symbolid;
   },
