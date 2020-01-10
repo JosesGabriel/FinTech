@@ -161,8 +161,8 @@ export default {
           this.setTrades(this.temp_trades);
         }
       } catch (err) {
-        console.log("error");
-        console.log(err);
+        //console.log("error");
+        //console.log(err);
       }
     },
     updateEffect: dom => {
@@ -173,6 +173,9 @@ export default {
         item.style.background = "";
       }, 100);
     }
+  },
+  mounted() {
+    this.initTimetrade(this.symbolid);
   }
 };
 </script>

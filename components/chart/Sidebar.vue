@@ -87,6 +87,9 @@ export default {
     } else {
       this.setSymbolID("29235364749115392"); // PSE
     }
+  },
+  mounted() {
+    this.initStock(this.symbolid);
   }
 };
 </script>

@@ -118,12 +118,12 @@ export default {
       );
 
       this.sse.onopen = function() {
-        console.log("open sse");
+        // console.log("open sse");
       };
 
       this.sse.onerror = function(err) {
-        console.log("err sse");
-        console.log(err);
+        // console.log("err sse");
+        // console.log(err);
       };
     }
   },

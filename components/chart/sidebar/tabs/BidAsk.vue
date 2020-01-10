@@ -122,7 +122,8 @@ export default {
     ...mapGetters({
       symbolid: "chart/symbolid",
       bidask: "chart/bidask",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      sse: "global/sse"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -135,7 +136,7 @@ export default {
     loading: function(value) {
       if (value === false) {
         setTimeout(() => {
-          this.sse.addEventListener("info", this.sseInfo);
+          this.sse.addEventListener("bidask", this.sseBidask);
         }, 2000);
       }
     }
@@ -189,7 +190,11 @@ export default {
     },
     sseBidask: function(e) {
       if (this.bidask.asks !== undefined && this.bidask.bids !== undefined) {
-        const data = JSON.parse(event.data);
+        if (this.symbolid == undefined) return;
+        const data = JSON.parse(e.data);
+        // console.log(data);
+        // console.log(this.symbolid);
+        if (this.symbolid !== data.sym_id) return;
 
         if (data.ov == "B") {
           // bid
@@ -209,7 +214,95 @@ export default {
         }
         // console.log(this.bidask);
       }
+    },
+    // For Bid and Asks
+    updateBidAndAsks: function(list, data) {
+      const index = list.findIndex(item => item.id === data.id);
+      //   console.log("update bidask", data.ty);
+      //   console.log(index);
+      //   console.log(list);
+      //   console.log(data);
+      if (data.ty == "a") {
+        if (typeof list[index] !== "undefined") {
+          list[index].count++;
+          list[index].volume += data.vol;
+        } else {
+          list.push(this.addToBidAskList(data.id, data));
+        }
+      } else if (data.ty == "au") {
+        // decrement data.id's count by 1, if count is zero, remove from list
+        list = this.updateBidAskCount(list, index, -1, data.vol);
+        // add new data.idn to list
+        list.push(this.addToBidAskList(data.idn, data));
+      } else if (data.ty == "d") {
+        // decrement data.id's count by 1, if count is zero, remove from list
+        list = this.updateBidAskCount(list, index, -1, data.vol);
+      } else if (data.ty == "u") {
+        // same as au but drop the data.id entirely and add data.idn to list
+        if (typeof list[index] !== "undefined") {
+          list = list.filter((item, key) => key !== index);
+        }
+        list.push(this.addToBidAskList(data.idn, data));
+      } else if (data.ty == "fd") {
+        // decrement data.id's count by 1, if count is zero, remove from list
+        list = this.updateBidAskCount(list, index, -1, 0);
+
+        list = this.updateBidAskVolume(list, index, -1 * data.vol);
+      } else if (data.ty == "pd") {
+        list = this.updateBidAskVolume(list, index, data.vol);
+      }
+
+      const limit = Math.max(this.bidask.asks.length, this.bidask.bids.length);
+      this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
+      return list;
+    },
+    updateBidAskCount: function(list, id, increment, volume) {
+      if (typeof list[id] !== "undefined") {
+        list[id].count += increment;
+        list[id].volume += volume * increment;
+        // if count less than 0, remove from the list
+        if (list[id].count <= 0) {
+          list = list.filter((item, key) => key !== id);
+        }
+      }
+      return list;
+    },
+    updateBidAskVolume: function(list, id, increment) {
+      if (typeof list[id] !== "undefined") {
+        list[id].volume += increment;
+      }
+      return list;
+    },
+    addToBidAskList: function(id, data) {
+      return {
+        count: 1,
+        id: id,
+        price: data.p,
+        volume: data.vol
+      };
+    },
+    sortBy: function(key, order = "asc") {
+      return function innerSort(a, b) {
+        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+          // property doesn't exist on either object
+          return 0;
+        }
+
+        const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
+        const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
+
+        let comparison = 0;
+        if (varA > varB) {
+          comparison = 1;
+        } else if (varA < varB) {
+          comparison = -1;
+        }
+        return order === "desc" ? comparison * -1 : comparison;
+      };
     }
+  },
+  mounted() {
+    this.initBidask(this.symbolid);
   }
 };
 </script>
