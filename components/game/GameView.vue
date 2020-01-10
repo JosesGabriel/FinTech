@@ -49,6 +49,14 @@ export default {
     GameVariables,
     RankingTable
   },
+  props: {
+    seriesData: {
+      default() {
+        return {};
+      },
+      type: Object
+    }
+  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
