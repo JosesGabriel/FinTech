@@ -1,11 +1,19 @@
 import { IsInArray } from "~/helpers/arrays/urls";
 
+/**
+ * Extends the nuxt-axios package
+ * 
+ * @param {*} {}
+ */
 export default function({ $axios, redirect }) {
   if (process.client) {
     // list of exempted urls
     const urls = [process.env.CHART_API_URL, process.env.STREAM_API_URL];
 
     // region custom handlers
+    /**
+     * Handles every axios request
+     */
     $axios.interceptors.request.use(
       config => {
         const token = localStorage["auth._token.local"];
@@ -22,7 +30,9 @@ export default function({ $axios, redirect }) {
       }
     );
 
-    // set global token
+    /**
+     * Set global authorization token
+     */
     $axios.setGlobalAuth = () => {
       $axios.defaults.headers.common["Authorization"] =
         localStorage["auth._token.local"];
@@ -30,10 +40,14 @@ export default function({ $axios, redirect }) {
     // endregion custom handlers
 
     // region override
-    // set on request
+    /**
+     * Set on request callback
+     */
     $axios.onRequest(config => {});
 
-    // set on error methods
+    /**
+     * Set error callback
+     */
     $axios.onError(error => {
       // TODO handle global errors
       //   const code = parseInt(error.response && error.response.status)
