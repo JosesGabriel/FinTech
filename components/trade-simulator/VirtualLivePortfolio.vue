@@ -275,6 +275,13 @@ export default {
     resetModal,
     shareModal
   },
+  props: {
+    Capital: {
+      default() {
+        return "";
+      }
+    }
+  },
   watch: {
     simulatorOpenPosition: function() {
       this.getOpenPositions();
@@ -489,11 +496,14 @@ export default {
                         parseFloat(currentProfitLoss) + parseFloat(currentprofit);
 
                         //console.log('Current -' + currentProfitLoss);
-                       // console.log('Prior -' + priorProfitLoss);
+                        //console.log('Prior -' + this.priorProfitLoss);
                         let daychange =
-                          parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
+                           parseFloat(this.priorProfitLoss) - parseFloat(currentProfitLoss);
                         if(this.priorProfitLoss != 0 ){  
-                          daychangeperf = (daychange / this.priorProfitLoss) * 100;
+                          //console.log('Capital - '+ this.Capital);
+                          let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
+                          daychangeperf = (daychange / dperf) * 100;
+                          //daychangeperf = (daychange / this.priorProfitLoss) * 100;
                         }                     
                       this.$emit("DayChange", daychange);
                       this.$emit("DayChangePerc", daychangeperf);
@@ -594,9 +604,11 @@ export default {
               //========================================================================
                 let daychangeperf = 0;
                 let daychange =
-                    parseFloat(tploss) - parseFloat(this.priorProfitLoss);
+                    parseFloat(this.priorProfitLoss) - parseFloat(tploss);
                   if(this.priorProfitLoss != 0 ){  
-                    daychangeperf = (daychange / this.priorProfitLoss) * 100;
+                    //daychangeperf = (daychange / this.priorProfitLoss) * 100;
+                    let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
+                      daychangeperf = (daychange / dperf) * 100;
                   }                     
                 this.$emit("DayChange", daychange);
                 this.$emit("DayChangePerc", daychangeperf);

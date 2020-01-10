@@ -177,10 +177,12 @@
       >
         <v-container class="pa-0">
           <VirtualLivePortfolio
+           :Capital="port_capital"
             v-on:DayChange="DayChange"
             v-on:DayChangePerc="ChangePerc"
             v-on:totalUnrealized="Unrealized"
             v-on:totalMarketValue="TotalMValue"
+          
           />
         </v-container>
       </v-tab-item>
