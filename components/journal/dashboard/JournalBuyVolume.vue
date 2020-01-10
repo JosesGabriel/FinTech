@@ -64,7 +64,7 @@ export default {
       series: [
         {
           name: "Loss",
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
         }
       ],
       chartOptions: {
@@ -241,7 +241,7 @@ export default {
     getBuyVolume() {
       if (this.journalCharts != null) {
         const buyVolumeArray = this.journalCharts.data.buy_volume;
-        const volumeArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        const volumeArray = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
         if (buyVolumeArray.length != 0) {
           for (let i = 0; i < buyVolumeArray.length; i++) {
             buyVolumeArray[i] = parseFloat(buyVolumeArray[i]);

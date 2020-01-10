@@ -37,7 +37,7 @@ export default {
             lossersArray: [],
             series: [{
                 name: 'Lossers',
-                data: [ 0,  0,  0,  0,  0,  0,  0]
+                data: [ null,  null,  null,  null,  null,  null,  null]
             }],
             chartOptions: {
                 plotOptions: {
@@ -112,7 +112,7 @@ export default {
                         show: true,
                         align: 'left',
                         minWidth: 0,
-                        maxWidth: 160,
+                        maxWidth: 100,
                         style: {
                             color: '#b6b6b6',
                             fontSize: '12px',
@@ -172,7 +172,7 @@ export default {
                 const objLossers = this.journalCharts.data.top_stocks
                 const lossersArray = []
                 const negativeArr = []
-                let lastValueArray = [ 0, 0, 0, 0, 0, 0, 0]
+                let lastValueArray = [ null,  null,  null,  null,  null,  null,  null]
                 let lastSymbolArray = [' ', ' ', ' ', ' ', ' ', ' ', ' ']
                 let filteredStocks = null
 

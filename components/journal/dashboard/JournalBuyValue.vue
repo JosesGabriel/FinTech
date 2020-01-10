@@ -79,7 +79,7 @@ export default {
       series: [
         {
           name: "Loss",
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
         }
       ],
       chartOptions: {
@@ -238,7 +238,7 @@ export default {
     getBuyValue() {
       if (this.journalCharts != null) {
         const buyValue = this.journalCharts.data.buy_value;
-        const valueArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0];
+        const valueArray = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
         if (buyValue.length != 0) {
           for (let i = 0; i < buyValue.length; i++) {
             buyValue[i] = parseFloat(buyValue[i]);

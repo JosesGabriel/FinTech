@@ -80,6 +80,15 @@ export default {
               left: 2,
               top: 2,
               opacity: 1
+            },
+            colors: {
+              ranges: [
+                {
+                  from: -10000000000000000000000000,
+                  to: 0,
+                  color: "#F44336"
+                }
+              ]
             }
           }
         },
