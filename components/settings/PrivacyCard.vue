@@ -45,6 +45,8 @@
                       <v-col cols="12"
                         ><v-select
                           :items="privacyOptions"
+                          item-text="text"
+                          item-value="value"
                           placeholder="Public"
                           dense
                           hide-details
@@ -100,7 +102,10 @@ export default {
       ],
       privacyToggleMode: false,
       currentSettingIndex: "",
-      privacyOptions: ["Public", "Only Me"],
+      privacyOptions: [
+        { text: "Public", value: "public" },
+        { text: "Only Me", value: "only_me" }
+      ],
       currentSetting: ""
     };
   },
@@ -124,23 +129,19 @@ export default {
           this.currentSetting +
           " ]"
       );
-      //READY TO POST TO ENDPOINT
-      // this.$api.accounts.updateSettings
-      //   .putnoid(payload)
-      //   .then(response => {
-      //     this.alert.push(true);
-      //     this.alert.push(response.message);
-      //   })
-      //   .catch(e => {
-      //     this.alert.push(false);
-      //     this.alert.push("Error Updating");
-      //   })
-      //   .finally(
-      //     function() {
-      //       this.cardLoader = false;
-      //       this.$emit("alert", this.alert);
-      //     }.bind(this)
-      //   );
+      let payload = {
+        settings: {}
+      };
+      payload.settings[this.currentSettingIndex] = this.currentSetting;
+      this.$api.accounts.updateSettings
+        .putnoid(payload)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(e => {
+          console.log(e);
+        })
+        .finally(function() {}.bind(this));
       this.currentSetting = "";
       this.privacyToggleMode = false;
     }
