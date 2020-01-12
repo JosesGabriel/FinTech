@@ -37,6 +37,10 @@ export default (ctx, inject) => {
     authentication: {
       register: initApiRepository("/register"),
       verify: initApiRepository("/verify")
+    },
+    accounts: {
+      updateAccount: initApiRepository("/users"),
+      updateSettings: initApiRepository("/users/settings")
     }
   };
 

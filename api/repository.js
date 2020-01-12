@@ -20,6 +20,10 @@ export default $axios => resource => ({
   put(id, payload) {
     return $axios.$put(`${resource}/${id}`, payload);
   },
+  // lmao dili ko kabalo unsay iname ani. PUT request ra ni withou ID na identifier since bearer token lang need
+  putnoid(payload) {
+    return $axios.$put(`${resource}`, payload);
+  },
 
   delete(id) {
     return $axios.$delete(`${resource}/${id}`);
