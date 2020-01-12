@@ -1,12 +1,13 @@
 <template>
-    <v-row no-gutters>
+    <v-row no-gutters ref="componentWrapper">
+        <!-- Don't remove ref value. Used for sharing -->
         <v-col cols="12">
             <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
                 <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">EMOTIONAL STATISTICS</h6>
                 <v-spacer></v-spacer>
-                <v-btn icon small @click.stop="showScheduleForm=true"> 
-                    <img src="/icon/journal-icons/share-icon.svg" width="15">
-                </v-btn>
+                <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
+      </v-btn>
             </v-card-title>
         </v-col>
         <v-col class="pa-0" cols="6" sm="6" md="6">
@@ -39,7 +40,11 @@
                 </template>
             </v-simple-table>
         </v-col>
-        <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+        <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
     </v-row>
 </template>
 
@@ -74,6 +79,8 @@ export default {
     },
     data () {
         return {  
+            shareLink: "",
+      showShareForm: false,
             showScheduleForm: false,
             emotionalArray: [],
             series: [{
@@ -199,6 +206,14 @@ export default {
         }
     },
     methods: {
+        async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
         getEmotionalStats(){
             if(this.journalCharts != null) {
                 const objStrategy = this.journalCharts.data.emotional_statistics

@@ -1,5 +1,6 @@
 <template>
-  <v-col class="pa-0">
+  <v-col class="pa-0" ref="componentWrapper"> 
+    <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
       <h1 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">OPEN POSITION/S (PHP)</h1>
       <v-spacer></v-spacer>
@@ -36,8 +37,8 @@
         <span class="v-btn__content">Fund</span>
       </v-btn>
 
-      <v-btn icon small @click.stop="showScheduleForm=true">
-        <img src="/icon/journal-icons/share-icon.svg" width="15" />
+      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-data-table
@@ -155,7 +156,11 @@
         ></v-pagination>
       </v-card>
     </v-card>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
     <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
     <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" />
@@ -196,12 +201,13 @@ export default {
   },
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       post: {
         id: 1,
         title: "My Journey with Vue"
       },
       livePortfolioLoading: "success",
-      showScheduleForm: false,
       showResetForm: false,
       showFundsForm: false,
       showTradeViewForm: false,
@@ -274,6 +280,14 @@ export default {
       setOpenPosition: "journal/setOpenPosition",
       setJournalCharts: "journal/setJournalCharts"
     }),
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
 

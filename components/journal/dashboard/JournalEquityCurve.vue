@@ -1,5 +1,5 @@
 <template>
-  <v-col class="pa-0" cols="12" sm="12" md="12">
+  <v-col ref="componentWrapper" class="pa-0" cols="12" sm="12" md="12">
     <v-card-title
       class="text-left justify-left px-0 pb-2 pt-5"
       :style="borderColor"
@@ -54,8 +54,8 @@
         >Custom</v-btn
       >
       <v-spacer></v-spacer>
-      <v-btn icon small @click.stop="showScheduleForm = true">
-        <img src="/icon/journal-icons/share-icon.svg" width="15" />
+      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-col class="pa-0 pt-5" cols="12" sm="12" md="12">
@@ -70,8 +70,9 @@
       </div>
     </v-col>
     <share-modal
-      :visible="showScheduleForm"
-      @close="showScheduleForm = false"
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
     />
   </v-col>
 </template>
@@ -101,6 +102,8 @@ export default {
   },
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       showScheduleForm: false,
       selection: "one_year",
       series: [
@@ -277,6 +280,14 @@ export default {
     this.lightSwitcher();
   },
   methods: {
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getEquityCurve() {
       this.equityCurveArr = [];
       if (this.defaultPortfolioId != null) {

@@ -1,50 +1,70 @@
 <template>
-  <v-row no-gutters>
+  <v-row ref="componentWrapper" no-gutters>
+    <!-- Don't remove ref value. Used for sharing -->
     <v-col cols="12">
-      <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-        <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">EXPENSE REPORT</h6>
+      <v-card-title
+        class="text-left justify-left px-0 pb-2 pt-0"
+        :style="borderColor"
+      >
+        <h6
+          class="font-weight-regular subtitle-2"
+          :style="{ color: fontColor }"
+        >
+          EXPENSE REPORT
+        </h6>
         <v-spacer></v-spacer>
-        <v-btn icon small @click.stop="showScheduleForm=true">
-          <img src="/icon/journal-icons/share-icon.svg" width="15" />
+        <v-btn icon small @click="showShareModal()">
+          <v-icon>mdi-share-variant</v-icon>
         </v-btn>
       </v-card-title>
     </v-col>
     <v-col class="pa-0 pt-3" cols="3" sm="3" md="3">
       <v-card-title class="text-left justify-left pa-0">
-        <h6 class="font-weight-regular caption text-capitalize" :style="{ color: fontColor }">Trading Result (PHP)</h6>
+        <h6
+          class="font-weight-regular caption text-capitalize"
+          :style="{ color: fontColor }"
+        >
+          Trading Result (PHP)
+        </h6>
       </v-card-title>
-      <v-simple-table :dense="true" :dark="lightSwitch == true" id="liveportfolio-table">
+      <v-simple-table
+        id="liveportfolio-table"
+        :dense="true"
+        :dark="lightSwitch == true"
+      >
         <template v-slot:default>
           <tbody>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Commisions</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(comm)) }}</td>
+              <td class="item_position-prop caption text-right px-1 py-1">
+                {{ formatPrice(parseFloat(comm)) }}
+              </td>
             </tr>
             <tr id="table_tr_snap-cont">
-              <td class="item_position-prop caption px-1 py-2">Value Added Tax</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(vadd)) }}</td>
+              <td class="item_position-prop caption px-1 py-2">
+                Value Added Tax
+              </td>
+              <td class="item_position-prop caption text-right px-1 py-1">
+                {{ formatPrice(parseFloat(vadd)) }}
+              </td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Transfer Fee</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(tfee)) }}</td>
+              <td class="item_position-prop caption text-right px-1 py-1">
+                {{ formatPrice(parseFloat(tfee)) }}
+              </td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">SCCP</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(sccp)) }}</td>
+              <td class="item_position-prop caption text-right px-1 py-1">
+                {{ formatPrice(parseFloat(sccp)) }}
+              </td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Sales Tax</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(stax)) }}</td>
+              <td class="item_position-prop caption text-right px-1 py-1">
+                {{ formatPrice(parseFloat(stax)) }}
+              </td>
             </tr>
           </tbody>
         </template>
@@ -52,10 +72,20 @@
     </v-col>
     <v-col class="pa-0 pl-5" cols="9" sm="9" md="9">
       <div id="chart">
-        <apexcharts ref="ExpenseReportTrades" height="230" type="line" :options="chartOptions" :series="series"/>
+        <apexcharts
+          ref="ExpenseReportTrades"
+          height="230"
+          type="line"
+          :options="chartOptions"
+          :series="series"
+        />
       </div>
     </v-col>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
   </v-row>
 </template>
 
@@ -86,6 +116,8 @@ export default {
   },
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       showScheduleForm: false,
       expenseReportArray: [],
       comm: "0.00",
@@ -232,11 +264,30 @@ export default {
       }
     };
   },
+  watch: {
+    journalCharts: function() {
+      this.getExpenseReport();
+    },
+    defaultPortfolioId: function() {
+      this.getExpenseReport();
+    },
+    lightSwitch: function() {
+      this.lightSwitcher();
+    }
+  },
   mounted() {
     this.getExpenseReport();
     this.lightSwitcher();
   },
   methods: {
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {
@@ -297,17 +348,6 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(".", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getExpenseReport();
-    },
-    defaultPortfolioId: function() {
-      this.getExpenseReport();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };

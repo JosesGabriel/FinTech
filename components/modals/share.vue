@@ -1,29 +1,23 @@
 <template>
   <v-dialog v-model="show" max-width="450px" persistent>
-    <v-card :dark="lightSwitch == true">
+    <v-card :dark="lightSwitch == true" :loading="loader">
       <v-card-title class="text-center justify-center px-0 py-3 pt-5">
         <h1 class="font-weight-regular subtitle-1 success--text">
           Promote Your Work
         </h1>
       </v-card-title>
       <v-card color="transparent" class="d-flex justify-center" elevation="0">
-        <router-link to="/" class="px-1">
-          <v-btn icon @click="shareToTwitter()">
-            <img src="/icon/journal-icons/twitter.svg" width="25" />
-          </v-btn>
-        </router-link>
-        <router-link to="/" class="px-1 routerlink_facebook-link">
-          <v-btn icon @click="shareToFb">
-            <v-icon color="#B6B6B6" class="facebook_box-icon display-1" flat
-              >mdi-facebook-box</v-icon
-            >
-          </v-btn>
-        </router-link>
-        <router-link to="/login" class="px-1">
-          <v-btn icon @click="shareToLyduz">
-            <img src="/icon/lyduz-icon.svg" width="25" />
-          </v-btn>
-        </router-link>
+        <v-btn icon @click="shareToTwitter()">
+          <img src="/icon/journal-icons/twitter.svg" width="25" />
+        </v-btn>
+        <v-btn icon @click="shareToFb">
+          <v-icon color="#B6B6B6" class="facebook_box-icon display-1" flat
+            >mdi-facebook-box</v-icon
+          >
+        </v-btn>
+        <v-btn icon @click="shareToLyduz">
+          <img src="/icon/lyduz-icon.svg" width="25" />
+        </v-btn>
       </v-card>
       <v-card-title class="text-center justify-center px-0 py-3 pt-5">
         <h5 class="font-weight-thin caption success--text">or Copy Link</h5>
@@ -64,7 +58,7 @@
           class="shareModal__button--close"
           icon
           color="success"
-          @click.stop="closeEmit"
+          @click.stop="closeEmit, (show = false)"
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -82,12 +76,17 @@ export default {
     postid: {
       type: String,
       default: ""
+    },
+    imageid: {
+      type: String,
+      default: ""
     }
   },
   data() {
     return {
       show: false,
-      shareURL: process.env.CURRENT_DOMAIN + "/post/" + this.postid
+      shareURL: process.env.CURRENT_DOMAIN + "/post/" + this.postid,
+      loader: false
     };
   },
   computed: {
@@ -96,7 +95,13 @@ export default {
     })
   },
   mounted: function() {
-    if (this.postid) this.show = true;
+    if (this.postid || this.imageid) this.show = true;
+
+    if (this.imageid) {
+      this.shareURL = "";
+      this.loader = "success";
+      this.uploadImage();
+    }
   },
   created: function() {
     window.fbAsyncInit = function() {
@@ -157,7 +162,40 @@ export default {
         "menubar=1,resizable=1,width=350,height=250"
       );
     },
-    shareToLyduz() {}
+    shareToLyduz() {},
+    uploadImage: function() {
+      let formData = new FormData();
+      let file = this.dataURLtoFile(this.imageid, "file.png");
+      formData.append("file", file);
+      this.$api.social.upload
+        .create(formData)
+        .then(
+          function(response) {
+            this.shareURL = response.data.file.url;
+            this.lo;
+          }.bind(this)
+        )
+        .catch(error => {
+          console.log(error.response.data.message);
+        })
+        .finally(
+          function() {
+            this.loader = false;
+          }.bind(this)
+        );
+    },
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    }
   }
 };
 </script>

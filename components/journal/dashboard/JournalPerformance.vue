@@ -1,5 +1,6 @@
 <template>
-  <v-container class="pa-0">
+  <v-container class="pa-0" ref="componentWrapper">
+    <!-- Don't remove ref value. Used for sharing -->
     <v-col class="pa-0" cols="12">
       <v-card-title
         class="text-left justify-left mr-3 px-0 pb-2 pt-0"
@@ -12,9 +13,9 @@
           PERFORMANCE
         </h6>
         <v-spacer></v-spacer>
-        <v-btn icon small @click.stop="showScheduleForm = true">
-          <img src="/icon/journal-icons/share-icon.svg" width="15" />
-        </v-btn>
+        <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
+      </v-btn>
       </v-card-title>
     </v-col>
     <div id="chart" class="pt-3">
@@ -27,8 +28,9 @@
       />
     </div>
     <share-modal
-      :visible="showScheduleForm"
-      @close="showScheduleForm = false"
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
     />
   </v-container>
 </template>
@@ -60,6 +62,8 @@ export default {
   },
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       showScheduleForm: false,
       performanceArray: [],
       series: [
@@ -228,6 +232,14 @@ export default {
     this.lightSwitcher();
   },
   methods: {
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getPerformance() {
       if (this.journalCharts != null) {
         const objPerformance = this.journalCharts.data.performance;

@@ -1,5 +1,6 @@
 <template>
-  <v-container class="pa-0 pl-10">
+  <v-container ref="componentWrapper" class="pa-0 pl-10">
+    <!-- Don't remove ref value. Used for sharing -->
     <v-col class="pa-0" cols="12">
       <v-card-title
         class="text-left justify-left ml-2 px-0 pb-2 pt-0"
@@ -12,8 +13,13 @@
           GROSS PROFIT AND LOSS
         </h6>
         <v-spacer></v-spacer>
-        <v-btn icon small @click.stop="showScheduleForm = true">
-          <img src="/icon/journal-icons/share-icon.svg" width="15" />
+        <v-btn
+          icon
+          small
+          :dark="lightSwitch == 0 ? false : true"
+          @click="showShareModal()"
+        >
+          <v-icon>mdi-share-variant</v-icon>
         </v-btn>
       </v-card-title>
     </v-col>
@@ -27,8 +33,9 @@
       />
     </div>
     <share-modal
-      :visible="showScheduleForm"
-      @close="showScheduleForm = false"
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
     />
   </v-container>
 </template>
@@ -60,12 +67,31 @@ export default {
   },
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       showScheduleForm: false,
 
       series: [
         {
           name: "Loss",
-          data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+          data: [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
         }
       ],
       chartOptions: {
@@ -245,10 +271,35 @@ export default {
     this.lightSwitcher();
   },
   methods: {
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getGrossPL() {
       if (this.journalCharts != null) {
         const objGrosPL = this.journalCharts.data.profit_loss;
-        const lastArray = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+        const lastArray = [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ];
         if (objGrosPL.length != 0) {
           lastArray.unshift(...objGrosPL);
 

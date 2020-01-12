@@ -1,5 +1,6 @@
 <template>
-    <v-col class="pa-0">
+    <v-col class="pa-0" ref="componentWrapper">
+      <!-- Don't remove ref value. Used for sharing -->
         <v-card-title class="text-left justify-center align-center px-0 py-3 pt-5">
           <v-col class="pa-0 pr-3 mr-n10" cols="12" sm="4" md="4">
             <v-text-field
@@ -21,9 +22,9 @@
           <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
           <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
           <v-spacer></v-spacer>
-          <v-btn icon small @click.stop="showScheduleForm=true"> 
-              <img src="/icon/journal-icons/share-icon.svg" width="15">
-          </v-btn>
+          <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
+      </v-btn>
         </v-card-title>
         <v-data-table
           :headers="headers"
@@ -88,7 +89,11 @@
             <v-pagination class="d-flex flex-end lp_data_table-pagination" color="transparent" dark v-model="page" :length="pageCount"></v-pagination>
           </v-card>
         </v-card>
-        <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+        <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
     </v-col>
 </template>
 <script>
@@ -101,6 +106,8 @@ export default {
   },
   data () {
     return {
+      shareLink: "",
+      showShareForm: false,
       liveLedgerLoading: "success",
       showScheduleForm: false,
       itemsPerPage: 10,
@@ -142,6 +149,14 @@ export default {
     if(this.defaultPortfolioId != 0 ?  this.getLedgerLogs() : '');
   },
   methods: {
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getLedgerLogs() {
       const ledgerparams = {
 	      fund: this.defaultPortfolioId
