@@ -4,7 +4,7 @@
       <template v-slot:activator="{ on }">
         <v-btn
           outlined
-          color="#03dac5"
+          color="success"
           dark
           class="text-capitalize mr-2"
           style="border-width: 2px"
@@ -15,7 +15,7 @@
       </template>
       <v-card :loading="watchCardModalLoading" color="darkcard">
         <v-card-title>
-          <span class="subtitle-1 font-weight-light" style="color: #03dac5"
+          <span class="subtitle-1 font-weight-light" style="color: success"
             >Add Watchlist</span
           >
         </v-card-title>
@@ -83,7 +83,7 @@
           >
           <v-btn
             class="addWatch__button"
-            color="#03dac5"
+            color="success"
             light
             depressed
             :disabled="saveButtonDisable"

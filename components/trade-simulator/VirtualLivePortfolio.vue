@@ -5,7 +5,7 @@
       <v-spacer></v-spacer>
       <v-btn
         outlined
-        color="#03dac5"
+        color="success"
         dark
         class="text-capitalize mr-2 resetbtn"
         @click.stop="showResetForm=true"
@@ -13,7 +13,7 @@
       >Reset</v-btn>
       <v-btn
         outlined
-        color="#03dac5"
+        color="success"
         @click.stop="EnterTradeModal=true"
         dark
         class="text-capitalize mr-2 resetbtn"
@@ -586,8 +586,8 @@ export default {
       }
 
       this.sse = new EventSource(
-        //"http://localhost:8021/sse/market-data/pse/all"
-        "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+        "http://localhost:8021/sse/market-data/pse/all"
+        // "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
       );
 
       this.sse.onopen = function() {

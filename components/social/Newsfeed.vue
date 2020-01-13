@@ -482,10 +482,25 @@ export default {
     if (this.$route.name == "index") this.scroll();
   },
   methods: {
+    /**
+     * changes sharePostID value that is being used as a key in the share component.
+     * this change will trigger the share modal to be visible
+     *
+     * @param   {string}  postid
+     *
+     * @return
+     */
     showShareModal(postid) {
       this.sharePostID = postid;
       this.showShare = true;
     },
+    /**
+     * triggers when this component is loaded with an ID parameter in the URL.
+     * 'searches' specific post by executing a request.
+     * Emits postData which is then captured by the single post page.
+     *
+     * @return
+     */
     searchPost() {
       this.$api.social.searchPost
         .show(this.postid)
@@ -497,6 +512,12 @@ export default {
           console.log(e);
         });
     },
+    /**
+     * triggers when component loads or user hits bottom of page.
+     * Concatenates to postsObject
+     *
+     * @return
+     */
     loadPosts() {
       const params = {
         page: this.pageCount
@@ -513,6 +534,15 @@ export default {
           console.log(e);
         });
     },
+    /**
+     * deletes user post from database; also removes from postsObject
+     * which will remove the post from the page
+     *
+     * @param   {string}  id
+     * @param   {integer}  index
+     *
+     * @return
+     */
     deletePost(id, index) {
       this.$api.social.deletePost
         .delete(id)
@@ -524,6 +554,16 @@ export default {
           this.triggerAlert(true, e.message);
         });
     },
+    /**
+     * edits user post from database; also removes from postObject
+     * which will remove the post from the page
+     *
+     * @param   {string}  id
+     * @param   {string}  content
+     * @param   {integer}  index
+     *
+     * @return
+     */
     editPost(id, content, index) {
       let payload = {
         content: content
@@ -538,6 +578,15 @@ export default {
           this.triggerAlert(true, e.message);
         });
     },
+    /**
+     * posts comment; also automatically adds to page after button click
+     *
+     * @param   {string}  id
+     * @param   {string}  content
+     * @param   {integer}  index
+     *`
+     * @return`
+     */
     postComment(id, content, index) {
       let payload = {
         parent_id: 0,
@@ -561,6 +610,15 @@ export default {
         }
       });
     },
+    /**
+     * [post_react description]
+     *
+     * @param   {[type]}  post_id  [post_id description]
+     * @param   {[type]}  type     [type description]
+     * @param   {[type]}  index    [index description]
+     *
+     * @return  {[type]}           [return description]
+     */
     post_react(post_id, type, index) {
       const params = post_id;
       if (type == "bull") {

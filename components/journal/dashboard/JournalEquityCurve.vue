@@ -1,58 +1,13 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="12" sm="12" md="12">
-    <v-card-title
-      class="text-left justify-left px-0 pb-2 pt-5"
-      :style="borderColor"
-    >
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">
-        EQUITY CURVE
-      </h6>
+    <v-card-title class="text-left justify-left px-0 pb-2 pt-5" :style="borderColor">
+      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">EQUITY CURVE</h6>
       <v-spacer></v-spacer>
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        class="body-2 text-capitalize"
-        elevation="0"
-        >Day</v-btn
-      >
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        class="body-2 text-capitalize"
-        elevation="0"
-        >Week</v-btn
-      >
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        class="body-2 text-capitalize"
-        elevation="0"
-        >Month</v-btn
-      >
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        class="body-2 text-capitalize"
-        elevation="0"
-        >Year</v-btn
-      >
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        class="body-2 text-capitalize"
-        elevation="0"
-        >Custom</v-btn
-      >
+      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>
+      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Week</v-btn>
+      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
+      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
+      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon>mdi-share-variant</v-icon>
@@ -60,20 +15,18 @@
     </v-card-title>
     <v-col class="pa-0 pt-5" cols="12" sm="12" md="12">
       <div id="chart">
-        <apexcharts
-          ref="equityCurveChart"
-          type="line"
-          height="300"
-          :options="chartOptions"
-          :series="series"
-        />
+        <client-only>
+          <apexcharts
+            ref="equityCurveChart"
+            type="line"
+            height="300"
+            :options="chartOptions"
+            :series="series"
+          />
+        </client-only>
       </div>
     </v-col>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
   </v-col>
 </template>
 

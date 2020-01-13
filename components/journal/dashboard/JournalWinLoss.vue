@@ -3,7 +3,9 @@
     <v-row no-gutters>
       <v-col class="pa-0" cols="12">
         <div class="small pt-5">
-          <apexcharts height="270" type="donut" :options="chartOptions" :series="series"></apexcharts>
+          <client-only>
+            <apexcharts height="270" type="donut" :options="chartOptions" :series="series" />
+          </client-only>
         </div>
       </v-col>
       <v-col class="pa-3 px-10" cols="12">
@@ -12,7 +14,7 @@
             <tbody>
               <tr id="table_tr_snap-cont">
                 <td class="caption px-1 py-1">
-                  <v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Winning Strategy
+                  <v-icon class="pr-1 caption" color="success">mdi-circle</v-icon>Winning Strategy
                 </td>
                 <td class="caption text-right px-1 py-1">{{ winStrategy }}</td>
               </tr>
@@ -192,7 +194,7 @@ export default {
     renderPortfolioKey: function() {
       this.getStrategyStat();
     }
-  },
+  }
 };
 </script>
 <style scoped>

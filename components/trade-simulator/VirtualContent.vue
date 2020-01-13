@@ -97,7 +97,7 @@
     </v-row>
 
     <v-tabs
-      color="#03dac5"
+      color="success"
       background-color="transparent"
       :dark="lightSwitch == true"
       :style="{ background: cardbackground }"
@@ -131,7 +131,7 @@
             :items="portfolio"
             dark
             v-on:change="getOpenPosition"
-            background-color="#03DAC5"
+            background-color="success"
             label="Select Portfolio"
             dense
             solo
@@ -170,7 +170,7 @@
       </v-row>
       <v-tab-item
         dark
-        color="#03dac5"
+        color="success"
         background-color="black"
         :value="'tab-' + 1"
         :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"
@@ -188,7 +188,7 @@
       </v-tab-item>
       <v-tab-item
         dark
-        color="#03dac5"
+        color="success"
         background-color="transparent"
         :value="'tab-' + 2"
         :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"
