@@ -13,7 +13,6 @@ import { nativeBus } from "~/helpers/native-bus";
 
 // BASE CONSTANTS
 const BASE_URL = process.env.CHART_API_URL + "/charts";
-const STREAM_BASE_URL = process.env.STREAM_API_URL;
 const TOKEN = process.env.CHART_CLIENT_SECRET;
 
 // URL LIST
@@ -24,10 +23,6 @@ const SEARCH_URL = `${BASE_URL}/tradingview/search`;
 const SERVER_TIME_URL = `${BASE_URL}/tradingview/time`;
 const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 
-// STREAM API
-const SSE_URL = `${STREAM_BASE_URL}/sse?stream=market-data`;
-const MARKET_INFO_PREFIX = "M-D.INFO";
-
 var symbolInfoObj = {
   exchange: ""
 };
@@ -35,7 +30,16 @@ var symbolInfoObj = {
 // INITIALIZE DEFAULTS
 axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
 
-function listenToEventSource(symbolId, resolution, onRealtimeCallback) {
+/**
+ * Listens to SSE INFO native bus event.
+ *
+ * @param   {Number}  symbolId            unique symbol id of stocks
+ * @param   {String}  resolution          resolution supported by TV
+ * @param   {Function}  onRealtimeCallback  realtime callback to publish in TV
+ *
+ * @return
+ */
+function sseInfoNativeBusListener(symbolId, resolution, onRealtimeCallback) {
   nativeBus.$on("b-tv-sse-all", data => {
     if (symbolId == data.sym_id) {
       // execute real-time callback
@@ -52,7 +56,11 @@ function listenToEventSource(symbolId, resolution, onRealtimeCallback) {
 }
 
 export default {
-  // onready is executed when the chart components are loaded and ready.
+  /**
+   * Onready is executed when the chart components are loaded and ready.
+   *
+   * @return {Function} result callback
+   */
   onReady: cb => {
     setTimeout(() => {
       // get tradingview config
@@ -62,7 +70,16 @@ export default {
       });
     }, 0);
   },
-  // searchsymbols is fired when the user inputs to the tradingview search bar
+  /**
+   * Searchsymbols is fired when the user inputs to the tradingview search bar
+   *
+   * @param   {String}  userInput              user input queries
+   * @param   {String}  exchange               selected exchange, '' for all
+   * @param   {String}  symbolType             type of preferred stock to be searched
+   * @param   {Function}  onResultReadyCallback  result callback
+   *
+   * @return  {Function}                         result callback, [] for errors
+   */
   searchSymbols: (userInput, exchange, symbolType, onResultReadyCallback) => {
     // assign exchange to global symbol info
     symbolInfoObj.exchange = exchange;
@@ -86,7 +103,16 @@ export default {
         onResultReadyCallback([]);
       });
   },
-  // resolvesymbol is fired when the user clicks the symbol from search bar
+  /**
+   * Resolvesymbol is fired when the user clicks the symbol from search bar
+   *
+   *
+   * @param   {String}  symbolName                symbil name in Exchange:StockCode format
+   * @param   {Function}  onSymbolResolvedCallback  on success resolve callback
+   * @param   {Function}  onResolveErrorCallback    on error resolve callback
+   *
+   * @return  {Function}                            a callback response
+   */
   resolveSymbol: (
     symbolName,
     onSymbolResolvedCallback,
@@ -130,7 +156,19 @@ export default {
         });
     }, 0);
   },
-  // getbars is loaded when the resolvesymbol is executed
+  /**
+   * Getbars is loaded when the resolvesymbol is executed
+   *
+   * @param   {Object}  symbolInfo         symbol info object
+   * @param   {String}  resolution         resolution of timefrime selected
+   * @param   {Date}  from                 from date
+   * @param   {Date}  to                   to date
+   * @param   {Function}  onHistoryCallback  on success callback
+   * @param   {Function}  onErrorCallback    on error callback
+   * @param   {Boolean}  firstDataRequest   on first data request
+   *
+   * @return  {Function}                     callback
+   */
   getBars: function(
     symbolInfo,
     resolution,
@@ -192,7 +230,17 @@ export default {
         onErrorCallback([]);
       });
   },
-  // subscribebars connects to a stream for realtime update
+  /**
+   * Subscribebars connects to a stream for realtime update
+   *
+   * @param   {Object}  symbolInfo                  symbol info object
+   * @param   {Stirng}  resolution                  resolution in timeframe selected
+   * @param   {Function}  onRealtimeCallback          on success callback
+   * @param   {String}  subscribeUID                unique identifier on subscribe
+   * @param   {Function}  onResetCacheNeededCallback  on reset cache callback
+   *
+   * @return  {Function}                              callback result
+   */
   subscribeBars: (
     symbolInfo,
     resolution,
@@ -201,13 +249,25 @@ export default {
     onResetCacheNeededCallback
   ) => {
     // listen to sse
-    listenToEventSource(symbolInfo.id, resolution, onRealtimeCallback);
+    sseInfoNativeBusListener(symbolInfo.id, resolution, onRealtimeCallback);
   },
-  // unsubscribebars disconnects to a stream for realtime update
+  /**
+   * Unsubscribebars disconnects to a stream for realtime update
+   *
+   * @return
+   */
   unsubscribeBars: subscriberUID => {
-    nativeBus.$off("b-tv-sse-all") // stop listening to event
+    nativeBus.$off("b-tv-sse-all"); // stop listening to event
   },
-  // calculatehistorydepth is fired and related during resolvesymbol event
+  /**
+   * Calculatehistorydepth is fired and related during resolvesymbol event
+   *
+   * @param   {String}  resolution      resolution timeframe selected
+   * @param   {Any}  resolutionBack  response resolution to chart
+   * @param   {Any}  intervalBack    response interval to chart
+   *
+   * @return  {Object}                  return resolution and interval specified
+   */
   calculateHistoryDepth: (resolution, resolutionBack, intervalBack) => {
     if (parseInt(resolution) > 0) {
       resolutionBack = "M";
@@ -218,12 +278,32 @@ export default {
       intervalBack: intervalBack
     };
   },
-  // getmarks is executed as a request for custom plots in charting area
+  /**
+   * Getmarks is executed as a request for custom plots in charting area
+   *
+   * @param   {String}  symbolInfo      symbol info object
+   * @param   {Date}  startDate       start date
+   * @param   {Date}  endDate         end date
+   * @param   {Function}  onDataCallback  on success data callback
+   * @param   {String}  resolution      resolution timeframe
+   *
+   * @return
+   */
   getMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {
     // TODO: add event for get marks for future works
     console.log("=====getMarks running");
   },
-  // gettimescalemarks is executed as a request for events and displasyed in volume area
+  /**
+   * Gettimescalemarks is executed as a request for events and displasyed in volume area
+   *
+   * @param   {Object}  symbolInfo      symbol info object
+   * @param   {Date}  from            from date
+   * @param   {Date}  to              to date
+   * @param   {Function}  onDataCallback  on success data callback
+   * @param   {String}  resolution      resolution timeframe
+   *
+   * @return  {Function}                  callback response
+   */
   getTimescaleMarks: (symbolInfo, from, to, onDataCallback, resolution) => {
     const params = {
       symbol: symbolInfo.name,
@@ -250,7 +330,11 @@ export default {
         onDataCallback([]);
       });
   },
-  // getServerTime is executed with onready event and used for time synchornization
+  /**
+   * GetServerTime is executed with onready event and used for time synchornization
+   *
+   * @return  {Function}  callback response with the server time
+   */
   getServerTime: cb => {
     // get tradingview config
     axios.get(SERVER_TIME_URL).then(({ data }) => {
