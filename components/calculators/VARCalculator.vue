@@ -6,11 +6,7 @@
     class="px-2"
   >
     <v-card-title class="pl-2">
-      <span
-        class="subtitle-1 font-weight-black py-0 pl-2"
-        style="color: #03dac5"
-        >VAR CALCULATOR</span
-      >
+      <span class="subtitle-1 font-weight-black py-0 pl-2" style="color: #03dac5">VAR CALCULATOR</span>
     </v-card-title>
     <v-card-text class="pa-1">
       <v-container class="py-0">
@@ -25,21 +21,35 @@
           </v-col>
           <v-col cols="12 pt-4">
             <v-select
+              :dark="lightSwitch == true"
+              :menu-props="{offsetY: true, dark: lightSwitch == true}"
+              :items="stockList"
               v-model="stocksDropdownModel"
               label="Select Stock"
-              :items="stockList"
               item-text="symbol"
               item-value="id_str"
+              item-color="success"
               append-icon="mdi-chevron-down"
               class="pl-0"
-              dark
+              light
+              dense
               hide-details
               color="success"
               required
-            ></v-select>
+            >
+              <template slot="item" slot-scope="data">
+                <v-list-item-content
+                  :dark="lightSwitch == true"
+                  :style="{ background: cardbackground }"
+                  style="padding: 12px 12px; margin: -16px;"
+                >
+                  <v-list-item-title v-html="data.item.symbol" class="text-uppercase"></v-list-item-title>
+                </v-list-item-content>
+              </template>
+            </v-select>
           </v-col>
-          <v-col cols="12"
-            ><v-text-field
+          <v-col cols="12">
+            <v-text-field
               v-model="identifiedEntryPrice"
               type="number"
               label="Buy Price"
@@ -47,34 +57,32 @@
               dense
               hide-details
               color="success"
-            ></v-text-field
-          ></v-col>
-          <v-col cols="12"
-            ><v-text-field
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
               v-model="riskTolerance"
               type="number"
               label="Risk Tolerance (%)"
               dense
               hide-details
               color="success"
-            ></v-text-field
-          ></v-col>
-          <v-col cols="12"
-            ><v-text-field
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
               v-model="targetProfit"
               type="number"
               label="Target Profit (%)"
               dense
               hide-details
               color="success"
-            ></v-text-field
-          ></v-col>
+            ></v-text-field>
+          </v-col>
         </v-row>
         <v-row v-if="resultPage">
           <v-col cols="12">
-            <span class="body-2 font-weight-light" style="color: #03dac5"
-              >Your results</span
-            >
+            <span class="body-2 font-weight-light" style="color: #03dac5">Your results</span>
           </v-col>
           <v-col cols="12" class="d-flex justify-space-between">
             <span>No. of Shares to buy</span>
@@ -111,7 +119,7 @@
         color="transparent"
         @click="dialog = false"
         >Close</v-btn
-      > -->
+      >-->
       <v-btn
         v-if="!resultPage"
         class="addWatch__button"
@@ -120,8 +128,7 @@
         depressed
         :disabled="nextButtonDisable"
         @click="calculate()"
-        >Continue</v-btn
-      >
+      >Continue</v-btn>
       <v-btn
         v-else
         class="addWatch__button"
@@ -129,17 +136,11 @@
         light
         depressed
         @click="addToWatchlist()"
-        >Add to Watchlist</v-btn
-      >
+      >Add to Watchlist</v-btn>
     </v-card-actions>
-    <v-snackbar
-      v-model="watchList__alert"
-      :color="watchList__alertState ? 'success' : 'error'"
-    >
+    <v-snackbar v-model="watchList__alert" :color="watchList__alertState ? 'success' : 'error'">
       {{ post__responseMsg }}
-      <v-btn color="white" text @click="watchList__alert = false">
-        Close
-      </v-btn>
+      <v-btn color="white" text @click="watchList__alert = false">Close</v-btn>
     </v-snackbar>
   </v-card>
 </template>
@@ -179,7 +180,10 @@ export default {
     ...mapGetters({
       renderChartKey: "watchers/getRenderChartKey",
       lightSwitch: "global/getLightSwitch"
-    })
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   watch: {
     stocksDropdownModel: function(e) {
@@ -420,3 +424,47 @@ export default {
   }
 };
 </script>
+<style
+>
+.v-menu__content
+  .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+  color: #03dac5 !important;
+}
+.v-menu__content > .v-select-list > .v-list.theme--dark {
+  padding: unset;
+  border-radius: unset !important;
+}
+.v-menu__content > .v-select-list > .v-list.theme--light {
+  padding: unset;
+  border-radius: unset !important;
+}
+
+.v-menu__content.theme--dark::-webkit-scrollbar {
+  width: 5px !important;
+}
+.v-menu__content.theme--dark::-webkit-scrollbar-track {
+  background: #172431 !important;
+  border-radius: 10px !important;
+}
+.v-menu__content.theme--dark::-webkit-scrollbar-thumb {
+  background: #03dac5 !important;
+  border-radius: 20px !important;
+}
+.v-menu__content.theme--dark::-webkit-scrollbar-thumb:hover {
+  background: #03dac5 !important;
+}
+.v-menu__content.theme--light::-webkit-scrollbar {
+  width: 5px !important;
+}
+.v-menu__content.theme--light::-webkit-scrollbar-track {
+  background: #c1c1c1 !important;
+  border-radius: 0 !important;
+}
+.v-menu__content.theme--light::-webkit-scrollbar-thumb {
+  background: #03dac5 !important;
+  border-radius: 20px !important;
+}
+.v-menu__content.theme--light::-webkit-scrollbar-thumb:hover {
+  background: #03dac5 !important;
+}
+</style>

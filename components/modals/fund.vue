@@ -43,8 +43,8 @@
             </v-row>
             <v-text-field
               label="Enter Amount"
-              color="#00FFC3"
-              style="color: #00FFC3"
+              color="success"
+              style="color: success"
               :dark="lightSwitch == true"
               class="body-1 buy_selector quantity-input py-3"
               v-model="enterAmount"
@@ -91,8 +91,8 @@
             </v-row>
             <v-text-field
               label="Enter Amount"
-              color="#00FFC3"
-              style="color: #00FFC3"
+              color="success"
+              style="color: success"
               :dark="lightSwitch == true"
               class="body-1 buy_selector quantity-input py-3"
               v-model="withrawAmount"

@@ -142,13 +142,13 @@
         </v-container>
       </v-tab-item>
 
-      <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2">
+      <v-tab-item dark color="success" background-color="#0c1f33" :value="'tab-' + 2">
         <v-container class="pa-0">
           <div class="separator"></div>
           <TradelogsContent />
         </v-container>
       </v-tab-item>
-      <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 3">
+      <v-tab-item dark color="success" background-color="#0c1f33" :value="'tab-' + 3">
         <v-container class="pa-0">
           <div class="separator"></div>
           <LedgerContent />

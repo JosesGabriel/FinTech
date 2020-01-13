@@ -54,6 +54,8 @@
                     @change="getStockDetails"
                     :items="stocklist"
                     :menu-props="{offsetY: true, dark: lightSwitch == true}"
+                    :dark="lightSwitch == true"
+                    light
                     item-text="symbol"
                     item-value="id_str"
                     item-color="success"
@@ -61,7 +63,7 @@
                     class="pa-0 ma-0"
                     append-icon="mdi-chevron-down"
                     label="Select Stock"
-                    color="gray"
+                    color="success"
                     dense
                   >
                     <template slot="item" slot-scope="data">
@@ -252,6 +254,7 @@
                     item-color="success"
                     dense
                     :dark="lightSwitch == true"
+                    light
                     class="enter_amount-deposit-select ma-0"
                   >
                     <template slot="item" slot-scope="data">
@@ -272,28 +275,13 @@
                   class="py-0 justify-right d-flex align-center text-right"
                 >
                   <v-text-field
-                    v-model="priceModel"
-                    label="Buy Price"
-                    placeholder="Enter Buy Price"
-                    color="#00FFC3"
-                    style="color: #00FFC3"
-                    :dark="lightSwitch == true"
-                    class="body-2 buy_selector quantity-input py-3"
-                  ></v-text-field>
-                </v-col>
-                <v-col
-                  cols="12"
-                  sm="12"
-                  md="12"
-                  class="py-0 justify-right d-flex align-center text-right"
-                >
-                  <v-text-field
                     v-model="quantityModel"
                     label="Quantity"
                     placeholder="Enter Quantity"
                     type="number"
                     color="success"
                     :dark="lightSwitch == true"
+                    light
                     class="body-2 buy_selector buy_price-input py-3"
                   ></v-text-field>
                   <v-btn
@@ -307,6 +295,23 @@
                   <v-btn @click="quantityModel += boardLotModel" text icon color="success">
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="12"
+                  md="12"
+                  class="py-0 justify-right d-flex align-center text-right"
+                >
+                  <v-text-field
+                    v-model="priceModel"
+                    label="Buy Price"
+                    placeholder="Enter Buy Price"
+                    color="success"
+                    style="color: success"
+                    :dark="lightSwitch == true"
+                    light
+                    class="body-2 buy_selector quantity-input py-3"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                   <v-row no-gutters>
@@ -326,7 +331,13 @@
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
-              <v-btn text class="text-capitalize" @click="e1 = 1">Back</v-btn>
+              <v-btn
+                text
+                class="text-capitalize"
+                @click="e1 = 1"
+                :dark="lightSwitch == true"
+                light
+              >Back</v-btn>
               <v-btn
                 color="success"
                 v-show="showBuybtn"
@@ -346,11 +357,12 @@
                   <div>
                     <v-select
                       v-model="strategyModel"
-                      offset-y="true"
                       item-color="success"
                       append-icon="mdi-chevron-down"
                       class="mb-1"
                       :items="strategy"
+                      :dark="lightSwitch == true"
+                      light
                       label="Select Strategy"
                       flat
                     ></v-select>
@@ -362,6 +374,8 @@
                       item-color="success"
                       append-icon="mdi-chevron-down"
                       class="mb-1"
+                      :dark="lightSwitch == true"
+                      light
                       :items="tradeplan"
                       label="Select Trade Plan"
                       flat
@@ -374,6 +388,8 @@
                       item-color="success"
                       append-icon="mdi-chevron-down"
                       :items="emotions"
+                      :dark="lightSwitch == true"
+                      light
                       label="Select Emotions"
                       flat
                     ></v-select>
@@ -390,6 +406,8 @@
                     class="white--text trading_notes-textarea body-2"
                     v-model="notesModel"
                     placeholder="Enter Notes"
+                    :dark="lightSwitch == true"
+                    light
                     filled
                   ></v-textarea>
                 </v-col>
@@ -397,11 +415,16 @@
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
-              <v-btn text class="text-capitalize" @click="e1 = 2">Back</v-btn>
+              <v-btn
+                text
+                class="text-capitalize"
+                @click="e1 = 2"
+                :dark="lightSwitch == true"
+                light
+              >Back</v-btn>
               <v-btn
                 color="success"
                 class="text-capitalize black--text ml-1"
-                light
                 @click="buyListArray"
                 @click.stop="show = false"
               >Confirm</v-btn>
@@ -416,10 +439,11 @@
                   v-model="priceSellModel"
                   label="Sell Price"
                   placeholder="Enter Sell Price"
-                  color="#00FFC3"
+                  color="success"
                   type="number"
-                  style="color: #00FFC3"
-                  :light="lightSwitch == true"
+                  style="color: success"
+                  :dark="lightSwitch == true"
+                  light
                   class="body-2 buy_selector quantity-input py-3"
                 ></v-text-field>
                 <v-col sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
@@ -428,9 +452,10 @@
                     label="Quantity"
                     placeholder="Enter Quantity"
                     type="number"
-                    color="#00FFC3"
-                    style="color: #00FFC3"
+                    color="success"
+                    style="color: success"
                     :dark="lightSwitch == true"
+                    light
                     class="body-2 buy_selector buy_price-input py-3 quatity_number"
                   ></v-text-field>
                   <v-btn

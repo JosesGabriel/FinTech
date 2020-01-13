@@ -60,13 +60,14 @@
         <v-row no-gutters class="mt-5">
           <v-spacer></v-spacer>
           <v-btn
-            color="success"
+            color="secondary"
             class="text-capitalize"
             depressed
             text
+            :dark="lightSwitch == true"
             light
             @click.stop="show = false"
-          >Close</v-btn>
+          >Cancel</v-btn>
           <v-btn
             color="success"
             class="text-capitalize ml-1 black--text"
@@ -118,7 +119,6 @@ export default {
           this.notesModel = this.itemDetails.metas.notes;
           this.fund = this.itemDetails.fund;
           this.stockid = this.itemDetails.action;
-        console.log(this.itemDetails)
         }
         return this.visible;
       },
