@@ -27,7 +27,7 @@ export default {
       {
         rel: "icon",
         type: "image/x-icon",
-        href: `${process.env.CURRENT_DOMAIN}/lyduz.ico`
+        href: `${process.env.APP_URL}/lyduz.ico`
       }
     ],
     script: [

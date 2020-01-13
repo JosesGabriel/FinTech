@@ -105,7 +105,7 @@ export default {
       this.sse.close();
       this.$store.commit(
         "global/SET_FAVICON",
-        `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
+        `${process.env.APP_URL}/favicon/lyduz.ico`
       );
     },
     initSSE: function() {
