@@ -197,7 +197,7 @@
                   <div class="px-3">
                     <v-card-title class="pa-0 justify-center mt-3">
                       <h1
-                        class="font-weight-thin caption"
+                        class="caption"
                         :style="{ color: fontcolor2 }"
                       >Bid/ Ask Bar</h1>
                     </v-card-title>
@@ -211,7 +211,7 @@
                     ></v-progress-linear>
                     <v-card-title class="pa-0 justify-center mt-3">
                       <h1
-                        class="font-weight-thin caption"
+                        class="caption"
                         :style="{ color: fontcolor2 }"
                       >Members Sentiments</h1>
                     </v-card-title>
@@ -267,14 +267,14 @@
 
           <v-stepper-content step="3" class="pt-2">
             <v-container class="pt-0">
-              <v-row no-gutters class="px-0 py-0">
+              <v-row no-gutters class="mt-2 px-0 py-0">
                 <v-col sm="12" md="12">
                   <div>
                     <v-select
                       offset-y="true"
                       item-color="success"
                       append-icon="mdi-chevron-down"
-                      class="mb-1 enter_strategy"
+                      class="mb-5 enter_strategy"
                       :items="strategy"
                       v-model="selectedstrategy"
                       label="Enter Strategy"
@@ -297,7 +297,7 @@
                       offset-y="true"
                       item-color="success"
                       append-icon="mdi-chevron-down"
-                      class="mb-1 enter_tplan"
+                      class="mb-5 enter_tplan"
                       :items="tradeplan"
                       v-model="selectedtradeplan"
                       label="Enter Trade Plan"
@@ -320,7 +320,7 @@
                       offset-y="true"
                       item-color="success"
                       append-icon="mdi-chevron-down"
-                      class="enter_emotion"
+                      class="mb-5 enter_emotion"
                       :items="emotions"
                       v-model="selectedemotions"
                       label="Enter Emotions"
@@ -339,6 +339,9 @@
                     </v-select>
                   </div>
                 </v-col>
+                <v-col style="color: #03dac5; font-size: 12px;">
+                  Enter Notes
+                </v-col>
                 <v-col
                   cols="12"
                   sm="12"
@@ -346,10 +349,10 @@
                   class="pa-0 mt-3 justify-right d-flex align-center text-right"
                 >
                   <v-textarea
-                    class="white--text trading_notes-textarea body-2"
+                    dense
+                    filled   
+                    class="white--text trading_notes-textarea"
                     v-model="notes"
-                    placeholder="Enter Notes"
-                    filled
                     :dark="lightSwitch == true"
                     :style="{ background: cardbackground }"
                   ></v-textarea>

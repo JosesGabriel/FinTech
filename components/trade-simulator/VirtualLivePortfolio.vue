@@ -127,13 +127,23 @@
                 :readonly="(this.editDetails == 'edit' ? false : true)"
                 item-color="success"
                 :append-icon="(this.editDetails == 'edit' ? 'mdi-chevron-down' : '')"
-                class="mb-1"
+                class="mb-5"
                 :items="strategy"
                 v-model="selectedstrategy"
                 :label="(this.editDetails == 'edit' ? 'Enter Strategy' : 'Strategy')"
                 dense
                 flat
-              ></v-select>
+              >
+                 <template slot="item" slot-scope="data">
+                    <v-list-item-content
+                      :dark="lightSwitch == true"
+                      :style="{ background: cardbackground }"
+                      style="padding: 21px 12px; margin: -16px;"
+                    >
+                      <v-list-item-title v-html="data.item"></v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+              </v-select>
             </div>
             <div>
               <v-select
@@ -141,13 +151,23 @@
                 :readonly="(this.editDetails == 'edit' ? false : true)"
                 item-color="success"
                 :append-icon="(this.editDetails == 'edit' ? 'mdi-chevron-down' : '')"
-                class="mb-1"
+                class="mb-5"
                 :items="tradeplan"
                 v-model="selectedtradeplan"
                 :label="(this.editDetails == 'edit' ? 'Enter Trade Plan' : 'Trade Plan')"
                 dense
                 flat
-              ></v-select>
+              >
+                  <template slot="item" slot-scope="data">
+                    <v-list-item-content
+                      :dark="lightSwitch == true"
+                      :style="{ background: cardbackground }"
+                      style="padding: 21px 12px; margin: -16px;"
+                    >
+                      <v-list-item-title v-html="data.item"></v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+              </v-select>
             </div>
             <div>
               <v-select
@@ -158,10 +178,24 @@
                 :items="emotions"
                 v-model="selectedemotions"
                 :label="(this.editDetails == 'edit' ? 'Enter Emotions' : 'Emotions')"
+                class="mb-1"
                 dense
                 flat
-              ></v-select>
+              >
+                  <template slot="item" slot-scope="data">
+                    <v-list-item-content
+                      :dark="lightSwitch == true"
+                      :style="{ background: cardbackground }"
+                      style="padding: 21px 12px; margin: -16px;"
+                    >
+                      <v-list-item-title v-html="data.item"></v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+              </v-select>
             </div>
+          </v-col>
+          <v-col style="color: #03dac5; font-size: 12px; padding-top:0px; padding-bottom:0px;">
+            Notes
           </v-col>
           <v-col
             cols="12"
@@ -174,7 +208,6 @@
               class="white--text trading_notes-textarea body-2 mb-0 pb-0"
               v-model="notes"
               :readonly="(this.editDetails == 'edit' ? false : true)"
-              :placeholder="(this.editDetails == 'edit' ? 'Enter Notes' : 'Notes')"
               filled
             ></v-textarea>
           </v-col>
@@ -426,27 +459,29 @@ export default {
       this.edit_id = item.id;
     },
     editLive: function() {
-      const editparams = {
-        strategy: this.selectedstrategy,
-        plan: this.selectedtradeplan,
-        emotion: this.selectedemotions,
-        notes: this.notes
-      };
-      this.$axios
-        .$post(
-          process.env.API_URL +
-            "/journal/funds/" +
-            this.simulatorPortfolioID +
-            "/update/" +
-            this.edit_id,
-          editparams
-        )
-        .then(response => {
-          if (response.success) {
-            this.showEditForm = false;
-            this.getOpenPositions();
-          }
-        });
+      if (confirm("Save changes?")) {
+          const editparams = {
+            strategy: this.selectedstrategy,
+            plan: this.selectedtradeplan,
+            emotion: this.selectedemotions,
+            notes: this.notes
+          };
+          this.$axios
+            .$post(
+              process.env.API_URL +
+                "/journal/funds/" +
+                this.simulatorPortfolioID +
+                "/update/" +
+                this.edit_id,
+              editparams
+            )
+            .then(response => {
+              if (response.success) {
+                this.showEditForm = false;
+                this.getOpenPositions();
+              }
+            });
+      }
     },
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);

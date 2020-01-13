@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const baseURL = process.env.API_URL + "/social";
 
 export default $axios => ({

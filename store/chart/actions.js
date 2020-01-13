@@ -34,9 +34,6 @@ export default {
   async setIndex({ commit }, data) {
     await commit("SET_INDEX", data);
   },
-  async setAllstocks({ commit }, data) {
-    await commit("SET_ALLSTOCKS", data);
-  },
   async setTabsSidebar({ commit }, data) {
     await commit("SET_TABS_SIDEBAR", data);
   },

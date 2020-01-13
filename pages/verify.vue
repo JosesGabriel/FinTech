@@ -11,7 +11,6 @@
   </v-container>
 </template>
 <script>
-require("dotenv").config();
 export default {
   layout: "main",
   components: {},

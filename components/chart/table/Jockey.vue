@@ -149,7 +149,8 @@
   </v-col>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   components: {},
   data() {
@@ -169,7 +170,8 @@ export default {
       index: "chart/index",
       fullscreen: "chart/getTableFullscreen",
       ticker: "chart/getTicker",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      sse: "chart/sse"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -193,6 +195,7 @@ export default {
     }
   },
   mounted() {
+    //this.sse.addEventListener("trade", this.sseInfo);
     this.symbol_id = '29235365118214144';
     this.$api.chart.stocks
       .brokersActivity({
@@ -223,6 +226,16 @@ export default {
       });
   },
   methods: {
+  ...mapActions({
+        setSSETrade: "chart/setSSETrade"
+      }),
+    sseTrade: function(e){
+      try {
+        //console.log('Jocky-',e.data);
+      }catch (error){
+
+      }
+    },
     addcomma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
@@ -273,38 +286,6 @@ export default {
           this.sortArray("buy_volume");
         });
     },
-
-/*    initSSE: function() {
-      if (this.sse !== null) {
-        //this.sse.close();
-        this.counter = 0;
-      }
-
-      this.sse = new EventSource(
-        //"http://localhost:8021/sse/market-data/pse/all"
-        "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
-      );
-
-      this.sse.onopen = function() {
-        console.log("open sse"); //
-      };
-       
-      this.sse.onerror = function(err) {
-        console.log("error");
-        //console.log(err);
-      };
-      
-      const that = this;
-      
-      this.sse.addEventListener("trade",function(e) {
-           const data = JSON.parse(e.data);  
-           
-          if(that.symbol_id == data.sym_id){
-            console.log('Data SYm -'+ data.sym);
-          }
-      });
-     
-    },*/
 
     sortArray(data) {
       if (this.desc) {

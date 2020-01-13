@@ -116,11 +116,24 @@ export default {
   },
   mounted() {},
   methods: {
+    /**
+     * triggers and shows snackbar alert
+     *
+     * @param   {Array}  alert
+     *
+     * @return
+     */
     showAlert(alert) {
       this.alert = true;
       this.alertState = alert[0];
       this.alertMessage = alert[1];
     },
+    /**
+     * Updates user privacy settings based on user input
+     *
+     *
+     * @return
+     */
     updateAccount() {
       console.log(
         "Update option at index [ " +

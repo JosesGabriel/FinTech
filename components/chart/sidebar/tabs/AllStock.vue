@@ -20,7 +20,7 @@
     >
       <v-data-table
         :headers="headers"
-        :items="allstocks"
+        :items="all_stocks"
         class="data_table-container custom_table"
         dense
         :dark="lightSwitch == 1"
@@ -71,7 +71,7 @@
                 props.item.value | numeral("0.000a")
               }}</span>
             </td>
-            <td class="text-right" style="width:45px">
+            <td class="text-right text-uppercase" style="width:45px">
               <span class="">{{ props.item.trades | numeral("0,0") }}</span>
             </td>
             <td style="width:5px"></td>
@@ -112,7 +112,8 @@ export default {
           class: "text-right"
         }
       ],
-      loading: "#03dac5"
+      loading: "#03dac5",
+      all_stocks: []
     };
   },
   computed: {
@@ -128,8 +129,9 @@ export default {
   },
   watch: {
     sseInfo: function(value) {
-      console.log("sse info");
-      console.log(value);
+      if (this.loading === false) {
+        this.sseAllInfo(value);
+      }
     }
   },
   methods: {
@@ -137,6 +139,13 @@ export default {
       setSymbolID: "chart/setSymbolID",
       setAllstocks: "chart/setAllstocks"
     }),
+    updateEffect: dom => {
+      const item = document.getElementById(dom);
+      item.style.background = "rgb(182,182,182,.2)";
+      setTimeout(function() {
+        item.style.background = "";
+      }, 200);
+    },
     initAllStock: async function() {
       this.loading = "#03dac5";
       try {
@@ -145,26 +154,49 @@ export default {
         });
         // this filter made to remove all index stocks
         const filtered = response.data.filter(data => parseInt(data.value) > 0);
-        // console.log("all stocks");
-        // filtered.forEach(element => {
-        //   const el = element.stockidstr;
-        //   this.stocks.push(el);
-        // });
-        // console.log(this.stocks);
-        this.setAllstocks(filtered);
+        filtered.forEach(data => {
+          let {
+            stockidstr,
+            symbol,
+            change,
+            last,
+            changepercentage,
+            value,
+            trades
+          } = data;
+          this.all_stocks.push({
+            stockidstr,
+            symbol,
+            change,
+            last,
+            changepercentage,
+            value,
+            trades
+          });
+        });
         this.loading = false;
       } catch (error) {
         console.log(error);
       }
     },
-    sseAllInfo: function(e) {
+    sseAllInfo: function(data) {
       try {
-        const data = JSON.parse(e.data);
-        console.log("all stocks");
-        console.log(data.sym_id);
-        console.log(this.allstocks);
+        const stock = this.all_stocks.find(
+          resp => resp.stockidstr == data.sym_id
+        );
+        const key = this.all_stocks.indexOf(stock);
+        this.all_stocks.splice(key, 1, {
+          stockidstr: stock.stockidstr,
+          symbol: stock.symbol,
+          change: data.chg,
+          last: data.l,
+          changepercentage: data.chgpc,
+          value: data.val,
+          trades: data.t
+        });
+        this.updateEffect(stock.stockidstr);
       } catch (error) {
-        //console.log(error);
+        console.log(error);
       }
     }
   },

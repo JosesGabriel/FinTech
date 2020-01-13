@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const baseURL = process.env.CHART_API_URL + "/stocks";
 const token = process.env.CHART_CLIENT_SECRET;
 
