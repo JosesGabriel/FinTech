@@ -1,10 +1,10 @@
 /**
  * Returns a boolean result if url is found in urls, regardless of the exactness of string
  *
- * @export
- * @param {Array} urls
- * @param {string} url
- * @returns
+ * @param   {Array}  urls  list of urls  
+ * @param   {String}  url  input url
+ *
+ * @return  {Boolean}      whether is in url is in array
  */
 export function IsInArray(urls, url) {
   let isFound;
