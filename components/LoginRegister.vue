@@ -62,9 +62,9 @@
       </v-stepper>
     </v-card>
 
-    <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
-      {{ alertMessage }}
-      <v-btn color="white" text @click="alert = false">
+    <v-snackbar v-model="alert.model" :color="alert.state">
+      {{ alert.message }}
+      <v-btn color="white" text @click="alert.model = false">
         Close
       </v-btn>
     </v-snackbar>
@@ -85,11 +85,13 @@ export default {
   },
   data() {
     return {
+      alert: {
+        message: "",
+        model: false,
+        state: "success"
+      },
       card__loader: false,
       registerLoading: false,
-      alert: false,
-      alertState: false,
-      alertMessage: "",
       isLightMode: 0,
       tab: null,
       stepper: ""
@@ -98,8 +100,7 @@ export default {
   computed: {
     ...mapGetters({
       userWatchedStocks: "watchers/getUserWatchedStocks",
-      lightSwitch: "global/getLightSwitch",
-      loginModalState: "login/getLoginModalState"
+      lightSwitch: "global/getLightSwitch"
     }),
     show: {
       //show dialog toggle
@@ -119,7 +120,7 @@ export default {
     loginModalState: function() {
       if (this.loginModalState) {
         this.show = true;
-        this.showAlert(true, "Successfully Verified User");
+        this.showAlert({ message: "Successfully Verified User" });
       } else if (!this.loginModalState) {
         this.show = false;
       }
@@ -129,10 +130,10 @@ export default {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
-    showAlert(state, message) {
-      this.alertState = state;
-      this.alert = true;
-      this.alertMessage = message;
+    showAlert({ state, message, model }) {
+      this.alert.message = message;
+      this.alert.model = model;
+      this.alert.state = state;
     }
   }
 };
