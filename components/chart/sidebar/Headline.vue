@@ -152,17 +152,17 @@ export default {
       if (change > 0) {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/up.ico`
+          `${process.env.APP_URL}/favicon/up.ico`
         );
       } else if (change < 0) {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/down.ico`
+          `${process.env.APP_URL}/favicon/down.ico`
         );
       } else {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
+          `${process.env.APP_URL}/favicon/lyduz.ico`
         );
       }
     },

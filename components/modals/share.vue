@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       show: false,
-      shareURL: process.env.CURRENT_DOMAIN + "/post/" + this.postid,
+      shareURL: process.env.APP_URL + "/post/" + this.postid,
       loader: false
     };
   },
