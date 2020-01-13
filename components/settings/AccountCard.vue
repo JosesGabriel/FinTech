@@ -263,6 +263,13 @@ export default {
   },
   mounted() {},
   methods: {
+    /**
+     * Updates user account settings based on user input
+     *
+     * @param   {string}  value
+     *
+     * @return
+     */
     updateAccount(value) {
       this.cardLoader = "success";
       let payload;
@@ -325,6 +332,11 @@ export default {
         );
       this.closeAllToggles();
     },
+    /**
+     * reverts all inputs back to displaying data only
+     *
+     * @return
+     */
     closeAllToggles() {
       this.nameToggle = false;
       this.usernameToggle = false;

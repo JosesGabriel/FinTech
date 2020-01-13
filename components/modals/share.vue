@@ -66,7 +66,6 @@
     </v-card>
   </v-dialog>
 </template>
-
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -125,6 +124,11 @@ export default {
     })(document, "script", "facebook-jssdk");
   },
   methods: {
+    /**
+     * binds url from textfield to user clipboard
+     *
+     * @return
+     */
     copyshareURL() {
       let shareURLToCopy = document.querySelector("#testing-code");
       shareURLToCopy.setAttribute("type", "text");
@@ -138,9 +142,19 @@ export default {
       shareURLToCopy.setAttribute("type", "hidden");
       window.getSelection().removeAllRanges();
     },
+    /**
+     * Emits close that can be captured by whatever is using this component
+     *
+     * @return
+     */
     closeEmit() {
       this.$emit("closeModal");
     },
+    /**
+     * share to facebook
+     *
+     * @return  {[type]}  [return description]
+     */
     shareToFb() {
       FB.ui(
         {
@@ -150,11 +164,16 @@ export default {
         function(response) {}
       );
     },
+    /**
+     * generates link, opens a window that will let user to share to twitter
+     *
+     * @return
+     */
     shareToTwitter() {
       let twitterURL =
-        "https://twitter.com/intent/tweet?url=" +
+        process.env.TWITTER_LINK +
         this.shareURL +
-        "&via=arbitrageph&hashtags=arbitrageph";
+        process.env.TWITTER_LINK_EXTENSION;
       window.open(
         twitterURL,
         "mywindow",
@@ -162,6 +181,11 @@ export default {
       );
     },
     shareToLyduz() {},
+    /**
+     * posts to GCP storage
+     *
+     * @return
+     */
     uploadImage: function() {
       let formData = new FormData();
       let file = this.dataURLtoFile(this.imageid, "file.png");
@@ -183,6 +207,14 @@ export default {
           }.bind(this)
         );
     },
+    /**
+     * converts base64 image from html2canvas
+     *
+     * @param   {string}  dataurl
+     * @param   {string}  filename
+     *
+     * @return  {File}
+     */
     dataURLtoFile(dataurl, filename) {
       var arr = dataurl.split(","),
         mime = arr[0].match(/:(.*?);/)[1],

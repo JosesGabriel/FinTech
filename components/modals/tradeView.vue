@@ -8,7 +8,7 @@
         <v-spacer></v-spacer>
         <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text class="px-1" color="#03DAC5">
+            <v-btn v-on="on" text class="px-1" color="success">
               <span class="text-capitalize">Date:</span>
               <v-card-text class="pa-0" v-html="date"></v-card-text>
               <v-icon>mdi-chevron-down</v-icon>
@@ -33,7 +33,7 @@
             <v-container class="pa-5 pt-0 px-0">
               <v-row no-gutters>
                 <v-tabs
-                  color="#03dac5"
+                  color="success"
                   background-color="transparent"
                   :dark="lightSwitch == true"
                   grow
@@ -51,20 +51,29 @@
                 </v-tabs>
                 <v-col cols="12" sm="12" md="12" class="pt-3 mt-2">
                   <v-select
-                    v-model="GetSelectStock"
-                    :offset-y="true"
-                    item-color="success"
-                    color="success"
-                    class="pa-0 ma-0"
-                    append-icon="mdi-chevron-down"
+                    @change="getStockDetails"
                     :items="stocklist"
+                    :menu-props="{offsetY: true, dark: lightSwitch == true}"
                     item-text="symbol"
                     item-value="id_str"
+                    item-color="success"
+                    v-model="GetSelectStock"
+                    class="pa-0 ma-0"
+                    append-icon="mdi-chevron-down"
                     label="Select Stock"
-                    @change="getStockDetails"
-                    :light="lightSwitch == false"
-                    :menu-props="{offsetY: true}"
-                  ></v-select>
+                    color="gray"
+                    dense
+                  >
+                    <template slot="item" slot-scope="data">
+                      <v-list-item-content
+                        :dark="lightSwitch == true"
+                        :style="{ background: cardbackground }"
+                        style="padding: 12px 12px; margin: -16px;"
+                      >
+                        <v-list-item-title v-html="data.item.symbol" class="text-uppercase"></v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
 
                   <v-col cols="12" class="pa-0">
                     <v-row no-gutters>
@@ -174,7 +183,7 @@
                     <v-progress-linear
                       :value="bidask"
                       background-color="#F44336"
-                      color="#03DAC5"
+                      color="success"
                       height="5px"
                       class="mt-1"
                     ></v-progress-linear>
@@ -184,7 +193,7 @@
                     <v-progress-linear
                       value="50"
                       background-color="#F44336"
-                      color="#03DAC5"
+                      color="success"
                       height="5px"
                       class="mt-1 mb-1"
                     ></v-progress-linear>
@@ -239,12 +248,22 @@
                     append-icon="mdi-chevron-down"
                     @change="whereToSave"
                     label="Select Portfolio"
-                    color="#00FFC3"
+                    color="success"
                     item-color="success"
                     dense
                     :dark="lightSwitch == true"
                     class="enter_amount-deposit-select ma-0"
-                  ></v-select>
+                  >
+                    <template slot="item" slot-scope="data">
+                      <v-list-item-content
+                        :dark="lightSwitch == true"
+                        :style="{ background: cardbackground }"
+                        style="padding: 12px 12px; margin: -16px;"
+                      >
+                        <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
                 </v-col>
                 <v-col
                   cols="12"
@@ -273,8 +292,7 @@
                     label="Quantity"
                     placeholder="Enter Quantity"
                     type="number"
-                    color="#00FFC3"
-                    style="color: #00FFC3"
+                    color="success"
                     :dark="lightSwitch == true"
                     class="body-2 buy_selector buy_price-input py-3"
                   ></v-text-field>
@@ -401,7 +419,7 @@
                   color="#00FFC3"
                   type="number"
                   style="color: #00FFC3"
-                  :dark="lightSwitch == true"
+                  :light="lightSwitch == true"
                   class="body-2 buy_selector quantity-input py-3"
                 ></v-text-field>
                 <v-col sm="12" md="12" class="py-0 justify-right d-flex align-center text-right">
@@ -552,6 +570,25 @@ export default {
       stockList: "global/getStockList",
       lightSwitch: "global/getLightSwitch"
     }),
+    fontcolor2: function() {
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+    },
+    fontColor: function() {
+      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+    },
+    fontColorTable: function() {
+      return this.lightSwitch == 0
+        ? "data_table-container"
+        : "data_table-container-dark";
+    },
+    fontColorDate: function() {
+      return this.lightSwitch == 0
+        ? "datepicker-container-light"
+        : "datepicker-container";
+    },
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    },
     show: {
       get() {
         return this.visible;
@@ -589,19 +626,6 @@ export default {
           this.ave = 0;
         }
       }
-    },
-    fontColor: function() {
-      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
-    },
-    fontColorTable: function() {
-      return this.lightSwitch == 0
-        ? "data_table-container"
-        : "data_table-container-dark";
-    },
-    fontColorDate: function() {
-      return this.lightSwitch == 0
-        ? "datepicker-container-light"
-        : "datepicker-container";
     }
   },
   watch: {
@@ -798,7 +822,7 @@ export default {
       this.$api.chart.stocks.history(params).then(
         function(result) {
           this.stockSymbolGet = result.data;
-          console.log(this.stockSymbolGet)
+          console.log(this.stockSymbolGet);
 
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.boardLotModel = 1000000;
@@ -877,7 +901,6 @@ export default {
     getUserPortfolio() {
       this.selectPortfolioModel = [];
       if (this.userPortfolio.length != 0) {
-        this.selectPortfolioModel.push({ header: "Real Portfolio" });
         const toFindReal = "real"; // what we want to count
         for (let i = 0; i < this.userPortfolio.length; i++) {
           let portfolioListPush1 = this.userPortfolio[i];

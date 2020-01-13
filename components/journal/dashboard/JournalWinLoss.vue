@@ -14,7 +14,7 @@
             <tbody>
               <tr id="table_tr_snap-cont">
                 <td class="caption px-1 py-1">
-                  <v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Winning Strategy
+                  <v-icon class="pr-1 caption" color="success">mdi-circle</v-icon>Winning Strategy
                 </td>
                 <td class="caption text-right px-1 py-1">{{ winStrategy }}</td>
               </tr>

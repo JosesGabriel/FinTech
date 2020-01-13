@@ -4,7 +4,7 @@
       <template v-slot:activator="{ on }">
         <v-btn
           outlined
-          color="#03dac5"
+          color="success"
           dark
           class="text-capitalize mr-2"
           style="border-width: 2px"

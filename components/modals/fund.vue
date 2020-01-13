@@ -6,20 +6,20 @@
         class="text-left justify-left pa-3 px-5 success--text subtitle-1 font-weight-bold"
       >FUND</v-card-title>
       <v-tabs
-        color="#03dac5"
+        color="success"
         background-color="transparent"
         class="px-7"
         :dark="lightSwitch == true"
         grow
       >
         <v-tab
-          color="#fff"
+          color="white"
           class="tab_menu-top text-capitalize subtitle-1"
           :href="`#funds-1`"
           @click="hideWithdrawButton = false, hideDepositButton = true"
         >Deposit</v-tab>
         <v-tab
-          color="#fff"
+          color="white"
           class="tab_menu-top text-capitalize subtitle-1"
           :href="`#funds-2`"
           @click="hideWithdrawButton = true, hideDepositButton = false"
@@ -27,7 +27,7 @@
 
         <v-tab-item
           dark
-          color="#03dac5"
+          color="success"
           background-color="#0c1f33"
           class="active-class"
           :value="'funds-' + 1"
@@ -55,21 +55,31 @@
               <span class="custom-dropdown big">
                 <v-select
                   :items="items"
+                  :menu-props="{offsetY: true, dark: lightSwitch == true}"
                   v-model="fundSourceModel"
                   item-text="name"
                   item-value="funds_source"
                   label="Fund Source"
-                  color="#00FFC3"
                   item-color="success"
+                  color="success"
                   dense
-                  :dark="lightSwitch == true"
                   class="enter_amount-deposit-select ma-0"
-                ></v-select>
+                >
+                  <template slot="item" slot-scope="data">
+                    <v-list-item-content
+                      :dark="lightSwitch == true"
+                      :style="{ background: cardbackground }"
+                      style="padding: 12px 12px; margin: -16px;"
+                    >
+                      <v-list-item-title v-html="data.item.name" class="text-capitalize"></v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                </v-select>
               </span>
             </v-col>
           </v-container>
         </v-tab-item>
-        <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'funds-' + 2">
+        <v-tab-item dark color="success" background-color="#0c1f33" :value="'funds-' + 2">
           <v-container class="pa-0">
             <div class="separator"></div>
             <v-row no-gutters>
@@ -147,7 +157,10 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       selectedPortfolio: "journal/getSelectedPortfolio",
       lightSwitch: "global/getLightSwitch"
-    })
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
   },
   data() {
     return {
@@ -172,7 +185,6 @@ export default {
       timeoutNotification: 10000
     };
   },
-  mounted() {},
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
@@ -192,7 +204,7 @@ export default {
       this.componentKeys++;
     },
     depositNow() {
-      let portfolio_id = this.defaultPortfolioId
+      let portfolio_id = this.defaultPortfolioId;
       let params = {
         total_value: parseFloat(this.enterAmount),
         action: this.fundSourceModel
@@ -217,7 +229,7 @@ export default {
         });
     },
     withdrawNow() {
-      let portfolio_id = this.defaultPortfolioId
+      let portfolio_id = this.defaultPortfolioId;
       const params = {
         total_value: parseFloat(this.withrawAmount)
       };

@@ -22,7 +22,7 @@
             <tbody>
               <tr>
                 <td class="caption px-1 py-1">
-                  <v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Win
+                  <v-icon class="pr-1 caption" color="success">mdi-circle</v-icon>Win
                 </td>
                 <td class="caption text-right px-1 py-1 pr-8">{{ win }}</td>
 
