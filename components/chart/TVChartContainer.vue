@@ -11,11 +11,7 @@ import Datafeed from "~/providers/tradingview/api";
 export default {
   name: "TVChartContainer",
   props: {
-    //region url
-    datafeedUrl: {
-      default: "https://demo_feed.tradingview.com",
-      type: String
-    },
+    dataFeed: {},
     chartsStorageUrl: {
       default: "https://saveload.tradingview.com",
       type: String
@@ -28,8 +24,6 @@ export default {
       default: "/vendor/charting_library/",
       type: String
     },
-    //endregion url
-
     symbol: {
       default: "PSE:PSEI",
       type: String
@@ -47,7 +41,7 @@ export default {
       type: String
     },
     clientId: {
-      default: "arbitrage.ph",
+      default: "lyduz.com/chart",
       type: String
     },
     userId: {
@@ -65,11 +59,44 @@ export default {
     timezone: {
       default: "Asia/Hong_Kong",
       type: String
+    },
+    timeFrames: {
+      default: () => [
+        { text: "50y", resolution: "D" },
+        { text: "20y", resolution: "D" },
+        { text: "10y", resolution: "D" },
+        { text: "5y", resolution: "D" },
+        { text: "4y", resolution: "D" },
+        { text: "3y", resolution: "D" },
+        { text: "2y", resolution: "D" },
+        { text: "1y", resolution: "D" },
+        { text: "6m", resolution: "D" },
+        { text: "3m", resolution: "D" },
+        { text: "2m", resolution: "D" },
+        { text: "1m", resolution: "D" },
+        { text: "1w", resolution: "30" },
+        { text: "3d", resolution: "15" },
+        { text: "1d", resolution: "5" }
+      ],
+      type: Array
+    },
+    enabledFeatures: {
+      default: () => [
+        "narrow_chart_enabled",
+        "study_templates",
+        "keep_left_toolbar_visible_on_small_screens"
+      ],
+      type: Array
+    },
+    disabledFeatures: {
+      default: () => ["link_to_tradingview"],
+      type: Array
+    },
+    studesOverrides: {
+      default: () => ({
+        "volume.show ma": true
+      })
     }
-    // theme: {
-    //   default: "Dark",
-    //   type: String
-    // }
   },
   data() {
     return {
@@ -91,24 +118,30 @@ export default {
       lightSwitch: "global/getLightSwitch",
       market_code: "chart/market_code"
     }),
-    theme: function() {
+    /**
+     * Returns the theme depending on the current light switch value.
+     *
+     * @return  {String}  theme, Light or Dark
+     */
+    theme() {
       return this.lightSwitch == 0 ? "Light" : "Dark";
     },
-    chartView: function() {
+    /**
+     * Binds chart view classes depending on the current state of the window selector.
+     *
+     * @return
+     */
+    chartView() {
       if (this.ticker && this.table) {
-        //console.log('both open');
         this.chartViewId = 1;
         this.chartViewClass = "chartViewClass_1";
       } else if (!this.ticker && this.table) {
-        //console.log('table only');
         this.chartViewId = 2;
         this.chartViewClass = "chartViewClass_2";
       } else if (this.ticker && !this.table) {
-        //console.log('ticker only');
         this.chartViewId = 3;
         this.chartViewClass = "chartViewClass_3";
       } else if (!this.ticker && !this.table) {
-        //console.log('both close');
         this.chartViewId = 4;
         this.chartViewClass = "chartViewClass_4";
       }
@@ -134,9 +167,28 @@ export default {
     }
   },
   watch: {
+    /**
+     * Watch lightSwitch state changes.
+     *
+     * @param   {String}  value  the theme
+     *
+     * @return
+     */
     lightSwitch(value) {
-      this.loadChart();
+      if (this.market_code) {
+        this.loadChart(this.market_code);
+      } else {
+        this.loadChart(this.symbol);
+      }
     },
+    /**
+     * Watch marketCode state changes
+     *
+     * @param   {String}  value  from market code
+     * @param   {String}  old    to market code
+     *
+     * @return
+     */
     market_code(value, old) {
       const params = {
         symbolid: null,
@@ -157,32 +209,23 @@ export default {
       this.first_load = false;
     }
   },
-  mounted() {
-    if (localStorage.currentMode) {
-      this.setLightSwitch(localStorage.currentMode);
-    }
-    this.loadChart();
-  },
-  destroyed() {
-    if (this.tvWidget !== null) {
-      this.tvWidget.remove();
-      this.tvWidget = null;
-    }
-  },
   methods: {
     ...mapActions({
       setSymbolID: "chart/setSymbolID",
       setLightSwitch: "global/setLightSwitch"
     }),
-    loadChart() {
-      // listen to ticker toggle
+    /**
+     * Load tradingview chart properties and options.
+     *
+     * @return
+     */
+    loadChart(symbol) {
       this.$bus.$on("adjustChartView", data => {
         this.chartView;
       });
 
-      //! BEWARE: no trailing slash is expected in feed URL
+      // NOTE: BEWARE: no trailing slash is expected in feed URL
       const widgetOptions = {
-        //region overrides
         overrides: {
           "paneProperties.background":
             this.lightSwitch == 0 ? "#f2f2f2" : "#00121e",
@@ -205,59 +248,28 @@ export default {
           "mainSeriesProperties.showCountdown": true,
           "scalesProperties.showStudyPlotLabels": true
         },
-        studies_overrides: {
-          "volume.show ma": true
-        },
-        //endregion overrides
-
-        //region perma static
-        disabled_features: ["link_to_tradingview"],
-        enabled_features: [
-          "narrow_chart_enabled",
-          "study_templates",
-          "keep_left_toolbar_visible_on_small_screens"
-        ],
-        toolbar_bg: this.lightSwitch == 0 ? "#F2F2F2" : "#00121e",
-        time_frames: [
-          { text: "50y", resolution: "D" },
-          { text: "20y", resolution: "D" },
-          { text: "10y", resolution: "D" },
-          { text: "5y", resolution: "D" },
-          { text: "4y", resolution: "D" },
-          { text: "3y", resolution: "D" },
-          { text: "2y", resolution: "D" },
-          { text: "1y", resolution: "D" },
-          { text: "6m", resolution: "D" },
-          { text: "3m", resolution: "D" },
-          { text: "2m", resolution: "D" },
-          { text: "1m", resolution: "D" },
-          { text: "1w", resolution: "30" },
-          { text: "3d", resolution: "15" },
-          { text: "1d", resolution: "5" }
-        ],
-        symbol_search_request_delay: 300,
-        //endregion perma static
-
-        //region default
+        studies_overrides: this.studesOverrides,
+        disabled_features: this.disabledFeatures,
+        enabled_features: this.enabledFeatures,
+        toolbar_bg: this.lightSwitch == 0 ? "#F2F2F2" : "#00121e", // FIXME configs for hex color
+        time_frames: this.timeFrames,
+        symbol_search_request_delay: 300, // strict delay to avoid API request overload
         debug: false,
-        symbol: this.symbol,
-        datafeed: Datafeed,
-        interval: this.interval,
-        container_id: this.containerId,
-        library_path: this.libraryPath,
+        datafeed: this.dataFeed,
         locale: this.getLanguageFromURL() || "en",
         charts_storage_url: this.chartsStorageUrl,
+        custom_css_url: this.customCssUrl,
+        library_path: this.libraryPath,
+        symbol: symbol,
+        interval: this.interval,
+        container_id: this.containerId,
         charts_storage_api_version: this.chartsStorageApiVersion,
         client_id: this.clientId,
         user_id: this.userId,
         fullscreen: this.fullscreen,
         autosize: this.autosize,
-        //custom_css_url: this.custom_css_url,
-        custom_css_url: "tradingview.css",
         timezone: this.timezone,
         theme: this.theme
-
-        //endregion default
       };
 
       const tvWidget = new window.TradingView.widget(widgetOptions);
@@ -265,9 +277,8 @@ export default {
 
       //chart methods
       tvWidget.onChartReady(() => {
-        //! region subscribe
         //onHeaderReady event
-        //TODO: add custom headers
+        //TODO: add custom headers, this is a guide
         tvWidget.headerReady().then(() => {
           /*this.widgetCreateButton(
           "Click to show a notification popup",
@@ -286,7 +297,7 @@ export default {
         );*/
         });
 
-        //chart onSymbolChanged event
+        // chart onSymbolChanged event
         const that = this;
         tvWidget
           .chart()
@@ -299,9 +310,13 @@ export default {
 
             that.passTickerToChart(params);
           });
-        //! endregion subscribe
       });
     },
+    /**
+     * Get language from URL.
+     *
+     * @return  {Any}
+     */
     getLanguageFromURL() {
       const regex = new RegExp("[\\?&]lang=([^&#]*)");
       const results = regex.exec(window.location.search);
@@ -309,6 +324,13 @@ export default {
         ? null
         : decodeURIComponent(results[1].replace(/\+/g, " "));
     },
+    /**
+     * Pass ticker object from outside component to tv chart.
+     *
+     * @param   {Object}  object  ticker value
+     *
+     * @return  {Boolean}          operation is success or not
+     */
     passTickerToChart(object) {
       if (object && this.tvWidget) {
         //console.log(object);
@@ -320,6 +342,16 @@ export default {
 
       return false;
     },
+    /**
+     * Create a widget button in tradingview
+     *
+     * @param   {Any}  title
+     * @param   {Any}  content
+     * @param   {Any}  callback
+     * @param   {Any}  options
+     *
+     * @return  {Any}
+     */
     widgetCreateButton(title, content, callback, options) {
       const button = this.widget.createButton(options);
       button.setAttribute("title", title);
@@ -327,14 +359,24 @@ export default {
       button.addEventListener("click", callback);
       button.innerHTML = content;
     }
+  },
+  mounted() {
+    if (localStorage.currentMode) {
+      this.setLightSwitch(localStorage.currentMode);
+    }
+
+    this.loadChart(this.symbol);
+  },
+  destroyed() {
+    if (this.tvWidget !== null) {
+      this.tvWidget.remove();
+      this.tvWidget = null;
+    }
   }
 };
 </script>
 
 <style scoped>
-/* .TVChartContainer {
-  height: calc(100vh - 152px); 
-} */
 .chartViewClass_1 {
   /* both open */
   height: calc(100vh - 132px);

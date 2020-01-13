@@ -2,16 +2,8 @@
   <v-row ref="componentWrapper" no-gutters>
     <!-- Don't remove ref value. Used for sharing -->
     <v-col cols="12">
-      <v-card-title
-        class="text-left justify-left px-0 pb-2 pt-0"
-        :style="borderColor"
-      >
-        <h6
-          class="font-weight-regular subtitle-2"
-          :style="{ color: fontColor }"
-        >
-          EXPENSE REPORT
-        </h6>
+      <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+        <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">EXPENSE REPORT</h6>
         <v-spacer></v-spacer>
         <v-btn icon small @click="showShareModal()">
           <v-icon>mdi-share-variant</v-icon>
@@ -23,48 +15,40 @@
         <h6
           class="font-weight-regular caption text-capitalize"
           :style="{ color: fontColor }"
-        >
-          Trading Result (PHP)
-        </h6>
+        >Trading Result (PHP)</h6>
       </v-card-title>
-      <v-simple-table
-        id="liveportfolio-table"
-        :dense="true"
-        :dark="lightSwitch == true"
-      >
+      <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
         <template v-slot:default>
           <tbody>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Commisions</td>
-              <td class="item_position-prop caption text-right px-1 py-1">
-                {{ formatPrice(parseFloat(comm)) }}
-              </td>
+              <td
+                class="item_position-prop caption text-right px-1 py-1"
+              >{{ formatPrice(parseFloat(comm)) }}</td>
             </tr>
             <tr id="table_tr_snap-cont">
-              <td class="item_position-prop caption px-1 py-2">
-                Value Added Tax
-              </td>
-              <td class="item_position-prop caption text-right px-1 py-1">
-                {{ formatPrice(parseFloat(vadd)) }}
-              </td>
+              <td class="item_position-prop caption px-1 py-2">Value Added Tax</td>
+              <td
+                class="item_position-prop caption text-right px-1 py-1"
+              >{{ formatPrice(parseFloat(vadd)) }}</td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Transfer Fee</td>
-              <td class="item_position-prop caption text-right px-1 py-1">
-                {{ formatPrice(parseFloat(tfee)) }}
-              </td>
+              <td
+                class="item_position-prop caption text-right px-1 py-1"
+              >{{ formatPrice(parseFloat(tfee)) }}</td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">SCCP</td>
-              <td class="item_position-prop caption text-right px-1 py-1">
-                {{ formatPrice(parseFloat(sccp)) }}
-              </td>
+              <td
+                class="item_position-prop caption text-right px-1 py-1"
+              >{{ formatPrice(parseFloat(sccp)) }}</td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Sales Tax</td>
-              <td class="item_position-prop caption text-right px-1 py-1">
-                {{ formatPrice(parseFloat(stax)) }}
-              </td>
+              <td
+                class="item_position-prop caption text-right px-1 py-1"
+              >{{ formatPrice(parseFloat(stax)) }}</td>
             </tr>
           </tbody>
         </template>
@@ -72,20 +56,18 @@
     </v-col>
     <v-col class="pa-0 pl-5" cols="9" sm="9" md="9">
       <div id="chart">
-        <apexcharts
-          ref="ExpenseReportTrades"
-          height="230"
-          type="line"
-          :options="chartOptions"
-          :series="series"
-        />
+        <client-only>
+          <apexcharts
+            ref="ExpenseReportTrades"
+            height="230"
+            type="line"
+            :options="chartOptions"
+            :series="series"
+          />
+        </client-only>
       </div>
     </v-col>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
   </v-row>
 </template>
 

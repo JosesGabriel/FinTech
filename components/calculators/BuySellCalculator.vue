@@ -235,6 +235,13 @@ export default {
     }
   },
   methods: {
+    /**
+     * Removes comma (when number is Numeral formatted) and parses to float
+     *
+     * @param   {integer}  num
+     *
+     * @return  {float}
+     */
     parseNumber(num) {
       if (Number.isInteger(num)) return num;
       else {
@@ -242,6 +249,11 @@ export default {
         return parseFloat(num);
       }
     },
+    /**
+     * Fires when user presses Calculate button
+     *
+     * @return
+     */
     calculate() {
       let buyValue = this.parseNumber(this.buyValue);
       let shares = this.parseNumber(this.shares);

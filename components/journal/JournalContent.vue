@@ -1,6 +1,6 @@
 <template>
   <v-col class="pt-3" cols="12" sm="12" md="12">
-    <v-tabs color="#03DAC5" background-color="transparent" dark>
+    <v-tabs color="success" background-color="transparent" dark>
       <v-tab
         class="tab_menu-top text-capitalize subtitle-1"
         :style="{ color: fontColor }"
@@ -21,44 +21,65 @@
       <v-col sm="3" md="2" class="pa-0">
         <v-select
           :dark="lightSwitch == true"
-          offset-y="true"
-          class="select_portfolio selectjournal_portfolio mt-2 success--text"
-          item-color="success"
-          append-icon="mdi-chevron-down"
-          background-color="#03DAC5"
-          label="Select Portfolio"
-          color="grey"
-          dense
-          solo
-          flat
-          light
           :items="portfolioListPush"
           v-on:change="changePortfolio"
           v-model="portfolioDropdownModel"
           item-text="name"
           item-value="id"
           return-object
-          :menu-props="{closeOnContentClick: true}"
+          :menu-props="{offsetY: false, dark: lightSwitch == true}"
+          class="select_portfolio selectjournal_portfolio mt-2 success--text"
+          item-color="success"
+          append-icon="mdi-chevron-down"
+          background-color="success"
+          label="Select Portfolio"
+          color="grey"
+          dense
+          solo
+          flat
+          light
         >
           <template slot="item" slot-scope="data">
-            <v-list-item-content>
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
+              style="padding: 12px 12px; margin: -16px;"
+            >
               <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
             </v-list-item-content>
           </template>
           <template v-slot:append-item>
-            <v-list-item @click="setPortfolioReal(item)" class="sumportfolio_real mt-1">
+            <v-list-item
+              @click="setPortfolioReal(item)"
+              class="sumportfolio_real"
+              ripple
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
+              @click.stop="showCreatePortForm=true"
+            >
               <v-list-item-content>
-                <v-list-item-title>Sum of Real Portfolio</v-list-item-title>
+                <v-list-item-title class="text-uppercase">Sum of Real Portfolio</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item @click="setPortfolioVirtual()">
+            <v-list-item
+              @click="setPortfolioVirtual()"
+              ripple
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
+              @click.stop="showCreatePortForm=true"
+            >
               <v-list-item-content>
-                <v-list-item-title>Sum of Virtual Portfolio</v-list-item-title>
+                <v-list-item-title class="text-uppercase">Sum of Virtual Portfolio</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item ripple @click.stop="showCreatePortForm=true">
+            <v-list-item
+              ripple
+              @click.stop="showCreatePortForm=true"
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
+            >
               <v-list-item-content>
-                <v-list-item-title>
+                <v-list-item-title class="text-uppercase">
                   Create Portfolio
                   <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon>
                 </v-list-item-title>
@@ -67,7 +88,7 @@
           </template>
         </v-select>
       </v-col>
-      <v-tab-item color="#03dac5" background-color="black" :value="'tab-' + 1">
+      <v-tab-item color="success" background-color="black" :value="'tab-' + 1">
         <v-container class="pa-0">
           <div class="separator"></div>
           <JournalLivePortfolio />
@@ -120,6 +141,7 @@
           <div class="component_spacer"></div>
         </v-container>
       </v-tab-item>
+
       <v-tab-item dark color="#03dac5" background-color="#0c1f33" :value="'tab-' + 2">
         <v-container class="pa-0">
           <div class="separator"></div>
@@ -266,7 +288,6 @@ export default {
 
           // this.portfolioListPush = []
           let defaultPort = false;
-          this.portfolioListPush.push({ header: "Real Portfolio" });
           for (let i = 0; i < this.portfolioList.length; i++) {
             let portfolioListPush1 = this.portfolioList[i];
             if (portfolioListPush1.type === "real") {
@@ -302,7 +323,6 @@ export default {
           }
           if (this.portfolioList.length != 0) {
             this.portfolioListPush.push({ divider: true });
-            this.portfolioListPush.push({ header: "Virtual Portfolio" });
             const toFindVirtual = "virtual"; // what we want to count
             for (let i = 0; i < this.portfolioList.length; i++) {
               let portfolioListPush2 = this.portfolioList[i];
@@ -313,7 +333,6 @@ export default {
           }
         }.bind(this)
       );
-      // this.componentKey++;
     },
     getJournalCharts() {
       if (this.portfolioDropdownModel != null) {
@@ -343,8 +362,13 @@ export default {
 .component_spacer {
   height: 50px;
 }
-.sumportfolio_real {
+.sumportfolio_real.theme--light {
   border-top: 1px solid;
+  border-color: #c1c1c1;
+}
+.sumportfolio_real.theme--dark {
+  border-top: 1px solid;
+  border-color: #172431;
 }
 .tab_menu-top.v-tab--active {
   color: #03dac5 !important;
@@ -449,5 +473,56 @@ span.apexcharts-tooltip-text-label {
 .apexcharts-canvas.dark svg .apexcharts-yaxis-label,
 .apexcharts-canvas.dark svg .apexcharts-xaxis-label {
   fill: #e5e5e5;
+}
+.v-menu__content > .v-select-list > .v-list.theme--light {
+  padding: unset;
+  border-radius: unset !important;
+}
+.v-menu__content > .v-select-list > .v-list.theme--dark {
+  padding: unset;
+  border-radius: unset !important;
+}
+.v-menu__content.theme--light {
+  border-radius: unset !important;
+  border: 1px solid #c1c1c1;
+}
+.v-menu__content.theme--dark {
+  border-radius: unset !important;
+  border: 1px solid #172431;
+}
+.v-menu__content.theme--dark::-webkit-scrollbar {
+  width: 5px !important;
+}
+.v-menu__content.theme--dark::-webkit-scrollbar-track {
+  background: #172431 !important;
+  border-radius: 10px !important;
+}
+.v-menu__content.theme--dark::-webkit-scrollbar-thumb {
+  background: #03dac5 !important;
+  border-radius: 20px !important;
+}
+.v-menu__content.theme--dark::-webkit-scrollbar-thumb:hover {
+  background: #03dac5 !important;
+}
+.v-menu__content.theme--light::-webkit-scrollbar {
+  width: 5px !important;
+}
+.v-menu__content.theme--light::-webkit-scrollbar-track {
+  background: #c1c1c1 !important;
+  border-radius: 0 !important;
+}
+.v-menu__content.theme--light::-webkit-scrollbar-thumb {
+  background: #03dac5 !important;
+  border-radius: 20px !important;
+}
+.v-menu__content.theme--light::-webkit-scrollbar-thumb:hover {
+  background: #03dac5 !important;
+}
+.v-list hr.v-divider.theme--light {
+  background: #c1c1c1;
+}
+.v-list hr.v-divider.theme--dark {
+  background: #172431;
+  border-top: 1px solid #172431;
 }
 </style>
