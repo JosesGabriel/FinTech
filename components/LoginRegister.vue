@@ -38,11 +38,11 @@
             </v-card>
           </v-stepper-content>
           <v-stepper-content step="2" class="pa-0">
-            <Login />
+            <Login @alert="showAlert" />
           </v-stepper-content>
 
           <v-stepper-content step="3" class="pa-0">
-            <Register />
+            <Register @alert="showAlert" />
           </v-stepper-content>
 
           <v-stepper-content step="4">
@@ -126,9 +126,9 @@ export default {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
-    showAlert({ state, message, model }) {
+    showAlert({ message, state }) {
       this.alert.message = message;
-      this.alert.model = model;
+      this.alert.model = true;
       this.alert.state = state;
     }
   }
