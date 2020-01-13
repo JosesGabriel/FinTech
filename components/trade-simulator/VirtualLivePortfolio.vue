@@ -551,8 +551,8 @@ export default {
       }
 
       this.sse = new EventSource(
-        //"http://localhost:8021/sse/market-data/pse/all"
-        "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+        "http://localhost:8021/sse/market-data/pse/all"
+        // "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
       );
 
       this.sse.onopen = function() {

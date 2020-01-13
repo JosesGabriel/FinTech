@@ -2,27 +2,24 @@
   <v-container class="pa-0">
     <v-col class="pa-0" cols="12" sm="12" md="12">
       <div id="chart">
-        <apexcharts
-          ref="winnersChart"
-          type="bar"
-          height="230"
-          :options="chartOptions"
-          :series="series"
-        />
+        <client-only>
+          <apexcharts
+            ref="winnersChart"
+            type="bar"
+            height="230"
+            :options="chartOptions"
+            :series="series"
+          />
+        </client-only>
       </div>
     </v-col>
   </v-container>
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
-
 import { mapGetters } from "vuex";
 
 export default {
-  components: {
-    apexcharts: VueApexCharts
-  },
   computed: {
     ...mapGetters({
       renderPortfolioKey: "journal/getRenderPortfolioKey",
@@ -195,7 +192,6 @@ export default {
           return winnersArray;
         });
         this.winnersArray = winnersArray;
-        console.log(winnersArray);
         for (let i = 0; i < this.winnersArray.length; i++) {
           let toSeparate = this.winnersArray[i];
 

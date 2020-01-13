@@ -1,13 +1,8 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="7" sm="7" md="7">
     <!-- Don't remove ref value. Used for sharing -->
-    <v-card-title
-      class="text-left justify-left px-0 pb-2 pt-0"
-      :style="borderColor"
-    >
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">
-        MONTHLY PERFORMANCE
-      </h6>
+    <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">MONTHLY PERFORMANCE</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon>mdi-share-variant</v-icon>
@@ -15,22 +10,20 @@
     </v-card-title>
     <v-col class="pa-0" cols="12" sm="12" md="12">
       <div id="chart">
-        <apexcharts
-          ref="monthlyPerformance"
-          type="bar"
-          class="monthlyperf_chart"
-          height="300"
-          width="90%"
-          :options="chartOptions"
-          :series="series"
-        />
+        <client-only>
+          <apexcharts
+            ref="monthlyPerformance"
+            type="bar"
+            class="monthlyperf_chart"
+            height="300"
+            width="90%"
+            :options="chartOptions"
+            :series="series"
+          />
+        </client-only>
       </div>
     </v-col>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
   </v-col>
 </template>
 <script>
@@ -255,6 +248,7 @@ export default {
       if (this.journalCharts != null) {
         this.monthlyPerformance = this.journalCharts.data;
         let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance;
+        console.log(monthlyPerformanceArr);
         this.$refs.monthlyPerformance.updateSeries([
           {
             data: monthlyPerformanceArr

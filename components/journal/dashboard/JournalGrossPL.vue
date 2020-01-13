@@ -2,41 +2,23 @@
   <v-container ref="componentWrapper" class="pa-0 pl-10">
     <!-- Don't remove ref value. Used for sharing -->
     <v-col class="pa-0" cols="12">
-      <v-card-title
-        class="text-left justify-left ml-2 px-0 pb-2 pt-0"
-        :style="borderColor"
-      >
+      <v-card-title class="text-left justify-left ml-2 px-0 pb-2 pt-0" :style="borderColor">
         <h6
           class="font-weight-regular subtitle-2"
           :style="{ color: fontColor }"
-        >
-          GROSS PROFIT AND LOSS
-        </h6>
+        >GROSS PROFIT AND LOSS</h6>
         <v-spacer></v-spacer>
-        <v-btn
-          icon
-          small
-          :dark="lightSwitch == 0 ? false : true"
-          @click="showShareModal()"
-        >
+        <v-btn icon small :dark="lightSwitch == 0 ? false : true" @click="showShareModal()">
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
       </v-card-title>
     </v-col>
     <div id="chart" class="pt-3">
-      <apexcharts
-        ref="GrossPL"
-        type="bar"
-        height="300"
-        :options="chartOptions"
-        :series="series"
-      />
+      <client-only>
+        <apexcharts ref="GrossPL" type="bar" height="300" :options="chartOptions" :series="series" />
+      </client-only>
     </div>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
   </v-container>
 </template>
 

@@ -1,13 +1,8 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0 pl-10" cols="5" sm="5" md="5">
     <!-- Don't remove ref value. Used for sharing -->
-    <v-card-title
-      class="text-left justify-left px-0 pb-2 pt-0"
-      :style="borderColor"
-    >
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">
-        TRADE STATISTICS
-      </h6>
+    <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">TRADE STATISTICS</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon>mdi-share-variant</v-icon>
@@ -16,70 +11,49 @@
     <v-row no-gutters>
       <v-col class="pa-0 pt-5" cols="12">
         <div class="small">
-          <apexcharts
-            type="donut"
-            height="245"
-            :options="chartOptions"
-            :series="series"
-          ></apexcharts>
+          <client-only>
+            <apexcharts type="donut" height="245" :options="chartOptions" :series="series" />
+          </client-only>
         </div>
       </v-col>
       <v-col class="pa-0" cols="12">
-        <v-simple-table
-          id="liveportfolio-table"
-          :dense="true"
-          :dark="lightSwitch == true"
-        >
+        <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
           <template v-slot:default>
             <tbody>
               <tr>
                 <td class="caption px-1 py-1">
-                  <v-icon class="pr-1 caption" color="#03DAC5"
-                    >mdi-circle</v-icon
-                  >Win
+                  <v-icon class="pr-1 caption" color="#03DAC5">mdi-circle</v-icon>Win
                 </td>
                 <td class="caption text-right px-1 py-1 pr-8">{{ win }}</td>
 
                 <td class="caption px-1 py-1 pl-8">
-                  <v-icon class="pr-1 caption" color="#F44336"
-                    >mdi-circle</v-icon
-                  >Loss
+                  <v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Loss
                 </td>
                 <td class="caption text-right px-1 py-1">{{ loss }}</td>
               </tr>
               <tr>
                 <td class="caption px-1 py-1">Total Trades</td>
-                <td class="caption text-right px-1 py-1 pr-8">
-                  {{ winlossresult }}
-                </td>
+                <td class="caption text-right px-1 py-1 pr-8">{{ winlossresult }}</td>
 
                 <td class="caption px-1 py-1 pl-8">Win Rate</td>
-                <td class="caption text-right px-1 py-1">
-                  {{ winrateresult }}%
-                </td>
+                <td class="caption text-right px-1 py-1">{{ winrateresult }}%</td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
       </v-col>
     </v-row>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
   </v-col>
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
 import shareModal from "~/components/modals/share";
 
 import { mapGetters } from "vuex";
 
 export default {
   components: {
-    apexcharts: VueApexCharts,
     shareModal
   },
   computed: {

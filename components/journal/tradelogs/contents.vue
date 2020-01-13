@@ -130,25 +130,7 @@
         >{{ totalProfitLossPerf.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}%</span>
       </v-col>
     </v-row>
-    <v-card class="d-flex justify-space-between align-center" color="transparent" elevation="0">
-      <v-card color="transparent" :dark="lightSwitch == true" class="justify-center" elevation="0">
-        <v-card-title class="caption pa-0">
-          <span>Show Rows</span>
-          <v-spacer></v-spacer>
-          <v-text-field
-            :value="(tradeLogs.length <= 10 ? tradeLogs.length : 10)"
-            type="number"
-            min="5"
-            max="10"
-            @input="itemsPerPage = parseInt($event, 10)"
-            :dark="lightSwitch == true"
-            class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
-            color="success"
-            dense
-          ></v-text-field>
-          <span class="pl-1">of {{ tradeLogs.length }}</span>
-        </v-card-title>
-      </v-card>
+    <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
       <v-card color="transparent" elevation="0">
         <v-pagination
           class="d-flex flex-end lp_data_table-pagination"

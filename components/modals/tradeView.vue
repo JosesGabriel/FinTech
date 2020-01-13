@@ -798,6 +798,7 @@ export default {
       this.$api.chart.stocks.history(params).then(
         function(result) {
           this.stockSymbolGet = result.data;
+          console.log(this.stockSymbolGet)
 
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.boardLotModel = 1000000;

@@ -1,12 +1,7 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="8" sm="8" md="8">
-    <v-card-title
-      class="text-left justify-left mx-3 px-0 pb-2 pt-5"
-      :style="borderColor"
-    >
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">
-        CURRENT ALLOCATION
-      </h6>
+    <v-card-title class="text-left justify-left mx-3 px-0 pb-2 pt-5" :style="borderColor">
+      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">CURRENT ALLOCATION</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon>mdi-share-variant</v-icon>
@@ -17,29 +12,21 @@
         <v-simple-table id="liveportfolio-table" :dense="true" dark>
           <template v-slot:default>
             <tbody>
-              <tr
-                v-for="item in allodata.slice(0, 9)"
-                id="table_tr_snap-cont"
-                :key="item.stocks"
-              >
-                <v-icon class="pa-1 caption" :style="{ color: item.color }"
-                  >mdi-circle</v-icon
-                >
+              <tr v-for="item in allodata.slice(0, 9)" id="table_tr_snap-cont" :key="item.stocks">
+                <v-icon class="pa-1 caption" :style="{ color: item.color }">mdi-circle</v-icon>
                 <td
                   class="item_position-prop caption text-capitalize px-1 py-1"
                   :style="{ color: fontColor }"
-                >
-                  {{ item.stock_id }}
-                </td>
+                >{{ item.stock_id }}</td>
                 <td
                   class="item_position-prop caption text-right px-1 py-1"
                   width="75%"
                   :style="{ color: fontColor }"
                 >
                   {{
-                    item.position
-                      .toFixed(2)
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  item.position
+                  .toFixed(2)
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   }}
                 </td>
               </tr>
@@ -49,21 +36,19 @@
       </v-col>
       <v-col class="pa-0 pt-5" cols="6" sm="6" md="6">
         <div class="small">
-          <apexcharts
-            width="280"
-            height="280"
-            type="donut"
-            :options="chartOptions"
-            :series="series"
-          ></apexcharts>
+          <client-only>
+            <apexcharts
+              width="280"
+              height="280"
+              type="donut"
+              :options="chartOptions"
+              :series="series"
+            />
+          </client-only>
         </div>
       </v-col>
     </v-row>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
   </v-col>
 </template>
 
@@ -185,7 +170,7 @@ export default {
                 },
                 total: {
                   show: true,
-                  label: "Total Allocation",
+                  label: "Total Equity",
                   fontSize: "12px",
                   color: "",
                   fontFamily: "'Nunito' !important",
