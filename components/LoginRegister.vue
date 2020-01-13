@@ -110,10 +110,6 @@ export default {
       set(value) {
         this.$emit("input", value);
       }
-    },
-    passwordConfirmationRule() {
-      return () =>
-        this.password === this.confirmPassword || "Password must match";
     }
   },
   watch: {
