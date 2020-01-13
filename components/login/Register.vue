@@ -86,7 +86,7 @@
         </v-btn>
         <span class="text-center d-block  caption w-100"
           >Already have an account?
-          <a class="text-center" @click="stepper = 2">Sign In</a></span
+          <a class="text-center" @click="$emit('stepper', 2)">Sign In</a></span
         >
       </div>
     </v-form>

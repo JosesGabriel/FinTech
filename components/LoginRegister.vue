@@ -38,11 +38,11 @@
             </v-card>
           </v-stepper-content>
           <v-stepper-content step="2" class="pa-0">
-            <Login @alert="showAlert" />
+            <Login @alert="showAlert" @stepper="changeStep" />
           </v-stepper-content>
 
           <v-stepper-content step="3" class="pa-0">
-            <Register @alert="showAlert" />
+            <Register @alert="showAlert" @stepper="changeStep" />
           </v-stepper-content>
 
           <v-stepper-content step="4">
@@ -126,6 +126,9 @@ export default {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
+    changeStep(step) {
+      this.stepper = step;
+    },
     showAlert({ message, state }) {
       this.alert.message = message;
       this.alert.model = true;
