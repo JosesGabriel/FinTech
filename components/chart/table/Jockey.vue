@@ -159,7 +159,8 @@ export default {
       jockey: [],
       desc: true,
       current: 0,
-      hover: false
+      hover: false,
+      symbol_id: '',
     };
   },
   computed: {
@@ -181,6 +182,7 @@ export default {
     symbolid(symid) {
       this.getCurrent(symid);
       this.initJockey(symid);
+      this.initSSE();
     },
     fullscreen(value) {},
     ticker(value) {
@@ -192,9 +194,10 @@ export default {
     }
   },
   mounted() {
+    this.symbol_id = '29235365118214144';
     this.$api.chart.stocks
       .brokersActivity({
-        "symbol-id": "29235365118214144"
+        "symbol-id": this.symbol_id
       })
       .then(response => {
         this.jockey = response.data;
@@ -239,6 +242,7 @@ export default {
         });
     },
     initJockey(id) {
+      this.symbol_id = id;
       this.$api.chart.stocks
         .brokersActivity({
           "symbol-id": id
@@ -270,6 +274,39 @@ export default {
           this.sortArray("buy_volume");
         });
     },
+
+/*    initSSE: function() {
+      if (this.sse !== null) {
+        //this.sse.close();
+        this.counter = 0;
+      }
+
+      this.sse = new EventSource(
+        //"http://localhost:8021/sse/market-data/pse/all"
+        "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+      );
+
+      this.sse.onopen = function() {
+        console.log("open sse"); //
+      };
+       
+      this.sse.onerror = function(err) {
+        console.log("error");
+        //console.log(err);
+      };
+      
+      const that = this;
+      
+      this.sse.addEventListener("trade",function(e) {
+           const data = JSON.parse(e.data);  
+           
+          if(that.symbol_id == data.sym_id){
+            console.log('Data SYm -'+ data.sym);
+          }
+      });
+     
+    },*/
+
     sortArray(data) {
       if (this.desc) {
         this.desc = false;
