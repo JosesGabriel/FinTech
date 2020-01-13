@@ -51,7 +51,11 @@
           to="/watchlist"
           >Add symbols to your watchlist.</router-link
         >
-        <router-link to="/watchlist" class="caption no-transform">
+        <router-link
+          v-if="watchListObject.length != 0"
+          to="/watchlist"
+          class="caption no-transform"
+        >
           Show more
         </router-link>
       </v-list>
