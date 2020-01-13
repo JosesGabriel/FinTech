@@ -54,13 +54,19 @@
       class="data_table-container pl-10 secondary--text"
     >
       <template v-slot:item.stock_symbol="{ item }">
-       <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_symbol }}</span>
+        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_symbol }}</span>
       </template>
       <template v-slot:item.position="{ item }">
-       <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
+        <span
+          class="pl-3"
+          :style="{ color: fontcolor2 }"
+        >{{ item.position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
       </template>
       <template v-slot:item.average_price="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ formatPriceAvePrice(item.average_price) }}</span>
+        <span
+          class="pl-3"
+          :style="{ color: fontcolor2 }"
+        >{{ formatPriceAvePrice(item.average_price) }}</span>
       </template>
       <template v-slot:item.total_value="{ item }">
         <span class="pl-3" :style="{ color: fontcolor2 }">{{ formatPrice(item.total_value) }}</span>
@@ -69,10 +75,14 @@
         <span class="pl-3" :style="{ color: fontcolor2 }">{{ formatPrice(item.market_value) }}</span>
       </template>
       <template v-slot:item.profit_loss="{ item }">
-        <span :class="item.profit_loss > 0 ? 'positive' : item.profit_loss < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.profit_loss) }}</span>
+        <span
+          :class="item.profit_loss > 0 ? 'positive' : item.profit_loss < 0 ? 'negative' : 'neutral' "
+        >{{ formatPrice(item.profit_loss) }}</span>
       </template>
       <template v-slot:item.pl_percentage="{ item }">
-        <span :class="item.pl_percentage > 0 ? 'positive' : item.pl_percentage < 0 ? 'negative' : 'neutral' ">{{ formatPrice(item.pl_percentage) }}%</span>
+        <span
+          :class="item.pl_percentage > 0 ? 'positive' : item.pl_percentage < 0 ? 'negative' : 'neutral' "
+        >{{ formatPrice(item.pl_percentage) }}%</span>
       </template>
       <template v-slot:item.action="{ item }">
         <div
@@ -126,26 +136,7 @@
         >{{ totalProfitLossPerf.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}%</span>
       </v-col>
     </v-row>
-    <v-card class="d-flex justify-space-between align-center" color="transparent" elevation="0">
-      <v-card color="transparent" :dark="lightSwitch == true" class="justify-center" elevation="0">
-        <v-card-title class="caption pa-0">
-          <span>Show Rows</span>
-          <v-spacer></v-spacer>
-          <v-text-field
-            :value="(portfolioLogs.length <= 5 ? portfolioLogs.length : 5)"
-            type="number"
-            min="5"
-            max="10"
-            @input="itemsPerPage = parseInt($event, 10)"
-            dark
-            class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
-            :dark="lightSwitch == true"
-            color="success"
-            dense
-          ></v-text-field>
-          <span class="pl-1">of {{ portfolioLogs.length }}</span>
-        </v-card-title>
-      </v-card>
+    <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
       <v-card color="transparent" elevation="0">
         <v-pagination
           class="d-flex flex-end lp_data_table-pagination"
@@ -225,7 +216,12 @@ export default {
       itemsPerPage: 5,
       search: "",
       headers: [
-        { text: "Stocks", value: "stock_symbol", align: "left", sortable: false },
+        {
+          text: "Stocks",
+          value: "stock_symbol",
+          align: "left",
+          sortable: false
+        },
         { text: "Position", value: "position", align: "right" },
         { text: "Avg. Price", value: "average_price", align: "right" },
         { text: "Total Cost", value: "total_value", align: "right" },
@@ -235,10 +231,12 @@ export default {
         { text: "", value: "action", sortable: false, align: "right" }
       ],
       portfolioLogs: [],
+      stockSym: [],
       page: 1,
       pageCount: 0,
       menuShow: false,
       componentKeys: 0,
+      sse: null,
 
       totalProfitLoss: 0,
       totalProfitLossPerf: 0,
@@ -266,11 +264,11 @@ export default {
   },
   mounted() {
     if (this.defaultPortfolioId != null ? this.getOpenPositions() : "");
-    if(!this.selectedPortfolio) {
+    if (!this.selectedPortfolio) {
       if (this.selectedPortfolio.type === "virtual") {
-        this.ifVirtualShow = true
+        this.ifVirtualShow = true;
       } else {
-        this.ifVirtualShow = false
+        this.ifVirtualShow = false;
       }
     }
   },
@@ -316,9 +314,10 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     getOpenPositions() {
-
       this.totalProfitLoss = 0;
       this.totalProfitLossPerf = 0;
+      let filteredStocks = null;
+      this.stockSym = [];
 
       const openparams = {
         fund: this.defaultPortfolioId
@@ -330,30 +329,109 @@ export default {
 
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].fund = this.defaultPortfolioId;
-            this.totalProfitLoss = this.totalProfitLoss + parseFloat(this.portfolioLogs[i].profit_loss);
-            this.totalProfitLossPerf = this.totalProfitLossPerf + parseFloat(this.portfolioLogs[i].pl_percentage);
+            this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
+            this.totalProfitLoss =
+              this.totalProfitLoss +
+              parseFloat(this.portfolioLogs[i].profit_loss);
+            this.totalProfitLossPerf =
+              this.totalProfitLossPerf +
+              parseFloat(this.portfolioLogs[i].pl_percentage);
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
           }
           // Loading on table
-          this.livePortfolioLoading = false
+          this.livePortfolioLoading = false;
         }.bind(this)
       );
       this.componentKeys++;
+    },
+    initSSE() {
+      let len = this.stockSym.length;
+      const that = this;
+
+      if (this.sse !== null) {
+        this.sse.close();
+        this.counter = 0;
+      }
+      this.sse = new EventSource(
+        // "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+        "http://localhost:8021/sse/market-data/pse/all"
+      );
+      this.sse.onopen = function() {
+        console.log("[TEST OPEN] open sse");
+      };
+      this.sse.onerror = function(err) {
+        console.log("[TEST ERROR]", err);
+      };
+      this.sse.addEventListener("trade", function(e) {
+        const data = JSON.parse(e.data);
+        for (let i = 0; i < that.stockSym.length; i++) {
+          if (that.stockSym[i] == data.sym_id) {
+            that.trigger(data.sym_id, data.exp);
+          }
+        }
+      });
+    },
+    trigger: function(symbol, lprice) {
+      let profit = 0;
+      let perf = 0;
+
+      for (let i = 0; i < this.portfolioLogs.length; i++) {
+        if (this.portfolioLogs[i].stock_id == symbol) {
+          console.log(symbol);
+          console.log(lprice);
+          let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
+
+          let mvalue = this.fees(buyResult);
+          let tcost =
+            this.portfolioLogs[i].position *
+            this.portfolioLogs[i].average_price;
+          profit = parseFloat(mvalue) - parseFloat(tcost);
+          perf = (profit / tcost) * 100;
+
+          this.portfolioLogs[i].market_value = mvalue;
+          this.portfolioLogs[i].profit_loss = profit;
+          this.portfolioLogs[i].pl_percentage = perf;
+
+          let updatedItem = {
+            ...this.portfolioLogs[i],
+            ...{ market_value: this.portfolioLogs[i].market_value }
+          };
+          this.portfolioLogs.splice(i, 1, updatedItem);
+        }
+      }
+    },
+    fees(buyResult) {
+      let dpartcommission = buyResult * 0.0025;
+      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
+      // TAX
+      let dtax = dcommission * 0.12;
+      // Transfer Fee
+      let dtransferfee = buyResult * 0.00005;
+      let dsell = buyResult * 0.006;
+      // SCCP
+      let dsccp = buyResult * 0.0001;
+      let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
+      return buyResult - dall;
     }
   },
   watch: {
     selectedPortfolio: function() {
       if (this.selectedPortfolio.type === "virtual") {
-      this.ifVirtualShow = true
+        this.ifVirtualShow = true;
       } else {
-      this.ifVirtualShow = false
+        this.ifVirtualShow = false;
       }
     },
-    renderPortfolioKey: function() {
-      this.getOpenPositions();
+    portfolioLogs: function() {
+      this.initSSE();
     },
     defaultPortfolioId: function() {
       this.getOpenPositions();
+      this.initSSE();
+    },
+    renderPortfolioKey: function() {
+      this.getOpenPositions();
+      this.initSSE();
     },
     renderEditKey: function() {
       this.getOpenPositions();
@@ -384,7 +462,8 @@ export default {
 .data_table-container.theme--light.v-data-table thead tr th {
   color: #494949;
 }
-.data_table-container.v-data-table td, .total_bottom {
+.data_table-container.v-data-table td,
+.total_bottom {
   font-size: 12px !important;
 }
 .data_table-container i.v-icon.v-data-table-header__icon.mdi.mdi-arrow-up {

@@ -1,13 +1,15 @@
 <template>
   <v-col class="pa-0">
     <div id="chart">
-      <apexcharts
-        ref="stratStatsChart"
-        type="bar"
-        height="240"
-        :options="chartOptions"
-        :series="series"
-      />
+      <client-only>
+        <apexcharts
+          ref="stratStatsChart"
+          type="bar"
+          height="240"
+          :options="chartOptions"
+          :series="series"
+        />
+      </client-only>
     </div>
     <v-simple-table :dense="true" :dark="lightSwitch == true" id="liveportfolio-table">
       <template v-slot:default>
@@ -37,14 +39,9 @@
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
-
 import { mapGetters } from "vuex";
 
 export default {
-  components: {
-    apexcharts: VueApexCharts
-  },
   computed: {
     ...mapGetters({
       renderPortfolioKey: "journal/getRenderPortfolioKey",
@@ -148,9 +145,9 @@ export default {
               fontSize: "12px",
               fontFamily: "'Nunito' !important",
               cssClass: "apexcharts-yaxis-label"
-            },
-            offsetX: 102,
-            offsetY: -17
+            }
+            // offsetX: 102,
+            // offsetY: -17
           },
           axisTicks: {
             show: false
@@ -181,7 +178,7 @@ export default {
     };
   },
   methods: {
-    getStrategyStat() { 
+    getStrategyStat() {
       if (this.journalCharts != null) {
         const objStrategy = this.journalCharts.data.strategy_statistics;
         const strategyArray = [];

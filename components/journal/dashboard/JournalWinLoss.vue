@@ -3,7 +3,9 @@
     <v-row no-gutters>
       <v-col class="pa-0" cols="12">
         <div class="small pt-5">
-          <apexcharts height="270" type="donut" :options="chartOptions" :series="series"></apexcharts>
+          <client-only>
+            <apexcharts height="270" type="donut" :options="chartOptions" :series="series" />
+          </client-only>
         </div>
       </v-col>
       <v-col class="pa-3 px-10" cols="12">
@@ -192,7 +194,7 @@ export default {
     renderPortfolioKey: function() {
       this.getStrategyStat();
     }
-  },
+  }
 };
 </script>
 <style scoped>
