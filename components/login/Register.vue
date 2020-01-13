@@ -177,7 +177,10 @@ export default {
         .then(response => {
           this.registerLoading = false;
           if (response.success) {
-            this.showAlert(true, response.message);
+            this.$emit("alert", {
+              message: response.message,
+              state: "success"
+            });
             setTimeout(
               function() {
                 this.show = false;
@@ -185,12 +188,15 @@ export default {
               3000
             );
           } else {
-            this.showAlert(false, response.message);
+            this.$emit("alert", { message: response.message, state: "error" });
           }
           this.registerLoading = false;
         })
         .catch(error => {
-          this.showAlert(false, error.response.data.message);
+          this.$emit("alert", {
+            message: error.response.data.message,
+            state: "error"
+          });
           this.registerLoading = false;
         });
     }

@@ -83,11 +83,14 @@ export default {
         });
 
         this.card__loader = false;
-        this.showAlert(true, "Successfully Logged In");
+        this.$emit("alert", {
+          state: "success",
+          message: "Successfully Logged In"
+        });
         this.setLoginModalState(false);
       } catch (error) {
         this.card__loader = false;
-        this.showAlert(false, "Invalid Credentials");
+        this.$emit("alert", { state: "error", message: "Invalid Credentials" });
       }
     }
   }
