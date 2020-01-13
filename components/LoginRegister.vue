@@ -130,6 +130,9 @@ export default {
       this.stepper = step;
     },
     showAlert({ message, state }) {
+      if (this.alert.state) {
+        this.show = false;
+      }
       this.alert.message = message;
       this.alert.model = true;
       this.alert.state = state;
