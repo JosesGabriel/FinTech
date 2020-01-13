@@ -5,19 +5,18 @@
 	By default, the base URL of the API is connected to
 	the data-api /charts, and the tradingview configurations
 	are injected and modelled with respect to the orignal UDF queries.
-
-	//TODO: dependency injection for the constant API routes
  */
 
 import axios from "axios";
 import moment from "moment";
+import { nativeBus } from "~/helpers/native-bus";
 
-//BASE CONSTANTS
+// BASE CONSTANTS
 const BASE_URL = process.env.CHART_API_URL + "/charts";
 const STREAM_BASE_URL = process.env.STREAM_API_URL;
 const TOKEN = process.env.CHART_CLIENT_SECRET;
 
-//URL LIST
+// URL LIST
 const CONFIG_URL = `${BASE_URL}/tradingview/config`;
 const HISTORY_URL = `${BASE_URL}/tradingview/history`;
 const RESOLVE_URL = `${BASE_URL}/tradingview/symbols`;
@@ -25,62 +24,47 @@ const SEARCH_URL = `${BASE_URL}/tradingview/search`;
 const SERVER_TIME_URL = `${BASE_URL}/tradingview/time`;
 const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 
-//STREAM API
+// STREAM API
 const SSE_URL = `${STREAM_BASE_URL}/sse?stream=market-data`;
 const MARKET_INFO_PREFIX = "M-D.INFO";
 
-var eventSource; //global event source variable
 var symbolInfoObj = {
   exchange: ""
 };
 
-//INITIALIZE DEFAULTS
+// INITIALIZE DEFAULTS
 axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
 
 function listenToEventSource(symbolId, resolution, onRealtimeCallback) {
-  if (eventSource != null) {
-    eventSource.close();
-  }
-
-  eventSource = new EventSource(SSE_URL);
-  eventSource.onopen = function() {
-    console.log("open sse");
-  };
-  eventSource.onerror = function(err) {
-    console.log(err);
-  };
-  eventSource.addEventListener(`${MARKET_INFO_PREFIX}.${symbolId}`, function(
-    event
-  ) {
-    // execute real-time callback
-    // update bars
-    const objData = JSON.parse(event.data);
-
-    onRealtimeCallback({
-      time: objData.t * 1000, // needs to be in milliseconds
-      close: objData.c,
-      open: objData.o,
-      low: objData.l,
-      high: objData.h,
-      volume: objData.vol
-    });
+  nativeBus.$on("b-tv-sse-all", data => {
+    if (symbolId == data.sym_id) {
+      // execute real-time callback
+      onRealtimeCallback({
+        time: data.t * 1000, // needs to be in milliseconds
+        close: data.c,
+        open: data.o,
+        low: data.l,
+        high: data.h,
+        volume: data.vol
+      });
+    }
   });
 }
 
 export default {
-  //onready is executed when the chart components are loaded and ready.
+  // onready is executed when the chart components are loaded and ready.
   onReady: cb => {
     setTimeout(() => {
-      //get tradingview config
+      // get tradingview config
       axios.get(CONFIG_URL).then(({ data }) => {
-        //write to callback
+        // write to callback
         cb(data.data);
       });
     }, 0);
   },
-  //searchsymbols is fired when the user inputs to the tradingview search bar
+  // searchsymbols is fired when the user inputs to the tradingview search bar
   searchSymbols: (userInput, exchange, symbolType, onResultReadyCallback) => {
-    //assign exchange to global symbol info
+    // assign exchange to global symbol info
     symbolInfoObj.exchange = exchange;
 
     const params = {
@@ -90,7 +74,7 @@ export default {
       limit: 30
     };
 
-    //get tradingview search
+    // get tradingview search
     axios
       .get(SEARCH_URL, {
         params: params
@@ -102,7 +86,7 @@ export default {
         onResultReadyCallback([]);
       });
   },
-  //resolvesymbol is fired when the user clicks the symbol from search bar
+  // resolvesymbol is fired when the user clicks the symbol from search bar
   resolveSymbol: (
     symbolName,
     onSymbolResolvedCallback,
@@ -110,12 +94,12 @@ export default {
   ) => {
     let symbol, exchange;
 
-    //check if reolveSymbol is triggered by "enter" key
+    // check if reolveSymbol is triggered by "enter" key
     if (symbolName.indexOf(":") == -1) {
       symbol = symbolName;
       exchange = symbolInfoObj.exchange;
 
-      //check if symbol is empty for all change, if yes, set default to PSE
+      // check if symbol is empty for all change, if yes, set default to PSE
       if (exchange.length == 0) {
         exchange = "PSE";
       }
@@ -126,14 +110,14 @@ export default {
       exchange = SPLIT_DATA[0];
     }
 
-    //structure the get params
+    // structure the get params
     const params = {
       symbol: symbol,
       exchange: exchange
     };
 
     setTimeout(function() {
-      //get tradingview resolve
+      // get tradingview resolve
       axios
         .get(RESOLVE_URL, {
           params: params
@@ -146,7 +130,7 @@ export default {
         });
     }, 0);
   },
-  //getbars is loaded when the resolvesymbol is executed
+  // getbars is loaded when the resolvesymbol is executed
   getBars: function(
     symbolInfo,
     resolution,
@@ -164,12 +148,12 @@ export default {
       resolution: "1D"
     };
 
-    //check for 1m resolution
+    // check for 1m resolution
     if (resolution != "D") {
       params.resolution = "1m";
     }
 
-    //get tradingview history
+    // get tradingview history
     axios
       .get(HISTORY_URL, {
         params: params
@@ -208,7 +192,7 @@ export default {
         onErrorCallback([]);
       });
   },
-  //subscribebars connects to a stream for realtime update
+  // subscribebars connects to a stream for realtime update
   subscribeBars: (
     symbolInfo,
     resolution,
@@ -219,9 +203,9 @@ export default {
     // listen to sse
     listenToEventSource(symbolInfo.id, resolution, onRealtimeCallback);
   },
-  //unsubscribebars disconnects to a stream for realtime update
+  // unsubscribebars disconnects to a stream for realtime update
   unsubscribeBars: subscriberUID => {},
-  //calculatehistorydepth is fired and related during resolvesymbol event
+  // calculatehistorydepth is fired and related during resolvesymbol event
   calculateHistoryDepth: (resolution, resolutionBack, intervalBack) => {
     if (parseInt(resolution) > 0) {
       resolutionBack = "M";
@@ -232,12 +216,12 @@ export default {
       intervalBack: intervalBack
     };
   },
-  //getmarks is executed as a request for custom plots in charting area
+  // getmarks is executed as a request for custom plots in charting area
   getMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {
-    //optional
+    // TODO: add event for get marks for future works
     console.log("=====getMarks running");
   },
-  //gettimescalemarks is executed as a request for events and displasyed in volume area
+  // gettimescalemarks is executed as a request for events and displasyed in volume area
   getTimescaleMarks: (symbolInfo, from, to, onDataCallback, resolution) => {
     const params = {
       symbol: symbolInfo.name,
@@ -247,12 +231,12 @@ export default {
       resolution: "1D"
     };
 
-    //check for 1m resolution
+    // check for 1m resolution
     if (resolution != "D") {
       params.resolution = "1m";
     }
 
-    //get tradingview history
+    // get tradingview history
     axios
       .get(TIMESCALE_MARKS_TIME_URL, {
         params: params
@@ -264,11 +248,11 @@ export default {
         onDataCallback([]);
       });
   },
-  //getServerTime is executed with onready event and used for time synchornization
+  // getServerTime is executed with onready event and used for time synchornization
   getServerTime: cb => {
-    //get tradingview config
+    // get tradingview config
     axios.get(SERVER_TIME_URL).then(({ data }) => {
-      //write to callback
+      // write to callback
       cb(data.data.time);
     });
   }
