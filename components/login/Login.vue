@@ -22,11 +22,13 @@
           <v-col cols="12">
             <v-text-field
               v-model="password"
+              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPassword ? 'text' : 'password'"
               label="Password"
               color="primary"
-              type="password"
               dense
               hide-details
+              @click:append="showPassword = !showPassword"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -67,7 +69,8 @@ export default {
       email: "",
       isLightMode: 0,
       isLoading: false,
-      password: ""
+      password: "",
+      showPassword: false
     };
   },
   computed: {
