@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const baseURL = process.env.API_URL + "/journal";
 const baseChartURL = process.env.CHART_API_URL + "/stocks";
 

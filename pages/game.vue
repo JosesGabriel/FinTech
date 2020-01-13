@@ -14,7 +14,6 @@
   </v-container>
 </template>
 <script>
-require("dotenv").config();
 import { myToken } from "~/assets/client.js";
 import GameLobby from "~/components/game/GameLobby";
 import GameView from "~/components/game/GameView";

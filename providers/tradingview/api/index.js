@@ -9,8 +9,6 @@
 	//TODO: dependency injection for the constant API routes
  */
 
-require("dotenv").config();
-
 import axios from "axios";
 import moment from "moment";
 

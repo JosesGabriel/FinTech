@@ -78,7 +78,6 @@ tr span {
 }
 </style>
 <script>
-require("dotenv").config();
 import { mapActions, mapGetters } from "vuex";
 import { client } from "~/assets/client.js";
 export default {

@@ -69,7 +69,6 @@
 
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
-require("dotenv").config();
 import { mapActions, mapGetters } from "vuex";
 export default {
   props: {

@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 export default () => ({
   //region configs
   lightSwitch: 0,
