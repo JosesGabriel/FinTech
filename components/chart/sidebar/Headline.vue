@@ -70,7 +70,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Headline",
@@ -103,7 +103,7 @@ export default {
       stock_marketcap: "chart/stock_marketcap",
       headline_loading: "chart/headline_loading",
       favicon: "global/favicon",
-      sse: "global/sse"
+      sse: "chart/sse"
     }),
     changetype() {
       let value = this.stock.change;
@@ -119,9 +119,7 @@ export default {
   watch: {
     headline_loading: function(value) {
       if (value === false) {
-        setTimeout(() => {
-          this.sse.addEventListener("info", this.sseInfo);
-        }, 2000);
+        this.sse.addEventListener("info", this.sseInfo);
       }
     },
     stock_marketcap: function(value) {
@@ -138,6 +136,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setSSEInfo: "chart/setSSEInfo"
+    }),
     updateEffect: dom => {
       const item = document.getElementById(dom);
       item.style.background = "rgb(182,182,182,.2)";
@@ -152,17 +153,17 @@ export default {
       if (change > 0) {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/up.ico`
+          `${process.env.APP_URL}/favicon/up.ico`
         );
       } else if (change < 0) {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/down.ico`
+          `${process.env.APP_URL}/favicon/down.ico`
         );
       } else {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
+          `${process.env.APP_URL}/favicon/lyduz.ico`
         );
       }
     },
@@ -170,6 +171,7 @@ export default {
       try {
         if (this.symbolid == undefined) return;
         const data = JSON.parse(e.data);
+        this.setSSEInfo(data);
         if (this.symbolid !== data.sym_id) return;
         this.counter++;
         this.$store.commit("chart/SET_STOCK_OBJ", {

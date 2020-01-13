@@ -85,7 +85,7 @@ export default {
       lightSwitch: "global/getLightSwitch",
       responsive_height: "chart/responsive_height",
       trades: "chart/trades",
-      sse: "global/sse"
+      sse: "chart/sse"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -108,15 +108,14 @@ export default {
     loading(value) {
       if (value === false) {
         this.temp_trades = this.trades;
-        setTimeout(() => {
-          this.sse.addEventListener("trade", this.sseTrade);
-        }, 2000);
+        this.sse.addEventListener("trade", this.sseTrade);
       }
     }
   },
   methods: {
     ...mapActions({
-      setTrades: "chart/setTrades"
+      setTrades: "chart/setTrades",
+      setSSETrade: "chart/setSSETrade"
     }),
     initTimetrade: function(symid) {
       this.loading = "#03dac5";
@@ -141,6 +140,7 @@ export default {
       try {
         if (this.symbolid == undefined) return;
         const trades = JSON.parse(e.data);
+        this.setSSETrade(trades);
         if (this.symbolid !== trades.sym_id) return;
         this.temp_trades.unshift({
           id: `${trades.t}_${this.ctr_trades++}`,
