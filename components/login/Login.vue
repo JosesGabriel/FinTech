@@ -1,5 +1,9 @@
 <template>
-  <v-card height="584px" :dark="isLightMode == 0 ? false : true">
+  <v-card
+    height="584px"
+    :dark="isLightMode == 0 ? false : true"
+    :loading="isLoading"
+  >
     <div class="display-1 font-weight-bold loginCard--intro">
       Log In
     </div>
@@ -62,6 +66,7 @@ export default {
     return {
       email: "",
       isLightMode: 0,
+      isLoading: false,
       password: ""
     };
   },
@@ -73,6 +78,7 @@ export default {
   },
   methods: {
     async login() {
+      this.isLoading = true;
       this.card__loader = "primary";
       try {
         await this.$auth.loginWith("local", {
@@ -87,10 +93,12 @@ export default {
           state: "success",
           message: "Successfully Logged In"
         });
+        this.isLoading = false;
         this.setLoginModalState(false);
       } catch (error) {
         this.card__loader = false;
         this.$emit("alert", { state: "error", message: "Invalid Credentials" });
+        this.isLoading = false;
       }
     }
   }
