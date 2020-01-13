@@ -404,40 +404,6 @@
     />
   </v-col>
 </template>
-<style>
-.postOptions__btn {
-  position: relative;
-  bottom: 15px;
-  left: 10px;
-}
-.postOptions__btn::before {
-  color: transparent;
-}
-.post--sentiment {
-  background: rgba(0, 219, 197, 0.2);
-  border-radius: 20px;
-}
-.postOptions__container {
-  position: absolute;
-  display: inline-grid;
-  background-color: #0c1a2b;
-  padding: 4px;
-  border-radius: 10px;
-  right: 4px;
-  top: 40px;
-  z-index: 1;
-}
-.postOptions__dropdown--caret {
-  width: 0;
-  height: 0;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 17px solid #0c1a2b;
-  position: absolute;
-  right: 18px;
-  top: 28px;
-}
-</style>
 <script>
 import { mapGetters } from "vuex";
 import PhotoCarousel from "~/components/social/PhotoCarousel";

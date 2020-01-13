@@ -1,10 +1,13 @@
 <template>
-  <v-col class="pa-0" cols="4" sm="4" md="4">
+  <v-col ref="componentWrapper" class="pa-0" cols="4" sm="4" md="4">
+    <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 pb-2 pt-5">
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">PORTFOLIO SNAPSHOT</h6>
+      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">
+        PORTFOLIO SNAPSHOT
+      </h6>
       <v-spacer></v-spacer>
-      <v-btn icon small @click.stop="showScheduleForm=true">
-        <img src="/icon/journal-icons/share-icon.svg" width="15" />
+      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-col class="pa-0">
@@ -16,28 +19,41 @@
         :style="{ border: borderColor }"
       >
         <v-card-title class="text-left justify-left py-2 px-3">
-          <h6 class="font-weight-regular caption text-capitalize">Trading Result (PHP)</h6>
+          <h6 class="font-weight-regular caption text-capitalize">
+            Trading Result (PHP)
+          </h6>
         </v-card-title>
-        <v-simple-table :dense="true" :style="{color: fontColor}" :dark="lightSwitch == true" id="liveportfolio-table">
+        <v-simple-table
+          id="liveportfolio-table"
+          :dense="true"
+          :style="{ color: fontColor }"
+          :dark="lightSwitch == true"
+        >
           <template v-slot:default>
             <tbody>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Starting Capital</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ formatPrice(parseFloat(startingCapital)) }}</td>
+                <td class="item_position-prop px-3 py-1 caption">
+                  Starting Capital
+                </td>
+                <td class="item_position-prop text-right px-3 py-1 caption">
+                  {{ formatPrice(parseFloat(startingCapital)) }}
+                </td>
               </tr>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Year to Date P/L</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ formatPrice(parseFloat(yearTDPL)) }}</td>
+                <td class="item_position-prop px-3 py-1 caption">
+                  Year to Date P/L
+                </td>
+                <td class="item_position-prop text-right px-3 py-1 caption">
+                  {{ formatPrice(parseFloat(yearTDPL)) }}
+                </td>
               </tr>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Portfolio YTD %</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ formatPrice(parseFloat(portfolioTDPL)) }}</td>
+                <td class="item_position-prop px-3 py-1 caption">
+                  Portfolio YTD %
+                </td>
+                <td class="item_position-prop text-right px-3 py-1 caption">
+                  {{ formatPrice(parseFloat(portfolioTDPL)) }}
+                </td>
               </tr>
             </tbody>
           </template>
@@ -51,35 +67,48 @@
         :style="{ border: borderColor }"
       >
         <v-card-title class="text-left justify-left py-2 px-3">
-          <h6 class="font-weight-regular caption text-capitalize">Funds Transfers (PHP)</h6>
+          <h6 class="font-weight-regular caption text-capitalize">
+            Funds Transfers (PHP)
+          </h6>
         </v-card-title>
-        <v-simple-table :dense="true" :style="{color: fontColor}" :dark="lightSwitch  == true" id="liveportfolio-table">
+        <v-simple-table
+          id="liveportfolio-table"
+          :dense="true"
+          :style="{ color: fontColor }"
+          :dark="lightSwitch == true"
+        >
           <template v-slot:default>
             <tbody>
               <tr id="table_tr_snap-cont">
                 <td class="item_position-prop px-3 py-1 caption">Deposits</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ formatPrice(parseFloat(Deposits)) }}</td>
+                <td class="item_position-prop text-right px-3 py-1 caption">
+                  {{ formatPrice(parseFloat(Deposits)) }}
+                </td>
               </tr>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Withdrawals</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ formatPrice(parseFloat(Withdrawals)) }}</td>
+                <td class="item_position-prop px-3 py-1 caption">
+                  Withdrawals
+                </td>
+                <td class="item_position-prop text-right px-3 py-1 caption">
+                  {{ formatPrice(parseFloat(Withdrawals)) }}
+                </td>
               </tr>
               <tr id="table_tr_snap-cont">
                 <td class="item_position-prop px-3 py-1 caption">Equity</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ formatPrice(parseFloat(Equity)) }}</td>
+                <td class="item_position-prop text-right px-3 py-1 caption">
+                  {{ formatPrice(parseFloat(Equity)) }}
+                </td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
       </v-card>
     </v-col>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
   </v-col>
 </template>
 <script>
@@ -93,6 +122,8 @@ export default {
   },
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       showScheduleForm: false,
       startingCapital: 0,
       yearTDPL: 0,
@@ -118,7 +149,27 @@ export default {
       return this.lightSwitch == 0 ? "1px solid #b6b6b6" : "1px solid #535358";
     }
   },
+  watch: {
+    defaultPortfolioId: function() {
+      this.getSnapshot();
+    },
+    renderPortfolioKey: function() {
+      this.getSnapshot();
+    },
+    renderEditKey: function() {
+      this.getSnapshot();
+    }
+  },
+  mounted() {},
   methods: {
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getSnapshot() {
       if (this.defaultPortfolioId != null) {
         const snapshotparams = {
@@ -138,18 +189,6 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(".", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  },
-  mounted() {},
-  watch: {
-    defaultPortfolioId: function() {
-      this.getSnapshot();
-    },
-    renderPortfolioKey: function() {
-      this.getSnapshot();
-    },
-    renderEditKey: function() {
-      this.getSnapshot();
     }
   }
 };

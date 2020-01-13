@@ -1,5 +1,6 @@
 <template>
-  <v-container class="pa-0">
+  <v-container ref="componentWrapper" class="pa-0">
+    <!-- Don't remove ref value. Used for sharing -->
     <v-col class="pa-0" cols="12">
       <v-card-title
         class="text-left justify-left mr-3 px-0 pb-2 pt-0"
@@ -12,8 +13,13 @@
           BUY VOLUME
         </h6>
         <v-spacer></v-spacer>
-        <v-btn icon small @click.stop="showScheduleForm = true">
-          <img src="/icon/journal-icons/share-icon.svg" width="15" />
+        <v-btn
+          icon
+          small
+          :dark="lightSwitch == 0 ? false : true"
+          @click="showShareModal()"
+        >
+          <v-icon>mdi-share-variant</v-icon>
         </v-btn>
       </v-card-title>
     </v-col>
@@ -27,8 +33,9 @@
       />
     </div>
     <share-modal
-      :visible="showScheduleForm"
-      @close="showScheduleForm = false"
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
     />
   </v-container>
 </template>
@@ -60,11 +67,30 @@ export default {
   },
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       showScheduleForm: false,
       series: [
         {
           name: "Loss",
-          data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]
+          data: [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
         }
       ],
       chartOptions: {
@@ -238,10 +264,35 @@ export default {
     this.lightSwitcher();
   },
   methods: {
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getBuyVolume() {
       if (this.journalCharts != null) {
         const buyVolumeArray = this.journalCharts.data.buy_volume;
-        const volumeArray = [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null];
+        const volumeArray = [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ];
         if (buyVolumeArray.length != 0) {
           for (let i = 0; i < buyVolumeArray.length; i++) {
             buyVolumeArray[i] = parseFloat(buyVolumeArray[i]);

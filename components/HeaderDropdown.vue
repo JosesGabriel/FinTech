@@ -9,7 +9,10 @@
       class="userSettings__dropdown"
     >
       <v-card-actions class="d-block">
-        <v-btn outlined text @click="logout()">Logout</v-btn>
+        <router-link to="/settings" class="no-transform">
+          <v-btn outlined text block class="mb-2">Settings</v-btn></router-link
+        >
+        <v-btn outlined text block @click="logout()">Logout</v-btn>
         <v-switch
           v-model="lightSwitch_m"
           color="warning"
@@ -31,7 +34,7 @@
   height: 0;
   border-left: 13px solid transparent;
   border-right: 13px solid transparent;
-  border-bottom: 17px solid #2196f3;
+  border-bottom: 17px solid rgb(182, 182, 182, 0.2);
   position: absolute;
   right: 40px;
   top: 36px;

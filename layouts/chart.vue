@@ -71,25 +71,6 @@ export default {
     Table,
     Ticker
   },
-  data() {
-    return {};
-  },
-  computed: {
-    ...mapGetters({
-      ticker: "chart/getTicker",
-      sidebar: "chart/getSidebar",
-      lightSwitch: "global/getLightSwitch"
-    }),
-    cardbackground: function() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-    }
-  },
-  methods: {
-    ...mapActions({
-      setTicker: "chart/setTicker",
-      setSidebar: "chart/setSidebar"
-    })
-  },
   head() {
     return {
       title: "Interactive Chart - Lyduz | Free Stock Trading Platform",
@@ -101,6 +82,56 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    ...mapGetters({
+      ticker: "chart/getTicker",
+      sidebar: "chart/getSidebar",
+      lightSwitch: "global/getLightSwitch",
+      sse: "global/sse",
+      symbolid: "chart/symbolid"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
+  },
+  methods: {
+    ...mapActions({
+      setTicker: "chart/setTicker",
+      setSidebar: "chart/setSidebar",
+      setSSE: "global/setSSE"
+    }),
+    closeSSE: function() {
+      this.sse.close();
+      this.$store.commit(
+        "global/SET_FAVICON",
+        `${process.env.CURRENT_DOMAIN}/favicon/lyduz.ico`
+      );
+    },
+    initSSE: function() {
+      if (this.sse !== null) {
+        this.closeSSE();
+      }
+
+      this.setSSE(
+        new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
+      );
+
+      this.sse.onopen = function() {
+        // console.log("open sse");
+      };
+
+      this.sse.onerror = function(err) {
+        // console.log("err sse");
+        // console.log(err);
+      };
+    }
+  },
+  mounted() {
+    this.initSSE();
+  },
+  beforeDestroy() {
+    this.closeSSE();
   }
 };
 </script>

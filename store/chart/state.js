@@ -4,6 +4,7 @@ export default () => ({
   tableMaximize: false,
   tableFullscreen: false,
   sidebar: true,
+  headline_loading: "#03dac5",
 
   symbolid: 0,
   market_code: null,

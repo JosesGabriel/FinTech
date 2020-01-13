@@ -1,26 +1,36 @@
 <template>
-  <v-col class="pa-0" cols="7" sm="7" md="7">
-    <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">MONTHLY PERFORMANCE</h6>
+  <v-col ref="componentWrapper" class="pa-0" cols="7" sm="7" md="7">
+    <!-- Don't remove ref value. Used for sharing -->
+    <v-card-title
+      class="text-left justify-left px-0 pb-2 pt-0"
+      :style="borderColor"
+    >
+      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">
+        MONTHLY PERFORMANCE
+      </h6>
       <v-spacer></v-spacer>
-      <v-btn icon small @click.stop="showScheduleForm=true">
-        <img src="/icon/journal-icons/share-icon.svg" width="15" />
+      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-col class="pa-0" cols="12" sm="12" md="12">
       <div id="chart">
         <apexcharts
+          ref="monthlyPerformance"
           type="bar"
           class="monthlyperf_chart"
           height="300"
           width="90%"
-          ref="monthlyPerformance"
           :options="chartOptions"
           :series="series"
         />
       </div>
     </v-col>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
   </v-col>
 </template>
 <script>
@@ -34,12 +44,27 @@ export default {
   },
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       showScheduleForm: false,
       monthlyPerformance: null,
       series: [
         {
           name: "Loss",
-          data: [null, null, null, null, null, null, null, null, null, null, null, null]
+          data: [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
         }
       ],
       chartOptions: {
@@ -202,11 +227,30 @@ export default {
         : "border-bottom: 1px solid #535358";
     }
   },
+  watch: {
+    journalCharts: function() {
+      this.getMPerformance();
+    },
+    defaultPortfolioId: function() {
+      this.getMPerformance();
+    },
+    lightSwitch: function() {
+      this.lightSwitcher();
+    }
+  },
   mounted() {
     this.getMPerformance();
     this.lightSwitcher();
   },
   methods: {
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getMPerformance() {
       if (this.journalCharts != null) {
         this.monthlyPerformance = this.journalCharts.data;
@@ -243,17 +287,6 @@ export default {
           }
         };
       }
-    }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getMPerformance();
-    },
-    defaultPortfolioId: function() {
-      this.getMPerformance();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };

@@ -1,5 +1,6 @@
 <template>
-  <v-col class="pa-0">
+  <v-col class="pa-0" ref="componentWrapper">
+    <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
       <v-spacer></v-spacer>
       <v-btn
@@ -19,8 +20,8 @@
         height="23"
       >Trade</v-btn>
 
-      <v-btn icon small @click.stop="showScheduleForm=true">
-        <img src="/icon/journal-icons/share-icon.svg" width="15" />
+      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
 
@@ -206,18 +207,24 @@
       @close="EnterTradeModal=false"
     />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
   </v-col>
 </template>
 <script>
 import TradeModal from "~/components/trade-simulator/TradeModal";
 import resetModal from "~/components/trade-simulator/reset";
-import shareModal from "~/components/trade-simulator/share";
+import shareModal from "~/components/modals/share";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   data() {
     return {
+      shareLink: "",
+      showShareForm: false,
       itemsPerPage: 5,
       search: "",
       page: 1,
@@ -302,6 +309,14 @@ export default {
       setSimulatorConfirmedBuySell:
         "tradesimulator/setSimulatorConfirmedBuySell"
     }),
+    async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getOpenPositions() {
       const openparams2 = {
         fund: this.simulatorPortfolioID

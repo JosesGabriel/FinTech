@@ -1,5 +1,6 @@
 <template>
-  <v-col class="pa-0">
+  <v-col class="pa-0" ref="componentWrapper">
+    <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-center align-center px-0 py-3 pt-5">
       <v-col class="pa-0 pr-3" cols="12" sm="3" md="3">
         <v-text-field
@@ -80,8 +81,8 @@
         </v-date-picker>
       </v-dialog>
       <v-spacer></v-spacer>
-      <v-btn icon small @click.stop="showScheduleForm=true">
-        <img src="/icon/journal-icons/share-icon.svg" width="15" />
+      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+        <v-icon>mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-data-table
@@ -202,7 +203,11 @@
         ></v-pagination>
       </v-card>
     </v-card>
-    <share-modal :visible="showScheduleForm" @close="showScheduleForm=false" />
+    <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
   </v-col>
 </template>
 <script>
@@ -214,6 +219,8 @@ export default {
   },
   data: function() {
     return {
+      shareLink: "",
+      showShareForm: false,
       showScheduleForm: false,
       itemsPerPage: 5,
       search: "",
@@ -277,6 +284,14 @@ export default {
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
       setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition"
     }),
+     async showShareModal() {
+      const el = this.$refs.componentWrapper;
+      const options = {
+        type: "dataURL"
+      };
+      this.shareLink = await this.$html2canvas(el, options);
+      this.showShareForm = true;
+    },
     getTradeLogs() {
       const tradelogsparams = {
         fund: this.simulatorPortfolioID
