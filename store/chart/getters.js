@@ -36,10 +36,6 @@ export default {
     return state.trades;
   },
 
-  allstocks: state => {
-    return state.allstocks;
-  },
-
   index: state => {
     return state.index;
   },
