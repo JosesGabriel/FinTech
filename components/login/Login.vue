@@ -79,27 +79,28 @@ export default {
   methods: {
     async login() {
       this.isLoading = true;
-      this.card__loader = "primary";
-      try {
-        await this.$auth.loginWith("local", {
+      this.$auth
+        .loginWith("local", {
           data: {
             username: this.email,
             password: this.password
           }
+        })
+        .then(() => {
+          this.$emit("alert", {
+            state: "success",
+            message: "Successfully Logged In"
+          });
+        })
+        .catch(() => {
+          this.$emit("alert", {
+            state: "error",
+            message: "Invalid Credentials"
+          });
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
-
-        this.card__loader = false;
-        this.$emit("alert", {
-          state: "success",
-          message: "Successfully Logged In"
-        });
-        this.isLoading = false;
-        this.setLoginModalState(false);
-      } catch (error) {
-        this.card__loader = false;
-        this.$emit("alert", { state: "error", message: "Invalid Credentials" });
-        this.isLoading = false;
-      }
     }
   }
 };
