@@ -204,7 +204,9 @@ export default {
     listenToEventSource(symbolInfo.id, resolution, onRealtimeCallback);
   },
   // unsubscribebars disconnects to a stream for realtime update
-  unsubscribeBars: subscriberUID => {},
+  unsubscribeBars: subscriberUID => {
+    nativeBus.$off("b-tv-sse-all") // stop listening to event
+  },
   // calculatehistorydepth is fired and related during resolvesymbol event
   calculateHistoryDepth: (resolution, resolutionBack, intervalBack) => {
     if (parseInt(resolution) > 0) {
