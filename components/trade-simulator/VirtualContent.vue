@@ -446,6 +446,9 @@ export default {
 .v-select__slot .v-icon {
   color: #03dac5 !important;
 }
+.v-card:not(.v-sheet--tile):not(.v-card--shaped) {
+    border-radius: unset;
+}
 .v-menu__content > .v-select-list > .v-list {
   padding: unset;
   border: 1px solid rgb(23, 36, 49);

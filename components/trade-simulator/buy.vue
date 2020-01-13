@@ -204,6 +204,9 @@ export default {
     }
   },
   watch: {
+    simulatorPortfolioID: function(){
+      this.getPortfolio();
+    },
     simulatorConfirmedBuySell: function() {
       if (this.simulatorConfirmedBuySell == "sell") {
         let tcost =
@@ -228,34 +231,32 @@ export default {
     }
   },
   mounted() {
-    const openparams = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-      };
-    this.$api.journal.portfolio.portfolio(openparams).then(
-      function(result) {
-       
-        for (let i = 0; i < result.data.logs.length; i++) {
-          if (
-            result.data.logs[i].type == "virtual" &&
-            result.data.logs[i].name != "Default Virtual Portfolio" 
-          ) {
-            this.portfolio.push(result.data.logs[i].name);
-            if (result.data.logs[i].name == "My Virtual Portfolio") {
-              let avfunds = parseFloat(result.data.logs[i].balance);
-              this.availableFunds = this.addcomma(avfunds);
-              this.defaultvalue = result.data.logs[i].name;
-            }
-          }
-        }
-      }.bind(this)
-    );
-    // this.quantity = this.Position;
+    this.getPortfolio();
   },
   methods: {
     ...mapActions({
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
       setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
+    getPortfolio(){
+        this.$api.journal.portfolio.portfolio().then(
+          function(result) {
+          
+            for (let i = 0; i < result.data.logs.length; i++) {
+              if (
+                result.data.logs[i].type == "virtual"
+              ) {
+                this.portfolio.push(result.data.logs[i].name);
+                if (result.data.logs[i].name == "My Virtual Portfolio") {
+                  let avfunds = parseFloat(result.data.logs[i].balance);
+                  this.availableFunds = this.addcomma(avfunds);
+                  this.defaultvalue = result.data.logs[i].name;
+                }
+              }
+            }
+          }.bind(this)
+        );
+    },
     addButton() {
       if (this.simulatorConfirmedBuySell == "sell") {
         this.quantity =
