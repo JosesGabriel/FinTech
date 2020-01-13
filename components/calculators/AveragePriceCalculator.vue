@@ -108,6 +108,13 @@ export default {
     })
   },
   methods: {
+    /**
+     * Removes comma (when number is Numeral formatted) and parses to float
+     *
+     * @param   {integer}  num
+     *
+     * @return  {float}
+     */
     parseNumber(num) {
       if (Number.isInteger(num)) return num;
       else {
@@ -115,6 +122,11 @@ export default {
         return parseFloat(num);
       }
     },
+    /**
+     * Fires when user presses Calculate button
+     *
+     * @return
+     */
     calculate() {
       let totalCost = 0;
       let totalPrice = 0;
@@ -136,6 +148,13 @@ export default {
       this.totalPosition = numeral(totalVolume).format("0,0");
       this.averagePrice = numeral(finalCost).format("0,0.00");
     },
+    /**
+     * returns total fee
+     *
+     * @param   {integer}  marketvalue
+     *
+     * @return  {integer}
+     */
     getFee(marketvalue) {
       let totalfee = 0;
       let partcpms = marketvalue * 0.0025;
@@ -146,6 +165,11 @@ export default {
       totalfee = commission + tax + transfer + sccp;
       return totalfee;
     },
+    /**
+     * Clears all inputs
+     *
+     * @return
+     */
     clear() {
       this.positionKey = 1;
       this.position = [0];

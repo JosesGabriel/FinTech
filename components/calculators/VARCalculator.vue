@@ -1,6 +1,6 @@
 <template>
   <v-card
-    :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+    :color="lightSwitch == 0 ? 'lightcard' : 'darkchart'"
     :dark="lightSwitch == 0 ? false : true"
     :loading="loader"
     class="px-2"
@@ -222,6 +222,11 @@ export default {
     ...mapActions({
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
+    /**
+     * Disables 'next' button if user has incomplete inputs
+     *
+     * @return
+     */
     fieldsCheck() {
       if (
         this.identifiedEntryPrice != "" &&
@@ -234,9 +239,12 @@ export default {
         this.nextButtonDisable = true;
       }
     },
+    /**
+     * Fires when user clicks Calculate button
+     *
+     * @return
+     */
     calculate() {
-      /* PORTFOLIO PLANNING */
-
       let portfolioAllocationDec = Number(this.portfolioAllocation) / 100;
 
       let positionSizeMin = Math.round(
@@ -353,6 +361,11 @@ export default {
 
       this.totalCost = identifiedEntryPrice * this.sharesToBuy + buyFeesTotal;
     },
+    /**
+     * Executes POST request, adds to Watchlist
+     *
+     * @return
+     */
     addToWatchlist() {
       this.loader = "primary";
       let params = {
@@ -380,11 +393,24 @@ export default {
           this.clearFields();
         });
     },
+    /**
+     * Triggers and shows snackbar alerts
+     *
+     * @param   {Boolean}  state
+     * @param   {string}  message
+     *
+     * @return
+     */
     showAlert(state, message) {
       this.watchList__alert = true;
       this.post__responseMsg = message;
       this.watchList__alertState = state;
     },
+    /**
+     * clears all input fields
+     *
+     * @return
+     */
     clearFields() {
       this.stocksDropdownModel = "";
       this.identifiedEntryPrice = "";
