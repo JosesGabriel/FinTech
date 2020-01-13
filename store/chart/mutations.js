@@ -74,5 +74,18 @@ export default {
 
   SET_MARKET_CODE(state, data) {
     state.market_code = data;
+  },
+
+  SET_SSE(state, data) {
+    state.sse = data;
+  },
+  SET_SSE_INFO(state, data) {
+    state.sseInfo = data;
+  },
+  SET_SSE_TRADE(state, data) {
+    state.sseTrade = data;
+  },
+  SET_SSE_BIDASK(state, data) {
+    state.sseBidask = data;
   }
 };

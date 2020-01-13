@@ -10,8 +10,5 @@ export default {
 
   favicon: state => {
     return state.favicon;
-  },
-  sse: state => {
-    return state.sse;
   }
 };

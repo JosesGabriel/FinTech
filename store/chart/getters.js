@@ -98,5 +98,18 @@ export default {
   },
   stock_changepercentage: state => {
     return state.stock.changepercentage;
+  },
+
+  sse: state => {
+    return state.sse;
+  },
+  sseInfo: state => {
+    return state.sseInfo;
+  },
+  sseTrade: state => {
+    return state.sseTrade;
+  },
+  sseBidask: state => {
+    return state.sseBidask;
   }
 };

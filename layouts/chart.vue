@@ -88,7 +88,7 @@ export default {
       ticker: "chart/getTicker",
       sidebar: "chart/getSidebar",
       lightSwitch: "global/getLightSwitch",
-      sse: "global/sse",
+      sse: "chart/sse",
       symbolid: "chart/symbolid"
     }),
     cardbackground: function() {
@@ -99,7 +99,7 @@ export default {
     ...mapActions({
       setTicker: "chart/setTicker",
       setSidebar: "chart/setSidebar",
-      setSSE: "global/setSSE"
+      setSSE: "chart/setSSE"
     }),
     closeSSE: function() {
       this.sse.close();

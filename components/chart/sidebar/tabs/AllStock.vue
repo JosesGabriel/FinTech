@@ -120,19 +120,16 @@ export default {
       lightSwitch: "global/getLightSwitch",
       responsive_height: "chart/responsive_height",
       allstocks: "chart/allstocks",
-      sse: "global/sse"
+      sseInfo: "chart/sseInfo"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   watch: {
-    loading: function(value) {
-      if (value === false) {
-        setTimeout(() => {
-          this.sse.addEventListener("info", this.sseAllInfo);
-        }, 2000);
-      }
+    sseInfo: function(value) {
+      console.log("sse info");
+      console.log(value);
     }
   },
   methods: {
@@ -165,7 +162,7 @@ export default {
         const data = JSON.parse(e.data);
         console.log("all stocks");
         console.log(data.sym_id);
-        console.log(this.allstocks)
+        console.log(this.allstocks);
       } catch (error) {
         //console.log(error);
       }

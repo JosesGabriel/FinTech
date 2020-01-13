@@ -45,5 +45,18 @@ export default {
   },
   async setMarketCode({ commit }, data) {
     await commit("SET_MARKET_CODE", data);
+  },
+
+  async setSSE({ commit }, data) {
+    await commit("SET_SSE", data);
+  },
+  async setSSEInfo({ commit }, data) {
+    await commit("SET_SSE_INFO", data);
+  },
+  async setSSETrade({ commit }, data) {
+    await commit("SET_SSE_TRADE", data);
+  },
+  async setSSEBidask({ commit }, data) {
+    await commit("SET_SSE_BIDASK", data);
   }
 };

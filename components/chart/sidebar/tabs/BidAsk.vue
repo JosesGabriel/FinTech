@@ -123,7 +123,7 @@ export default {
       symbolid: "chart/symbolid",
       bidask: "chart/bidask",
       lightSwitch: "global/getLightSwitch",
-      sse: "global/sse"
+      sse: "chart/sse"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -135,15 +135,14 @@ export default {
     },
     loading: function(value) {
       if (value === false) {
-        setTimeout(() => {
-          this.sse.addEventListener("bidask", this.sseBidask);
-        }, 2000);
+        this.sse.addEventListener("bidask", this.sseBidask);
       }
     }
   },
   methods: {
     ...mapActions({
-      setBidask: "chart/setBidask"
+      setBidask: "chart/setBidask",
+      setSSEBidask: "chart/setSSEBidask"
     }),
     formatItem: function(item, key = null) {
       if (item == undefined) return;
@@ -192,6 +191,7 @@ export default {
       if (this.bidask.asks !== undefined && this.bidask.bids !== undefined) {
         if (this.symbolid == undefined) return;
         const data = JSON.parse(e.data);
+        this.setSSEBidask(data);
         // console.log(data);
         // console.log(this.symbolid);
         if (this.symbolid !== data.sym_id) return;

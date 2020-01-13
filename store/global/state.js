@@ -8,6 +8,5 @@ export default () => ({
   //region stock data
   stockList: [],
   //endregion stock data
-  favicon: `${process.env.APP_URL}/lyduz.ico`,
-  sse: null
+  favicon: `${process.env.APP_URL}/lyduz.ico`
 });

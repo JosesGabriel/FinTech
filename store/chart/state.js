@@ -72,5 +72,10 @@ export default () => ({
     }
   ],
   trade_login: false,
-  responsive_height: 510
+  responsive_height: 510,
+
+  sse: null,
+  sseInfo: null,
+  sseTrade: null,
+  sseBidask: null
 });

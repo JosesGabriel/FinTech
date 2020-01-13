@@ -9,8 +9,5 @@ export default {
   //end region stock data
   SET_FAVICON(state, data) {
     state.favicon = data;
-  },
-  SET_SSE(state, data) {
-    state.sse = data;
   }
 };
