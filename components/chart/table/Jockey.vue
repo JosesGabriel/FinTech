@@ -182,7 +182,6 @@ export default {
     symbolid(symid) {
       this.getCurrent(symid);
       this.initJockey(symid);
-      this.initSSE();
     },
     fullscreen(value) {},
     ticker(value) {
