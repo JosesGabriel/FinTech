@@ -89,7 +89,6 @@ export default {
   name: "AllStock",
   data() {
     return {
-      stocks: [],
       headers: [
         {
           text: "Symbol",
@@ -116,12 +115,38 @@ export default {
       loading: "#03dac5"
     };
   },
-  mounted() {
-    this.$api.chart.stocks
-      .history({
-        exchange: "PSE"
-      })
-      .then(response => {
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch",
+      responsive_height: "chart/responsive_height",
+      allstocks: "chart/allstocks",
+      sse: "global/sse"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
+  },
+  watch: {
+    loading: function(value) {
+      if (value === false) {
+        setTimeout(() => {
+          this.sse.addEventListener("info", this.sseAllInfo);
+        }, 2000);
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      setSymbolID: "chart/setSymbolID",
+      setAllstocks: "chart/setAllstocks"
+    }),
+    initAllStock: async function() {
+      this.loading = "#03dac5";
+      try {
+        const response = await this.$api.chart.stocks.history({
+          exchange: "PSE"
+        });
+        // this filter made to remove all index stocks
         const filtered = response.data.filter(data => parseInt(data.value) > 0);
         // console.log("all stocks");
         // filtered.forEach(element => {
@@ -131,23 +156,23 @@ export default {
         // console.log(this.stocks);
         this.setAllstocks(filtered);
         this.loading = false;
-      });
-  },
-  computed: {
-    ...mapGetters({
-      lightSwitch: "global/getLightSwitch",
-      responsive_height: "chart/responsive_height",
-      allstocks: "chart/allstocks"
-    }),
-    cardbackground: function() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    sseAllInfo: function(e) {
+      try {
+        const data = JSON.parse(e.data);
+        console.log("all stocks");
+        console.log(data.sym_id);
+        console.log(this.allstocks)
+      } catch (error) {
+        //console.log(error);
+      }
     }
   },
-  methods: {
-    ...mapActions({
-      setSymbolID: "chart/setSymbolID",
-      setAllstocks: "chart/setAllstocks"
-    })
+  mounted() {
+    this.initAllStock();
   }
 };
 </script>
