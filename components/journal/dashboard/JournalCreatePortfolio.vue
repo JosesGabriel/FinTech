@@ -36,7 +36,7 @@
         <v-spacer></v-spacer>
         <v-btn color="white" class="text-capitalize" text light @click.stop="show = false">Close</v-btn>
         <v-btn
-          color="#03dac5"
+          color="success"
           class="text-capitalize"
           depressed
           light

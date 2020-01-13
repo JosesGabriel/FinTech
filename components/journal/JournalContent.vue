@@ -21,7 +21,13 @@
       <v-col sm="3" md="2" class="pa-0">
         <v-select
           :dark="lightSwitch == true"
-          offset-y="true"
+          :items="portfolioListPush"
+          v-on:change="changePortfolio"
+          v-model="portfolioDropdownModel"
+          item-text="name"
+          item-value="id"
+          return-object
+          :menu-props="{offsetY: false, dark: lightSwitch == true}"
           class="select_portfolio selectjournal_portfolio mt-2 success--text"
           item-color="success"
           append-icon="mdi-chevron-down"
@@ -32,13 +38,6 @@
           solo
           flat
           light
-          :items="portfolioListPush"
-          v-on:change="changePortfolio"
-          v-model="portfolioDropdownModel"
-          item-text="name"
-          item-value="id"
-          return-object
-          :menu-props="{offsetY: false, dark: lightSwitch == true}"
         >
           <template slot="item" slot-scope="data">
             <v-list-item-content
@@ -89,7 +88,7 @@
           </template>
         </v-select>
       </v-col>
-      <v-tab-item color="#03dac5" background-color="black" :value="'tab-' + 1">
+      <v-tab-item color="success" background-color="black" :value="'tab-' + 1">
         <v-container class="pa-0">
           <div class="separator"></div>
           <JournalLivePortfolio />
