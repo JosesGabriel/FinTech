@@ -458,8 +458,8 @@ export default {
       let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
 
       for (let index = 0; index < this.portfolioLogs.length; index++) {
-        let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
-       // console.log('DayChange Date -' + pdate);
+           let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
+        console.log('DayChange Date -' + pdate);
                   const params = {
                     "symbol-id": this.portfolioLogs[index].metas.stock_id,
                     resolution: "1D",
@@ -495,15 +495,15 @@ export default {
                       currentProfitLoss =
                         parseFloat(currentProfitLoss) + parseFloat(currentprofit);
 
-                        console.log('Current -' + currentProfitLoss);
-                        console.log('Prior -' + this.priorProfitLoss);
+                        //console.log('Current -' + currentProfitLoss);
+                        //console.log('Prior -' + this.priorProfitLoss);
                         
                         let daychange =
                            parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
                         if(this.priorProfitLoss != 0 ){  
-                          console.log('Capital - '+ this.Capital);
+                          //console.log('Capital - '+ this.Capital);
                           let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
-                          console.log('Prior Equity -' + dperf);
+                          //console.log('Prior Equity -' + dperf);
                           daychangeperf = (daychange / dperf) * 100;
                           //daychangeperf = (daychange / this.priorProfitLoss) * 100;
                         }                     
