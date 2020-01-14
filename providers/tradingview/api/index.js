@@ -23,9 +23,13 @@ const SEARCH_URL = `${BASE_URL}/tradingview/search`;
 const SERVER_TIME_URL = `${BASE_URL}/tradingview/time`;
 const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 
-var symbolInfoObj = {
+// holds symbol info object
+let symbolInfoObj = {
   exchange: ""
 };
+
+// holds the last bar of any subscribed chart
+let lastBarData = {};
 
 // INITIALIZE DEFAULTS
 axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
@@ -40,8 +44,86 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
  * @return
  */
 function sseInfoNativeBusListener(symbolId, resolution, onRealtimeCallback) {
+  // calculate chart data based on resolution
+  let open = 0;
+  let high = 0;
+  let low = 0;
+  let last = 0;
+  let lastKnownTime = "";
+  let currentVolume = 0;
+  let executedVolume = 0;
+  let lastCumulativeVolume = 0;
+
   nativeBus.$on("b-tv-sse-all", data => {
     if (symbolId == data.sym_id) {
+      // check resolution
+      if (resolution != "D") {
+        // region per piece bar
+        last = data.c;
+
+        // check if time is different
+        if (
+          lastKnownTime.length > 0 &&
+          lastKnownTime != moment.unix(data.t).format("HHmm")
+        ) {
+          // re-initialize to initial state
+          open = 0;
+          high = 0;
+          low = 0;
+          last = 0;
+          lastKnownTime = "";
+          currentVolume = 0;
+          executedVolume = 0;
+          lastCumulativeVolume = 0;
+
+          // get latest time
+          lastKnownTime = moment.unix(data.t).format("HHmm");
+        }
+
+        // assign if set
+        if (open == 0) {
+          open = data.c;
+          lastKnownTime = moment.unix(data.t).format("HHmm");
+        }
+        if (high == 0 || last > high) {
+          high = data.c;
+        }
+        if (low == 0 || last < low) {
+          low = data.c;
+        }
+
+        // TODO: real time volume transaction.
+        // Currently, cannot get per 1m vplume because last known volume
+        // that should be in D resolution cannot be accessed.
+        // Other untried ideas include requesting for the last minute volume during time change
+        // @author: kbaluyot
+        // // check if volume is supported
+        if (lastBarData.hasOwnProperty("volume")) {
+          data.vol = 0;
+          //   if (lastCumulativeVolume == 0) {
+          //     // if first data
+          //     currentVolume = lastBarData.volume;
+          //   } else {
+          //     currentVolume = lastCumulativeVolume;
+          //   }
+
+          //   // assign latest volume
+          //   lastCumulativeVolume = data.vol
+
+          //   // override data volume
+          //   executedVolume = data.vol - currentVolume;
+          //   data.vol = executedVolume;
+        }
+        // console.log(lastBarData.volume, executedVolume, data.vol)
+
+        // override data ohlc
+        data.c = last;
+        data.o = open;
+        data.l = low;
+        data.h = high;
+        // endregion per piece bar
+      }
+
       // execute real-time callback
       onRealtimeCallback({
         time: data.t * 1000, // needs to be in milliseconds
@@ -203,27 +285,34 @@ export default {
         if (data.s !== "ok" && !nodata) {
           onErrorCallback(data.s);
         }
-        var bars = [];
-        var barsCount = nodata ? 0 : data.t.length;
-        var volumePresent = typeof data.v != "undefined";
-        for (var i = 0; i < barsCount; i++) {
-          var barValue = {
+        let bars = [];
+        let barsCount = nodata ? 0 : data.t.length;
+        let volumePresent = typeof data.v != "undefined";
+        for (let i = 0; i < barsCount; i++) {
+          let barValue = {
             time: data.t[i] * 1000,
             close: parseFloat(data.c[i]),
             open: parseFloat(data.o[i]),
             high: parseFloat(data.h[i]),
             low: parseFloat(data.l[i])
           };
+
           if (volumePresent) {
             barValue.volume = parseFloat(data.v[i]);
             barValue.foreign = parseFloat(data.v[i]);
           }
+
           bars.push(barValue);
         }
-        var meta = { noData: nodata };
+
+        // get the last bar
+        lastBarData = bars[barsCount - 1];
+
+        let meta = { noData: nodata };
         if (nodata && data.nb) {
           meta.nextTime = data.nb;
         }
+
         onHistoryCallback(bars, meta);
       })
       .catch(error => {

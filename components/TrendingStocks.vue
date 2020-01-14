@@ -4,6 +4,7 @@
     color="transparent"
     :dark="lightSwitch == 0 ? false : true"
     outlined
+    :loading="loader"
   >
     <div class="pa-0 pl-2">
       <div class="body-2 font-weight-black">Trending Stocks</div>
@@ -14,16 +15,19 @@
             <div v-for="n in trendingStocks.length" :key="n" class="pb-3">
               <v-list-item-title class="caption d-flex justify-space-between"
                 ><span>{{ stockCode[n - 1] }}</span
-                ><span
+                ><span v-if="tStocksObject"
                   >₱{{ trendingStocks[n - 1].last }}</span
                 ></v-list-item-title
               >
               <v-list-item-subtitle
                 class="overline d-flex justify-space-between"
                 ><span class="tStocks--description">{{
-                  tStocksObject.data.stocks[n - 1].description
+                  tStocksObject
+                    ? tStocksObject.data.stocks[n - 1].description
+                    : ""
                 }}</span
                 ><span
+                  v-if="tStocksObject"
                   class="font-weight-black"
                   :class="
                     trendingStocks[n - 1].change > 0
@@ -45,9 +49,7 @@ import { mapGetters } from "vuex";
 export default {
   data: function() {
     return {
-      tStocksObject: JSON.parse(
-        '{"data":{"stocks":[{"stock_id":"29235363339829248","market_code":"PSE:2GO","hits":"123","description":"2GO Group Inc"},{"stock_id":"29235363583098880","market_code":"PSE:ABA","hits":"123","description":"AbaCore Capital Holdings, Inc."},{"stock_id":"29235363113336832","market_code":"PSE:AC","hits":"123","description":"Atok-Big Wedge Co. Inc."},{"stock_id":"29235363679567872","market_code":"PSE:BDO","hits":"123","description":"BDO Unibank Inc."},{"stock_id":"29235363432103936","market_code":"PSE:BLOOM","hits":"123","description":"Bloomberry Resorts Corp."}]},"headers":[],"message":"Successfully fetched trending stocks.","meta":[],"status":200,"success":true}'
-      ),
+      tStocksObject: "",
       trendingStocks: [
         { last: "", change: "" },
         { last: "", change: "" },
@@ -55,7 +57,8 @@ export default {
         { last: "", change: "" },
         { last: "", change: "" }
       ],
-      stockCode: ["", "", "", "", ""]
+      stockCode: ["", "", "", "", ""],
+      loader: false
     };
   },
   computed: {
@@ -68,16 +71,32 @@ export default {
   },
   methods: {
     /**
-     * gets current trending stocks and then finds the last price and change percentage of those stocks
+     * gets current trending stocks
      *
      * @return
      */
     getTrendingStocks() {
+      this.loader = "success";
+      const params = {
+        count: 5
+      };
+      this.$api.social.trendingStocks.index(params).then(
+        function(result) {
+          this.tStocksObject = result;
+          this.getTrendingStocksValues();
+        }.bind(this)
+      );
+    },
+    /**
+     * gets last price and change percentage of those stocks
+     *
+     * @return
+     */
+    getTrendingStocksValues() {
       for (let i = 0; i < this.tStocksObject.data.stocks.length; i++) {
         //removes index from string because it returns PSE:ABA
         let x = this.tStocksObject.data.stocks[i].market_code.split(":");
         this.stockCode[i] = x[1];
-        //
 
         const params = {
           "symbol-id": this.tStocksObject.data.stocks[i].stock_id
@@ -88,6 +107,7 @@ export default {
             this.trendingStocks[
               i
             ].change = result.data.changepercentage.toFixed(2);
+            this.loader = false;
           }.bind(this)
         );
       }
