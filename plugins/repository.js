@@ -17,7 +17,8 @@ export default (ctx, inject) => {
       upload: initApiRepository("/storage/upload"),
       deletePost: initApiRepository("/social/posts"),
       updatePost: initApiRepository("/social/posts"),
-      searchPost: initApiRepository("/social/posts")
+      searchPost: initApiRepository("/social/posts"),
+      trendingStocks: initApiRepository("/social/posts/trending")
     },
     chart: {
       stocks: stockRepository(ctx.$axios),
