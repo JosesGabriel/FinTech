@@ -231,7 +231,7 @@ export default {
       }),
     sseTrade: function(e){
       try {
-        //console.log('Jocky-',e.data);
+        console.log('Jocky-',e.data);
       }catch (error){
 
       }
