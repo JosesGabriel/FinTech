@@ -23,7 +23,8 @@ const SEARCH_URL = `${BASE_URL}/tradingview/search`;
 const SERVER_TIME_URL = `${BASE_URL}/tradingview/time`;
 const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 
-var symbolInfoObj = {
+// holds symbol info object
+let symbolInfoObj = {
   exchange: ""
 };
 
