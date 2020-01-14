@@ -18,6 +18,7 @@
                 label="Select Strategy"
                 flat
                 :dark="lightSwitch == true"
+                :menu-props="{offsetY: true, dark: lightSwitch == true}"
               ></v-select>
             </div>
             <div>
@@ -31,6 +32,7 @@
                 label="Select Trade Plan"
                 flat
                 :dark="lightSwitch == true"
+                :menu-props="{offsetY: true, dark: lightSwitch == true}"
               ></v-select>
             </div>
             <div>
@@ -43,6 +45,7 @@
                 label="Select Emotions"
                 flat
                 :dark="lightSwitch == true"
+                :menu-props="{offsetY: true, dark: lightSwitch == true}"
               ></v-select>
             </div>
             <div>
@@ -146,7 +149,7 @@ export default {
       this.$api.journal.portfolio
         .tradeedit(fund_id, stock_id, params)
         .then(response => {
-          console.log(response)
+          console.log(response);
           if (response.success) {
             this.keyCreateCounter = this.renderEditKey;
             this.keyCreateCounter++;
