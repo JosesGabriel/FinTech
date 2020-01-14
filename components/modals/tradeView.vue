@@ -375,7 +375,7 @@
                           :style="{ background: cardbackground }"
                           style="padding: 12px 12px; margin: -16px;"
                         >
-                          <v-list-item-title v-html="data.item" class="text-uppercase"></v-list-item-title>
+                          <v-list-item-title v-html="data.item" class="text-capitalize caption"></v-list-item-title>
                         </v-list-item-content>
                       </template>
                     </v-select>
@@ -401,7 +401,7 @@
                           :style="{ background: cardbackground }"
                           style="padding: 12px 12px; margin: -16px;"
                         >
-                          <v-list-item-title v-html="data.item" class="text-uppercase"></v-list-item-title>
+                          <v-list-item-title v-html="data.item" class="text-capitalize caption"></v-list-item-title>
                         </v-list-item-content>
                       </template>
                     </v-select>
@@ -426,7 +426,7 @@
                           :style="{ background: cardbackground }"
                           style="padding: 12px 12px; margin: -16px;"
                         >
-                          <v-list-item-title v-html="data.item" class="text-uppercase"></v-list-item-title>
+                          <v-list-item-title v-html="data.item" class="text-capitalize caption"></v-list-item-title>
                         </v-list-item-content>
                       </template>
                     </v-select>

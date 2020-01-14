@@ -7,7 +7,7 @@
 
           <v-tab :href="`#tab-1`" class="text-capitalize subtitle-1">Profile</v-tab>
           <v-tab :href="`#tab-2`" class="text-capitalize subtitle-1">Activities</v-tab>
-          <v-tab :href="`#tab-3`" class="text-capitalize subtitle-1">Services</v-tab>
+          <v-tab :href="`#tab-3`" class="text-capitalize subtitle-1" disabled>Services</v-tab>
 
           <!-- Profile tab -->
           <v-tab-item class="mt-10" :value="'tab-1'">

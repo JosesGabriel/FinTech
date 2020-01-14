@@ -482,22 +482,6 @@ export default {
   tr:hover:not(.v-data-table__expand-row) {
   background: transparent;
 }
-.show_rows {
-  border: 2px solid #03dac5;
-  width: 45px;
-}
-.show_rows .v-input__control {
-  min-height: auto;
-}
-.show_rows .v-input__slot:before {
-  display: none;
-}
-.show_rows .v-input__slot {
-  margin: 0;
-}
-.show_rows .v-input__slot input {
-  padding: 0;
-}
 /* -------Pagination-------- */
 .v-pagination.lp_data_table-pagination li .v-pagination__navigation {
   background: transparent;
