@@ -29,7 +29,8 @@
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="5" lg="5">
                 <ProfileIdeas class="my-3" />
-                <ProfileConnections class="my-3" />
+                <ProfileFollowing class="my-3" />
+                <ProfileFollowers class="my-3" />
               </v-col>
               <v-col cols="12" sm="12" md="7" lg="7">
                 <v-container>
@@ -55,7 +56,8 @@ import ProfileCourse from "~/components/profile/parts/ProfileCourse";
 
 // Profile tab
 import ProfileIdeas from "~/components/profile/parts/ProfileIdeas";
-import ProfileConnections from "~/components/profile/parts/ProfileConnections";
+import ProfileFollowing from "~/components/profile/parts/ProfileFollowing";
+import ProfileFollowers from "~/components/profile/parts/ProfileFollowers";
 import PostField from "~/components/social/PostField";
 import Newsfeed from "~/components/social/Newsfeed";
 
@@ -69,7 +71,8 @@ export default {
     ProfileInterests,
     ProfileCourse,
     ProfileIdeas,
-    ProfileConnections,
+    ProfileFollowing,
+    ProfileFollowers,
     PostField,
     Newsfeed
   },

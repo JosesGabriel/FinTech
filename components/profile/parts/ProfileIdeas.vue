@@ -3,10 +3,10 @@
     <v-card class="transparent__bg pa-3 mb-2" outlined dark>
       <v-row no-gutters>
         <span class="white--text pa-2 d-block subtitle-1">Ideas</span>
-        <v-spacer></v-spacer>
+        <!-- <v-spacer></v-spacer>
         <v-btn color="success" icon>
           <v-icon small>mdi-pencil</v-icon>
-        </v-btn>
+        </v-btn> -->
       </v-row>
       <v-list-item v-for="n in 3" :key="n" class="pa-0" @click dense three-line>
         <v-img
