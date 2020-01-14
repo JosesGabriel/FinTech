@@ -24,6 +24,9 @@ export default $axios => ({
 
   postSentiment(params) {
     return $axios.$post(`${baseURL}/sentiments/`, params);
+  },
+  followAccount(params) {
+    return $axios.$post(`${baseURL}/users/` + params + `/follow`);
   }
 
   //   intraday(params) {

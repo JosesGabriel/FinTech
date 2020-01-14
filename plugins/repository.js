@@ -18,7 +18,8 @@ export default (ctx, inject) => {
       deletePost: initApiRepository("/social/posts"),
       updatePost: initApiRepository("/social/posts"),
       searchPost: initApiRepository("/social/posts"),
-      trendingStocks: initApiRepository("/social/posts/trending")
+      trendingStocks: initApiRepository("/social/posts/trending"),
+      follow: socialRepository(ctx.$axios)
     },
     chart: {
       stocks: stockRepository(ctx.$axios),
