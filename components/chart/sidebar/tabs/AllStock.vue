@@ -68,7 +68,7 @@
             </td>
             <td class="text-right" style="width:60px">
               <span class="text-uppercase">{{
-                props.item.value | numeral("0.000a")
+                props.item.value | numeral("0.00a")
               }}</span>
             </td>
             <td class="text-right text-uppercase" style="width:45px">
@@ -141,6 +141,7 @@ export default {
     }),
     updateEffect: dom => {
       const item = document.getElementById(dom);
+      if (item == null) return;
       item.style.background = "rgb(182,182,182,.2)";
       setTimeout(function() {
         item.style.background = "";
@@ -181,9 +182,11 @@ export default {
     },
     sseAllInfo: function(data) {
       try {
+        //console.log("realtime");
         const stock = this.all_stocks.find(
           resp => resp.stockidstr == data.sym_id
         );
+        //console.log(stock.stockidstr);
         const key = this.all_stocks.indexOf(stock);
         this.all_stocks.splice(key, 1, {
           stockidstr: stock.stockidstr,
@@ -192,7 +195,7 @@ export default {
           last: data.l,
           changepercentage: data.chgpc,
           value: data.val,
-          trades: data.t
+          trades: data.tr
         });
         this.updateEffect(stock.stockidstr);
       } catch (error) {

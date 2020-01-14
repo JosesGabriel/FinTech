@@ -75,11 +75,6 @@ import { nativeBus } from "~/helpers/native-bus";
 
 export default {
   name: "Headline",
-  data() {
-    return {
-      counter: 0
-    };
-  },
   head() {
     return {
       title: this.stock.description,
@@ -154,17 +149,23 @@ export default {
       if (change > 0) {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.APP_URL}/favicon/up.ico`
+          `${process.env.APP_URL}/favicon/up.ico?v=${Math.round(
+            Math.random() * 999
+          )}`
         );
       } else if (change < 0) {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.APP_URL}/favicon/down.ico`
+          `${process.env.APP_URL}/favicon/down.ico?v=${Math.round(
+            Math.random() * 999
+          )}`
         );
       } else {
         this.$store.commit(
           "global/SET_FAVICON",
-          `${process.env.APP_URL}/favicon/lyduz.ico`
+          `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
+            Math.random() * 999
+          )}`
         );
       }
     },
@@ -175,12 +176,12 @@ export default {
         // set sse info to state
         this.setSSEInfo(data);
         // emit sse info
-        nativeBus.$emit('b-tv-sse-all', data)
-        
+        nativeBus.$emit("b-tv-sse-all", data);
+
         if (this.symbolid !== data.sym_id) return;
-        this.counter++;
+
         this.$store.commit("chart/SET_STOCK_OBJ", {
-          trades: parseInt(this.stock.trades) + parseInt(this.counter)
+          trades: parseInt(data.tr)
         });
         if (parseFloat(this.stock.weekyearlow) > parseFloat(data.l)) {
           //console.log(this.stock.weekyearlow + " > " + data.l);
