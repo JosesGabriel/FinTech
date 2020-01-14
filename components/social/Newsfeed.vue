@@ -65,13 +65,7 @@
               >
                 <v-icon>mdi-dots-horizontal</v-icon>
               </v-btn>
-              <div
-                v-if="
-                  postOptionsMode &&
-                    currentPost == n - 1 &&
-                    postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
-                "
-              >
+              <div v-if="postOptionsMode && currentPost == n - 1">
                 <div class="postOptions__dropdown--caret"></div>
                 <div class="postOptions__container">
                   <v-dialog width="500">
@@ -140,6 +134,15 @@
                       (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
                     >Edit</v-btn
+                  >
+                  <v-btn
+                    v-if="
+                      postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
+                    "
+                    x-small
+                    text
+                    @click="followAccount(postsObject[n - 1].user.uuid)"
+                    >Follow</v-btn
                   >
                 </div>
               </div>
@@ -482,6 +485,19 @@ export default {
     if (this.$route.name == "index") this.scroll();
   },
   methods: {
+    followAccount(user_id) {
+      const params = user_id;
+      this.$api.social.follow
+        .followAccount(params)
+        .then(response => {
+          if (response.success) {
+            this.triggerAlert(true, "Successfully followed!");
+          }
+        })
+        .catch(e => {
+          this.triggerAlert(false, "You are already following this user.");
+        });
+    },
     /**
      * changes sharePostID value that is being used as a key in the share component.
      * this change will trigger the share modal to be visible
