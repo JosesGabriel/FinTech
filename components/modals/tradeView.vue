@@ -358,15 +358,27 @@
                   <div>
                     <v-select
                       v-model="strategyModel"
-                      item-color="success"
                       append-icon="mdi-chevron-down"
                       class="mb-1"
+                      color="success"
                       :items="strategy"
+                      item-color="success"
+                      :menu-props="{offsetY: true, dark: lightSwitch == true}"
                       :dark="lightSwitch == true"
-                      light
                       label="Select Strategy"
-                      flat
-                    ></v-select>
+                      light
+                      dense
+                    >
+                      <template slot="item" slot-scope="data">
+                        <v-list-item-content
+                          :dark="lightSwitch == true"
+                          :style="{ background: cardbackground }"
+                          style="padding: 12px 12px; margin: -16px;"
+                        >
+                          <v-list-item-title v-html="data.item" class="text-uppercase"></v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </v-select>
                   </div>
                   <div>
                     <v-select
@@ -375,25 +387,49 @@
                       item-color="success"
                       append-icon="mdi-chevron-down"
                       class="mb-1"
+                      color="success"
                       :dark="lightSwitch == true"
+                      :menu-props="{offsetY: true, dark: lightSwitch == true}"
                       light
                       :items="tradeplan"
                       label="Select Trade Plan"
                       flat
-                    ></v-select>
+                    >
+                      <template slot="item" slot-scope="data">
+                        <v-list-item-content
+                          :dark="lightSwitch == true"
+                          :style="{ background: cardbackground }"
+                          style="padding: 12px 12px; margin: -16px;"
+                        >
+                          <v-list-item-title v-html="data.item" class="text-uppercase"></v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </v-select>
                   </div>
                   <div>
                     <v-select
                       v-model="emotionsModel"
                       offset-y="true"
                       item-color="success"
+                      color="success"
                       append-icon="mdi-chevron-down"
                       :items="emotions"
                       :dark="lightSwitch == true"
+                      :menu-props="{offsetY: true, dark: lightSwitch == true}"
                       light
                       label="Select Emotions"
                       flat
-                    ></v-select>
+                    >
+                      <template slot="item" slot-scope="data">
+                        <v-list-item-content
+                          :dark="lightSwitch == true"
+                          :style="{ background: cardbackground }"
+                          style="padding: 12px 12px; margin: -16px;"
+                        >
+                          <v-list-item-title v-html="data.item" class="text-uppercase"></v-list-item-title>
+                        </v-list-item-content>
+                      </template>
+                    </v-select>
                   </div>
                 </v-col>
                 <v-col
@@ -408,6 +444,7 @@
                     v-model="notesModel"
                     placeholder="Enter Notes"
                     :dark="lightSwitch == true"
+                    :menu-props="{offsetY: true, dark: lightSwitch == true}"
                     light
                     filled
                   ></v-textarea>
@@ -680,11 +717,11 @@ export default {
     },
     quantityModel(value) {
       this.buyWatch();
-      this.quantityModel = parseFloat(value)
+      this.quantityModel = parseFloat(value);
     },
     quantitySellModel(value) {
       this.sellWatch();
-      this.quantitySellModel = parseFloat(value)
+      this.quantitySellModel = parseFloat(value);
     },
     date: function() {
       this.dateWatch();

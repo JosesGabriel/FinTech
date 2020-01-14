@@ -2,7 +2,10 @@
   <v-container class="pa-0" dark>
     <v-card class="transparent__bg pa-3 mb-2" outlined dark>
       <v-row no-gutters>
-        <span class="white--text pa-2 d-block subtitle-1">Ideas</span>
+        <span class="white--text pa-2 d-block subtitle-1">
+          Connections ·
+          <span class="secondary--text">10,000</span>
+        </span>
         <v-spacer></v-spacer>
         <v-btn color="success" icon>
           <v-icon small>mdi-pencil</v-icon>
