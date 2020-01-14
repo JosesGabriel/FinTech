@@ -23,8 +23,9 @@
         text
         color="success"
         @click="filterDate('day')"
-        class="body-2 text-capitalize"
+        class="text-capitalize"
         elevation="0"
+        style="font-size:14px;"
       >Day</v-btn>
       <v-btn
         small
@@ -32,8 +33,9 @@
         text
         color="success"
         @click="filterDate('week')"
-        class="body-2 text-capitalize"
+        class="text-capitalize"
         elevation="0"
+        style="font-size:14px;"
       >Week</v-btn>
       <v-btn
         small
@@ -41,8 +43,9 @@
         text
         color="success"
         @click="filterDate('month')"
-        class="body-2 text-capitalize"
+        class="text-capitalize"
         elevation="0"
+        style="font-size:14px;"
       >Month</v-btn>
       <v-btn
         small
@@ -50,8 +53,9 @@
         text
         color="success"
         @click="filterDate('year')"
-        class="body-2 text-capitalize"
+        class="text-capitalize"
         elevation="0"
+        style="font-size:14px;"
       >Year</v-btn>
       <v-dialog
         ref="dialog"
@@ -175,7 +179,7 @@
       elevation="0"
     >
       <v-card color="transparent" class="justify-center" elevation="0">
-        <v-card-title class="caption pa-0">
+        <v-card-title class="pa-0" style="font-size:12px;">
           <span :style="{ color: fontcolor2 }">Show Rows</span>
           <v-spacer></v-spacer>
           <v-text-field
@@ -186,7 +190,8 @@
             @input="itemsPerPage = parseInt($event, 10)"
             :dark="lightSwitch == true"
             :style="{ background: cardbackground }"
-            class="pt-0 pl-4 mt-0 ml-1 show_rows caption"
+            class="pt-0 pl-4 mt-0 ml-1 show_rows"
+            style="font-size:12px;"
             color="success"
             dense
           ></v-text-field>

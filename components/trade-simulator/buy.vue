@@ -10,7 +10,7 @@
               this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : ''
             "
             style="font-size:13px !important;"
-            class="subtitle-1 px-0 py-2 secondary--text"
+            class="px-0 py-2 secondary--text"
           >Available Funds</v-card-title>
           <v-spacer></v-spacer>
           <v-card-title
@@ -18,7 +18,7 @@
             :class="
               this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : ''
             "
-            class="subtitle-1 px-0 py-2 secondary--text"
+            class="px-0 py-2 secondary--text"
             style="font-size:13px !important;"
           >{{ this.availableFunds }}</v-card-title>
         </v-row>
@@ -111,12 +111,12 @@
                     ? 'boardlotsell'
                     : 'boardlotbuy'
                 "
-                class="subtitle-1 pa-0 secondary--text"
+                class="pa-0 secondary--text"
               >Board lot</v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
                 :style="{ color: fontcolor2 }"
-                class="subtitle-1 pa-0 secondary--text"
+                class="pa-0 secondary--text"
                 style="font-size:13px !important"
               >{{ this.BoardLot }}</v-card-title>
             </v-row>
@@ -127,7 +127,7 @@
               <v-card-title
                 style="font-size:13px !important"
                 :style="{ color: fontcolor2 }"
-                class="subtitle-1 px-0 py-2 secondary--text"
+                class="px-0 py-2 secondary--text"
               >
                 {{
                 this.simulatorConfirmedBuySell == "sell"
@@ -138,7 +138,7 @@
               <v-spacer></v-spacer>
               <v-card-title
                 :style="{ color: fontcolor2 }"
-                class="subtitle-1 px-0 py-2 secondary--text"
+                class="px-0 py-2 secondary--text"
                 style="font-size:13px !important"
               >{{ this.totalCost }}</v-card-title>
             </v-row>
