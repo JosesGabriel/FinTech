@@ -7,7 +7,7 @@
   >
     <v-card :dark="lightSwitch == true" :style="{ background: cardbackground }">
       <v-card-title
-        class="text-left justify-left pa-5 pb-0 px-5 success--text subtitle-1 font-weight-bold"
+        class="text-left justify-left pa-5 pb-0 px-5 success--text"
       >TRADE</v-card-title>
       <v-stepper
         v-model="e1"
@@ -83,11 +83,11 @@
 
                   <v-row no-gutters>
                     <v-card-title
-                      class="subtitle-1 pa-0"
+                      class="pa-0"
                       style="font-size:12.5px !important;"
                     >Current Price</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title :style="{ color: fontcolor2 }" class="subtitle-1 pa-0">
+                    <v-card-title :style="{ color: fontcolor2 }" class="pa-0">
                       <p
                         class="text-right ma-0 body-1"
                         style="font-size:12.5px !important;"
@@ -118,32 +118,32 @@
                         <template v-slot:default>
                           <tbody>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">Previous</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">Previous</td>
                               <td
-                                class="item_position-prop body-2 text-right pa-0 px-1 stock_details"
+                                class="item_position-prop text-right pa-0 px-1 stock_details"
                               >{{ prev }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">Low</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">Low</td>
                               <td
-                                class="body-2 text-right py-1 px-1 stock_details"
+                                class="text-right py-1 px-1 stock_details"
                                 :class="valueStatusLow"
                               >{{ low }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">52WKLow</td>
-                              <td class="body-2 text-right py-1 px-1 stock_details">{{ wklow }}</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">52WKLow</td>
+                              <td class="text-right py-1 px-1 stock_details">{{ wklow }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">Volume</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">Volume</td>
                               <td
-                                class="item_position-prop body-2 text-right py-1 px-1 stock_details"
+                                class="item_position-prop text-right py-1 px-1 stock_details"
                               >{{ volm }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">Trades</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">Trades</td>
                               <td
-                                class="item_position-prop body-2 text-right py-1 px-1 stock_details"
+                                class="item_position-prop text-right py-1 px-1 stock_details"
                               >{{ trades }}</td>
                             </tr>
                           </tbody>
@@ -160,33 +160,33 @@
                         <template v-slot:default>
                           <tbody>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">Open</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">Open</td>
                               <td
-                                class="item_position-prop body-2 text-right py-1 px-1 stock_details"
+                                class="item_position-prop text-right py-1 px-1 stock_details"
                               >{{ open }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">High</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">High</td>
                               <td
-                                class="item_position-prop body-2 text-right py-1 px-1 stock_details"
+                                class="item_position-prop text-right py-1 px-1 stock_details"
                               >{{ high }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">52WKHigh</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">52WKHigh</td>
                               <td
-                                class="item_position-prop body-2 text-right py-1 px-1 stock_details"
+                                class="item_position-prop text-right py-1 px-1 stock_details"
                               >{{ wkhigh }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">Value</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">Value</td>
                               <td
-                                class="item_position-prop body-2 text-right py-1 px-1 stock_details"
+                                class="item_position-prop text-right py-1 px-1 stock_details"
                               >{{ vole }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop body-2 py-1 px-1 stock_details">Average</td>
+                              <td class="item_position-prop py-1 px-1 stock_details">Average</td>
                               <td
-                                class="item_position-prop body-2 text-right py-1 px-1 stock_details"
+                                class="item_position-prop text-right py-1 px-1 stock_details"
                               >{{ ave }}</td>
                             </tr>
                           </tbody>
@@ -197,7 +197,7 @@
                   <div class="px-3">
                     <v-card-title class="pa-0 justify-center mt-3">
                       <h1
-                        class="caption"
+                        style="font-size: 12px;"
                         :style="{ color: fontcolor2 }"
                       >Bid/ Ask Bar</h1>
                     </v-card-title>
@@ -211,7 +211,7 @@
                     ></v-progress-linear>
                     <v-card-title class="pa-0 justify-center mt-3">
                       <h1
-                        class="caption"
+                         style="font-size: 12px;"
                         :style="{ color: fontcolor2 }"
                       >Members Sentiments</h1>
                     </v-card-title>

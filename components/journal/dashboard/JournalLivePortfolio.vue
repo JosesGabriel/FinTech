@@ -337,6 +337,7 @@ export default {
               this.totalProfitLossPerf +
               parseFloat(this.portfolioLogs[i].pl_percentage);
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
+            this.portfolioLogs[i] = {...this.portfolioLogs[i], execute: false};
           }
           // Loading on table
           this.livePortfolioLoading = false;
@@ -353,8 +354,8 @@ export default {
         this.counter = 0;
       }
       this.sse = new EventSource(
-        // "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
-        "http://localhost:8021/sse/market-data/pse/all"
+        "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+        // "http://localhost:8021/sse/market-data/pse/all"
       );
       this.sse.onopen = function() {
         console.log("[TEST OPEN] open sse");
@@ -377,8 +378,6 @@ export default {
 
       for (let i = 0; i < this.portfolioLogs.length; i++) {
         if (this.portfolioLogs[i].stock_id == symbol) {
-          console.log(symbol);
-          console.log(lprice);
           let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
 
           let mvalue = this.fees(buyResult);
@@ -391,6 +390,8 @@ export default {
           this.portfolioLogs[i].market_value = mvalue;
           this.portfolioLogs[i].profit_loss = profit;
           this.portfolioLogs[i].pl_percentage = perf;
+
+          this.portfolioLogs[i].execute = true;
 
           let updatedItem = {
             ...this.portfolioLogs[i],

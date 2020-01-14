@@ -29,8 +29,20 @@
           item-color="success"
           dense
           :dark="lightSwitch == true"
+          :menu-props="{offsetY: true, dark: lightSwitch == true}"
+          light
           append-icon="mdi-chevron-down"
-        ></v-select>
+        >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
+              style="padding: 12px 12px; margin: -16px;"
+            >
+              <v-list-item-title v-html="data.item.type" class="text-uppercase"></v-list-item-title>
+            </v-list-item-content>
+          </template>
+        </v-select>
       </v-container>
       <v-card-actions class="pa-3">
         <v-spacer></v-spacer>
@@ -59,6 +71,9 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    },
     show: {
       get() {
         return this.visible;

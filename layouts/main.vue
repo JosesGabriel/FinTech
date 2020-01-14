@@ -7,14 +7,14 @@
       </v-container>
       <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
         {{ alertMessage }}
-        <v-btn color="white" text @click="alert = false">
-          Close
-        </v-btn>
+        <v-btn color="white" text @click="alert = false">Close</v-btn>
       </v-snackbar>
     </v-content>
   </v-app>
 </template>
 <style>
+@import "~/assets/css/scrollbar/style.css";
+
 .theme--dark.v-sheet {
   background-color: #00121e;
 }

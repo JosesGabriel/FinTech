@@ -254,6 +254,7 @@
                     item-color="success"
                     dense
                     :dark="lightSwitch == true"
+                    :menu-props="{offsetY: true, dark: lightSwitch == true}"
                     light
                     class="enter_amount-deposit-select ma-0"
                   >
@@ -677,11 +678,13 @@ export default {
       const result = parseFloat(newValue);
       this.priceSellModel = result;
     },
-    quantityModel: function() {
+    quantityModel(value) {
       this.buyWatch();
+      this.quantityModel = parseFloat(value)
     },
-    quantitySellModel: function() {
+    quantitySellModel(value) {
       this.sellWatch();
+      this.quantitySellModel = parseFloat(value)
     },
     date: function() {
       this.dateWatch();

@@ -9,6 +9,7 @@
           <v-tab :href="`#tab-2`" class="text-capitalize subtitle-1">Activities</v-tab>
           <v-tab :href="`#tab-3`" class="text-capitalize subtitle-1">Services</v-tab>
 
+          <!-- Profile tab -->
           <v-tab-item class="mt-10" :value="'tab-1'">
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="8" lg="8">
@@ -23,18 +24,38 @@
               </v-col>
             </v-row>
           </v-tab-item>
+          <!-- Activities tab -->
+          <v-tab-item class="mt-10" :value="'tab-2'">
+            <v-row no-gutters>
+              <v-col cols="12" sm="12" md="5" lg="5">
+                <ProfileIdeas class="my-3" />
+              </v-col>
+              <v-col cols="12" sm="12" md="7" lg="7">
+                <v-container>
+                  <PostField class="mb-3" @authorNewPost="authorNewPost" />
+                  <Newsfeed :new-post="newPost" />
+                </v-container>
+              </v-col>
+            </v-row>
+          </v-tab-item>
         </v-tabs>
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
-import ProfileAbout from "~/components/profile/ProfileAbout";
-import ProfileExperience from "~/components/profile/ProfileExperience";
-import ProfileEducation from "~/components/profile/ProfileEducation";
-import ProfileSkills from "~/components/profile/ProfileSkills";
-import ProfileInterests from "~/components/profile/ProfileInterests";
-import ProfileCourse from "~/components/profile/ProfileCourse";
+// Profile tab
+import ProfileAbout from "~/components/profile/parts/ProfileAbout";
+import ProfileExperience from "~/components/profile/parts/ProfileExperience";
+import ProfileEducation from "~/components/profile/parts/ProfileEducation";
+import ProfileSkills from "~/components/profile/parts/ProfileSkills";
+import ProfileInterests from "~/components/profile/parts/ProfileInterests";
+import ProfileCourse from "~/components/profile/parts/ProfileCourse";
+
+// Profile tab
+import ProfileIdeas from "~/components/profile/parts/ProfileIdeas";
+import PostField from "~/components/social/PostField";
+import Newsfeed from "~/components/social/Newsfeed";
 
 export default {
   layout: "main",
@@ -44,7 +65,24 @@ export default {
     ProfileEducation,
     ProfileSkills,
     ProfileInterests,
-    ProfileCourse
+    ProfileCourse,
+    ProfileIdeas,
+    PostField,
+    Newsfeed
+  },
+  data() {
+    return {
+      isOpen: true,
+      newPost: {}
+    };
+  },
+  methods: {
+    toggle: function() {
+      this.isOpen = !this.isOpen;
+    },
+    authorNewPost: function(value) {
+      this.newPost = value;
+    }
   }
 };
 </script>

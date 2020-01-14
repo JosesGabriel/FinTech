@@ -10,7 +10,7 @@
   </v-container>
 </template>
 <script>
-import ProfileCover from "~/components/profile/ProfileCover";
+import ProfileCover from "~/components/profile/parts/ProfileCover";
 import ProfileTimeline from "~/components/profile/ProfileTimeline";
 
 export default {

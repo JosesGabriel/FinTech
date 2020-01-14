@@ -6,7 +6,7 @@
         :style="{ border: cardbackground2 }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">Realized P/L (PHP)</v-row>
+        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Realized P/L (PHP)</v-row>
         <v-row class="mt-1 mb-2">
           <v-col
             md="12"
@@ -20,7 +20,7 @@
         :style="{ border: cardbackground2 }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">Unrealized P/L (PHP)</v-row>
+        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Unrealized P/L (PHP)</v-row>
         <v-row class="mt-1">
           <v-col
             md="12"
@@ -34,7 +34,7 @@
         :style="{ border: cardbackground2 }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">Port Performance %</v-row>
+        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Port Performance %</v-row>
         <v-row class="mt-1">
           <v-col
             md="12"
@@ -48,7 +48,7 @@
         :style="{ border: cardbackground2 }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">Max Drawdown %</v-row>
+        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Max Drawdown %</v-row>
         <v-row class="mt-1">
           <v-col
             md="12"
@@ -62,7 +62,7 @@
         :style="{ border: cardbackground2 }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">Equity</v-row>
+        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Equity</v-row>
         <v-row class="mt-1">
           <v-col
             md="12"
@@ -76,7 +76,7 @@
         :style="{ border: cardbackground2 }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 caption">Day Change</v-row>
+        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Day Change</v-row>
         <v-row class="mt-0">
           <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
             <v-row class="ma-0 pa-0 overline">
@@ -105,13 +105,13 @@
     >
       <v-tab
         :style="{ color: fontcolor }"
-        class="tab_menu-top text-capitalize subtitle-1"
+        class="tab_menu-top text-capitalize"
         :href="`#tab-1`"
       >Live Portfolio</v-tab>
       <v-tab
         :style="{ color: fontcolor }"
-        class="tab_menu-top text-capitalize subtitle-1"
-        :href="`#tab-2`"
+        class="tab_menu-top text-capitalize"
+        :href="`#tab-2`"  
       >Tradelogs</v-tab>
 
       <v-row>
@@ -532,5 +532,9 @@ export default {
 }
 .selector .v-input__control {
   min-height: auto !important;
+}
+.label {
+  font-family: 'Nunito Sans', sans-serif !important;
+  font-size: 12px;
 }
 </style>
