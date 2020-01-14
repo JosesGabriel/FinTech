@@ -29,12 +29,12 @@
   </v-container>
 </template>
 <script>
-import ProfileAbout from "~/components/profile/ProfileAbout";
-import ProfileExperience from "~/components/profile/ProfileExperience";
-import ProfileEducation from "~/components/profile/ProfileEducation";
-import ProfileSkills from "~/components/profile/ProfileSkills";
-import ProfileInterests from "~/components/profile/ProfileInterests";
-import ProfileCourse from "~/components/profile/ProfileCourse";
+import ProfileAbout from "~/components/profile/parts/ProfileAbout";
+import ProfileExperience from "~/components/profile/parts/ProfileExperience";
+import ProfileEducation from "~/components/profile/parts/ProfileEducation";
+import ProfileSkills from "~/components/profile/parts/ProfileSkills";
+import ProfileInterests from "~/components/profile/parts/ProfileInterests";
+import ProfileCourse from "~/components/profile/parts/ProfileCourse";
 
 export default {
   layout: "main",

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="transparent__bg" dark>
+  <v-card class="transparent__bg" dark elevation="0">
     <v-container dark>
       <v-row no-gutters>
         <span class="white--text pa-2 d-block subtitle-1">Add new skills with these courses for free</span>

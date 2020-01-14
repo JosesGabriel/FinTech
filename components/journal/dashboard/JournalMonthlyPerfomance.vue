@@ -248,7 +248,11 @@ export default {
       if (this.journalCharts != null) {
         this.monthlyPerformance = this.journalCharts.data;
         let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance;
-        console.log(monthlyPerformanceArr);
+        for(let i = 0; i < monthlyPerformanceArr.length; i++) {
+          if(monthlyPerformanceArr[i] == 0) {
+            monthlyPerformanceArr[i] = null
+          }
+        }
         this.$refs.monthlyPerformance.updateSeries([
           {
             data: monthlyPerformanceArr

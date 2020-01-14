@@ -490,34 +490,6 @@ span.apexcharts-tooltip-text-label {
   border-radius: unset !important;
   border: 1px solid #172431;
 }
-.v-menu__content.theme--dark::-webkit-scrollbar {
-  width: 5px !important;
-}
-.v-menu__content.theme--dark::-webkit-scrollbar-track {
-  background: #172431 !important;
-  border-radius: 10px !important;
-}
-.v-menu__content.theme--dark::-webkit-scrollbar-thumb {
-  background: #03dac5 !important;
-  border-radius: 20px !important;
-}
-.v-menu__content.theme--dark::-webkit-scrollbar-thumb:hover {
-  background: #03dac5 !important;
-}
-.v-menu__content.theme--light::-webkit-scrollbar {
-  width: 5px !important;
-}
-.v-menu__content.theme--light::-webkit-scrollbar-track {
-  background: #c1c1c1 !important;
-  border-radius: 0 !important;
-}
-.v-menu__content.theme--light::-webkit-scrollbar-thumb {
-  background: #03dac5 !important;
-  border-radius: 20px !important;
-}
-.v-menu__content.theme--light::-webkit-scrollbar-thumb:hover {
-  background: #03dac5 !important;
-}
 .v-list hr.v-divider.theme--light {
   background: #c1c1c1;
 }
