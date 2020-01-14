@@ -61,69 +61,18 @@
         </div>
       </v-card-actions>
       <div class="watchlistCard__percentbar">
-        <div
-          class="watchlistCard__bar watchlistCard__bar--green"
-          style="width:46%"
-        ></div>
-        <div
-          class="watchlistCard__bar watchlistCard__bar--red"
-          style="width:54%"
-        ></div>
+        <MarketDepth :stocksym="userWatchedStocks[data].stock_id" />
       </div>
     </v-card>
   </v-hover>
 </template>
-<style>
-.watchlistCard__head {
-  /* position: absolute; */
-}
-.watchlistCard__stockDescription {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  font-size: 8px;
-}
-.watchCard--unfocused {
-  opacity: 0.5;
-}
-.watchlistCard__bar--green {
-  background-color: #03dac5;
-}
-.watchlistCard__bar--red {
-  background-color: #f44336;
-}
-.watchlistCard__text--gray {
-  color: gray;
-}
-.watchlistCard__items {
-  margin-bottom: 10px;
-  display: block;
-}
-.watchlistCard__items,
-.watchlistCard__percentbar {
-  position: relative;
-  bottom: 40px;
-}
-.watchlistCard__itemsLabel {
-  position: relative;
-  bottom: 5px;
-}
-.watchlistCard__bar {
-  float: left;
-  color: #fff;
-  padding: 2px 0;
-  text-align: center;
-  line-height: 0;
-  border-radius: 5px 0 0 5px;
-}
-.apexcharts-tooltip {
-  box-shadow: none;
-}
-</style>
 <script>
 import { mapActions, mapGetters } from "vuex";
-
+import MarketDepth from "~/components/watchers/MarketDepth";
 export default {
+  components: {
+    MarketDepth
+  },
   props: ["data"],
   data: function() {
     return {
@@ -369,3 +318,51 @@ export default {
   }
 };
 </script>
+
+<style>
+.watchlistCard__head {
+  /* position: absolute; */
+}
+.watchlistCard__stockDescription {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 8px;
+}
+.watchCard--unfocused {
+  opacity: 0.5;
+}
+.watchlistCard__bar--green {
+  background-color: #03dac5;
+}
+.watchlistCard__bar--red {
+  background-color: #f44336;
+}
+.watchlistCard__text--gray {
+  color: gray;
+}
+.watchlistCard__items {
+  margin-bottom: 10px;
+  display: block;
+}
+.watchlistCard__items,
+.watchlistCard__percentbar {
+  position: relative;
+  bottom: 40px;
+}
+.watchlistCard__itemsLabel {
+  position: relative;
+  bottom: 5px;
+}
+.watchlistCard__bar {
+  float: left;
+  color: #fff;
+  padding: 2px 0;
+  text-align: center;
+  line-height: 0;
+  border-radius: 5px 0 0 5px;
+}
+.apexcharts-tooltip {
+  box-shadow: none;
+}
+</style>
