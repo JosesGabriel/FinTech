@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="show" max-width="320px">
-    <v-card color="#00121E">
+    <v-card :dark="lightSwitch == true">
       <v-card-title
         class="text-left justify-left pa-3 px-5 success--text text-uppercase subtitle-1 font-weight-bold"
       >Record a Trade</v-card-title>
@@ -17,8 +17,9 @@
                     :close-on-content-click="false"
                     :return-value.sync="buyDate"
                     transition="scale-transition"
-                    offset-y
                     min-width="290px"
+                    :dark="lightSwitch == true"
+                    light
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
@@ -26,14 +27,23 @@
                         label="Date"
                         readonly
                         v-on="on"
-                        dark
+                        :dark="lightSwitch == true"
+                        light
                         color="success"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="buyDate" no-title scrollable>
+                    <v-date-picker
+                      color="success"
+                      :style="{ background: cardbackground }"
+                      v-model="buyDate"
+                      no-title
+                      scrollable
+                      :dark="lightSwitch == true"
+                      light
+                    >
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="buyMenu = false">Cancel</v-btn>
-                      <v-btn text color="primary" @click="$refs.buyMenu.save(buyDate)">OK</v-btn>
+                      <v-btn text color="secondary" @click="buyMenu = false">Cancel</v-btn>
+                      <v-btn text color="success" @click="$refs.buyMenu.save(buyDate)">OK</v-btn>
                     </v-date-picker>
                   </v-menu>
                   <v-select
@@ -47,15 +57,27 @@
                     label="Select Stock"
                     color="success"
                     dense
-                    dark
+                    :dark="lightSwitch == true"
+                    light
                     flat
-                    :menu-props="{offsetY: true}"
-                  ></v-select>
+                    :menu-props="{offsetY: true, dark: lightSwitch == true}"
+                  >
+                    <template slot="item" slot-scope="data">
+                      <v-list-item-content
+                        :dark="lightSwitch == true"
+                        :style="{ background: cardbackground }"
+                        style="padding: 12px 12px; margin: -16px;"
+                      >
+                        <v-list-item-title v-html="data.item.symbol" class="text-uppercase"></v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </v-select>
                   <v-text-field
                     label="Buy Price"
                     placeholder="Enter Buy Price"
                     color="success"
-                    dark
+                    :dark="lightSwitch == true"
+                    light
                     v-model="buyPrice"
                     type="number"
                     class="body-2 buy_selector quantity-input py-3"
@@ -64,7 +86,8 @@
                     label="Quantity"
                     placeholder="Enter Quantity"
                     color="success"
-                    dark
+                    :dark="lightSwitch == true"
+                    light
                     type="number"
                     v-model="buyQuantity"
                     class="body-2 buy_selector quantity-input py-3"
@@ -77,8 +100,9 @@
                   <v-row class="mt-4" no-gutters>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="success"
+                      color="secondary"
                       class="text-capitalize black--text ml-1"
+                      :dark="lightSwitch == true"
                       light
                       text
                       @click.stop="show = false"
@@ -100,7 +124,8 @@
                     :close-on-content-click="false"
                     :return-value.sync="sellDate"
                     transition="scale-transition"
-                    offset-y
+                    :dark="lightSwitch == true"
+                    light
                     min-width="290px"
                   >
                     <template v-slot:activator="{ on }">
@@ -109,21 +134,31 @@
                         label="Date"
                         readonly
                         v-on="on"
-                        dark
+                        :dark="lightSwitch == true"
+                        light
                         color="success"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="sellDate" no-title scrollable>
+                    <v-date-picker
+                      v-model="sellDate"
+                      no-title
+                      scrollable
+                      :style="{ background: cardbackground }"
+                      color="success"
+                      :dark="lightSwitch == true"
+                      light
+                    >
                       <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="sellMenu = false">Cancel</v-btn>
-                      <v-btn text color="primary" @click="$refs.sellMenu.save(sellDate)">OK</v-btn>
+                      <v-btn text color="secondary" @click="sellMenu = false">Cancel</v-btn>
+                      <v-btn text color="success" @click="$refs.sellMenu.save(sellDate)">OK</v-btn>
                     </v-date-picker>
                   </v-menu>
                   <v-text-field
                     label="Sell Price"
                     placeholder="Enter Sell Price"
                     color="success"
-                    dark
+                    :dark="lightSwitch == true"
+                    light
                     min="0"
                     type="number"
                     v-model="sellPrice"
@@ -133,7 +168,8 @@
                     label="Quantity"
                     placeholder="Enter Quantity"
                     color="success"
-                    dark
+                    :dark="lightSwitch == true"
+                    light
                     type="number"
                     v-model="sellQuantity"
                     readonly
@@ -156,8 +192,9 @@
                   <v-row class="mt-4" no-gutters>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="success"
+                      color="secondary"
                       class="text-capitalize black--text ml-1"
+                      :dark="lightSwitch == true"
                       light
                       text
                       @click="e1 = 1"
@@ -177,35 +214,38 @@
                     <div>
                       <v-select
                         v-model="strategyModel"
-                        offset-y="true"
                         item-color="success"
                         append-icon="mdi-chevron-down"
                         class="mb-1"
                         :items="strategy"
                         label="Select Strategy"
+                        :dark="lightSwitch == true"
+                        light
                         flat
                       ></v-select>
                     </div>
                     <div>
                       <v-select
                         v-model="tradeplanModel"
-                        offset-y="true"
                         item-color="success"
                         append-icon="mdi-chevron-down"
                         class="mb-1"
                         :items="tradeplan"
                         label="Select Trade Plan"
+                        :dark="lightSwitch == true"
+                        light
                         flat
                       ></v-select>
                     </div>
                     <div>
                       <v-select
                         v-model="emotionsModel"
-                        offset-y="true"
                         item-color="success"
                         append-icon="mdi-chevron-down"
                         :items="emotions"
                         label="Select Emotions"
+                        :dark="lightSwitch == true"
+                        light
                         flat
                       ></v-select>
                     </div>
@@ -220,14 +260,17 @@
                         class="white--text trading_notes-textarea body-2"
                         v-model="notesModel"
                         placeholder="Enter Notes"
+                        :dark="lightSwitch == true"
+                        light
                         filled
                       ></v-textarea>
                     </v-col>
                     <v-row class="mt-4" no-gutters>
                       <v-spacer></v-spacer>
                       <v-btn
-                        color="success"
-                        class="text-capitalize black--text ml-1"
+                        color="secondary"
+                        class="text-capitalize ml-1"
+                        :dark="lightSwitch == true"
                         light
                         text
                         @click="e1 = 2"
@@ -301,8 +344,12 @@ export default {
       defaultPortfolioId: "journal/getDefaultPortfolioId",
       renderEditKey: "journal/getRenderEditKey",
       renderPortfolioKey: "journal/getRenderPortfolioKey",
-      stockList: "global/getStockList"
+      stockList: "global/getStockList",
+      lightSwitch: "global/getLightSwitch"
     }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    },
     show: {
       get() {
         return this.visible;
@@ -537,5 +584,13 @@ export default {
 }
 .neutral {
   color: #bdbdbd;
+}
+</style>
+<style>
+.v-date-picker-table.v-date-picker-table--date.theme--dark {
+  background: #00121e;
+}
+.v-date-picker-header.theme--dark {
+  background: #00121e;
 }
 </style>

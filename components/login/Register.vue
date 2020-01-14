@@ -138,6 +138,9 @@ export default {
       lightSwitch: "global/getLightSwitch",
       loginModalState: "login/getLoginModalState"
     }),
+    fullName() {
+      return `${this.firstName} ${this.lastName}`;
+    },
     show: {
       //show dialog toggle
       get() {
@@ -167,6 +170,7 @@ export default {
       let params = {
         first_name: this.firstName,
         last_name: this.lastName,
+        name: this.fullName,
         username: this.userName,
         email: this.emailAddress,
         password: this.password,

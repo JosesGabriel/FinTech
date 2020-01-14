@@ -71,6 +71,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { nativeBus } from "~/helpers/native-bus";
 
 export default {
   name: "Headline",
@@ -171,7 +172,11 @@ export default {
       try {
         if (this.symbolid == undefined) return;
         const data = JSON.parse(e.data);
+        // set sse info to state
         this.setSSEInfo(data);
+        // emit sse info
+        nativeBus.$emit('b-tv-sse-all', data)
+        
         if (this.symbolid !== data.sym_id) return;
         this.counter++;
         this.$store.commit("chart/SET_STOCK_OBJ", {

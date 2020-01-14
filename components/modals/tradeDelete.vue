@@ -11,13 +11,14 @@
         <v-row no-gutters>
           <v-spacer></v-spacer>
           <v-btn
-            color="success"
+            color="secondary"
             class="text-capitalize mt-2"
             depressed
             text
+            :dark="lightSwitch == true"
             light
             @click.stop="show = false"
-          >Close</v-btn>
+          >Cancel</v-btn>
           <v-btn
             color="success"
             class="ml-1 text-capitalize mt-2 black--text"
