@@ -118,7 +118,7 @@
       :style="{ background: cardbackground }"
     >
       <v-card>
-        <v-card-title>{{ (this.editDetails == 'edit' ? 'Edit' : 'Trade Details') }}</v-card-title>
+        <v-card-title class="success--text" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
         <v-card-text>
           <v-col sm="12" md="12" class="my-0">
             <div>
@@ -603,9 +603,12 @@ export default {
       
       this.sse.addEventListener("trade",function(e) {
            const data = JSON.parse(e.data);  
+           
           for(let i =0; i< that.stockSym.length; i++){ 
             if(that.stockSym[i] == data.sym_id){
-                that.trigger(data.sym, data.exp);
+                //console.log('SYmbol - '+ data.sym_id);
+                //console.log('Price - '+ data.exp);
+                that.trigger(data.sym_id, data.exp);
             }
           }
       });
@@ -621,7 +624,7 @@ export default {
         let tmvalue = 0;
        
         for (let i = 0; i < this.portfolioLogs.length; i++) {
-            if(this.portfolioLogs[i].stock_id == symbol){
+            if(this.portfolioLogs[i].metas.stock_id == symbol){
                 
                 let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
                 let mvalue = this.fees(buyResult);
