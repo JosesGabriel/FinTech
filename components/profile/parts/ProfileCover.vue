@@ -27,7 +27,7 @@
             <v-card class="pa-2 mb-auto" color="transparent" outlined tile>
               <div class>
                 <v-list-item-title class="white--text display-1">Liza Soberano</v-list-item-title>
-                <v-list-item-title class="white--text subtitle-1">Ikaw lang sapat na, bhe 06</v-list-item-title>
+                <v-list-item-title class="white--text subtitle-1">@LizaSoberano</v-list-item-title>
               </div>
             </v-card>
             <v-card class="pa-2 profile_suminfo d-block" color="transparent" outlined tile>
