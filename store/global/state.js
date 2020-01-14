@@ -6,5 +6,5 @@ export default () => ({
   //region stock data
   stockList: [],
   //endregion stock data
-  favicon: `${process.env.APP_URL}/lyduz.ico`
+  favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=2`
 });
