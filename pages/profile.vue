@@ -12,14 +12,14 @@
 <script>
 import ProfileCover from "~/components/profile/parts/ProfileCover";
 import ProfileTimeline from "~/components/profile/ProfileTimeline";
-import iconfont from "@fortawesome/fontawesome-free/css/all.css";
+// import iconfont from "@fortawesome/fontawesome-free/css/all.css";
 
 export default {
   layout: "main",
   components: {
     ProfileCover,
     ProfileTimeline,
-    iconfont: "fa"
+    // iconfont: "fa"
   }
 };
 </script>
