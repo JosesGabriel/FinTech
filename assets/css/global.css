@@ -1,29 +1,45 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap');
-#app {
+#app,
+#app div,
+#app a,
+#app span,
+#app table,
+#app thead,
+#app tbody,
+#app tr,
+#app td {
     font-family: 'Nunito Sans', sans-serif !important;
     /* font-weight: 500 !important; */
 }
+
+
 /* .v-application a {
     color: #78909C !important;
 } */
+
 #liveportfolio-table {
     background: none;
 }
+
 .avatar__border {
-    border: 1px solid rgba(189,189,189,0.2);
+    border: 1px solid rgba(189, 189, 189, 0.2);
     /* rgba: (189,189,189, 0.2) */
 }
+
 .no-transform {
     text-transform: none !important;
     text-decoration: none !important;
 }
+
 .page__wrapper {
     max-width: 1080px !important;
     margin-top: 40px !important;
 }
+
 .pa-05 {
     padding: 2px !important;
-  }
+}
+
 .v-list-item {
     user-select: text !important;
 }

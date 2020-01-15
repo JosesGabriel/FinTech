@@ -233,6 +233,7 @@ export default {
       menuShow: false,
       componentKeys: 0,
       sse: null,
+      counter: 0,
 
       totalProfitLoss: 0,
       totalProfitLossPerf: 0,
@@ -267,6 +268,7 @@ export default {
         this.ifVirtualShow = false;
       }
     }
+    this.initSSE();
   },
   methods: {
     ...mapActions({
@@ -427,16 +429,11 @@ export default {
         this.ifVirtualShow = false;
       }
     },
-    portfolioLogs: function() {
-      this.initSSE();
-    },
     defaultPortfolioId: function() {
       this.getOpenPositions();
-      this.initSSE();
     },
     renderPortfolioKey: function() {
       this.getOpenPositions();
-      this.initSSE();
     },
     renderEditKey: function() {
       this.getOpenPositions();

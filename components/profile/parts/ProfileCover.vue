@@ -1,7 +1,7 @@
 <template>
   <v-container dark class="pa-0 profile_cover-cont">
     <v-row no-gutters>
-      <v-col cols="12" class="pa-0">
+      <v-col cols="12" class="pa-0" elevation="10">
         <v-img
           src="https://cdn.pixabay.com/photo/2016/09/10/17/18/book-1659717_960_720.jpg"
           aspect-ratio="3"
@@ -26,8 +26,8 @@
           >
             <v-card class="pa-2 mb-auto" color="transparent" outlined tile>
               <div class>
-                <v-list-item-title class="white--text display-1">Liza Soberano</v-list-item-title>
-                <v-list-item-title class="white--text subtitle-1">@LizaSoberano</v-list-item-title>
+                <v-list-item-title class="white--text font-weight-bold display-1 text-shadow">Liza Soberano</v-list-item-title>
+                <v-list-item-title class="white--text subtitle-1 text-shadow">@LizaSoberano</v-list-item-title>
               </div>
             </v-card>
             <v-card class="pa-2 profile_suminfo d-block" color="transparent" outlined tile>
@@ -94,5 +94,8 @@ export default {
 }
 .cover_bottom-x {
   width: 100% !important;
+}
+.text-shadow {
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 </style>
