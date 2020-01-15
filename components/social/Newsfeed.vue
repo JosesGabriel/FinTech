@@ -394,12 +394,6 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
-      {{ alertResponse }}
-      <v-btn color="white" text @click="alert = false">
-        Close
-      </v-btn>
-    </v-snackbar>
     <Share
       v-if="showShare"
       :postid="sharePostID"
@@ -408,7 +402,7 @@
   </v-col>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
 import Share from "~/components/modals/share";
 export default {
@@ -435,9 +429,6 @@ export default {
       postsObject: [],
       loader: true,
       pageCount: 1,
-      alert: false,
-      alertState: "",
-      alertResponse: "",
       editTextAreaModel: [],
       currentPost: "",
       deleteDialog: false,
@@ -485,6 +476,9 @@ export default {
     if (this.$route.name == "index") this.scroll();
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
     followAccount(user_id) {
       const params = user_id;
       this.$api.social.follow
@@ -673,9 +667,12 @@ export default {
       };
     },
     triggerAlert(type, message) {
-      this.alert = true;
-      this.alertState = type;
-      this.alertResponse = message;
+      let alert = {
+        model: true,
+        state: type,
+        message: message
+      };
+      this.setAlert(alert);
     }
   }
 };

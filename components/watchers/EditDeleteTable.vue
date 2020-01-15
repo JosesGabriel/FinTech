@@ -66,15 +66,6 @@
         </v-icon>
       </template>
     </v-data-table>
-    <v-snackbar
-      v-model="watchList__alert"
-      :color="watchList__alertState ? 'success' : 'error'"
-    >
-      {{ post__responseMsg }}
-      <v-btn color="white" text @click="watchList__alert = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </div>
 </template>
 <script>
@@ -83,9 +74,6 @@ export default {
   data: () => ({
     dialog: false,
     tableLoading: true,
-    watchList__alert: false,
-    watchList__alertState: null,
-    post__responseMsg: "",
     watchCardModalLoading: false,
     headers: [
       {
@@ -142,7 +130,8 @@ export default {
   methods: {
     ...mapActions({
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
-      setRenderChartKey: "watchers/setRenderChartKey"
+      setRenderChartKey: "watchers/setRenderChartKey",
+      setAlert: "global/setAlert"
     }),
     populateStockDropdown() {
       // GET Data from User Watchlist
@@ -178,18 +167,25 @@ export default {
           .then(
             function(response) {
               if (response.success) {
-                this.watchList__alert = true;
-                this.post__responseMsg = response.message;
-                this.watchList__alertState = true;
+                let alert = {
+                  model: true,
+                  state: true,
+                  message: response.message
+                };
+                this.setAlert(alert);
+
                 this.watchCardModalLoading = false;
                 this.keyCounter = this.renderChartKey;
                 this.keyCounter++;
                 this.setRenderChartKey(this.keyCounter);
                 this.userStockData.splice(index, 1);
               } else {
-                this.watchList__alert = true;
-                this.post__responseMsg = response.message;
-                this.watchList__alertState = false;
+                let alert = {
+                  model: true,
+                  state: false,
+                  message: response.message
+                };
+                this.setAlert(alert);
               }
             }.bind(this)
           );
@@ -216,16 +212,23 @@ export default {
           .put(this.userWatchedStocks[this.editedIndex].id, params)
           .then(response => {
             if (response.success) {
-              this.watchList__alert = true;
-              this.post__responseMsg = response.message;
-              this.watchList__alertState = true;
+              let alert = {
+                model: true,
+                state: true,
+                message: response.message
+              };
+              this.setAlert(alert);
+
               this.keyCounter = this.renderChartKey;
               this.keyCounter++;
               this.setRenderChartKey(this.keyCounter);
             } else {
-              this.watchList__alert = true;
-              this.post__responseMsg = response.message;
-              this.watchList__alertState = false;
+              let alert = {
+                model: true,
+                state: false,
+                message: response.message
+              };
+              this.setAlert(alert);
             }
             this.tableLoading = false;
           });
