@@ -53,7 +53,7 @@
                           class="privacy__field"
                           dense
                           hide-details
-                          success
+                          color="#172431"
                           outlined
                           @change="currentSetting = $event"
                         ></v-select
@@ -121,18 +121,6 @@ export default {
     this.$refs.expansionPanel[0].$el.click();
   },
   methods: {
-    /**
-     * triggers and shows snackbar alert
-     *
-     * @param   {Array}  alert
-     *
-     * @return
-     */
-    showAlert(alert) {
-      this.alert = true;
-      this.alertState = alert[0];
-      this.alertMessage = alert[1];
-    },
     /**
      * Updates user privacy settings based on user input
      *

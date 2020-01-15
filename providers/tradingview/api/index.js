@@ -41,7 +41,7 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
  * @param   {String}  resolution          resolution supported by TV
  * @param   {Function}  onRealtimeCallback  realtime callback to publish in TV
  *
- * @return
+ * @return {Function} onRealtimeCallback function
  */
 function sseInfoNativeBusListener(symbolId, resolution, onRealtimeCallback) {
   // calculate chart data based on resolution

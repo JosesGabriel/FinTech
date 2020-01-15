@@ -14,10 +14,27 @@
         >
       </div>
     </div>
+
+    <v-card
+      v-show="loading"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+      class="mt-2 mr-2"
+      flat
+      tile
+    >
+      <v-progress-linear
+        color="success"
+        indeterminate
+        buffer-value="100"
+        height="5"
+        class="mt-3"
+      ></v-progress-linear>
+    </v-card>
+
     <v-card
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      :loading="loading"
       :max-height="`calc(100vh - ${responsive_height - 170}px)`"
       style="overflow-y: auto;"
       class="mt-2 mr-2"
@@ -40,12 +57,12 @@
             <span
               class="span__symbolid"
               @click="setSymbolID(item.id)"
-              @dblclick="showRemoveButton(item)"
-              >{{ item.title }}</span
+              @dblclick="showRemoveButton()"
+              >{{ item.symbol }}</span
             >
           </div>
           <div class="top__right pr-2">
-            <span class="">{{ item.value | numeral("0,0.00") }}</span>
+            <span class="">{{ item.last | numeral("0,0.00") }}</span>
           </div>
         </div>
         <div class="watchlist__bottom">
@@ -57,26 +74,28 @@
                 { lightmode__text: lightSwitch == 0 }
               ]"
               >{{
-                $globalMethod.limitDisplayString(item.description, 18, true)
+                $globalMethod.limitDisplayString(item.description, 15, true)
               }}</span
             >
           </div>
-          <div class="bottom__right pr-2">
+          <div class="bottom__right overline pr-2">
             <span
-              ><v-icon v-show="item.changetype == 1" class="increase"
+              ><v-icon v-show="item.change > 0.0" class="increase"
                 >mdi-chevron-up</v-icon
-              ><v-icon v-show="item.changetype == 2" class="decrease"
+              ><v-icon v-show="item.change < 0.0" class="decrease"
                 >mdi-chevron-down</v-icon
               >
             </span>
             <span
               :class="[
                 {
-                  increase: item.changetype == 1,
-                  decrease: item.changetype == 2
+                  increase: item.change > 0.0,
+                  decrease: item.change < 0.0
                 }
               ]"
-              >{{ item.volume }}</span
+              >{{ item.change | numeral("0.00a") }} ({{
+                item.changepercentage | numeral("0.00a")
+              }}%)</span
             >
           </div>
         </div>
@@ -91,101 +110,99 @@ export default {
   name: "Watchlist",
   data() {
     return {
-      loading: false,
-      showColumn: false,
-      columnStyle: "col-12",
-      items: [
-        {
-          id: "29235363595681792",
-          title: "JFC",
-          description: "Jollibee Foods Corp.",
-          value: "232.23",
-          volume: "-0.20(0.10%)",
-          changetype: 2,
-          color: false
-        },
-        {
-          id: "29235365000773632",
-          title: "PAL",
-          description: "Pal Holdings Inc.",
-          value: "31.23",
-          volume: "0.20(0.09%)",
-          changetype: 1,
-          color: false
-        }
-        // {
-        //   id: 3,
-        //   title: "IRC",
-        //   description: "Infradev Holdings Inc.",
-        //   value: "442.2",
-        //   volume: "-0.20(0.90%)",
-        //   changetype: 2
-        // },
-        // {
-        //   id: 4,
-        //   title: "JAS",
-        //   description: "Jaskstone Inc.",
-        //   value: "561.23",
-        //   volume: "0.20(0.09%)",
-        //   changetype: 1
-        // }
-      ]
+      loading: true,
+      items: []
     };
   },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      responsive_height: "chart/responsive_height"
+      responsive_height: "chart/responsive_height",
+      allstocks: "chart/allstocks",
+      sseInfo: "chart/sseInfo"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
+  watch: {
+    sseInfo: function(value) {
+      if (this.loading === false) {
+        this.sseAllInfo(value);
+      }
+    }
+  },
+  mounted() {
+    this.initWatchlist();
+  },
   methods: {
+    ...mapActions({
+      setSymbolID: "chart/setSymbolID"
+    }),
+    initWatchlist: async function() {
+      try {
+        this.items = [];
+        const response = await this.$api.watchlist.watchlists.index();
+        const data = response.data.watchlist;
+        data.forEach(data => {
+          const symbol = data.market_code.split(":");
+          this.items.push({
+            id: data.id,
+            sym_id: data.stock_id,
+            symbol: symbol.pop(),
+            description: data.description,
+            last: data.last,
+            changepercentage: data.change_percentage,
+            change: data.change,
+            color: false
+          });
+        });
+        //console.log(data);
+        this.loading = false;
+      } catch (error) {
+        //console.log(error);
+      }
+    },
+    sseAllInfo: function(data) {
+      try {
+        const stock = this.items.find(resp => resp.sym_id == data.sym_id);
+        if (stock == undefined) return;
+        const key = this.items.indexOf(stock);
+        this.items.splice(key, 1, {
+          id: stock.id,
+          sym_id: stock.sym_id,
+          symbol: stock.symbol,
+          description: stock.description,
+          last: data.c,
+          changepercentage: data.chgpc,
+          change: data.chg,
+          color: true
+        });
+        this.updateEffect(stock.id);
+      } catch (error) {
+        //console.log(error);
+      }
+    },
     onHoverEffect: function(value) {
       if (value == true) {
         return "rgb(182, 182, 182, 0.2)";
-        //return this.lightSwitch == 0 ? "#e6e6e6" : "#142a46";
       }
     },
-    showRemoveButton: function(item) {
-      //   this.showColumn = !this.showColumn;
-      //   let watch = document.getElementById(`watch_${item.id}`);
-      //   let show = document.getElementById(`show_${item.id}`);
-      //   if (this.showColumn) {
-      //     watch.classList.remove("col-12");
-      //     watch.classList.add("col-11");
-      //     watch.classList.add("watchColumnStyle");
-      //     show.style.display = "block";
-      //   } else {
-      //     watch.classList.add("col-12");
-      //     watch.classList.remove("watchColumnStyle");
-      //     show.style.display = "none";
-      //   }
+    updateEffect: dom => {
+      const item = document.getElementById(`watch__${dom}`);
+      const mouseoverEvent = new Event("mouseleave");
+      setTimeout(function() {
+        item.dispatchEvent(mouseoverEvent)
+      }, 200);
     },
-    confirmRemove: function(item) {
-      if (confirm("Are you sure to remove this stock?")) {
-        //   console.log(item);
-        this.$delete(this.items, item);
-        //  console.log("removed");
-      }
-    },
+    showRemoveButton: function() {},
     addWatchlist: function() {
-      // console.log("add new watchlist");
-      //this.$router.push("/watchlist");
       let routeData = this.$router.resolve({
         name: "watchlist"
         //query: { data: "someData" }
       });
       window.open(routeData.href, "_blank");
-    },
-    changeStock: stock => {
-      // console.log("stock selected");
-      // console.log(stock.id);
-    },
-    ...mapActions({
-      setSymbolID: "chart/setSymbolID"
-    })
+    }
   }
 };
 </script>

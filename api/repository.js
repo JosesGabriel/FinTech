@@ -2,11 +2,11 @@
 // I've used typical CRUD method names and actions here
 
 export default $axios => resource => ({
-  index() {
-    return $axios.$get(`${resource}`);
+  index(params) {
+    return $axios.$get(`${resource}`, { params });
   },
-  show(id) {
-    return $axios.$get(`${resource}/${id}`);
+  show(id, params) {
+    return $axios.$get(`${resource}/${id}`, { params });
   },
 
   create(payload) {

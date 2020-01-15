@@ -697,8 +697,10 @@ export default {
   mounted() {
     if (this.simulatorPortfolioID != 0 ? this.getOpenPositions() : "");
     this.initSSE();
-    
   },
+  beforeDestroy() {
+     this.sse.close();
+  }
     
 };
 </script>

@@ -6,7 +6,7 @@
       { lightmode__text: lightSwitch == 0 }
     ]"
   >
-    <div id="sentiment__caption">Members Sentiment</div>
+    <div id="sentiment__caption">{{ caption }}</div>
     <div id="sentiment__container" class="text-center">
       <div id="bull__container">
         <v-img
@@ -59,7 +59,8 @@ export default {
       bull: "0.00",
       bear: "0.00",
       loading: true,
-      first_load: true
+      first_load: true,
+      caption: "Members Sentiment"
     };
   },
   watch: {
@@ -90,6 +91,7 @@ export default {
         this.bear = parseFloat((bear / total_sentiment) * 100);
         this.can_add = false;
         this.loading = false;
+        this.caption = "Members Sentiment";
       } catch (error) {
         //console.log("error post sentiment");
         //nuconsole.log(error);
@@ -107,6 +109,9 @@ export default {
         this.bull = parseFloat((bull / total_sentiment) * 100);
         this.bear = parseFloat((bear / total_sentiment) * 100);
         this.can_add = response.data.user_stats.can_add;
+        if (this.can_add == true) {
+          this.caption = "Register Sentiment";
+        }
         this.loading = false;
       } catch (error) {
         //console.log(error);

@@ -90,7 +90,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in jockey" :key="item.broker_code">
+          <tr v-for="item in jockey" :key="item.broker_code" :id="item.broker_code">
             <td style="width:200px;">
               <div style="font-weight: bold; padding-top: 3px;">
                 {{ item.broker_code }}
@@ -171,7 +171,8 @@ export default {
       fullscreen: "chart/getTableFullscreen",
       ticker: "chart/getTicker",
       lightSwitch: "global/getLightSwitch",
-      sse: "chart/sse"
+      sse: "chart/sse",
+      sseTrade: "chart/sseTrade"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -192,41 +193,16 @@ export default {
       } else {
         this.max = "calc(100vh - 250px)";
       }
+    },
+    sseTrade: function(data){
+      this.jockeyRealTime(data);
     }
   },
   mounted() {
     //this.sse.addEventListener("trade", this.sseInfo);
-    this.symbol_id = '29235365118214144';
-    this.$api.chart.stocks
-      .brokersActivity({
-        "symbol-id": this.symbol_id
-      })
-      .then(response => {
-        this.jockey = response.data;
-        for (let i = 0; i < response.data.length; i++) {
-          this.jockey[i].broker_code = this.jockey[i].broker_code;
-          this.jockey[i].broker_description = this.jockey[i].broker_description;
-          this.jockey[i].buy_volume = this.jockey[i].buying.volume;
-          this.jockey[i].buy_avprice = this.jockey[i].buying.average_price;
-          this.jockey[i].buy_value = this.jockey[i].buying.value;
-          this.jockey[i].buy_mweight = this.jockey[
-            i
-          ].buying.market_weight_percentage;
-          this.jockey[i].sell_volume = this.jockey[i].selling.volume;
-          this.jockey[i].sell_avprice = this.jockey[i].selling.average_price;
-          this.jockey[i].sell_value = this.jockey[i].selling.value;
-          this.jockey[i].sell_mweight = this.jockey[
-            i
-          ].selling.market_weight_percentage;
-          this.jockey[i].net_volume = this.jockey[i].net.volume;
-          this.jockey[i].net_value = this.jockey[i].net.value;
-        }
-        this.desc = true;
-        this.sortArray("buy_volume");
-      });
   },
   methods: {
-  ...mapActions({
+ /*...mapActions({
         setSSETrade: "chart/setSSETrade"
       }),
     sseTrade: function(e){
@@ -235,7 +211,7 @@ export default {
       }catch (error){
 
       }
-    },
+    }, */
     addcomma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
@@ -286,7 +262,49 @@ export default {
           this.sortArray("buy_volume");
         });
     },
-
+    jockeyRealTime(data){
+      if(this.symbol_id == data.sym_id){   
+          for (let index = 0; index < this.jockey.length; index++) {
+                  if(this.jockey[index].broker_code == data.b){
+                      this.jockey[index].buy_volume = parseFloat(this.jockey[index].buy_volume) + parseFloat(data.exvol);
+                      this.jockey[index].buy_value = parseFloat(this.jockey[index].buy_value) + (parseFloat(data.exvol) * parseFloat(data.exp));
+                      this.jockey[index].buy_avprice = this.jockey[index].buy_value / this.jockey[index].buy_volume;
+                      this.jockey[index].buy_mweight = (this.jockey[index].buy_volume / this.totalBuyVolume()) * 100;
+                      this.jockey[index].net_volume = this.jockey[index].buy_volume - parseFloat(this.jockey[index].sell_volume);
+                      this.jockey[index].net_value = this.jockey[index].buy_value - parseFloat(this.jockey[index].sell_value);
+                      let updatedItem = {...this.jockey[index]};
+                      this.jockey.splice(index, 1, updatedItem);
+                      this.updateEffect(this.jockey[index].broker_code);
+                  }
+                  if(this.jockey[index].broker_code == data.s){
+                      this.jockey[index].sell_volume = parseFloat(this.jockey[index].sell_volume) + parseFloat(data.exvol);
+                      this.jockey[index].sell_value = parseFloat(this.jockey[index].sell_value) + (parseFloat(data.exvol) * parseFloat(data.exp));
+                      this.jockey[index].sell_avprice = this.jockey[index].sell_value / this.jockey[index].sell_volume;
+                      this.jockey[index].sell_mweight = (this.jockey[index].sell_volume / this.totalSellVolume()) * 100;
+                      this.jockey[index].net_volume = this.jockey[index].buy_volume - parseFloat(this.jockey[index].sell_volume);
+                      this.jockey[index].net_value = this.jockey[index].buy_value - parseFloat(this.jockey[index].sell_value);
+                      let updatedItem = {...this.jockey[index]};
+                      this.jockey.splice(index, 1, updatedItem);
+                      this.updateEffect(this.jockey[index].broker_code);
+                  }   
+                        
+          }
+      }
+    },
+    totalBuyVolume(){
+      let total = 0;
+      for (let i = 0; i < this.jockey.length; i++) {
+            total = total + parseFloat(this.jockey[i].buy_volume);
+      }
+      return total;
+    },
+    totalSellVolume(){
+      let total = 0;
+      for (let i = 0; i < this.jockey.length; i++) {
+            total = total + parseFloat(this.jockey[i].sell_volume);
+      }
+      return total;
+    },
     sortArray(data) {
       if (this.desc) {
         this.desc = false;
@@ -305,6 +323,14 @@ export default {
         }
         return this.jockey.sort(compare);
       }
+    },
+    updateEffect: dom => {
+      const item = document.getElementById(dom);
+      if (item == null) return;
+      item.style.background = "rgb(182,182,182,.2)";
+      setTimeout(function() {
+        item.style.background = "";
+      }, 200);
     },
     nFormatter(num) {
       if (num >= 1000000000) {

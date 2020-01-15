@@ -52,7 +52,7 @@
               :loading="isLoading"
             >
               <div
-                class="display-1 font-weight-bold loginCard--intro text-center"
+                class="display-1 font-weight-bold loginCard--intro text-center py-2"
               >
                 Welcome to the community!
               </div>
@@ -71,12 +71,12 @@
                     you're in
                   </div>
                   <div class="body-2 text-center secondary--text">
-                    <v-btn icon>
+                    <v-btn class="loginReg__social" icon>
                       <v-icon color="#B6B6B6" class="display-1 mr-5" flat
                         >mdi-facebook</v-icon
                       >
                     </v-btn>
-                    <v-btn icon>
+                    <v-btn class="loginReg__social" icon>
                       <v-icon color="#B6B6B6" class="display-1 ml-5" flat
                         >mdi-twitter</v-icon
                       >
@@ -94,17 +94,10 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-
-    <v-snackbar v-model="alert.model" :color="alert.state">
-      {{ alert.message }}
-      <v-btn color="white" text @click="alert.model = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-dialog>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import Login from "~/components/login/Login";
 import Register from "~/components/login/Register";
 
@@ -159,6 +152,9 @@ export default {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
     changeStep(step) {
       this.stepper = step;
     },
@@ -166,9 +162,13 @@ export default {
       if (this.alert.state && show != true) {
         this.show = false;
       }
-      this.alert.message = message;
-      this.alert.model = true;
-      this.alert.state = state;
+      if (state == "error") state = false;
+      let alert = {
+        model: true,
+        state: state,
+        message: message
+      };
+      this.setAlert(alert);
     }
   }
 };
@@ -193,5 +193,8 @@ export default {
   position: relative;
   right: 13px;
   bottom: 4px;
+}
+.loginReg__social::before {
+  background-color: transparent;
 }
 </style>

@@ -27,7 +27,7 @@ export default {
       {
         rel: "icon",
         type: "image/x-icon",
-        href: `${process.env.APP_URL}/favicon/favicon.ico?v=2`
+        href: `${process.env.APP_URL}/favicon/favicon.ico`
       }
     ],
     script: [

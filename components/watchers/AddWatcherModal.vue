@@ -93,15 +93,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-snackbar
-      v-model="watchList__alert"
-      :color="watchList__alertState ? 'success' : 'error'"
-    >
-      {{ post__responseMsg }}
-      <v-btn color="white" text @click="watchList__alert = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </div>
 </template>
 <style>
@@ -121,8 +112,6 @@ export default {
     takeProfitModel: "",
     stopLossModel: "",
     post__responseMsg: null,
-    watchList__alert: false,
-    watchList__alertState: null,
     watchCardModalLoading: false,
     saveButtonDisable: true
   }),
@@ -157,13 +146,15 @@ export default {
   methods: {
     ...mapActions({
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
-      setRenderChartKey: "watchers/setRenderChartKey"
+      setRenderChartKey: "watchers/setRenderChartKey",
+      setAlert: "global/setAlert"
     }),
     fieldsWatch() {
       if (
         this.stocksDropdownModel &&
         (this.entryPriceModel != "" ||
-          (this.stopLossModel != "" || this.takeProfitModel != ""))
+          this.stopLossModel != "" ||
+          this.takeProfitModel != "")
       ) {
         this.saveButtonDisable = false;
       } else {
@@ -190,26 +181,35 @@ export default {
           function(response) {
             this.watchCardModalLoading = false;
             if (response.success) {
-              this.watchList__alert = true;
-              this.post__responseMsg = response.message;
-              this.watchList__alertState = true;
+              let alert = {
+                model: true,
+                state: true,
+                message: response.message
+              };
+              this.setAlert(alert);
               this.dialog = false;
               //This line sets vuex renderchartkey. Watchlist.vue watches this value, if it detects a change, chart is re-rendered
               this.keyCounter = this.renderChartKey;
               this.keyCounter++;
               this.setRenderChartKey(this.keyCounter);
             } else {
-              this.watchList__alert = true;
-              this.post__responseMsg = response.message;
-              this.watchList__alertState = false;
+              let alert = {
+                model: true,
+                state: false,
+                message: response.message
+              };
+              this.setAlert(alert);
             }
           }.bind(this)
         );
       } else {
         this.watchCardModalLoading = false;
-        this.watchList__alert = true;
-        this.post__responseMsg = "Watchlist already exists!";
-        this.watchList__alertState = false;
+        let alert = {
+          model: true,
+          state: false,
+          message: "Watchlist already exists!"
+        };
+        this.setAlert(alert);
       }
       this.stocksDropdownModel = "";
       this.entryPriceModel = "";

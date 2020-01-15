@@ -42,16 +42,10 @@
         </v-tabs>
       </v-col>
     </v-row>
-    <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
-      {{ alertMessage }}
-      <v-btn color="white" text @click="alert = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import AccountCard from "~/components/settings/AccountCard.vue";
 import AdsCard from "~/components/settings/AdsCard.vue";
 import NotificationsCard from "~/components/settings/NotificationsCard.vue";
@@ -67,11 +61,7 @@ export default {
     PrivacyCard
   },
   data() {
-    return {
-      alert: false,
-      alertState: "",
-      alertMessage: ""
-    };
+    return {};
   },
   computed: {
     ...mapGetters({
@@ -80,10 +70,16 @@ export default {
   },
   mounted: function() {},
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
     showAlert(alert) {
-      this.alert = true;
-      this.alertState = alert[0];
-      this.alertMessage = alert[1];
+      let alertM = {
+        model: true,
+        state: alert[0],
+        message: alert[1]
+      };
+      this.setAlert(alertM);
     }
   }
 };
