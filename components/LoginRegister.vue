@@ -162,10 +162,10 @@ export default {
     changeStep(step) {
       this.stepper = step;
     },
-    showAlert({ message, state }) {
-      // if (this.alert.state && !this.alert.show) {
-      //   this.show = false;
-      // }
+    showAlert({ message, state, show }) {
+      if (this.alert.state && show != true) {
+        this.show = false;
+      }
       this.alert.message = message;
       this.alert.model = true;
       this.alert.state = state;
