@@ -53,7 +53,7 @@
                           class="privacy__field"
                           dense
                           hide-details
-                          success
+                          color="#172431"
                           outlined
                           @change="currentSetting = $event"
                         ></v-select
