@@ -5,8 +5,7 @@
       :class="!hover ? 'watchCard--unfocused' : ''"
       :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
       :dark="lightSwitch == 0 ? false : true"
-      shaped
-      max-height="245"
+      max-height="282"
       :loading="watchCardLoading"
     >
       <div class="watchlistCard__head">

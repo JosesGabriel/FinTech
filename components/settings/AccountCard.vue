@@ -88,7 +88,7 @@
                   ><v-text-field
                     v-model="userName"
                     label="Username"
-                    success
+                    color="#172431"
                     hide-details
                     outlined
                     dense
@@ -126,7 +126,7 @@
                   ><v-text-field
                     v-model="mobile"
                     label="Contact"
-                    success
+                    color="#172431"
                     hide-details
                     outlined
                     dense
@@ -162,7 +162,7 @@
                   ><v-text-field
                     v-model="email"
                     label="Email Address"
-                    success
+                    color="#172431"
                     hide-details
                     outlined
                     dense
