@@ -3,6 +3,7 @@ import stockRepository from "~/api/chart/stockRepository";
 import chartRepository from "~/api/chart/chartRepository";
 import socialRepository from "~/api/social/socialRepository";
 import journalRepository from "~/api/journal/journalRepository";
+import providerRepository from "~/api/authentication/providerRepository";
 // import repository for case to case end point
 
 export default (ctx, inject) => {
@@ -36,6 +37,7 @@ export default (ctx, inject) => {
     },
     authentication: {
       register: initApiRepository("/register"),
+      providers: providerRepository(ctx.$axios),
       verify: initApiRepository("/verify")
     },
     accounts: {
