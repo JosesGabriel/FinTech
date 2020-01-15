@@ -64,6 +64,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      setAlert: "global/setAlert",
       setLoginModalState: "login/setLoginModalState"
     }),
     retrieveParams() {
@@ -77,10 +78,18 @@ export default {
         return this.$axios
           .get(`${process.env.API_URL}/?${params}`)
           .then(({ data }) => {
-            console.log(data);
+            if (data.success) {
+              this.setAlert({
+                state: "success",
+                message: data.message
+              });
+            }
           })
           .catch(() => {
-            console.log("Request error");
+            this.setAlert({
+              state: "error",
+              message: "An error has occurred."
+            });
           });
       }
       if (param.includes("redirected=true")) {
