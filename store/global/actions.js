@@ -9,5 +9,8 @@ export default {
   //end region stock data
   async setFavicon({ commit }, data) {
     await commit("SET_FAVICON", data);
+  },
+  async setAlert({ commit }, data) {
+    await commit("SET_ALERT", data);
   }
 };

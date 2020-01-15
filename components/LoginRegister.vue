@@ -94,17 +94,10 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-
-    <v-snackbar v-model="alert.model" :color="alert.state">
-      {{ alert.message }}
-      <v-btn color="white" text @click="alert.model = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-dialog>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import Login from "~/components/login/Login";
 import Register from "~/components/login/Register";
 
@@ -159,6 +152,9 @@ export default {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
     changeStep(step) {
       this.stepper = step;
     },
@@ -166,9 +162,13 @@ export default {
       if (this.alert.state && show != true) {
         this.show = false;
       }
-      this.alert.message = message;
-      this.alert.model = true;
-      this.alert.state = state;
+      if (state == "error") state = false;
+      let alert = {
+        model: true,
+        state: state,
+        message: message
+      };
+      this.setAlert(alert);
     }
   }
 };

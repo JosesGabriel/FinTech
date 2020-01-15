@@ -138,10 +138,6 @@
         @click="addToWatchlist()"
       >Add to Watchlist</v-btn>
     </v-card-actions>
-    <v-snackbar v-model="watchList__alert" :color="watchList__alertState ? 'success' : 'error'">
-      {{ post__responseMsg }}
-      <v-btn color="white" text @click="watchList__alert = false">Close</v-btn>
-    </v-snackbar>
   </v-card>
 </template>
 <script>
@@ -152,9 +148,6 @@ export default {
   data() {
     return {
       loader: false,
-      post__responseMsg: null,
-      watchList__alert: false,
-      watchList__alertState: null,
       nextButtonDisable: true,
       stocksDropdownModel: null,
       stockList: [],
@@ -396,19 +389,6 @@ export default {
           this.loader = false;
           this.clearFields();
         });
-    },
-    /**
-     * Triggers and shows snackbar alerts
-     *
-     * @param   {Boolean}  state
-     * @param   {string}  message
-     *
-     * @return
-     */
-    showAlert(state, message) {
-      this.watchList__alert = true;
-      this.post__responseMsg = message;
-      this.watchList__alertState = state;
     },
     /**
      * clears all input fields

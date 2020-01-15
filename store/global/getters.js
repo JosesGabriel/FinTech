@@ -10,5 +10,9 @@ export default {
 
   favicon: state => {
     return state.favicon;
+  },
+
+  getAlert(state) {
+    return state.alert;
   }
 };
