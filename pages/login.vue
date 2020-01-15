@@ -68,6 +68,21 @@ export default {
     }),
     retrieveParams() {
       let param = this.$route.fullPath;
+      const { query } = this.$route;
+      if (Object.prototype.hasOwnProperty.call(query, "_action")) {
+        const params = Object.keys(query)
+          .map(key => `${key}=${query[key]}`)
+          .join("&");
+
+        return this.$axios
+          .get(`${process.env.API_URL}/?${params}`)
+          .then(({ data }) => {
+            console.log(data);
+          })
+          .catch(() => {
+            console.log("Request error");
+          });
+      }
       if (param.includes("redirected=true")) {
         this.setLoginModalState(true);
       }
