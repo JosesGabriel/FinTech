@@ -42,6 +42,7 @@
       ></small>
       <small class="ml-3"><a>Forgot your password?</a></small>
     </v-card-text>
+    <Providers />
     <div class="loginButtons--wrapper">
       <v-btn
         class="mb-2"
@@ -62,8 +63,12 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+import Providers from "./Providers";
 
 export default {
+  components: {
+    Providers
+  },
   data() {
     return {
       email: "",
