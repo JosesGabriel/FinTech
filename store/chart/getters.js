@@ -39,6 +39,11 @@ export default {
   index: state => {
     return state.index;
   },
+
+  allstocks: state => {
+    return state.allstocks;
+  },
+
   tabs_sidebar: state => {
     return state.tabs_sidebar;
   },
