@@ -60,7 +60,7 @@
                     item-value="id_str"
                     item-color="success"
                     v-model="GetSelectStock"
-                    class="pa-0 ma-0"
+                    class="pa-0 ma-0 body-2"
                     append-icon="mdi-chevron-down"
                     label="Select Stock"
                     color="success"
@@ -72,7 +72,7 @@
                         :style="{ background: cardbackground }"
                         style="padding: 12px 12px; margin: -16px;"
                       >
-                        <v-list-item-title v-html="data.item.symbol" class="text-uppercase"></v-list-item-title>
+                        <v-list-item-title v-html="data.item.symbol" class="text-uppercase caption"></v-list-item-title>
                       </v-list-item-content>
                     </template>
                   </v-select>
@@ -256,7 +256,7 @@
                     :dark="lightSwitch == true"
                     :menu-props="{offsetY: true, dark: lightSwitch == true}"
                     light
-                    class="enter_amount-deposit-select ma-0"
+                    class="enter_amount-deposit-select ma-0 body-2"
                   >
                     <template slot="item" slot-scope="data">
                       <v-list-item-content
@@ -264,7 +264,7 @@
                         :style="{ background: cardbackground }"
                         style="padding: 12px 12px; margin: -16px;"
                       >
-                        <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
+                        <v-list-item-title v-html="data.item.name" class="text-uppercase caption"></v-list-item-title>
                       </v-list-item-content>
                     </template>
                   </v-select>
@@ -359,7 +359,7 @@
                     <v-select
                       v-model="strategyModel"
                       append-icon="mdi-chevron-down"
-                      class="py-2"
+                      class="py-2 body-2"
                       color="success"
                       :items="strategy"
                       item-color="success"
@@ -385,7 +385,7 @@
                       v-model="tradeplanModel"
                       item-color="success"
                       append-icon="mdi-chevron-down"
-                      class="py-2"
+                      class="py-2 body-2"
                       color="success"
                       :dark="lightSwitch == true"
                       :menu-props="{offsetY: true, dark: lightSwitch == true}"
@@ -409,7 +409,7 @@
                     <v-select
                       v-model="emotionsModel"
                       item-color="success"
-                      class="py-2"
+                      class="py-2 body-2"
                       color="success"
                       append-icon="mdi-chevron-down"
                       :items="emotions"

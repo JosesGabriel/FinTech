@@ -376,28 +376,28 @@ export default {
       let profit = 0;
       let perf = 0;
       console.log("Checked");
-      // for (let i = 0; i < this.portfolioLogs.length; i++) {
-      //   if (this.portfolioLogs[i].stock_id == symbol) {
-      //     console.log(this.portfolioLogs[i]);
-      //     let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
-      //     let mvalue = this.fees(buyResult);
-      //     let tcost =
-      //       this.portfolioLogs[i].position *
-      //       this.portfolioLogs[i].average_price;
-      //     profit = parseFloat(mvalue) - parseFloat(tcost);
-      //     perf = (profit / tcost) * 100;
+      for (let i = 0; i < this.portfolioLogs.length; i++) {
+        if (this.portfolioLogs[i].stock_id == symbol) {
+          console.log(this.portfolioLogs[i]);
+          let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
+          let mvalue = this.fees(buyResult);
+          let tcost =
+            this.portfolioLogs[i].position *
+            this.portfolioLogs[i].average_price;
+          profit = parseFloat(mvalue) - parseFloat(tcost);
+          perf = (profit / tcost) * 100;
 
-      //     this.portfolioLogs[i].market_value = mvalue;
-      //     this.portfolioLogs[i].profit_loss = profit;
-      //     this.portfolioLogs[i].pl_percentage = perf;
+          this.portfolioLogs[i].market_value = mvalue;
+          this.portfolioLogs[i].profit_loss = profit;
+          this.portfolioLogs[i].pl_percentage = perf;
 
-      //     let updatedItem = {
-      //       ...this.portfolioLogs[i],
-      //       ...{ market_value: this.portfolioLogs[i].market_value }
-      //     };
-      //     this.portfolioLogs.splice(i, 1, updatedItem);
-      //   }
-      // }
+          let updatedItem = {
+            ...this.portfolioLogs[i],
+            ...{ market_value: this.portfolioLogs[i].market_value }
+          };
+          this.portfolioLogs.splice(i, 1, updatedItem);
+        }
+      }
     },
     fees(buyResult) {
       let dpartcommission = buyResult * 0.0025;

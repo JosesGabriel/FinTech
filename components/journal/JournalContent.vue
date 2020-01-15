@@ -28,7 +28,7 @@
           item-value="id"
           return-object
           :menu-props="{offsetY: false, dark: lightSwitch == true}"
-          class="select_portfolio selectjournal_portfolio mt-2 success--text"
+          class="select_portfolio selectjournal_portfolio mt-2 success--text body-2"
           item-color="success"
           append-icon="mdi-chevron-down"
           background-color="success"
@@ -45,7 +45,7 @@
               :style="{ background: cardbackground }"
               style="padding: 12px 12px; margin: -16px;"
             >
-              <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
+              <v-list-item-title v-html="data.item.name" class="text-uppercase caption"></v-list-item-title>
             </v-list-item-content>
           </template>
           <template v-slot:append-item>
@@ -58,7 +58,7 @@
               @click.stop="showCreatePortForm=true"
             >
               <v-list-item-content>
-                <v-list-item-title class="text-uppercase">Sum of Real Portfolio</v-list-item-title>
+                <v-list-item-title class="text-uppercase caption">Sum of Real Portfolio</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <v-list-item
@@ -69,7 +69,7 @@
               @click.stop="showCreatePortForm=true"
             >
               <v-list-item-content>
-                <v-list-item-title class="text-uppercase">Sum of Virtual Portfolio</v-list-item-title>
+                <v-list-item-title class="text-uppercase caption">Sum of Virtual Portfolio</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <v-list-item
@@ -79,7 +79,7 @@
               :style="{ background: cardbackground }"
             >
               <v-list-item-content>
-                <v-list-item-title class="text-uppercase">
+                <v-list-item-title class="text-uppercase caption">
                   Create Portfolio
                   <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon>
                 </v-list-item-title>

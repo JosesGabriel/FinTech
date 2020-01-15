@@ -26,6 +26,7 @@
           item-value="value"
           label="Type of Portfolio"
           color="success"
+          class="body-2"
           item-color="success"
           dense
           :dark="lightSwitch == true"
@@ -39,7 +40,7 @@
               :style="{ background: cardbackground }"
               style="padding: 12px 12px; margin: -16px;"
             >
-              <v-list-item-title v-html="data.item.type" class="text-uppercase"></v-list-item-title>
+              <v-list-item-title v-html="data.item.type" class="text-uppercase caption"></v-list-item-title>
             </v-list-item-content>
           </template>
         </v-select>
