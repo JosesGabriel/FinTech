@@ -13,8 +13,9 @@
           <v-col cols="12">
             <v-text-field
               v-model="email"
+              class="login__textfield"
               label="Email"
-              color="primary"
+              color="success"
               dense
               hide-details
             ></v-text-field>
@@ -22,10 +23,11 @@
           <v-col cols="12">
             <v-text-field
               v-model="password"
+              class="login__textfield"
               :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
               :type="showPassword ? 'text' : 'password'"
               label="Password"
-              color="primary"
+              color="success"
               dense
               hide-details
               @click:append="showPassword = !showPassword"
@@ -33,14 +35,15 @@
           </v-col>
         </v-row>
       </v-container>
+      <small class="ml-3"
+        ><a class="success--text">Forgot your password?</a></small
+      >
       <small
         ><v-checkbox
           class="ml-3 remember--checkbox"
           label="Remember me"
-          value="John"
         ></v-checkbox
       ></small>
-      <small class="ml-3"><a>Forgot your password?</a></small>
     </v-card-text>
     <div class="loginButtons--wrapper">
       <v-btn
@@ -55,7 +58,9 @@
       </v-btn>
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
-        <a class="text-center" @click="$emit('stepper', 3)">Sign Up</a></span
+        <a class="text-center success--text" @click="$emit('stepper', 3)"
+          >Sign Up</a
+        ></span
       >
     </div>
   </v-card>
@@ -107,4 +112,19 @@ export default {
     }
   }
 };
+// .v-input__control.v-input__slot.v-input__append-inner.v-input__icon
+//   i
 </script>
+<style>
+.login__textfield
+  .v-input__control
+  .v-input__slot
+  .v-input__append-inner
+  .v-input__icon
+  i {
+  font-size: 20px;
+}
+.login__textfield .v-input__control .v-input__slot .v-text-field__slot label {
+  font-size: 14px;
+}
+</style>
