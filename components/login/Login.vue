@@ -112,8 +112,6 @@ export default {
     }
   }
 };
-// .v-input__control.v-input__slot.v-input__append-inner.v-input__icon
-//   i
 </script>
 <style>
 .login__textfield
