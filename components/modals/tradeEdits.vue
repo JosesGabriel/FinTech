@@ -13,13 +13,24 @@
                 offset-y="true"
                 item-color="success"
                 append-icon="mdi-chevron-down"
-                class="mb-1"
+                class="py-2 body-2"
                 :items="strategy"
                 label="Select Strategy"
-                flat
                 :dark="lightSwitch == true"
                 :menu-props="{offsetY: true, dark: lightSwitch == true}"
-              ></v-select>
+                light
+                dense
+              >
+                <template slot="item" slot-scope="data">
+                  <v-list-item-content
+                    :dark="lightSwitch == true"
+                    :style="{ background: cardbackground }"
+                    style="padding: 12px 12px; margin: -16px;"
+                  >
+                    <v-list-item-title v-html="data.item" class="text-capitalize caption"></v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </v-select>
             </div>
             <div>
               <v-select
@@ -27,26 +38,49 @@
                 offset-y="true"
                 item-color="success"
                 append-icon="mdi-chevron-down"
-                class="mb-1"
+                class="py-2 body-2"
                 :items="tradeplan"
                 label="Select Trade Plan"
-                flat
                 :dark="lightSwitch == true"
                 :menu-props="{offsetY: true, dark: lightSwitch == true}"
-              ></v-select>
+                light
+                dense
+              >
+                <template slot="item" slot-scope="data">
+                  <v-list-item-content
+                    :dark="lightSwitch == true"
+                    :style="{ background: cardbackground }"
+                    style="padding: 12px 12px; margin: -16px;"
+                  >
+                    <v-list-item-title v-html="data.item" class="text-capitalize caption"></v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </v-select>
             </div>
             <div>
               <v-select
                 v-model="emotionsModel"
                 offset-y="true"
                 item-color="success"
+                class="py-2 body-2"
                 append-icon="mdi-chevron-down"
                 :items="emotions"
                 label="Select Emotions"
-                flat
                 :dark="lightSwitch == true"
                 :menu-props="{offsetY: true, dark: lightSwitch == true}"
-              ></v-select>
+                light
+                dense
+              >
+                <template slot="item" slot-scope="data">
+                  <v-list-item-content
+                    :dark="lightSwitch == true"
+                    :style="{ background: cardbackground }"
+                    style="padding: 12px 12px; margin: -16px;"
+                  >
+                    <v-list-item-title v-html="data.item" class="text-capitalize caption"></v-list-item-title>
+                  </v-list-item-content>
+                </template>
+              </v-select>
             </div>
             <div>
               <v-textarea
@@ -112,6 +146,9 @@ export default {
       renderEditKey: "journal/getRenderEditKey",
       lightSwitch: "global/getLightSwitch"
     }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    },
     show: {
       get() {
         if (this.visible) {
@@ -132,7 +169,6 @@ export default {
       }
     }
   },
-  mounted() {},
   methods: {
     ...mapActions({
       setRenderEditKey: "journal/setRenderEditKey"

@@ -19,8 +19,9 @@
               <v-text-field
                 v-model="firstName"
                 :rules="nameRules"
+                class="login__textfield"
                 label="First name"
-                color="primary"
+                color="success"
                 dense
                 hide-details
               ></v-text-field>
@@ -29,8 +30,9 @@
               <v-text-field
                 v-model="lastName"
                 :rules="nameRules"
+                class="login__textfield"
                 label="Last name"
-                color="primary"
+                color="success"
                 dense
                 hide-details
               ></v-text-field>
@@ -39,9 +41,10 @@
               <v-text-field
                 v-model="emailAddress"
                 :rules="emailRules"
+                class="login__textfield"
                 type="email"
                 label="Email address"
-                color="primary"
+                color="success"
                 dense
                 hide-details
               ></v-text-field>
@@ -50,8 +53,9 @@
               <v-text-field
                 v-model="userName"
                 :rules="usernameRules"
+                class="login__textfield"
                 label="Username"
-                color="primary"
+                color="success"
                 dense
                 hide-details
               ></v-text-field>
@@ -60,15 +64,22 @@
               <v-text-field
                 v-model="password"
                 :rules="passwordRules"
+                class="login__textfield"
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="showPassword ? 'text' : 'password'"
                 label="Password"
-                color="primary"
+                color="success"
                 dense
                 hide-details
                 @click:append="showPassword = !showPassword"
               ></v-text-field>
             </v-col>
+
+            <span class="mt-3 pl-4 caption secondary--text"
+              >By signing up you agree to
+              <a class="success--text">Lyduz Terms</a> and
+              <a class="success--text">Policies.</a></span
+            >
           </v-row>
         </v-container>
       </v-card-text>
@@ -86,7 +97,9 @@
         </v-btn>
         <span class="text-center d-block  caption w-100"
           >Already have an account?
-          <a class="text-center" @click="$emit('stepper', 2)">Sign In</a></span
+          <a class="text-center success--text" @click="$emit('stepper', 2)"
+            >Sign In</a
+          ></span
         >
       </div>
     </v-form>
@@ -166,7 +179,7 @@ export default {
     },
     signUp() {
       this.confirmPassword = this.password;
-      this.registerLoading = "primary";
+      this.registerLoading = "success";
       let params = {
         first_name: this.firstName,
         last_name: this.lastName,
@@ -183,14 +196,16 @@ export default {
           if (response.success) {
             this.$emit("alert", {
               message: response.message,
-              state: "success"
+              state: "success",
+              show: true
             });
-            setTimeout(
-              function() {
-                this.show = false;
-              }.bind(this),
-              3000
-            );
+            this.$emit("stepper", 4);
+            // setTimeout(
+            //   function() {
+            //     this.show = false;
+            //   }.bind(this),
+            //   3000
+            // );
           } else {
             this.$emit("alert", { message: response.message, state: "error" });
           }

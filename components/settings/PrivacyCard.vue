@@ -24,9 +24,11 @@
         <v-expansion-panels flat>
           <v-expansion-panel v-for="n in privacyLabelList.length" :key="n">
             <v-expansion-panel-header
+              ref="expansionPanel"
               :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
               >{{ privacyLabelList[n - 1] }}</v-expansion-panel-header
             >
+            <v-divider style="border-color:#172431" />
             <v-expansion-panel-content
               :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
             >
@@ -38,16 +40,17 @@
                   <v-col cols="5">
                     <span>{{ profilePrivacyOptions[n - 1][i - 1] }}</span>
                   </v-col>
-                  <v-col cols="5">
+                  <v-col cols="4">
                     <v-row
                       v-if="privacyToggleMode && currentSettingIndex == i - 1"
                     >
-                      <v-col cols="12"
+                      <v-col cols="12" class="pa-0"
                         ><v-select
                           :items="privacyOptions"
                           item-text="text"
                           item-value="value"
                           placeholder="Public"
+                          class="privacy__field"
                           dense
                           hide-details
                           success
@@ -114,7 +117,9 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
-  mounted() {},
+  mounted() {
+    this.$refs.expansionPanel[0].$el.click();
+  },
   methods: {
     /**
      * triggers and shows snackbar alert
@@ -161,3 +166,9 @@ export default {
   }
 };
 </script>
+<style>
+.privacy__field {
+  transform: scale(0.8);
+  transform-origin: top left;
+}
+</style>

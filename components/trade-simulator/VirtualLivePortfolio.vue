@@ -587,7 +587,7 @@ export default {
 
       this.sse = new EventSource(
         //"http://localhost:8021/sse/market-data/pse/all"
-         "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+        process.env.SSE_STREAM + "market-data/pse/all"
       );
 
       this.sse.onopen = function() {
@@ -606,8 +606,8 @@ export default {
            
           for(let i =0; i< that.stockSym.length; i++){ 
             if(that.stockSym[i] == data.sym_id){
-                //console.log('SYmbol - '+ data.sym_id);
-                //console.log('Price - '+ data.exp);
+                console.log('SYmbol - '+ data.sym_id);
+                console.log('Price - '+ data.exp);
                 that.trigger(data.sym_id, data.exp);
             }
           }
@@ -646,7 +646,6 @@ export default {
                 profit = parseFloat(this.portfolioLogs[i].Profit);
                 perf = parseFloat(this.portfolioLogs[i].Perf);
                 tmvalue = parseFloat(tmvalue) + parseFloat(this.portfolioLogs[i].MarketValue);
-                
             }
                 tploss = parseFloat(tploss) + parseFloat(profit);
                 tplossperf = parseFloat(tplossperf) + parseFloat(perf);  
