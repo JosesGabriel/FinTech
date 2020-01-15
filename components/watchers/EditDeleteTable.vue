@@ -133,14 +133,18 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey",
       setAlert: "global/setAlert"
     }),
+    /**
+     * GET Data from User Watchlist
+     * Converts stock symbol_id to stock code like; 123123123 = 'JFC'
+     *
+     * @return
+     */
     populateStockDropdown() {
       // GET Data from User Watchlist
       // Converts stock symbol_id to stock code like; 123123123 = 'JFC'
       this.shemes = JSON.parse(JSON.stringify(this.userWatchedStocks)); //removes vuex pointer and two way data binding
       this.userStockData = this.shemes;
       for (let i = 0; i < this.userStockData.length; i++) {
-        //Just converts stock_id to stock symbol
-        //INEFFICIENT AS FUCK; todo Refactor and improve
         const params = {
           "symbol-id": this.userStockData[i].stock_id
         };
@@ -152,12 +156,25 @@ export default {
         );
       }
     },
+    /**
+     * fires when user is on edit mode
+     *
+     * @param   {string}  item
+     *
+     * @return
+     */
     editItem(item) {
       this.editedIndex = this.userStockData.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-
+    /**
+     * fires when user clicks delete button
+     *
+     * @param   {[type]}  item  [item description]
+     *
+     * @return  {[type]}        [return description]
+     */
     deleteItem(item) {
       this.watchCardModalLoading = "primary";
       const index = this.userStockData.indexOf(item);
@@ -191,7 +208,11 @@ export default {
           );
       }
     },
-
+    /**
+     * Closes dialog
+     *
+     * @return
+     */
     close() {
       this.dialog = false;
       setTimeout(() => {
@@ -199,7 +220,12 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-
+    /**
+     * Will fire when user finishes editing and clicks save button.
+     * Executes PUT request
+     *
+     * @return  {[type]}  [return description]
+     */
     save() {
       this.tableLoading = "primary";
       if (this.editedIndex > -1) {

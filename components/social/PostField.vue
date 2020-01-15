@@ -166,6 +166,13 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    /**
+     * Fires when user clicks post button in social
+     * Will also run some specific code if user has images
+     * attached to their post
+     *
+     * @return
+     */
     postField__submit: function() {
       this.postField__loading = true;
 
@@ -177,7 +184,7 @@ export default {
           visibility: "public",
           status: "active"
         };
-        this.$api.social.create
+        this.$api.social.actions
           .create(params)
           .then(
             function(response) {
@@ -195,7 +202,7 @@ export default {
           visibility: "public",
           status: "active"
         };
-        this.$api.social.create
+        this.$api.social.actions
           .create(params)
           .then(
             function(response) {
@@ -208,9 +215,20 @@ export default {
           });
       }
     },
+    /**
+     * clicks actual input type file button. lisod i-style ang <input type="file">
+     *
+     * @return
+     */
     onClickImageUploadBtn: function() {
-      this.$refs.postField__inputRef.click(); // clicks actual input type file button. lisod i-style ang <input type="file">
+      this.$refs.postField__inputRef.click();
     },
+    /**
+     * fires when user clicks post button and they have images attached to the post
+     * Will post to GCP server
+     *
+     * @return
+     */
     uploadImage: function() {
       this.loader = "success";
       for (let i = 0; i < this.$refs.postField__inputRef.files.length; i++) {
@@ -229,6 +247,14 @@ export default {
           });
       }
     },
+    /**
+     * Detects when input field triggers a change
+     * splits file name to get file type and pass to generateImagePreviews()
+     *
+     * @param   {[type]}  e
+     *
+     * @return
+     */
     onInputFileChange: function(e) {
       this.uploadImage();
       var files = e.target.files || e.dataTransfer.files;
@@ -238,6 +264,14 @@ export default {
         this.generateImagePreviews(files[i], filetype);
       }
     },
+    /**
+     * Generates the small image previews that can be seen after user selects images to upload
+     *
+     * @param   {object}  file
+     * @param   {string}  type
+     *
+     * @return
+     */
     generateImagePreviews: function(file, type) {
       var reader = new FileReader();
       reader.onload = e => {
@@ -248,9 +282,24 @@ export default {
       };
       reader.readAsDataURL(file);
     },
+    /**
+     * Fires when user clicks 'x' button in image previews
+     *
+     * @param   {integer}  closeId
+     *
+     * @return
+     */
     removeImage: function(closeId) {
       this.$set(this.postField__imagesArray, closeId - 1, "");
     },
+    /**
+     * clears post text field
+     *
+     * @param   {string}  type
+     * @param   {string}  message
+     *
+     * @return
+     */
     clearInputs: function(type, message) {
       this.postFieldModel = "";
       this.postField__loading = false;

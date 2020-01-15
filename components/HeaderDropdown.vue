@@ -69,6 +69,11 @@ export default {
     ...mapActions({
       setLightSwitch: "global/setLightSwitch"
     }),
+    /**
+     * fires when user clicks logout button
+     *
+     * @return
+     */
     logout() {
       this.$auth.logout();
     }

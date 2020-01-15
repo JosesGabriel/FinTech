@@ -204,6 +204,11 @@ export default {
     this.watchCardMount();
   },
   methods: {
+    /**
+     * Get PSEI 10 day data points
+     *
+     * @return
+     */
     watchCardMount() {
       //Get PSEI 10 day data points
       const params = {

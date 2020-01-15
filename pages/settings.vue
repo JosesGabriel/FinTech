@@ -73,6 +73,13 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    /**
+     * Fires global snackbar alert
+     *
+     * @param   {object}  alert
+     *
+     * @return
+     */
     showAlert(alert) {
       let alertM = {
         model: true,

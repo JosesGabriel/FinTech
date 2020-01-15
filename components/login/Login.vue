@@ -85,6 +85,11 @@ export default {
     })
   },
   methods: {
+    /**
+     * fires when user logs in to the site
+     *
+     * @return
+     */
     async login() {
       this.isLoading = true;
       this.$auth
