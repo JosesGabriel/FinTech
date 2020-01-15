@@ -52,7 +52,7 @@
               :loading="isLoading"
             >
               <div
-                class="display-1 font-weight-bold loginCard--intro text-center"
+                class="display-1 font-weight-bold loginCard--intro text-center py-2"
               >
                 Welcome to the community!
               </div>
@@ -71,12 +71,12 @@
                     you're in
                   </div>
                   <div class="body-2 text-center secondary--text">
-                    <v-btn icon>
+                    <v-btn class="loginReg__social" icon>
                       <v-icon color="#B6B6B6" class="display-1 mr-5" flat
                         >mdi-facebook</v-icon
                       >
                     </v-btn>
-                    <v-btn icon>
+                    <v-btn class="loginReg__social" icon>
                       <v-icon color="#B6B6B6" class="display-1 ml-5" flat
                         >mdi-twitter</v-icon
                       >
@@ -193,5 +193,8 @@ export default {
   position: relative;
   right: 13px;
   bottom: 4px;
+}
+.loginReg__social::before {
+  background-color: transparent;
 }
 </style>
