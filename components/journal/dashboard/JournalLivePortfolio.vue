@@ -1,5 +1,5 @@
 <template>
-  <v-col class="pa-0" ref="componentWrapper"> 
+  <v-col class="pa-0" ref="componentWrapper">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
       <h1 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">OPEN POSITION/S (PHP)</h1>
@@ -147,11 +147,7 @@
         ></v-pagination>
       </v-card>
     </v-card>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
     <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
     <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" />
@@ -337,9 +333,13 @@ export default {
               this.totalProfitLossPerf +
               parseFloat(this.portfolioLogs[i].pl_percentage);
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
-            this.portfolioLogs[i] = {...this.portfolioLogs[i], execute: false};
+            this.portfolioLogs[i] = {
+              ...this.portfolioLogs[i],
+              execute: false
+            };
           }
           // Loading on table
+          console.log(this.portfolioLogs);
           this.livePortfolioLoading = false;
         }.bind(this)
       );
@@ -354,7 +354,7 @@ export default {
         this.counter = 0;
       }
       this.sse = new EventSource(
-        "https://stream-api.arbitrage.ph/sse/market-data/pse/all"
+        `${process.env.STREAM_API_URL}/sse/market-data/pse/all`
         // "http://localhost:8021/sse/market-data/pse/all"
       );
       this.sse.onopen = function() {
@@ -375,31 +375,29 @@ export default {
     trigger: function(symbol, lprice) {
       let profit = 0;
       let perf = 0;
+      console.log("Checked");
+      // for (let i = 0; i < this.portfolioLogs.length; i++) {
+      //   if (this.portfolioLogs[i].stock_id == symbol) {
+      //     console.log(this.portfolioLogs[i]);
+      //     let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
+      //     let mvalue = this.fees(buyResult);
+      //     let tcost =
+      //       this.portfolioLogs[i].position *
+      //       this.portfolioLogs[i].average_price;
+      //     profit = parseFloat(mvalue) - parseFloat(tcost);
+      //     perf = (profit / tcost) * 100;
 
-      for (let i = 0; i < this.portfolioLogs.length; i++) {
-        if (this.portfolioLogs[i].stock_id == symbol) {
-          let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
+      //     this.portfolioLogs[i].market_value = mvalue;
+      //     this.portfolioLogs[i].profit_loss = profit;
+      //     this.portfolioLogs[i].pl_percentage = perf;
 
-          let mvalue = this.fees(buyResult);
-          let tcost =
-            this.portfolioLogs[i].position *
-            this.portfolioLogs[i].average_price;
-          profit = parseFloat(mvalue) - parseFloat(tcost);
-          perf = (profit / tcost) * 100;
-
-          this.portfolioLogs[i].market_value = mvalue;
-          this.portfolioLogs[i].profit_loss = profit;
-          this.portfolioLogs[i].pl_percentage = perf;
-
-          this.portfolioLogs[i].execute = true;
-
-          let updatedItem = {
-            ...this.portfolioLogs[i],
-            ...{ market_value: this.portfolioLogs[i].market_value }
-          };
-          this.portfolioLogs.splice(i, 1, updatedItem);
-        }
-      }
+      //     let updatedItem = {
+      //       ...this.portfolioLogs[i],
+      //       ...{ market_value: this.portfolioLogs[i].market_value }
+      //     };
+      //     this.portfolioLogs.splice(i, 1, updatedItem);
+      //   }
+      // }
     },
     fees(buyResult) {
       let dpartcommission = buyResult * 0.0025;
@@ -413,7 +411,13 @@ export default {
       let dsccp = buyResult * 0.0001;
       let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
       return buyResult - dall;
+    },
+    closeSSE: function() {
+      this.sse.close();
     }
+  },
+  beforeDestroy() {
+    this.closeSSE();
   },
   watch: {
     selectedPortfolio: function() {

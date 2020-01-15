@@ -293,7 +293,7 @@
                   >
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
-                  <v-btn @click="quantityModel += boardLotModel" text icon color="success">
+                  <v-btn @click="quantityModel += parseFloat(boardLotModel)" text icon color="success">
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
                 </v-col>
@@ -359,7 +359,7 @@
                     <v-select
                       v-model="strategyModel"
                       append-icon="mdi-chevron-down"
-                      class="mb-1"
+                      class="py-2"
                       color="success"
                       :items="strategy"
                       item-color="success"
@@ -383,17 +383,16 @@
                   <div>
                     <v-select
                       v-model="tradeplanModel"
-                      offset-y="true"
                       item-color="success"
                       append-icon="mdi-chevron-down"
-                      class="mb-1"
+                      class="py-2"
                       color="success"
                       :dark="lightSwitch == true"
                       :menu-props="{offsetY: true, dark: lightSwitch == true}"
-                      light
                       :items="tradeplan"
                       label="Select Trade Plan"
-                      flat
+                      light
+                      dense
                     >
                       <template slot="item" slot-scope="data">
                         <v-list-item-content
@@ -409,16 +408,16 @@
                   <div>
                     <v-select
                       v-model="emotionsModel"
-                      offset-y="true"
                       item-color="success"
+                      class="py-2"
                       color="success"
                       append-icon="mdi-chevron-down"
                       :items="emotions"
                       :dark="lightSwitch == true"
                       :menu-props="{offsetY: true, dark: lightSwitch == true}"
-                      light
                       label="Select Emotions"
-                      flat
+                      light
+                      dense
                     >
                       <template slot="item" slot-scope="data">
                         <v-list-item-content
@@ -504,7 +503,7 @@
                   >
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
-                  <v-btn @click="quantitySellModel += boardLotModel" text icon color="success">
+                  <v-btn @click="quantitySellModel += parseFloat(boardLotModel)" text icon color="success">
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
                 </v-col>
@@ -598,7 +597,7 @@ export default {
       priceModel: "0.00",
       priceSellModel: "0.00",
       quantityModel: 0.0,
-      quantitySellModel: 0,
+      quantitySellModel: 0.0,
       totalCostModel: 0,
       totalCostSellModel: 0,
       AvailableBoardLot: 0,
@@ -660,8 +659,8 @@ export default {
         if (!value) {
           this.$emit("close");
           this.priceModel = 0;
-          this.quantityModel = null;
-          this.quantitySellModel = null;
+          this.quantityModel = 0.0;
+          this.quantitySellModel = 0.0;
           this.strategyModel = "";
           this.tradeplanModel = "";
           this.emotionsModel = "";
@@ -784,7 +783,7 @@ export default {
             this.setRenderPortfolioKey(this.keyCreateCounter);
             this.GetSelectStock = null;
             this.priceModel = 0;
-            this.quantityModel = null;
+            this.quantityModel = 0.0;
             this.strategyModel = null;
             this.tradeplanModel = null;
             this.emotionsModel = null;
@@ -839,7 +838,7 @@ export default {
             this.setRenderPortfolioKey(this.keyCreateCounter);
             this.GetSelectStock = null;
             this.priceSellModel = 0;
-            this.quantitySellModel = null;
+            this.quantitySellModel = 0.0;
             this.dateModel = new Date().toISOString().substr(0, 10);
             this.e1 = 1;
 
