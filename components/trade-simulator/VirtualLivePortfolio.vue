@@ -587,7 +587,7 @@ export default {
 
       this.sse = new EventSource(
         //"http://localhost:8021/sse/market-data/pse/all"
-        "https://stream-api.lyduz.com/sse/market-data/pse/all"
+        process.env.SSE_STREAM + "market-data/pse/all"
       );
 
       this.sse.onopen = function() {
