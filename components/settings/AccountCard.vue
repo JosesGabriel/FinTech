@@ -24,32 +24,41 @@
         <v-container class="pa-0">
           <v-row>
             <v-col cols="4">
-              <span>Name</span>
+              <span class="white--text">Name</span>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="5">
               <span v-if="!nameToggle">{{ firstName }} {{ lastName }}</span>
-              <v-row v-else>
-                <v-col cols="5"
-                  ><v-text-field
-                    v-model="firstName"
-                    label="First Name"
-                    success
-                    hide-details
-                    outlined
-                    dense
-                  ></v-text-field
-                ></v-col>
-                <v-col cols="5"
-                  ><v-text-field
-                    v-model="lastName"
-                    label="Last Name"
-                    success
-                    hide-details
-                    outlined
-                    dense
-                  ></v-text-field
-                ></v-col>
-              </v-row>
+              <div v-else>
+                <v-row>
+                  <v-col cols="4" class="py-1">
+                    <span class="caption">First Name</span>
+                  </v-col>
+                  <v-col cols="6" class="py-1">
+                    <v-text-field
+                      v-model="firstName"
+                      class="name__field"
+                      color="#172431"
+                      hide-details
+                      outlined
+                      dense
+                    ></v-text-field
+                  ></v-col>
+                </v-row>
+                <v-row
+                  ><v-col cols="4" class="py-1">
+                    <span class="caption">Last Name</span>
+                  </v-col>
+                  <v-col cols="6" class="py-1"
+                    ><v-text-field
+                      v-model="lastName"
+                      class="name__field"
+                      color="#172431"
+                      hide-details
+                      outlined
+                      dense
+                    ></v-text-field></v-col
+                ></v-row>
+              </div>
             </v-col>
             <v-col cols="2" class="pa-0">
               <v-btn
@@ -70,16 +79,16 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span>User Name</span>
+              <span class="white--text">User Name</span>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="5">
               <span v-if="!usernameToggle">{{ userName }}</span>
               <v-row v-else>
                 <v-col cols="12"
                   ><v-text-field
                     v-model="userName"
                     label="Username"
-                    success
+                    color="#172431"
                     hide-details
                     outlined
                     dense
@@ -106,9 +115,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span>Contact</span>
+              <span class="white--text">Contact</span>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="5">
               <span v-if="!contactToggle"
                 ><i>{{ mobile ? mobile : "No number added yet." }}</i></span
               >
@@ -117,7 +126,7 @@
                   ><v-text-field
                     v-model="mobile"
                     label="Contact"
-                    success
+                    color="#172431"
                     hide-details
                     outlined
                     dense
@@ -144,16 +153,16 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span>Email Address</span>
+              <span class="white--text">Email Address</span>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="5">
               <span v-if="!emailToggle">{{ email }}</span>
               <v-row v-else>
                 <v-col cols="12"
                   ><v-text-field
                     v-model="email"
                     label="Email Address"
-                    success
+                    color="#172431"
                     hide-details
                     outlined
                     dense
@@ -180,21 +189,47 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span>Password</span>
+              <span class="white--text">Password</span>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="5">
               <span v-if="!passwordToggle">*******</span>
               <v-row v-else>
-                <v-col cols="12"
+                <v-col cols="12" class="py-0"
                   ><v-text-field
-                    v-model="password"
-                    label="Password"
-                    success
+                    v-model="currentPassword"
+                    class="name__field"
+                    label="Current Password"
+                    color="#172431"
                     hide-details
                     outlined
                     dense
                   ></v-text-field
                 ></v-col>
+                <v-col cols="12" class="py-0"
+                  ><v-text-field
+                    v-model="newPassword"
+                    class="name__field"
+                    label="New Password"
+                    color="#172431"
+                    hide-details
+                    outlined
+                    dense
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="12" class="py-0"
+                  ><v-text-field
+                    v-model="confirmNewPassword"
+                    class="name__field"
+                    label="Re-type new Password"
+                    color="#172431"
+                    hide-details
+                    outlined
+                    dense
+                  ></v-text-field
+                ></v-col>
+                <v-col cols="12" class="py-0">
+                  <a class="success--text caption">Forgot your password?</a>
+                </v-col>
               </v-row>
             </v-col>
             <v-col cols="2" class="pa-0">
@@ -221,7 +256,7 @@
           </v-row> -->
           <v-row>
             <v-col cols="12">
-              <a>Delete Your Account and Information</a>
+              <a class="white--text">Delete Your Account and Information</a>
             </v-col>
           </v-row>
         </v-container>
@@ -251,7 +286,9 @@ export default {
       userName: this.$auth.user.data.user.username,
       mobile: this.$auth.user.data.user.mobile,
       email: this.$auth.user.data.user.email,
-      password: "",
+      currentPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
       alert: [],
       cardLoader: false
     };
@@ -347,3 +384,9 @@ export default {
   }
 };
 </script>
+<style>
+.name__field {
+  transform: scale(0.7);
+  transform-origin: top left;
+}
+</style>

@@ -45,18 +45,51 @@
             <Register @alert="showAlert" @stepper="changeStep" />
           </v-stepper-content>
 
-          <v-stepper-content step="4">
+          <v-stepper-content step="4" class="pa-0">
             <v-card
-              class="mb-12"
-              color="grey lighten-1"
-              height="200px"
-            ></v-card>
-
-            <v-btn color="primary" @click="stepper = 1">
-              Continue
-            </v-btn>
-
-            <v-btn text>Cancel</v-btn>
+              height="584px"
+              :dark="isLightMode == 0 ? false : true"
+              :loading="isLoading"
+            >
+              <div
+                class="display-1 font-weight-bold loginCard--intro text-center py-2"
+              >
+                Welcome to the community!
+              </div>
+              <div class="body-2 text-center secondary--text">
+                Check your email to verify your account
+              </div>
+              <v-card-text class="pa-0">
+                <v-container class="pa-0">
+                  <v-row>
+                    <v-col cols="12" class="pa-0">
+                      <v-img src="castle_register.svg"></v-img>
+                    </v-col>
+                  </v-row>
+                  <div class="body-2 text-center secondary--text">
+                    What's a humble brag between peers? <br />Let them know
+                    you're in
+                  </div>
+                  <div class="body-2 text-center secondary--text">
+                    <v-btn class="loginReg__social" icon>
+                      <v-icon color="#B6B6B6" class="display-1 mr-5" flat
+                        >mdi-facebook</v-icon
+                      >
+                    </v-btn>
+                    <v-btn class="loginReg__social" icon>
+                      <v-icon color="#B6B6B6" class="display-1 ml-5" flat
+                        >mdi-twitter</v-icon
+                      >
+                    </v-btn>
+                  </div>
+                </v-container>
+              </v-card-text>
+              <a
+                class="float-right no-transform success--text skip__btn overline"
+                @click="stepper = 2"
+                >Skip</a
+              >
+            </v-card>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -129,8 +162,8 @@ export default {
     changeStep(step) {
       this.stepper = step;
     },
-    showAlert({ message, state }) {
-      if (this.alert.state) {
+    showAlert({ message, state, show }) {
+      if (this.alert.state && show != true) {
         this.show = false;
       }
       this.alert.message = message;
@@ -155,5 +188,13 @@ export default {
 }
 .remember--checkbox label {
   font-size: 0.75rem;
+}
+.skip__btn {
+  position: relative;
+  right: 13px;
+  bottom: 4px;
+}
+.loginReg__social::before {
+  background-color: transparent;
 }
 </style>

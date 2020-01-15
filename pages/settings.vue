@@ -3,8 +3,10 @@
     <v-row class="mb-5" no-gutters>
       <v-col cols="12">
         <v-tabs
+          active-class="success--text"
           background-color="transparent"
           vertical
+          hide-slider
           :dark="lightSwitch == 0 ? false : true"
         >
           <v-tab class="no-transform caption settings__tabs">

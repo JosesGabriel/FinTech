@@ -63,7 +63,7 @@
                   item-color="success"
                   color="success"
                   dense
-                  class="enter_amount-deposit-select ma-0"
+                  class="enter_amount-deposit-select ma-0 body-2"
                 >
                   <template slot="item" slot-scope="data">
                     <v-list-item-content
@@ -71,7 +71,7 @@
                       :style="{ background: cardbackground }"
                       style="padding: 12px 12px; margin: -16px;"
                     >
-                      <v-list-item-title v-html="data.item.name" class="text-capitalize"></v-list-item-title>
+                      <v-list-item-title v-html="data.item.name" class="text-capitalize caption"></v-list-item-title>
                     </v-list-item-content>
                   </template>
                 </v-select>
