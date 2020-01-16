@@ -17,7 +17,6 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import axios from "axios"; //temporary. 'this' keyword is not accessible on asyncData method
 import Newsfeed from "~/components/social/Newsfeed";
 
 export default {
@@ -37,11 +36,21 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
-  async asyncData({ params }) {
-    return axios
-      .get(`https://dev-api.arbitrage.ph/api/social/posts/${params.id}`)
+  async asyncData({ $axios, params }) {
+    // return axios
+    //   .get(`https://dev-api.arbitrage.ph/api/social/posts/${params.id}`)
+    //   .then(res => {
+    //     return { post: res.data.data.post };
+    //   });
+
+    // asyncData lifecycle has no access to 'this' keyword. Needs to use $axios syntax
+    $axios
+      .get(params.id)
       .then(res => {
         return { post: res.data.data.post };
+      })
+      .catch(e => {
+        console.log(e);
       });
   },
   head() {
@@ -65,7 +74,7 @@ export default {
         },
         {
           property: "fb:app_id",
-          content: "407039123333666"
+          content: process.env.FB_APP_ID
         }
       ]
     };
@@ -74,6 +83,13 @@ export default {
   layout: "main",
   mounted() {},
   methods: {
+    /**
+     * Captures data emitted by Newsfeed component
+     *
+     * @param   {object}  object
+     *
+     * @return
+     */
     parsePost(object) {
       this.post = object[0].content;
       if (object[0].attachments_count > 0) {

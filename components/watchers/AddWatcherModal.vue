@@ -149,6 +149,12 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey",
       setAlert: "global/setAlert"
     }),
+    /**
+     * controls save button disabled property based on whether user has completely
+     * input on all fields
+     *
+     * @return
+     */
     fieldsWatch() {
       if (
         this.stocksDropdownModel &&
@@ -161,6 +167,13 @@ export default {
         this.saveButtonDisable = true;
       }
     },
+    /**
+     * Fires when user clicks add watch button.
+     * First checks if user is already watching that specific stock
+     * if not, execute POST request to api to add to watched stocks
+     *
+     * @return  {[type]}  [return description]
+     */
     addWatch() {
       this.watchCardModalLoading = "success";
       let stockExists = false;

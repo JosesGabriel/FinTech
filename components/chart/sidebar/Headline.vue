@@ -75,6 +75,9 @@ import { nativeBus } from "~/helpers/native-bus";
 
 export default {
   name: "Headline",
+  data: () => ({
+    counter: 0
+  }),
   head() {
     return {
       title: this.stock.description,
@@ -88,6 +91,21 @@ export default {
       link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
     };
   },
+  mounted() {
+    // request of sir davin to have a dynamic favicon
+    window.setInterval(() => {
+      this.counter += 1;
+      if (this.counter >= 20) {
+        this.$store.commit(
+          "global/SET_FAVICON",
+          `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
+            Math.random() * 999
+          )}`
+        );
+        this.counter = 0;
+      }
+    }, 100);
+  },
   computed: {
     ...mapGetters({
       symbolid: "chart/symbolid",
@@ -99,7 +117,8 @@ export default {
       stock_marketcap: "chart/stock_marketcap",
       headline_loading: "chart/headline_loading",
       favicon: "global/favicon",
-      sse: "chart/sse"
+      sse: "chart/sse",
+      blink: "chart/blink"
     }),
     changetype() {
       let value = this.stock.change;
@@ -135,16 +154,18 @@ export default {
     ...mapActions({
       setSSEInfo: "chart/setSSEInfo"
     }),
-    updateEffect: dom => {
+    updateEffect: function(dom) {
       const item = document.getElementById(dom);
       item.style.background = "rgb(182,182,182,.2)";
-      setTimeout(function() {
+      setTimeout(() => {
         item.style.background = "";
-      }, 100);
+      }, this.blink);
     },
     tickSoundFavicon: function(change) {
       const beepSound = new Audio("/audio/vk_notification.mp3");
       beepSound.play();
+      // reset counter
+      this.counter = 0;
 
       if (change > 0) {
         this.$store.commit(
@@ -174,7 +195,7 @@ export default {
         if (this.symbolid == undefined) return;
         const data = JSON.parse(e.data);
         // set sse info to state
-        this.setSSEInfo(data);
+        //this.setSSEInfo(data);
         // emit sse info
         nativeBus.$emit("b-tv-sse-all", data);
 
@@ -201,8 +222,11 @@ export default {
         this.$store.commit("chart/SET_STOCK_OBJ", { high: data.h });
         this.$store.commit("chart/SET_STOCK_OBJ", { low: data.l });
         this.$store.commit("chart/SET_STOCK_OBJ", { open: data.o });
+
+        const totalaverage = data.val / data.vol;
+        const average = isNaN(totalaverage) ? 0 : totalaverage;
         this.$store.commit("chart/SET_STOCK_OBJ", {
-          average: data.val / data.vol
+          average
         });
         // create a tick sound and favicon for every update in sse
         this.tickSoundFavicon(data.chg);

@@ -33,6 +33,12 @@ export default {
     this.initDepthbar();
   },
   methods: {
+    /**
+     * Fires when component is mounted, gets the full depth of specific stock.
+     * market depth of stock
+     *
+     * @return  {function}  [return description]
+     */
     initDepthbar: function() {
       this.progbar.loading = true;
       this.progbar.value = 100;

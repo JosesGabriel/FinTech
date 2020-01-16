@@ -49,13 +49,14 @@ export default {
   },
   head() {
     return {
-      link: [{ rel: "icon", type: "image/x-icon", href: "/lyduz.ico" }]
+      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
     };
   },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      alert: "global/getAlert"
+      alert: "global/getAlert",
+      favicon: "global/favicon"
     })
   },
   mounted() {

@@ -164,7 +164,8 @@ export default {
       stock_average: "chart/stock_average",
       stock_trades: "chart/stock_trades",
       stock_weekyearlow: "chart/stock_weekyearlow",
-      stock_weekyearhigh: "chart/stock_weekyearhigh"
+      stock_weekyearhigh: "chart/stock_weekyearhigh",
+      blink: "chart/blink"
     })
   },
   watch: {
@@ -200,12 +201,12 @@ export default {
     }
   },
   methods: {
-    updateEffect: dom => {
+    updateEffect: function(dom) {
       const item = document.getElementById(dom);
       item.style.background = "rgb(182,182,182,.2)";
-      setTimeout(function() {
+      setTimeout(() => {
         item.style.background = "";
-      }, 100);
+      }, this.blink);
     }
   }
 };

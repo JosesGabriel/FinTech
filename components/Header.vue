@@ -33,7 +33,7 @@
         ></v-text-field>
       </div>
       <router-link to="/" class="social__router">
-        <v-btn class="header__button" text @click="paletteSwitch()">
+        <v-btn class="header__button" text>
           Power Tools
         </v-btn>
       </router-link>
@@ -109,21 +109,7 @@ export default {
   methods: {
     ...mapActions({
       setStockList: "global/setStockList"
-    }),
-    toggleSearch() {
-      this.searchButtonIsVisible
-        ? (this.searchButtonIsVisible = false)
-        : (this.searchButtonIsVisible = true);
-    },
-    paletteSwitch() {
-      if (localStorage.currentMode && localStorage.currentMode == 0) {
-        localStorage.currentMode = 1;
-        this.isLightMode = 1;
-      } else {
-        localStorage.currentMode = 0;
-        this.isLightMode = 0;
-      }
-    }
+    })
   }
 };
 </script>

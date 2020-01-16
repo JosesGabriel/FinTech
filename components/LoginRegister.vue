@@ -155,9 +155,26 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    /**
+     * Fires when login or register components emit a changeStep
+     * Basically scrolls/switches to different tab of stepper
+     *
+     * @param   {integer}  step
+     *
+     * @return
+     */
     changeStep(step) {
       this.stepper = step;
     },
+    /**
+     * Fires global snackbar alert
+     *
+     * @param   {string}  message
+     * @param   {string}  state
+     * @param   {string}  show
+     *
+     * @return
+     */
     showAlert({ message, state, show }) {
       if (this.alert.state && show != true) {
         this.show = false;

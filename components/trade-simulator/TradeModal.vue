@@ -569,9 +569,7 @@ export default {
         dformat =
           [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/") +
           " " +
-          [d.getHours(), d.getMinutes(), d.getSeconds()].join(":"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
-
-      
+          [d.getHours(), d.getMinutes(), d.getSeconds()].join(":"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format      
       // if Sell is selected
       if (this.sellSelected) {
         
@@ -600,8 +598,7 @@ export default {
               sellparams
             )
             .then(response => {
-              if (response.success) {
-               
+              if (response.success) {         
                 this.setSimulatorOpenPosition(this.OpenPosition);
                 this.e1 = 1;
                 this.onreset = false;

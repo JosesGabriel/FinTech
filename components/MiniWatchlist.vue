@@ -235,6 +235,11 @@ export default {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
+    /**
+     * Gets current users watched stocks
+     *
+     * @return
+     */
     watchCardMount() {
       this.$api.watchlist.watchlists.index().then(response => {
         this.watchListObject = response.data.watchlist;

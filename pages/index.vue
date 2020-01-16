@@ -52,9 +52,13 @@ export default {
   },
   mounted() {},
   methods: {
-    toggle: function() {
-      this.isOpen = !this.isOpen;
-    },
+    /**
+     * Captures when post field emits that user has posted new post
+     *
+     * @param   {integer}  value
+     *
+     * @return  {function}
+     */
     authorNewPost: function(value) {
       this.newPost = value;
     }
