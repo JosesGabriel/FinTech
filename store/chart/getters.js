@@ -112,5 +112,9 @@ export default {
   },
   sseBidask: state => {
     return state.sseBidask;
+  },
+
+  blink: state => {
+    return state.blink;
   }
 };
