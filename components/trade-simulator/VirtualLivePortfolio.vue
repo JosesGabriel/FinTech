@@ -35,7 +35,7 @@
       :style="{ background: cardbackground }"
       class="data_table-container pl-10 secondary--text"
     >  
-         
+        
             <template v-slot:item.stock_id="{ item }" >
               <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
             </template>
@@ -86,10 +86,10 @@
                   @click.stop="showEditForm=true"
                   text
                 >Edit</v-btn>
-                <v-btn small class="caption btn_sidemenu" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
+                <v-btn small class="caption btn_sidemenu"  @click.stop="showDelete=true" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
               </div>
               <v-icon small class="mr-2" @mouseover="menuLogsShow(item)">mdi-dots-horizontal</v-icon>
-            </template>    
+            </template> 
 
     </v-data-table>
 
@@ -243,6 +243,7 @@
       @close="EnterTradeModal=false"
     />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
+    <trade-delete :visible="showDelete" v-on:confirmedDelete="deleteConfirm" :itemDetails="itemDetails" @close="showDelete=false" />
     <share-modal
       v-if="showShareForm"
       :imageid="shareLink"
@@ -254,6 +255,7 @@
 import TradeModal from "~/components/trade-simulator/TradeModal";
 import resetModal from "~/components/trade-simulator/reset";
 import shareModal from "~/components/modals/share";
+import tradeDelete from "~/components/modals/tradeDelete";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -281,6 +283,7 @@ export default {
       portfolioLogs: [],
       openposition: [],
       stockSym: [],
+      itemDetails: null,
       portfolioLogsrealtime: [],
       realtime: false,
       items: [{ title: "Note" }, { title: "Delete" }],
@@ -309,15 +312,18 @@ export default {
       dayprior: 0,
       priorProfitLoss: 0,
       date: new Date().toISOString().substr(0, 10),
-      streamTrigger: '',
       filtered: '',
       lastprice: 0,
+      showDelete: false,
+      confirmdelete: false,
+      itemToDelete: '',
     };
   },
   components: {
     TradeModal,
     resetModal,
-    shareModal
+    shareModal,
+    tradeDelete
   },
   props: {
     Capital: {
@@ -336,7 +342,9 @@ export default {
     EnterTradeModal: function() {
       this.trade_modal = this.EnterTradeModal;
     },
-       
+    confirmdelete: function(){
+      this.execute(this.itemToDelete);
+    }  
 
   },
   methods: {
@@ -383,7 +391,9 @@ export default {
                   strategy: this.portfolioLogs[i].metas.strategy,
                   tradeplan: this.portfolioLogs[i].metas.plan,
                   emotion: this.portfolioLogs[i].metas.emotion,
-                  notes: this.portfolioLogs[i].metas.notes
+                  notes: this.portfolioLogs[i].metas.notes,
+                  fund: this.simulatorPortfolioID,
+                  action: this.portfolioLogs[i].metas.stock_id
                 };
               this.totalmvalue =
                   parseFloat(this.totalmvalue) + parseFloat(this.portfolioLogs[i].market_value);
@@ -399,34 +409,30 @@ export default {
       );
       
     },
-    deleteLive: function(item) {
-      //TODO: use repo
-      if (confirm("Do you really want to delete?")) {
-        this.$axios
-          .$post(
-            process.env.API_URL +
-              "/journal/funds/" +
-              this.simulatorPortfolioID +
-              "/delete/" +
-              item.id
-          )
-          .then(response => {
-            if (response.success) {
-              let profit = 0;
-              let perc = 0;
-              for (let index = 0; index < this.portfolioLogs.length; index++) {
-                if(this.portfolioLogs[index].metas.stock_id == item.id){            
-                  profit = this.portfolioLogs[index].Profit;
-                  perc = this.portfolioLogs[index].Perf;
-                  this.portfolioLogs.splice(index, 1);
-                  this.totalProfitLoss = parseFloat(this.totalProfitLoss) - parseFloat(profit);
-                  this.totalPerf = parseFloat(this.totalPerf) - parseFloat(perc);   
-                  this.$emit("totalUnrealized", this.totalProfitLoss);
-                }
-              }
-            }
-          });
+    deleteConfirm(value){
+      this.confirmdelete = value;
+    },
+    execute(item){
+      if(this.confirmdelete){
+        let profit = 0;
+        let perc = 0;
+        for (let index = 0; index < this.portfolioLogs.length; index++) {
+          if(this.portfolioLogs[index].metas.stock_id == item){            
+            profit = this.portfolioLogs[index].Profit;
+            perc = this.portfolioLogs[index].Perf;
+            this.openposition.splice(index,1);
+            this.portfolioLogs.splice(index, 1);
+            this.totalProfitLoss = parseFloat(this.totalProfitLoss) - parseFloat(profit);
+            this.totalPerf = parseFloat(this.totalPerf) - parseFloat(perc);   
+            this.$emit("totalUnrealized", this.totalProfitLoss);
+          }
+        }
       }
+    },
+    deleteLive: function(item) {    
+      this.confirmdelete = false;
+      this.itemDetails = item;
+      this.itemToDelete = item.id;
     },
     details: function(item, edit) {
       this.editDetails = edit;
