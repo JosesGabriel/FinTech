@@ -18,7 +18,8 @@
             <th
               colspan="4"
               class="text-left j_header"
-              style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;"
+              :style="(sortName == 'buy_volume' ? 'border-bottom: 1px solid #03dac5 !important' : 'border-bottom: 1px solid #414f58 !important')"
+              style="padding-bottom: 6px !important; font-size: 12px;font-weight: bold;"
               @click="sortArray('buy_volume')"
             >
               Buying
@@ -28,6 +29,7 @@
             <th
               colspan="4"
               class="text-left j_header"
+              :style="(sortName == 'sell_volume' ? 'border-bottom: 1px solid #03dac5 !important' : 'border-bottom: 1px solid #414f58 !important')"
               style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;"
               @click="sortArray('sell_volume')"
             >
@@ -38,6 +40,7 @@
             <th
               colspan="2"
               class="text-left j_header"
+              :style="(sortName == 'net_volume' ? 'border-bottom: 1px solid #03dac5 !important' : 'border-bottom: 1px solid #414f58 !important')"
               style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;"
               @click="sortArray('net_volume')"
             >
@@ -85,7 +88,8 @@
             <th class="text-right secondary_color pt-2">Value</th>
             <th class="text-right secondary_color pt-2">Weight</th>
             <th class="text-right pt-2"></th>
-            <th class="text-right secondary_color pt-2">Net Volume</th>
+            <th class="text-right secondary_color pt-2"
+            >Net Volume</th>
             <th class="text-right pr-2 secondary_color pt-2">Net Value</th>
           </tr>
         </thead>
@@ -162,6 +166,7 @@ export default {
       current: 0,
       hover: false,
       symbol_id: '',
+      sortName: '',
     };
   },
   computed: {
@@ -199,19 +204,9 @@ export default {
     }
   },
   mounted() {
-    //this.sse.addEventListener("trade", this.sseInfo);
+    
   },
   methods: {
- /*...mapActions({
-        setSSETrade: "chart/setSSETrade"
-      }),
-    sseTrade: function(e){
-      try {
-        console.log('Jocky-',e.data);
-      }catch (error){
-
-      }
-    }, */
     addcomma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
@@ -260,6 +255,7 @@ export default {
           }
           this.desc = true;
           this.sortArray("buy_volume");
+          this.sortName = 'buy_volume';
         });
     },
     jockeyRealTime(data){
@@ -306,6 +302,7 @@ export default {
       return total;
     },
     sortArray(data) {
+      this.sortName = data;
       if (this.desc) {
         this.desc = false;
         function compare(a, b) {

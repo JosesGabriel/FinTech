@@ -305,8 +305,9 @@ export default {
       this.totalProfitLoss = 0;
       this.totalProfitLossPerf = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+
         function(result) {
-         // if(result.meta.logs.length != 0){
+
           this.tradeLogs = result.data.logs;
           this.tradelogs2 = this.tradeLogs;
           let plossperc = [];
@@ -355,8 +356,6 @@ export default {
               }.bind(this)
             );
           }
-
-         // }
 
         }.bind(this)
       );

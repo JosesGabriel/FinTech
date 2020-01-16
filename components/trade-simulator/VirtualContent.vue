@@ -66,7 +66,8 @@
         <v-row class="mt-1">
           <v-col
             md="12"
-            :class="((this.port_total + parseFloat(this.port_capital)) > 0 ? 'positive' : 'negative')"
+            :style="{ color: fontcolor }"
+            :class="((this.port_total + parseFloat(this.port_capital)) > 0 ? '__white' : 'negative')"
             class="text-right pb-0 pl-0 pr-3"
           >{{ this.addcomma(this.port_total + parseFloat(this.port_capital)) }}</v-col>
         </v-row>
@@ -173,7 +174,7 @@
         color="success"
         background-color="black"
         :value="'tab-' + 1"
-        :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"
+        :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #172431')"
       >
         <v-container class="pa-0">
           <VirtualLivePortfolio
@@ -451,7 +452,7 @@ export default {
 }
 .v-menu__content > .v-select-list > .v-list {
   padding: unset;
-  border: 1px solid rgb(23, 36, 49);
+  border: 1px solid #172431;
 }
 .select_portfolio > .v-input__control {
   padding-top: 16px !important;
@@ -509,6 +510,10 @@ export default {
 }
 .neutral {
   color: #535358;
+}
+
+.__white {
+  color: #fff;
 }
 
 .selector
