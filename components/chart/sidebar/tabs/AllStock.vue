@@ -130,7 +130,7 @@ export default {
   watch: {
     sseInfo: function(value) {
       if (this.loading === false) {
-        this.sseAllInfo(value);
+        //this.sseAllInfo(value);
       }
     }
   },

@@ -32,6 +32,8 @@
       ></v-progress-linear>
     </v-card>
 
+    <h4 v-show="noitems === true" class="text-center">No Watchlist</h4>
+
     <v-card
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
@@ -111,6 +113,7 @@ export default {
   data() {
     return {
       loading: true,
+      noitems: false,
       items: []
     };
   },
@@ -128,7 +131,7 @@ export default {
   watch: {
     sseInfo: function(value) {
       if (this.loading === false) {
-        this.sseAllInfo(value);
+        //this.sseAllInfo(value);
       }
     }
   },
@@ -161,6 +164,8 @@ export default {
         this.loading = false;
       } catch (error) {
         //console.log(error);
+        this.noitems = true;
+        this.loading = false;
       }
     },
     sseAllInfo: function(data) {
@@ -192,7 +197,7 @@ export default {
       const item = document.getElementById(`watch__${dom}`);
       const mouseoverEvent = new Event("mouseleave");
       setTimeout(function() {
-        item.dispatchEvent(mouseoverEvent)
+        item.dispatchEvent(mouseoverEvent);
       }, 200);
     },
     showRemoveButton: function() {},
