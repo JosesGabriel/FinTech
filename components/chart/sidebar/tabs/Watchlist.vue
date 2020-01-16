@@ -122,7 +122,8 @@ export default {
       lightSwitch: "global/getLightSwitch",
       responsive_height: "chart/responsive_height",
       allstocks: "chart/allstocks",
-      sseInfo: "chart/sseInfo"
+      sseInfo: "chart/sseInfo",
+      blink: "chart/blink"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -131,7 +132,7 @@ export default {
   watch: {
     sseInfo: function(value) {
       if (this.loading === false) {
-        //this.sseAllInfo(value);
+        this.sseAllInfo(value);
       }
     }
   },
@@ -193,12 +194,12 @@ export default {
         return "rgb(182, 182, 182, 0.2)";
       }
     },
-    updateEffect: dom => {
+    updateEffect: function(dom) {
       const item = document.getElementById(`watch__${dom}`);
       const mouseoverEvent = new Event("mouseleave");
-      setTimeout(function() {
+      setTimeout(() => {
         item.dispatchEvent(mouseoverEvent);
-      }, 200);
+      }, this.blink);
     },
     showRemoveButton: function() {},
     addWatchlist: function() {

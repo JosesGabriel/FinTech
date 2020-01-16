@@ -35,7 +35,8 @@
       :style="{ background: cardbackground }"
       class="data_table-container pl-10 secondary--text"
     >  
-            <template v-slot:item.stock_id="{ item }">
+        
+            <template v-slot:item.stock_id="{ item }" >
               <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
             </template>
             <template v-slot:item.Position="{ item }">
@@ -47,8 +48,9 @@
             <template v-slot:item.TotalCost="{ item }">
               <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.TotalCost }}</span>
             </template>
+
             <template v-slot:item.MarketValue="{ item }" >
-              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.MarketValue }}</span>
+              <span class="pl-3" :id="item.stock_id" :style="{ color: fontcolor2 }">{{ item.MarketValue }}</span>
             </template>
             <template v-slot:item.Profit="{ item }">
               <span
@@ -56,7 +58,7 @@
               >{{ item.Profit }}</span>
             </template>
             <template v-slot:item.Perf="{ item }">
-              <span
+              <span    
                 :class="(parseFloat(item.Perf) > 0 ? 'positive' : parseFloat(item.Perf) < 0 ? 'negative' : '')"
               >{{ item.Perf }}%</span>
             </template>
@@ -84,10 +86,11 @@
                   @click.stop="showEditForm=true"
                   text
                 >Edit</v-btn>
-                <v-btn small class="caption btn_sidemenu" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
+                <v-btn small class="caption btn_sidemenu"  @click.stop="showDelete=true" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
               </div>
               <v-icon small class="mr-2" @mouseover="menuLogsShow(item)">mdi-dots-horizontal</v-icon>
-            </template>    
+            </template> 
+
     </v-data-table>
 
 
@@ -240,6 +243,7 @@
       @close="EnterTradeModal=false"
     />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
+    <trade-delete :visible="showDelete" v-on:confirmedDelete="deleteConfirm" :itemDetails="itemDetails" @close="showDelete=false" />
     <share-modal
       v-if="showShareForm"
       :imageid="shareLink"
@@ -251,6 +255,7 @@
 import TradeModal from "~/components/trade-simulator/TradeModal";
 import resetModal from "~/components/trade-simulator/reset";
 import shareModal from "~/components/modals/share";
+import tradeDelete from "~/components/modals/tradeDelete";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -278,6 +283,7 @@ export default {
       portfolioLogs: [],
       openposition: [],
       stockSym: [],
+      itemDetails: null,
       portfolioLogsrealtime: [],
       realtime: false,
       items: [{ title: "Note" }, { title: "Delete" }],
@@ -306,14 +312,18 @@ export default {
       dayprior: 0,
       priorProfitLoss: 0,
       date: new Date().toISOString().substr(0, 10),
-      streamTrigger: '',
       filtered: '',
+      lastprice: 0,
+      showDelete: false,
+      confirmdelete: false,
+      itemToDelete: '',
     };
   },
   components: {
     TradeModal,
     resetModal,
-    shareModal
+    shareModal,
+    tradeDelete
   },
   props: {
     Capital: {
@@ -332,7 +342,9 @@ export default {
     EnterTradeModal: function() {
       this.trade_modal = this.EnterTradeModal;
     },
-       
+    confirmdelete: function(){
+      this.execute(this.itemToDelete);
+    }  
 
   },
   methods: {
@@ -350,6 +362,7 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    
     getOpenPositions() {
       const openparams2 = {
         fund: this.simulatorPortfolioID
@@ -359,96 +372,67 @@ export default {
       this.openposition = [];
       this.stockSym = [];
       this.totalmvalue = 0;
-      let lastprice = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
           this.portfolioLogs = result.data.open;
-          //console.log('Port-', result);
-          for (let i = 0; i < this.portfolioLogs.length; i++) {
-            this.openposition[i] = this.portfolioLogs[i].stock_id;
-            const params = {
-              "symbol-id": this.portfolioLogs[i].stock_id
-            };
-            this.$api.chart.stocks.history(params).then(
-            //this.$api.journal.portfolio.history(params).then(
-              function(result) {
-                this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol; //result.data.symbol;
-                this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
-                let buyResult =
-                  this.portfolioLogs[i].position *
-                  parseFloat(result.data.last).toFixed(2);
-
-                let dpartcommission = buyResult * 0.0025;
-                let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-                // TAX
-                let dtax = dcommission * 0.12;
-                // Transfer Fee
-                let dtransferfee = buyResult * 0.00005;
-                // SCCP
-                let dsccp = buyResult * 0.0001;
-                let dsell = buyResult * 0.006;
-                let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
-                let mvalue = buyResult - dall;
-                let tcost =
-                  this.portfolioLogs[i].position *
-                  this.portfolioLogs[i].average_price;
-                let profit = parseFloat(mvalue) - parseFloat(tcost);
-                let perf = (profit / tcost) * 100;
-                let pos = this.addcomma(this.portfolioLogs[i].position).split(
-                  "."
-                )[0];
-
-                this.totalmvalue =
-                  parseFloat(this.totalmvalue) + parseFloat(mvalue);
-                if (this.portfolioLogs[i].position > 0) {
-                  this.totalProfitLoss =
-                    parseFloat(this.totalProfitLoss) + parseFloat(profit);
-                  this.totalPerf =
-                    parseFloat(this.totalPerf) + parseFloat(perf);
-                }
-                this.portfolioLogs[i].Position = pos;
-                this.portfolioLogs[i].AvgPrice = this.portfolioLogs[
-                  i
-                ].average_price.toFixed(3);
-                this.portfolioLogs[i].TotalCost = this.addcomma(tcost);
-                this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
-                this.portfolioLogs[i].Profit = this.addcomma(profit);
-                this.portfolioLogs[i].Perf = this.addcomma(perf);
-                this.portfolioLogs[i].action = {
-                  id: result.data.stockidstr,
+         // console.log('Result Live Port -', result.data.open);
+          for (let i = 0; i < result.data.open.length; i++) {
+              this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
+              this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
+              this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol;
+              this.portfolioLogs[i].Position = this.portfolioLogs[i].position;
+              this.portfolioLogs[i].AvgPrice = this.portfolioLogs[i].average_price.toFixed(3);
+              this.portfolioLogs[i].TotalCost = this.addcomma(this.portfolioLogs[i].total_value);
+              this.portfolioLogs[i].MarketValue = this.addcomma(this.portfolioLogs[i].market_value);
+              this.portfolioLogs[i].Profit = this.addcomma(this.portfolioLogs[i].profit_loss);
+              this.portfolioLogs[i].Perf = this.portfolioLogs[i].pl_percentage.toFixed(2);
+              this.portfolioLogs[i].action = {
+                  id: this.portfolioLogs[i].metas.stock_id,
                   strategy: this.portfolioLogs[i].metas.strategy,
                   tradeplan: this.portfolioLogs[i].metas.plan,
                   emotion: this.portfolioLogs[i].metas.emotion,
-                  notes: this.portfolioLogs[i].metas.notes
+                  notes: this.portfolioLogs[i].metas.notes,
+                  fund: this.simulatorPortfolioID,
+                  action: this.portfolioLogs[i].metas.stock_id
                 };
-
-                this.$emit("totalUnrealized", this.totalProfitLoss);
-                this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
-              }.bind(this)
-            );
+              this.totalmvalue =
+                  parseFloat(this.totalmvalue) + parseFloat(this.portfolioLogs[i].market_value);
+              this.totalProfitLoss =
+                    parseFloat(this.totalProfitLoss) + parseFloat(this.portfolioLogs[i].profit_loss);
+              this.totalPerf =
+                    parseFloat(this.totalPerf) + parseFloat(this.portfolioLogs[i].pl_percentage);
+              this.$emit("totalUnrealized", this.totalProfitLoss);
+              this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
           }
-          this.getDayChange();
+           this.getDayChange();
         }.bind(this)
       );
       
     },
-    deleteLive: function(item) {
-      //TODO: use repo
-      if (confirm("Do you really want to delete?")) {
-        this.$axios
-          .$post(
-            process.env.API_URL +
-              "/journal/funds/" +
-              this.simulatorPortfolioID +
-              "/delete/" +
-              item.id
-          )
-          .then(response => {
-            if (response.success) {
-              this.getOpenPositions();
-            }
-          });
+    deleteConfirm(value){
+      this.confirmdelete = value;
+    },
+    execute(item){
+      if(this.confirmdelete){
+        let profit = 0;
+        let perc = 0;
+        for (let index = 0; index < this.portfolioLogs.length; index++) {
+          if(this.portfolioLogs[index].metas.stock_id == item){            
+            profit = this.portfolioLogs[index].Profit;
+            perc = this.portfolioLogs[index].Perf;
+            this.openposition.splice(index,1);
+            this.portfolioLogs.splice(index, 1);
+            this.totalProfitLoss = parseFloat(this.totalProfitLoss) - parseFloat(profit);
+            this.totalPerf = parseFloat(this.totalPerf) - parseFloat(perc);   
+            this.$emit("totalUnrealized", this.totalProfitLoss);
+          }
+        }
       }
+    },
+    deleteLive: function(item) {    
+      this.confirmdelete = false;
+      this.itemDetails = item;
+      this.itemToDelete = item.id;
     },
     details: function(item, edit) {
       this.editDetails = edit;
@@ -482,6 +466,14 @@ export default {
               }
             });
       }
+    },
+    updateEffect: dom => {
+      const item = document.getElementById(dom);
+      if (item == null) return;
+      item.style.background = "rgb(182,182,182,.2)";
+      setTimeout(function() {
+        item.style.background = "";
+      }, 400);
     },
     menuLogsShow: function(item) {
       let pl = document.getElementById(`pl_${item.id}`);
@@ -606,8 +598,6 @@ export default {
            
           for(let i =0; i< that.stockSym.length; i++){ 
             if(that.stockSym[i] == data.sym_id){
-                console.log('SYmbol - '+ data.sym_id);
-                console.log('Price - '+ data.exp);
                 that.trigger(data.sym_id, data.exp);
             }
           }
@@ -625,7 +615,7 @@ export default {
        
         for (let i = 0; i < this.portfolioLogs.length; i++) {
             if(this.portfolioLogs[i].metas.stock_id == symbol){
-                
+                let oldvalue = this.portfolioLogs[i].MarketValue;
                 let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
                 let mvalue = this.fees(buyResult);
                 let tcost = this.portfolioLogs[i].position *
@@ -641,7 +631,11 @@ export default {
                 
                 let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
                 this.portfolioLogs.splice(i, 1, updatedItem);
-               
+
+                if(oldvalue != this.portfolioLogs[i].MarketValue){
+                  this.updateEffect(this.portfolioLogs[i].stock_id);
+                }
+
             }else{
                 profit = parseFloat(this.portfolioLogs[i].Profit);
                 perf = parseFloat(this.portfolioLogs[i].Perf);
