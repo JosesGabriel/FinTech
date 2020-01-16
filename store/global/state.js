@@ -6,7 +6,9 @@ export default () => ({
   //region stock data
   stockList: [],
   //endregion stock data
-  favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=2`,
+  favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
+    Math.random() * 999
+  )}`,
 
   //Global snackbar
   alert: {
