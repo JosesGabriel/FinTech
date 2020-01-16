@@ -479,6 +479,13 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    /**
+     * fires when user clicks follow button
+     *
+     * @param   {string}  user_id
+     *
+     * @return
+     */
     followAccount(user_id) {
       const params = user_id;
       this.$api.social.follow
