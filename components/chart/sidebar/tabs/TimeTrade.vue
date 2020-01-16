@@ -85,7 +85,8 @@ export default {
       lightSwitch: "global/getLightSwitch",
       responsive_height: "chart/responsive_height",
       trades: "chart/trades",
-      sse: "chart/sse"
+      sse: "chart/sse",
+      blink: "chart/blink"
     }),
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -165,13 +166,13 @@ export default {
         //console.log(err);
       }
     },
-    updateEffect: dom => {
+    updateEffect: function(dom) {
       const item = document.getElementById(dom);
       if (item == null) return;
       item.style.background = "rgb(182,182,182,.2)";
-      setTimeout(function() {
+      setTimeout(() => {
         item.style.background = "";
-      }, 100);
+      }, this.blink);
     }
   },
   mounted() {

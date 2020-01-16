@@ -62,12 +62,29 @@ export default {
         this.setStock(data);
         this.setMarketCode(data.market_code);
         this.setHeadlineLoading(false);
-        this.$store.commit(
-          "global/SET_FAVICON",
-          `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
-            Math.random() * 999
-          )}`
-        );
+
+        if (data.change > 0) {
+          this.$store.commit(
+            "global/SET_FAVICON",
+            `${process.env.APP_URL}/favicon/up.ico?v=${Math.round(
+              Math.random() * 999
+            )}`
+          );
+        } else if (data.change < 0) {
+          this.$store.commit(
+            "global/SET_FAVICON",
+            `${process.env.APP_URL}/favicon/down.ico?v=${Math.round(
+              Math.random() * 999
+            )}`
+          );
+        } else {
+          this.$store.commit(
+            "global/SET_FAVICON",
+            `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
+              Math.random() * 999
+            )}`
+          );
+        }
       } catch (error) {
         //console.log(error);
       }
