@@ -1,5 +1,5 @@
 <template>
-  <v-container class="page__wrapper" dark>
+  <v-container dark>
     <ProfileCover />
 
     <v-row no-gutters>

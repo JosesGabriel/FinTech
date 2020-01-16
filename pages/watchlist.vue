@@ -114,15 +114,23 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * Captures emit from sectorindexlist which already contains PSEI data
+     * In order to prevent doing another request, this data is then passed to the PSEICard component
+     *
+     * @param   {object}  value
+     *
+     * @return
+     */
     getPSEIData(value) {
       this.pseData = value;
     },
+    /**
+     * Get user watched stocks
+     *
+     * @return  {[type]}  [return description]
+     */
     getUserWatchList() {
-      //Params won't be needed in the future, user token only
-
-      // let userData = {
-      //   user_id: this.$auth.loggedIn ? this.$auth.user.data.user.uuid : "000"
-      // };
       this.$api.watchlist.watchlists.index().then(
         function(response) {
           this.watchListObject = response.data.watchlist;

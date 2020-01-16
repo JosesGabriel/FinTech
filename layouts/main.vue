@@ -5,9 +5,12 @@
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
         <nuxt />
       </v-container>
-      <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
-        {{ alertMessage }}
-        <v-btn color="white" text @click="alert = false">Close</v-btn>
+      <v-snackbar
+        v-model="alert.model"
+        :color="alert.state ? 'success' : 'error'"
+      >
+        {{ alert.message }}
+        <v-btn color="white" text @click="alert.model = false">Close</v-btn>
       </v-snackbar>
     </v-content>
   </v-app>
@@ -41,20 +44,19 @@ export default {
   },
   data() {
     return {
-      isLightMode: 0,
-      alert: false,
-      alertState: false,
-      alertMessage: ""
+      isLightMode: 0
     };
   },
   head() {
     return {
-      link: [{ rel: "icon", type: "image/x-icon", href: "/lyduz.ico" }]
+      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
     };
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      alert: "global/getAlert",
+      favicon: "global/favicon"
     })
   },
   mounted() {

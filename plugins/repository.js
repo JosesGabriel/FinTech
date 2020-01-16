@@ -3,6 +3,7 @@ import stockRepository from "~/api/chart/stockRepository";
 import chartRepository from "~/api/chart/chartRepository";
 import socialRepository from "~/api/social/socialRepository";
 import journalRepository from "~/api/journal/journalRepository";
+import providerRepository from "~/api/authentication/providerRepository";
 // import repository for case to case end point
 
 export default (ctx, inject) => {
@@ -13,11 +14,8 @@ export default (ctx, inject) => {
   const api = {
     social: {
       posts: socialRepository(ctx.$axios),
-      create: initApiRepository("/social/posts"),
+      actions: initApiRepository("/social/posts"),
       upload: initApiRepository("/storage/upload"),
-      deletePost: initApiRepository("/social/posts"),
-      updatePost: initApiRepository("/social/posts"),
-      searchPost: initApiRepository("/social/posts"),
       trendingStocks: initApiRepository("/social/posts/trending"),
       follow: socialRepository(ctx.$axios)
     },
@@ -38,6 +36,7 @@ export default (ctx, inject) => {
     },
     authentication: {
       register: initApiRepository("/register"),
+      providers: providerRepository(ctx.$axios),
       verify: initApiRepository("/verify")
     },
     accounts: {

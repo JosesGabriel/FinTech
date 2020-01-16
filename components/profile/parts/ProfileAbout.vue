@@ -2,9 +2,11 @@
   <v-container class="pa-0" dark>
     <v-card class="transparent__bg pa-3 mb-2" outlined dark>
       <v-row no-gutters>
-        <span class="white--text pa-2 d-block subtitle-1">About</span>
+        <span class="white--text pa-2 d-block font-weight-bold subtitle-1">About</span>
         <v-spacer></v-spacer>
-        <v-btn color="success" icon><v-icon small>mdi-pencil</v-icon></v-btn>
+        <v-btn color="success" icon>
+          <v-icon small>mdi-pencil</v-icon>
+        </v-btn>
       </v-row>
       <span
         class="px-2 d-block body-2"
@@ -39,22 +41,54 @@
             <v-list-item-subtitle class="mb-3">10,000</v-list-item-subtitle>
             <v-list-item-title>Ideas Published</v-list-item-title>
             <v-list-item-subtitle class="mb-3">8</v-list-item-subtitle>
-            <v-list-item-title>Contact</v-list-item-title>
-            <v-list-item-subtitle>
-              <v-icon small color="secondary" class="pa-1">mdi-phone</v-icon>(+63) 908 818 4444
-            </v-list-item-subtitle>
-            <v-list-item-subtitle>
-              <v-icon small color="secondary" class="pa-1">mdi-email-outline</v-icon>mariamalalawi@gg.com
-            </v-list-item-subtitle>
-            <v-list-item-subtitle>
-              <v-icon small color="secondary" class="pa-1">mdi-facebook</v-icon>https://www.facebook.com/ivanaxalawi/
-            </v-list-item-subtitle>
-            <v-list-item-subtitle>
-              <v-icon small color="secondary" class="pa-1">mdi-twitter</v-icon>https://twitter.com/ivanaalawi?lang=en
-            </v-list-item-subtitle>
+            <v-row no-gutters>
+              <div>
+                <v-list-item-title>Contact</v-list-item-title>
+                <v-list-item-subtitle>
+                  <v-icon small color="secondary" class="pa-1">mdi-phone</v-icon>(+63) 908 818 4444
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-icon small color="secondary" class="pa-1">mdi-email-outline</v-icon>mariamalalawi@gg.com
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-icon small color="secondary" class="pa-1">mdi-facebook</v-icon>https://www.facebook.com/ivanaxalawi/
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-icon small color="secondary" class="pa-1">mdi-twitter</v-icon>https://twitter.com/ivanaalawi?lang=en
+                </v-list-item-subtitle>
+              </div>
+              <v-spacer></v-spacer>
+              <div class="qr-code">
+                <QRCanvas :options="options" @updated="onUpdated" />
+              </div>
+            </v-row>
           </v-list-item-content>
         </v-list-item>
       </v-container>
     </v-card>
   </v-container>
 </template>
+<script>
+import { QRCanvas } from "qrcanvas-vue";
+
+export default {
+  components: {
+    QRCanvas
+  },
+  data() {
+    return {
+      options: {
+        data: "hello",
+        size: 115,
+        background: "transparent",
+        foreground: "rgba(255, 255, 255, 0.12)"
+      }
+    };
+  },
+  methods: {
+    onUpdated() {
+      console.log("updated");
+    }
+  }
+};
+</script>

@@ -246,8 +246,12 @@ export default {
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
       setLightSwitch: "global/setLightSwitch"
     }),
+    /**
+     * GET Closing Price from Stock History API
+     *
+     * @return
+     */
     watchCardMount() {
-      // GET Closing Price from Stock History API
       const params = {
         "symbol-id": this.userWatchedStocks[this.data].stock_id,
         resolution: "1D",

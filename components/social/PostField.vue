@@ -141,29 +141,17 @@
         </div>
       </div>
     </v-form>
-    <v-snackbar
-      v-model="postField__alert"
-      :color="postField__alertState ? 'success' : 'error'"
-    >
-      {{ post__responseMsg }}
-      <v-btn color="white" text @click="postField__alert = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-card>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      postField__alertState: null,
-      post__responseMsg: null,
       post__isImage: null,
       postFieldModel: null,
       postField__previewImage: [],
       postField__loading: false,
-      postField__alert: false,
       postField__imagesArray: [],
       postField__cloudArray: [],
       loader: false
@@ -175,6 +163,16 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
+    /**
+     * Fires when user clicks post button in social
+     * Will also run some specific code if user has images
+     * attached to their post
+     *
+     * @return
+     */
     postField__submit: function() {
       this.postField__loading = true;
 
@@ -186,18 +184,16 @@ export default {
           visibility: "public",
           status: "active"
         };
-        this.$api.social.create
+        this.$api.social.actions
           .create(params)
           .then(
             function(response) {
-              this.post__responseMsg = response.message;
               this.$emit("authorNewPost", params);
-              this.clearInputs("success");
+              this.clearInputs(true, response.message);
             }.bind(this)
           )
           .catch(error => {
-            this.post__responseMsg = error.response.data.message;
-            this.clearInputs("error");
+            this.clearInputs(false, error.response.data.message);
           });
       } else {
         // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
@@ -206,24 +202,33 @@ export default {
           visibility: "public",
           status: "active"
         };
-        this.$api.social.create
+        this.$api.social.actions
           .create(params)
           .then(
             function(response) {
-              this.post__responseMsg = response.message;
               this.$emit("authorNewPost", params);
-              this.clearInputs("success");
+              this.clearInputs(true, response.message);
             }.bind(this)
           )
           .catch(error => {
-            this.post__responseMsg = error.response.data.message;
-            this.clearInputs("error");
+            this.clearInputs(false, error.response.data.message);
           });
       }
     },
+    /**
+     * clicks actual input type file button. lisod i-style ang <input type="file">
+     *
+     * @return
+     */
     onClickImageUploadBtn: function() {
-      this.$refs.postField__inputRef.click(); // clicks actual input type file button. lisod i-style ang <input type="file">
+      this.$refs.postField__inputRef.click();
     },
+    /**
+     * fires when user clicks post button and they have images attached to the post
+     * Will post to GCP server
+     *
+     * @return
+     */
     uploadImage: function() {
       this.loader = "success";
       for (let i = 0; i < this.$refs.postField__inputRef.files.length; i++) {
@@ -238,11 +243,18 @@ export default {
             }.bind(this)
           )
           .catch(error => {
-            this.post__responseMsg = error.response.data.message;
-            this.clearInputs("error");
+            this.clearInputs(false, error.response.data.message);
           });
       }
     },
+    /**
+     * Detects when input field triggers a change
+     * splits file name to get file type and pass to generateImagePreviews()
+     *
+     * @param   {[type]}  e
+     *
+     * @return
+     */
     onInputFileChange: function(e) {
       this.uploadImage();
       var files = e.target.files || e.dataTransfer.files;
@@ -252,6 +264,14 @@ export default {
         this.generateImagePreviews(files[i], filetype);
       }
     },
+    /**
+     * Generates the small image previews that can be seen after user selects images to upload
+     *
+     * @param   {object}  file
+     * @param   {string}  type
+     *
+     * @return
+     */
     generateImagePreviews: function(file, type) {
       var reader = new FileReader();
       reader.onload = e => {
@@ -262,16 +282,35 @@ export default {
       };
       reader.readAsDataURL(file);
     },
+    /**
+     * Fires when user clicks 'x' button in image previews
+     *
+     * @param   {integer}  closeId
+     *
+     * @return
+     */
     removeImage: function(closeId) {
       this.$set(this.postField__imagesArray, closeId - 1, "");
     },
-    clearInputs: function(type) {
-      type == "success"
-        ? (this.postField__alertState = true)
-        : (this.postField__alertState = false);
-      this.postField__alert = true;
+    /**
+     * clears post text field
+     *
+     * @param   {string}  type
+     * @param   {string}  message
+     *
+     * @return
+     */
+    clearInputs: function(type, message) {
       this.postFieldModel = "";
       this.postField__loading = false;
+
+      let alert = {
+        model: true,
+        state: type,
+        message: message
+      };
+      this.setAlert(alert);
+
       this.removeImage();
     }
   }

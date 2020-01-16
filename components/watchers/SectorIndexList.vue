@@ -53,6 +53,12 @@ export default {
     this.getSectoralIndex();
   },
   methods: {
+    /**
+     * Fires on mount, gets sectoral index
+     * Ignores PSEI index
+     *
+     * @return
+     */
     getSectoralIndex() {
       const params = {
         exchange: "PSE",

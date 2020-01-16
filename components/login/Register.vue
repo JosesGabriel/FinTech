@@ -169,6 +169,11 @@ export default {
     }
   },
   methods: {
+    /**
+     * clears all input fields in this component
+     *
+     * @return
+     */
     clearFields() {
       (this.firstName = ""),
         (this.lastName = ""),
@@ -177,6 +182,11 @@ export default {
         (this.password = ""),
         (this.confirmPassword = "");
     },
+    /**
+     * Fires when user clicks sign up button
+     *
+     * @return
+     */
     signUp() {
       this.confirmPassword = this.password;
       this.registerLoading = "success";

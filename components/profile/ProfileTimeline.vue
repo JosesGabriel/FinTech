@@ -1,5 +1,5 @@
 <template>
-  <v-container class="page__wrapper" dark>
+  <v-container dark>
     <v-row no-gutters>
       <v-col class="px-2" cols="12" sm="12" md="12" lg="12">
         <v-tabs color="success" background-color="transparent" dark>
@@ -10,7 +10,7 @@
           <v-tab :href="`#tab-3`" class="text-capitalize subtitle-1" disabled>Services</v-tab>
 
           <!-- Profile tab -->
-          <v-tab-item class="mt-10" :value="'tab-1'">
+          <v-tab-item class="mt-5" :value="'tab-1'">
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="8" lg="8">
                 <ProfileAbout class="my-2" />
@@ -20,7 +20,7 @@
                 <ProfileInterests class="my-2" />
               </v-col>
               <v-col cols="12" sm="12" md="4" lg="4">
-                <ProfileCourse class="my-2" />
+                <ProfileCourse />
               </v-col>
             </v-row>
           </v-tab-item>
@@ -107,5 +107,8 @@ export default {
 }
 .v-item-group.theme--dark.v-slide-group.v-tabs-bar {
   border-bottom: 1px solid #1f2f39 !important;
+}
+.qr-code {
+  width: 115px;
 }
 </style>

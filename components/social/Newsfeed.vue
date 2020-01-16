@@ -394,12 +394,6 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
-      {{ alertResponse }}
-      <v-btn color="white" text @click="alert = false">
-        Close
-      </v-btn>
-    </v-snackbar>
     <Share
       v-if="showShare"
       :postid="sharePostID"
@@ -408,7 +402,7 @@
   </v-col>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
 import Share from "~/components/modals/share";
 export default {
@@ -435,9 +429,6 @@ export default {
       postsObject: [],
       loader: true,
       pageCount: 1,
-      alert: false,
-      alertState: "",
-      alertResponse: "",
       editTextAreaModel: [],
       currentPost: "",
       deleteDialog: false,
@@ -485,6 +476,9 @@ export default {
     if (this.$route.name == "index") this.scroll();
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
     followAccount(user_id) {
       const params = user_id;
       this.$api.social.follow
@@ -518,7 +512,7 @@ export default {
      * @return
      */
     searchPost() {
-      this.$api.social.searchPost
+      this.$api.social.actions
         .show(this.postid)
         .then(response => {
           this.postsObject = this.postsObject.concat(response.data.post);
@@ -560,7 +554,7 @@ export default {
      * @return
      */
     deletePost(id, index) {
-      this.$api.social.deletePost
+      this.$api.social.actions
         .delete(id)
         .then(response => {
           this.triggerAlert(true, response.message);
@@ -584,7 +578,7 @@ export default {
       let payload = {
         content: content
       };
-      this.$api.social.updatePost
+      this.$api.social.actions
         .put(id, payload)
         .then(response => {
           this.triggerAlert(true, response.message);
@@ -629,11 +623,11 @@ export default {
     /**
      * [post_react description]
      *
-     * @param   {[type]}  post_id  [post_id description]
-     * @param   {[type]}  type     [type description]
-     * @param   {[type]}  index    [index description]
+     * @param   {integer}  post_id
+     * @param   {string}  type
+     * @param   {integer}  index
      *
-     * @return  {[type]}           [return description]
+     * @return
      */
     post_react(post_id, type, index) {
       const params = post_id;
@@ -655,6 +649,13 @@ export default {
         });
       }
     },
+    /**
+     * Watches when user scrolls down to the bottom of the page.
+     * When that condition is satisfied, GET more posts from endpoint
+     * and concatenate it to postsObject
+     *
+     * @return
+     */
     scroll() {
       window.onscroll = () => {
         let bottomOfWindow =
@@ -672,10 +673,21 @@ export default {
         }
       };
     },
+    /**
+     * Triggers snackbar alerts
+     *
+     * @param   {boolean}  type
+     * @param   {string}  message
+     *
+     * @return
+     */
     triggerAlert(type, message) {
-      this.alert = true;
-      this.alertState = type;
-      this.alertResponse = message;
+      let alert = {
+        model: true,
+        state: type,
+        message: message
+      };
+      this.setAlert(alert);
     }
   }
 };

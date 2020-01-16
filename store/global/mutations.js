@@ -9,5 +9,8 @@ export default {
   //end region stock data
   SET_FAVICON(state, data) {
     state.favicon = data;
+  },
+  SET_ALERT(state, data) {
+    state.alert = data;
   }
 };

@@ -10,6 +10,8 @@ export default () => ({
   market_code: null,
   index: true,
 
+  allstocks: [],
+
   stock: {
     average: 0,
     change: 0,
@@ -60,7 +62,7 @@ export default () => ({
       id: 2,
       icon: "mdi-format-list-bulleted-square",
       component: "AllStock",
-      disabled: false
+      disabled: true
     },
     {
       id: 3,

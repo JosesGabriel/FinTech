@@ -1,6 +1,5 @@
 <template>
   <div>
-    <client-only>
       <v-content>
         <v-content v-show="lightSwitch == false">
           <!-- TradingView Widget BEGIN -->
@@ -103,7 +102,6 @@
           <!-- TradingView Widget END -->
         </v-content>
       </v-content>
-    </client-only>
   </div>
 </template>
 

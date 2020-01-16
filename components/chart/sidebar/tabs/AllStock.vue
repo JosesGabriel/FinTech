@@ -130,7 +130,7 @@ export default {
   watch: {
     sseInfo: function(value) {
       if (this.loading === false) {
-        this.sseAllInfo(value);
+        //this.sseAllInfo(value);
       }
     }
   },
@@ -163,7 +163,8 @@ export default {
             last,
             changepercentage,
             value,
-            trades
+            trades,
+            description
           } = data;
           this.all_stocks.push({
             stockidstr,
@@ -172,9 +173,11 @@ export default {
             last,
             changepercentage,
             value,
-            trades
+            trades,
+            description
           });
         });
+        //this.setAllstocks(this.all_stocks);
         this.loading = false;
       } catch (error) {
         console.log(error);

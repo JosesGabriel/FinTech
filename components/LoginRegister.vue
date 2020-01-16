@@ -94,17 +94,10 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-
-    <v-snackbar v-model="alert.model" :color="alert.state">
-      {{ alert.message }}
-      <v-btn color="white" text @click="alert.model = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-dialog>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import Login from "~/components/login/Login";
 import Register from "~/components/login/Register";
 
@@ -159,16 +152,40 @@ export default {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
+    /**
+     * Fires when login or register components emit a changeStep
+     * Basically scrolls/switches to different tab of stepper
+     *
+     * @param   {integer}  step
+     *
+     * @return
+     */
     changeStep(step) {
       this.stepper = step;
     },
+    /**
+     * Fires global snackbar alert
+     *
+     * @param   {string}  message
+     * @param   {string}  state
+     * @param   {string}  show
+     *
+     * @return
+     */
     showAlert({ message, state, show }) {
       if (this.alert.state && show != true) {
         this.show = false;
       }
-      this.alert.message = message;
-      this.alert.model = true;
-      this.alert.state = state;
+      if (state == "error") state = false;
+      let alert = {
+        model: true,
+        state: state,
+        message: message
+      };
+      this.setAlert(alert);
     }
   }
 };

@@ -66,15 +66,6 @@
         </v-icon>
       </template>
     </v-data-table>
-    <v-snackbar
-      v-model="watchList__alert"
-      :color="watchList__alertState ? 'success' : 'error'"
-    >
-      {{ post__responseMsg }}
-      <v-btn color="white" text @click="watchList__alert = false">
-        Close
-      </v-btn>
-    </v-snackbar>
   </div>
 </template>
 <script>
@@ -83,9 +74,6 @@ export default {
   data: () => ({
     dialog: false,
     tableLoading: true,
-    watchList__alert: false,
-    watchList__alertState: null,
-    post__responseMsg: "",
     watchCardModalLoading: false,
     headers: [
       {
@@ -142,16 +130,21 @@ export default {
   methods: {
     ...mapActions({
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
-      setRenderChartKey: "watchers/setRenderChartKey"
+      setRenderChartKey: "watchers/setRenderChartKey",
+      setAlert: "global/setAlert"
     }),
+    /**
+     * GET Data from User Watchlist
+     * Converts stock symbol_id to stock code like; 123123123 = 'JFC'
+     *
+     * @return
+     */
     populateStockDropdown() {
       // GET Data from User Watchlist
       // Converts stock symbol_id to stock code like; 123123123 = 'JFC'
       this.shemes = JSON.parse(JSON.stringify(this.userWatchedStocks)); //removes vuex pointer and two way data binding
       this.userStockData = this.shemes;
       for (let i = 0; i < this.userStockData.length; i++) {
-        //Just converts stock_id to stock symbol
-        //INEFFICIENT AS FUCK; todo Refactor and improve
         const params = {
           "symbol-id": this.userStockData[i].stock_id
         };
@@ -163,12 +156,25 @@ export default {
         );
       }
     },
+    /**
+     * fires when user is on edit mode
+     *
+     * @param   {string}  item
+     *
+     * @return
+     */
     editItem(item) {
       this.editedIndex = this.userStockData.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
-
+    /**
+     * fires when user clicks delete button
+     *
+     * @param   {[type]}  item  [item description]
+     *
+     * @return  {[type]}        [return description]
+     */
     deleteItem(item) {
       this.watchCardModalLoading = "primary";
       const index = this.userStockData.indexOf(item);
@@ -178,24 +184,35 @@ export default {
           .then(
             function(response) {
               if (response.success) {
-                this.watchList__alert = true;
-                this.post__responseMsg = response.message;
-                this.watchList__alertState = true;
+                let alert = {
+                  model: true,
+                  state: true,
+                  message: response.message
+                };
+                this.setAlert(alert);
+
                 this.watchCardModalLoading = false;
                 this.keyCounter = this.renderChartKey;
                 this.keyCounter++;
                 this.setRenderChartKey(this.keyCounter);
                 this.userStockData.splice(index, 1);
               } else {
-                this.watchList__alert = true;
-                this.post__responseMsg = response.message;
-                this.watchList__alertState = false;
+                let alert = {
+                  model: true,
+                  state: false,
+                  message: response.message
+                };
+                this.setAlert(alert);
               }
             }.bind(this)
           );
       }
     },
-
+    /**
+     * Closes dialog
+     *
+     * @return
+     */
     close() {
       this.dialog = false;
       setTimeout(() => {
@@ -203,7 +220,12 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-
+    /**
+     * Will fire when user finishes editing and clicks save button.
+     * Executes PUT request
+     *
+     * @return  {[type]}  [return description]
+     */
     save() {
       this.tableLoading = "primary";
       if (this.editedIndex > -1) {
@@ -216,16 +238,23 @@ export default {
           .put(this.userWatchedStocks[this.editedIndex].id, params)
           .then(response => {
             if (response.success) {
-              this.watchList__alert = true;
-              this.post__responseMsg = response.message;
-              this.watchList__alertState = true;
+              let alert = {
+                model: true,
+                state: true,
+                message: response.message
+              };
+              this.setAlert(alert);
+
               this.keyCounter = this.renderChartKey;
               this.keyCounter++;
               this.setRenderChartKey(this.keyCounter);
             } else {
-              this.watchList__alert = true;
-              this.post__responseMsg = response.message;
-              this.watchList__alertState = false;
+              let alert = {
+                model: true,
+                state: false,
+                message: response.message
+              };
+              this.setAlert(alert);
             }
             this.tableLoading = false;
           });

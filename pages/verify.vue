@@ -1,13 +1,6 @@
 <template>
   <v-container dark>
-    <v-row class="mb-5" no-gutters>
-      <v-snackbar v-model="alert" :color="alertState ? 'success' : 'error'">
-        {{ alertContent }}
-        <v-btn color="white" text @click="alert = false">
-          Close
-        </v-btn>
-      </v-snackbar>
-    </v-row>
+    <v-row class="mb-5" no-gutters> </v-row>
   </v-container>
 </template>
 <script>
@@ -16,11 +9,7 @@ export default {
   components: {},
   auth: false,
   data() {
-    return {
-      alert: false,
-      alertState: "",
-      alertContent: ""
-    };
+    return {};
   },
   mounted: function() {
     this.retrieveParams();
