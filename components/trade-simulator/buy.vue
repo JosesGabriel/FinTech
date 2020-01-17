@@ -1,6 +1,5 @@
 <template>
   <v-container class="pa-0">
-    <!--<div class="separator"></div>-->
     <v-row no-gutters class="pa-3 pb-0">
       <v-col cols="12" sm="12" md="12">
         <v-row no-gutters>
@@ -240,8 +239,7 @@ export default {
     }),
     getPortfolio(){
         this.$api.journal.portfolio.portfolio().then(
-          function(result) {
-          
+          function(result) {        
             for (let i = 0; i < result.data.logs.length; i++) {
               if (
                 result.data.logs[i].type == "virtual"
@@ -328,13 +326,9 @@ export default {
       this.totalCost = this.addcomma(pressfees);
       this.$emit("totalPosition", this.quantity);
     },
-    getBalance: function(item) { 
-      const params = {
-        user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58"
-      };
-      this.$api.journal.portfolio.portfolio(params).then(
-        function(result) {
-          
+    getBalance: function(item) {     
+      this.$api.journal.portfolio.portfolio().then(
+        function(result) {     
           for (let i = 0; i < result.data.logs.length; i++) {
             if (result.data.logs[i].name == item) {
               this.setSimulatorPortfolioID(result.data.logs[i].id);

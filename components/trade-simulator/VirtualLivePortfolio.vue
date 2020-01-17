@@ -121,7 +121,7 @@
       :style="{ background: cardbackground }"
     >
       <v-card>
-        <v-card-title class="success--text" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
+        <v-card-title class="success--text" style="font-size: 16px;" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
         <v-card-text>
           <v-col sm="12" md="12" class="my-0">
             <div>
@@ -450,16 +450,10 @@ export default {
             emotion: this.selectedemotions,
             notes: this.notes
           };
-          this.$axios
-            .$post(
-              process.env.API_URL +
-                "/journal/funds/" +
-                this.simulatorPortfolioID +
-                "/update/" +
-                this.edit_id,
-              editparams
-            )
-            .then(response => {
+          
+        this.$api.journal.portfolio
+        .tradeedit(this.simulatorPortfolioID, this.edit_id, editparams)
+        .then(response => {
               if (response.success) {
                 this.showEditForm = false;
                 this.getOpenPositions();
@@ -500,23 +494,19 @@ export default {
       let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
 
       for (let index = 0; index < this.portfolioLogs.length; index++) {
-           let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
-        console.log('DayChange Date -' + pdate);
+           let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];     
                   const params = {
                     "symbol-id": this.portfolioLogs[index].metas.stock_id,
                     resolution: "1D",
                     limit: 2
                   };
                   this.$api.chart.charts.latest(params).then(
-                    function(result) {
-                      //console.log('Day Cahnge -', result);                    
+                    function(result) {                          
                       let prior_date = new Date(result.data.t[1]*1000);
                       let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
                       let tcost =
                         this.portfolioLogs[index].position *
-                        this.portfolioLogs[index].average_price;
-                        //console.log('Date Current -' + pdate);
-                        //console.log('Date Prior -' + dformat_prior);                     
+                        this.portfolioLogs[index].average_price;                  
                       if (pdate != dformat) {                        
                         let priorPrice = result.data.c[1];
                         let priorbuyResult =
@@ -536,18 +526,12 @@ export default {
                       let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
                       currentProfitLoss =
                         parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-
-                        //console.log('Current -' + currentProfitLoss);
-                        //console.log('Prior -' + this.priorProfitLoss);
                         
                         let daychange =
                            parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
-                        if(this.priorProfitLoss != 0 ){  
-                          //console.log('Capital - '+ this.Capital);
-                          let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
-                          //console.log('Prior Equity -' + dperf);
+                        if(this.priorProfitLoss != 0 ){                          
+                          let dperf = parseFloat(this.Capital) + this.priorProfitLoss;                        
                           daychangeperf = (daychange / dperf) * 100;
-                          //daychangeperf = (daychange / this.priorProfitLoss) * 100;
                         }                     
                       this.$emit("DayChange", daychange);
                       this.$emit("DayChangePerc", daychangeperf);
