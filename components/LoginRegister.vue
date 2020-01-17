@@ -48,7 +48,7 @@
           <v-stepper-content step="4" class="pa-0">
             <v-card height="584px" :dark="isLightMode == 0 ? false : true">
               <div
-                class="display-1 font-weight-bold loginCard--intro text-center py-2"
+                class="display-1 font-weight-bold loginCard--intro text-center py-2 pt-6"
               >
                 Welcome to the community!
               </div>
@@ -205,9 +205,12 @@ export default {
 .skip__btn {
   position: relative;
   right: 13px;
-  bottom: 4px;
+  top: 15px;
 }
 .loginReg__social::before {
   background-color: transparent;
+}
+.loginReg__social:hover .v-btn__content i {
+  color: #03dac5 !important;
 }
 </style>
