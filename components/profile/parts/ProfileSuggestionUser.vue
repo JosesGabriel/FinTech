@@ -16,9 +16,13 @@
           </v-list-item-content>
 
           <v-list-item-action>
-            <v-btn icon>
-              <v-icon color="success">mdi-account-multiple-plus</v-icon>
-            </v-btn>
+            <v-btn
+              outlined
+              color="success"
+              small
+              class="text-capitalize font-weight-bold caption"
+              rounded
+            >Follow</v-btn>
           </v-list-item-action>
         </v-list-item>
       </v-list>

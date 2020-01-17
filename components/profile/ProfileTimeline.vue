@@ -21,8 +21,8 @@
               </v-col>
               <v-col cols="12" sm="12" md="4" lg="4">
                 <!-- <ProfileCourse /> // hide for now -->
-                <ProfileRooms />
                 <ProfileSuggestionUser />
+                <ProfileRooms />
                 <ProfileAds />
                 <v-container>
                   <FooterSidebar />
