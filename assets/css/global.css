@@ -1,4 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap');
+
+/* @font-face {
+    font-family: "NunitoSans Regular";
+    src: url('~assets/fonts/NunitoSans-Regular.ttf') format('ttf');
+} */
+
 #app,
 #app div,
 #app a,
@@ -33,6 +39,11 @@
 
 .page__wrapper {
     max-width: 1080px !important;
+    margin-top: 40px !important;
+}
+
+.page__wrapper.profile-page__wrapper {
+    max-width: 950px !important;
     margin-top: 40px !important;
 }
 

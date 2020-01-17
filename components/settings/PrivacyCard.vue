@@ -106,7 +106,9 @@ export default {
       privacyToggleMode: false,
       currentSettingIndex: "",
       privacyOptions: [
-        { text: "Public", value: "public" },
+        { text: "Everyone", value: "public" },
+        { text: "Connections", value: "connections" },
+        { text: "Connections and Followers", value: "connections_followers" },
         { text: "Only Me", value: "only_me" }
       ],
       currentSetting: ""

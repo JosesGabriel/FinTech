@@ -1,5 +1,5 @@
 <template>
-  <v-container dark>
+  <v-container class="page__wrapper profile-page__wrapper" dark>
     <ProfileCover />
 
     <v-row no-gutters>
@@ -18,7 +18,7 @@ export default {
   layout: "main",
   components: {
     ProfileCover,
-    ProfileTimeline,
+    ProfileTimeline
     // iconfont: "fa"
   }
 };

@@ -1,7 +1,7 @@
 <template>
-  <v-container dark>
+  <v-container class="px-0" dark>
     <v-row no-gutters>
-      <v-col class="px-2" cols="12" sm="12" md="12" lg="12">
+      <v-col class="px-0" cols="12" sm="12" md="12" lg="12">
         <v-tabs color="success" background-color="transparent" dark>
           <v-tabs-slider></v-tabs-slider>
 
@@ -20,7 +20,13 @@
                 <ProfileInterests class="my-2" />
               </v-col>
               <v-col cols="12" sm="12" md="4" lg="4">
-                <ProfileCourse />
+                <!-- <ProfileCourse /> // hide for now -->
+                <ProfileRooms />
+                <ProfileSuggestionUser />
+                <ProfileAds />
+                <v-container>
+                  <FooterSidebar />
+                </v-container>
               </v-col>
             </v-row>
           </v-tab-item>
@@ -52,7 +58,11 @@ import ProfileExperience from "~/components/profile/parts/ProfileExperience";
 import ProfileEducation from "~/components/profile/parts/ProfileEducation";
 import ProfileSkills from "~/components/profile/parts/ProfileSkills";
 import ProfileInterests from "~/components/profile/parts/ProfileInterests";
-import ProfileCourse from "~/components/profile/parts/ProfileCourse";
+import ProfileRooms from "~/components/profile/parts/ProfileRooms";
+import ProfileSuggestionUser from "~/components/profile/parts/ProfileSuggestionUser";
+import ProfileAds from "~/components/profile/parts/ProfileAds";
+import FooterSidebar from "~/components/FooterSidebar";
+// import ProfileCourse from "~/components/profile/parts/ProfileCourse"; // hide for now
 
 // Profile tab
 import ProfileIdeas from "~/components/profile/parts/ProfileIdeas";
@@ -69,7 +79,11 @@ export default {
     ProfileEducation,
     ProfileSkills,
     ProfileInterests,
-    ProfileCourse,
+    ProfileRooms,
+    ProfileSuggestionUser,
+    ProfileAds,
+    FooterSidebar,
+    // ProfileCourse, // hide for now
     ProfileIdeas,
     ProfileFollowing,
     ProfileFollowers,
@@ -109,6 +123,12 @@ export default {
   border-bottom: 1px solid #1f2f39 !important;
 }
 .qr-code {
-  width: 115px;
+  width: 50px;
+}
+.v-card.qr-code__element > *:last-child:not(.v-btn):not(.v-chip) {
+  border-radius: unset;
+}
+.heading-underline {
+  border-bottom: thin solid rgba(255, 255, 255, 0.12);
 }
 </style>
