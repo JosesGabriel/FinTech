@@ -63,7 +63,7 @@ export default {
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     show: {

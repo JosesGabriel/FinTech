@@ -451,13 +451,13 @@ export default {
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor: function() {
+    fontcolor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; 
     },
-    fontcolor2: function() {
+    fontcolor2() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; 
     },
 
@@ -471,7 +471,7 @@ export default {
         }
       }
     },
-    valueStatusLow: function() {
+    valueStatusLow() {
       return {
         highnum: this.low > this.high,
         lownum: this.low < this.high,
@@ -480,7 +480,7 @@ export default {
     }
   },
   watch: {
-    Trade_Modal: function() {
+    Trade_Modal() {
       if (!this.Trade_Modal) {
         this.e1 = 1;
         this.buySelected = true;
@@ -619,7 +619,7 @@ export default {
             date: dformat
           }
         };   
-        
+
          this.$api.journal.portfolio
         .tradebuy(fund_id, stock_id, buyparams)
         .then(response => {

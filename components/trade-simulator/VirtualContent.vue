@@ -242,23 +242,23 @@ export default {
       RenderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor: function() {
+    fontcolor() {
       return this.lightSwitch == 0
         ? "#000000 !important"
         : "#ffffff !important";
     },
-    cardbackground2: function() {
+    cardbackground2() {
       return this.lightSwitch == 0 ? "1px solid #dadada" : "1px solid #172431";
     },
-    tabsborder: function() {
+    tabsborder() {
       return this.lightSwitch == 0 ? "1px solid #b6b6b6" : "1px solid #535358";
     }
   },
   watch: {
-    simulatorPortfolioID: function() {
+    simulatorPortfolioID() {
       this.realized = 0;
       this.unrealized = 0;
       this.totalmvalue = 0;
@@ -271,10 +271,10 @@ export default {
       this.default_port = this.simulatorPortfolioID;
       this.getPorfolio('newdata');
     },
-    RenderPortfolioKey: function(){
+    RenderPortfolioKey(){
       //this.getPorfolio('newdata');
     },
-    unrealized: function() {
+    unrealized() {
       this.getTradeLogs();
     }
   },
