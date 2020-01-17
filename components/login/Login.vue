@@ -59,13 +59,14 @@
       </v-btn>
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
-        <a class="text-center success--text" @click="$emit('stepper', 3)"
+        <a class="text-center success--text" @click="$emit('stepper', 4)"
           >Sign Up</a
         ></span
       >
     </div>
   </v-card>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 import Providers from "./Providers";

@@ -38,6 +38,7 @@
     </v-dialog>
   </div>
 </template>
+
 <script>
 import EditDeleteTable from "~/components/watchers/EditDeleteTable";
 export default {

@@ -12,30 +12,18 @@
           <v-tab class="no-transform caption settings__tabs">
             Account
           </v-tab>
-          <!-- <v-tab class="no-transform caption settings__tabs">
-            Subscription and Payments
-          </v-tab> -->
           <v-tab class="no-transform caption settings__tabs">
             Privacy Settings
           </v-tab>
-          <!-- <v-tab class="no-transform caption settings__tabs">
-            Ads
-          </v-tab> -->
           <v-tab class="no-transform caption settings__tabs">
             Notifications
           </v-tab>
           <v-tab-item>
             <AccountCard @alert="showAlert" />
           </v-tab-item>
-          <!-- <v-tab-item>
-            <PaymentsCard />
-          </v-tab-item> -->
           <v-tab-item>
             <PrivacyCard />
           </v-tab-item>
-          <!-- <v-tab-item>
-            <AdsCard />
-          </v-tab-item> -->
           <v-tab-item>
             <NotificationsCard />
           </v-tab-item>
@@ -44,6 +32,7 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
 import { mapGetters, mapActions } from "vuex";
 import AccountCard from "~/components/settings/AccountCard.vue";
@@ -60,15 +49,11 @@ export default {
     PaymentsCard,
     PrivacyCard
   },
-  data() {
-    return {};
-  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     })
   },
-  mounted: function() {},
   methods: {
     ...mapActions({
       setAlert: "global/setAlert"
@@ -91,6 +76,7 @@ export default {
   }
 };
 </script>
+
 <style>
 /* DONT TOUCH, call Joses if you really want to change this */
 .v-slide-group__content.v-tabs-bar__content {

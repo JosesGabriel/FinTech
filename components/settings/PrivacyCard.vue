@@ -89,10 +89,11 @@
     </v-card>
   </div>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data: function() {
+  data() {
     return {
       privacyLabelList: ["Profile"],
       profilePrivacyOptions: [
@@ -106,7 +107,9 @@ export default {
       privacyToggleMode: false,
       currentSettingIndex: "",
       privacyOptions: [
-        { text: "Public", value: "public" },
+        { text: "Everyone", value: "public" },
+        { text: "Connections", value: "connections" },
+        { text: "Connections and Followers", value: "connections_followers" },
         { text: "Only Me", value: "only_me" }
       ],
       currentSetting: ""
@@ -154,6 +157,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .privacy__field {
   transform: scale(0.8);

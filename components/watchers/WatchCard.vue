@@ -8,7 +8,7 @@
       max-height="282"
       :loading="watchCardLoading"
     >
-      <div class="watchlistCard__head">
+      <div>
         <strong class="caption">{{ stockExchange }}: {{ stockSymbol }}</strong
         ><br />
         <span class="watchlistCard__stockDescription d-block">{{
@@ -65,6 +65,7 @@
     </v-card>
   </v-hover>
 </template>
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 import MarketDepth from "~/components/watchers/MarketDepth";
@@ -80,7 +81,7 @@ export default {
       stockCurrentChange: "",
       stockExchange: "",
       stockDescription: "",
-      watchCardLoading: "primary",
+      watchCardLoading: "success",
       isLightMode: 0,
       series: [
         {
@@ -233,7 +234,13 @@ export default {
     })
   },
   watch: {
-    userWatchedStocks: function() {
+    /**
+     * Watches vuex value. When this value updates, that means a user has added, edited or deleted a watched stock.
+     * Execute GET for stock price data based on newly added stock
+     *
+     * @return
+     */
+    userWatchedStocks() {
       this.watchCardMount();
     }
   },
@@ -323,9 +330,6 @@ export default {
 </script>
 
 <style>
-.watchlistCard__head {
-  /* position: absolute; */
-}
 .watchlistCard__stockDescription {
   text-overflow: ellipsis;
   white-space: nowrap;

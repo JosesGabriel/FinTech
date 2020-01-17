@@ -46,13 +46,9 @@
           </v-stepper-content>
 
           <v-stepper-content step="4" class="pa-0">
-            <v-card
-              height="584px"
-              :dark="isLightMode == 0 ? false : true"
-              :loading="isLoading"
-            >
+            <v-card height="584px" :dark="isLightMode == 0 ? false : true">
               <div
-                class="display-1 font-weight-bold loginCard--intro text-center py-2"
+                class="display-1 font-weight-bold loginCard--intro text-center py-2 pt-6"
               >
                 Welcome to the community!
               </div>
@@ -96,6 +92,7 @@
     </v-card>
   </v-dialog>
 </template>
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Login from "~/components/login/Login";
@@ -128,8 +125,12 @@ export default {
       userWatchedStocks: "watchers/getUserWatchedStocks",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * Show dialog toggle
+     *
+     * @return
+     */
     show: {
-      //show dialog toggle
       get() {
         return this.value;
       },
@@ -139,7 +140,12 @@ export default {
     }
   },
   watch: {
-    loginModalState: function() {
+    /**
+     * Watches loginModaState, controls modal state whether showing or not.
+     *
+     * @return
+     */
+    loginModalState() {
       if (this.loginModalState) {
         this.show = true;
         this.showAlert({ message: "Successfully Verified User" });
@@ -190,6 +196,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .loginButtons--wrapper {
   position: absolute;
@@ -209,9 +216,12 @@ export default {
 .skip__btn {
   position: relative;
   right: 13px;
-  bottom: 4px;
+  top: 15px;
 }
 .loginReg__social::before {
   background-color: transparent;
+}
+.loginReg__social:hover .v-btn__content i {
+  color: #03dac5 !important;
 }
 </style>

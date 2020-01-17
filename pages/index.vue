@@ -22,6 +22,7 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
 import Navbar from "~/components/Navbar";
 import Newsfeed from "~/components/social/Newsfeed";
@@ -50,7 +51,6 @@ export default {
       newPost: {}
     };
   },
-  mounted() {},
   methods: {
     /**
      * Captures when post field emits that user has posted new post

@@ -15,6 +15,7 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 import Newsfeed from "~/components/social/Newsfeed";
@@ -36,22 +37,24 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
+  /**
+   * asyncdata is used to render server side values, in this case a single post object
+   * This is needed for dynamic generation of OG tags without visiting the page itself.
+   *
+   * asyncData lifecycle has no access to 'this' keyword. Needs to use $axios syntax
+   *
+   * @param   {object}  $axios  unsure, but this is the $axios object
+   * @param   {string}  params
+   *
+   * @return
+   */
   async asyncData({ $axios, params }) {
-    // return axios
-    //   .get(`https://dev-api.arbitrage.ph/api/social/posts/${params.id}`)
-    //   .then(res => {
-    //     return { post: res.data.data.post };
-    //   });
-
-    // asyncData lifecycle has no access to 'this' keyword. Needs to use $axios syntax
     $axios
       .get(params.id)
       .then(res => {
         return { post: res.data.data.post };
       })
-      .catch(e => {
-        console.log(e);
-      });
+      .catch(e => {});
   },
   head() {
     return {
@@ -99,6 +102,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .page__container {
   max-width: 1080px;

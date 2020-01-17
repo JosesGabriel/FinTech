@@ -161,6 +161,7 @@
     </v-container>
   </v-card>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 let numeral = require("numeral");
@@ -224,12 +225,27 @@ export default {
     })
   },
   watch: {
+    /**
+     * Watches for changes on Number of Shares field. Executes calculate function when change is detected
+     *
+     * @return
+     */
     shares: function() {
       this.calculate();
     },
+    /**
+     * Watches for changes on Buy Price field. Executes calculate function when change is detected
+     *
+     * @return
+     */
     buyPrice: function() {
       this.calculate();
     },
+    /**
+     * Watches for changes on Sell Price field. Executes calculate function when change is detected
+     *
+     * @return
+     */
     sellPrice: function() {
       this.calculate();
     }
@@ -377,6 +393,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .beAnalysis__row {
   padding: 3px;

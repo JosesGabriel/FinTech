@@ -62,11 +62,12 @@
     </v-card-text>
   </v-card>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 export default {
   props: ["data"],
-  data: function() {
+  data() {
     return {
       stockData: [],
       watchCardLoading: "primary",
@@ -226,7 +227,13 @@ export default {
     })
   },
   watch: {
-    renderChartKey: function() {
+    /**
+     * Watches vuex value. When this value updates, that means a user has added, edited or deleted a watched stock.
+     * Execute GET again to update user watchlist with new values.
+     *
+     * @return
+     */
+    renderChartKey() {
       this.watchCardMount();
     }
   },

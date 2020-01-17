@@ -1,5 +1,5 @@
 <template>
-  <v-card class="investagram_bulok text-center" color="transparent" dark flat>
+  <v-card class="login__card text-center" color="transparent" dark flat>
     <span class="display-4 text-center d-inline-block">
       <span class="font-weight-thin">
         <img
@@ -13,6 +13,7 @@
     </span>
   </v-card>
 </template>
+
 <script>
 import { mapActions } from "vuex";
 export default {
@@ -52,14 +53,13 @@ export default {
   },
   layout: "main",
   middleware: ["auth"],
-  components: {},
   data() {
     return {
       isOpen: true,
       postImage: "https://lyduz.com/png_logo.png"
     };
   },
-  mounted: function() {
+  mounted() {
     this.retrieveParams();
   },
   methods: {
@@ -67,6 +67,11 @@ export default {
       setAlert: "global/setAlert",
       setLoginModalState: "login/setLoginModalState"
     }),
+    /**
+     * Redirect for auth provider (facebook)
+     *
+     * @return
+     */
     retrieveParams() {
       let param = this.$route.fullPath;
       const { query } = this.$route;
@@ -99,8 +104,9 @@ export default {
   }
 };
 </script>
+
 <style>
-.investagram_bulok {
+.login__card {
   margin-top: 150px;
 }
 </style>

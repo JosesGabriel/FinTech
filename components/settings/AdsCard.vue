@@ -43,6 +43,7 @@
     </v-card>
   </div>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 export default {
@@ -61,8 +62,6 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     })
-  },
-  mounted() {},
-  methods: {}
+  }
 };
 </script>

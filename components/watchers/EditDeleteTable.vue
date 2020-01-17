@@ -68,6 +68,7 @@
     </v-data-table>
   </div>
 </template>
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -108,16 +109,26 @@ export default {
     ...mapGetters({
       userWatchedStocks: "watchers/getUserWatchedStocks",
       renderChartKey: "watchers/getRenderChartKey"
-    }),
-    formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    }
+    })
   },
 
   watch: {
+    /**
+     * Watches changes on dialog value, closes modal.
+     *
+     * @param   {string}  val
+     *
+     * @return
+     */
     dialog(val) {
       val || this.close();
     },
+    /**
+     * Watches changes on userWatchedStocks. If user deletes/updates an item,
+     * will execute GET function to update userWatchedStocks list
+     *
+     * @return
+     */
     userWatchedStocks() {
       this.populateStockDropdown();
     }
@@ -140,8 +151,6 @@ export default {
      * @return
      */
     populateStockDropdown() {
-      // GET Data from User Watchlist
-      // Converts stock symbol_id to stock code like; 123123123 = 'JFC'
       this.shemes = JSON.parse(JSON.stringify(this.userWatchedStocks)); //removes vuex pointer and two way data binding
       this.userStockData = this.shemes;
       for (let i = 0; i < this.userStockData.length; i++) {
@@ -171,9 +180,9 @@ export default {
     /**
      * fires when user clicks delete button
      *
-     * @param   {[type]}  item  [item description]
+     * @param   {string}  item
      *
-     * @return  {[type]}        [return description]
+     * @return
      */
     deleteItem(item) {
       this.watchCardModalLoading = "primary";
@@ -224,7 +233,7 @@ export default {
      * Will fire when user finishes editing and clicks save button.
      * Executes PUT request
      *
-     * @return  {[type]}  [return description]
+     * @return
      */
     save() {
       this.tableLoading = "primary";
@@ -265,6 +274,7 @@ export default {
   }
 };
 </script>
+
 <style>
 header {
   height: 0px !important; /* if present, naay empty header element na 64px */
