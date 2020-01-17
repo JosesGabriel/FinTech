@@ -86,6 +86,7 @@
     </v-container>
   </v-card>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 let numeral = require("numeral");
@@ -95,10 +96,8 @@ export default {
       totalCost: 0,
       totalPosition: 0,
       averagePrice: 0,
-
       position: [0],
       positionPrice: [0],
-
       positionKey: 1
     };
   },

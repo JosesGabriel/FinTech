@@ -62,6 +62,7 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
 import Navbar from "~/components/Navbar";
 import WatchCard from "~/components/watchers/WatchCard.vue";
@@ -100,11 +101,17 @@ export default {
     })
   },
   watch: {
-    renderChartKey: function() {
+    /**
+     * Watches vuex value. When this value updates, that means a user has added, edited or deleted a watched stock.
+     * Execute GET again to update user watchlist with new values.
+     *
+     * @return
+     */
+    renderChartKey() {
       this.getUserWatchList();
     }
   },
-  mounted: function() {
+  mounted() {
     // GET Data from User Watchlist
     this.getUserWatchList();
   },
@@ -128,7 +135,7 @@ export default {
     /**
      * Get user watched stocks
      *
-     * @return  {[type]}  [return description]
+     * @return
      */
     getUserWatchList() {
       this.$api.watchlist.watchlists.index().then(

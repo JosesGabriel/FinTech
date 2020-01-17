@@ -113,13 +113,6 @@
     </v-card-text>
     <v-card-actions class="pt-6 mt-6">
       <v-spacer></v-spacer>
-      <!-- <v-btn
-        class="addWatch__button"
-        depressed
-        color="transparent"
-        @click="dialog = false"
-        >Close</v-btn
-      >-->
       <v-btn
         v-if="!resultPage"
         class="addWatch__button"
@@ -140,6 +133,7 @@
     </v-card-actions>
   </v-card>
 </template>
+
 <script>
 let numeral = require("numeral");
 import { mapGetters, mapActions } from "vuex";
@@ -174,12 +168,25 @@ export default {
       renderChartKey: "watchers/getRenderChartKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    /**
+     * Decides v-list-item background
+     *
+     * @return
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   watch: {
-    stocksDropdownModel: function(e) {
+    /**
+     * Triggers when user has selected a stock from the dropdown.
+     * Gets currentprice of selected stock
+     *
+     * @param   {string}  e
+     *
+     * @return  {[type]}
+     */
+    stocksDropdownModel(e) {
       const params = {
         exchange: "PSE",
         "symbol-id": e
@@ -191,16 +198,38 @@ export default {
       );
       this.fieldsCheck();
     },
-    data: function(e) {
+    /**
+     * Controls whether the modal should switch to the results page tab
+     *
+     * @param   {string}  e
+     *
+     * @return
+     */
+    data(e) {
       this.resultPage = false;
     },
-    identifiedEntryPrice: function(e) {
+    /**
+     * Watches for changes on identifiedEntryPrice field. Controls whether next button is clickable or disabled
+     *
+     * @return
+     */
+    identifiedEntryPrice(e) {
       this.fieldsCheck();
     },
-    riskTolerance: function(e) {
+    /**
+     * Watches for changes on riskTolerance field. Controls whether next button is clickable or disabled
+     *
+     * @return
+     */
+    riskTolerance(e) {
       this.fieldsCheck();
     },
-    targetProfit: function(e) {
+    /**
+     * Watches for changes on targetProfit field. Controls whether next button is clickable or disabled
+     *
+     * @return
+     */
+    targetProfit(e) {
       this.fieldsCheck();
     }
   },
@@ -404,6 +433,7 @@ export default {
   }
 };
 </script>
+
 <style
 >
 .v-menu__content

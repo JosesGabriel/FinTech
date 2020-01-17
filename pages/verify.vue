@@ -3,18 +3,20 @@
     <v-row class="mb-5" no-gutters> </v-row>
   </v-container>
 </template>
+
 <script>
 export default {
   layout: "main",
-  components: {},
   auth: false,
-  data() {
-    return {};
-  },
-  mounted: function() {
+  mounted() {
     this.retrieveParams();
   },
   methods: {
+    /**
+     * Params parameters on URL and passes to endpoint to confirm verification
+     *
+     * @return  {[type]}  [return description]
+     */
     retrieveParams() {
       let param = this.$route.fullPath.indexOf("?");
       this.$axios

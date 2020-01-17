@@ -32,6 +32,7 @@
     <span class="overline no-wrap-text">10D 9D 8D 7D 6D 5D 4D 3D 2D 1D</span>
   </v-card>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 
@@ -39,7 +40,7 @@ export default {
   props: {
     data: {}
   },
-  data: function() {
+  data() {
     return {
       series: [
         {
@@ -184,7 +185,15 @@ export default {
     })
   },
   watch: {
-    data: function() {
+    /**
+     * Watches changes on emitted PSEI data.
+     * If change is less than 0 chart color is red
+     * if greater than 0, green
+     * if not use secondary color
+     *
+     * @return
+     */
+    data() {
       if (this.data.change > 0) {
         this.$refs.closePriceChart.updateOptions({
           colors: ["#00FFC3"]
@@ -229,6 +238,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .no-wrap-text {
   white-space: nowrap;

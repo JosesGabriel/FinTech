@@ -35,33 +35,22 @@ export default {
   methods: {
     /**
      * Fires when component is mounted, gets the full depth of specific stock.
-     * market depth of stock
+     * Full market depth of stock
      *
-     * @return  {function}  [return description]
+     * @return
      */
-    initDepthbar: function() {
+    initDepthbar() {
       this.progbar.loading = true;
       this.progbar.value = 100;
       const params = {
         "symbol-id": this.stocksym,
         entry: 5
       };
-      // Full Depth
-      this.$api.chart.stocks
-        .fulldepth(params)
-        .then(response => {
-          this.fulldepth = parseFloat(response.data.bid_total_percent).toFixed(
-            2
-          );
-          this.progbar.value = this.fulldepth;
-          this.progbar.loading = false;
-        })
-        .catch(error => {
-          if (this.toggleButton === true) {
-            //console.log(error.response);
-            //console.log(error.response.data.message);
-          }
-        });
+      this.$api.chart.stocks.fulldepth(params).then(response => {
+        this.fulldepth = parseFloat(response.data.bid_total_percent).toFixed(2);
+        this.progbar.value = this.fulldepth;
+        this.progbar.loading = false;
+      });
     }
   }
 };

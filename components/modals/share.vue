@@ -66,6 +66,7 @@
     </v-card>
   </v-dialog>
 </template>
+
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -92,7 +93,7 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
-  mounted: function() {
+  mounted() {
     if (this.postid || this.imageid) this.show = true;
 
     if (this.imageid) {
@@ -101,29 +102,37 @@ export default {
       this.uploadImage();
     }
   },
-  created: function() {
-    window.fbAsyncInit = function() {
-      FB.init({
-        appId: "407039123333666",
-        autoLogAppEvents: true,
-        xfbml: true,
-        version: "v5.0"
-      });
-    };
-
-    (function(d, s, id) {
-      var js,
-        fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {
-        return;
-      }
-      js = d.createElement(s);
-      js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    })(document, "script", "facebook-jssdk");
+  created() {
+    this.fbInitialization();
   },
   methods: {
+    /**
+     * Initializes facebook SDK
+     *
+     * @return
+     */
+    fbInitialization() {
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: process.env.FB_APP_ID,
+          autoLogAppEvents: true,
+          xfbml: true,
+          version: "v5.0"
+        });
+      };
+
+      (function(d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+          return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    },
     /**
      * binds url from textfield to user clipboard
      *
@@ -186,7 +195,7 @@ export default {
      *
      * @return
      */
-    uploadImage: function() {
+    uploadImage() {
       let formData = new FormData();
       let file = this.dataURLtoFile(this.imageid, "file.png");
       formData.append("file", file);
@@ -230,6 +239,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .shareModal__button--close {
   position: absolute;

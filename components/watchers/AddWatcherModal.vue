@@ -75,14 +75,14 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
-            class="addWatch__button"
+            class="no-transform"
             depressed
             color="transparent"
             @click="dialog = false"
             >Close</v-btn
           >
           <v-btn
-            class="addWatch__button"
+            class="no-transform"
             color="success"
             light
             depressed
@@ -95,11 +95,7 @@
     </v-dialog>
   </div>
 </template>
-<style>
-.addWatch__button {
-  text-transform: none;
-}
-</style>
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -122,26 +118,33 @@ export default {
     })
   },
   watch: {
-    entryPriceModel: function() {
+    /**
+     * Detects changes on entry price field and controls whether Save button on watchlist is clickable or not
+     *
+     * @return
+     */
+    entryPriceModel() {
       this.fieldsWatch();
     },
-    stopLossModel: function() {
+    /**
+     * Detects changes on stop loss field and controls whether Save button on watchlist is clickable or not
+     *
+     * @return
+     */
+    stopLossModel() {
       this.fieldsWatch();
     },
-    takeProfitModel: function() {
+    /**
+     * Detects changes on take profit field and controls whether Save button on watchlist is clickable or not
+     *
+     * @return
+     */
+    takeProfitModel() {
       this.fieldsWatch();
     }
   },
   mounted() {
-    const params = {
-      exchange: "PSE",
-      status: "active"
-    };
-    this.$api.chart.stocks.list(params).then(
-      function(result) {
-        this.stockList = result.data;
-      }.bind(this)
-    );
+    this.getStockList();
   },
   methods: {
     ...mapActions({
@@ -149,6 +152,22 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey",
       setAlert: "global/setAlert"
     }),
+    /**
+     * GETs stocklist for stocks dropdown in modal
+     *
+     * @return
+     */
+    getStockList() {
+      const params = {
+        exchange: "PSE",
+        status: "active"
+      };
+      this.$api.chart.stocks.list(params).then(
+        function(result) {
+          this.stockList = result.data;
+        }.bind(this)
+      );
+    },
     /**
      * controls save button disabled property based on whether user has completely
      * input on all fields
@@ -172,7 +191,7 @@ export default {
      * First checks if user is already watching that specific stock
      * if not, execute POST request to api to add to watched stocks
      *
-     * @return  {[type]}  [return description]
+     * @return
      */
     addWatch() {
       this.watchCardModalLoading = "success";
@@ -184,7 +203,7 @@ export default {
       }
       if (!stockExists) {
         let params = {
-          user_id: this.$auth.user.data.user.uuid, //temporary, remind backend about bearer token auth, no need for user_id
+          user_id: this.$auth.user.data.user.uuid,
           stock_id: this.stocksDropdownModel,
           entry_price: this.entryPriceModel,
           take_profit: this.takeProfitModel,

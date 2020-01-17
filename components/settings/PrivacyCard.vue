@@ -89,10 +89,11 @@
     </v-card>
   </div>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data: function() {
+  data() {
     return {
       privacyLabelList: ["Profile"],
       profilePrivacyOptions: [
@@ -156,6 +157,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .privacy__field {
   transform: scale(0.8);

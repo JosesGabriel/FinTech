@@ -25,10 +25,11 @@
     </div>
   </v-card>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data: function() {
+  data() {
     return {
       sectoralIndexType: [
         "All Shares",

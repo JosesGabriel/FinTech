@@ -138,7 +138,7 @@
                     <template v-slot:activator="{ on }">
                       <v-btn
                         v-if="!mobile"
-                        class="addContact__btn no-transform mb-1"
+                        class="no-transform mb-1"
                         color="success"
                         text
                         v-on="on"
@@ -314,11 +314,6 @@
               >
             </v-col>
           </v-row>
-          <!-- <v-row>
-            <v-col cols="12">
-              <a>Feed Preferences</a>
-            </v-col>
-          </v-row> -->
           <v-row>
             <v-col cols="12">
               <a class="white--text">Delete Your Account and Information</a>
@@ -362,6 +357,7 @@
     </v-dialog>
   </div>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 export default {
@@ -399,7 +395,6 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
-  mounted() {},
   methods: {
     /**
      * Updates user account settings based on user input
@@ -480,7 +475,7 @@ export default {
      *
      * @param   {string}  value
      *
-     * @return  {[type]}
+     * @return
      */
     checkFieldsToggle(value) {
       switch (value) {
@@ -632,6 +627,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .name__field {
   transform: scale(0.7);
@@ -640,11 +636,6 @@ export default {
 .mobile__radio {
   transform: scale(0.8);
   transform-origin: center left;
-}
-.addContact__btn {
-  /* position: relative;
-  left: 80px;
-  bottom: 25px; */
 }
 .addContact__field--wrapper {
   padding: 0 60px !important;
