@@ -33,8 +33,6 @@ export default {
   },
   watch: {
     symbolid(symid) {
-      //   console.log("depthbar");
-      //   console.log(symid);
       this.initTransbar(symid);
     }
   },
@@ -42,7 +40,14 @@ export default {
     this.initTransbar(this.symbolid);
   },
   methods: {
-    initTransbar: function(symid) {
+    /**
+     * initialise and request transaction api on mounted hook
+     *
+     * @param   {String}  symid  sym_id
+     *
+     * @return
+     */
+    initTransbar(symid) {
       this.progbar.loading = true;
       this.progbar.value = 100;
       const params = {
@@ -52,15 +57,12 @@ export default {
       this.$api.chart.stocks
         .transaction(params)
         .then(response => {
-          //  console.log(response);
           this.progbar.value = parseFloat(
             response.data.high_total_percent
           ).toFixed(2);
           this.progbar.loading = false;
         })
-        .catch(error => {
-          // console.log(error);
-        });
+        .catch(() => {});
     }
   }
 };
@@ -69,12 +71,8 @@ export default {
 <style scoped>
 #pgbr__container {
   height: 30px;
-  /* background: green; */
   padding-top: 10px;
   padding-left: 27px;
   padding-right: 27px;
-}
-#progressbar {
-  /* margin-top: 10px; */
 }
 </style>

@@ -88,7 +88,14 @@ export default {
     this.initDepthbar(this.symbolid);
   },
   methods: {
-    initDepthbar: function(symid) {
+    /**
+     * initialise and request market depth api
+     *
+     * @param   {[type]}  symid  [symid description]
+     *
+     * @return  {[type]}         [return description]
+     */
+    initDepthbar(symid) {
       this.progbar.loading = true;
       this.progbar.value = 100;
       const params = {
@@ -107,12 +114,7 @@ export default {
             this.progbar.loading = false;
           }
         })
-        .catch(error => {
-          if (this.toggleButton === false) {
-            //console.log(error.response);
-            //console.log(error.response.data.message);
-          }
-        });
+        .catch(() => {});
       // Full Depth
       this.$api.chart.stocks
         .fulldepth(params)
@@ -125,12 +127,7 @@ export default {
             this.progbar.loading = false;
           }
         })
-        .catch(error => {
-          if (this.toggleButton === true) {
-            //console.log(error.response);
-            //console.log(error.response.data.message);
-          }
-        });
+        .catch(() => {});
     }
   }
 };

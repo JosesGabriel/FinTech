@@ -71,18 +71,6 @@ export default {
     Table,
     Ticker
   },
-  head() {
-    return {
-      title: "Interactive Chart - Lyduz | Free Stock Trading Platform",
-      meta: [
-        {
-          //   hid: "og emman description",
-          //   name: "og karl description",
-          //   content: "og My custom description"
-        }
-      ]
-    };
-  },
   computed: {
     ...mapGetters({
       ticker: "chart/getTicker",
@@ -91,6 +79,11 @@ export default {
       sse: "chart/sse",
       symbolid: "chart/symbolid"
     }),
+    /**
+     * toggle between ligth/dark mode
+     *
+     * @return  {String}
+     */
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
@@ -101,6 +94,11 @@ export default {
       setSidebar: "chart/setSidebar",
       setSSE: "chart/setSSE"
     }),
+    /**
+     * Close SSE connection, set back dafault favicon
+     *
+     * @return
+     */
     closeSSE: function() {
       this.sse.close();
       this.$store.commit(
@@ -108,6 +106,11 @@ export default {
         `${process.env.APP_URL}/favicon/favicon.ico?v=3`
       );
     },
+    /**
+     * initialise SSE connection, used on mount hook
+     *
+     * @return  {function}  [return description]
+     */
     initSSE: function() {
       if (this.sse !== null) {
         this.closeSSE();
@@ -117,14 +120,9 @@ export default {
         new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
       );
 
-      this.sse.onopen = function() {
-        // console.log("open sse");
-      };
+      this.sse.onopen = function() {};
 
-      this.sse.onerror = function(err) {
-        // console.log("err sse");
-        // console.log(err);
-      };
+      this.sse.onerror = function() {};
     }
   },
   mounted() {
@@ -152,22 +150,15 @@ export default {
   background: #03dac5;
 }
 #chart_body {
-  /* background: #00121e !important; */
-  /*font-family: "Karla", sans-serif !important;*/
   font-family: "Nunito Sans", sans-serif !important;
 }
 .chart__container {
-  /* border: 1px solid red; */
 }
 .ticker__container {
   height: 50px;
-  /* color: #fff; */
-  /* background: #00121e; */
 }
 .table__container {
   height: 30px;
-  /* color: #fff; */
-  /* background: #00121e; */
 }
 .spacer__content {
   height: 52px;
@@ -180,7 +171,6 @@ export default {
   flex: 1;
 }
 .content__right {
-  /* background: #00121e; */
   padding-left: 3px !important;
   margin-left: 10px !important;
   flex: 0 0 270px;

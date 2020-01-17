@@ -124,12 +124,17 @@ export default {
       sseInfo: "chart/sseInfo",
       blink: "chart/blink"
     }),
-    cardbackground: function() {
+    /**
+     * toggle card background on light/dark mode
+     *
+     * @return
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   watch: {
-    sseInfo: function(value) {
+    sseInfo(value) {
       if (this.loading === false) {
         this.sseAllInfo(value);
       }
@@ -140,7 +145,14 @@ export default {
       setSymbolID: "chart/setSymbolID",
       setAllstocks: "chart/setAllstocks"
     }),
-    updateEffect: function(dom) {
+    /**
+     * add simpe blink animation effect
+     *
+     * @param   {String}  dom  id of element
+     *
+     * @return
+     */
+    updateEffect(dom) {
       const item = document.getElementById(dom);
       if (item == null) return;
       item.style.background = "rgb(182,182,182,.2)";
@@ -148,7 +160,12 @@ export default {
         item.style.background = "";
       }, this.blink);
     },
-    initAllStock: async function() {
+    /**
+     * initialize and request latest stock info on mount hook
+     *
+     * @return
+     */
+    async initAllStock() {
       this.loading = "#03dac5";
       try {
         const response = await this.$api.chart.stocks.history({
@@ -184,13 +201,18 @@ export default {
         console.log(error);
       }
     },
-    sseAllInfo: function(data) {
+    /**
+     * initialise and listen to stock info sse
+     *
+     * @param   {Object}  data  stock info data
+     *
+     * @return
+     */
+    sseAllInfo(data) {
       try {
-        //console.log("realtime");
         const stock = this.all_stocks.find(
           resp => resp.stockidstr == data.sym_id
         );
-        //console.log(stock.stockidstr);
         const key = this.all_stocks.indexOf(stock);
         this.all_stocks.splice(key, 1, {
           stockidstr: stock.stockidstr,

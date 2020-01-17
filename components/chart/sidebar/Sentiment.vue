@@ -64,20 +64,39 @@ export default {
     };
   },
   watch: {
-    stock: function(stock) {
+    stock(stock) {
       if (this.first_load === false) {
         this.initSentiments(stock.stockidstr, stock.market_code);
       }
     }
   },
   methods: {
-    bearCircle: function() {
+    /**
+     * Select bearish in as sentiments
+     *
+     * @return
+     */
+    bearCircle() {
       this.postSentiment(this.stock.stockidstr, this.stock.market_code, "bear");
     },
-    bullCircle: function() {
+    /**
+     * Select bullish in as sentiments
+     *
+     * @return
+     */
+    bullCircle() {
       this.postSentiment(this.stock.stockidstr, this.stock.market_code, "bull");
     },
-    postSentiment: async function(stock_id, market_code, sentiment) {
+    /**
+     * Post sentiment to endpoint
+     *
+     * @param   {String}  stock_id
+     * @param   {String}  market_code  ex: PSEI:ALI
+     * @param   {String}  sentiment    bull/bear
+     *
+     * @return  {[type]}               [return description]
+     */
+    async postSentiment(stock_id, market_code, sentiment) {
       if (this.can_add === false) return;
       this.loading = true;
       try {
@@ -92,12 +111,17 @@ export default {
         this.can_add = false;
         this.loading = false;
         this.caption = "Members Sentiment";
-      } catch (error) {
-        //console.log("error post sentiment");
-        //nuconsole.log(error);
-      }
+      } catch (error) {}
     },
-    initSentiments: async function(stock_id, market_code) {
+    /**
+     * initialize and request sentiment social API on mount hook
+     *
+     * @param   {String}  stock_id
+     * @param   {String}  market_code
+     *
+     * @return
+     */
+    async initSentiments(stock_id, market_code) {
       this.can_add = true;
       this.loading = true;
       try {
@@ -113,9 +137,7 @@ export default {
           this.caption = "Register Sentiment";
         }
         this.loading = false;
-      } catch (error) {
-        //console.log(error);
-      }
+      } catch (error) {}
     }
   },
   computed: {
@@ -125,6 +147,9 @@ export default {
     })
   },
   mounted() {
+    /**
+     * set delay 2 secs for a purpose
+     */
     setTimeout(() => {
       this.initSentiments(this.stock.stockidstr, this.stock.market_code);
       this.first_load = false;
@@ -169,16 +194,13 @@ export default {
 #bull__container {
   flex: 0 0 50px;
   padding-right: 5px;
-  /* background: red; */
 }
 #bear__container {
   flex: 0 0 50px;
   padding-left: 5px;
-  /* background: blue; */
 }
 #prgbr__container {
   flex: 0 0 180px;
-  /* background: green; */
 }
 #sentiment__caption {
   width: 100%;

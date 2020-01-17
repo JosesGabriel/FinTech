@@ -71,10 +71,10 @@ export default {
       symbolid: "chart/symbolid",
       lightSwitch: "global/getLightSwitch"
     }),
-    color: function() {
+    color() {
       return this.lightSwitch == 0 ? "lightchart" : "darkchart";
     },
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -84,7 +84,7 @@ export default {
     })
   },
   watch: {
-    symbolid(value) {
+    symbolid() {
       this.active_tab = "tab-1";
       this.first_load = false;
     },

@@ -88,14 +88,17 @@ export default {
       sse: "chart/sse",
       blink: "chart/blink"
     }),
-    cardbackground: function() {
+    /**
+     * toggle card background light/dark mode
+     *
+     * @return
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   watch: {
     symbolid(symid) {
-      //   console.log("time trade");
-      //   console.log(this.index);
       this.initTimetrade(symid);
     },
     trades(value) {
@@ -118,7 +121,14 @@ export default {
       setTrades: "chart/setTrades",
       setSSETrade: "chart/setSSETrade"
     }),
-    initTimetrade: function(symid) {
+    /**
+     * initialise and request time trade api on mount hook
+     *
+     * @param   {String}  symid  sym_id
+     *
+     * @return
+     */
+    initTimetrade(symid) {
       this.loading = "#03dac5";
       this.$api.chart.stocks
         .trades({
@@ -129,15 +139,18 @@ export default {
         })
         .then(response => {
           this.setTrades(response.data);
-          //   console.log("set trades");
-          //   console.log(response.data);
           this.loading = false;
         })
-        .catch(error => {
-          // console.log(error);
-        });
+        .catch(() => {});
     },
-    sseTrade: function(e) {
+    /**
+     * initialise sse, listen to time trade
+     *
+     * @param   {Object}  e  response
+     *
+     * @return
+     */
+    sseTrade(e) {
       try {
         if (this.symbolid == undefined) return;
         const trades = JSON.parse(e.data);
@@ -161,12 +174,17 @@ export default {
           }
           this.setTrades(this.temp_trades);
         }
-      } catch (err) {
-        //console.log("error");
-        //console.log(err);
-      }
+      } catch (err) {}
     },
-    updateEffect: function(dom) {
+    /**
+     * add simple blink animation
+     *
+     * @param   {String}  dom  id of element
+     *
+     * @return
+     */
+
+    updateEffect(dom) {
       const item = document.getElementById(dom);
       if (item == null) return;
       item.style.background = "rgb(182,182,182,.2)";

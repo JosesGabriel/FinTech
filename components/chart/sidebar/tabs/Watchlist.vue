@@ -56,12 +56,9 @@
       >
         <div class="watchlist__top">
           <div class="top__left pl-2">
-            <span
-              class="span__symbolid"
-              @click="setSymbolID(item.id)"
-              @dblclick="showRemoveButton()"
-              >{{ item.symbol }}</span
-            >
+            <span class="span__symbolid" @click="setSymbolID(item.id)">{{
+              item.symbol
+            }}</span>
           </div>
           <div class="top__right pr-2">
             <span class="">{{ item.last | numeral("0,0.00") }}</span>
@@ -125,12 +122,17 @@ export default {
       sseInfo: "chart/sseInfo",
       blink: "chart/blink"
     }),
-    cardbackground: function() {
+    /**
+     * toggle card color
+     *
+     * @return
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   watch: {
-    sseInfo: function(value) {
+    sseInfo(value) {
       if (this.loading === false) {
         this.sseAllInfo(value);
       }
@@ -143,7 +145,12 @@ export default {
     ...mapActions({
       setSymbolID: "chart/setSymbolID"
     }),
-    initWatchlist: async function() {
+    /**
+     * initialise and request for wathclist data api
+     *
+     * @return
+     */
+    async initWatchlist() {
       try {
         this.items = [];
         const response = await this.$api.watchlist.watchlists.index();
@@ -161,15 +168,20 @@ export default {
             color: false
           });
         });
-        //console.log(data);
         this.loading = false;
       } catch (error) {
-        //console.log(error);
         this.noitems = true;
         this.loading = false;
       }
     },
-    sseAllInfo: function(data) {
+    /**
+     * initialize and listen to sse stock info
+     *
+     * @param   {Object}  data
+     *
+     * @return
+     */
+    sseAllInfo(data) {
       try {
         const stock = this.items.find(resp => resp.sym_id == data.sym_id);
         if (stock == undefined) return;
@@ -185,27 +197,42 @@ export default {
           color: true
         });
         this.updateEffect(stock.id);
-      } catch (error) {
-        //console.log(error);
-      }
+      } catch (error) {}
     },
-    onHoverEffect: function(value) {
+    /**
+     * add simple hover effect
+     *
+     * @param   {String}  value
+     *
+     * @return
+     */
+    onHoverEffect(value) {
       if (value == true) {
         return "rgb(182, 182, 182, 0.2)";
       }
     },
-    updateEffect: function(dom) {
+    /**
+     * add simple animation effect
+     *
+     * @param   {String}  dom  element id
+     *
+     * @return
+     */
+    updateEffect(dom) {
       const item = document.getElementById(`watch__${dom}`);
       const mouseoverEvent = new Event("mouseleave");
       setTimeout(() => {
         item.dispatchEvent(mouseoverEvent);
       }, this.blink);
     },
-    showRemoveButton: function() {},
-    addWatchlist: function() {
+    /**
+     * redirect to watchlist page
+     *
+     * @return
+     */
+    addWatchlist() {
       let routeData = this.$router.resolve({
         name: "watchlist"
-        //query: { data: "someData" }
       });
       window.open(routeData.href, "_blank");
     }
@@ -240,10 +267,6 @@ export default {
   font-size: 11px;
 }
 
-.watchlist__top :hover {
-  /* background: red; */
-}
-
 .top__left {
   flex: 0 0 136px;
   font-size: 16px;
@@ -274,7 +297,6 @@ export default {
   cursor: pointer;
 }
 .content__card-watchlist {
-  /* ${responsive_height - 175} */
   height: calc(100vh - 335px);
   overflow-x: auto;
 }

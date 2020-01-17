@@ -118,7 +118,12 @@ export default {
       sidebarboard: "chart/getSidebar",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    /**
+     * toggle card background dark/light
+     *
+     * @return  {String} 
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -130,15 +135,31 @@ export default {
       setTableMaximize: "chart/setTableMaximize",
       setTableFullscreen: "chart/setTableFullscreen"
     }),
-    toggleTicker: function() {
+    /**
+     * show/hide ticker via bus emit
+     *
+     * @return 
+     */
+    toggleTicker() {
       this.setTicker(!this.ticker);
       this.$bus.$emit("adjustChartView");
     },
-    toggleSidebarBoard: function() {
+    /**
+     * show/hide sidebar
+     *
+     * @return 
+     */
+    toggleSidebarBoard() {
       this.setSidebar(!this.sidebarboard);
     },
-    toggleTabs: function(tab) {
-      //console.log(tab);
+    /**
+     * toggle tabs in sidebar
+     *
+     * @param   {String}  tab  tab string name
+     *
+     * @return  
+     */
+    toggleTabs(tab) {
       if (this.fullscreen) return;
       if (this.active_tab == tab || this.maximize == false) {
         this.tabs_show = !this.tabs_show;
@@ -147,7 +168,12 @@ export default {
       }
       this.active_tab = tab;
     },
-    toggleTabsFullscreen: function() {
+    /**
+     * toggle view fullscreen of table component
+     *
+     * @return 
+     */
+    toggleTabsFullscreen() {
       this.setTableFullscreen(!this.fullscreen);
       this.$bus.$emit("adjustChartView");
     }
@@ -182,7 +208,6 @@ export default {
   z-index: 1;
   width: 150px;
   margin-right: 5px;
-  /* background: red; */
   text-align: right;
 }
 .icon-flipped-x {
