@@ -36,10 +36,12 @@
               <v-col cols="12" sm="12" md="5" lg="5">
                 <!-- <ProfileIdeas class="my-3" /> -->
                 <ProfileFollowing class="my-3" />
-                <ProfileFollowers class="my-3" />
-                <v-container>
-                  <FooterSidebar />
-                </v-container>
+                <div class="activity_sticky-sidebar">
+                  <ProfileFollowers class="my-3" />
+                  <v-container>
+                    <FooterSidebar />
+                  </v-container>
+                </div>
               </v-col>
               <v-col cols="12" sm="12" md="7" lg="7">
                 <v-container>
