@@ -293,7 +293,12 @@
                   >
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
-                  <v-btn @click="quantityModel += parseFloat(boardLotModel)" text icon color="success">
+                  <v-btn
+                    @click="quantityModel += parseFloat(boardLotModel)"
+                    text
+                    icon
+                    color="success"
+                  >
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
                 </v-col>
@@ -503,7 +508,12 @@
                   >
                     <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
-                  <v-btn @click="quantitySellModel += parseFloat(boardLotModel)" text icon color="success">
+                  <v-btn
+                    @click="quantitySellModel += parseFloat(boardLotModel)"
+                    text
+                    icon
+                    color="success"
+                  >
                     <v-icon>mdi-chevron-up</v-icon>
                   </v-btn>
                 </v-col>

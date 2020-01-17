@@ -83,14 +83,7 @@ export default {
       setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition"
     }),
     resetLive() {
-      this.$axios
-        .$post(
-          process.env.API_URL +
-            "/journal/funds/" +
-            this.simulatorPortfolioID +
-            "/reset/"
-        )
-        .then(response => {
+       this.$api.journal.portfolio.reset(this.simulatorPortfolioID).then(response => {
           if (response.success) {
             this.setSimulatorOpenPosition("");
           }

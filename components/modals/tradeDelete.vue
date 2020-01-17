@@ -67,6 +67,8 @@ export default {
       setRenderEditKey: "journal/setRenderEditKey"
     }),
     deleteNow() {
+      let confirmed = true;
+      this.$emit("confirmedDelete", confirmed);
       let fund_id = this.fund;
       let stock_id = this.stockid;
       this.$api.journal.portfolio

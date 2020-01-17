@@ -127,14 +127,15 @@ export default {
           background: colors.grey.lighten5,
           primary: colors.blue,
           accent: colors.grey.darken3,
-          secondary: "#78909c",
+          secondary: "#E5E5E5",
           info: colors.purple,
           warning: colors.orange,
           error: "#F44336",
           success: "#03DAC5",
+          tertiary: "#B6B6B6",
           darkcard: "#0c1a2b",
           lightcard: "#f2f2f2",
-          darkchart: "00121e",
+          darkchart: "#00121e",
           lightchart: "#f2f2f2"
         },
         dark: {

@@ -17,7 +17,8 @@ export default (ctx, inject) => {
       actions: initApiRepository("/social/posts"),
       upload: initApiRepository("/storage/upload"),
       trendingStocks: initApiRepository("/social/posts/trending"),
-      follow: socialRepository(ctx.$axios)
+      follow: socialRepository(ctx.$axios),
+      suggestedUsers: initApiRepository("/social/suggested")
     },
     chart: {
       stocks: stockRepository(ctx.$axios),

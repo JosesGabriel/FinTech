@@ -6,16 +6,29 @@
           src="https://cdn.pixabay.com/photo/2016/09/10/17/18/book-1659717_960_720.jpg"
           aspect-ratio="3"
           class="white--text align-end"
-        ></v-img>
+        >
+          <v-overlay absolute color="darkchart" :opacity=".9" :value="overlay">
+            <v-btn icon>
+              <v-icon large color="success">mdi-plus</v-icon>
+            </v-btn>
+          </v-overlay>
+        </v-img>
       </v-col>
       <v-col cols="12" class="cover_info pa-0">
         <v-list-item>
           <v-list-item-avatar size="200">
+            <span class="profile-badge">ALPHA</span>
             <v-img
               class="profile_photo"
               src="https://www.thefamouspeople.com/profiles/images/liza-soberano-4.jpg"
               lazy-src="https://www.thefamouspeople.com/profiles/images/liza-soberano-4.jpg"
-            ></v-img>
+            >
+              <v-overlay absolute color="darkchart" :opacity=".9" :value="overlay">
+                <v-btn icon>
+                  <v-icon large color="success">mdi-plus</v-icon>
+                </v-btn>
+              </v-overlay>
+            </v-img>
           </v-list-item-avatar>
           <v-card
             class="d-flex align-start flex-column cover_bottom-x"
@@ -26,7 +39,9 @@
           >
             <v-card class="pa-2 mb-auto" color="transparent" outlined tile>
               <div class>
-                <v-list-item-title class="white--text font-weight-bold display-1 text-shadow">Liza Soberano</v-list-item-title>
+                <v-list-item-title
+                  class="white--text font-weight-bold display-1 text-shadow"
+                >Liza Soberano</v-list-item-title>
                 <v-list-item-title class="white--text subtitle-1 text-shadow">@LizaSoberano</v-list-item-title>
               </div>
             </v-card>
@@ -53,6 +68,7 @@
                     small
                     dark
                     icon
+                    @click="overlay = !overlay"
                   >
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
@@ -68,6 +84,7 @@
 <script>
 export default {
   data: () => ({
+    overlay: false,
     items: [
       { title: "Click Me" },
       { title: "Click Me" },
@@ -97,5 +114,16 @@ export default {
 }
 .text-shadow {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+.profile-badge {
+  padding: 2px 12px;
+  position: absolute;
+  z-index: 1;
+  font-weight: 600;
+  background: #d42083;
+  border-radius: 50px;
+  bottom: 13px;
+  right: 0;
+  box-shadow: 0px 0px 7px 0px black;
 }
 </style>

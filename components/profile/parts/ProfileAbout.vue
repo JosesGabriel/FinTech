@@ -58,8 +58,10 @@
                 </v-list-item-subtitle>
               </div>
               <v-spacer></v-spacer>
-              <div class="qr-code">
-                <QRCanvas :options="options" @updated="onUpdated" />
+              <div class="qr-code pb-1">
+                <v-card class="d-flex align-end qr-code__element" height="100%" flat>
+                  <QRCanvas :options="options" @updated="onUpdated" />
+                </v-card>
               </div>
             </v-row>
           </v-list-item-content>
@@ -79,9 +81,9 @@ export default {
     return {
       options: {
         data: "hello",
-        size: 115,
+        size: 50,
         background: "transparent",
-        foreground: "rgba(255, 255, 255, 0.12)"
+        foreground: "#03DAC5",
       }
     };
   },

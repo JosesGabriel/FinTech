@@ -35,7 +35,7 @@
       :style="{ background: cardbackground }"
       class="data_table-container pl-10 secondary--text"
     >  
-         
+        
             <template v-slot:item.stock_id="{ item }" >
               <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
             </template>
@@ -86,10 +86,10 @@
                   @click.stop="showEditForm=true"
                   text
                 >Edit</v-btn>
-                <v-btn small class="caption btn_sidemenu" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
+                <v-btn small class="caption btn_sidemenu"  @click.stop="showDelete=true" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
               </div>
               <v-icon small class="mr-2" @mouseover="menuLogsShow(item)">mdi-dots-horizontal</v-icon>
-            </template>    
+            </template> 
 
     </v-data-table>
 
@@ -121,7 +121,7 @@
       :style="{ background: cardbackground }"
     >
       <v-card>
-        <v-card-title class="success--text" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
+        <v-card-title class="success--text" style="font-size: 16px;" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
         <v-card-text>
           <v-col sm="12" md="12" class="my-0">
             <div>
@@ -243,6 +243,7 @@
       @close="EnterTradeModal=false"
     />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
+    <trade-delete :visible="showDelete" v-on:confirmedDelete="deleteConfirm" :itemDetails="itemDetails" @close="showDelete=false" />
     <share-modal
       v-if="showShareForm"
       :imageid="shareLink"
@@ -254,6 +255,7 @@
 import TradeModal from "~/components/trade-simulator/TradeModal";
 import resetModal from "~/components/trade-simulator/reset";
 import shareModal from "~/components/modals/share";
+import tradeDelete from "~/components/modals/tradeDelete";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -281,6 +283,7 @@ export default {
       portfolioLogs: [],
       openposition: [],
       stockSym: [],
+      itemDetails: null,
       portfolioLogsrealtime: [],
       realtime: false,
       items: [{ title: "Note" }, { title: "Delete" }],
@@ -309,15 +312,18 @@ export default {
       dayprior: 0,
       priorProfitLoss: 0,
       date: new Date().toISOString().substr(0, 10),
-      streamTrigger: '',
       filtered: '',
       lastprice: 0,
+      showDelete: false,
+      confirmdelete: false,
+      itemToDelete: '',
     };
   },
   components: {
     TradeModal,
     resetModal,
-    shareModal
+    shareModal,
+    tradeDelete
   },
   props: {
     Capital: {
@@ -336,7 +342,9 @@ export default {
     EnterTradeModal: function() {
       this.trade_modal = this.EnterTradeModal;
     },
-       
+    confirmdelete: function(){
+      this.execute(this.itemToDelete);
+    }  
 
   },
   methods: {
@@ -383,7 +391,9 @@ export default {
                   strategy: this.portfolioLogs[i].metas.strategy,
                   tradeplan: this.portfolioLogs[i].metas.plan,
                   emotion: this.portfolioLogs[i].metas.emotion,
-                  notes: this.portfolioLogs[i].metas.notes
+                  notes: this.portfolioLogs[i].metas.notes,
+                  fund: this.simulatorPortfolioID,
+                  action: this.portfolioLogs[i].metas.stock_id
                 };
               this.totalmvalue =
                   parseFloat(this.totalmvalue) + parseFloat(this.portfolioLogs[i].market_value);
@@ -399,34 +409,30 @@ export default {
       );
       
     },
-    deleteLive: function(item) {
-      //TODO: use repo
-      if (confirm("Do you really want to delete?")) {
-        this.$axios
-          .$post(
-            process.env.API_URL +
-              "/journal/funds/" +
-              this.simulatorPortfolioID +
-              "/delete/" +
-              item.id
-          )
-          .then(response => {
-            if (response.success) {
-              let profit = 0;
-              let perc = 0;
-              for (let index = 0; index < this.portfolioLogs.length; index++) {
-                if(this.portfolioLogs[index].metas.stock_id == item.id){            
-                  profit = this.portfolioLogs[index].Profit;
-                  perc = this.portfolioLogs[index].Perf;
-                  this.portfolioLogs.splice(index, 1);
-                  this.totalProfitLoss = parseFloat(this.totalProfitLoss) - parseFloat(profit);
-                  this.totalPerf = parseFloat(this.totalPerf) - parseFloat(perc);   
-                  this.$emit("totalUnrealized", this.totalProfitLoss);
-                }
-              }
-            }
-          });
+    deleteConfirm(value){
+      this.confirmdelete = value;
+    },
+    execute(item){
+      if(this.confirmdelete){
+        let profit = 0;
+        let perc = 0;
+        for (let index = 0; index < this.portfolioLogs.length; index++) {
+          if(this.portfolioLogs[index].metas.stock_id == item){            
+            profit = this.portfolioLogs[index].Profit;
+            perc = this.portfolioLogs[index].Perf;
+            this.openposition.splice(index,1);
+            this.portfolioLogs.splice(index, 1);
+            this.totalProfitLoss = parseFloat(this.totalProfitLoss) - parseFloat(profit);
+            this.totalPerf = parseFloat(this.totalPerf) - parseFloat(perc);   
+            this.$emit("totalUnrealized", this.totalProfitLoss);
+          }
+        }
       }
+    },
+    deleteLive: function(item) {    
+      this.confirmdelete = false;
+      this.itemDetails = item;
+      this.itemToDelete = item.id;
     },
     details: function(item, edit) {
       this.editDetails = edit;
@@ -444,16 +450,10 @@ export default {
             emotion: this.selectedemotions,
             notes: this.notes
           };
-          this.$axios
-            .$post(
-              process.env.API_URL +
-                "/journal/funds/" +
-                this.simulatorPortfolioID +
-                "/update/" +
-                this.edit_id,
-              editparams
-            )
-            .then(response => {
+          
+        this.$api.journal.portfolio
+        .tradeedit(this.simulatorPortfolioID, this.edit_id, editparams)
+        .then(response => {
               if (response.success) {
                 this.showEditForm = false;
                 this.getOpenPositions();
@@ -494,23 +494,19 @@ export default {
       let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
 
       for (let index = 0; index < this.portfolioLogs.length; index++) {
-           let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
-        console.log('DayChange Date -' + pdate);
+           let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];     
                   const params = {
                     "symbol-id": this.portfolioLogs[index].metas.stock_id,
                     resolution: "1D",
                     limit: 2
                   };
                   this.$api.chart.charts.latest(params).then(
-                    function(result) {
-                      //console.log('Day Cahnge -', result);                    
+                    function(result) {                          
                       let prior_date = new Date(result.data.t[1]*1000);
                       let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
                       let tcost =
                         this.portfolioLogs[index].position *
-                        this.portfolioLogs[index].average_price;
-                        //console.log('Date Current -' + pdate);
-                        //console.log('Date Prior -' + dformat_prior);                     
+                        this.portfolioLogs[index].average_price;                  
                       if (pdate != dformat) {                        
                         let priorPrice = result.data.c[1];
                         let priorbuyResult =
@@ -530,18 +526,12 @@ export default {
                       let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
                       currentProfitLoss =
                         parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-
-                        //console.log('Current -' + currentProfitLoss);
-                        //console.log('Prior -' + this.priorProfitLoss);
                         
                         let daychange =
                            parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
-                        if(this.priorProfitLoss != 0 ){  
-                          //console.log('Capital - '+ this.Capital);
-                          let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
-                          //console.log('Prior Equity -' + dperf);
+                        if(this.priorProfitLoss != 0 ){                          
+                          let dperf = parseFloat(this.Capital) + this.priorProfitLoss;                        
                           daychangeperf = (daychange / dperf) * 100;
-                          //daychangeperf = (daychange / this.priorProfitLoss) * 100;
                         }                     
                       this.$emit("DayChange", daychange);
                       this.$emit("DayChangePerc", daychangeperf);

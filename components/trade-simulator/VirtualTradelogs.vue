@@ -145,7 +145,7 @@
         >
           <v-btn small class="caption btn_sidemenu" text>Details</v-btn>
           <v-btn small class="caption btn_sidemenu" text>Edit</v-btn>
-          <v-btn small class="caption btn_sidemenu" v-on:click="deleteLogs(item.action)" text>Delete</v-btn>
+          <v-btn small class="caption btn_sidemenu"  @click.stop="showSellDelete=true" v-on:click="deleteLogs(item.action)" text>Delete</v-btn>
         </div>
         <v-icon
           small
@@ -213,20 +213,30 @@
       :imageid="shareLink"
       @closeModal="showShareForm = false"
     />
+    <sell-delete
+      v-on:confirmedDelete="deleteConfirm"
+      :visible="showSellDelete"
+      :itemDetails="itemDetails"
+      @close="showSellDelete=false"
+    />
   </v-col>
 </template>
 <script>
 import shareModal from "~/components/modals/share";
+import sellDelete from "~/components/modals/sellDelete";
 import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
-    shareModal
+    shareModal,
+    sellDelete
   },
   data: function() {
     return {
       shareLink: "",
       showShareForm: false,
       showScheduleForm: false,
+      showSellDelete: false,
+      itemDetails: null,
       itemsPerPage: 5,
       search: "",
       headers: [
@@ -253,7 +263,9 @@ export default {
       totalProfitLossPerf: 0,
       totalPerf: 0,
       date: new Date().toISOString().substr(0, 10),
-      modal: false
+      modal: false,
+      confirmdelete: false,
+      itemToDelete: '',
     };
   },
   props: ["item"],
@@ -282,6 +294,9 @@ export default {
     },
     simulatorOpenPosition: function() {
       this.getTradeLogs();
+    },
+    confirmdelete: function(){
+      this.execute(this.itemToDelete);
     }
   },
   methods: {
@@ -296,6 +311,40 @@ export default {
       };
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
+    },
+    deleteConfirm(value){
+      this.confirmdelete = value;
+    },
+    execute(item){
+      if(this.confirmdelete){
+        let profit = 0;
+        let perc = 0;
+        let plossperc = [];
+        for (let index = 0; index < this.tradeLogs.length; index++) {
+          if(this.tradeLogs[index].id == item){            
+            profit = this.tradeLogs[index].meta.profit_loss;
+            perc = this.tradeLogs[index].meta.profit_loss_percentage;
+            this.tradeLogs.splice(index, 1);
+            this.totalProfitLoss = parseFloat(this.totalProfitLoss) - parseFloat(profit);
+            this.totalProfitLossPerf = parseFloat(this.totalProfitLossPerf) - parseFloat(perc);   
+             this.$emit("totalRealized", this.totalProfitLoss);
+
+             if (
+                  parseFloat(this.tradeLogs[index].meta.profit_loss_percentage) < 0
+                ) {
+                  plossperc[index] = this.tradeLogs[index].meta.profit_loss_percentage;
+                  let maxx = this.arrayMax(plossperc);
+                  this.$emit("MaxDrawdown", maxx.toFixed(2));
+                }
+          }
+        }
+      }
+    },
+    deleteLogs(item) {
+      console.log('Tlogs -', item);
+      this.confirmdelete = false;
+      this.itemDetails = item;
+      this.itemToDelete = item.id;
     },
     getTradeLogs() {
       const tradelogsparams = {
@@ -343,7 +392,9 @@ export default {
                 this.totalProfitLossPerf =
                   this.totalProfitLossPerf +
                   parseFloat(this.tradeLogs[i].meta.profit_loss_percentage);
-                this.tradeLogs[i].action = this.tradeLogs[i].id;
+                this.tradeLogs[i].action = {
+                    id: this.tradeLogs[i].id
+                  };
                 this.$emit("totalRealized", this.totalProfitLoss);
 
                 if (
@@ -395,21 +446,7 @@ export default {
       let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
       return buyResult - dall;
     },
-    deleteLogs(item) {
-      if (confirm("Do you really want to delete?")) {
-        this.$axios
-          .$post(
-            process.env.API_URL +
-              "/journal/funds/tradelog/delete/" +
-              item
-          )
-          .then(response => {
-            if (response.success) {
-              this.getTradeLogs();
-            }
-          });
-      }
-    },
+    
     tradelogsmenuLogsShow: function(item) {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "block";
