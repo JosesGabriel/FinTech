@@ -59,7 +59,7 @@ export default {
      *
      * @return  {function}
      */
-    authorNewPost: function(value) {
+    authorNewPost(value) {
       this.newPost = value;
     }
   }

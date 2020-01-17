@@ -8,12 +8,15 @@ export default $axios => ({
       `${baseURL}/posts${query.length > 0 ? "?" + query : ""}`
     );
   },
+
   postComment(params, payload) {
     return $axios.$post(`${baseURL}/posts/` + params + `/comments`, payload);
   },
+
   bearish(params) {
     return $axios.$post(`${baseURL}/posts/` + params + `/bear`);
   },
+
   bullish(params) {
     return $axios.$post(`${baseURL}/posts/` + params + `/bull`);
   },

@@ -124,6 +124,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .login__textfield
   .v-input__control
