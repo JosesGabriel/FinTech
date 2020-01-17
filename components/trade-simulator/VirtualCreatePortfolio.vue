@@ -72,10 +72,10 @@ export default {
         keyCreateCounter: 2
     }),
     watch: {
-        namePortfolioModel: function() {
+        namePortfolioModel() {
             this.fieldsWatch();
         },
-        initialCapitalModel: function(newValue) {
+        initialCapitalModel(newValue) {
            this.fieldsWatch();
             const result = newValue
                 .replace(/\D/g, "")
@@ -83,7 +83,7 @@ export default {
             this.initialCapitalModel = result;
             // console.log(parseInt(this.initialCapitalModel))
         },
-        typePortfolioModel: function() {
+        typePortfolioModel() {
             this.fieldsWatch();
         }
     },
@@ -99,7 +99,7 @@ export default {
                 this.saveButtonDisable = true;
             }
         },
-        createPortfolio: function(){
+        createPortfolio(){
              let convertedNumbers = this.initialCapitalModel.replace(/,/g, "");
             const createportfolioparams = {
                

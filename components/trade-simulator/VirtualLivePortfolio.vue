@@ -333,16 +333,16 @@ export default {
     }
   },
   watch: {
-    simulatorOpenPosition: function() {
+    simulatorOpenPosition() {
       this.getOpenPositions();
     },
-    simulatorPortfolioID: function() {
+    simulatorPortfolioID() {
       this.getOpenPositions();
     },
-    EnterTradeModal: function() {
+    EnterTradeModal() {
       this.trade_modal = this.EnterTradeModal;
     },
-    confirmdelete: function(){
+    confirmdelete(){
       this.execute(this.itemToDelete);
     }  
 
@@ -429,12 +429,12 @@ export default {
         }
       }
     },
-    deleteLive: function(item) {    
+    deleteLive(item) {    
       this.confirmdelete = false;
       this.itemDetails = item;
       this.itemToDelete = item.id;
     },
-    details: function(item, edit) {
+    details(item, edit) {
       this.editDetails = edit;
       this.selectedstrategy = item.strategy;
       this.selectedtradeplan = item.tradeplan;
@@ -442,7 +442,7 @@ export default {
       this.notes = item.notes;
       this.edit_id = item.id;
     },
-    editLive: function() {
+    editLive() {
       if (confirm("Save changes?")) {
           const editparams = {
             strategy: this.selectedstrategy,
@@ -469,11 +469,11 @@ export default {
         item.style.background = "";
       }, 400);
     },
-    menuLogsShow: function(item) {
+    menuLogsShow(item) {
       let pl = document.getElementById(`pl_${item.id}`);
       pl.style.display = "block";
     },
-    menuLogsHide: function(item) {
+    menuLogsHide(item) {
       let pl = document.getElementById(`pl_${item.id}`);
 
       pl.style.display = "none";
@@ -555,7 +555,7 @@ export default {
       return buyResult - dall;
     },
      
-    initSSE: function() {
+    initSSE() {
       if (this.sse !== null) {
         this.sse.close();
         this.counter = 0;
@@ -589,7 +589,7 @@ export default {
      
     },
  
-    trigger: function(symbol, lprice){
+    trigger(symbol, lprice){
               
         let profit = 0;
         let perf = 0;
@@ -658,13 +658,13 @@ export default {
       stock: "chart/stock"
     }),
     
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor: function() {
+    fontcolor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
     },
-    fontcolor2: function() {
+    fontcolor2() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     },
    

@@ -230,7 +230,7 @@ export default {
     shareModal,
     sellDelete
   },
-  data: function() {
+  data() {
     return {
       shareLink: "",
       showShareForm: false,
@@ -275,13 +275,13 @@ export default {
       simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor: function() {
+    fontcolor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    fontcolor2: function() {
+    fontcolor2() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     }
   },
@@ -289,13 +289,13 @@ export default {
     if (this.simulatorPortfolioID != 0 ? this.getTradeLogs() : "");
   },
   watch: {
-    simulatorPortfolioID: function() {
+    simulatorPortfolioID() {
       this.getTradeLogs();
     },
-    simulatorOpenPosition: function() {
+    simulatorOpenPosition() {
       this.getTradeLogs();
     },
-    confirmdelete: function(){
+    confirmdelete(){
       this.execute(this.itemToDelete);
     }
   },
@@ -321,18 +321,18 @@ export default {
         let perc = 0;
         let plossperc = [];
         for (let index = 0; index < this.tradeLogs.length; index++) {
+           profit = this.tradeLogs[index].meta.profit_loss;
+           perc = this.tradeLogs[index].meta.profit_loss_percentage;
           if(this.tradeLogs[index].id == item){            
-            profit = this.tradeLogs[index].meta.profit_loss;
-            perc = this.tradeLogs[index].meta.profit_loss_percentage;
             this.tradeLogs.splice(index, 1);
             this.totalProfitLoss = parseFloat(this.totalProfitLoss) - parseFloat(profit);
             this.totalProfitLossPerf = parseFloat(this.totalProfitLossPerf) - parseFloat(perc);   
              this.$emit("totalRealized", this.totalProfitLoss);
-
-             if (
-                  parseFloat(this.tradeLogs[index].meta.profit_loss_percentage) < 0
+          }else { 
+            if (
+                  parseFloat(perc) < 0
                 ) {
-                  plossperc[index] = this.tradeLogs[index].meta.profit_loss_percentage;
+                  plossperc[index] = parseFloat(perc);
                   let maxx = this.arrayMax(plossperc);
                   this.$emit("MaxDrawdown", maxx.toFixed(2));
                 }
@@ -341,7 +341,6 @@ export default {
       }
     },
     deleteLogs(item) {
-      console.log('Tlogs -', item);
       this.confirmdelete = false;
       this.itemDetails = item;
       this.itemToDelete = item.id;
@@ -447,11 +446,11 @@ export default {
       return buyResult - dall;
     },
     
-    tradelogsmenuLogsShow: function(item) {
+    tradelogsmenuLogsShow(item) {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "block";
     },
-    tradelogsmenuLogsHide: function(item) {
+    tradelogsmenuLogsHide(item) {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "none";
     },

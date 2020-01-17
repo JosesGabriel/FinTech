@@ -170,13 +170,13 @@ export default {
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor: function() {
+    fontcolor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
     },
-    fontcolor2: function() {
+    fontcolor2() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     }
   },
@@ -203,10 +203,10 @@ export default {
     }
   },
   watch: {
-    simulatorPortfolioID: function(){
+    simulatorPortfolioID(){
       this.getPortfolio();
     },
-    simulatorConfirmedBuySell: function() {
+    simulatorConfirmedBuySell() {
       if (this.simulatorConfirmedBuySell == "sell") {
         let tcost =
           parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
@@ -216,11 +216,11 @@ export default {
         if (this.Reset == true ? (this.totalCost = 0) : "");
       }
     },
-    BuyPrice: function() {
+    BuyPrice() {
       if (this.simulatorConfirmedBuySell == "buy" ? (this.quantity = 0) : "");
       this.totalCost = 0;
     },
-    Position: function() {
+    Position() {
       this.quantity = this.Position;
       this.setSimulatorPositions(this.quantity);
       let add =
@@ -309,7 +309,7 @@ export default {
         n.toLocaleString().split(sep)[0] + sep + n.toFixed(2).split(sep)[1]
       );
     },
-    keypress: function() {
+    keypress() {
       let press = 0;
       if (this.simulatorConfirmedBuySell == "sell") {
         if (this.quantity > this.Position) {
@@ -326,7 +326,7 @@ export default {
       this.totalCost = this.addcomma(pressfees);
       this.$emit("totalPosition", this.quantity);
     },
-    getBalance: function(item) {     
+    getBalance(item) {     
       this.$api.journal.portfolio.portfolio().then(
         function(result) {     
           for (let i = 0; i < result.data.logs.length; i++) {
