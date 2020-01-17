@@ -4,7 +4,7 @@
       <v-row no-gutters>
         <span class="white--text pa-2 d-block font-weight-bold subtitle-1">About</span>
         <v-spacer></v-spacer>
-        <v-btn color="success" icon>
+        <v-btn color="success" icon @click.stop="showUploadPhoto=true">
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
       </v-row>
@@ -68,17 +68,21 @@
         </v-list-item>
       </v-container>
     </v-card>
+    <edit-about :visible="showUploadPhoto" @close="showUploadPhoto=false" />
   </v-container>
 </template>
 <script>
 import { QRCanvas } from "qrcanvas-vue";
+import editAbout from "~/components/profile/dialog/EditProfileAbout";
 
 export default {
   components: {
-    QRCanvas
+    QRCanvas,
+    editAbout
   },
   data() {
     return {
+      showUploadPhoto: false,
       options: {
         data: "hello",
         size: 50,
