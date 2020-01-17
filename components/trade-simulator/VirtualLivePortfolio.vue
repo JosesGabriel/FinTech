@@ -121,7 +121,7 @@
       :style="{ background: cardbackground }"
     >
       <v-card>
-        <v-card-title class="success--text" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
+        <v-card-title class="success--text" style="font-size: 16px;" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
         <v-card-text>
           <v-col sm="12" md="12" class="my-0">
             <div>
