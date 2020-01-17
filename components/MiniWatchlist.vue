@@ -328,6 +328,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .mWatchlist__text--noData {
   padding-top: 45px;
