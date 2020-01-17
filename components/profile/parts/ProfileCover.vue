@@ -152,6 +152,7 @@ export default {
 .profile_cover-cont {
   border: thin solid hsla(0, 0%, 100%, 0.12);
   border-radius: 0 0 5px 5px;
+  border-top: 0;
 }
 .profile_suminfo {
   /* margin-top: 26px; */

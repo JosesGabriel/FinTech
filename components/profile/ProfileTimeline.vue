@@ -21,7 +21,7 @@
               </v-col>
               <v-col cols="12" sm="12" md="4" lg="4">
                 <!-- <ProfileCourse /> // hide for now -->
-                <ProfileSuggestionUser />
+                <ProfileSuggestedUser />
                 <ProfileRooms />
                 <ProfileAds />
                 <v-container>
@@ -64,7 +64,7 @@ import ProfileEducation from "~/components/profile/parts/ProfileEducation";
 import ProfileSkills from "~/components/profile/parts/ProfileSkills";
 import ProfileInterests from "~/components/profile/parts/ProfileInterests";
 import ProfileRooms from "~/components/profile/parts/ProfileRooms";
-import ProfileSuggestionUser from "~/components/profile/parts/ProfileSuggestionUser";
+import ProfileSuggestedUser from "~/components/profile/parts/ProfileSuggestedUser";
 import ProfileAds from "~/components/profile/parts/ProfileAds";
 import FooterSidebar from "~/components/FooterSidebar";
 // import ProfileCourse from "~/components/profile/parts/ProfileCourse"; // hide for now
@@ -85,7 +85,7 @@ export default {
     ProfileSkills,
     ProfileInterests,
     ProfileRooms,
-    ProfileSuggestionUser,
+    ProfileSuggestedUser,
     ProfileAds,
     FooterSidebar,
     // ProfileCourse, // hide for now
