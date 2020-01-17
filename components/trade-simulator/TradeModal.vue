@@ -7,7 +7,8 @@
   >
     <v-card :dark="lightSwitch == true" :style="{ background: cardbackground }">
       <v-card-title
-        class="text-left justify-left pa-5 pb-0 px-5 success--text"
+        class="text-left justify-left pa-5 pb-3 px-5 success--text"
+        style="font-size:16px;"
       >TRADE</v-card-title>
       <v-stepper
         v-model="e1"
@@ -85,6 +86,7 @@
                     <v-card-title
                       class="pa-0"
                       style="font-size:12.5px !important;"
+                      :style="{ color: fontcolor2 }"
                     >Current Price</v-card-title>
                     <v-spacer></v-spacer>
                     <v-card-title :style="{ color: fontcolor2 }" class="pa-0">
@@ -116,9 +118,11 @@
                         id="liveportfolio-table"
                       >
                         <template v-slot:default>
-                          <tbody>
-                            <tr id="table_tr_snap-cont">
-                              <td class="item_position-prop py-1 px-1 stock_details">Previous</td>
+                          <tbody :style="{color: fontcolor2}" >
+                            <tr id="table_tr_snap-cont" >
+                              <td class="item_position-prop py-1 px-1 stock_details"
+                              
+                              >Previous</td>
                               <td
                                 class="item_position-prop text-right pa-0 px-1 stock_details"
                               >{{ prev }}</td>
@@ -158,7 +162,7 @@
                         id="liveportfolio-table"
                       >
                         <template v-slot:default>
-                          <tbody>
+                          <tbody :style="{color: fontcolor2}">
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop py-1 px-1 stock_details">Open</td>
                               <td
@@ -588,16 +592,9 @@ export default {
             }
           };
      
-          this.$axios
-            .$post(
-              process.env.API_URL +
-                "/journal/funds/" +
-                fund_id +
-                "/sell/" +
-                stock_id,
-              sellparams
-            )
-            .then(response => {
+        this.$api.journal.portfolio
+        .tradesell(fund_id, stock_id, sellparams)
+        .then(response => {
               if (response.success) {         
                 this.setSimulatorOpenPosition(this.OpenPosition);
                 this.e1 = 1;
@@ -612,7 +609,6 @@ export default {
         // if Buy is selected
 
         const buyparams = {
-         // user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
           position: this.simulatorPositions,
           stock_price: this.cprice,
           transaction_meta: {
@@ -622,20 +618,12 @@ export default {
             notes: this.notes,
             date: dformat
           }
-        };
-     
-        this.$axios
-          .$post(
-            process.env.API_URL +
-              "/journal/funds/" +
-              fund_id +
-              "/buy/" +
-              stock_id,
-            buyparams
-          )
-          .then(response => {
-            if (response.success) {
-              
+        };   
+        
+         this.$api.journal.portfolio
+        .tradebuy(fund_id, stock_id, buyparams)
+        .then(response => {
+            if (response.success) {          
               this.setSimulatorOpenPosition(this.OpenPosition);
               this.e1 = 1;
               this.onreset = false;

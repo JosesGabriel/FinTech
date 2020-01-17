@@ -66,6 +66,8 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
     deleteNow() {
+      let confirmed = true;
+      this.$emit("confirmedDelete", confirmed);
       let transaction_id = this.transaction_id;
       this.$api.journal.portfolio.selldelete(transaction_id).then(response => {
         if (response.success) {
