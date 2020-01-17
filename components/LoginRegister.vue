@@ -46,11 +46,7 @@
           </v-stepper-content>
 
           <v-stepper-content step="4" class="pa-0">
-            <v-card
-              height="584px"
-              :dark="isLightMode == 0 ? false : true"
-              :loading="isLoading"
-            >
+            <v-card height="584px" :dark="isLightMode == 0 ? false : true">
               <div
                 class="display-1 font-weight-bold loginCard--intro text-center py-2"
               >
