@@ -40,10 +40,6 @@ export default {
     return state.index;
   },
 
-  allstocks: state => {
-    return state.allstocks;
-  },
-
   tabsSidebar: state => {
     return state.tabsSidebar;
   },

@@ -118,7 +118,6 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
       responsiveHeight: "chart/responsiveHeight",
-      allstocks: "chart/allstocks",
       sseInfo: "chart/sseInfo",
       blink: "chart/blink"
     }),

@@ -120,7 +120,6 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
       responsiveHeight: "chart/responsiveHeight",
-      allstocks: "chart/allstocks",
       sseInfo: "chart/sseInfo",
       blink: "chart/blink"
     }),
@@ -142,8 +141,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSymbolID: "chart/setSymbolID",
-      setAllstocks: "chart/setAllstocks"
+      setSymbolID: "chart/setSymbolID"
     }),
     /**
      * add simpe blink animation effect
@@ -195,7 +193,6 @@ export default {
             description
           });
         });
-        //this.setAllstocks(this.allStocks);
         this.loading = false;
       } catch (error) {
         console.log(error);

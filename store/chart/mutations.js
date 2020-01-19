@@ -60,10 +60,6 @@ export default {
     state.index = data;
   },
 
-  SET_ALLSTOCKS(state, data) {
-    state.allstocks = data;
-  },
-
   SET_TABS_SIDEBAR(state, data) {
     state.tabsSidebar = data;
   },
