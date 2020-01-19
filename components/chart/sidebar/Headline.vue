@@ -5,7 +5,7 @@
         <v-content>
           <v-slide-y-reverse-transition>
             <v-icon
-              v-show="changetype == 1"
+              v-show="changeType == 1"
               size="60"
               class="arrow-icon increase"
               >mdi-chevron-up</v-icon
@@ -14,7 +14,7 @@
 
           <v-slide-y-transition>
             <v-icon
-              v-show="changetype == 2"
+              v-show="changeType == 2"
               size="60"
               class="arrow-icon decrease"
               >mdi-chevron-down</v-icon
@@ -41,8 +41,8 @@
           <span
             class="hchange"
             :class="[
-              { increase: changetype == 1 },
-              { decrease: changetype == 2 }
+              { increase: changeType == 1 },
+              { decrease: changeType == 2 }
             ]"
           >
             <span id="stock__change">{{
@@ -117,7 +117,7 @@ export default {
       stock_change: "chart/stock_change",
       stock_changepercentage: "chart/stock_changepercentage",
       stock_marketcap: "chart/stock_marketcap",
-      headline_loading: "chart/headline_loading",
+      headlineLoading: "chart/headlineLoading",
       favicon: "global/favicon",
       sse: "chart/sse",
       blink: "chart/blink"
@@ -127,7 +127,7 @@ export default {
      *
      * @return
      */
-    changetype() {
+    changeType() {
       let value = this.stock.change;
       if (value > 0) {
         return 1;
@@ -139,7 +139,7 @@ export default {
     }
   },
   watch: {
-    headline_loading(value) {
+    headlineLoading(value) {
       if (value === false) {
         this.sse.addEventListener("info", this.sseInfo);
       }

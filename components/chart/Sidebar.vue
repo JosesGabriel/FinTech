@@ -1,7 +1,7 @@
 <template>
-  <v-content :style="{ background: cardbackground }">
+  <v-content :style="{ background: cardBackground }">
     <v-card
-      :loading="headline_loading"
+      :loading="headlineLoading"
       style="height:220px"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       flat
@@ -36,14 +36,14 @@ export default {
     ...mapGetters({
       symbolid: "chart/symbolid",
       lightSwitch: "global/getLightSwitch",
-      headline_loading: "chart/headline_loading"
+      headlineLoading: "chart/headlineLoading"
     }),
     /**
      * toggle card background dark/light
      *
      * @return  {String}
      */
-    cardbackground() {
+    cardBackground() {
       return this.lightSwitch == 0 ? "#e3e9ed" : "#172431";
     }
   },
@@ -63,7 +63,7 @@ export default {
      * @return
      */
     async initStock(symid) {
-      this.setHeadlineLoading("#03dac5");
+      this.setHeadlineLoading("success");
       try {
         const response = await this.$api.chart.stocks.history({
           "symbol-id": symid
@@ -102,7 +102,7 @@ export default {
     }
   },
   watch: {
-    symbolid(symid, oldsymid) {
+    symbolid(symid) {
       this.initStock(symid);
     }
   },

@@ -20,7 +20,7 @@ export default {
   },
 
   SET_HEADLINE_LOADING(state, data) {
-    state.headline_loading = data;
+    state.headlineLoading = data;
   },
 
   SET_SYMBOLID(state, data) {
@@ -65,15 +65,15 @@ export default {
   },
 
   SET_TABS_SIDEBAR(state, data) {
-    state.tabs_sidebar = data;
+    state.tabsSidebar = data;
   },
 
   SET_TRADE_LOGIN(state, data) {
-    state.trade_login = data;
+    state.tradeLogin = data;
   },
 
   SET_MARKET_CODE(state, data) {
-    state.market_code = data;
+    state.marketCode = data;
   },
 
   SET_SSE(state, data) {

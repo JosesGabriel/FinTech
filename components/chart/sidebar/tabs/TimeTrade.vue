@@ -4,7 +4,7 @@
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
-      :style="`height: calc(100vh - ${responsive_height + 20}px)`"
+      :style="`height: calc(100vh - ${responsiveHeight + 20}px)`"
       class="card__timetrade pl-1 pr-2"
       flat
       tile
@@ -13,8 +13,8 @@
         dense
         :dark="lightSwitch == 1"
         fixed-header
-        :style="{ background: cardbackground }"
-        :height="`calc(100vh - ${responsive_height + 20}px)`"
+        :style="{ background: cardBackground }"
+        :height="`calc(100vh - ${responsiveHeight + 20}px)`"
       >
         <thead>
           <tr>
@@ -73,9 +73,9 @@ export default {
   name: "TimeTrade",
   data() {
     return {
-      loading: "#03dac5",
-      temp_trades: [],
-      ctr_trades: 0
+      loading: "success",
+      tempTrades: [],
+      ctrTrades: 0
     };
   },
   computed: {
@@ -83,7 +83,7 @@ export default {
       symbolid: "chart/symbolid",
       index: "chart/index",
       lightSwitch: "global/getLightSwitch",
-      responsive_height: "chart/responsive_height",
+      responsiveHeight: "chart/responsiveHeight",
       trades: "chart/trades",
       sse: "chart/sse",
       blink: "chart/blink"
@@ -93,7 +93,7 @@ export default {
      *
      * @return
      */
-    cardbackground() {
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -111,7 +111,7 @@ export default {
     },
     loading(value) {
       if (value === false) {
-        this.temp_trades = this.trades;
+        this.tempTrades = this.trades;
         this.sse.addEventListener("trade", this.sseTrade);
       }
     }
@@ -129,7 +129,7 @@ export default {
      * @return
      */
     initTimetrade(symid) {
-      this.loading = "#03dac5";
+      this.loading = "success";
       this.$api.chart.stocks
         .trades({
           "symbol-id": symid,
@@ -156,9 +156,9 @@ export default {
         const trades = JSON.parse(e.data);
         this.setSSETrade(trades);
         if (this.symbolid !== trades.sym_id) return;
-        this.temp_trades.unshift({
-          id: `${trades.t}_${this.ctr_trades++}`,
-          id_str: String(`${trades.t}_${this.ctr_trades++}`),
+        this.tempTrades.unshift({
+          id: `${trades.t}_${this.ctrTrades++}`,
+          id_str: String(`${trades.t}_${this.ctrTrades++}`),
           timestamp: trades.t,
           date: null,
           datetime: null,
@@ -169,10 +169,10 @@ export default {
         });
 
         if (this.trades.length !== undefined && this.trades.length > 0) {
-          if (this.temp_trades.length > 99) {
-            this.temp_trades.pop();
+          if (this.tempTrades.length > 99) {
+            this.tempTrades.pop();
           }
-          this.setTrades(this.temp_trades);
+          this.setTrades(this.tempTrades);
         }
       } catch (err) {}
     },

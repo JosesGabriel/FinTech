@@ -22,7 +22,7 @@
         dense
         :dark="lightSwitch == 1"
         fixed-header
-        :style="{ background: cardbackground }"
+        :style="{ background: cardBackground }"
         height="105px"
         class="custom_table pl-5 pr-3"
       >
@@ -115,7 +115,7 @@ export default {
   },
   data() {
     return {
-      loading: "#03dac5"
+      loading: "success"
     };
   },
   computed: {
@@ -125,7 +125,7 @@ export default {
       lightSwitch: "global/getLightSwitch",
       sse: "chart/sse"
     }),
-    cardbackground: function() {
+    cardBackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -164,7 +164,7 @@ export default {
       return result;
     },
     initBidask: async function(symid) {
-      this.loading = "#03dac5";
+      this.loading = "success";
       //console.log("bidask");
       try {
         const response = await this.$api.chart.stocks.bidask({

@@ -74,9 +74,9 @@
                 md="12"
                 class="text-right pb-0 pl-0 pr-3"
                 :class="[
-                  { increase: changetype(open.profit_loss) == 1 },
-                  { decrease: changetype(open.profit_loss) == 2 },
-                  { neutral: changetype(open.profit_loss) == 0 }
+                  { increase: changeType(open.profit_loss) == 1 },
+                  { decrease: changeType(open.profit_loss) == 2 },
+                  { neutral: changeType(open.profit_loss) == 0 }
                 ]"
               >
                 {{ open.profit_loss | numeral("0.00a") }}
@@ -93,9 +93,9 @@
                 md="12"
                 class="text-right pb-0 pl-0 pr-3"
                 :class="[
-                  { increase: changetype(open.pl_percentage) == 1 },
-                  { decrease: changetype(open.pl_percentage) == 2 },
-                  { neutral: changetype(open.pl_percentage) == 0 }
+                  { increase: changeType(open.pl_percentage) == 1 },
+                  { decrease: changeType(open.pl_percentage) == 2 },
+                  { neutral: changeType(open.pl_percentage) == 0 }
                 ]"
               >
                 {{ open.pl_percentage | numeral("0.00a") }}
@@ -119,7 +119,7 @@
         calculate-widths
         disable-pagination
         hide-default-footer
-        :style="{ background: cardbackground }"
+        :style="{ background: cardBackground }"
         :height="`${tablesize}`"
       >
         <template v-slot:item="props">
@@ -251,30 +251,20 @@ export default {
       ticker: "chart/getTicker",
       lightSwitch: "global/getLightSwitch",
       stock: "chart/stock",
-      symbolid: "chart/symbolid",
-      index: "chart/index",
-      market_code: "chart/market_code"
+      symbolid: "chart/symbolid"
     }),
     tablesize: function() {
       return this.fullscreen ? this.max : this.min;
     },
-    cardbackground: function() {
+    cardBackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   watch: {
     symbolid(symbolid) {
-      // console.log("symbols");
-      // console.log(value);
       this.initActivity(symbolid);
     },
-    fullscreen(value) {
-      // console.log("fullscreen");
-      // console.log(value);
-    },
     ticker(value) {
-      // console.log("ticker");
-      // console.log(value);
       if (value) {
         this.max = "calc(100vh - 295px)";
       } else {
@@ -286,13 +276,10 @@ export default {
     this.initActivity(this.symbolid);
   },
   methods: {
-    shareActivity: function() {
-      console.log("share");
-    },
+    shareActivity: function() {},
     initActivity: function(symid) {
       this.$api.journal.portfolio
         .open({
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
           fund: "real",
           stock_id: symid
         })
@@ -302,17 +289,14 @@ export default {
 
       this.$api.journal.portfolio
         .tradelogs({
-          user_id: "2d5486a1-8885-47bc-8ac6-d33b17ff7b58",
           fund: "real",
           stock: symid
         })
         .then(response => {
-          console.log("tradelogs");
           this.items = response.data.logs;
-          console.log(this.items);
         });
     },
-    changetype: function(value) {
+    changeType: function(value) {
       if (value > 0) {
         return 1;
       } else if (value < 0) {
@@ -339,7 +323,6 @@ export default {
 
 <style scoped>
 #top {
-  /* background: red; */
   height: 120px;
 }
 #icon__share {
@@ -360,15 +343,8 @@ export default {
   color: #fe4949;
 }
 .vt_realized {
-  /* background: #0c1a2b73; */
-  /* border: #b6b6b6 1px solid; */
   border: rgb(182, 182, 182, 0.2) 1px solid;
 }
-/* .vt_realized:hover {
-  background: #0c1a2b;
-  box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
-    0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12) !important;
-} */
 .neutral {
   color: #dddddd !important;
 }

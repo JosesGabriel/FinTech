@@ -5,7 +5,7 @@
         :indeterminate="progbar.loading"
         :value="progbar.value"
         background-color="error"
-        color="#03dac5"
+        color="success"
         height="5"
       ></v-progress-linear>
     </div>

@@ -9,7 +9,7 @@
         v-show="maximize || fullscreen"
         small
         icon
-        :color="fullscreen ? '#03dac5' : '#b6b6b6'"
+        :color="fullscreen ? 'success' : '#b6b6b6'"
         :class="[{ button__disable: !maximize && !fullscreen }]"
         title="Maximize Table"
         @click="toggleTabsFullscreen"
@@ -21,7 +21,7 @@
       <v-btn
         small
         icon
-        :color="ticker ? '#03dac5' : '#BBB'"
+        :color="ticker ? 'success' : '#BBB'"
         title="Ticker"
         @click="toggleTicker"
       >
@@ -31,7 +31,7 @@
       <v-btn
         small
         icon
-        :color="sidebarboard ? '#03dac5' : '#b6b6b6'"
+        :color="sidebarboard ? 'success' : '#b6b6b6'"
         title="Sidebar"
         @click="toggleSidebarBoard"
       >
@@ -41,7 +41,7 @@
 
     <v-tabs
       height="30"
-      color="#03dac5"
+      color="success"
       class="table__tabs"
       :background-color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :dark="lightSwitch == true"
@@ -61,7 +61,7 @@
         v-for="item in tabs_content"
         :key="item.id"
         :value="`tab-${item.id}`"
-        :style="{ background: cardbackground }"
+        :style="{ background: cardBackground }"
       >
         <component :is="item.component" v-show="tabs_show" />
       </v-tab-item>
@@ -123,7 +123,7 @@ export default {
      *
      * @return  {String} 
      */
-    cardbackground() {
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },

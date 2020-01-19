@@ -111,12 +111,6 @@ export default {
     mode() {
       return this.lightSwitch == false ? "light" : "dark";
     }
-  },
-  watch: {
-    lightSwitch(value) {
-      //console.log("light");
-      //console.log(this.mode);
-    }
   }
 };
 </script>

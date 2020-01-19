@@ -14,21 +14,21 @@
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :loading="loading"
       class="pl-3 pr-2"
-      :style="`height: calc(100vh - ${responsive_height - 170}px)`"
+      :style="`height: calc(100vh - ${responsiveHeight - 170}px)`"
       flat
       tile
     >
       <v-data-table
         :headers="headers"
-        :items="all_stocks"
+        :items="allStocks"
         class="data_table-container custom_table"
         dense
         :dark="lightSwitch == 1"
         fixed-header
         disable-pagination
         hide-default-footer
-        :height="`calc(100vh - ${responsive_height - 160}px)`"
-        :style="{ background: cardbackground }"
+        :height="`calc(100vh - ${responsiveHeight - 160}px)`"
+        :style="{ background: cardBackground }"
       >
         <!-- <template #item.symbol="{item}">
             SYM
@@ -112,14 +112,14 @@ export default {
           class: "text-right"
         }
       ],
-      loading: "#03dac5",
-      all_stocks: []
+      loading: "success",
+      allStocks: []
     };
   },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      responsive_height: "chart/responsive_height",
+      responsiveHeight: "chart/responsiveHeight",
       allstocks: "chart/allstocks",
       sseInfo: "chart/sseInfo",
       blink: "chart/blink"
@@ -129,7 +129,7 @@ export default {
      *
      * @return
      */
-    cardbackground() {
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -166,7 +166,7 @@ export default {
      * @return
      */
     async initAllStock() {
-      this.loading = "#03dac5";
+      this.loading = "success";
       try {
         const response = await this.$api.chart.stocks.history({
           exchange: "PSE"
@@ -184,7 +184,7 @@ export default {
             trades,
             description
           } = data;
-          this.all_stocks.push({
+          this.allStocks.push({
             stockidstr,
             symbol,
             change,
@@ -195,7 +195,7 @@ export default {
             description
           });
         });
-        //this.setAllstocks(this.all_stocks);
+        //this.setAllstocks(this.allStocks);
         this.loading = false;
       } catch (error) {
         console.log(error);
@@ -210,11 +210,11 @@ export default {
      */
     sseAllInfo(data) {
       try {
-        const stock = this.all_stocks.find(
+        const stock = this.allStocks.find(
           resp => resp.stockidstr == data.sym_id
         );
-        const key = this.all_stocks.indexOf(stock);
-        this.all_stocks.splice(key, 1, {
+        const key = this.allStocks.indexOf(stock);
+        this.allStocks.splice(key, 1, {
           stockidstr: stock.stockidstr,
           symbol: stock.symbol,
           change: data.chg,

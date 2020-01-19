@@ -32,12 +32,12 @@
       ></v-progress-linear>
     </v-card>
 
-    <h4 v-show="noitems === true" class="text-center">No Watchlist</h4>
+    <h4 v-show="noItems === true" class="text-center">No Watchlist</h4>
 
     <v-card
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      :max-height="`calc(100vh - ${responsive_height - 170}px)`"
+      :max-height="`calc(100vh - ${responsiveHeight - 170}px)`"
       style="overflow-y: auto;"
       class="mt-2 mr-2"
       flat
@@ -110,14 +110,14 @@ export default {
   data() {
     return {
       loading: true,
-      noitems: false,
+      noItems: false,
       items: []
     };
   },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      responsive_height: "chart/responsive_height",
+      responsiveHeight: "chart/responsiveHeight",
       allstocks: "chart/allstocks",
       sseInfo: "chart/sseInfo",
       blink: "chart/blink"
@@ -170,7 +170,7 @@ export default {
         });
         this.loading = false;
       } catch (error) {
-        this.noitems = true;
+        this.noItems = true;
         this.loading = false;
       }
     },

@@ -3,7 +3,7 @@
   <v-app
     id="chart_body"
     class="gameGlobal"
-    :style="{ background: cardbackground }"
+    :style="{ background: cardBackground }"
   >
     <Header />
     <div class="spacer__content"></div>
@@ -84,7 +84,7 @@ export default {
      *
      * @return  {String}
      */
-    cardbackground: function() {
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -99,7 +99,7 @@ export default {
      *
      * @return
      */
-    closeSSE: function() {
+    closeSSE() {
       this.sse.close();
       this.$store.commit(
         "global/SET_FAVICON",
@@ -111,7 +111,7 @@ export default {
      *
      * @return  {function}  [return description]
      */
-    initSSE: function() {
+    initSSE() {
       if (this.sse !== null) {
         this.closeSSE();
       }

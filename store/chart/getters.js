@@ -16,8 +16,8 @@ export default {
     return state.sidebar;
   },
 
-  headline_loading: state => {
-    return state.headline_loading;
+  headlineLoading: state => {
+    return state.headlineLoading;
   },
 
   symbolid: state => {
@@ -44,17 +44,17 @@ export default {
     return state.allstocks;
   },
 
-  tabs_sidebar: state => {
-    return state.tabs_sidebar;
+  tabsSidebar: state => {
+    return state.tabsSidebar;
   },
-  trade_login: state => {
-    return state.trade_login;
+  tradeLogin: state => {
+    return state.tradeLogin;
   },
-  market_code: state => {
-    return state.market_code;
+  marketCode: state => {
+    return state.marketCode;
   },
-  responsive_height: state => {
-    return state.responsive_height;
+  responsiveHeight: state => {
+    return state.responsiveHeight;
   },
 
   /* status stock */
