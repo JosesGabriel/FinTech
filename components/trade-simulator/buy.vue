@@ -4,12 +4,12 @@
       <v-col cols="12" sm="12" md="12">
         <v-row no-gutters>
           <v-card-title
-            :style="{ color: fontcolor2 }"
+            :style="{ color: toggleFontColor }"
             :class="
               this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : ''
             "
             style="font-size:13px !important;"
-            class="px-0 py-2 secondary--text"
+            class="px-0 py-2"
           >Available Funds</v-card-title>
           <v-spacer></v-spacer>
           <v-card-title
@@ -17,7 +17,7 @@
             :class="
               this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : ''
             "
-            class="px-0 py-2 secondary--text"
+            class="px-0 py-2"
             style="font-size:13px !important;"
           >{{ this.availableFunds }}</v-card-title>
         </v-row>
@@ -44,7 +44,7 @@
               <template slot="item" slot-scope="data">
                 <v-list-item-content
                   :dark="lightSwitch == true"
-                  :style="{ background: cardbackground }"
+                  :style="{ background: cardBackground }"
                   style="padding: 21px 12px; margin: -16px;"
                 >
                   <v-list-item-title v-html="data.item"></v-list-item-title>
@@ -63,7 +63,7 @@
               placeholder="Enter Quantity"
               @keyup="keypress"
               color="#00FFC3"
-              :style="{ color: fontcolor2 }"
+              :style="{ color: toggleFontColor }"
               flat
               class="body-2 buy_selector buy_price-input py-3 pb-0"
               type="number"
@@ -94,7 +94,7 @@
                   : 'Enter Buy Price'
               "
               color="#00FFC3"
-              :style="{ color: fontcolor2 }"
+              :style="{ color: toggleFontColor }"
               class="body-2 buy_selector quantity-input py-3"
               readonly
               :value="this.BuyPrice"
@@ -104,7 +104,7 @@
             <v-row no-gutters>
               <v-card-title
                 style="font-size:13px !important"
-                :style="{ color: fontcolor2 }"
+                :style="{ color: toggleFontColor }"
                 :class="
                   this.simulatorConfirmedBuySell == 'sell'
                     ? 'boardlotsell'
@@ -114,7 +114,7 @@
               >Board lot</v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
-                :style="{ color: fontcolor2 }"
+                :style="{ color: toggleFontColor }"
                 class="pa-0 secondary--text"
                 style="font-size:13px !important"
               >{{ this.BoardLot }}</v-card-title>
@@ -125,7 +125,7 @@
             <v-row no-gutters>
               <v-card-title
                 style="font-size:13px !important"
-                :style="{ color: fontcolor2 }"
+                :style="{ color: toggleFontColor }"
                 class="px-0 py-2 secondary--text"
               >
                 {{
@@ -136,7 +136,7 @@
               </v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
-                :style="{ color: fontcolor2 }"
+                :style="{ color: toggleFontColor }"
                 class="px-0 py-2 secondary--text"
                 style="font-size:13px !important"
               >{{ this.totalCost }}</v-card-title>
@@ -170,13 +170,21 @@ export default {
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground() {
+    /**
+     * Toggle background color (Dark/light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor() {
-      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
-    },
-    fontcolor2() {
+        
+    /**
+     * Toggle Font Color (Dark/Light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    toggleFontColor() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     }
   },
@@ -211,7 +219,7 @@ export default {
         let tcost =
           parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
         this.totalCost = this.fees(tcost);
-        this.totalCost = this.addcomma(this.totalCost);
+        this.totalCost = this.addComma(this.totalCost);
       } else {
         if (this.Reset == true ? (this.totalCost = 0) : "");
       }
@@ -226,7 +234,7 @@ export default {
       let add =
         parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
       let addfees = this.fees(add);
-      this.totalCost = this.addcomma(addfees);
+      this.totalCost = this.addComma(addfees);
     }
   },
   mounted() {
@@ -237,6 +245,9 @@ export default {
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
       setSimulatorPositions: "tradesimulator/setSimulatorPositions"
     }),
+    /**
+     * Get List of Portfolios
+     */
     getPortfolio(){
         this.$api.journal.portfolio.portfolio().then(
           function(result) {        
@@ -245,9 +256,9 @@ export default {
                 result.data.logs[i].type == "virtual"
               ) {
                 this.portfolio.push(result.data.logs[i].name);
-                if (result.data.logs[i].name == "My Virtual Portfolio") {
+                if (result.data.logs[i].id == this.simulatorPortfolioID) {
                   let avfunds = parseFloat(result.data.logs[i].balance);
-                  this.availableFunds = this.addcomma(avfunds);
+                  this.availableFunds = this.addComma(avfunds);
                   this.defaultvalue = result.data.logs[i].name;
                 }
               }
@@ -255,6 +266,9 @@ export default {
           }.bind(this)
         );
     },
+    /**
+     * Calculate Quantity & Total Cost based on Boardlot (Addition)
+     */
     addButton() {
       if (this.simulatorConfirmedBuySell == "sell") {
         this.quantity =
@@ -269,9 +283,12 @@ export default {
         parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
       let addfees = this.fees(add);
       this.setSimulatorPositions(this.quantity);
-      this.totalCost = this.addcomma(addfees);
+      this.totalCost = this.addComma(addfees);
       this.$emit("totalPosition", this.quantity);
     },
+    /**
+     * Calculate Quantity & Total Cost based on Boardlot (Subtraction)
+     */
     minusButton() {
       this.quantity =
         this.quantity <= 0 || this.quantity < parseInt(this.BoardLot)
@@ -281,9 +298,16 @@ export default {
         parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
       let minfees = this.fees(min);
       this.setSimulatorPositions(this.quantity);
-      this.totalCost = this.addcomma(minfees);
+      this.totalCost = this.addComma(minfees);
       this.$emit("totalPosition", this.quantity);
     },
+    /**
+     * Calculate the fees based on Price
+     *
+     * @param   {float}  buyResult   (Position * Last Price)
+     *
+     * @return  {float}  total fees
+     */
     fees(buyResult) {
       let dpartcommission = buyResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
@@ -302,20 +326,33 @@ export default {
         return buyResult + dall;
       }
     },
-    addcomma(n, sep, decimals) {
+    /**
+     * Add comma separator
+     *
+     * @param   {int}  n            number
+     * @param   {char}  sep         separator character
+     * @param   {int}  decimals     number of decimals
+     *
+     */
+    addComma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
       return (
         n.toLocaleString().split(sep)[0] + sep + n.toFixed(2).split(sep)[1]
       );
     },
+    /**
+     * Calculate TOtal Cost in entering Quantity
+     *
+     * @return  {[type]}  [return description]
+     */
     keypress() {
       let press = 0;
       if (this.simulatorConfirmedBuySell == "sell") {
         if (this.quantity > this.Position) {
           press = parseFloat(this.Position) * parseFloat(this.BuyPrice);
           let pressfees = this.fees(press);
-          this.totalCost = this.addcomma(pressfees);
+          this.totalCost = this.addComma(pressfees);
           this.$emit("totalPosition", this.quantity);
           return (this.quantity = this.Position);
         }
@@ -323,23 +360,32 @@ export default {
       press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
       let pressfees = this.fees(press);
       this.setSimulatorPositions(this.quantity);
-      this.totalCost = this.addcomma(pressfees);
+      this.totalCost = this.addComma(pressfees);
       this.$emit("totalPosition", this.quantity);
     },
+    /**
+     * Get Available Funds
+     *
+     * @param   {string}  item  Portfolio ID
+     *
+     * @return  {Float}       balance
+     */
     getBalance(item) {     
       this.$api.journal.portfolio.portfolio().then(
         function(result) {     
           for (let i = 0; i < result.data.logs.length; i++) {
-            if (result.data.logs[i].name == item) {
-              this.setSimulatorPortfolioID(result.data.logs[i].id);
-              let avfunds = parseFloat(result.data.logs[i].balance);
-              this.availableFunds = this.addcomma(avfunds);
-            }
+            if (
+                result.data.logs[i].type == "virtual"
+              ) {
+                  if(result.data.logs[i].name == item) {
+                    this.setSimulatorPortfolioID(result.data.logs[i].id);
+                    let avfunds = parseFloat(result.data.logs[i].balance);
+                    this.availableFunds = this.addComma(avfunds);
+                  }
+              }
           }
         }.bind(this)
-      );
-
-      
+      );    
     }
   }
 };

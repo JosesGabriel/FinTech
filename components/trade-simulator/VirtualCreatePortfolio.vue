@@ -81,7 +81,6 @@ export default {
                 .replace(/\D/g, "")
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             this.initialCapitalModel = result;
-            // console.log(parseInt(this.initialCapitalModel))
         },
         typePortfolioModel() {
             this.fieldsWatch();
@@ -92,6 +91,10 @@ export default {
             setRenderPortfolioKey: "journal/setRenderPortfolioKey",
             setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
         }),
+        /**
+         * Input field validation
+         *
+         */
         fieldsWatch() {
             if ( this.typePortfolioModel != "" || this.initialCapital != "" || this.namePortfolioModel != "" ) {
                 this.saveButtonDisable = false;
@@ -99,6 +102,10 @@ export default {
                 this.saveButtonDisable = true;
             }
         },
+        /**
+         * Create Virtual Portfolio
+         *
+         */
         createPortfolio(){
              let convertedNumbers = this.initialCapitalModel.replace(/,/g, "");
             const createportfolioparams = {
@@ -121,6 +128,10 @@ export default {
                 }.bind(this)
             );
         },
+        /**
+         * Initialized Portfolio ID
+         *
+         */
         getPorfolio(){
             let num = 0;
             this.$api.journal.portfolio.portfolio().then(

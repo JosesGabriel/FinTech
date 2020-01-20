@@ -3,7 +3,7 @@
     v-model="show"
     max-width="450px"
     :dark="lightSwitch == true"
-    :style="{ background: cardbackground }"
+    :style="{ background: cardBackground }"
   >
     <v-card dark="lightSwitch == true" :style="{ background: cardbackground }">
       <v-card-title class="text-center justify-center px-5 pt-10">
@@ -63,7 +63,12 @@ export default {
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground() {
+    /**
+     * Change background color (Dark/light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     show: {
@@ -82,6 +87,9 @@ export default {
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
       setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition"
     }),
+    /**
+     * Reset Trade Simulator Portfolio
+     */
     resetLive() {
        this.$api.journal.portfolio.reset(this.simulatorPortfolioID).then(response => {
           if (response.success) {
