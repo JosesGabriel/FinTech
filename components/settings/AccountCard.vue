@@ -37,7 +37,7 @@
                     <v-text-field
                       v-model="firstName"
                       class="name__field"
-                      color="#172431"
+                      color="#b6b6b6"
                       hide-details
                       outlined
                       dense
@@ -53,7 +53,7 @@
                     ><v-text-field
                       v-model="lastName"
                       class="name__field"
-                      color="#172431"
+                      color="#b6b6b6"
                       hide-details
                       outlined
                       dense
@@ -92,7 +92,8 @@
                 <v-col cols="12"
                   ><v-text-field
                     v-model="userName"
-                    color="#172431"
+                    class="name__field"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
@@ -156,7 +157,7 @@
                         ><span>Phone number: </span>
                         <v-text-field
                           v-model="mobile"
-                          color="#172431"
+                          color="#b6b6b6"
                           hide-details
                           outlined
                           dense
@@ -187,10 +188,7 @@
                 </v-col>
                 <span class="pl-3"
                   >Only you can see your contact information. Stay connected
-                  with the community as we provide you with sms alerts. With the
-                  mobile number you provided, you will receive SMS notifications
-                  informing you about the latest stock picks and market
-                  updates.</span
+                  with the community as we provide you with sms alerts.</span
                 >
               </v-row>
             </v-col>
@@ -224,7 +222,8 @@
                 <v-col cols="12"
                   ><v-text-field
                     v-model="email"
-                    color="#172431"
+                    class="name__field"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
@@ -265,7 +264,7 @@
                     v-model="currentPassword"
                     class="name__field"
                     label="Current Password"
-                    color="#172431"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
@@ -276,7 +275,7 @@
                     v-model="newPassword"
                     class="name__field"
                     label="New Password"
-                    color="#172431"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
@@ -287,7 +286,7 @@
                     v-model="confirmNewPassword"
                     class="name__field"
                     label="Re-type new Password"
-                    color="#172431"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
