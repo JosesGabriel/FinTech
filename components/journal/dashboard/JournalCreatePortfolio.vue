@@ -86,34 +86,49 @@ export default {
       }
     }
   },
-  data: () => ({
-    portfolio: [
-      { type: "Real Portfolio", value: "real" },
-      { type: "Virtual Portfolio", value: "virtual" }
-    ],
-    portfolioModel: "",
-    saveButtonDisable: true,
-    namePortfolioModel: "",
-    initialCapitalModel: null,
-    typePortfolioModel: null,
-    keyCreateCounter: 2
-  }),
-  mounted() {
-    // console.log(this.portfolio)
+  data() {
+    return {
+      portfolio: [
+        { type: "Real Portfolio", value: "real" },
+        { type: "Virtual Portfolio", value: "virtual" }
+      ],
+      portfolioModel: "",
+      saveButtonDisable: true,
+      namePortfolioModel: "",
+      initialCapitalModel: null,
+      typePortfolioModel: null,
+      keyCreateCounter: 2
+    };
   },
   watch: {
-    namePortfolioModel: function() {
+    /**
+     * Watch namePortfolioModel execute fieldswatch
+     *
+     * @return
+     */
+    namePortfolioModel() {
       this.fieldsWatch();
     },
-    initialCapitalModel: function(newValue) {
+    /**
+     * initialCapitalModel changing numbers into string and add separators and decimals
+     *
+     * @param   {number}  newValue  [newValue description]
+     *
+     * @return  {string}  number with comma separator and 2 decimal points
+     */
+    initialCapitalModel(newValue) {
       this.fieldsWatch();
       const result = newValue
         .replace(/\D/g, "")
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       this.initialCapitalModel = result;
-      // console.log(parseInt(this.initialCapitalModel))
     },
-    typePortfolioModel: function() {
+    /**
+     * typePortfolioModel watching type of portfolio
+     *
+     * @return
+     */
+    typePortfolioModel() {
       this.fieldsWatch();
     }
   },
@@ -122,6 +137,11 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
+    /**
+     * Watch fields under create portfolio forms
+     *
+     * @return  [return description]
+     */
     fieldsWatch() {
       if (
         this.typePortfolioModel != "" &&
@@ -133,8 +153,13 @@ export default {
         this.saveButtonDisable = true;
       }
     },
-    createPortfolio: function() {
-      let convertedNumbers = this.initialCapitalModel.replace(/,/g, "");
+    /**
+     * Execute creating portfolio
+     *
+     * @return  creating portfolio
+     */
+    createPortfolio() {
+      const convertedNumbers = this.initialCapitalModel.replace(/,/g, "");
       const createportfolioparams = {
         currency_code: "PHP",
         name: this.namePortfolioModel,
@@ -149,7 +174,7 @@ export default {
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
-            // this.setDefaultPortfolioId(response.data.fund.id);
+            // this.setDefaultPortfolioId(response.data.fund.id); // hide for now
           }
         });
     }

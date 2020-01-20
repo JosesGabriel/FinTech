@@ -55,7 +55,7 @@
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.credit }}</span>
       </template>
       <template v-slot:item.balance="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ formatPrice(item.balance) }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.balance | numeral("0,0.00") }}</span>
       </template>
       <template slot="footer">
         <v-row no-gutters class="mt-3">
@@ -69,12 +69,12 @@
             style="width: 190px"
             class="text-right subtitle-2"
             :class="(totalDebit < 0 ? 'negative' : 'positive')"
-          >{{ formatPrice(totalDebit) }}</span>
+          >{{ totalDebit | numeral("0,0.00") }}</span>
           <span
             style="width: 190px"
             class="text-right subtitle-2"
             :class="(totalCredit < 0 ? 'negative' : 'positive')"
-          >{{ formatPrice(totalCredit) }}</span>
+          >{{ totalCredit | numeral("0,0.00") }}</span>
           <span style="width: 190px;" class="text-right subtitle-2"></span>
         </v-row>
       </template>
@@ -132,20 +132,43 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    fontcolor2: function() {
+    fontcolor2() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     },
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   mounted() {
     if (this.defaultPortfolioId != 0 ? this.getLedgerLogs() : "");
   },
+  watch: {
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getLedgerLogs();
+    },
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
+      this.getLedgerLogs();
+    }
+  },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -154,6 +177,11 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * Ledger gets update when getLedgerLogs triggered
+     *
+     * @return  {[array]} returned array
+     */
     getLedgerLogs() {
       const ledgerparams = {
         fund: this.defaultPortfolioId
@@ -179,7 +207,7 @@ export default {
           this.ledgerContent[i] = { ...ledgerArray, ...this.ledgerContent[i] };
 
           if (this.ledgerContent[i].action == "deposit") {
-            const Depositdebit = {
+            let Depositdebit = {
               debit: "-",
               credit: parseFloat(this.ledgerContent[i].total_value)
                 .toFixed(2)
@@ -193,7 +221,7 @@ export default {
             };
             this.ledgerContent[i].action = "Deposit Income";
           } else if (this.ledgerContent[i].action == "dividend_income") {
-            const Dividenddebit = {
+            let Dividenddebit = {
               debit: "-",
               credit: parseFloat(this.ledgerContent[i].total_value)
                 .toFixed(2)
@@ -207,7 +235,7 @@ export default {
             };
             this.ledgerContent[i].action = "Dividend Income";
           } else if (this.ledgerContent[i].action == "withdraw") {
-            const debit = {
+            let debit = {
               debit: parseFloat(this.ledgerContent[i].total_value)
                 .toFixed(2)
                 .replace(".", ".")
@@ -244,27 +272,29 @@ export default {
         this.liveLedgerLoading = false;
       });
     },
-    ledgermenuLogsShow: function(item) {
+    /**
+     * if trades are hovered item will show, item will assigned as hovered with this function
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    ledgermenuLogsShow(item) {
       let lt = document.getElementById(`lt_${item.id}`);
 
       lt.style.display = "block";
     },
-    ledgermenuLogsHide: function(item) {
+    /**
+     * if trades are hovered item will hide, item will assigned as hovered with this function
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    ledgermenuLogsHide(item) {
       let lt = document.getElementById(`lt_${item.id}`);
 
       lt.style.display = "none";
-    },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  },
-  watch: {
-    defaultPortfolioId: function() {
-      this.getLedgerLogs();
-    },
-    renderPortfolioKey: function() {
-      this.getLedgerLogs();
     }
   }
 };

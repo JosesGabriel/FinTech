@@ -66,23 +66,26 @@
         <span
           class="pl-3"
           :style="{ color: fontcolor2 }"
-        >{{ formatPriceAvePrice(item.average_price) }}</span>
+        >{{ item.average_price | numeral("0,0.000") }}</span>
       </template>
       <template v-slot:item.total_value="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ formatPrice(item.total_value) }}</span>
+        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.total_value | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.market_value="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ formatPrice(item.market_value) }}</span>
+        <span
+          class="pl-3"
+          :style="{ color: fontcolor2 }"
+        >{{ item.market_value | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.profit_loss="{ item }">
         <span
           :class="item.profit_loss > 0 ? 'positive' : item.profit_loss < 0 ? 'negative' : 'neutral' "
-        >{{ formatPrice(item.profit_loss) }}</span>
+        >{{ item.profit_loss | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.pl_percentage="{ item }">
         <span
           :class="item.pl_percentage > 0 ? 'positive' : item.pl_percentage < 0 ? 'negative' : 'neutral' "
-        >{{ formatPrice(item.pl_percentage) }}%</span>
+        >{{ item.pl_percentage | numeral("0,0.00") }}%</span>
       </template>
       <template v-slot:item.action="{ item }">
         <div
@@ -147,6 +150,7 @@
         ></v-pagination>
       </v-card>
     </v-card>
+    <!-- Dialog boxes -->
     <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
     <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
@@ -162,7 +166,7 @@
       @close="showEditDetails=false"
     />
     <trade-delete :visible="showDelete" :itemDetails="itemDetails" @close="showDelete=false" />
-    <!-- @click.stop="showResetForm=true" -->
+    <!-- Dialog boxes -->
   </v-col>
 </template>
 <script>
@@ -175,6 +179,7 @@ import tradeEdits from "~/components/modals/tradeEdits";
 import tradeDelete from "~/components/modals/tradeDelete";
 
 import { mapActions, mapGetters } from "vuex";
+import { Fees } from "~/helpers/taxation";
 
 export default {
   components: {
@@ -260,7 +265,17 @@ export default {
     }
   },
   mounted() {
+    /**
+     * function will not load if portfolio ID is null
+     *
+     * @return  {[object]}  [return description]
+     */
     if (this.defaultPortfolioId != null ? this.getOpenPositions() : "");
+    /**
+     * if portfolio type is virtual then the fund or trade button will assign as disabled
+     *
+     * @return  {[type]}  [return description]
+     */
     if (!this.selectedPortfolio) {
       if (this.selectedPortfolio.type === "virtual") {
         this.ifVirtualShow = true;
@@ -268,7 +283,49 @@ export default {
         this.ifVirtualShow = false;
       }
     }
+    /**
+     * function initSSE load on mounted
+     */
     this.initSSE();
+  },
+  watch: {
+    /**
+     * Watching selectedPortfolio if portolio type selected is virtual
+     * fund or trade button will assign as disabled.
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    selectedPortfolio() {
+      if (this.selectedPortfolio.type === "virtual") {
+        this.ifVirtualShow = true;
+      } else {
+        this.ifVirtualShow = false;
+      }
+    },
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getOpenPositions();
+    },
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
+      this.getOpenPositions();
+    },
+    /**
+     * if trade edit or remove succed renderEditKey will increment
+     *
+     * @return  {number}  increment key
+     */
+    renderEditKey() {
+      this.getOpenPositions();
+    }
   },
   methods: {
     ...mapActions({
@@ -276,6 +333,11 @@ export default {
       setOpenPosition: "journal/setOpenPosition",
       setJournalCharts: "journal/setJournalCharts"
     }),
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -284,33 +346,65 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
-    menuLogsShow: function(item) {
+    /**
+     * if trades are hovered item will show, item will assigned as hovered with this function
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    menuLogsShow(item) {
       let pl = document.getElementById(`pl_${item.id}`);
 
       pl.style.display = "block";
     },
-    menuLogsHide: function(item) {
+    /**
+     * if trades are hovered item will hide, item will assigned as hovered with this function
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    menuLogsHide(item) {
       let pl = document.getElementById(`pl_${item.id}`);
 
       pl.style.display = "none";
     },
-    deleteLive: function(item) {
+    /**
+     * passing credentials of each item to be deleted to this.itemDetails (to props)
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    deleteLive(item) {
       this.itemDetails = item;
     },
-    detailsLive: function(item) {
+    /**
+     * passing credentials of each item to details to this.itemDetails (to props)
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    detailsLive(item) {
       this.itemDetails = item;
     },
-    editLive: function(item) {
+    /**
+     * passing credentials of each item to be edit to this.itemDetails (to props)
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    editLive(item) {
       this.itemDetails = item;
     },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    formatPriceAvePrice(value) {
-      let val = (value / 1).toFixed(3).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
+    /**
+     * open position gets update when getOpenPositions triggered
+     *
+     * @return  {[array]} returned array
+     */
     getOpenPositions() {
       this.totalProfitLoss = 0;
       this.totalProfitLossPerf = 0;
@@ -340,13 +434,17 @@ export default {
               execute: false
             };
           }
-          // Loading on table
-          console.log(this.portfolioLogs);
           this.livePortfolioLoading = false;
         }.bind(this)
       );
       this.componentKeys++;
     },
+    /**
+     * SSE connection starts here every second this function will check
+     * if connection are available or not.
+     *
+     * @return  {object}  returned object every tick of data
+     */
     initSSE() {
       let len = this.stockSym.length;
       const that = this;
@@ -360,10 +458,8 @@ export default {
         // "http://localhost:8021/sse/market-data/pse/all"
       );
       this.sse.onopen = function() {
-        console.log("[TEST OPEN] open sse");
       };
       this.sse.onerror = function(err) {
-        console.log("[TEST ERROR]", err);
       };
       this.sse.addEventListener("trade", function(e) {
         const data = JSON.parse(e.data);
@@ -374,15 +470,23 @@ export default {
         }
       });
     },
-    trigger: function(symbol, lprice) {
+    /**
+     * if sse gets matched with array.id of open position this function will trigger
+     * and perform update to triggered item
+     *
+     * @param   {string}  symbol  string-id from incoming data
+     * @param   {number}  lprice  execution price from incoming data
+     *
+     * @return  {object}          return item updated
+     */
+    trigger(symbol, lprice) {
       let profit = 0;
       let perf = 0;
-      console.log("Checked");
+
       for (let i = 0; i < this.portfolioLogs.length; i++) {
         if (this.portfolioLogs[i].stock_id == symbol) {
-          console.log(this.portfolioLogs[i]);
           let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
-          let mvalue = this.fees(buyResult);
+          let mvalue = Fees(buyResult);
           let tcost =
             this.portfolioLogs[i].position *
             this.portfolioLogs[i].average_price;
@@ -401,43 +505,20 @@ export default {
         }
       }
     },
-    fees(buyResult) {
-      let dpartcommission = buyResult * 0.0025;
-      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-      // TAX
-      let dtax = dcommission * 0.12;
-      // Transfer Fee
-      let dtransferfee = buyResult * 0.00005;
-      let dsell = buyResult * 0.006;
-      // SCCP
-      let dsccp = buyResult * 0.0001;
-      let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
-      return buyResult - dall;
-    },
-    closeSSE: function() {
+    /**
+     * function for closing sse connection
+     *
+     * @return  close sse
+     */
+    closeSSE() {
       this.sse.close();
     }
   },
   beforeDestroy() {
+    /**
+     * execute close sse connection if this component is hide
+     */
     this.closeSSE();
-  },
-  watch: {
-    selectedPortfolio: function() {
-      if (this.selectedPortfolio.type === "virtual") {
-        this.ifVirtualShow = true;
-      } else {
-        this.ifVirtualShow = false;
-      }
-    },
-    defaultPortfolioId: function() {
-      this.getOpenPositions();
-    },
-    renderPortfolioKey: function() {
-      this.getOpenPositions();
-    },
-    renderEditKey: function() {
-      this.getOpenPositions();
-    }
   }
 };
 </script>
@@ -461,6 +542,8 @@ export default {
 }
 </style>
 <style>
+/* there are reason why i separate this style */
+
 .data_table-container.theme--light.v-data-table thead tr th {
   color: #494949;
 }

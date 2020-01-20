@@ -63,18 +63,18 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    borderColor: function() {
+    borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"
         : "border-bottom: 1px solid #535358";
     },
-    winlossresult: function() {
+    winlossresult() {
       return (this.result = parseInt(this.win) + parseInt(this.loss));
     },
-    winrateresult: function() {
+    winrateresult() {
       let NaNcon = ((this.win * 100) / this.result).toFixed(0);
       if (NaNcon == "NaN") {
         return 0;
@@ -185,20 +185,37 @@ export default {
     };
   },
   watch: {
-    journalCharts: function() {
-      this.getJournalChart();
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
+      this.getTradeStats();
     },
-    defaultPortfolioId: function() {
-      this.getJournalChart();
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getTradeStats();
     },
-    renderPortfolioKey: function() {
-      this.getJournalChart();
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
+      this.getTradeStats();
     }
   },
-  mounted() {
-    this.getJournalChart();
-  },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -207,7 +224,12 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
-    getJournalChart() {
+    /**
+     * getTradeStats will work on ploting/updating chart series 
+     *
+     * @return  {array}  data to update chart
+     */
+    getTradeStats() {
       this.journalchart = [];
       if (this.journalCharts != null) {
         this.tradeStaticsArr = this.journalCharts.data;

@@ -2,9 +2,7 @@
   <v-col ref="componentWrapper" class="pa-0" cols="4" sm="4" md="4">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 pb-2 pt-5">
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">
-        PORTFOLIO SNAPSHOT
-      </h6>
+      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">PORTFOLIO SNAPSHOT</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon>mdi-share-variant</v-icon>
@@ -19,9 +17,7 @@
         :style="{ border: borderColor }"
       >
         <v-card-title class="text-left justify-left py-2 px-3">
-          <h6 class="font-weight-regular caption text-capitalize">
-            Trading Result (PHP)
-          </h6>
+          <h6 class="font-weight-regular caption text-capitalize">Trading Result (PHP)</h6>
         </v-card-title>
         <v-simple-table
           id="liveportfolio-table"
@@ -32,28 +28,22 @@
           <template v-slot:default>
             <tbody>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">
-                  Starting Capital
-                </td>
-                <td class="item_position-prop text-right px-3 py-1 caption">
-                  {{ formatPrice(parseFloat(startingCapital)) }}
-                </td>
+                <td class="item_position-prop px-3 py-1 caption">Starting Capital</td>
+                <td
+                  class="item_position-prop text-right px-3 py-1 caption"
+                >{{ startingCapital | numeral("0,0.00") }}</td>
               </tr>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">
-                  Year to Date P/L
-                </td>
-                <td class="item_position-prop text-right px-3 py-1 caption">
-                  {{ formatPrice(parseFloat(yearTDPL)) }}
-                </td>
+                <td class="item_position-prop px-3 py-1 caption">Year to Date P/L</td>
+                <td
+                  class="item_position-prop text-right px-3 py-1 caption"
+                >{{ yearTDPL | numeral("0,0.00") }}</td>
               </tr>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">
-                  Portfolio YTD %
-                </td>
-                <td class="item_position-prop text-right px-3 py-1 caption">
-                  {{ formatPrice(parseFloat(portfolioTDPL)) }}
-                </td>
+                <td class="item_position-prop px-3 py-1 caption">Portfolio YTD %</td>
+                <td
+                  class="item_position-prop text-right px-3 py-1 caption"
+                >{{ portfolioTDPL | numeral("0,0.00") }}</td>
               </tr>
             </tbody>
           </template>
@@ -67,9 +57,7 @@
         :style="{ border: borderColor }"
       >
         <v-card-title class="text-left justify-left py-2 px-3">
-          <h6 class="font-weight-regular caption text-capitalize">
-            Funds Transfers (PHP)
-          </h6>
+          <h6 class="font-weight-regular caption text-capitalize">Funds Transfers (PHP)</h6>
         </v-card-title>
         <v-simple-table
           id="liveportfolio-table"
@@ -81,34 +69,28 @@
             <tbody>
               <tr id="table_tr_snap-cont">
                 <td class="item_position-prop px-3 py-1 caption">Deposits</td>
-                <td class="item_position-prop text-right px-3 py-1 caption">
-                  {{ formatPrice(parseFloat(Deposits)) }}
-                </td>
+                <td
+                  class="item_position-prop text-right px-3 py-1 caption"
+                >{{ Deposits | numeral("0,0.00") }}</td>
               </tr>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">
-                  Withdrawals
-                </td>
-                <td class="item_position-prop text-right px-3 py-1 caption">
-                  {{ formatPrice(parseFloat(Withdrawals)) }}
-                </td>
+                <td class="item_position-prop px-3 py-1 caption">Withdrawals</td>
+                <td
+                  class="item_position-prop text-right px-3 py-1 caption"
+                >{{ Withdrawals | numeral("0,0.00") }}</td>
               </tr>
               <tr id="table_tr_snap-cont">
                 <td class="item_position-prop px-3 py-1 caption">Equity</td>
-                <td class="item_position-prop text-right px-3 py-1 caption">
-                  {{ formatPrice(parseFloat(Equity)) }}
-                </td>
+                <td
+                  class="item_position-prop text-right px-3 py-1 caption"
+                >{{ Equity | numeral("0,0.00") }}</td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
       </v-card>
     </v-col>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
   </v-col>
 </template>
 <script>
@@ -119,19 +101,6 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   components: {
     shareModal
-  },
-  data() {
-    return {
-      shareLink: "",
-      showShareForm: false,
-      showScheduleForm: false,
-      startingCapital: 0,
-      yearTDPL: 0,
-      portfolioTDPL: 0,
-      Deposits: 0,
-      Withdrawals: 0,
-      Equity: 0
-    };
   },
   computed: {
     ...mapGetters({
@@ -149,19 +118,51 @@ export default {
       return this.lightSwitch == 0 ? "1px solid #b6b6b6" : "1px solid #535358";
     }
   },
+  data() {
+    return {
+      shareLink: "",
+      showShareForm: false,
+      showScheduleForm: false,
+      startingCapital: 0,
+      yearTDPL: 0,
+      portfolioTDPL: 0,
+      Deposits: 0,
+      Withdrawals: 0,
+      Equity: 0
+    };
+  },
   watch: {
-    defaultPortfolioId: function() {
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
       this.getSnapshot();
     },
-    renderPortfolioKey: function() {
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
       this.getSnapshot();
     },
-    renderEditKey: function() {
+    /**
+     * if trade edit or remove succed renderEditKey will increment
+     *
+     * @return  {number}  increment key
+     */
+    renderEditKey() {
       this.getSnapshot();
     }
   },
-  mounted() {},
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -170,6 +171,11 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * getSnapshot will work on ploting/updating table 
+     *
+     * @return  {array}  data to update chart
+     */
     getSnapshot() {
       if (this.defaultPortfolioId != null) {
         const snapshotparams = {
@@ -186,10 +192,6 @@ export default {
       }
       this.componentKeys++;
     },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
   }
 };
 </script>
