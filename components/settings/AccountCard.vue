@@ -24,7 +24,7 @@
         <v-container class="pa-0">
           <v-row>
             <v-col cols="4">
-              <span class="white--text">Name</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'">Name</span>
             </v-col>
             <v-col cols="5">
               <span v-if="!nameToggle">{{ firstName }} {{ lastName }}</span>
@@ -84,7 +84,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">User Name{{ keisha }}</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'"
+                >User Name</span
+              >
             </v-col>
             <v-col cols="5">
               <span v-if="!usernameToggle">{{ userName }}</span>
@@ -124,7 +126,7 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">Contact</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'">Contact</span>
             </v-col>
             <v-col cols="5">
               <span v-if="!contactToggle"
@@ -214,7 +216,7 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">Email Address</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'">Email Address</span>
             </v-col>
             <v-col cols="5">
               <span v-if="!emailToggle">{{ email }}</span>
@@ -254,7 +256,7 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">Password</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'">Password</span>
             </v-col>
             <v-col cols="5">
               <span v-if="!passwordToggle">*******</span>
@@ -320,7 +322,7 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <a class="white--text">Delete Your Account and Information</a>
+              <a :class="lightSwitch == 0 ? '' : 'white--text'">Delete Your Account and Information</a>
             </v-col>
           </v-row>
         </v-container>
@@ -350,7 +352,7 @@
             >Cancel</v-btn
           >
           <v-btn
-            class="no-transform"
+            class="no-transform black--text"
             color="success"
             @click="
               unsavedChangesDialog = false;
