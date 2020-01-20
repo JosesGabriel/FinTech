@@ -4,8 +4,7 @@ export default $axios => ({
   getLoginUrl(provider) {
     return $axios.get(`${baseURL}/login/${provider}`);
   },
-  getRedirectCallback(provider) {
-    const { query } = this.$route;
+  getRedirectCallback(provider, query) {
     const params = Object.keys(query)
       .map(key => `${key}=${query[key]}`)
       .join("&");
