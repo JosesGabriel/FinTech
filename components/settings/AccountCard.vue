@@ -126,7 +126,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span :class="lightSwitch == 0 ? '' : 'white--text'">Contact</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'"
+                >Contact</span
+              >
             </v-col>
             <v-col cols="5">
               <span v-if="!contactToggle"
@@ -216,7 +218,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span :class="lightSwitch == 0 ? '' : 'white--text'">Email Address</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'"
+                >Email Address</span
+              >
             </v-col>
             <v-col cols="5">
               <span v-if="!emailToggle">{{ email }}</span>
@@ -256,7 +260,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span :class="lightSwitch == 0 ? '' : 'white--text'">Password</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'"
+                >Password</span
+              >
             </v-col>
             <v-col cols="5">
               <span v-if="!passwordToggle">*******</span>
@@ -322,7 +328,9 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <a :class="lightSwitch == 0 ? '' : 'white--text'">Delete Your Account and Information</a>
+              <a :class="lightSwitch == 0 ? '' : 'white--text'"
+                >Delete Your Account and Information</a
+              >
             </v-col>
           </v-row>
         </v-container>
@@ -409,6 +417,16 @@ export default {
     })
   },
   methods: {
+    /**
+     * Updates all user account settings based on user input
+     * Not sure what is most efficient so I have two update functions.
+     * this one and updateAccount.
+     *
+     * Only difference is this passes all fields and the other only passes the fields that were changed.
+     * To discuss
+     *
+     * @return  {[type]}  [return description]
+     */
     updateAccountAll() {
       let payload = {
         first_name: this.firstName,
