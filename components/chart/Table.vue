@@ -1,9 +1,16 @@
 <template>
   <v-col class="pa-0">
     <v-content class="content__vynduebutton pl-2">
-        <img class="img__vyndue" src="/icon/vyndue2.svg" title="Vyndue"></img
+        <img class="img__vyndue" @click="showVyndueChat" src="/icon/vyndue2.svg" title="Vyndue"></img
       >
     </v-content>
+    <!---------------->
+    <template>
+      <v-container :class="this.show ? 'display' : 'no_display' " class="vyndue__chat">
+          <ChatClient v-on:showChat="ShowDialog"/>
+      </v-container>
+    </template>
+    <!---------------->
     <v-content class="content__btncontainer">
       <v-btn
         v-show="maximize || fullscreen"
@@ -73,12 +80,14 @@ import { mapActions, mapGetters } from "vuex";
 import Jockey from "~/components/chart/table/Jockey";
 import Activity from "~/components/chart/table/Activity";
 import Trade from "~/components/chart/table/Trade";
+import ChatClient from "~/components/modals/VyndueChatClient";
 
 export default {
   components: {
     Jockey,
     Activity,
-    Trade
+    Trade,
+    ChatClient
   },
   data() {
     return {
@@ -107,7 +116,8 @@ export default {
           component: "Trade",
           disabled: false
         }
-      ]
+      ],
+      show: false,
     };
   },
   computed: {
@@ -150,7 +160,13 @@ export default {
     toggleTabsFullscreen: function() {
       this.setTableFullscreen(!this.fullscreen);
       this.$bus.$emit("adjustChartView");
-    }
+    },
+    showVyndueChat: function() {
+      if(this.show ? this.show = false : this.show = true);
+    },
+    ShowDialog(value) {
+      this.show = value;
+    },
   }
 };
 </script>
@@ -202,5 +218,18 @@ export default {
 .button__disable {
   cursor: not-allowed !important;
   pointer-events: none;
+}
+.no_display {
+  display: none;
+}
+.display {
+  display: block;
+}
+.vyndue__chat {
+  position: fixed;
+  bottom: 5%;
+  left: 40px;
+  width: 500px;
+  z-index: 3;
 }
 </style>
