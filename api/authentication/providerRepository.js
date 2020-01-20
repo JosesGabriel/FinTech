@@ -5,6 +5,10 @@ export default $axios => ({
     return $axios.get(`${baseURL}/login/${provider}`);
   },
   getRedirectCallback(provider) {
-    return $axios.get(`${baseURL}/login/${provider}/callback`);
+    const { query } = this.$route;
+    const params = Object.keys(query)
+      .map(key => `${key}=${query[key]}`)
+      .join("&");
+    return $axios.get(`${baseURL}/login/${provider}/callback/?${params}`);
   }
 });
