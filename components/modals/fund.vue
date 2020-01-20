@@ -110,7 +110,6 @@
           :dark="lightSwitch == true"
           @click.stop="show = false"
         >Close</v-btn>
-        <!-- @click.stop="show=false" -->
         <v-btn
           color="success"
           class="text-capitalize"
@@ -131,7 +130,6 @@
           @click.stop="show = false"
           :disabled="disableWithdrawButtonSave"
         >Withdraw</v-btn>
-        <!-- @click.stop="show=false" -->
       </v-card-actions>
     </v-card>
   </v-dialog>

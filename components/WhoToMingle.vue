@@ -52,25 +52,15 @@
             >
           </div>
         </v-list-item>
-        <!-- <router-link to="/login" class="whoToMingle__link--viewMembers caption">
-          Show more
-        </router-link> -->
       </v-list>
     </div>
   </v-card>
 </template>
-<style scoped>
-.whoToMingle__link--viewMembers {
-  text-decoration: none;
-}
-.no-wrap {
-  white-space: nowrap;
-}
-</style>
+
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
-  data: function() {
+  data() {
     return {
       suggestedUsersObject: "",
       trendingStocks: [
@@ -146,3 +136,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.whoToMingle__link--viewMembers {
+  text-decoration: none;
+}
+.no-wrap {
+  white-space: nowrap;
+}
+</style>

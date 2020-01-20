@@ -5,7 +5,7 @@
         <v-content>
           <v-slide-y-reverse-transition>
             <v-icon
-              v-show="changetype == 1"
+              v-show="changeType == 1"
               size="60"
               class="arrow-icon increase"
               >mdi-chevron-up</v-icon
@@ -14,7 +14,7 @@
 
           <v-slide-y-transition>
             <v-icon
-              v-show="changetype == 2"
+              v-show="changeType == 2"
               size="60"
               class="arrow-icon decrease"
               >mdi-chevron-down</v-icon
@@ -41,8 +41,8 @@
           <span
             class="hchange"
             :class="[
-              { increase: changetype == 1 },
-              { decrease: changetype == 2 }
+              { increase: changeType == 1 },
+              { decrease: changeType == 2 }
             ]"
           >
             <span id="stock__change">{{
@@ -75,9 +75,11 @@ import { nativeBus } from "~/helpers/native-bus";
 
 export default {
   name: "Headline",
-  data: () => ({
-    counter: 0
-  }),
+  data() {
+    return {
+      counter: 0
+    };
+  },
   head() {
     return {
       title: this.stock.description,
@@ -115,12 +117,17 @@ export default {
       stock_change: "chart/stock_change",
       stock_changepercentage: "chart/stock_changepercentage",
       stock_marketcap: "chart/stock_marketcap",
-      headline_loading: "chart/headline_loading",
+      headlineLoading: "chart/headlineLoading",
       favicon: "global/favicon",
       sse: "chart/sse",
       blink: "chart/blink"
     }),
-    changetype() {
+    /**
+     * toggle type for up/down arrow
+     *
+     * @return
+     */
+    changeType() {
       let value = this.stock.change;
       if (value > 0) {
         return 1;
@@ -132,21 +139,21 @@ export default {
     }
   },
   watch: {
-    headline_loading: function(value) {
+    headlineLoading(value) {
       if (value === false) {
         this.sse.addEventListener("info", this.sseInfo);
       }
     },
-    stock_marketcap: function(value) {
+    stock_marketcap() {
       this.updateEffect("stock__marketcap");
     },
-    stock_last: function(value) {
+    stock_last() {
       this.updateEffect("stock__last");
     },
-    stock_change: function(value) {
+    stock_change() {
       this.updateEffect("stock__change");
     },
-    stock_changepercentage: function(value) {
+    stock_changepercentage() {
       this.updateEffect("stock__changepercentage");
     }
   },
@@ -154,14 +161,28 @@ export default {
     ...mapActions({
       setSSEInfo: "chart/setSSEInfo"
     }),
-    updateEffect: function(dom) {
+    /**
+     * add blink simple effect animation
+     *
+     * @param   {String}  dom  id of element
+     *
+     * @return
+     */
+    updateEffect(dom) {
       const item = document.getElementById(dom);
       item.style.background = "rgb(182,182,182,.2)";
       setTimeout(() => {
         item.style.background = "";
       }, this.blink);
     },
-    tickSoundFavicon: function(change) {
+    /**
+     * trgger sound effect and dynamic favicon
+     *
+     * @param   {Float}  change  stock change
+     *
+     * @return
+     */
+    tickSoundFavicon(change) {
       const beepSound = new Audio("/audio/vk_notification.mp3");
       beepSound.play();
       // reset counter
@@ -190,7 +211,7 @@ export default {
         );
       }
     },
-    sseInfo: function(e) {
+    sseInfo(e) {
       try {
         if (this.symbolid == undefined) return;
         const data = JSON.parse(e.data);
@@ -262,9 +283,7 @@ div {
   font-size: 11px;
 }
 .template {
-  /* font-size: x-small; */
   color: #fff;
-  /* font-family: 'Karla', sans-serif !important; */
 }
 .hcontainer_top {
   margin-top: 2px;
@@ -289,14 +308,11 @@ div {
 }
 #headline {
   display: flex;
-  /* height: 70px; */
 }
 .headline__arrow {
   flex: 0 0 60px;
-  /* background: red; */
 }
 .headline_description {
   flex: 0 0 210px;
-  /* background: blue; */
 }
 </style>

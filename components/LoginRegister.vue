@@ -92,6 +92,7 @@
     </v-card>
   </v-dialog>
 </template>
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 import Login from "~/components/login/Login";
@@ -124,8 +125,12 @@ export default {
       userWatchedStocks: "watchers/getUserWatchedStocks",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * Show dialog toggle
+     *
+     * @return
+     */
     show: {
-      //show dialog toggle
       get() {
         return this.value;
       },
@@ -135,7 +140,12 @@ export default {
     }
   },
   watch: {
-    loginModalState: function() {
+    /**
+     * Watches loginModaState, controls modal state whether showing or not.
+     *
+     * @return
+     */
+    loginModalState() {
       if (this.loginModalState) {
         this.show = true;
         this.showAlert({ message: "Successfully Verified User" });
@@ -186,6 +196,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .loginButtons--wrapper {
   position: absolute;

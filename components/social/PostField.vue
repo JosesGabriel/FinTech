@@ -134,7 +134,7 @@
             absolute
             color="success"
             :disabled="!postFieldModel"
-            @click="postField__submit"
+            @click="postFieldSubmit"
           >
             Post
           </v-btn>
@@ -143,6 +143,7 @@
     </v-form>
   </v-card>
 </template>
+
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
@@ -173,7 +174,7 @@ export default {
      *
      * @return
      */
-    postField__submit: function() {
+    postFieldSubmit() {
       this.postField__loading = true;
 
       if (this.$refs.postField__inputRef.files) {
@@ -220,7 +221,7 @@ export default {
      *
      * @return
      */
-    onClickImageUploadBtn: function() {
+    onClickImageUploadBtn() {
       this.$refs.postField__inputRef.click();
     },
     /**
@@ -229,7 +230,7 @@ export default {
      *
      * @return
      */
-    uploadImage: function() {
+    uploadImage() {
       this.loader = "success";
       for (let i = 0; i < this.$refs.postField__inputRef.files.length; i++) {
         let formData = new FormData();
@@ -255,7 +256,7 @@ export default {
      *
      * @return
      */
-    onInputFileChange: function(e) {
+    onInputFileChange(e) {
       this.uploadImage();
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -272,7 +273,7 @@ export default {
      *
      * @return
      */
-    generateImagePreviews: function(file, type) {
+    generateImagePreviews(file, type) {
       var reader = new FileReader();
       reader.onload = e => {
         type == "image"
@@ -289,7 +290,7 @@ export default {
      *
      * @return
      */
-    removeImage: function(closeId) {
+    removeImage(closeId) {
       this.$set(this.postField__imagesArray, closeId - 1, "");
     },
     /**
@@ -300,7 +301,7 @@ export default {
      *
      * @return
      */
-    clearInputs: function(type, message) {
+    clearInputs(type, message) {
       this.postFieldModel = "";
       this.postField__loading = false;
 

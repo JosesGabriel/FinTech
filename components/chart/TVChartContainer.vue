@@ -116,7 +116,7 @@ export default {
       maximize_table: "chart/getTableMaximize",
       fullscreen_table: "chart/getTableFullscreen",
       lightSwitch: "global/getLightSwitch",
-      market_code: "chart/market_code"
+      marketCode: "chart/marketCode"
     }),
     /**
      * Returns the theme depending on the current light switch value.
@@ -175,8 +175,8 @@ export default {
      * @return
      */
     lightSwitch(value) {
-      if (this.market_code) {
-        this.loadChart(this.market_code);
+      if (this.marketCode) {
+        this.loadChart(this.marketCode);
       } else {
         this.loadChart(this.symbol);
       }
@@ -189,7 +189,7 @@ export default {
      *
      * @return
      */
-    market_code(value, old) {
+    marketCode(value, old) {
       const params = {
         symbolid: null,
         market_code: value

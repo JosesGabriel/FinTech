@@ -44,10 +44,11 @@
     </v-card>
   </div>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data: function() {
+  data() {
     return {
       settingsLabelList: [
         "Name",
@@ -62,8 +63,6 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     })
-  },
-  mounted() {},
-  methods: {}
+  }
 };
 </script>

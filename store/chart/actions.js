@@ -26,10 +26,6 @@ export default {
     await commit("SET_STOCK", data);
   },
 
-  async setAllstocks({ commit }, data) {
-    await commit("SET_ALLSTOCKS", data);
-  },
-
   async setBidask({ commit }, data) {
     await commit("SET_BIDASK", data);
   },

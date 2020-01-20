@@ -66,6 +66,7 @@
     </div>
   </v-card>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 import Providers from "./Providers";
@@ -123,6 +124,7 @@ export default {
   }
 };
 </script>
+
 <style>
 .login__textfield
   .v-input__control

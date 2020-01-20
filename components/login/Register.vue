@@ -105,6 +105,7 @@
     </v-form>
   </v-card>
 </template>
+
 <script>
 import { mapGetters } from "vuex";
 
@@ -151,11 +152,20 @@ export default {
       lightSwitch: "global/getLightSwitch",
       loginModalState: "login/getLoginModalState"
     }),
+    /**
+     * Simply a combination of first_name and last_name
+     *
+     * @return  {[type]}  [return description]
+     */
     fullName() {
       return `${this.firstName} ${this.lastName}`;
     },
+    /**
+     * show dialog toggle
+     *
+     * @return
+     */
     show: {
-      //show dialog toggle
       get() {
         return this.value;
       },
@@ -163,6 +173,11 @@ export default {
         this.$emit("input", value);
       }
     },
+    /**
+     * Ruleset for password confirmation
+     *
+     * @return  {[type]}  [return description]
+     */
     passwordConfirmationRule() {
       return () =>
         this.password === this.confirmPassword || "Password must match";
@@ -210,12 +225,6 @@ export default {
               show: true
             });
             this.$emit("stepper", 4);
-            // setTimeout(
-            //   function() {
-            //     this.show = false;
-            //   }.bind(this),
-            //   3000
-            // );
           } else {
             this.$emit("alert", { message: response.message, state: "error" });
           }

@@ -8,9 +8,25 @@
           class="white--text align-end"
         >
           <v-overlay absolute color="darkchart" :opacity=".9" :value="overlay">
-            <v-btn icon>
-              <v-icon large color="success">mdi-plus</v-icon>
-            </v-btn>
+            <v-menu offset-y dense>
+              <template v-slot:activator="{ on }">
+                <v-btn icon dark v-on="on">
+                  <v-icon large color="success">mdi-plus</v-icon>
+                </v-btn>
+              </template>
+              <v-list
+                :dark="lightSwitch == true"
+                :style="{ background: cardbackground }"
+                style="padding: 0;"
+              >
+                <v-list-item @click.stop="showUploadCover=true">
+                  <v-list-item-title class="success--text">Upload Photo</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click>
+                  <v-list-item-title class="success--text">Remove</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-overlay>
         </v-img>
       </v-col>
@@ -24,9 +40,25 @@
               lazy-src="https://www.thefamouspeople.com/profiles/images/liza-soberano-4.jpg"
             >
               <v-overlay absolute color="darkchart" :opacity=".9" :value="overlay">
-                <v-btn icon>
-                  <v-icon large color="success">mdi-plus</v-icon>
-                </v-btn>
+                <v-menu offset-y dense>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon dark v-on="on">
+                      <v-icon large color="success">mdi-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list
+                    :dark="lightSwitch == true"
+                    :style="{ background: cardbackground }"
+                    style="padding: 0;"
+                  >
+                    <v-list-item @click.stop="showUploadPhoto=true">
+                      <v-list-item-title class="success--text">Upload Photo</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click>
+                      <v-list-item-title class="success--text">Remove</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </v-overlay>
             </v-img>
           </v-list-item-avatar>
@@ -60,12 +92,11 @@
                   <v-list-item-title class="success--text font-weight-medium body-1">10,000</v-list-item-title>
                 </div>
                 <v-spacer></v-spacer>
-                <div class="text-center pt-2">
+                <div class="text-center pt-1">
                   <v-btn
                     background-color="transparent"
                     color="success"
                     class="text-capitalize caption"
-                    small
                     dark
                     icon
                     @click="overlay = !overlay"
@@ -77,21 +108,38 @@
             </v-card>
           </v-card>
         </v-list-item>
+
+        <upload-profile :visible="showUploadPhoto" @close="showUploadPhoto=false" />
+        <upload-cover :visible="showUploadCover" @close="showUploadCover=false" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 <script>
+import { mapGetters } from "vuex";
+import uploadProfile from "~/components/profile/dialog/UploadProfilePhoto";
+import uploadCover from "~/components/profile/dialog/UploadProfileCover";
+
 export default {
-  data: () => ({
-    overlay: false,
-    items: [
-      { title: "Click Me" },
-      { title: "Click Me" },
-      { title: "Click Me" },
-      { title: "Click Me 2" }
-    ]
-  })
+  components: {
+    uploadProfile,
+    uploadCover
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    }),
+    cardbackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
+  },
+  data() {
+    return {
+      showUploadPhoto: false,
+      showUploadCover: false,
+      overlay: false
+    };
+  }
 };
 </script>
 <style scoped>
@@ -104,6 +152,7 @@ export default {
 .profile_cover-cont {
   border: thin solid hsla(0, 0%, 100%, 0.12);
   border-radius: 0 0 5px 5px;
+  border-top: 0;
 }
 .profile_suminfo {
   /* margin-top: 26px; */

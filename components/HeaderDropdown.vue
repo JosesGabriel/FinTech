@@ -22,24 +22,7 @@
     </v-card>
   </div>
 </template>
-<style>
-.userSettings__dropdown {
-  position: absolute;
-  top: 53px;
-  right: 10px;
-  margin-right: 10px;
-}
-.userSettings__dropdown--caret {
-  width: 0;
-  height: 0;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 17px solid rgb(182, 182, 182, 0.2);
-  position: absolute;
-  right: 40px;
-  top: 36px;
-}
-</style>
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
@@ -57,7 +40,12 @@ export default {
     })
   },
   watch: {
-    lightSwitch_m: function() {
+    /**
+     * Watches light switch. Updates localStorage value to new value
+     *
+     * @return
+     */
+    lightSwitch_m() {
       this.setLightSwitch(this.lightSwitch_m ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
     }
@@ -80,3 +68,22 @@ export default {
   }
 };
 </script>
+
+<style>
+.userSettings__dropdown {
+  position: absolute;
+  top: 53px;
+  right: 10px;
+  margin-right: 10px;
+}
+.userSettings__dropdown--caret {
+  width: 0;
+  height: 0;
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-bottom: 17px solid rgb(182, 182, 182, 0.2);
+  position: absolute;
+  right: 40px;
+  top: 36px;
+}
+</style>

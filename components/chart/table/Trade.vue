@@ -1,7 +1,7 @@
 <template>
   <v-content>
     <!-- select broker -->
-    <v-content v-show="show_brokers" class="mx-12 text-center">
+    <v-content v-show="showBrokers" class="mx-12 text-center">
       <span
         class="subtitle-1 font-weight-bold"
         :class="[
@@ -19,13 +19,13 @@
         :dark="lightSwitch == 1"
       >
         <v-card
-          v-for="item in items_top"
+          v-for="item in itemsTop"
           :key="item.id"
           class="card__trades pa-2"
           outlined
           tile
           flat
-          :style="{ background: cardbackground }"
+          :style="{ background: cardBackground }"
           :class="[{ hide__card: item.show == false }]"
           @click="showModal(item)"
         >
@@ -45,13 +45,13 @@
         :dark="lightSwitch == 1"
       >
         <v-card
-          v-for="item in items_bottom"
+          v-for="item in itemsBottom"
           :key="item.id"
           class="card__trades pa-2"
           outlined
           tile
           flat
-          :style="{ background: cardbackground }"
+          :style="{ background: cardBackground }"
           :class="{ hide__card: item.show == false }"
           @click="showModal(item)"
         >
@@ -67,7 +67,7 @@
 
       <!-- dialog -->
       <v-row justify="center">
-        <v-dialog v-model="trade_login" persistent max-width="290">
+        <v-dialog v-model="tradeLogin" persistent max-width="290">
           <v-card
             :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
             flat
@@ -103,7 +103,7 @@
                   <v-text-field
                     v-show="broker.id != 3"
                     label="Email/Username"
-                    color="#03DAC5"
+                    color="success"
                     required
                   ></v-text-field>
 
@@ -116,7 +116,7 @@
                     <v-col class="col-5 pa-0">
                       <v-text-field
                         label="User ID"
-                        color="#03DAC5"
+                        color="success"
                         required
                       ></v-text-field>
                     </v-col>
@@ -126,14 +126,14 @@
                       ></v-col
                     >
                     <v-col class="col-5 pa-0">
-                      <v-text-field color="#03DAC5" required></v-text-field>
+                      <v-text-field color="success" required></v-text-field>
                     </v-col>
                   </v-row>
                 </v-col>
                 <v-col cols="12 pa-0">
                   <v-text-field
                     label="Password"
-                    color="#03DAC5"
+                    color="success"
                     type="password"
                     required
                   ></v-text-field>
@@ -143,11 +143,13 @@
                     </span>
                   </v-content>
                 </v-col>
-                <v-content class="text-center caption font-weight-bold"> Not yet ready </v-content>
+                <v-content class="text-center caption font-weight-bold">
+                  Not yet ready
+                </v-content>
                 <v-col cols="12 pa-0 text-center">
                   <v-btn
                     class="mt-10"
-                    color="#03DAC5"
+                    color="success"
                     outlined=""
                     text
                     rounded
@@ -166,7 +168,7 @@
 
     <!-- paper trade -->
     <v-content
-      v-show="!show_brokers"
+      v-show="!showBrokers"
       class="pt-2"
       :class="[
         { darkmode__text: lightSwitch == 1 },
@@ -178,14 +180,14 @@
         <v-col class="col___left col-9 pa-0">
           <v-container class="d-flex flex-row pa-0">
             <v-card
-              v-for="item in card_content"
+              v-for="item in cardContent"
               :key="item.id"
               class="ml-4 pa-0"
               tile
               outlined
               min-width="165"
               min-height="70"
-              :style="{ background: cardbackground }"
+              :style="{ background: cardBackground }"
               :dark="lightSwitch == 1"
             >
               <v-card-text class="pa-0">
@@ -245,7 +247,7 @@
               class="select__trade ma-0 pa-0"
               item-color="success"
               append-icon="mdi-chevron-down"
-              background-color="#03dac5"
+              background-color="success"
               label="Select Strategy"
               color="success"
               dense
@@ -256,7 +258,7 @@
               class="select__trade ma-0 pa-0"
               item-color="success"
               append-icon="mdi-chevron-down"
-              background-color="#03dac5"
+              background-color="success"
               label="Select Trade Plan"
               color="success"
               dense
@@ -267,7 +269,7 @@
               class="select__trade ma-0 pa-0"
               item-color="success"
               append-icon="mdi-chevron-down"
-              background-color="#03dac5"
+              background-color="success"
               label="Select Emotion"
               color="success"
               dense
@@ -294,14 +296,14 @@
           <br />
           <v-btn
             small
-            color="#03DAC5"
+            color="success"
             :dark="lightSwitch == 1"
             class="caption mt-2"
             >ENTER</v-btn
           >
         </v-col>
       </v-row>
-      <!-- <v-btn @click="showBrokers">Return</v-btn> -->
+      <!-- <v-btn @click="setShowBrokers">Return</v-btn> -->
     </v-content>
   </v-content>
 </template>
@@ -312,15 +314,15 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      show_brokers: true,
+      showBrokers: true,
       broker: {},
-      card_content: [
+      cardContent: [
         { id: 1, title: "Price", amount: "10,000.00", php: true },
         { id: 2, title: "Quantity", amount: "10,000", php: false },
         { id: 3, title: "Total", amount: "1,000,000.00", php: true }
       ],
       items: ["Test", "Test 1"],
-      items_top: [
+      itemsTop: [
         {
           id: 1,
           title: "Paper Trade",
@@ -350,7 +352,7 @@ export default {
           modal: true
         }
       ],
-      items_bottom: [
+      itemsBottom: [
         {
           id: 7,
           title: "Papa Securities",
@@ -370,10 +372,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      trade_login: "chart/trade_login",
+      tradeLogin: "chart/tradeLogin",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    cardBackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -384,14 +386,14 @@ export default {
     showModal: function(item) {
       console.log(item);
       if (item.modal == false) {
-        this.show_brokers = false;
+        this.showBrokers = false;
         return;
       }
       this.broker = item;
-      this.setTradeLogin(!this.trade_login);
+      this.setTradeLogin(!this.tradeLogin);
     },
-    showBrokers: function() {
-      this.show_brokers = true;
+    setShowBrokers: function() {
+      this.showBrokers = true;
     }
   }
 };
@@ -428,9 +430,6 @@ export default {
 .v-text-field.v-text-field--enclosed .v-text-field__details {
   margin-bottom: -7px;
 }
-/* .select__trade .v-text-field.v-text-field--enclosed .v-text-field__details {
-  margin-bottom: -1px !important;
-} */
 </style>
 
 <style scoped>

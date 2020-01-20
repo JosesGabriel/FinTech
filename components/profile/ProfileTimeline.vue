@@ -21,8 +21,8 @@
               </v-col>
               <v-col cols="12" sm="12" md="4" lg="4">
                 <!-- <ProfileCourse /> // hide for now -->
+                <ProfileSuggestedUser />
                 <ProfileRooms />
-                <ProfileSuggestionUser />
                 <ProfileAds />
                 <v-container>
                   <FooterSidebar />
@@ -34,9 +34,14 @@
           <v-tab-item class="mt-10" :value="'tab-2'">
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="5" lg="5">
-                <ProfileIdeas class="my-3" />
+                <!-- <ProfileIdeas class="my-3" /> -->
                 <ProfileFollowing class="my-3" />
-                <ProfileFollowers class="my-3" />
+                <div class="activity_sticky-sidebar">
+                  <ProfileFollowers class="my-3" />
+                  <v-container>
+                    <FooterSidebar />
+                  </v-container>
+                </div>
               </v-col>
               <v-col cols="12" sm="12" md="7" lg="7">
                 <v-container>
@@ -59,13 +64,13 @@ import ProfileEducation from "~/components/profile/parts/ProfileEducation";
 import ProfileSkills from "~/components/profile/parts/ProfileSkills";
 import ProfileInterests from "~/components/profile/parts/ProfileInterests";
 import ProfileRooms from "~/components/profile/parts/ProfileRooms";
-import ProfileSuggestionUser from "~/components/profile/parts/ProfileSuggestionUser";
+import ProfileSuggestedUser from "~/components/profile/parts/ProfileSuggestedUser";
 import ProfileAds from "~/components/profile/parts/ProfileAds";
 import FooterSidebar from "~/components/FooterSidebar";
 // import ProfileCourse from "~/components/profile/parts/ProfileCourse"; // hide for now
 
 // Profile tab
-import ProfileIdeas from "~/components/profile/parts/ProfileIdeas";
+// import ProfileIdeas from "~/components/profile/parts/ProfileIdeas";
 import ProfileFollowing from "~/components/profile/parts/ProfileFollowing";
 import ProfileFollowers from "~/components/profile/parts/ProfileFollowers";
 import PostField from "~/components/social/PostField";
@@ -80,11 +85,11 @@ export default {
     ProfileSkills,
     ProfileInterests,
     ProfileRooms,
-    ProfileSuggestionUser,
+    ProfileSuggestedUser,
     ProfileAds,
     FooterSidebar,
     // ProfileCourse, // hide for now
-    ProfileIdeas,
+    // ProfileIdeas,
     ProfileFollowing,
     ProfileFollowers,
     PostField,
@@ -130,5 +135,17 @@ export default {
 }
 .heading-underline {
   border-bottom: thin solid rgba(255, 255, 255, 0.12);
+}
+.theme--dark.upload-container {
+  border: 2px dashed #0c1a2b !important;
+  border-radius: 1px !important;
+}
+.image_close {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.edit_about-textarea.v-textarea.theme--dark fieldset {
+  border-color: #1f2e39;
 }
 </style>

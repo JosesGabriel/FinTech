@@ -200,7 +200,7 @@
           width="24"
           height="24"
           color="success"
-          @click="post_react(postsObject[n - 1].id, 'bull', n - 1)"
+          @click="postReact(postsObject[n - 1].id, 'bull', n - 1)"
         >
           <img src="/icon/bullish.svg" width="12" />
         </v-btn>
@@ -212,7 +212,7 @@
           width="24"
           height="24"
           color="error"
-          @click="post_react(postsObject[n - 1].id, 'bear', n - 1)"
+          @click="postReact(postsObject[n - 1].id, 'bear', n - 1)"
         >
           <img src="/icon/bearish.svg" width="12" />
         </v-btn>
@@ -401,6 +401,7 @@
     />
   </v-col>
 </template>
+
 <script>
 import { mapGetters, mapActions } from "vuex";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
@@ -413,12 +414,12 @@ export default {
   },
   props: {
     newPost: {
-      default: function() {
+      default() {
         return [];
       }
     },
     postid: {
-      default: function() {
+      default() {
         return "";
       },
       type: String
@@ -444,7 +445,14 @@ export default {
     })
   },
   watch: {
-    newPost: function() {
+    /**
+     * Fires when user submits a new post.
+     * Creates a new object based on submitted post and unshifts postsObject
+     * so that post is automatically shown to user after submitting
+     *
+     * @return
+     */
+    newPost() {
       let attachments = [];
       for (let i = 0; i < this.newPost.attachments.length; i++) {
         attachments[i] = {};
@@ -467,7 +475,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.postid);
     if (this.postid) {
       this.searchPost();
     } else {
@@ -628,7 +635,8 @@ export default {
       });
     },
     /**
-     * [post_react description]
+     * Fires when user clicks either Bull or Bear button.
+     * Executes requests
      *
      * @param   {integer}  post_id
      * @param   {string}  type
@@ -636,7 +644,7 @@ export default {
      *
      * @return
      */
-    post_react(post_id, type, index) {
+    postReact(post_id, type, index) {
       const params = post_id;
       if (type == "bull") {
         this.$api.social.posts.bullish(params).then(response => {
