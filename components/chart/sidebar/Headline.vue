@@ -139,20 +139,47 @@ export default {
     }
   },
   watch: {
+    /**
+     * run sse only after response API has fetched
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return
+     */
     headlineLoading(value) {
       if (value === false) {
         this.sse.addEventListener("info", this.sseInfo);
       }
     },
+    /**
+     * blink stock marketcap value
+     *
+     * @return
+     */
     stock_marketcap() {
       this.updateEffect("stock__marketcap");
     },
+    /**
+     * blink stock last value
+     *
+     * @return
+     */
     stock_last() {
       this.updateEffect("stock__last");
     },
+    /**
+     * blink stock change value
+     *
+     * @return
+     */
     stock_change() {
       this.updateEffect("stock__change");
     },
+    /**
+     * blink stock change percentage value
+     *
+     * @return
+     */
     stock_changepercentage() {
       this.updateEffect("stock__changepercentage");
     }
@@ -211,6 +238,13 @@ export default {
         );
       }
     },
+    /**
+     * run and listen to SSE info
+     *
+     * @param   {Object}  e  response from sse
+     *
+     * @return
+     */
     sseInfo(e) {
       try {
         if (this.symbolid == undefined) return;

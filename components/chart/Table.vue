@@ -1,9 +1,16 @@
 <template>
   <v-col class="pa-0">
     <v-content class="content__vynduebutton pl-2">
-        <img class="img__vyndue" src="/icon/vyndue2.svg" title="Vyndue"></img
+        <img class="img__vyndue" @click="showVyndueChat" src="/icon/vyndue2.svg" title="Vyndue"></img
       >
     </v-content>
+    <!---------------->
+    <template>
+      <v-container :class="this.show ? 'display' : 'no_display' " class="vyndue__chat">
+          <ChatClient v-on:showChat="ShowDialog"/>
+      </v-container>
+    </template>
+    <!---------------->
     <v-content class="content__btncontainer">
       <v-btn
         v-show="maximize || fullscreen"
@@ -47,7 +54,7 @@
       :dark="lightSwitch == true"
     >
       <v-tab
-        v-for="item in tabs_content"
+        v-for="item in tabsContent"
         :key="item.id"
         :href="`#tab-${item.id}`"
         class="text-capitalize subtitle-1"
@@ -58,12 +65,12 @@
       </v-tab>
 
       <v-tab-item
-        v-for="item in tabs_content"
+        v-for="item in tabsContent"
         :key="item.id"
         :value="`tab-${item.id}`"
         :style="{ background: cardBackground }"
       >
-        <component :is="item.component" v-show="tabs_show" />
+        <component :is="item.component" v-show="tabsShow" />
       </v-tab-item>
     </v-tabs>
   </v-col>
@@ -73,19 +80,20 @@ import { mapActions, mapGetters } from "vuex";
 import Jockey from "~/components/chart/table/Jockey";
 import Activity from "~/components/chart/table/Activity";
 import Trade from "~/components/chart/table/Trade";
+import ChatClient from "~/components/modals/VyndueChatClient";
 
 export default {
   components: {
     Jockey,
     Activity,
-    Trade
+    Trade,
+    ChatClient
   },
   data() {
     return {
-      tabs_show: false,
-      active_tab: 0,
-      last_visit: 0,
-      tabs_content: [
+      tabsShow: false,
+      activeTab: 0,
+      tabsContent: [
         {
           id: 1,
           icon: "mdi-cash-usd-outline",
@@ -107,7 +115,8 @@ export default {
           component: "Trade",
           disabled: false
         }
-      ]
+      ],
+      show: false,
     };
   },
   computed: {
@@ -161,12 +170,12 @@ export default {
      */
     toggleTabs(tab) {
       if (this.fullscreen) return;
-      if (this.active_tab == tab || this.maximize == false) {
-        this.tabs_show = !this.tabs_show;
+      if (this.activeTab == tab || this.maximize == false) {
+        this.tabsShow = !this.tabsShow;
         this.setTableMaximize(!this.maximize);
         this.$bus.$emit("adjustChartView");
       }
-      this.active_tab = tab;
+      this.activeTab = tab;
     },
     /**
      * toggle view fullscreen of table component
@@ -176,7 +185,13 @@ export default {
     toggleTabsFullscreen() {
       this.setTableFullscreen(!this.fullscreen);
       this.$bus.$emit("adjustChartView");
-    }
+    },
+    showVyndueChat: function() {
+      if(this.show ? this.show = false : this.show = true);
+    },
+    ShowDialog(value) {
+      this.show = value;
+    },
   }
 };
 </script>
@@ -227,5 +242,18 @@ export default {
 .button__disable {
   cursor: not-allowed !important;
   pointer-events: none;
+}
+.no_display {
+  display: none;
+}
+.display {
+  display: block;
+}
+.vyndue__chat {
+  position: fixed;
+  bottom: 5%;
+  left: 40px;
+  width: 500px;
+  z-index: 3;
 }
 </style>

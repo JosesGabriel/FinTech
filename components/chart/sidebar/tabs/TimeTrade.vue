@@ -98,9 +98,23 @@ export default {
     }
   },
   watch: {
+    /**
+     * run initTimetrade everytime symbol id changes
+     *
+     * @param   {String}  symid  symbol id
+     *
+     * @return
+     */
     symbolid(symid) {
       this.initTimetrade(symid);
     },
+    /**
+     * Once a trade data coming in, create a simlple blink effect
+     *
+     * @param   {Object}  value  response data object
+     *
+     * @return
+     */
     trades(value) {
       setTimeout(
         function() {
@@ -109,6 +123,13 @@ export default {
         100
       );
     },
+    /**
+     * once loading is done run and listen to trade sse
+     *
+     * @param   {Boolena}  value  true/false
+     *
+     * @return
+     */
     loading(value) {
       if (value === false) {
         this.tempTrades = this.trades;

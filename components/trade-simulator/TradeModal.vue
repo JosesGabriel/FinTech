@@ -3,9 +3,9 @@
     v-model="show"
     max-width="320px"
     :dark="lightSwitch == true"
-    :style="{ background: cardbackground }"
+    :style="{ background: cardBackground }"
   >
-    <v-card :dark="lightSwitch == true" :style="{ background: cardbackground }">
+    <v-card :dark="lightSwitch == true" :style="{ background: cardBackground }">
       <v-card-title
         class="text-left justify-left pa-5 pb-3 px-5 success--text"
         style="font-size:16px;"
@@ -13,7 +13,7 @@
       <v-stepper
         v-model="e1"
         :dark="lightSwitch == true"
-        :style="{ background: cardbackground }"
+        :style="{ background: cardBackground }"
         id="stepper_container"
       >
         <v-stepper-items>
@@ -30,8 +30,7 @@
                       text
                       tile
                       width="100%"
-                      @click="btnBuy"
-                      color="secondary"
+                      @click="btnBuy"                   
                     >Buy</v-btn>
                   </div>
                 </v-col>
@@ -45,7 +44,6 @@
                       tile
                       width="100%"
                       @click="btnSell"
-                      color="secondary"
                     >Sell</v-btn>
                   </div>
                 </v-col>
@@ -72,7 +70,7 @@
                         <template slot="item" slot-scope="data">
                           <v-list-item-content
                             :dark="lightSwitch == true"
-                            :style="{ background: cardbackground }"
+                            :style="{ background: cardBackground }"
                             style="padding: 21px 12px; margin: -16px;"
                           >
                             <v-list-item-title v-html="data.item.symbol"></v-list-item-title>
@@ -86,14 +84,14 @@
                     <v-card-title
                       class="pa-0"
                       style="font-size:12.5px !important;"
-                      :style="{ color: fontcolor2 }"
+                      :style="{ color: toggleFontColor }"
                     >Current Price</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title :style="{ color: fontcolor2 }" class="pa-0">
+                    <v-card-title :style="{ color: toggleFontColor }" class="pa-0">
                       <p
                         class="text-right ma-0 body-1"
                         style="font-size:12.5px !important;"
-                        :style="{ color: fontcolor2 }"
+                        :style="{ color: toggleFontColor }"
                       >
                         {{ cprice }}
                         <span
@@ -113,12 +111,12 @@
                       <v-simple-table
                         :dense="true"
                         :dark="lightSwitch == true"
-                        :style="{ background: cardbackground }"
+                        :style="{ background: cardBackground }"
                         style="font-size: 12px;"
                         id="liveportfolio-table"
                       >
                         <template v-slot:default>
-                          <tbody :style="{color: fontcolor2}" >
+                          <tbody :style="{color: toggleFontColor}" >
                             <tr id="table_tr_snap-cont" >
                               <td class="item_position-prop py-1 px-1 stock_details"
                               
@@ -158,11 +156,11 @@
                       <v-simple-table
                         :dense="true"
                         :dark="lightSwitch == true"
-                        :style="{ background: cardbackground }"
+                        :style="{ background: cardBackground }"
                         id="liveportfolio-table"
                       >
                         <template v-slot:default>
-                          <tbody :style="{color: fontcolor2}">
+                          <tbody :style="{color: toggleFontColor}">
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop py-1 px-1 stock_details">Open</td>
                               <td
@@ -202,7 +200,7 @@
                     <v-card-title class="pa-0 justify-center mt-3">
                       <h1
                         style="font-size: 12px;"
-                        :style="{ color: fontcolor2 }"
+                        :style="{ color: toggleFontColor }"
                       >Bid/ Ask Bar</h1>
                     </v-card-title>
 
@@ -216,11 +214,11 @@
                     <v-card-title class="pa-0 justify-center mt-3">
                       <h1
                          style="font-size: 12px;"
-                        :style="{ color: fontcolor2 }"
+                        :style="{ color: toggleFontColor }"
                       >Members Sentiments</h1>
                     </v-card-title>
                     <v-progress-linear
-                      value="50"
+                      :value="sentiment"
                       background-color="#F44336"
                       color="#00FFC3"
                       height="5px"
@@ -288,7 +286,7 @@
                       <template slot="item" slot-scope="data">
                         <v-list-item-content
                           :dark="lightSwitch == true"
-                          :style="{ background: cardbackground }"
+                          :style="{ background: cardBackground }"
                           style="padding: 21px 12px; margin: -16px;"
                         >
                           <v-list-item-title v-html="data.item"></v-list-item-title>
@@ -311,7 +309,7 @@
                       <template slot="item" slot-scope="data">
                         <v-list-item-content
                           :dark="lightSwitch == true"
-                          :style="{ background: cardbackground }"
+                          :style="{ background: cardBackground }"
                           style="padding: 21px 12px; margin: -16px;"
                         >
                           <v-list-item-title v-html="data.item"></v-list-item-title>
@@ -334,7 +332,7 @@
                       <template slot="item" slot-scope="data">
                         <v-list-item-content
                           :dark="lightSwitch == true"
-                          :style="{ background: cardbackground }"
+                          :style="{ background: cardBackground }"
                           style="padding: 21px 12px; margin: -16px;"
                         >
                           <v-list-item-title v-html="data.item"></v-list-item-title>
@@ -358,7 +356,7 @@
                     class="white--text trading_notes-textarea"
                     v-model="notes"
                     :dark="lightSwitch == true"
-                    :style="{ background: cardbackground }"
+                    :style="{ background: cardBackground }"
                   ></v-textarea>
                 </v-col>
               </v-row>
@@ -396,6 +394,7 @@ export default {
       cpercentage: 0,
       change: 0,
       bidask: 50,
+      sentiment: 50,
       dboard: 0,
       stock_id: 0,
       stock: [],
@@ -451,13 +450,20 @@ export default {
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground() {
+    /**
+     * Toggle background color (Dark/light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor() {
-      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; 
-    },
-    fontcolor2() {
+    /**
+     * Toggle Font Color (Dark/Light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    toggleFontColor() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; 
     },
 
@@ -495,7 +501,6 @@ export default {
     }
   },
   mounted() {
-    console.log("Fund id = " + this.simulatorPortfolioID);
     const params = {
       exchange: "PSE",
       status: "active"
@@ -510,11 +515,14 @@ export default {
   methods: {
     ...mapActions({
       setSimulatorPositions: "tradesimulator/setSimulatorPositions",
-      //setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
       setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
       setSimulatorConfirmedBuySell:
         "tradesimulator/setSimulatorConfirmedBuySell"
     }),
+    /**
+     * No Trade Details appear if Sell is Selected in Stepper
+     *
+     */
     nextStep() {
       if (this.sellSelected) {
         this.show = false;
@@ -523,11 +531,22 @@ export default {
         this.e1 = 3;
       }
     },
+    /**
+     * Return Total Position
+     *
+     * @param   {float}  value  total position
+     *
+     * @return  {float}         total position
+     */
     totalPosition(value) {
       this.totalposition = value;
     },
-    btnBuy() {
-      
+    
+    /**
+     * initialize data when you click Buy Button
+     *
+     */
+    btnBuy() {     
       this.setSimulatorConfirmedBuySell("buy");
       this.totalposition = 0;
       this.buySelected = true;
@@ -536,6 +555,10 @@ export default {
       this.GetSelectStock = "";
       this.stock = this.stock2;
     },
+    /**
+     * initialize data when you click Sell Button
+     *
+     */
     btnSell() {
       if (
         this.GetSelectStock != "" ? this.getDetails(this.GetSelectStock) : ""
@@ -556,7 +579,14 @@ export default {
         );
       }
     },
-
+  /**
+ * Add comma separator
+ *
+ * @param   {float}  n        number
+ * @param   {char}  sep       separator character
+ * @param   {int}  decimals   number of decimal points
+ * @return  {string}          number with comma separator
+ */
     addcomma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
@@ -564,7 +594,11 @@ export default {
         n.toLocaleString().split(sep)[0] + sep + n.toFixed(2).split(sep)[1]
       );
     },
-    //----Confirm Buy/Sell Button----------
+
+    /**
+     * Confirm Buy/Sell Button
+     *
+     */
     confirm() {
       
       const stock_id = this.stock_id;
@@ -635,13 +669,20 @@ export default {
       }
      
     },
+
+    /**
+     * Get Stock Details 
+     *
+     * @param   {string}  selectObj  Stock ID
+     *
+     */
     getDetails(selectObj) {
+
       const params = {
         "symbol-id": selectObj
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
-         
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.dboard = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
@@ -657,7 +698,7 @@ export default {
           } else if (result.data.last >= 1000) {
             this.dboard = 5;
           }
-
+        
           if (this.sellSelected) {
             const sellparams = {
               fund: this.simulatorPortfolioID
@@ -691,6 +732,22 @@ export default {
           this.vole = this.nFormatter(result.data.value);
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
+
+            let market_code =  result.data.market_code;
+            let stock_id = selectObj;
+
+            this.$api.social.posts.getSentiment({
+              stock_id,
+              market_code
+            }).then(
+              function(response){
+                  this.sentiment = parseFloat((response.data.sentiment.bull / response.data.sentiment.total_sentiment) * 100);
+                  if(isNaN(this.sentiment)) {
+                    this.sentiment = 50;
+                  }
+              }.bind(this)
+            );
+                       
         }.bind(this)
       );
 
@@ -699,7 +756,16 @@ export default {
           this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);
         }.bind(this)
       );
+
     },
+
+    /**
+     * Format number from 1000 to 1K, 1000000 to 1M, 1000000000 to 1B
+     *
+     * @param   {int}  num  number
+     *
+     * @return  {string}   return formatted number
+     */
     nFormatter(num) {
       if (num >= 1000000000) {
         return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "B";
@@ -769,9 +835,7 @@ export default {
 }
 </style>
 <style>
-/* .v-menu__content > .v-select-list > .v-list.v-sheet {
-        background: #EAE8E8; 
-    }*/
+
 .v-menu__content
   > .v-select-list
   > .v-list.v-sheet

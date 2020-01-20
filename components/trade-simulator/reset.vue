@@ -3,9 +3,9 @@
     v-model="show"
     max-width="450px"
     :dark="lightSwitch == true"
-    :style="{ background: cardbackground }"
+    :style="{ background: cardBackground }"
   >
-    <v-card dark="lightSwitch == true" :style="{ background: cardbackground }">
+    <v-card dark="lightSwitch == true" :style="{ background: cardBackground }">
       <v-card-title class="text-center justify-center px-5 pt-10">
         <h1 class="font-weight-regular body-1">
           This action is final and cannot be undone.
@@ -22,7 +22,7 @@
               placeholder="HELL YEAH"
               solo
               :dark="lightSwitch == true"
-              :style="{ background: cardbackground }"
+              :style="{ background: cardBackground }"
               class="align-center justify-center headline font-weight-regular text-center white--text confirmation_message-reset"
             ></v-text-field>
           </v-col>
@@ -63,7 +63,12 @@ export default {
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground() {
+    /**
+     * Change background color (Dark/light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     show: {
@@ -82,6 +87,9 @@ export default {
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
       setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition"
     }),
+    /**
+     * Reset Trade Simulator Portfolio
+     */
     resetLive() {
        this.$api.journal.portfolio.reset(this.simulatorPortfolioID).then(response => {
           if (response.success) {

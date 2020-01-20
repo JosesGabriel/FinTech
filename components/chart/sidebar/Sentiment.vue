@@ -17,7 +17,7 @@
         </v-img>
       </div>
       <v-slide-y-reverse-transition>
-        <div v-show="!can_add" id="prgbr__container">
+        <div v-show="!canAdd" id="prgbr__container">
           <v-progress-linear
             background-color="error"
             color="success"
@@ -55,17 +55,24 @@ export default {
   name: "Sentiment",
   data() {
     return {
-      can_add: true,
+      canAdd: true,
       bull: "0.00",
       bear: "0.00",
       loading: true,
-      first_load: true,
+      firstLoad: true,
       caption: "Members Sentiment"
     };
   },
   watch: {
+    /**
+     * run initSentiments once stock change
+     *
+     * @param   {Object}  stock  stock object
+     *
+     * @return
+     */
     stock(stock) {
-      if (this.first_load === false) {
+      if (this.firstLoad === false) {
         this.initSentiments(stock.stockidstr, stock.market_code);
       }
     }
@@ -97,7 +104,7 @@ export default {
      * @return  {[type]}               [return description]
      */
     async postSentiment(stock_id, market_code, sentiment) {
-      if (this.can_add === false) return;
+      if (this.canAdd === false) return;
       this.loading = true;
       try {
         const response = await this.$api.social.posts.postSentiment({
@@ -108,7 +115,7 @@ export default {
         const { total_sentiment, bull, bear } = response.data.sentiment;
         this.bull = parseFloat((bull / total_sentiment) * 100);
         this.bear = parseFloat((bear / total_sentiment) * 100);
-        this.can_add = false;
+        this.canAdd = false;
         this.loading = false;
         this.caption = "Members Sentiment";
       } catch (error) {}
@@ -122,7 +129,7 @@ export default {
      * @return
      */
     async initSentiments(stock_id, market_code) {
-      this.can_add = true;
+      this.canAdd = true;
       this.loading = true;
       try {
         const response = await this.$api.social.posts.getSentiment({
@@ -132,8 +139,8 @@ export default {
         const { total_sentiment, bull, bear } = response.data.sentiment;
         this.bull = parseFloat((bull / total_sentiment) * 100);
         this.bear = parseFloat((bear / total_sentiment) * 100);
-        this.can_add = response.data.user_stats.can_add;
-        if (this.can_add == true) {
+        this.canAdd = response.data.user_stats.can_add;
+        if (this.canAdd == true) {
           this.caption = "Register Sentiment";
         }
         this.loading = false;
@@ -152,7 +159,7 @@ export default {
      */
     setTimeout(() => {
       this.initSentiments(this.stock.stockidstr, this.stock.market_code);
-      this.first_load = false;
+      this.firstLoad = false;
     }, 2000);
   }
 };
