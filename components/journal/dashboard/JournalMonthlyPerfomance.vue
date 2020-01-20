@@ -211,31 +211,51 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    borderColor: function() {
+    borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"
         : "border-bottom: 1px solid #535358";
-    }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getMPerformance();
-    },
-    defaultPortfolioId: function() {
-      this.getMPerformance();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   },
   mounted() {
     this.getMPerformance();
     this.lightSwitcher();
   },
+  watch: {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
+      this.getMPerformance();
+    },
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getMPerformance();
+    },
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
+      this.lightSwitcher();
+    }
+  },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -244,13 +264,18 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * getMPerformance will work on ploting/updating chart series 
+     *
+     * @return  {array}  data to update chart
+     */
     getMPerformance() {
       if (this.journalCharts != null) {
         this.monthlyPerformance = this.journalCharts.data;
         let monthlyPerformanceArr = this.monthlyPerformance.monthly_performance;
-        for(let i = 0; i < monthlyPerformanceArr.length; i++) {
-          if(monthlyPerformanceArr[i] == 0) {
-            monthlyPerformanceArr[i] = null
+        for (let i = 0; i < monthlyPerformanceArr.length; i++) {
+          if (monthlyPerformanceArr[i] == 0) {
+            monthlyPerformanceArr[i] = null;
           }
         }
         this.$refs.monthlyPerformance.updateSeries([
@@ -261,10 +286,11 @@ export default {
       }
       this.componentKeys++;
     },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {

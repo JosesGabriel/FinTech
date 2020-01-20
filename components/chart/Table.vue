@@ -16,7 +16,7 @@
         v-show="maximize || fullscreen"
         small
         icon
-        :color="fullscreen ? '#03dac5' : '#b6b6b6'"
+        :color="fullscreen ? 'success' : '#b6b6b6'"
         :class="[{ button__disable: !maximize && !fullscreen }]"
         title="Maximize Table"
         @click="toggleTabsFullscreen"
@@ -28,7 +28,7 @@
       <v-btn
         small
         icon
-        :color="ticker ? '#03dac5' : '#BBB'"
+        :color="ticker ? 'success' : '#BBB'"
         title="Ticker"
         @click="toggleTicker"
       >
@@ -38,7 +38,7 @@
       <v-btn
         small
         icon
-        :color="sidebarboard ? '#03dac5' : '#b6b6b6'"
+        :color="sidebarboard ? 'success' : '#b6b6b6'"
         title="Sidebar"
         @click="toggleSidebarBoard"
       >
@@ -48,7 +48,7 @@
 
     <v-tabs
       height="30"
-      color="#03dac5"
+      color="success"
       class="table__tabs"
       :background-color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :dark="lightSwitch == true"
@@ -68,7 +68,7 @@
         v-for="item in tabs_content"
         :key="item.id"
         :value="`tab-${item.id}`"
-        :style="{ background: cardbackground }"
+        :style="{ background: cardBackground }"
       >
         <component :is="item.component" v-show="tabs_show" />
       </v-tab-item>
@@ -128,7 +128,12 @@ export default {
       sidebarboard: "chart/getSidebar",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    /**
+     * toggle card background dark/light
+     *
+     * @return  {String} 
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -140,15 +145,31 @@ export default {
       setTableMaximize: "chart/setTableMaximize",
       setTableFullscreen: "chart/setTableFullscreen"
     }),
-    toggleTicker: function() {
+    /**
+     * show/hide ticker via bus emit
+     *
+     * @return 
+     */
+    toggleTicker() {
       this.setTicker(!this.ticker);
       this.$bus.$emit("adjustChartView");
     },
-    toggleSidebarBoard: function() {
+    /**
+     * show/hide sidebar
+     *
+     * @return 
+     */
+    toggleSidebarBoard() {
       this.setSidebar(!this.sidebarboard);
     },
-    toggleTabs: function(tab) {
-      //console.log(tab);
+    /**
+     * toggle tabs in sidebar
+     *
+     * @param   {String}  tab  tab string name
+     *
+     * @return  
+     */
+    toggleTabs(tab) {
       if (this.fullscreen) return;
       if (this.active_tab == tab || this.maximize == false) {
         this.tabs_show = !this.tabs_show;
@@ -157,7 +178,12 @@ export default {
       }
       this.active_tab = tab;
     },
-    toggleTabsFullscreen: function() {
+    /**
+     * toggle view fullscreen of table component
+     *
+     * @return 
+     */
+    toggleTabsFullscreen() {
       this.setTableFullscreen(!this.fullscreen);
       this.$bus.$emit("adjustChartView");
     },
@@ -198,7 +224,6 @@ export default {
   z-index: 1;
   width: 150px;
   margin-right: 5px;
-  /* background: red; */
   text-align: right;
 }
 .icon-flipped-x {

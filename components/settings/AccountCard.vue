@@ -24,7 +24,7 @@
         <v-container class="pa-0">
           <v-row>
             <v-col cols="4">
-              <span class="white--text">Name</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'">Name</span>
             </v-col>
             <v-col cols="5">
               <span v-if="!nameToggle">{{ firstName }} {{ lastName }}</span>
@@ -37,10 +37,11 @@
                     <v-text-field
                       v-model="firstName"
                       class="name__field"
-                      color="#172431"
+                      color="#b6b6b6"
                       hide-details
                       outlined
                       dense
+                      @input="firstNameChanged = true"
                     ></v-text-field
                   ></v-col>
                 </v-row>
@@ -52,10 +53,11 @@
                     ><v-text-field
                       v-model="lastName"
                       class="name__field"
-                      color="#172431"
+                      color="#b6b6b6"
                       hide-details
                       outlined
                       dense
+                      @input="lastNameChanged = true"
                     ></v-text-field></v-col
                 ></v-row>
               </div>
@@ -82,7 +84,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">User Name</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'"
+                >User Name</span
+              >
             </v-col>
             <v-col cols="5">
               <span v-if="!usernameToggle">{{ userName }}</span>
@@ -90,10 +94,12 @@
                 <v-col cols="12"
                   ><v-text-field
                     v-model="userName"
-                    color="#172431"
+                    class="name__field"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
+                    @input="usernameChanged = true"
                   ></v-text-field
                 ></v-col>
               </v-row>
@@ -120,7 +126,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">Contact</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'"
+                >Contact</span
+              >
             </v-col>
             <v-col cols="5">
               <span v-if="!contactToggle"
@@ -153,7 +161,7 @@
                         ><span>Phone number: </span>
                         <v-text-field
                           v-model="mobile"
-                          color="#172431"
+                          color="#b6b6b6"
                           hide-details
                           outlined
                           dense
@@ -184,10 +192,7 @@
                 </v-col>
                 <span class="pl-3"
                   >Only you can see your contact information. Stay connected
-                  with the community as we provide you with sms alerts. With the
-                  mobile number you provided, you will receive SMS notifications
-                  informing you about the latest stock picks and market
-                  updates.</span
+                  with the community as we provide you with sms alerts.</span
                 >
               </v-row>
             </v-col>
@@ -213,7 +218,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">Email Address</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'"
+                >Email Address</span
+              >
             </v-col>
             <v-col cols="5">
               <span v-if="!emailToggle">{{ email }}</span>
@@ -221,10 +228,12 @@
                 <v-col cols="12"
                   ><v-text-field
                     v-model="email"
-                    color="#172431"
+                    class="name__field"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
+                    @input="emailChanged = true"
                   ></v-text-field
                 ></v-col>
               </v-row>
@@ -251,7 +260,9 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">Password</span>
+              <span :class="lightSwitch == 0 ? '' : 'white--text'"
+                >Password</span
+              >
             </v-col>
             <v-col cols="5">
               <span v-if="!passwordToggle">*******</span>
@@ -261,7 +272,7 @@
                     v-model="currentPassword"
                     class="name__field"
                     label="Current Password"
-                    color="#172431"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
@@ -272,7 +283,7 @@
                     v-model="newPassword"
                     class="name__field"
                     label="New Password"
-                    color="#172431"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
@@ -283,10 +294,11 @@
                     v-model="confirmNewPassword"
                     class="name__field"
                     label="Re-type new Password"
-                    color="#172431"
+                    color="#b6b6b6"
                     hide-details
                     outlined
                     dense
+                    @input="passwordChanged = true"
                   ></v-text-field
                 ></v-col>
                 <v-col cols="12" class="py-0">
@@ -316,7 +328,9 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <a class="white--text">Delete Your Account and Information</a>
+              <a :class="lightSwitch == 0 ? '' : 'white--text'"
+                >Delete Your Account and Information</a
+              >
             </v-col>
           </v-row>
         </v-container>
@@ -337,6 +351,7 @@
         <v-card-actions class="mt-2">
           <v-spacer></v-spacer>
           <v-btn
+            class="no-transform"
             text
             @click="
               unsavedChangesDialog = false;
@@ -345,10 +360,11 @@
             >Cancel</v-btn
           >
           <v-btn
+            class="no-transform black--text"
             color="success"
             @click="
               unsavedChangesDialog = false;
-              closeAllToggles(currentToggle);
+              updateAccountAll();
             "
             >Confirm</v-btn
           >
@@ -361,7 +377,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data: function() {
+  data() {
     return {
       settingsLabelList: [
         "Name",
@@ -376,6 +392,11 @@ export default {
       emailToggle: false,
       passwordToggle: false,
       mobileDialog: false,
+      firstNameChanged: false,
+      lastNameChanged: false,
+      usernameChanged: false,
+      emailChanged: false,
+      passwordChanged: false,
       currentToggle: "",
       unsavedChangesDialog: false,
       firstName: this.$auth.user.data.user.first_name,
@@ -393,9 +414,56 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
-    })
+    }),
+    /**
+     * Simply a combination of first_name and last_name
+     *
+     * @return  {[type]}  [return description]
+     */
+    fullName() {
+      return `${this.firstName} ${this.lastName}`;
+    }
   },
   methods: {
+    /**
+     * Updates all user account settings based on user input
+     * Not sure what is most efficient so I have two update functions.
+     * this one and updateAccount.
+     *
+     * Only difference is this passes all fields and the other only passes the fields that were changed.
+     * To discuss
+     *
+     * @return  {[type]}  [return description]
+     */
+    updateAccountAll() {
+      let payload = {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        name: this.fullName,
+        username: this.userName,
+        mobile: this.mobile,
+        email: this.email,
+        password: this.password
+      };
+      this.cardLoader = "success";
+      this.$api.accounts.updateAccount
+        .putnoid(payload)
+        .then(response => {
+          this.alert.push(true);
+          this.alert.push(response.message);
+        })
+        .catch(e => {
+          this.alert.push(false);
+          this.alert.push("Error Updating");
+        })
+        .finally(
+          function() {
+            this.cardLoader = false;
+            this.$emit("alert", this.alert);
+          }.bind(this)
+        );
+      this.closeAllToggles();
+    },
     /**
      * Updates user account settings based on user input
      *
@@ -411,7 +479,8 @@ export default {
           {
             payload = {
               first_name: this.firstName,
-              last_name: this.lastName
+              last_name: this.lastName,
+              name: this.fullName
             };
           }
           break;
@@ -482,26 +551,39 @@ export default {
         case "name":
           {
             if (
-              this.usernameToggle ||
-              this.contactToggle ||
-              this.emailToggle ||
-              this.passwordToggle
+              (this.usernameToggle ||
+                this.contactToggle ||
+                this.emailToggle ||
+                this.passwordToggle) &&
+              (this.usernameChanged ||
+                this.emailChanged ||
+                this.passwordChanged)
             ) {
+              this.revertChangedFlags();
               this.currentToggle = "name";
               this.unsavedChangesDialog = true;
+            } else {
+              this.closeAllToggles("name");
             }
           }
           break;
         case "username":
           {
             if (
-              this.nameToggle ||
-              this.contactToggle ||
-              this.emailToggle ||
-              this.passwordToggle
+              (this.nameToggle ||
+                this.contactToggle ||
+                this.emailToggle ||
+                this.passwordToggle) &&
+              (this.firstNameChanged ||
+                this.lastNameChanged ||
+                this.passwordChanged ||
+                this.emailChanged)
             ) {
+              this.revertChangedFlags();
               this.currentToggle = "username";
               this.unsavedChangesDialog = true;
+            } else {
+              this.closeAllToggles("username");
             }
           }
           break;
@@ -513,34 +595,48 @@ export default {
               this.emailToggle ||
               this.passwordToggle
             ) {
-              this.currentToggle = "contact";
-              this.unsavedChangesDialog = true;
+              // this.currentToggle = "contact";
+              // this.unsavedChangesDialog = true;
             }
           }
           break;
         case "email":
           {
             if (
-              this.usernameToggle ||
-              this.contactToggle ||
-              this.nameToggle ||
-              this.passwordToggle
+              (this.usernameToggle ||
+                this.contactToggle ||
+                this.nameToggle ||
+                this.passwordToggle) &&
+              (this.firstNameChanged ||
+                this.lastNameChanged ||
+                this.usernameChanged ||
+                this.passwordChanged)
             ) {
+              this.revertChangedFlags();
               this.currentToggle = "email";
               this.unsavedChangesDialog = true;
+            } else {
+              this.closeAllToggles("email");
             }
           }
           break;
         case "password":
           {
             if (
-              this.usernameToggle ||
-              this.contactToggle ||
-              this.emailToggle ||
-              this.nameToggle
+              (this.usernameToggle ||
+                this.contactToggle ||
+                this.emailToggle ||
+                this.nameToggle) &&
+              (this.firstNameChanged ||
+                this.lastNameChanged ||
+                this.usernameChanged ||
+                this.emailChanged)
             ) {
+              this.revertChangedFlags();
               this.currentToggle = "password";
               this.unsavedChangesDialog = true;
+            } else {
+              this.closeAllToggles("password");
             }
           }
           break;
@@ -590,11 +686,11 @@ export default {
         this.emailToggle = false;
         this.passwordToggle = false;
 
-        this.firstName = this.$auth.user.data.user.first_name;
-        this.lastName = this.$auth.user.data.user.last_name;
-        this.userName = this.$auth.user.data.user.username;
-        this.mobile = this.$auth.user.data.user.mobile;
-        this.email = this.$auth.user.data.user.email;
+        // this.firstName = this.$auth.user.data.user.first_name;
+        // this.lastName = this.$auth.user.data.user.last_name;
+        // this.userName = this.$auth.user.data.user.username;
+        // this.mobile = this.$auth.user.data.user.mobile;
+        // this.email = this.$auth.user.data.user.email;
         switch (open) {
           case "name":
             {
@@ -623,6 +719,20 @@ export default {
             break;
         }
       }
+    },
+    /**
+     * reverts all 'Changed' flags.
+     * 'Changed' flags are used for detecting if user changed the value inside text fields.
+     * Used for determining whether 'Save Changes' modal should show or not
+     *
+     * @return
+     */
+    revertChangedFlags() {
+      this.firstNameChanged = false;
+      this.lastNameChanged = false;
+      this.usernameChanged = false;
+      this.emailChanged = false;
+      this.passwordChanged = false;
     }
   }
 };

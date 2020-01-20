@@ -16,7 +16,8 @@
         <TrendingStocks />
         <WhoToMingle />
         <MiniWatchlist />
-        <Bulletin />
+        <!-- TODO put back when implementing -->
+        <!-- <Bulletin /> -->
         <FooterSidebar />
       </v-col>
     </v-row>

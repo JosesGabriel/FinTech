@@ -56,11 +56,11 @@ export default {
       series: [
         {
           name: "Win",
-          data: [0, 0, 0, 0]
+          data: [null, null, null, null]
         },
         {
           name: "loss",
-          data: [0, 0, 0, 0]
+          data: [null, null, null, null]
         }
       ],
       chartOptions: {
@@ -177,52 +177,85 @@ export default {
       }
     };
   },
+  mounted() {
+    this.lightSwitcher();
+  },
+  watch: {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
+      this.getStrategyStat();
+    },
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
+      this.lightSwitcher();
+    }
+  },
   methods: {
+    /**
+     * getStrategyStat will work on ploting/updating chart using refs and
+     * iterating.
+     *
+     * @return  {array}  data to update chart
+     */
     getStrategyStat() {
+      this.strategyArr = []
       if (this.journalCharts != null) {
         const objStrategy = this.journalCharts.data.strategy_statistics;
-        const strategyArray = [];
+
+        let strategyArray = [];
         if (objStrategy.length != 0) {
           Object.keys(objStrategy).forEach(function(key) {
             strategyArray.push({ ...objStrategy[key], name: key });
           });
           this.strategyArr = strategyArray;
-
-          const winStrategy = [0, 0, 0, 0];
-          const lossStrategy = [0, 0, 0, 0];
-          const nameStrategy = [" ", " ", " ", " "];
-          for (let i = 0; i < this.strategyArr.length; i++) {
-            winStrategy.push(this.strategyArr[i].win);
-            lossStrategy.push(this.strategyArr[i].loss);
-            nameStrategy.push(this.strategyArr[i].name);
-          }
-
-          // load data series on bar graph
-          this.$refs.stratStatsChart.updateSeries([
-            {
-              data: winStrategy.reverse().slice(0, 4)
-            },
-            {
-              data: lossStrategy.reverse().slice(0, 4)
-            }
-          ]);
-
-          // load data names on bar graph
-          this.chartOptions = {
-            ...this.chartOptions,
-            ...{
-              xaxis: {
-                categories: [
-                  ...nameStrategy.reverse().slice(0, 4),
-                  ...this.chartOptions.xaxis.categories
-                ].slice(0, 4)
-              }
-            }
-          };
         }
+        let winStrategy = [null, null, null, null];
+        let lossStrategy = [null, null, null, null];
+        let nameStrategy = [" ", " ", " ", " "];
+        for (let i = 0; i < this.strategyArr.length; i++) {
+          winStrategy.push(this.strategyArr[i].win);
+          lossStrategy.push(this.strategyArr[i].loss);
+          nameStrategy.push(this.strategyArr[i].name);
+        }
+
+        // load data series on bar graph
+        this.$refs.stratStatsChart.updateSeries([
+          {
+            data: winStrategy.reverse().slice(0, 4)
+          },
+          {
+            data: lossStrategy.reverse().slice(0, 4)
+          }
+        ]);
+
+        // load data names on bar graph
+        this.chartOptions = {
+          ...this.chartOptions,
+          ...{
+            xaxis: {
+              categories: [
+                ...nameStrategy.reverse().slice(0, 4),
+                ...this.chartOptions.xaxis.categories
+              ].slice(0, 4)
+            }
+          }
+        };
       }
       this.componentKeys++;
     },
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {
@@ -243,24 +276,6 @@ export default {
           }
         };
       }
-    }
-  },
-  mounted() {
-    this.getStrategyStat();
-    this.lightSwitcher();
-  },
-  watch: {
-    journalCharts: function() {
-      this.getStrategyStat();
-    },
-    defaultPortfolioId: function() {
-      this.getStrategyStat();
-    },
-    renderPortfolioKey: function() {
-      this.getStrategyStat();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };

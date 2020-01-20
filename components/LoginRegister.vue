@@ -57,12 +57,14 @@
               </div>
               <v-card-text class="pa-0">
                 <v-container class="pa-0">
-                  <v-row>
+                  <v-row class="login__cardtext">
                     <v-col cols="12" class="pa-0">
                       <v-img src="castle_register.svg"></v-img>
                     </v-col>
                   </v-row>
-                  <div class="body-2 text-center secondary--text">
+                  <div
+                    class="body-2 text-center secondary--text login__cardtext"
+                  >
                     What's a humble brag between peers? <br />Let them know
                     you're in
                   </div>
@@ -223,5 +225,9 @@ export default {
 }
 .loginReg__social:hover .v-btn__content i {
   color: #03dac5 !important;
+}
+.login__cardtext {
+  position: relative;
+  bottom: 18px;
 }
 </style>

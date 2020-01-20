@@ -139,17 +139,30 @@ export default {
       }
     };
   },
-  mounted() {
-    this.getStrategyStat();
+  watch: {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
+      this.getStrategyStat();
+    }
   },
   methods: {
+    /**
+     * getStrategyStat will work on ploting/updating chart series
+     *
+     * @return  {array}  data to update chart
+     */
     getStrategyStat() {
+      this.strategyArr = [];
+      this.series = [0, 0];
       if (this.journalCharts != null) {
         const objStrategy = this.journalCharts.data.strategy_statistics;
-        const strategyArray = [];
-        if (objStrategy.length != 0) {
-          this.series = [];
 
+        let strategyArray = [];
+        if (objStrategy.length != 0) {
           Object.keys(objStrategy).forEach(function(key) {
             strategyArray.push({ ...objStrategy[key], name: key });
           });
@@ -169,10 +182,10 @@ export default {
             })
           );
           // return obj
-          const objWinResult = this.strategyArr.find(function(o) {
+          let objWinResult = this.strategyArr.find(function(o) {
             return o.win == winResult;
           });
-          const objLossResult = this.strategyArr.find(function(o) {
+          let objLossResult = this.strategyArr.find(function(o) {
             return o.loss == lossResult;
           });
           this.series.push(objWinResult.win, objLossResult.loss);
@@ -182,17 +195,6 @@ export default {
         }
       }
       this.componentKeys++;
-    }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getStrategyStat();
-    },
-    defaultPortfolioId: function() {
-      this.getStrategyStat();
-    },
-    renderPortfolioKey: function() {
-      this.getStrategyStat();
     }
   }
 };

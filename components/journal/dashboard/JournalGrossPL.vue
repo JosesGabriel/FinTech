@@ -52,7 +52,6 @@ export default {
       shareLink: "",
       showShareForm: false,
       showScheduleForm: false,
-
       series: [
         {
           name: "Loss",
@@ -237,22 +236,33 @@ export default {
       }
     };
   },
+  mounted() {
+    this.lightSwitcher();
+  },
   watch: {
-    journalCharts: function() {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
       this.getGrossPL();
     },
-    defaultPortfolioId: function() {
-      this.getGrossPL();
-    },
-    lightSwitch: function() {
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
       this.lightSwitcher();
     }
   },
-  mounted() {
-    this.getGrossPL();
-    this.lightSwitcher();
-  },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -261,39 +271,49 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * getGrossPL update chart series
+     *
+     * @return  {[array]} updating series with this array
+     */
     getGrossPL() {
+      let lastArray = [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ];
       if (this.journalCharts != null) {
         const objGrosPL = this.journalCharts.data.profit_loss;
-        const lastArray = [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ];
+
         if (objGrosPL.length != 0) {
           lastArray.unshift(...objGrosPL);
-
-          this.$refs.GrossPL.updateSeries([
-            {
-              data: lastArray.slice(0, 16)
-            }
-          ]);
         }
+        this.$refs.GrossPL.updateSeries([
+          {
+            data: lastArray.slice(0, 16)
+          }
+        ]);
       }
       this.componentKeys++;
     },
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {

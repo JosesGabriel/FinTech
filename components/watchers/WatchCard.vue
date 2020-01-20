@@ -74,7 +74,7 @@ export default {
     MarketDepth
   },
   props: ["data"],
-  data: function() {
+  data() {
     return {
       stockSymbol: "",
       stockCurrentPrice: "",
