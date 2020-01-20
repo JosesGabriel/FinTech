@@ -75,13 +75,9 @@ export default {
     retrieveParams() {
       let param = this.$route.fullPath;
       const { query } = this.$route;
-      if (Object.prototype.hasOwnProperty.call(query, "_action")) {
-        const params = Object.keys(query)
-          .map(key => `${key}=${query[key]}`)
-          .join("&");
-
-        return this.$axios
-          .get(`${process.env.API_URL}/?${params}`)
+      if (Object.prototype.hasOwnProperty.call(query, "auth_provider")) {
+        return this.$api.authentication.providers
+          .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
             if (data.success) {
               this.setAlert({

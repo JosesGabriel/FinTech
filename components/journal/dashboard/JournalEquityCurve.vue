@@ -217,22 +217,34 @@ export default {
       }
     };
   },
-  watch: {
-    defaultPortfolioId: function() {
-      this.getEquityCurve();
-    },
-    renderPortfolioKey: function() {
-      this.getEquityCurve();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
-    }
-  },
   mounted() {
     this.getEquityCurve();
     this.lightSwitcher();
   },
+  watch: {
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getEquityCurve();
+    },
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
+      this.lightSwitcher();
+    }
+  },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -241,6 +253,11 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * getEquityCurve update chart series
+     *
+     * @return  {[array]} updating series with this array
+     */
     getEquityCurve() {
       this.equityCurveArr = [];
       if (this.defaultPortfolioId != null) {
@@ -278,6 +295,11 @@ export default {
       }
       this.componentKeys++;
     },
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {
