@@ -55,11 +55,8 @@
     <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
   </v-row>
 </template>
-
-
 <script>
 import shareModal from "~/components/modals/share";
-
 import { mapGetters } from "vuex";
 
 export default {
@@ -181,8 +178,6 @@ export default {
               fontFamily: "'Nunito' !important",
               cssClass: "apexcharts-yaxis-label"
             }
-            // offsetX: 57,
-            // offsetY: -20
           },
           axisTicks: {
             show: false
@@ -213,7 +208,33 @@ export default {
       }
     };
   },
+  mounted() {
+    this.lightSwitcher();
+  },
+  watch: {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
+      this.getEmotionalStats();
+    },
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
+      this.lightSwitcher();
+    }
+  },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -222,52 +243,64 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * getEmotionalStats update chart series
+     *
+     * @return  {[array]} updating series with this array
+     */
     getEmotionalStats() {
+      this.emotionalArray = [];
       if (this.journalCharts != null) {
         const objStrategy = this.journalCharts.data.emotional_statistics;
-        const emotionalArray = [];
+
+        let emotionalArray = [];
         if (objStrategy.length != 0) {
           Object.keys(objStrategy).forEach(function(key) {
             emotionalArray.push({ ...objStrategy[key], name: key });
           });
           this.emotionalArray = emotionalArray;
-
-          const winEmotional = [null, null, null, null];
-          const lossEmotional = [null, null, null, null];
-          const nameEmotional = [" ", " ", " ", " "];
-
-          for (let i = 0; i < this.emotionalArray.length; i++) {
-            winEmotional.unshift(this.emotionalArray[i].win);
-            lossEmotional.unshift(this.emotionalArray[i].loss);
-            nameEmotional.unshift(this.emotionalArray[i].name);
-          }
-
-          // load data series on bar graph
-          this.$refs.emotionalStatistics.updateSeries([
-            {
-              data: winEmotional.slice(0, 3)
-            },
-            {
-              data: lossEmotional.slice(0, 3)
-            }
-          ]);
-
-          // load data names on bar graph
-          this.chartOptions = {
-            ...this.chartOptions,
-            ...{
-              xaxis: {
-                categories: [
-                  ...nameEmotional.slice(0, 3),
-                  ...this.chartOptions.xaxis.categories
-                ].slice(0, 3)
-              }
-            }
-          };
         }
+
+        const winEmotional = [null, null, null, null];
+        const lossEmotional = [null, null, null, null];
+        const nameEmotional = [" ", " ", " ", " "];
+
+        for (let i = 0; i < this.emotionalArray.length; i++) {
+          winEmotional.unshift(this.emotionalArray[i].win);
+          lossEmotional.unshift(this.emotionalArray[i].loss);
+          nameEmotional.unshift(this.emotionalArray[i].name);
+        }
+
+        // load data series on bar graph
+        this.$refs.emotionalStatistics.updateSeries([
+          {
+            data: winEmotional.slice(0, 3)
+          },
+          {
+            data: lossEmotional.slice(0, 3)
+          }
+        ]);
+
+        // load data names on bar graph
+        this.chartOptions = {
+          ...this.chartOptions,
+          ...{
+            xaxis: {
+              categories: [
+                ...nameEmotional.slice(0, 3),
+                ...this.chartOptions.xaxis.categories
+              ].slice(0, 3)
+            }
+          }
+        };
       }
       this.componentKeys++;
     },
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {
@@ -288,24 +321,6 @@ export default {
           }
         };
       }
-    }
-  },
-  mounted() {
-    this.getEmotionalStats();
-    this.lightSwitcher();
-  },
-  watch: {
-    journalCharts: function() {
-      this.getEmotionalStats();
-    },
-    defaultPortfolioId: function() {
-      this.getEmotionalStats();
-    },
-    renderPortfolioKey: function() {
-      this.getEmotionalStats();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };

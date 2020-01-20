@@ -41,29 +41,14 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    borderColor: function() {
+    borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"
         : "border-bottom: 1px solid #535358";
     }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getBuyValue();
-    },
-    defaultPortfolioId: function() {
-      this.getBuyValue();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
-    }
-  },
-  mounted() {
-    this.getBuyValue();
-    this.lightSwitcher();
   },
   data() {
     return {
@@ -245,7 +230,33 @@ export default {
       }
     };
   },
+  mounted() {
+    this.lightSwitcher();
+  },
+  watch: {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
+      this.getBuyValue();
+    },
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
+      this.lightSwitcher();
+    }
+  },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -254,40 +265,46 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * Get data from array the update series chart
+     *
+     * @return  {array}  series of number with null values
+     */
     getBuyValue() {
+      let valueArray = [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ];
       if (this.journalCharts != null) {
         const buyValue = this.journalCharts.data.buy_value;
-        const valueArray = [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ];
+
         if (buyValue.length != 0) {
           for (let i = 0; i < buyValue.length; i++) {
             buyValue[i] = parseFloat(buyValue[i]);
           }
-
-          valueArray.unshift(...buyValue);
-          // load data series on column chart
-          this.$refs.BuyValue.updateSeries([
-            {
-              data: valueArray.slice(0, 16)
-            }
-          ]);
         }
+
+        valueArray.unshift(...buyValue);
+        // load data series on column chart
+        this.$refs.BuyValue.updateSeries([
+          {
+            data: valueArray.slice(0, 16)
+          }
+        ]);
       }
       this.componentKeys++;
     },

@@ -41,10 +41,20 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    /**
+     * changes the font color if you are in a dark or light mode
+     *
+     * @return  {string}  hexcode color
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    borderColor: function() {
+    /**
+     * changes the border color if you are in a dark or light mode
+     *
+     * @return  {string}   returns border attributes
+     */
+    borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"
         : "border-bottom: 1px solid #535358";
@@ -231,24 +241,32 @@ export default {
     };
   },
   watch: {
-    journalCharts: function() {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
       this.getBuyVolume();
     },
-    defaultPortfolioId: function() {
-      this.getBuyVolume();
-    },
-    renderPortfolioKey: function() {
-      this.getBuyVolume();
-    },
-    lightSwitch: function() {
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
       this.lightSwitcher();
     }
   },
   mounted() {
-    this.getBuyVolume();
     this.lightSwitcher();
   },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  [return description]
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -257,43 +275,53 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * Get data from array the update series chart
+     *
+     * @return  {array}  series of numbers with null values
+     */
     getBuyVolume() {
+      let volumeArray = [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ];
       if (this.journalCharts != null) {
         const buyVolumeArray = this.journalCharts.data.buy_volume;
-        const volumeArray = [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ];
+
         if (buyVolumeArray.length != 0) {
           for (let i = 0; i < buyVolumeArray.length; i++) {
             buyVolumeArray[i] = parseFloat(buyVolumeArray[i]);
           }
-
-          volumeArray.unshift(...buyVolumeArray);
-          // load data series on column chart
-          this.$refs.BuyVolume.updateSeries([
-            {
-              data: volumeArray.slice(0, 16)
-            }
-          ]);
         }
+        volumeArray.unshift(...buyVolumeArray);
+        // load data series on column chart
+        this.$refs.BuyVolume.updateSeries([
+          {
+            data: volumeArray.slice(0, 16)
+          }
+        ]);
       }
       this.componentKeys++;
     },
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {

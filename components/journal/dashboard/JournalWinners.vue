@@ -166,10 +166,48 @@ export default {
     };
   },
   mounted() {
-    this.getTopWinners();
     this.lightSwitcher();
   },
+  watch: {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
+      this.getTopWinners();
+    },
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getTopWinners();
+    },
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
+      this.getTopWinners();
+    },
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
+      this.lightSwitcher();
+    }
+  },
   methods: {
+    /**
+     * getTopWinners will work on ploting/updating chart series and iterating
+     *
+     * @return  {array}  data to update chart
+     */
     getTopWinners() {
       if (this.journalCharts != null) {
         const objLossers = this.journalCharts.data.top_stocks;
@@ -235,6 +273,11 @@ export default {
       }
       this.componentKeys++;
     },
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {
@@ -255,20 +298,6 @@ export default {
           }
         };
       }
-    }
-  },
-  watch: {
-    journalCharts: function() {
-      this.getTopWinners();
-    },
-    defaultPortfolioId: function() {
-      this.getTopWinners();
-    },
-    renderPortfolioKey: function() {
-      this.getTopWinners();
-    },
-    lightSwitch: function() {
-      this.lightSwitcher();
     }
   }
 };

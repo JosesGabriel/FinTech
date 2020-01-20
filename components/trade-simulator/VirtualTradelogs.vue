@@ -11,7 +11,7 @@
           dense
           hide-details
           :dark="lightSwitch == true"
-          :style="{ background: cardbackground }"
+          :style="{ background: cardBackground }"
           color="success"
           class="tl_searchfields"
         ></v-text-field>
@@ -64,7 +64,7 @@
         persistent
         width="290px"
         :dark="lightSwitch == true"
-        :style="{ background: cardbackground }"
+        :style="{ background: cardBackground }"
       >
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" text class="px-1" color="success">
@@ -75,7 +75,7 @@
           v-model="date"
           color="#00121e"
           :dark="lightSwitch == true"
-          :style="{ background: cardbackground }"
+          :style="{ background: cardBackground }"
           class="datepicker-container"
           scrollable
         >
@@ -98,29 +98,29 @@
       hide-default-footer
       @page-count="pageCount = $event"
       :dark="lightSwitch == true"
-      :style="{ background: cardbackground }"
+      :style="{ background: cardBackground }"
       class="data_table-container pl-10 secondary--text"
     >
       <template v-slot:item.stock_id="{ item }">
-        <span :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
+        <span :style="{ color: secondaryColor }">{{ item.stock_id }}</span>
       </template>
       <template v-slot:item.date="{ item }">
-        <span :style="{ color: fontcolor2 }">{{ item.meta.date.split(' ')[0] }}</span>
+        <span :style="{ color: secondaryColor }">{{ item.meta.date.split(' ')[0] }}</span>
       </template>
       <template v-slot:item.amount="{ item }">
-        <span :style="{ color: fontcolor2 }">{{ item.amount }}</span>
+        <span :style="{ color: secondaryColor }">{{ item.amount }}</span>
       </template>
       <template v-slot:item.average_price="{ item }">
-        <span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.average_price)) }}</span>
+        <span :style="{ color: secondaryColor }">{{ addcomma(parseFloat(item.meta.average_price)) }}</span>
       </template>
       <template v-slot:item.buy_value="{ item }">
-        <span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.buy_value)) }}</span>
+        <span :style="{ color: secondaryColor }">{{ addcomma(parseFloat(item.meta.buy_value)) }}</span>
       </template>
       <template v-slot:item.sell_price="{ item }">
-        <span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.meta.sell_price)) }}</span>
+        <span :style="{ color: secondaryColor }">{{ addcomma(parseFloat(item.meta.sell_price)) }}</span>
       </template>
       <template v-slot:item.total_value="{ item }">
-        <span :style="{ color: fontcolor2 }">{{ addcomma(parseFloat(item.total_value)) }}</span>
+        <span :style="{ color: secondaryColor }">{{ addcomma(parseFloat(item.total_value)) }}</span>
       </template>
       <template v-slot:item.profit_loss="{ item }">
         <span
@@ -138,7 +138,7 @@
           v-show="menuShow"
           class="sidemenu_actions"
           :dark="lightSwitch == true"
-          :style="{ background: cardbackground }"
+          :style="{ background: cardBackground }"
           :id="`tl_${item.id}`"
           @mouseover="tradelogsmenuLogsShow(item)"
           @mouseleave="tradelogsmenuLogsHide(item)"
@@ -151,7 +151,7 @@
           small
           class="mr-2"
           @mouseover="tradelogsmenuLogsShow(item)"
-          :style="{ color: fontcolor2 }"
+          :style="{ color: secondaryColor }"
         >mdi-dots-horizontal</v-icon>
       </template>
     </v-data-table>
@@ -160,7 +160,7 @@
         style="font-size: 12px;"
         class="text-right font-weight-regular mr-10"
         width="100%"
-        :style="{ color: fontcolor }"
+        :style="{ color: primaryColor }"
       >
         Total Profit/Loss as of {{ this.date }}:
         <span
@@ -178,9 +178,9 @@
       color="transparent"
       elevation="0"
     >
-      <v-card color="transparent" class="justify-center" elevation="0">
+     <!-- <v-card color="transparent" class="justify-center" elevation="0">
         <v-card-title class="pa-0" style="font-size:12px;">
-          <span :style="{ color: fontcolor2 }">Show Rows</span>
+          <span :style="{ color: secondaryColor }">Show Rows</span>
           <v-spacer></v-spacer>
           <v-text-field
             :value="itemsPerPage"
@@ -189,15 +189,15 @@
             max="10"
             @input="itemsPerPage = parseInt($event, 10)"
             :dark="lightSwitch == true"
-            :style="{ background: cardbackground }"
+            :style="{ background: cardBackground }"
             class="pt-0 pl-4 mt-0 ml-1 show_rows"
             style="font-size:12px;"
             color="success"
             dense
           ></v-text-field>
-          <span class="pl-1" :style="{ color: fontcolor2 }">of {{ tradeLogs.length }}</span>
+          <span class="pl-1" :style="{ color: secondaryColor }">of {{ tradeLogs.length }}</span>
         </v-card-title>
-      </v-card>
+      </v-card> -->
       <v-card color="transparent" elevation="0">
         <v-pagination
           class="d-flex flex-end lp_data_table-pagination"
@@ -275,13 +275,28 @@ export default {
       simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground() {
+    /**
+     * Toggle background color (Dark/light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor() {
+    /**
+     * Toggle primary color (Dark/light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    primaryColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    fontcolor2() {
+    /**
+     * Toggle secondary color (Dark/light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    secondaryColor() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     }
   },
@@ -312,9 +327,22 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * delete confirmation
+     *
+     * @param   {boolean}  value  true/false
+     *
+     */
     deleteConfirm(value){
       this.confirmdelete = value;
     },
+
+    /**
+     * Execute Delete
+     *
+     * @param   {[type]}  item  Stock ID
+     *
+     */
     execute(item){
       if(this.confirmdelete){
         let profit = 0;
@@ -340,11 +368,23 @@ export default {
         }
       }
     },
+
+    /**
+     * delete initialization
+     *
+     * @param   {[type]}  item  details
+     *
+     */
     deleteLogs(item) {
       this.confirmdelete = false;
       this.itemDetails = item;
       this.itemToDelete = item.id;
     },
+
+    /**
+     * get Tradelogs Data
+     *
+     */
     getTradeLogs() {
       const tradelogsparams = {
         fund: this.simulatorPortfolioID
@@ -410,6 +450,14 @@ export default {
         }.bind(this)
       );
     },
+
+    /**
+     * Calculate Max Drawdown
+     *
+     * @param   {array}  arr  tradelogs percentage
+     *
+     * @return  {[type]}     minimum percentage
+     */
     arrayMax(arr) {
       var len = arr.length,
         min = Infinity;
@@ -420,6 +468,13 @@ export default {
       }
       return min;
     },
+    /**
+     * Calculate Buy Fees
+     *
+     * @param   {[type]}  buyResult  (Position * last price)
+     *
+     * @return  {float}             total fees
+     */
     buyfees(buyResult) {
       let dpartcommission = buyResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
@@ -432,6 +487,13 @@ export default {
       let dall = dcommission + dtax + dtransferfee + dsccp;
       return buyResult + dall;
     },
+    /**
+     * Calculate Sell Fees
+     *
+     * @param   {[type]}  buyResult  (Position * last price)
+     *
+     * @return  {float}              total fees
+     */
     sellfees(buyResult) {
       let dpartcommission = buyResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
@@ -454,6 +516,15 @@ export default {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "none";
     },
+
+    /**
+     * Add comma separator
+     *
+     * @param   {int}  n            number
+     * @param   {char}  sep         separator character
+     * @param   {int}  decimals     number of decimals
+     *
+     */
     addcomma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
@@ -461,6 +532,13 @@ export default {
         n.toLocaleString().split(sep)[0] + sep + n.toFixed(2).split(sep)[1]
       );
     },
+
+    /**
+     * Filter Data by Date
+     *
+     * @param   {object}  data  tradelogs data
+     *
+     */
     filterDate(data) {
       let d = new Date();
 

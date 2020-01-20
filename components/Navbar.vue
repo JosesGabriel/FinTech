@@ -108,8 +108,8 @@
               >
             </v-list-item>
           </router-link>
-
-          <router-link to="/game" class="navbar__links">
+          <!-- TODO put back after launch -->
+          <!-- <router-link to="/game" class="navbar__links">
             <v-list-item
               :class="active == 'game' ? 'v-list-item--active' : ''"
               :color="active == 'game' ? 'success' : ''"
@@ -125,7 +125,7 @@
                 ></v-list-item-content
               >
             </v-list-item>
-          </router-link>
+          </router-link> -->
           <router-link to="/watchlist" class="navbar__links">
             <v-list-item
               :class="active == 'watchlist' ? 'v-list-item--active' : ''"
