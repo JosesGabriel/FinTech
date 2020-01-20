@@ -169,39 +169,46 @@ export default {
     })
   },
   watch: {
-    stock_close: function(value) {
+    stock_close() {
       this.updateEffect("stock__close");
     },
-    stock_open: function(value) {
+    stock_open() {
       this.updateEffect("stock__open");
     },
-    stock_low: function(value) {
+    stock_low() {
       this.updateEffect("stock__low");
     },
-    stock_high: function(value) {
+    stock_high() {
       this.updateEffect("stock__high");
     },
-    stock_volume: function(value) {
+    stock_volume() {
       this.updateEffect("stock__volume");
     },
-    stock_value: function(value) {
+    stock_value() {
       this.updateEffect("stock__value");
     },
-    stock_average: function(value) {
+    stock_average() {
       this.updateEffect("stock__average");
     },
-    stock_trades: function(value) {
+    stock_trades() {
       this.updateEffect("stock__trades");
     },
-    stock_weekyearlow: function(value) {
+    stock_weekyearlow() {
       this.updateEffect("stock__weekyearlow");
     },
-    stock_weekyearhigh: function(value) {
+    stock_weekyearhigh() {
       this.updateEffect("stock__weekyearhigh");
     }
   },
   methods: {
-    updateEffect: function(dom) {
+    /**
+     * create a blink animation effect
+     *
+     * @param   {String}  dom
+     *
+     * @return
+     */
+    updateEffect(dom) {
       const item = document.getElementById(dom);
       item.style.background = "rgb(182,182,182,.2)";
       setTimeout(() => {
@@ -228,7 +235,6 @@ export default {
 #status__container {
   display: flex;
   margin-top: 5px;
-  /* height: 200px; */
 }
 #con__left {
   flex: 0 0 146px;

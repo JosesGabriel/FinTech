@@ -4,13 +4,11 @@ export default () => ({
   tableMaximize: false,
   tableFullscreen: false,
   sidebar: true,
-  headline_loading: "#03dac5",
+  headlineLoading: "success",
 
   symbolid: 0,
-  market_code: null,
+  marketCode: null,
   index: true,
-
-  allstocks: [],
 
   stock: {
     average: 0,
@@ -51,7 +49,7 @@ export default () => ({
     asks: []
   },
   trades: [],
-  tabs_sidebar: [
+  tabsSidebar: [
     {
       id: 1,
       icon: "mdi-cash-usd-outline",
@@ -71,8 +69,8 @@ export default () => ({
       disabled: false
     }
   ],
-  trade_login: false,
-  responsive_height: 510,
+  tradeLogin: false,
+  responsiveHeight: 510,
 
   sse: null,
   sseInfo: null,

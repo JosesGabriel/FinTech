@@ -3,7 +3,7 @@
   <v-app
     id="chart_body"
     class="gameGlobal"
-    :style="{ background: cardbackground }"
+    :style="{ background: cardBackground }"
   >
     <Header />
     <div class="spacer__content"></div>
@@ -71,18 +71,6 @@ export default {
     Table,
     Ticker
   },
-  head() {
-    return {
-      title: "Interactive Chart - Lyduz | Free Stock Trading Platform",
-      meta: [
-        {
-          //   hid: "og emman description",
-          //   name: "og karl description",
-          //   content: "og My custom description"
-        }
-      ]
-    };
-  },
   computed: {
     ...mapGetters({
       ticker: "chart/getTicker",
@@ -91,7 +79,12 @@ export default {
       sse: "chart/sse",
       symbolid: "chart/symbolid"
     }),
-    cardbackground: function() {
+    /**
+     * toggle between ligth/dark mode
+     *
+     * @return  {String}
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -101,14 +94,24 @@ export default {
       setSidebar: "chart/setSidebar",
       setSSE: "chart/setSSE"
     }),
-    closeSSE: function() {
+    /**
+     * Close SSE connection, set back dafault favicon
+     *
+     * @return
+     */
+    closeSSE() {
       this.sse.close();
       this.$store.commit(
         "global/SET_FAVICON",
         `${process.env.APP_URL}/favicon/favicon.ico?v=3`
       );
     },
-    initSSE: function() {
+    /**
+     * initialise SSE connection, used on mount hook
+     *
+     * @return  {function}  [return description]
+     */
+    initSSE() {
       if (this.sse !== null) {
         this.closeSSE();
       }
@@ -117,14 +120,9 @@ export default {
         new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
       );
 
-      this.sse.onopen = function() {
-        // console.log("open sse");
-      };
+      this.sse.onopen = function() {};
 
-      this.sse.onerror = function(err) {
-        // console.log("err sse");
-        // console.log(err);
-      };
+      this.sse.onerror = function() {};
     }
   },
   mounted() {
@@ -152,22 +150,15 @@ export default {
   background: #03dac5;
 }
 #chart_body {
-  /* background: #00121e !important; */
-  /*font-family: "Karla", sans-serif !important;*/
   font-family: "Nunito Sans", sans-serif !important;
 }
 .chart__container {
-  /* border: 1px solid red; */
 }
 .ticker__container {
   height: 50px;
-  /* color: #fff; */
-  /* background: #00121e; */
 }
 .table__container {
   height: 30px;
-  /* color: #fff; */
-  /* background: #00121e; */
 }
 .spacer__content {
   height: 52px;
@@ -180,7 +171,6 @@ export default {
   flex: 1;
 }
 .content__right {
-  /* background: #00121e; */
   padding-left: 3px !important;
   margin-left: 10px !important;
   flex: 0 0 270px;

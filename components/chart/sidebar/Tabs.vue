@@ -8,24 +8,24 @@
       flat
     >
       <v-tabs
-        v-model="active_tab"
-        color="#03dac5"
+        v-model="activeTab"
+        color="success"
         :background-color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
         grow
         :dark="lightSwitch == 1"
         height="35"
       >
         <v-tab
-          v-for="item in tabs_sidebar"
+          v-for="item in tabsSidebar"
           :key="item.component"
           :href="`#tab-${item.id}`"
-          :disabled="item.id == 1 && first_load == true"
+          :disabled="item.id == 1 && firstLoad == true"
         >
           <v-icon>{{ item.icon }}</v-icon>
         </v-tab>
 
         <v-tab-item
-          v-for="item in tabs_sidebar"
+          v-for="item in tabsSidebar"
           :key="item.component"
           :value="`tab-${item.id}`"
         >
@@ -60,21 +60,21 @@ export default {
   },
   data() {
     return {
-      active_tab: "tab-2",
-      first_load: true
+      activeTab: "tab-2",
+      firstLoad: true
     };
   },
   computed: {
     ...mapGetters({
-      tabs_sidebar: "chart/tabs_sidebar",
+      tabsSidebar: "chart/tabsSidebar",
       index: "chart/index",
       symbolid: "chart/symbolid",
       lightSwitch: "global/getLightSwitch"
     }),
-    color: function() {
+    color() {
       return this.lightSwitch == 0 ? "lightchart" : "darkchart";
     },
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -84,14 +84,14 @@ export default {
     })
   },
   watch: {
-    symbolid(value) {
-      this.active_tab = "tab-1";
-      this.first_load = false;
+    symbolid() {
+      this.activeTab = "tab-1";
+      this.firstLoad = false;
     },
     index(value) {
       if (value == true) {
-        this.active_tab = "tab-2";
-        this.first_load = true;
+        this.activeTab = "tab-2";
+        this.firstLoad = true;
       }
     }
   }

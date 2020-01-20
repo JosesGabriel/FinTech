@@ -1,7 +1,7 @@
 <template>
-  <v-content :style="{ background: cardbackground }">
+  <v-content :style="{ background: cardBackground }">
     <v-card
-      :loading="headline_loading"
+      :loading="headlineLoading"
       style="height:220px"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       flat
@@ -36,10 +36,14 @@ export default {
     ...mapGetters({
       symbolid: "chart/symbolid",
       lightSwitch: "global/getLightSwitch",
-      headline_loading: "chart/headline_loading"
+      headlineLoading: "chart/headlineLoading"
     }),
-    cardbackground: function() {
-      //return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e"; e3e9ed
+    /**
+     * toggle card background dark/light
+     *
+     * @return  {String}
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#e3e9ed" : "#172431";
     }
   },
@@ -51,8 +55,15 @@ export default {
       setMarketCode: "chart/setMarketCode",
       setHeadlineLoading: "chart/setHeadlineLoading"
     }),
-    initStock: async function(symid) {
-      this.setHeadlineLoading("#03dac5");
+    /**
+     * initialize and request stock info API on mount hook
+     *
+     * @param   {String}  symid
+     *
+     * @return
+     */
+    async initStock(symid) {
+      this.setHeadlineLoading("success");
       try {
         const response = await this.$api.chart.stocks.history({
           "symbol-id": symid
@@ -91,7 +102,7 @@ export default {
     }
   },
   watch: {
-    symbolid(symid, oldsymid) {
+    symbolid(symid) {
       this.initStock(symid);
     }
   },
@@ -118,16 +129,6 @@ export default {
 </script>
 
 <style>
-/* light / dark mode */
-/* .theme--dark.v-data-table .v-data-table-header th.sortable {
-  background: #00121e;
-  font-size: 11px;
-} */
-/* .theme--light.v-data-table .v-data-table-header th.sortable {
-  background: #f2f2f2;
-  font-size: 11px;
-} */
-
 .theme--dark.v-data-table.v-data-table--fixed-header thead th {
   background: #00121e;
   font-size: 11px;
@@ -141,12 +142,10 @@ export default {
 }
 
 .theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {
-  /* background: #142a46; */
   background-color: rgb(182, 182, 182, 0.2) !important;
 }
 
 .theme--light.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {
-  /* background: #b6b6b6; */
   background-color: rgb(182, 182, 182, 0.2) !important;
 }
 
@@ -202,9 +201,7 @@ export default {
 .v-data-table th {
   padding: 0px 0px !important;
 }
-.neutral {
-  /* color: #e5e5e5 !important; */
-}
+
 .increase {
   color: #03dac5 !important;
 }
