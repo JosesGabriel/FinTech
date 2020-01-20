@@ -32,6 +32,13 @@ export default {
     })
   },
   watch: {
+    /**
+     * run initTransbar everytime stock changes
+     *
+     * @param   {String}  symid  stock id
+     *
+     * @return
+     */
     symbolid(symid) {
       this.initTransbar(symid);
     }
