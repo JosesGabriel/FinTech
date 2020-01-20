@@ -41,6 +41,7 @@
                       hide-details
                       outlined
                       dense
+                      @input="firstNameChanged = true"
                     ></v-text-field
                   ></v-col>
                 </v-row>
@@ -56,6 +57,7 @@
                       hide-details
                       outlined
                       dense
+                      @input="lastNameChanged = true"
                     ></v-text-field></v-col
                 ></v-row>
               </div>
@@ -82,7 +84,7 @@
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span class="white--text">User Name</span>
+              <span class="white--text">User Name{{ keisha }}</span>
             </v-col>
             <v-col cols="5">
               <span v-if="!usernameToggle">{{ userName }}</span>
@@ -94,6 +96,7 @@
                     hide-details
                     outlined
                     dense
+                    @input="usernameChanged = true"
                   ></v-text-field
                 ></v-col>
               </v-row>
@@ -225,6 +228,7 @@
                     hide-details
                     outlined
                     dense
+                    @input="emailChanged = true"
                   ></v-text-field
                 ></v-col>
               </v-row>
@@ -287,6 +291,7 @@
                     hide-details
                     outlined
                     dense
+                    @input="passwordChanged = true"
                   ></v-text-field
                 ></v-col>
                 <v-col cols="12" class="py-0">
@@ -337,6 +342,7 @@
         <v-card-actions class="mt-2">
           <v-spacer></v-spacer>
           <v-btn
+            class="no-transform"
             text
             @click="
               unsavedChangesDialog = false;
@@ -345,10 +351,11 @@
             >Cancel</v-btn
           >
           <v-btn
+            class="no-transform"
             color="success"
             @click="
               unsavedChangesDialog = false;
-              closeAllToggles(currentToggle);
+              updateAccountAll();
             "
             >Confirm</v-btn
           >
@@ -361,7 +368,7 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data: function() {
+  data() {
     return {
       settingsLabelList: [
         "Name",
@@ -376,6 +383,11 @@ export default {
       emailToggle: false,
       passwordToggle: false,
       mobileDialog: false,
+      firstNameChanged: false,
+      lastNameChanged: false,
+      usernameChanged: false,
+      emailChanged: false,
+      passwordChanged: false,
       currentToggle: "",
       unsavedChangesDialog: false,
       firstName: this.$auth.user.data.user.first_name,
@@ -396,6 +408,34 @@ export default {
     })
   },
   methods: {
+    updateAccountAll() {
+      let payload = {
+        first_name: this.firstName,
+        last_name: this.lastName,
+        username: this.userName,
+        mobile: this.mobile,
+        email: this.email,
+        password: this.password
+      };
+      this.cardLoader = "success";
+      this.$api.accounts.updateAccount
+        .putnoid(payload)
+        .then(response => {
+          this.alert.push(true);
+          this.alert.push(response.message);
+        })
+        .catch(e => {
+          this.alert.push(false);
+          this.alert.push("Error Updating");
+        })
+        .finally(
+          function() {
+            this.cardLoader = false;
+            this.$emit("alert", this.alert);
+          }.bind(this)
+        );
+      this.closeAllToggles();
+    },
     /**
      * Updates user account settings based on user input
      *
@@ -482,26 +522,39 @@ export default {
         case "name":
           {
             if (
-              this.usernameToggle ||
-              this.contactToggle ||
-              this.emailToggle ||
-              this.passwordToggle
+              (this.usernameToggle ||
+                this.contactToggle ||
+                this.emailToggle ||
+                this.passwordToggle) &&
+              (this.usernameChanged ||
+                this.emailChanged ||
+                this.passwordChanged)
             ) {
+              this.revertChangedFlags();
               this.currentToggle = "name";
               this.unsavedChangesDialog = true;
+            } else {
+              this.closeAllToggles("name");
             }
           }
           break;
         case "username":
           {
             if (
-              this.nameToggle ||
-              this.contactToggle ||
-              this.emailToggle ||
-              this.passwordToggle
+              (this.nameToggle ||
+                this.contactToggle ||
+                this.emailToggle ||
+                this.passwordToggle) &&
+              (this.firstNameChanged ||
+                this.lastNameChanged ||
+                this.passwordChanged ||
+                this.emailChanged)
             ) {
+              this.revertChangedFlags();
               this.currentToggle = "username";
               this.unsavedChangesDialog = true;
+            } else {
+              this.closeAllToggles("username");
             }
           }
           break;
@@ -513,34 +566,48 @@ export default {
               this.emailToggle ||
               this.passwordToggle
             ) {
-              this.currentToggle = "contact";
-              this.unsavedChangesDialog = true;
+              // this.currentToggle = "contact";
+              // this.unsavedChangesDialog = true;
             }
           }
           break;
         case "email":
           {
             if (
-              this.usernameToggle ||
-              this.contactToggle ||
-              this.nameToggle ||
-              this.passwordToggle
+              (this.usernameToggle ||
+                this.contactToggle ||
+                this.nameToggle ||
+                this.passwordToggle) &&
+              (this.firstNameChanged ||
+                this.lastNameChanged ||
+                this.usernameChanged ||
+                this.passwordChanged)
             ) {
+              this.revertChangedFlags();
               this.currentToggle = "email";
               this.unsavedChangesDialog = true;
+            } else {
+              this.closeAllToggles("email");
             }
           }
           break;
         case "password":
           {
             if (
-              this.usernameToggle ||
-              this.contactToggle ||
-              this.emailToggle ||
-              this.nameToggle
+              (this.usernameToggle ||
+                this.contactToggle ||
+                this.emailToggle ||
+                this.nameToggle) &&
+              (this.firstNameChanged ||
+                this.lastNameChanged ||
+                this.usernameChanged ||
+                this.emailChanged)
             ) {
+              this.revertChangedFlags();
               this.currentToggle = "password";
               this.unsavedChangesDialog = true;
+            } else {
+              this.closeAllToggles("password");
             }
           }
           break;
@@ -590,11 +657,11 @@ export default {
         this.emailToggle = false;
         this.passwordToggle = false;
 
-        this.firstName = this.$auth.user.data.user.first_name;
-        this.lastName = this.$auth.user.data.user.last_name;
-        this.userName = this.$auth.user.data.user.username;
-        this.mobile = this.$auth.user.data.user.mobile;
-        this.email = this.$auth.user.data.user.email;
+        // this.firstName = this.$auth.user.data.user.first_name;
+        // this.lastName = this.$auth.user.data.user.last_name;
+        // this.userName = this.$auth.user.data.user.username;
+        // this.mobile = this.$auth.user.data.user.mobile;
+        // this.email = this.$auth.user.data.user.email;
         switch (open) {
           case "name":
             {
@@ -623,6 +690,20 @@ export default {
             break;
         }
       }
+    },
+    /**
+     * reverts all 'Changed' flags.
+     * 'Changed' flags are used for detecting if user changed the value inside text fields.
+     * Used for determining whether 'Save Changes' modal should show or not
+     *
+     * @return
+     */
+    revertChangedFlags() {
+      this.firstNameChanged = false;
+      this.lastNameChanged = false;
+      this.usernameChanged = false;
+      this.emailChanged = false;
+      this.passwordChanged = false;
     }
   }
 };
