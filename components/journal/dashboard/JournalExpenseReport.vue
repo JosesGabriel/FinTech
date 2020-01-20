@@ -24,31 +24,31 @@
               <td class="item_position-prop caption px-1 py-2">Commisions</td>
               <td
                 class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(comm)) }}</td>
+              >{{ comm | numeral("0,0.00") }}</td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Value Added Tax</td>
               <td
                 class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(vadd)) }}</td>
+              >{{ vadd | numeral("0,0.00") }}</td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Transfer Fee</td>
               <td
                 class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(tfee)) }}</td>
+              >{{ tfee | numeral("0,0.00") }}</td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">SCCP</td>
               <td
                 class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(sccp)) }}</td>
+              >{{ sccp | numeral("0,0.00") }}</td>
             </tr>
             <tr id="table_tr_snap-cont">
               <td class="item_position-prop caption px-1 py-2">Sales Tax</td>
               <td
                 class="item_position-prop caption text-right px-1 py-1"
-              >{{ formatPrice(parseFloat(stax)) }}</td>
+              >{{ stax | numeral("0,0.00") }}</td>
             </tr>
           </tbody>
         </template>
@@ -102,6 +102,7 @@ export default {
       showShareForm: false,
       showScheduleForm: false,
       expenseReportArray: [],
+      objExpenseReportTrades: [],
       comm: "0.00",
       vadd: "0.00",
       tfee: "0.00",
@@ -246,22 +247,33 @@ export default {
       }
     };
   },
+  mounted() {
+    this.lightSwitcher();
+  },
   watch: {
-    journalCharts: function() {
+    /**
+     * Watch journalCharts vuex if data changed execute function inside
+     *
+     * @return  {array}  getting buy value data from journalCharts vuex
+     */
+    journalCharts() {
       this.getExpenseReport();
     },
-    defaultPortfolioId: function() {
-      this.getExpenseReport();
-    },
-    lightSwitch: function() {
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
       this.lightSwitcher();
     }
   },
-  mounted() {
-    this.getExpenseReport();
-    this.lightSwitcher();
-  },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -270,32 +282,17 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
-    lightSwitcher() {
-      if (this.lightSwitch == 0) {
-        this.chartOptions = {
-          ...this.chartOptions,
-          ...{
-            theme: {
-              mode: "light"
-            }
-          }
-        };
-      } else if (this.lightSwitch == 1) {
-        this.chartOptions = {
-          ...this.chartOptions,
-          ...{
-            theme: {
-              mode: "dark"
-            }
-          }
-        };
-      }
-    },
+    /**
+     * getExpenseReport update chart series
+     *
+     * @return  {[array]} updating series with this array
+     */
     getExpenseReport() {
+      this.objExpenseReportTrades = [];
       if (this.journalCharts != null) {
         const objExpenseReport = this.journalCharts.data.expense_report;
-        const objExpenseReportTrades = this.journalCharts.data
-          .expense_report_trades;
+        this.objExpenseReportTrades = this.journalCharts.data.expense_report_trades;
+
         const expenseReportArray = [];
         Object.keys(objExpenseReport).forEach(function(key) {
           expenseReportArray.push({ value: objExpenseReport[key], name: key });
@@ -316,20 +313,39 @@ export default {
           }
         }
 
-        if (objExpenseReportTrades.length != 0) {
-          // load data series on line chart
-          this.$refs.ExpenseReportTrades.updateSeries([
-            {
-              data: objExpenseReportTrades.slice(0, 10)
-            }
-          ]);
-        }
+        this.$refs.ExpenseReportTrades.updateSeries([
+          {
+            data: this.objExpenseReportTrades.slice(0, 10)
+          }
+        ]);
       }
       this.componentKeys++;
     },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
+    lightSwitcher() {
+      if (this.lightSwitch == 0) {
+        this.chartOptions = {
+          ...this.chartOptions,
+          ...{
+            theme: {
+              mode: "light"
+            }
+          }
+        };
+      } else if (this.lightSwitch == 1) {
+        this.chartOptions = {
+          ...this.chartOptions,
+          ...{
+            theme: {
+              mode: "dark"
+            }
+          }
+        };
+      }
     }
   }
 };

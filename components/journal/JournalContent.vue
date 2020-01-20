@@ -229,15 +229,33 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    fontColor() {
       return this.lightSwitch == 0 ? "#000000" : "#ffffff";
     },
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   mounted() {
     this.getUserPortfolioList();
+  },
+  watch: {
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getJournalCharts();
+    },
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
+      this.getJournalCharts();
+    }
   },
   methods: {
     ...mapActions({
@@ -246,12 +264,23 @@ export default {
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
       setJournalCharts: "journal/setJournalCharts"
     }),
+    /**
+     * when tab dashboard clicked all components with in dashboard tab will be refreshed
+     *
+     * @return
+     */
     dashboardClicked() {
       this.keyCreateCounter = this.renderPortfolioKey;
       this.keyCreateCounter++;
       this.setRenderPortfolioKey(this.keyCreateCounter);
     },
-    changePortfolio(obj) {
+    /**
+     * on changed select funtion, assigning portfolio ID/portfolio info to state
+     *
+     * @param   {object}  obj  object of changed item
+     *
+     * @return  {object}       object data onchange
+     */ changePortfolio(obj) {
       this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
       const openparams = {
         fund: this.portfolioDropdownModel.id
@@ -266,13 +295,27 @@ export default {
         }.bind(this)
       );
     },
+    /**
+     * assigning portfolio ID with sum of portfolio real
+     *
+     * @param   {object}  item  object of selected item
+     *
+     * @return  {object}        [return description]
+     */
     setPortfolioReal(item) {
       this.setDefaultPortfolioId("real");
       this.keyCreateCounter = this.renderPortfolioKey;
       this.keyCreateCounter++;
       this.setRenderPortfolioKey(this.keyCreateCounter);
     },
-    setPortfolioVirtual() {
+    /**
+     * assigning portfolio ID with sum of portfolio virtual
+     *
+     * @param   {object}  item  object of selected item
+     *
+     * @return  {object}        [return description]
+     */
+    setPortfolioVirtual(item) {
       this.setDefaultPortfolioId("virtual");
       this.keyCreateCounter = this.renderPortfolioKey;
       this.keyCreateCounter++;
@@ -280,13 +323,17 @@ export default {
 
       this.portfolioDropdownModel = "Sum of Virtual Portfolio";
     },
+    /**
+     * get all portfolio of a specific user
+     *
+     * @return  {array}  array of item, all portfolios
+     */
     getUserPortfolioList() {
       this.$api.journal.portfolio.portfolio().then(
         function(result) {
           this.portfolioList = result.data.logs;
           this.setUserPortfolio(result.data.logs);
 
-          // this.portfolioListPush = []
           let defaultPort = false;
           for (let i = 0; i < this.portfolioList.length; i++) {
             let portfolioListPush1 = this.portfolioList[i];
@@ -316,7 +363,6 @@ export default {
               .then(
                 function(result) {
                   if (result.success) {
-                    console.log("created successfully");
                   }
                 }.bind(this)
               );
@@ -334,6 +380,11 @@ export default {
         }.bind(this)
       );
     },
+    /**
+     * function to get data for charts and assigned to journalCharts state
+     *
+     * @return  {object}  data to be save to state
+     */
     getJournalCharts() {
       if (this.portfolioDropdownModel != null) {
         let journalchartsparams = {
@@ -346,14 +397,6 @@ export default {
           });
       }
       this.componentKeys++;
-    }
-  },
-  watch: {
-    defaultPortfolioId: function() {
-      this.getJournalCharts();
-    },
-    renderPortfolioKey: function() {
-      this.getJournalCharts();
     }
   }
 };
@@ -395,10 +438,6 @@ export default {
 .navbarDrawer__card-journal .v-navigation-drawer__border {
   background: #000 !important;
 }
-/* .tab_menu-top:not(.v-tab--active):not(.v-tab--disabled) {
-        opacity: 1 !important;
-        color: #fff !important;
-    } */
 .apexcharts-tooltip-series-group,
 .apexcharts-tooltip.dark,
 .apexcharts-tooltip.light {
@@ -454,11 +493,6 @@ span.apexcharts-tooltip-text-label {
   min-height: auto !important;
   border-radius: unset;
 }
-/* .v-subheader.theme--light {
-  background: #00121e;
-  font-weight: 600;
-  padding-left: 16px;
-} */
 .apexcharts-canvas.dark {
   background: transparent !important;
 }

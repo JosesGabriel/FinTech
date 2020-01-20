@@ -233,24 +233,51 @@ export default {
     };
   },
   watch: {
-    defaultPortfolioId: function() {
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
       this.getAllocations();
     },
-    renderPortfolioKey: function() {
+
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
       this.getAllocations();
     },
-    stockList: function() {
+
+    /**
+     * watch stockList, container of all stock list from vuex state
+     *
+     * @return  {array}  get all stock list from this state
+     */
+    stockList() {
       this.getAllocations();
     },
-    lightSwitch: function() {
+
+    /**
+     * Watch lightSwitch if number changed light=0 dark=1
+     *
+     * @return  {number}  current number 0/1 for theme mode
+     */
+    lightSwitch() {
       this.lightSwitcher();
     }
   },
   mounted() {
-    this.getAllocations();
     this.lightSwitcher();
   },
   methods: {
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -259,6 +286,11 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * Generate array from user allocation with filtered stock
+     *
+     * @return  {[array]}  updating chart series by this returned data
+     */
     getAllocations() {
       this.updateLabels = [];
       if (this.defaultPortfolioId != null) {
@@ -299,10 +331,11 @@ export default {
         });
       }
     },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
+    /**
+     * Light mode and dark on chart
+     *
+     * @return  {object}  iterate to update chart theme mode
+     */
     lightSwitcher() {
       if (this.lightSwitch == 0) {
         this.chartOptions = {
