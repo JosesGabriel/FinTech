@@ -5,7 +5,7 @@
     :dark="lightSwitch == true"
     :style="{ background: cardBackground }"
   >
-    <v-card dark="lightSwitch == true" :style="{ background: cardbackground }">
+    <v-card dark="lightSwitch == true" :style="{ background: cardBackground }">
       <v-card-title class="text-center justify-center px-5 pt-10">
         <h1 class="font-weight-regular body-1">
           This action is final and cannot be undone.
@@ -22,7 +22,7 @@
               placeholder="HELL YEAH"
               solo
               :dark="lightSwitch == true"
-              :style="{ background: cardbackground }"
+              :style="{ background: cardBackground }"
               class="align-center justify-center headline font-weight-regular text-center white--text confirmation_message-reset"
             ></v-text-field>
           </v-col>

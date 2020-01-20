@@ -178,7 +178,7 @@
       color="transparent"
       elevation="0"
     >
-      <v-card color="transparent" class="justify-center" elevation="0">
+     <!-- <v-card color="transparent" class="justify-center" elevation="0">
         <v-card-title class="pa-0" style="font-size:12px;">
           <span :style="{ color: secondaryColor }">Show Rows</span>
           <v-spacer></v-spacer>
@@ -197,7 +197,7 @@
           ></v-text-field>
           <span class="pl-1" :style="{ color: secondaryColor }">of {{ tradeLogs.length }}</span>
         </v-card-title>
-      </v-card>
+      </v-card> -->
       <v-card color="transparent" elevation="0">
         <v-pagination
           class="d-flex flex-end lp_data_table-pagination"

@@ -218,7 +218,7 @@
                       >Members Sentiments</h1>
                     </v-card-title>
                     <v-progress-linear
-                      value="50"
+                      :value="sentiment"
                       background-color="#F44336"
                       color="#00FFC3"
                       height="5px"
@@ -394,6 +394,7 @@ export default {
       cpercentage: 0,
       change: 0,
       bidask: 50,
+      sentiment: 50,
       dboard: 0,
       stock_id: 0,
       stock: [],
@@ -676,12 +677,12 @@ export default {
      *
      */
     getDetails(selectObj) {
+
       const params = {
         "symbol-id": selectObj
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
-         
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.dboard = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
@@ -697,7 +698,7 @@ export default {
           } else if (result.data.last >= 1000) {
             this.dboard = 5;
           }
-
+        
           if (this.sellSelected) {
             const sellparams = {
               fund: this.simulatorPortfolioID
@@ -731,6 +732,22 @@ export default {
           this.vole = this.nFormatter(result.data.value);
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
+
+            let market_code =  result.data.market_code;
+            let stock_id = selectObj;
+
+            this.$api.social.posts.getSentiment({
+              stock_id,
+              market_code
+            }).then(
+              function(response){
+                  this.sentiment = parseFloat((response.data.sentiment.bull / response.data.sentiment.total_sentiment) * 100);
+                  if(isNaN(this.sentiment)) {
+                    this.sentiment = 50;
+                  }
+              }.bind(this)
+            );
+                       
         }.bind(this)
       );
 
@@ -739,6 +756,7 @@ export default {
           this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);
         }.bind(this)
       );
+
     },
 
     /**

@@ -29,7 +29,7 @@
                 this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : ''
               "
               v-model="item"
-              :value="this.defaultvalue"
+              :value="this.defaultValue"
               item-color="success"
               item-value="item"
               v-on:change="getBalance(item)"
@@ -160,7 +160,7 @@ export default {
       portfolio: [],
       item: "",
       fund_id: "",
-      defaultvalue: ""
+      defaultValue: ""
     };
   },
   computed: {
@@ -259,7 +259,7 @@ export default {
                 if (result.data.logs[i].id == this.simulatorPortfolioID) {
                   let avfunds = parseFloat(result.data.logs[i].balance);
                   this.availableFunds = this.addComma(avfunds);
-                  this.defaultvalue = result.data.logs[i].name;
+                  this.defaultValue = result.data.logs[i].name;
                 }
               }
             }

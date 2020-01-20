@@ -468,7 +468,6 @@ export default {
        
         this.$api.journal.portfolio.portfolio().then(
           function(result) {
-            
             let defaultPort = false;
             for (let i = 0; i < result.data.logs.length; i++) {
               if (
