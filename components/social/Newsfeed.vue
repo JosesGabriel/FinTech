@@ -234,6 +234,7 @@
         <span class="caption">1000</span>
       </v-card-actions>
       <v-divider></v-divider>
+      <List :comments="postsObject[n - 1].comments" />
       <!-- Start of Comment -->
       <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
@@ -281,11 +282,13 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import List from "~/components/social/feed/comments/List";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
 import Share from "~/components/modals/share";
 export default {
   name: "Newsfeed",
   components: {
+    List,
     PhotoCarousel,
     Share
   },
