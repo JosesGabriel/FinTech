@@ -63,26 +63,26 @@
         <span
           class="pl-2"
           :style="{ color: fontcolor2 }"
-        >{{ formatAvePrice(item.meta.average_price) }}</span>
+        >{{ item.meta.average_price | numeral("0,0.000") }}</span>
       </template>
       <template v-slot:item.buy_value="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ formatPrice(item.buy_value) }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.buy_value | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.sell_price="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ formatPrice(item.meta.sell_price) }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.sell_price | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.total_value="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ formatPrice(item.total_value) }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.total_value | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.profit_loss="{ item }">
         <span
           :class="item.profit_loss > 0 ? 'positive' : item.profit_loss < 0 ? 'negative' : 'neutral' "
-        >{{ formatPrice(item.profit_loss) }}</span>
+        >{{ item.profit_loss | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.profit_loss_percentage="{ item }">
         <span
           :class="item.profit_loss_percentage > 0 ? 'positive' : item.profit_loss_percentage < 0 ? 'negative' : 'neutral' "
-        >{{ formatPrice(item.profit_loss_percentage) }}%</span>
+        >{{ item.profit_loss_percentage | numeral("0,0.00") }}%</span>
       </template>
       <template v-slot:item.action="{ item }">
         <div
@@ -363,17 +363,16 @@ export default {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "block";
     },
+    /**
+     * if trades are hovered item will hide, item will assigned as hovered with this function
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
     tradelogsmenuLogsHide(item) {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "none";
-    },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    formatAvePrice(value) {
-      let val = (value / 1).toFixed(3).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     /**
      * current date formatted

@@ -184,7 +184,8 @@
                   </v-row>
                   <div class="px-3">
                     <v-card-title
-                      class="pa-0 justify-center secondary--text mt-3 font-weight-thin caption"
+                      class="pa-0 justify-center mt-3 mb-1 font-weight-thin caption"
+                      :color="lightSwitch == true ? '#FFFFFF' : '#000000'"
                     >Bid/ Ask Bar</v-card-title>
                     <v-progress-linear
                       :value="bidask"
@@ -194,10 +195,11 @@
                       class="mt-1"
                     ></v-progress-linear>
                     <v-card-title
-                      class="pa-0 justify-center secondary--text mt-3 font-weight-thin caption"
+                      class="pa-0 justify-center mt-3 mb-1 font-weight-thin caption"
+                      :color="lightSwitch == true ? '#FFFFFF' : '#000000'"
                     >Members Sentiments</v-card-title>
                     <v-progress-linear
-                      value="50"
+                      :value="sentiments"
                       background-color="#F44336"
                       color="success"
                       height="5px"
@@ -583,6 +585,7 @@ export default {
       wkhigh: 0,
       vole: 0,
       ave: 0,
+      sentiments: 50,
       GetSelectStock: null,
       strategy: [
         "Bottom Picking",
@@ -783,8 +786,6 @@ export default {
      */
     priceSellModel(newValue) {
       this.sellWatch();
-      const result = parseFloat(newValue);
-      this.priceSellModel = result;
     },
     /**
      * function quantityModel watch to assign a field required only in buy quantity
@@ -1050,6 +1051,27 @@ export default {
           this.ave = result.data.average.toFixed(2);
           this.priceModel = result.data.last;
           this.priceSellModel = parseFloat(result.data.last);
+
+          let market_code = result.data.market_code;
+          let stock_id = Obj;
+
+          this.$api.social.posts
+            .getSentiment({
+              stock_id,
+              market_code
+            })
+            .then(
+              function(response) {
+                this.sentiments = parseFloat(
+                  (response.data.sentiment.bull /
+                    response.data.sentiment.total_sentiment) *
+                    100
+                );
+                if (isNaN(this.sentiments)) {
+                  this.sentiments = 50;
+                }
+              }.bind(this)
+            );
         }.bind(this)
       );
 
