@@ -207,7 +207,7 @@
                     <v-progress-linear
                       :value="bidask"
                       background-color="#F44336"
-                      color="#00FFC3"
+                      color="#03dac5"
                       height="5px"
                       class="mt-1"
                     ></v-progress-linear>
@@ -220,7 +220,7 @@
                     <v-progress-linear
                       :value="sentiment"
                       background-color="#F44336"
-                      color="#00FFC3"
+                      color="#03dac5"
                       height="5px"
                       class="mt-1 mb-1"
                     ></v-progress-linear>
@@ -486,6 +486,10 @@ export default {
     }
   },
   watch: {
+    /**
+     * Initialized Trade MOdal when its closed
+     *
+     */
     Trade_Modal() {
       if (!this.Trade_Modal) {
         this.e1 = 1;

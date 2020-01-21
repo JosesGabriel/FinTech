@@ -270,6 +270,10 @@ export default {
 
   },
   watch: {
+    /**
+     * Initialized Cards when POrtfolio ID is changed
+     *
+     */
     simulatorPortfolioID() {
       this.realized = 0;
       this.unrealized = 0;
@@ -579,6 +583,7 @@ export default {
 }
 .select_portfolio > .v-input__control > .v-input__slot {
   min-height: initial;
+  border-radius: 3px;
 }
 
 .v-slide-group__content.v-tabs-bar__content:before {
