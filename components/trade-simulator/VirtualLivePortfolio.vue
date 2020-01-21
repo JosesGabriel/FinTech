@@ -32,25 +32,25 @@
       hide-default-footer
       @page-count="pageCount = $event"
       :dark="lightSwitch == true"
-      :style="{ background: cardbackground }"
+      :style="{ background: cardBackground }"
       class="data_table-container pl-10 secondary--text"
     >  
         
             <template v-slot:item.stock_id="{ item }" >
-              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_id }}</span>
+              <span class="pl-3" :style="{ color: secondaryColor }">{{ item.stock_id }}</span>
             </template>
             <template v-slot:item.Position="{ item }">
-              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.Position }}</span>
+              <span class="pl-3" :style="{ color: secondaryColor }">{{ item.Position }}</span>
             </template>
             <template v-slot:item.AvgPrice="{ item }">
-              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.AvgPrice }}</span>
+              <span class="pl-3" :style="{ color: secondaryColor }">{{ item.AvgPrice }}</span>
             </template>
             <template v-slot:item.TotalCost="{ item }">
-              <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.TotalCost }}</span>
+              <span class="pl-3" :style="{ color: secondaryColor }">{{ item.TotalCost }}</span>
             </template>
 
             <template v-slot:item.MarketValue="{ item }" >
-              <span class="pl-3" :id="item.stock_id" :style="{ color: fontcolor2 }">{{ item.MarketValue }}</span>
+              <span class="pl-3" :id="item.stock_id" :style="{ color: secondaryColor }">{{ item.MarketValue }}</span>
             </template>
             <template v-slot:item.Profit="{ item }">
               <span
@@ -67,7 +67,7 @@
                 v-show="menuShow"
                 class="sidemenu_actions"
                 :dark="lightSwitch == true"
-                :style="{ background: cardbackground }"
+                :style="{ background: cardBackground }"
                 :id="`pl_${item.id}`"
                 @mouseover="menuLogsShow(item)"
                 @mouseleave="menuLogsHide(item)"
@@ -99,7 +99,7 @@
         style="font-size: 12px;"
         class="text-right font-weight-regular mr-10"
         width="100%"
-        :style="{ color: fontcolor }"
+        :style="{ color: primaryColor }"
       >
         Total Profit/Loss as of {{ this.date }}:
         <span
@@ -118,7 +118,7 @@
       max-width="290"
       dark
       :dark="lightSwitch == true"
-      :style="{ background: cardbackground }"
+      :style="{ background: cardBackground }"
     >
       <v-card>
         <v-card-title class="success--text" style="font-size: 16px;" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
@@ -140,7 +140,7 @@
                  <template slot="item" slot-scope="data">
                     <v-list-item-content
                       :dark="lightSwitch == true"
-                      :style="{ background: cardbackground }"
+                      :style="{ background: cardBackground }"
                       style="padding: 21px 12px; margin: -16px;"
                     >
                       <v-list-item-title v-html="data.item"></v-list-item-title>
@@ -164,7 +164,7 @@
                   <template slot="item" slot-scope="data">
                     <v-list-item-content
                       :dark="lightSwitch == true"
-                      :style="{ background: cardbackground }"
+                      :style="{ background: cardBackground }"
                       style="padding: 21px 12px; margin: -16px;"
                     >
                       <v-list-item-title v-html="data.item"></v-list-item-title>
@@ -188,7 +188,7 @@
                   <template slot="item" slot-scope="data">
                     <v-list-item-content
                       :dark="lightSwitch == true"
-                      :style="{ background: cardbackground }"
+                      :style="{ background: cardBackground }"
                       style="padding: 21px 12px; margin: -16px;"
                     >
                       <v-list-item-title v-html="data.item"></v-list-item-title>
@@ -363,6 +363,10 @@ export default {
       this.showShareForm = true;
     },
     
+    /**
+     * Get Live Portfolio Data
+     *
+     */
     getOpenPositions() {
       const openparams2 = {
         fund: this.simulatorPortfolioID
@@ -375,7 +379,7 @@ export default {
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
           this.portfolioLogs = result.data.open;
-         // console.log('Result Live Port -', result.data.open);
+         
           for (let i = 0; i < result.data.open.length; i++) {
               this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
               this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
@@ -409,9 +413,22 @@ export default {
       );
       
     },
+    /**
+     * delete confirmation
+     *
+     * @param   {boolean}  value  true/false
+     *
+     */
     deleteConfirm(value){
       this.confirmdelete = value;
     },
+
+    /**
+     * Execute Live Delete
+     *
+     * @param   {[type]}  item  Stock ID
+     *
+     */
     execute(item){
       if(this.confirmdelete){
         let profit = 0;
@@ -429,11 +446,24 @@ export default {
         }
       }
     },
+    /**
+     * Delete initialization
+     *
+     * @param   {object}  item  item details
+     *
+     */
     deleteLive(item) {    
       this.confirmdelete = false;
       this.itemDetails = item;
       this.itemToDelete = item.id;
     },
+    /**
+     * Edit Initialization
+     *
+     * @param   {[type]}  item  Edit details
+     * @param   {[type]}  edit  [edit description]
+     *
+     */
     details(item, edit) {
       this.editDetails = edit;
       this.selectedstrategy = item.strategy;
@@ -442,6 +472,10 @@ export default {
       this.notes = item.notes;
       this.edit_id = item.id;
     },
+    /**
+     * Execute Edit 
+     *
+     */
     editLive() {
       if (confirm("Save changes?")) {
           const editparams = {
@@ -461,6 +495,11 @@ export default {
             });
       }
     },
+
+    /**
+     * Blink effect in Real Time changes
+     *
+     */
     updateEffect: dom => {
       const item = document.getElementById(dom);
       if (item == null) return;
@@ -478,6 +517,15 @@ export default {
 
       pl.style.display = "none";
     },
+
+    /**
+     * Add comma separator
+     *
+     * @param   {int}  n            number
+     * @param   {char}  sep         separator character
+     * @param   {int}  decimals     number of decimals
+     *
+     */
     addcomma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
@@ -485,6 +533,11 @@ export default {
         n.toLocaleString().split(sep)[0] + sep + n.toFixed(2).split(sep)[1]
       );
     },
+
+    /**
+     * Calculate Day Change
+     *
+     */
     getDayChange() {
       let currentProfitLoss = 0;
       this.priorProfitLoss = 0;
@@ -541,6 +594,13 @@ export default {
       }
       
     },
+    /**
+     * Calculate the fees based on Price
+     *
+     * @param   {float}  buyResult   (Position * Last Price)
+     *
+     * @return  {float}  total fees
+     */
     fees(buyResult) {
       let dpartcommission = buyResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
@@ -555,6 +615,10 @@ export default {
       return buyResult - dall;
     },
      
+    /**
+     * SSE initialization
+     *
+     */
     initSSE() {
       if (this.sse !== null) {
         this.sse.close();
@@ -588,7 +652,13 @@ export default {
       });
      
     },
- 
+    /**
+     * Real time calculations
+     *
+     * @param   {[type]}  symbol  incoming symbol ID
+     * @param   {[type]}  lprice  incoming last price
+     *
+     */
     trigger(symbol, lprice){
               
         let profit = 0;
@@ -657,21 +727,34 @@ export default {
       lightSwitch: "global/getLightSwitch",
       stock: "chart/stock"
     }),
-    
-    cardbackground() {
+
+    /**
+     * Toggle background color (Dark/light Theme)
+     *
+     * @return  {String}  hex code
+     */
+   
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor() {
+
+    /**
+     * Toggle primary Color
+     *
+     */
+    primaryColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5"; // #eae8e8
     },
-    fontcolor2() {
+    /**
+     * Toggle secondary Color
+     *
+     */
+    secondaryColor() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     },
    
   },
-  created (){
-      
-  }, 
+
   mounted() {
     if (this.simulatorPortfolioID != 0 ? this.getOpenPositions() : "");
     this.initSSE();

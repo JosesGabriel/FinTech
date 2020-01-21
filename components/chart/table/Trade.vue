@@ -303,7 +303,6 @@
           >
         </v-col>
       </v-row>
-      <!-- <v-btn @click="setShowBrokers">Return</v-btn> -->
     </v-content>
   </v-content>
 </template>
@@ -383,6 +382,13 @@ export default {
     ...mapActions({
       setTradeLogin: "chart/setTradeLogin"
     }),
+    /**
+     * show modal once trigger
+     *
+     * @param   {Object}  item  broker info
+     *
+     * @return
+     */
     showModal: function(item) {
       console.log(item);
       if (item.modal == false) {
@@ -391,9 +397,6 @@ export default {
       }
       this.broker = item;
       this.setTradeLogin(!this.tradeLogin);
-    },
-    setShowBrokers: function() {
-      this.showBrokers = true;
     }
   }
 };

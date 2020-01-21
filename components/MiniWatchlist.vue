@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       stockData: [],
-      watchCardLoading: "primary",
+      watchCardLoading: "success",
       watchListObject: "",
       isLightMode: 0,
       series: [

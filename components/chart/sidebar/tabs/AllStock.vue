@@ -133,6 +133,13 @@ export default {
     }
   },
   watch: {
+    /**
+     * enable sse once loading is done
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return
+     */
     sseInfo(value) {
       if (this.loading === false) {
         this.sseAllInfo(value);
@@ -194,9 +201,7 @@ export default {
           });
         });
         this.loading = false;
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
     /**
      * initialise and listen to stock info sse
@@ -221,9 +226,7 @@ export default {
           trades: data.tr
         });
         this.updateEffect(stock.stockidstr);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
   },
   mounted() {

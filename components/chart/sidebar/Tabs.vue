@@ -1,5 +1,5 @@
 <template>
-  <v-content :style="{ background: cardbackground }">
+  <v-content :style="{ background: cardBackground }">
     <v-card
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :dark="lightSwitch == 1"
@@ -71,29 +71,51 @@ export default {
       symbolid: "chart/symbolid",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * toggle card text color light/dark
+     *
+     * @return
+     */
     color() {
       return this.lightSwitch == 0 ? "lightchart" : "darkchart";
     },
-    cardbackground() {
+    /**
+     * toggle card background light/dark
+     *
+     * @return
+     */
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
-  methods: {
-    ...mapActions({
-      setTabsSidebar: "chart/setTabsSidebar"
-    })
-  },
   watch: {
+    /**
+     * once stock change by default show first tab
+     *
+     * @return
+     */
     symbolid() {
       this.activeTab = "tab-1";
       this.firstLoad = false;
     },
+    /**
+     * if index stock selected disable first tab
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return
+     */
     index(value) {
       if (value == true) {
         this.activeTab = "tab-2";
         this.firstLoad = true;
       }
     }
+  },
+  methods: {
+    ...mapActions({
+      setTabsSidebar: "chart/setTabsSidebar"
+    })
   }
 };
 </script>

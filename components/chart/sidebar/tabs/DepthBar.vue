@@ -73,6 +73,13 @@ export default {
     })
   },
   watch: {
+    /**
+     * toggle on/off to switch data
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return
+     */
     toggleButton(value) {
       if (value == true) {
         this.progbar.value = this.fulldepth;
@@ -80,6 +87,13 @@ export default {
         this.progbar.value = this.topdepth;
       }
     },
+    /**
+     * everytime symbol id change, run initDepthbar method
+     *
+     * @param   {String}  symid  symbol id
+     *
+     * @return
+     */
     symbolid(symid) {
       this.initDepthbar(symid);
     }

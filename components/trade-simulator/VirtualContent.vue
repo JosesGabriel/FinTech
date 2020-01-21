@@ -3,38 +3,38 @@
     <v-row class="mt-3 ml-0 mb-10 mr-2">
       <v-col
         class="ml-0 mb-2 pt-0 pb-0 vt_realized"
-        :style="{ border: cardbackground2 }"
+        :style="{ border: secondaryBackground }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Realized P/L (PHP)</v-row>
+        <v-row :style="{ color: toggleFontColor }" class="mt-2 pl-3 label">Realized P/L (PHP)</v-row>
         <v-row class="mt-1 mb-2">
           <v-col
             md="12"
             :class="(this.realized > 0 ? 'positive' : this.realized < 0 ? 'negative' : 'neutral')"
             class="text-right pb-0 pl-0 pr-3"
-          >{{ this.addcomma(this.realized) }}</v-col>
+          >{{ this.addComma(this.realized) }}</v-col>
         </v-row>
       </v-col>
       <v-col
         class="ml-3 mb-2 pt-0 pb-0 vt_realized"
-        :style="{ border: cardbackground2 }"
+        :style="{ border: secondaryBackground }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Unrealized P/L (PHP)</v-row>
+        <v-row :style="{ color: toggleFontColor }" class="mt-2 pl-3 label">Unrealized P/L (PHP)</v-row>
         <v-row class="mt-1">
           <v-col
             md="12"
             :class="(this.unrealized > 0 ? 'positive' : this.unrealized < 0 ? 'negative' : 'neutral')"
             class="text-right pb-0 pl-0 pr-3"
-          >{{ this.addcomma(this.unrealized) }}</v-col>
+          >{{ this.addComma(this.unrealized) }}</v-col>
         </v-row>
       </v-col>
       <v-col
         class="ml-3 mb-2 pt-0 pb-0 vt_realized"
-        :style="{ border: cardbackground2 }"
+        :style="{ border: secondaryBackground }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Port Performance %</v-row>
+        <v-row :style="{ color: toggleFontColor }" class="mt-2 pl-3 label">Port Performance %</v-row>
         <v-row class="mt-1">
           <v-col
             md="12"
@@ -45,10 +45,10 @@
       </v-col>
       <v-col
         class="ml-3 mb-2 pt-0 pb-0 vt_realized"
-        :style="{ border: cardbackground2 }"
+        :style="{ border: secondaryBackground }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Max Drawdown %</v-row>
+        <v-row :style="{ color: toggleFontColor }" class="mt-2 pl-3 label">Max Drawdown %</v-row>
         <v-row class="mt-1">
           <v-col
             md="12"
@@ -59,38 +59,38 @@
       </v-col>
       <v-col
         class="ml-3 mb-2 pt-0 pb-0 vt_realized"
-        :style="{ border: cardbackground2 }"
+        :style="{ border: secondaryBackground }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Equity</v-row>
+        <v-row :style="{ color: toggleFontColor }" class="mt-2 pl-3 label">Equity</v-row>
         <v-row class="mt-1">
           <v-col
             md="12"
-            :style="{ color: fontcolor }"
+            :style="{ color: toggleFontColor }"
             :class="((this.port_total + parseFloat(this.port_capital)) > 0 ? '__white' : 'negative')"
             class="text-right pb-0 pl-0 pr-3"
-          >{{ this.addcomma(this.port_total + parseFloat(this.port_capital)) }}</v-col>
+          >{{ this.addComma(this.port_total + parseFloat(this.port_capital)) }}</v-col>
         </v-row>
       </v-col>
       <v-col
         class="ml-3 mb-2 pt-0 pb-0 vt_realized"
-        :style="{ border: cardbackground2 }"
+        :style="{ border: secondaryBackground }"
         style="width:20%;"
       >
-        <v-row :style="{ color: fontcolor }" class="mt-2 pl-3 label">Day Change</v-row>
+        <v-row :style="{ color: toggleFontColor }" class="mt-2 pl-3 label">Day Change</v-row>
         <v-row class="mt-0">
           <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
             <v-row class="ma-0 pa-0 overline">
               <v-col
                 :class="(this.daychangepercentage > 0 ? 'positive' : this.daychangepercentage < 0 ? 'negative' : 'neutral')"
                 class="ma-0 pa-0"
-              >( {{ this.addcomma(this.daychangepercentage) }}%)</v-col>
+              >( {{ this.addComma(this.daychangepercentage) }}%)</v-col>
             </v-row>
             <v-row class="ma-0 pa-0">
               <v-col
                 :class="(this.daychange > 0 ? 'positive' : this.daychange < 0 ? 'negative' : 'neutral')"
                 class="ma-0 pa-0"
-              >{{ this.addcomma(this.daychange) }}</v-col>
+              >{{ this.addComma(this.daychange) }}</v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -101,16 +101,16 @@
       color="success"
       background-color="transparent"
       :dark="lightSwitch == true"
-      :style="{ background: cardbackground }"
+      :style="{ background: primaryBackground }"
       dark
     >
       <v-tab
-        :style="{ color: fontcolor }"
+        :style="{ color: toggleFontColor }"
         class="tab_menu-top text-capitalize"
         :href="`#tab-1`"
       >Live Portfolio</v-tab>
       <v-tab
-        :style="{ color: fontcolor }"
+        :style="{ color: toggleFontColor }"
         class="tab_menu-top text-capitalize"
         :href="`#tab-2`"  
       >Tradelogs</v-tab>
@@ -140,7 +140,7 @@
             <template slot="item" slot-scope="data">
               <v-list-item-content
                 :dark="lightSwitch == true"
-                :style="{ background: cardbackground }"
+                :style="{ background: primaryBackground }"
                 style="padding: 12px 12px; margin: -16px;"
               >
                 <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
@@ -150,12 +150,12 @@
             <template
               v-slot:append-item
               :dark="lightSwitch == true"
-              :style="{ background: cardbackground }"
+              :style="{ background: primaryBackground }"
             >
               <v-list-item
                 ripple
                 :dark="lightSwitch == true"
-                :style="{ background: cardbackground }"
+                :style="{ background: primaryBackground }"
                 @click.stop="showCreatePortForm=true"
               >
                 <v-list-item-content>
@@ -204,7 +204,6 @@
         </v-container>
       </v-tab-item>
     </v-tabs>
-    <!-- <ChartTesting/> -->
     <create-modal :visible="showCreatePortForm" @close="showCreatePortForm=false" />
   </v-col>
 </template>
@@ -242,20 +241,33 @@ export default {
       RenderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground() {
+    /**
+     * Toggle primary Background color (Dark/Light) Theme
+     *
+     * @return  {string}  hex code
+     */
+    primaryBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    fontcolor() {
+    /**
+     * Toggle Font Color (Dark/Light Theme)
+     *
+     * @return  {String}  hex code
+     */
+    toggleFontColor() {
       return this.lightSwitch == 0
         ? "#000000 !important"
         : "#ffffff !important";
     },
-    cardbackground2() {
+    /**
+     * Toggle secondary Background color (Dark/Light) Theme
+     *
+     * @return  {string}  hex code
+     */
+    secondaryBackground() {
       return this.lightSwitch == 0 ? "1px solid #dadada" : "1px solid #172431";
     },
-    tabsborder() {
-      return this.lightSwitch == 0 ? "1px solid #b6b6b6" : "1px solid #535358";
-    }
+
   },
   watch: {
     simulatorPortfolioID() {
@@ -271,9 +283,6 @@ export default {
       this.default_port = this.simulatorPortfolioID;
       this.getPorfolio('newdata');
     },
-    RenderPortfolioKey(){
-      //this.getPorfolio('newdata');
-    },
     unrealized() {
       this.getTradeLogs();
     }
@@ -282,12 +291,24 @@ export default {
     ...mapActions({
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
     }),
+    /**
+     * Get Data in Live Portfolio
+     *
+     * @param   {string}  selectObj  Portfolio ID
+     *
+     */
     getOpenPosition(selectObj) {
       this.getCapital(selectObj);
       this.setSimulatorPortfolioID(selectObj);
       this.default_port = selectObj;
       this.state = false;
     },
+    /**
+     * Get Capital 
+     *
+     * @param   {String}  id  Portfolio ID
+     *
+     */
     getCapital(id){
           this.$api.journal.portfolio.portfolio().then(
             function(result) {             
@@ -299,31 +320,81 @@ export default {
             }.bind(this)
           );
     },
+    /**
+     * Initialized Realized Card
+     *
+     * @param   {float}  value  realized value
+     *
+     */
     Realized(value) {
       this.realized = value;
     },
+    /**
+     * Initialized Unrealized Card
+     *
+     * @param   {float}  value  unrealized value
+     *
+     */
     Unrealized(value) {
       this.unrealized = value;
     },
+    /**
+     * Initialized Total Market Value
+     *
+     * @param   {float}  value  total market value
+     *
+     */
     TotalMValue(value) {
       this.totalmvalue = value;
     },
+    /**
+     * Initialized Max Drawdown 
+     *
+     * @param   {float}  value  total max drawdown
+     *
+     */
     TotalMax(value) {
       this.totalmax = value;
     },
+    /**
+     * Initialized Day Change
+     *
+     * @param   {float}  value  total day change
+     *
+     */
     DayChange(value) {
       this.daychange = value;
     },
+    /**
+     * Initialized Change Percentage
+     *
+     * @param   {float}  value  change percentage
+     *
+     */
     ChangePerc(value) {
       this.daychangepercentage = value;
     },
+    /**
+     * Initialized Port Performance
+     *
+     * @param   {float}  value  port performance
+     *
+     */
     portperf() {
       this.port_total = parseFloat(this.realized) + parseFloat(this.unrealized);
       let portperf = (this.port_total / 100000) * 100;
-      return this.addcomma(portperf);
+      return this.addComma(portperf);
     },
 
-    addcomma(n, sep, decimals) {
+    /**
+ * Add comma separator
+ *
+ * @param   {float}  n        number
+ * @param   {char}  sep       separator character
+ * @param   {int}  decimals   number of decimal points
+ * @return  {string}          number with comma separator
+ */
+    addComma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
       return (
@@ -332,7 +403,10 @@ export default {
     },
 
     //===============================================
-
+  /**
+   * get Trade Logs Data
+   *
+   */
     getTradeLogs() {
       const tradelogsparams = {
         fund: this.simulatorPortfolioID
@@ -366,6 +440,13 @@ export default {
       );
     },
 
+  /**
+   * Calculate Max Drawdown
+   *
+   * @param   {array}  arr  tradelogs percentage
+   *
+   * @return  {int}      minimum tradelogs percentage
+   */
     arrayMax(arr) {
       var len = arr.length,
         min = Infinity;
@@ -376,18 +457,24 @@ export default {
       }
       return min;
     },
+  
+    /**
+     * Get Data for the Select Portfolio Dropdown
+     *
+     * @param   {[type]}  key  Portfolio ID
+     *
+     */
     getPorfolio(key){
-     
+       
         this.$api.journal.portfolio.portfolio().then(
           function(result) {
-            console.log('Portfolio', result);
             let defaultPort = false;
             for (let i = 0; i < result.data.logs.length; i++) {
               if (
                 result.data.logs[i].type == "virtual"
               ) {
 
-                //let id_bal = result.data.logs[i].id + '|' + result.data.logs[i].capital;
+                
                 let portfolio_params = {
                   name: result.data.logs[i].name,
                   id: result.data.logs[i].id,
@@ -410,6 +497,7 @@ export default {
                  }
               }
             }
+           
             if (!defaultPort) {
               const createportfolioparams = {
                 currency_code: "PHP",

@@ -1,5 +1,4 @@
 <template>
-  <!-- hehhee -->
   <v-col class="pa-0 mt-3">
     <v-simple-table
       class="data_table-container jockey_table mt-2 ml-3 mr-2"
@@ -24,7 +23,7 @@
             >
               Buying
             </th>
-            <!--<th class="text-left" style="padding-bottom: 5px !important; border-bottom: 1px solid #414f58 !important;"></th>-->
+           
             <th class="text-left"></th>
             <th
               colspan="4"
@@ -35,7 +34,7 @@
             >
               Selling
             </th>
-            <!--<th class="text-left" style="padding-bottom: 5px !important; border-bottom: 1px solid #414f58 !important;"></th>-->
+            
             <th class="text-left"></th>
             <th
               colspan="2"
@@ -99,7 +98,7 @@
               <div style="font-weight: bold; padding-top: 3px;">
                 {{ item.broker_code }}
               </div>
-              <div class="broker_desc">{{ item.broker_description }}</div>
+              <div class="broker_desc text-uppercase">{{ item.broker_description }}</div>
             </td>
             <td class="text-right">{{ addcomma(item.buy_volume) }}</td>
             <td
@@ -214,16 +213,24 @@ export default {
         n.toLocaleString().split(sep)[0] + sep + n.toFixed(2).split(sep)[1]
       );
     },
+    /**
+     * Get last price
+     */
     getCurrent(id) {
       this.$api.chart.stocks
         .history({
           "symbol-id": id
         })
         .then(response => {
-          //console.log("current response - " , response.data.last);
           this.current = response.data.last;
         });
     },
+    /**
+     * Initialized Jockey
+     *
+     * @param   {string}  id  Stock symbol ID
+     *
+     */
     initJockey(id) {
       this.symbol_id = id;
       this.$api.chart.stocks
@@ -231,7 +238,6 @@ export default {
           "symbol-id": id
         })
         .then(response => {
-          //console.log("data response", response.data);
           this.jockey = response.data;
           for (let i = 0; i < response.data.length; i++) {
             this.jockey[i].broker_code = this.jockey[i].broker_code;
@@ -258,6 +264,13 @@ export default {
           this.sortName = 'buy_volume';
         });
     },
+
+    /**
+     * Real Time Execution
+     *
+     * @param   {object}  data  Jockey Data
+     *
+     */
     jockeyRealTime(data){
       if(this.symbol_id == data.sym_id){   
           for (let index = 0; index < this.jockey.length; index++) {
@@ -287,6 +300,11 @@ export default {
           }
       }
     },
+    /**
+     * Calculate total Buy VOlume
+     *
+     * @return  {Float} total buy volume
+     */
     totalBuyVolume(){
       let total = 0;
       for (let i = 0; i < this.jockey.length; i++) {
@@ -294,6 +312,11 @@ export default {
       }
       return total;
     },
+    /**
+     * Calculate total Sell VOlume
+     *
+     * @return  {Float} total sell volume
+     */
     totalSellVolume(){
       let total = 0;
       for (let i = 0; i < this.jockey.length; i++) {
@@ -301,6 +324,14 @@ export default {
       }
       return total;
     },
+
+    /**
+     * Data SOrting according to volume, average price
+     *
+     * @param   {array}  data  jockey data
+     *
+     * @return  {array}        sorted data of jockey
+     */
     sortArray(data) {
       this.sortName = data;
       if (this.desc) {
@@ -321,6 +352,10 @@ export default {
         return this.jockey.sort(compare);
       }
     },
+    /**
+     * Blinking change effect
+     *
+     */
     updateEffect: dom => {
       const item = document.getElementById(dom);
       if (item == null) return;
@@ -329,6 +364,14 @@ export default {
         item.style.background = "";
       }, 200);
     },
+
+    /**
+     * NUmber formatter from 1000 to 1K, 1000000 to 1M
+     *
+     * @param   {float}  num  number
+     *
+     * @return  {string}      formatted number
+     */
     nFormatter(num) {
       if (num >= 1000000000) {
         return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "B";
@@ -376,12 +419,10 @@ export default {
   cursor: pointer;
 }
 
-.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {
-  /* background: rgb(20, 42, 70) !important; */
+.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {  
   background-color: rgb(182, 182, 182, 0.2) !important;
 }
 .theme--dark.v-data-table tbody tr:hover {
-  /* background: rgb(20, 42, 70) !important; */
   background-color: rgb(182, 182, 182, 0.2) !important;
 }
 .broker_desc {

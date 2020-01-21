@@ -414,7 +414,15 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
-    })
+    }),
+    /**
+     * Simply a combination of first_name and last_name
+     *
+     * @return  {[type]}  [return description]
+     */
+    fullName() {
+      return `${this.firstName} ${this.lastName}`;
+    }
   },
   methods: {
     /**
@@ -431,6 +439,7 @@ export default {
       let payload = {
         first_name: this.firstName,
         last_name: this.lastName,
+        name: this.fullName,
         username: this.userName,
         mobile: this.mobile,
         email: this.email,
@@ -470,7 +479,8 @@ export default {
           {
             payload = {
               first_name: this.firstName,
-              last_name: this.lastName
+              last_name: this.lastName,
+              name: this.fullName
             };
           }
           break;
