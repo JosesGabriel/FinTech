@@ -405,7 +405,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
-import Share from "~/components/modals/share";
+import Share from "~/components/modals/Share";
 export default {
   name: "Newsfeed",
   components: {

@@ -40,7 +40,7 @@
 <script>
 import JournalStrategyStatsLogs from "~/components/journal/dashboard/JournalStrategyStatsLogs";
 import JournalWinLoss from "~/components/journal/dashboard/JournalWinLoss";
-import shareModal from "~/components/modals/share";
+import shareModal from "~/components/modals/Share";
 import { mapGetters } from "vuex";
 
 export default {

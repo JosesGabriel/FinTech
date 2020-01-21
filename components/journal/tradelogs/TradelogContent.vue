@@ -160,10 +160,10 @@
   </v-col>
 </template>
 <script>
-import shareModal from "~/components/modals/share";
-import sellDelete from "~/components/modals/sellDelete";
-import sellDetails from "~/components/modals/sellDetails";
-import recordTrade from "~/components/modals/record";
+import shareModal from "~/components/modals/Share";
+import sellDelete from "~/components/modals/SellDelete";
+import sellDetails from "~/components/modals/SellDetails";
+import recordTrade from "~/components/modals/Record";
 
 import { mapActions, mapGetters } from "vuex";
 

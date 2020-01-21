@@ -24,7 +24,7 @@
 <script>
 import JournalLossers from "~/components/journal/dashboard/JournalLossers";
 import JournalWinners from "~/components/journal/dashboard/JournalWinners";
-import shareModal from "~/components/modals/share";
+import shareModal from "~/components/modals/Share";
 import { mapGetters } from "vuex";
 
 export default {

@@ -66,6 +66,11 @@ export default {
     ...mapActions({
       setRenderEditKey: "journal/setRenderEditKey"
     }),
+    /**
+     * deleteNow function, trigger delete once user confirmed only openposition
+     *
+     * @return  {object}  returns deleted info
+     */
     deleteNow() {
       let confirmed = true;
       this.$emit("confirmedDelete", confirmed);

@@ -170,16 +170,16 @@
   </v-col>
 </template>
 <script>
-import resetModal from "~/components/modals/reset";
-import shareModal from "~/components/modals/share";
-import fundsModal from "~/components/modals/fund";
-import tradeView from "~/components/modals/tradeView";
-import tradeDetails from "~/components/modals/tradeDetails";
-import tradeEdits from "~/components/modals/tradeEdits";
-import tradeDelete from "~/components/modals/tradeDelete";
+import resetModal from "~/components/modals/Reset";
+import shareModal from "~/components/modals/Share";
+import fundsModal from "~/components/modals/Fund";
+import tradeView from "~/components/modals/TradeView";
+import tradeDetails from "~/components/modals/TradeDetails";
+import tradeEdits from "~/components/modals/TradeEdits";
+import tradeDelete from "~/components/modals/TradeDelete";
 
 import { mapActions, mapGetters } from "vuex";
-import { Fees } from "~/helpers/taxation";
+import { BuyFees } from "~/helpers/taxation";
 
 export default {
   components: {
@@ -254,13 +254,28 @@ export default {
       userPortfolio: "journal/getUserPortfolio",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    /**
+     * returns hexcode for secondary font color if current theme is dark or light
+     *
+     * @return  {string}  returns string
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    fontcolor2: function() {
+    /**
+     * returns hexcode for tertiary font color if current theme is dark or light
+     *
+     * @return  {string}  returns string
+     */
+    fontcolor2() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     },
-    cardbackground: function() {
+    /**
+     * returns hexcode for card color if current theme is dark or light
+     *
+     * @return  {string}  returns string
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
@@ -486,7 +501,7 @@ export default {
       for (let i = 0; i < this.portfolioLogs.length; i++) {
         if (this.portfolioLogs[i].stock_id == symbol) {
           let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
-          let mvalue = Fees(buyResult);
+          let mvalue = BuyFees(buyResult);
           let tcost =
             this.portfolioLogs[i].position *
             this.portfolioLogs[i].average_price;

@@ -222,8 +222,8 @@
   </v-col>
 </template>
 <script>
-import shareModal from "~/components/modals/share";
-import sellDelete from "~/components/modals/sellDelete";
+import shareModal from "~/components/modals/Share";
+import sellDelete from "~/components/modals/SellDelete";
 import { mapActions, mapGetters } from "vuex";
 export default {
   components: {

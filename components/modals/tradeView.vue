@@ -120,7 +120,9 @@
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Volume</td>
-                              <td class="item_position-prop body-2 text-right py-1 px-1">{{ volm }}</td>
+                              <td
+                                class="item_position-prop body-2 text-right py-1 px-1"
+                              >{{ volm | numeral("0.00a") }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Trades</td>
@@ -164,7 +166,9 @@
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Value</td>
-                              <td class="item_position-prop body-2 text-right py-1 px-1">{{ vole }}</td>
+                              <td
+                                class="item_position-prop body-2 text-right py-1 px-1"
+                              >{{ vole | numeral("0.00a") }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Average</td>
@@ -240,7 +244,7 @@
                     <v-spacer></v-spacer>
                     <v-card-title
                       class="subtitle-1 px-0 py-2 secondary--text"
-                    >{{ nFormatter(availableFundsModel) }}</v-card-title>
+                    >{{ availableFundsModel | numeral("0.00a") }}</v-card-title>
                   </v-row>
                   <v-select
                     :items="selectPortfolioModel"
@@ -555,6 +559,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { BuyFees, SellFees } from "~/helpers/taxation";
 
 export default {
   props: ["visible"],
@@ -642,29 +647,60 @@ export default {
       stockList: "global/getStockList",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontcolor2: function() {
-      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+    /**
+     * fontcolor2 changes everytime user change theme, returns secondary font color
+     *
+     * @return  {string}  returns font color hexcode
+     */
+    fontcolor2() {
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6";
     },
-    fontColor: function() {
+    /**
+     * fontColor function it returns tertiary font color
+     *
+     * @return  {string}  returns font color hexcode
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#000000" : "#ffffff";
     },
-    fontColorTable: function() {
+    /**
+     * fontColorTable function it returns class
+     *
+     * @return  {string}  returns class name
+     */
+    fontColorTable() {
       return this.lightSwitch == 0
         ? "data_table-container"
         : "data_table-container-dark";
     },
-    fontColorDate: function() {
+    /**
+     * fontColorDate function it returns class
+     *
+     * @return  {string}  returns class name
+     */
+    fontColorDate() {
       return this.lightSwitch == 0
         ? "datepicker-container-light"
         : "datepicker-container";
     },
-    cardbackground: function() {
+    /**
+     * cardbackground function it returns hexcode
+     *
+     * @return  {string}  returns background color
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     show: {
+      /**
+       * get data from props this.visible
+       */
       get() {
         return this.visible;
       },
+      /**
+       * once close set data back to props
+       */
       set(value) {
         if (!value) {
           this.$emit("close");
@@ -701,40 +737,89 @@ export default {
     }
   },
   watch: {
-    openPosition: function() {
+    /**
+     * get all user trade
+     *
+     * @return  {[array]}  returns array of trades
+     */
+    openPosition() {
       this.getSellItems();
     },
-    stockList: function() {
+    /**
+     * get stocklist only info
+     *
+     * @return  {[array]}  returns array of stocklist data
+     */
+    stockList() {
       this.initPortfolio();
 
       this.stocklist = this.stockList.data;
       this.stocklistBuy = this.stockList.data;
     },
-    GetSelectStock: function() {
+    /**
+     * watch GetSelectStock model and execute function that
+     * enable or disable confirmbutton
+     *
+     * @return  returns prop to attribute confirm button
+     */
+    GetSelectStock() {
       this.selectWatch();
     },
-    priceModel: function(newValue) {
+    /**
+     * function pricemodel watch to assign a field required only in buy
+     *
+     * @return   {number}   returns calculated with fees
+     */
+    priceModel() {
       this.buyWatch();
-
-      const result = parseFloat(newValue);
-      this.priceModel = result;
     },
-    priceSellModel: function(newValue) {
+    /**
+     * function pricemodel watch to assign a field required only in sell
+     *
+     * @param    {number}  newValue  params that holds the new value of priceSellModel
+     *
+     * @return   {number}   returns calculated with fees
+     */
+    priceSellModel(newValue) {
       this.sellWatch();
       const result = parseFloat(newValue);
       this.priceSellModel = result;
     },
+    /**
+     * function quantityModel watch to assign a field required only in buy quantity
+     *
+     * @param    {number}  newValue  params that holds the new value of quantityModel
+     *
+     * @return   {number}   returns calculated with fees
+     */
     quantityModel(value) {
       this.buyWatch();
       this.quantityModel = parseFloat(value);
     },
+    /**
+     * function quantitySellModel watch to assign a field required only in sell quantity
+     *
+     * @param    {number}  newValue  params that holds the new value of quantitySellModel
+     *
+     * @return   {number}   returns calculated with fees
+     */
     quantitySellModel(value) {
       this.sellWatch();
       this.quantitySellModel = parseFloat(value);
     },
-    date: function() {
+    /**
+     * date function watch if changes
+     *
+     * @return   {date}   returns user inputted date
+     */
+    date() {
       this.dateWatch();
     },
+    /**
+     * get latest user portfolio list
+     *
+     * @return  {[array]}  returns array of portfolio list
+     */
     userPortfolio() {
       this.getUserPortfolio();
     }
@@ -751,12 +836,17 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
+    /**
+     * function initPortfolio on mount: date
+     *
+     * @return  {string}  returns formatted date
+     */
     initPortfolio() {
-      var tim = new Date();
-      var time =
+      let tim = new Date();
+      let time =
         tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var today = new Date(this.date),
+      let today = new Date(this.date),
         month = "" + (today.getMonth() + 1),
         day = "" + today.getDate(),
         year = today.getFullYear();
@@ -764,10 +854,15 @@ export default {
       if (month.length < 2) month = "0" + month;
       if (day.length < 2) day = "0" + day;
 
-      var dateTime = [day, month, year].join("-") + " " + time;
+      let dateTime = [day, month, year].join("-") + " " + time;
       this.dateModel = dateTime;
       this.YMDModel = [day, month, year].join("-");
     },
+    /**
+     * function to buy trade
+     *
+     * @return  {object}  returns confirmation trade
+     */
     buyListArray() {
       let portfolio_id = this.defaultPortfolioId;
       let stock = this.GetSelectStock;
@@ -821,7 +916,12 @@ export default {
           }
         });
     },
-    sellListArray: function() {
+    /**
+     * function to sell trade
+     *
+     * @return  {object}  returns confirmation trade
+     */
+    sellListArray() {
       let portfolio_id = this.defaultPortfolioId;
       let stock = this.GetSelectStock;
       let aveprice =
@@ -870,16 +970,31 @@ export default {
           }
         });
     },
+    /**
+     * function buy tab switch to buy
+     *
+     * @return  returns property true or false
+     */
     toBuy() {
       this.stocklist = this.stocklistBuy;
       this.continuesellBtn = false;
       this.continuebuyBtn = true;
     },
+    /**
+     * function buy tab switch to sell
+     *
+     * @return  returns property true or false
+     */
     toSell() {
       this.stocklist = this.openPosition;
       this.continuebuyBtn = false;
       this.continuesellBtn = true;
     },
+    /**
+     * function to get tradelogs
+     *
+     * @return  returns object of data
+     */
     getSellItems() {
       for (let i = 0; i < this.openPosition.length; i++) {
         this.openPosition[i] = {
@@ -889,6 +1004,13 @@ export default {
         };
       }
     },
+    /**
+     * function on change item, and assigned boardlot and plotting tradelog data to your new inpt
+     *
+     * @param   {object}  Obj  handles the object of changed item
+     *
+     * @return  {object}       return object data of item
+     */
     getStockDetails(Obj) {
       const params = {
         "symbol-id": Obj
@@ -896,7 +1018,6 @@ export default {
       this.$api.chart.stocks.history(params).then(
         function(result) {
           this.stockSymbolGet = result.data;
-          console.log(this.stockSymbolGet);
 
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.boardLotModel = 1000000;
@@ -922,8 +1043,8 @@ export default {
           this.high = result.data.high.toFixed(2);
           this.wklow = result.data.weekyearlow.toFixed(2);
           this.wkhigh = result.data.weekyearhigh.toFixed(2);
-          this.volm = this.nFormatter(result.data.volume);
-          this.vole = this.nFormatter(result.data.value);
+          this.volm = result.data.volum;
+          this.vole = result.data.value;
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
           this.priceModel = result.data.last;
@@ -936,7 +1057,6 @@ export default {
           let stockDataList = this.openPosition[i];
 
           if (stockDataList.stock_id == Obj) {
-            // this.priceSellModel = stockDataList.metas.buy_price;
             this.avepriceSell = stockDataList.average_price;
             this.quantitySellModel = stockDataList.position;
             this.AvailableBoardLot = stockDataList.position;
@@ -960,22 +1080,15 @@ export default {
         }.bind(this)
       );
     },
-    nFormatter(num) {
-      if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "B";
-      }
-      if (num >= 1000000) {
-        return (num / 1000000).toFixed(2).replace(/\.0$/, "") + "M";
-      }
-      if (num >= 1000) {
-        return (num / 1000).toFixed(2).replace(/\.0$/, "") + "K";
-      }
-      return num;
-    },
+    /**
+     * get only all real portfolio
+     *
+     * @return  {[array]}  returns array of portfolio
+     */
     getUserPortfolio() {
       this.selectPortfolioModel = [];
       if (this.userPortfolio.length != 0) {
-        const toFindReal = "real"; // what we want to count
+        const toFindReal = "real";
         for (let i = 0; i < this.userPortfolio.length; i++) {
           let portfolioListPush1 = this.userPortfolio[i];
           if (portfolioListPush1.type === toFindReal) {
@@ -984,6 +1097,13 @@ export default {
         }
       }
     },
+    /**
+     * onchange function on which portfolio do you want to save trade
+     *
+     * @param   {object}  obj  object data of selected portfolio
+     *
+     * @return  {object}       returns select portfolio confirmation
+     */
     whereToSave(obj) {
       const portfoliofundsparams = {
         fund: obj
@@ -996,6 +1116,11 @@ export default {
         }.bind(this)
       );
     },
+    /**
+     * function to check if all fields are correctly inputted
+     *
+     * @return  returns property to button if true=disable or false=enable
+     */
     selectWatch() {
       if (this.typePortfolioModel != null) {
         this.continueButtonDisable = true;
@@ -1003,18 +1128,16 @@ export default {
         this.continueButtonDisable = false;
       }
     },
-    buyWatch(newValue) {
+    /**
+     * function validation on buy trade form
+     *
+     * @return  returns properties to confirmation button
+     */
+    buyWatch() {
       let buyResult =
         parseFloat(this.priceModel) * parseFloat(this.quantityModel);
-      let dpartcommission = buyResult * 0.0025;
-      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-      // TAX
-      let dtax = dcommission * 0.12;
-      // Transfer Fee
-      let dtransferfee = buyResult * 0.00005;
-      // SCCP
-      let dsccp = buyResult * 0.0001;
-      let dall = buyResult + dcommission + dtax + dtransferfee + dsccp;
+
+      let dall = BuyFees(buyResult);
       this.totalCostModel = dall
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1044,21 +1167,17 @@ export default {
         }
       }
     },
+    /**
+     * function validation on sell trade form
+     *
+     * @return  returns properties to confirmation button
+     */
     sellWatch(newValue) {
       let sellResult =
         parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
-      let dpartcommission = sellResult * 0.0025;
-      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-      // TAX
-      let dtax = dcommission * 0.12;
-      // Transfer Fee
-      let dtransferfee = sellResult * 0.00005;
-      // SCCP
-      let dsccp = sellResult * 0.0001;
-      let dsell = sellResult * 0.006;
-      let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
-      let result = sellResult - dall;
-      this.totalCostSellModel = result
+
+      let dall = SellFees(sellResult);
+      this.totalCostSellModel = dall
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
@@ -1089,12 +1208,17 @@ export default {
         }
       }
     },
+    /**
+     * watch date function every keyup of a user if value changes
+     *
+     * @return  {string}  returns formatted date
+     */
     dateWatch() {
-      var tim = new Date();
-      var time =
+      let tim = new Date();
+      let time =
         tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var today = new Date(this.date),
+      let today = new Date(this.date),
         month = "" + (today.getMonth() + 1),
         day = "" + today.getDate(),
         year = today.getFullYear();
@@ -1102,7 +1226,7 @@ export default {
       if (month.length < 2) month = "0" + month;
       if (day.length < 2) day = "0" + day;
 
-      var dateTime = [day, month, year].join("-") + " " + time;
+      let dateTime = [day, month, year].join("-") + " " + time;
       this.dateModel = dateTime;
       this.YMDModel = [day, month, year].join("-");
     }
@@ -1113,9 +1237,6 @@ export default {
 .tab_menu-top.v-tab--active {
   color: #03dac5 !important;
 }
-/* .menuable__content__active {
-  top: 180px !important;
-} */
 </style>
 <style>
 .data_table-container.v-data-table td,

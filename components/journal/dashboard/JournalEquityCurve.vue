@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import shareModal from "~/components/modals/share";
+import shareModal from "~/components/modals/Share";
 import { mapGetters } from "vuex";
 
 export default {

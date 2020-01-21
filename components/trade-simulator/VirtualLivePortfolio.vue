@@ -254,8 +254,8 @@
 <script>
 import TradeModal from "~/components/trade-simulator/TradeModal";
 import resetModal from "~/components/trade-simulator/reset";
-import shareModal from "~/components/modals/share";
-import tradeDelete from "~/components/modals/tradeDelete";
+import shareModal from "~/components/modals/Share";
+import tradeDelete from "~/components/modals/TradeDelete";
 import { mapActions, mapGetters } from "vuex";
 
 export default {

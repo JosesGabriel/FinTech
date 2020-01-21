@@ -177,7 +177,7 @@ import JournalPerformance from "~/components/journal/dashboard/JournalPerformanc
 import JournalGrossPL from "~/components/journal/dashboard/JournalGrossPL";
 
 //Ledger tab
-import TradelogsContent from "~/components/journal/tradelogs/contents";
+import TradelogsContent from "~/components/journal/tradelogs/TradelogContent";
 
 //Ledger tab
 import LedgerContent from "~/components/journal/ledger/LedgerContent";

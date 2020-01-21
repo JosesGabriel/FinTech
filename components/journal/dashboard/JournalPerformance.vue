@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import shareModal from "~/components/modals/share";
+import shareModal from "~/components/modals/Share";
 
 import { mapGetters } from "vuex";
 
@@ -41,10 +41,10 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    borderColor: function() {
+    borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"
         : "border-bottom: 1px solid #535358";
