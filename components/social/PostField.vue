@@ -131,7 +131,8 @@
             <img class="mr-1" src="/icon/video.svg" width="20" />
             <span class="success--text">Video</span>
           </v-btn>
-          <v-btn
+          <!-- TODO after launching -->
+          <!-- <v-btn
             class="postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
@@ -139,7 +140,7 @@
           >
             <img class="mr-1" src="/icon/polls.svg" width="17" />
             <span class="success--text">Polls</span>
-          </v-btn>
+          </v-btn> -->
           <v-btn
             rounded
             outlined
@@ -260,7 +261,8 @@ export default {
      */
     postFieldSubmit() {
       this.postFieldLoader = "success";
-
+      this.stockTagMode = false;
+      this.currentTaggedStock = "";
       if (this.$refs.postField__inputRef.files) {
         //text + image
         const params = {

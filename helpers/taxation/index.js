@@ -15,9 +15,8 @@ export function BuyFees(buyResult) {
     let dtransferfee = buyResult * 0.00005;
     // SCCP
     let dsccp = buyResult * 0.0001;
-    let dall = buyResult + dcommission + dtax + dtransferfee + dsccp;
-
-    return buyResult - dall;
+    let dall = dcommission + dtax + dtransferfee + dsccp;
+    return buyResult + dall;
 }
 /**
  * Sell fees taxation
@@ -38,6 +37,5 @@ export function SellFees(sellResult) {
     let dsccp = sellResult * 0.0001;
     let dsell = sellResult * 0.006;
     let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
-
     return sellResult - dall;
 }

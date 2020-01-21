@@ -28,7 +28,8 @@ export default (ctx, inject) => {
       portfolio: journalRepository(ctx.$axios)
     },
     watchlist: {
-      watchlists: initApiRepository("/journal/watchlist")
+      watchlists: initApiRepository("/journal/watchlist"),
+      mostwatched: initApiRepository("/journal/watchlist/watched")
     },
     game: {
       login: initApiRepository("/game/players"),

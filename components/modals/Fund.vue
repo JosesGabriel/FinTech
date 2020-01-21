@@ -114,7 +114,7 @@
         >Close</v-btn>
         <v-btn
           color="success"
-          class="text-capitalize"
+          class="text-capitalize black--text"
           depressed
           :light="lightSwitch == true"
           v-show="hideDepositButton"
@@ -124,7 +124,7 @@
         >Deposit</v-btn>
         <v-btn
           color="success"
-          class="text-capitalize"
+          class="text-capitalize black--text"
           depressed
           :light="lightSwitch == true"
           v-show="hideWithdrawButton"

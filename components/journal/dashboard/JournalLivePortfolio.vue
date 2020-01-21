@@ -500,6 +500,7 @@ export default {
         if (this.portfolioLogs[i].stock_id == symbol) {
           let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
           let mvalue = BuyFees(buyResult);
+          
           let tcost =
             this.portfolioLogs[i].position *
             this.portfolioLogs[i].average_price;
@@ -615,17 +616,17 @@ export default {
   width: 10px;
 }
 .lp_data_table-pagination {
-  color: #03dac5;
+  color: #03dac5 !important;
 }
 .v-pagination.lp_data_table-pagination .v-pagination__item--active {
-  color: #03dac5;
+  color: #03dac5 !important;
 }
 .lp_data_table-pagination i.v-icon {
   font-size: 11px;
 }
 .v-pagination.lp_data_table-pagination .v-pagination__item {
-  background: none;
-  box-shadow: none;
+  background: none !important;
+  box-shadow: none !important;
   margin: 0;
   outline-color: transparent;
   font-size: 12px;

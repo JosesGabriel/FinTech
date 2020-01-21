@@ -63,26 +63,26 @@
         <span
           class="pl-2"
           :style="{ color: fontcolor2 }"
-        >{{ formatAvePrice(item.meta.average_price) }}</span>
+        >{{ item.meta.average_price | numeral("0,0.000") }}</span>
       </template>
       <template v-slot:item.buy_value="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ formatPrice(item.buy_value) }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.buy_value | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.sell_price="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ formatPrice(item.meta.sell_price) }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.sell_price | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.total_value="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ formatPrice(item.total_value) }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.total_value | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.profit_loss="{ item }">
         <span
           :class="item.profit_loss > 0 ? 'positive' : item.profit_loss < 0 ? 'negative' : 'neutral' "
-        >{{ formatPrice(item.profit_loss) }}</span>
+        >{{ item.profit_loss | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.profit_loss_percentage="{ item }">
         <span
           :class="item.profit_loss_percentage > 0 ? 'positive' : item.profit_loss_percentage < 0 ? 'negative' : 'neutral' "
-        >{{ formatPrice(item.profit_loss_percentage) }}%</span>
+        >{{ item.profit_loss_percentage | numeral("0,0.00") }}%</span>
       </template>
       <template v-slot:item.action="{ item }">
         <div
@@ -179,7 +179,7 @@ export default {
       itemsPerPage: 10,
       search: "",
       headers: [
-        { text: "Stocks", value: "stock_id", align: "left", sortable: false },
+        { text: "Stocks", value: "stock_id", align: "left" },
         { text: "Date", value: "date", align: "right" },
         { text: "Volume", value: "amount", align: "right" },
         { text: "Ave. Price", value: "average_price", align: "right" },
@@ -237,10 +237,41 @@ export default {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
+  watch: {
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getTradeLogs();
+    },
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
+      this.getTradeLogs();
+    },
+    /**
+     * if trade edit or remove succed renderEditKey will increment
+     *
+     * @return  {number}  increment key
+     */
+    renderEditKey() {
+      this.getTradeLogs();
+    }
+  },
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -249,15 +280,31 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
-    deleteLive: function(item) {
+    /**
+     * passing credentials of each item to be deleted to this.itemDetails (to props)
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    deleteLive(item) {
       this.itemDetails = item;
     },
-    detailsLive: function(item) {
+    /**
+     * passing credentials of each item to details to this.itemDetails (to props)
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    detailsLive(item) {
       this.itemDetails = item;
     },
-    editLive: function(item) {
-      this.itemDetails = item;
-    },
+    /**
+     * getTradeLogs gets update when getTradeLogs triggered
+     *
+     * @return  {[array]} returned array
+     */
     getTradeLogs() {
       const tradelogsparams = {
         fund: this.defaultPortfolioId
@@ -305,21 +352,27 @@ export default {
       );
       this.componentKeys++;
     },
-    tradelogsmenuLogsShow: function(item) {
+    /**
+     * if trades are hovered item will show, item will assigned as hovered with this function
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    tradelogsmenuLogsShow(item) {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "block";
     },
-    tradelogsmenuLogsHide: function(item) {
+    /**
+     * if trades are hovered item will hide, item will assigned as hovered with this function
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    tradelogsmenuLogsHide(item) {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "none";
-    },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-    formatAvePrice(value) {
-      let val = (value / 1).toFixed(3).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     /**
      * current date formatted
@@ -348,17 +401,6 @@ export default {
       let year = date.getFullYear();
 
       this.date = monthNames[monthIndex] + " " + day + ", " + year;
-    }
-  },
-  watch: {
-    defaultPortfolioId: function() {
-      this.getTradeLogs();
-    },
-    renderPortfolioKey: function() {
-      this.getTradeLogs();
-    },
-    renderEditKey: function() {
-      this.getTradeLogs();
     }
   }
 };
