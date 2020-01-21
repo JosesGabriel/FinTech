@@ -125,6 +125,11 @@ export default {
       lightSwitch: "global/getLightSwitch",
       sse: "chart/sse"
     }),
+    /**
+     * toggle card background light/dark mode
+     *
+     * @return
+     */
     cardBackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
@@ -144,6 +149,14 @@ export default {
       setBidask: "chart/setBidask",
       setSSEBidask: "chart/setSSEBidask"
     }),
+    /**
+     * format display using numeral js filter
+     *
+     * @param   {Object}  item  bid/ask item
+     * @param   {String}  key   object key
+     *
+     * @return  {String}      formatted
+     */
     formatItem: function(item, key = null) {
       if (item == undefined) return;
       let result = null;
@@ -163,14 +176,20 @@ export default {
       }
       return result;
     },
+    /**
+     * initialise and request for bidask api data
+     *
+     * @param   {String}  symid  sym_id
+     *
+     * @return
+     */
     initBidask: async function(symid) {
       this.loading = "success";
-      //console.log("bidask");
       try {
         const response = await this.$api.chart.stocks.bidask({
           "symbol-id": symid,
           "filter-by-last": true,
-          limit: 10
+          limit: 2
         });
         const asks = Object.values(response.data.asks);
         const bids = Object.values(response.data.bids);
@@ -187,6 +206,13 @@ export default {
         //console.log("bidask error", error);
       }
     },
+    /**
+     * initialise and listen to bidask server-side event
+     *
+     * @param   {Object}  e  object response
+     *
+     * @return
+     */
     sseBidask: function(e) {
       if (this.bidask.asks !== undefined && this.bidask.bids !== undefined) {
         if (this.symbolid == undefined) return;
@@ -201,21 +227,30 @@ export default {
           const bids = this.updateBidAndAsks(this.bidask.bids, data);
           this.$store.commit(
             "chart/SET_BIDS",
-            bids.sort(this.sortBy("price", "desc"))
+            bids.sort((a, b) => b.price - a.price)
+            // bids.sort(this.sortBy("price", "desc"))
           );
         } else if (data.ov == "S") {
           // ask
-          //              if (data.ty != "a" || data.ty != "au") return;
+          // if (data.ty != "a" || data.ty != "au") return;
           const asks = this.updateBidAndAsks(this.bidask.asks, data);
           this.$store.commit(
             "chart/SET_ASKS",
-            asks.sort(this.sortBy("price", "desc"))
+            asks.sort((a, b) => b.price - a.price)
+            // asks.sort(this.sortBy("price", "desc"))
           );
         }
         // console.log(this.bidask);
       }
     },
-    // For Bid and Asks
+    /**
+     * update the list depend on sent condition
+     *
+     * @param   {Array}  list  list items bid/ask
+     * @param   {Object}  data  sent data from sse
+     *
+     * @return  {Object}  new list item formatted
+     */
     updateBidAndAsks: function(list, data) {
       const index = list.findIndex(item => item.id === data.id);
       //   console.log("update bidask", data.ty);

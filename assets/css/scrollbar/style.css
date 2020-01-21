@@ -56,3 +56,24 @@
 .theme--light .v-dialog::-webkit-scrollbar-thumb:hover {
     background: #03dac5 !important;
 }
+
+
+/* fields scroll */
+
+.notes_text::-webkit-scrollbar {
+    width: 5px;
+}
+
+.notes_text::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+.notes_text::-webkit-scrollbar-thumb {
+    background: #03dac5;
+    border-radius: 20px;
+}
+
+.notes_text::-webkit-scrollbar-thumb:hover {
+    background: #03dac5;
+}

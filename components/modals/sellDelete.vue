@@ -65,6 +65,11 @@ export default {
       setRenderEditKey: "journal/setRenderEditKey",
       setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
+    /**
+     * deleteNow function, trigger delete once user confirmed only tradelog
+     *
+     * @return  {object}  returns deleted info
+     */
     deleteNow() {
       let confirmed = true;
       this.$emit("confirmedDelete", confirmed);

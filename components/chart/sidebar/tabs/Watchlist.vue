@@ -120,17 +120,16 @@ export default {
       responsiveHeight: "chart/responsiveHeight",
       sseInfo: "chart/sseInfo",
       blink: "chart/blink"
-    }),
-    /**
-     * toggle card color
-     *
-     * @return
-     */
-    cardbackground() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-    }
+    })
   },
   watch: {
+    /**
+     * run sse only once loading is finish
+     *
+     * @param   {[type]}  value  [value description]
+     *
+     * @return  {[type]}         [return description]
+     */
     sseInfo(value) {
       if (this.loading === false) {
         this.sseAllInfo(value);

@@ -86,6 +86,7 @@
               <v-textarea
                 color="white"
                 class="white--text trading_notes-textarea body-2 mt-3"
+                :background-color="lightSwitch == 0 ? '#e3e9ed' : '#172431'"
                 v-model="notesModel"
                 placeholder="Trading Notes"
                 filled
@@ -120,6 +121,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+
 export default {
   props: ["visible", "itemDetails"],
   data() {
@@ -146,7 +148,12 @@ export default {
       renderEditKey: "journal/getRenderEditKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    /**
+     * depend on current theme mode function that change card background
+     *
+     * @return  {string}  return string hexcode color
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     show: {
@@ -173,9 +180,14 @@ export default {
     ...mapActions({
       setRenderEditKey: "journal/setRenderEditKey"
     }),
+    /**
+     * editNow function, posting editted info
+     *
+     * @return  {[type]}  returns object data
+     */
     editNow() {
-      let fund_id = this.fund;
-      let stock_id = this.stockid;
+      const fund_id = this.fund;
+      const stock_id = this.stockid;
       const params = {
         strategy: this.strategyModel,
         plan: this.tradeplanModel,
@@ -185,7 +197,6 @@ export default {
       this.$api.journal.portfolio
         .tradeedit(fund_id, stock_id, params)
         .then(response => {
-          console.log(response);
           if (response.success) {
             this.keyCreateCounter = this.renderEditKey;
             this.keyCreateCounter++;

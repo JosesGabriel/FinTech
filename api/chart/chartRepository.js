@@ -24,6 +24,14 @@ export default $axios => ({
     return $axios.$get(
       `${baseURL}/history/latest${query.length > 0 ? "?" + query : ""}`
     );
+  },
+
+  search(params) {
+    let query = buildParams(params);
+    $axios.setToken(token, "Bearer");
+    return $axios.$get(
+      `${baseURL}/tradingview/search${query.length > 0 ? "?" + query : ""}`
+    );
   }
 });
 

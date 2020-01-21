@@ -34,12 +34,12 @@
         >
           <v-container class="pa-0">
             <div class="separator"></div>
-            <v-row no-gutters>
-              <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title>
+            <v-row no-gutters class="my-2">
+              <v-card-title class="caption px-0 py-2 secondary--text">Available Funds</v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
-                class="subtitle-1 px-0 py-2 secondary--text"
-              >{{ nFormatter(parseFloat(availableFunds)) }}</v-card-title>
+                class="caption px-0 py-2 secondary--text"
+              >{{ availableFunds | numeral("0.00a") }}</v-card-title>
             </v-row>
             <v-text-field
               label="Enter Amount"
@@ -55,15 +55,17 @@
               <span class="custom-dropdown big">
                 <v-select
                   :items="items"
-                  :menu-props="{offsetY: true, dark: lightSwitch == true}"
                   v-model="fundSourceModel"
+                  class="enter_amount-deposit-select ma-0 body-2"
                   item-text="name"
                   item-value="funds_source"
                   label="Fund Source"
                   item-color="success"
                   color="success"
                   dense
-                  class="enter_amount-deposit-select ma-0 body-2"
+                  :dark="lightSwitch == true"
+                  :menu-props="{offsetY: true, dark: lightSwitch == true}"
+                  light
                 >
                   <template slot="item" slot-scope="data">
                     <v-list-item-content
@@ -82,12 +84,12 @@
         <v-tab-item dark color="success" background-color="#0c1f33" :value="'funds-' + 2">
           <v-container class="pa-0">
             <div class="separator"></div>
-            <v-row no-gutters>
-              <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title>
+            <v-row no-gutters class="my-2">
+              <v-card-title class="caption px-0 py-2 secondary--text">Available Funds</v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
-                class="subtitle-1 px-0 py-2 secondary--text"
-              >{{ nFormatter(parseFloat(availableFunds)) }}</v-card-title>
+                class="caption px-0 py-2 secondary--text"
+              >{{ availableFunds | numeral("0.00a") }}</v-card-title>
             </v-row>
             <v-text-field
               label="Enter Amount"
@@ -140,6 +142,12 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   props: ["visible"],
   computed: {
+    ...mapGetters({
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      selectedPortfolio: "journal/getSelectedPortfolio",
+      lightSwitch: "global/getLightSwitch"
+    }),
     show: {
       get() {
         return this.visible;
@@ -150,44 +158,79 @@ export default {
         }
       }
     },
-    ...mapGetters({
-      defaultPortfolioId: "journal/getDefaultPortfolioId",
-      renderPortfolioKey: "journal/getRenderPortfolioKey",
-      selectedPortfolio: "journal/getSelectedPortfolio",
-      lightSwitch: "global/getLightSwitch"
-    }),
-    cardbackground: function() {
+    /**
+     * returns hexcode for card color if current theme is dark or light
+     *
+     * @return  {string}  returns string
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   data() {
     return {
-      // data for withdraw
-      withrawAmount: "0.00",
-      // data for deposit
+      withrawAmount: 0.0,
       items: [
         { funds_source: "dividend_income", name: "Dividend Income" },
         { funds_source: "deposit", name: "Fresh Funds" }
       ],
-      quantity: "0.00",
-      enterAmount: "0.00",
+      quantity: 0.0,
+      enterAmount: 0.0,
       fundSourceModel: null,
       disableButtonSave: true,
       disableWithdrawButtonSave: true,
       hideWithdrawButton: false,
       hideDepositButton: true,
-      availableFunds: "0.00",
-      fund: 0,
-
-      snackbar: false,
-      timeoutNotification: 10000
+      availableFunds: 0.0,
+      fund: 0
     };
+  },
+  watch: {
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.availablefund();
+    },
+    /**
+     * watch enterAmount on keyup and check if enterAmount is validated or pass
+     * validation works.
+     *
+     * @return
+     */
+    enterAmount() {
+      this.enterAmountWatch();
+    },
+    /**
+     * watch withrawAmount on keyup and check if withrawAmount is validated or pass
+     * validation works.
+     *
+     * @return
+     */
+    withrawAmount() {
+      this.withrawAmountWatch();
+    },
+    /**
+     * validating if there's portfolio selected using fundsource
+     *
+     * @return
+     */
+    fundSourceModel() {
+      this.fundSourceWatch();
+    }
   },
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
+    /**
+     * once porfolio ID change this function will request for availablefunds
+     *
+     * @return  {number}  returns available balance
+     */
     availablefund() {
       const portfoliofundsparams = {
         fund: this.defaultPortfolioId
@@ -199,8 +242,12 @@ export default {
           }
         }.bind(this)
       );
-      this.componentKeys++;
     },
+    /**
+     * function of deposit
+     *
+     * @return  {object}  returns funds info
+     */
     depositNow() {
       let portfolio_id = this.defaultPortfolioId;
       let params = {
@@ -226,6 +273,11 @@ export default {
           }
         });
     },
+    /**
+     * function of withdraw
+     *
+     * @return  {object}  returns funds info
+     */
     withdrawNow() {
       let portfolio_id = this.defaultPortfolioId;
       const params = {
@@ -241,7 +293,7 @@ export default {
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
 
-            (this.withrawAmount = "0.00"),
+            (this.withrawAmount = 0),
               (this.fundSourceModel = null),
               (this.disableButtonSave = true),
               (this.disableWithdrawButtonSave = true),
@@ -250,7 +302,14 @@ export default {
           }
         });
     },
-    enterAmountWatch: function(newValue) {
+    /**
+     * function that will hold the disable/enable of save button
+     *
+     * @param   {number}  newValue  current value of number field
+     *
+     * @return  {number}          returns property
+     */
+    enterAmountWatch(newValue) {
       if (
         parseFloat(this.enterAmount) > 0 &&
         this.fundSourceModel != null &&
@@ -261,7 +320,12 @@ export default {
         this.disableButtonSave = true;
       }
     },
-    fundSourceWatch: function() {
+    /**
+     * function that will hold the disable/enable of save button
+     *
+     * @return  {number}          returns property
+     */
+    fundSourceWatch() {
       if (
         parseFloat(this.enterAmount) > 0 &&
         this.fundSourceModel != null &&
@@ -272,6 +336,11 @@ export default {
         this.disableButtonSave = true;
       }
     },
+    /**
+     * function that will hold the disable/enable of save button
+     *
+     * @return  {number}          returns property
+     */
     withrawAmountWatch: function() {
       if (
         parseFloat(this.withrawAmount) > 0 &&
@@ -281,45 +350,6 @@ export default {
       } else {
         this.disableWithdrawButtonSave = true;
       }
-    },
-    nFormatter(num) {
-      if (num >= 1000000000000000) {
-        return (num / 1000000000000000).toFixed(2).replace(/\.0$/, "") + "Q";
-      }
-      if (num >= 1000000000000) {
-        return (num / 1000000000000).toFixed(2).replace(/\.0$/, "") + "T";
-      }
-      if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "B";
-      }
-      if (num >= 1000000) {
-        return (num / 1000000).toFixed(2).replace(/\.0$/, "") + "M";
-      }
-      if (num >= 1000) {
-        return (num / 1000).toFixed(2).replace(/\.0$/, "") + "K";
-      }
-      return num;
-    }
-  },
-  watch: {
-    defaultPortfolioId: function() {
-      this.availablefund();
-    },
-    renderPortfolioKey: function() {
-      this.availablefund();
-    },
-    enterAmount: function(newValue) {
-      const result = newValue;
-      this.enterAmount = result;
-      this.enterAmountWatch();
-    },
-    withrawAmount: function(newValue) {
-      const result = newValue;
-      this.withrawAmount = result;
-      this.withrawAmountWatch();
-    },
-    fundSourceModel: function() {
-      this.fundSourceWatch();
     }
   }
 };

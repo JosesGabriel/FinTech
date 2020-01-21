@@ -331,6 +331,8 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { BuyFees, SellFees } from "~/helpers/taxation";
+
 export default {
   props: ["visible"],
   data() {
@@ -338,13 +340,13 @@ export default {
       e1: 1,
       buyDate: new Date().toISOString().substr(0, 10),
       buyMenu: false,
-      buyPrice: "0.00",
+      buyPrice: 0.0,
       buyQuantity: 0,
       buyResult: 0,
 
       sellDate: new Date().toISOString().substr(0, 10),
       sellMenu: false,
-      sellPrice: "0.00",
+      sellPrice: 0.0,
       sellQuantity: 0,
       sellResult: 0,
 
@@ -382,9 +384,6 @@ export default {
       stockList: "global/getStockList",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-    },
     show: {
       get() {
         return this.visible;
@@ -394,77 +393,111 @@ export default {
           this.$emit("close");
         }
       }
+    },
+    /**
+     * returns hexcode for card color if current theme is dark or light
+     *
+     * @return  {string}  returns string
+     */
+    cardbackground() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
+  },
+  mounted() {
+    this.listData = this.stockList;
+    if (this.listData.length != 0) {
+      this.listDataArr = this.listData.data;
     }
   },
   watch: {
-    strategyModel: function() {
+    /**
+     * watching strategyModel and run validation function
+     *
+     * @return  returns true or false once keyup on textfields
+     */
+    strategyModel() {
       this.confirmTradeBtn();
     },
-    tradeplanModel: function() {
+    /**
+     * watching tradeplanModel works for validation
+     *
+     * @return  returns true or false
+     */
+    tradeplanModel() {
       this.confirmTradeBtn();
     },
-    emotionsModel: function() {
+    /**
+     * watching emotionsModel works for validation
+     *
+     * @return  returns true or false
+     */
+    emotionsModel() {
       this.confirmTradeBtn();
     },
-    notesModel: function() {
+    /**
+     * watching notesModel works for validation
+     *
+     * @return  returns true or false
+     */
+    notesModel() {
       this.confirmTradeBtn();
     },
-    selectStockModel: function() {
+    /**
+     * watching selectStockModel works for validation
+     *
+     * @return  returns true or false
+     */
+    selectStockModel() {
       this.getSelectStock();
       this.continueBuyBtn();
       this.confirmTradeBtn();
     },
-    buyPrice: function(value) {
+    /**
+     * watching buyPrice works for validation auto calculate with quantity once user inputted
+     *
+     * @param   {number}  value  value that user inputted
+     *
+     * @return  {number}         returns final number
+     */
+    buyPrice(value) {
       this.continueBuyBtn();
       this.confirmTradeBtn();
       let buyResult = parseFloat(value) * parseFloat(this.buyQuantity);
-      let dpartcommission = buyResult * 0.0025;
-      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-      // TAX
-      let dtax = dcommission * 0.12;
-      // Transfer Fee
-      let dtransferfee = buyResult * 0.00005;
-      // SCCP
-      let dsccp = buyResult * 0.0001;
-      let dall = parseFloat(
-        buyResult + dcommission + dtax + dtransferfee + dsccp
-      );
+
+      let dall = BuyFees(buyResult);
       this.buyResult = dall.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    buyQuantity: function(value) {
+    /**
+     * watching buyQuantity works for validation auto calculate with price once user inputted
+     *
+     * @param   {number}  value  value that user inputted
+     *
+     * @return  {number}         returns final number
+     */
+    buyQuantity(value) {
       this.continueBuyBtn();
       this.confirmTradeBtn();
       this.sellQuantity = value;
       let buyResult = parseFloat(this.buyPrice) * parseFloat(value);
-      let dpartcommission = buyResult * 0.0025;
-      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-      // TAX
-      let dtax = dcommission * 0.12;
-      // Transfer Fee
-      let dtransferfee = buyResult * 0.00005;
-      // SCCP
-      let dsccp = buyResult * 0.0001;
-      let dall = parseFloat(
-        buyResult + dcommission + dtax + dtransferfee + dsccp
-      );
+
+      let dall = BuyFees(buyResult);
       this.buyResult = dall.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    sellPrice: function(value) {
+    /**
+     * watching sellPrice works for validation auto calculate with sell price once user inputted
+     * displaying total profit and loss with percentage
+     *
+     * @param   {number}  value  value that user inputted
+     *
+     * @return  {number}         returns final number
+     */
+    sellPrice(value) {
       this.continueSellBtn();
       this.confirmTradeBtn();
       let sellResult = parseFloat(value) * parseFloat(this.sellQuantity);
-      let dpartcommission = sellResult * 0.0025;
-      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-      // TAX
-      let dtax = dcommission * 0.12;
-      // Transfer Fee
-      let dtransferfee = sellResult * 0.00005;
-      // SCCP
-      let dsccp = sellResult * 0.0001;
-      let dsell = sellResult * 0.006;
-      let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
-      let result = parseFloat(sellResult - dall);
-      this.sellResult = result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+      let dall = SellFees(sellResult);
+      this.sellResult = dall.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
       let profitloss =
         parseFloat(this.sellResult.replace(/,/g, "")) -
@@ -480,6 +513,12 @@ export default {
       setRenderEditKey: "journal/setRenderEditKey",
       setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
+    /**
+     * onchange function, once ID change it filter the stock list
+     * get only the stock information
+     *
+     * @return  {[type]}  [return description]
+     */
     getSelectStock() {
       let filteredStocks = null;
       if (this.listData.length != 0) {
@@ -489,7 +528,12 @@ export default {
         this.resultStock = filteredStocks[0];
       }
     },
-    continueBuyBtn: function() {
+    /**
+     * function that enable/disable buycontinueBtn
+     *
+     * @return  returns true=disable or false=enable buy continue button
+     */
+    continueBuyBtn() {
       if (
         this.selectStockModel != null &&
         this.buyPrice != 0 &&
@@ -500,14 +544,24 @@ export default {
         this.buyContinueBtn = true;
       }
     },
-    continueSellBtn: function() {
+    /**
+     * function that enable/disable sellContinueBtn
+     *
+     * @return  it returns true=disable or false=enable sell continue button
+     */
+    continueSellBtn() {
       if (this.sellPrice != 0 && this.sellQuantity != 0) {
         this.sellContinueBtn = false;
       } else {
         this.sellContinueBtn = true;
       }
     },
-    confirmTradeBtn: function() {
+    /**
+     * confirm trade button function, final validation
+     *
+     * @return  returns true=disable or false=enable confirmFinalBtn
+     */
+    confirmTradeBtn() {
       if (
         this.defaultPortfolioId != null &&
         this.selectStockModel != null &&
@@ -525,13 +579,18 @@ export default {
         this.confirmFinalBtn = true;
       }
     },
+    /**
+     * recordNow function, submit record trade
+     *
+     * @return  {object}    success object return
+     */
     recordNow() {
       this.el = 1;
-      var tim = new Date();
-      var time =
+      let tim = new Date();
+      let time =
         tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var finalbuydate = new Date(this.buyDate),
+      let finalbuydate = new Date(this.buyDate),
         buymonth = "" + (finalbuydate.getMonth() + 1),
         buyday = "" + finalbuydate.getDate(),
         buyyear = finalbuydate.getFullYear();
@@ -541,7 +600,7 @@ export default {
 
       let buydateformatted = [buyday, buymonth, buyyear].join("-") + " " + time;
 
-      var finalselldate = new Date(this.sellDate),
+      let finalselldate = new Date(this.sellDate),
         sellmonth = "" + (finalselldate.getMonth() + 1),
         sellday = "" + finalselldate.getDate(),
         sellyear = finalselldate.getFullYear();
@@ -571,15 +630,14 @@ export default {
       this.$api.journal.portfolio
         .record(portfolio_id, payload)
         .then(response => {
-          console.log(response);
           this.buyDate = new Date().toISOString().substr(0, 10);
           this.buyMenu = false;
-          this.buyPrice = "0.00";
+          this.buyPrice = 0.0;
           this.buyQuantity = 0;
           this.buyResult = 0;
           this.sellDate = new Date().toISOString().substr(0, 10);
           this.sellMenu = false;
-          this.sellPrice = "0.00";
+          this.sellPrice = 0.0;
           this.sellQuantity = 0;
           this.sellResult = 0;
           this.selectStockModel = null;
@@ -596,16 +654,6 @@ export default {
           this.setRenderEditKey(this.keyCreateCounter);
           this.setRenderPortfolioKey(this.keyCreateCounter1);
         });
-    },
-    formatPrice(value) {
-      let val = (value / 1).toFixed(2).replace(".", ".");
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  },
-  mounted() {
-    this.listData = this.stockList;
-    if (this.listData.length != 0) {
-      this.listDataArr = this.listData.data;
     }
   }
 };

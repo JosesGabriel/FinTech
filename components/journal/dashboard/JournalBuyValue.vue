@@ -3,10 +3,13 @@
     <!-- Don't remove ref value. Used for sharing -->
     <v-col class="pa-0" cols="12">
       <v-card-title class="text-left justify-left ml-2 px-0 pb-2 pt-0" :style="borderColor">
-        <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">BUY VALUE</h6>
+        <h6
+          class="font-weight-bold subtitle-2"
+          :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+        >BUY VALUE</h6>
         <v-spacer></v-spacer>
         <v-btn icon small :dark="lightSwitch == 0 ? false : true" @click="showShareModal()">
-          <v-icon>mdi-share-variant</v-icon>
+          <v-icon small color="tertiary">mdi-share-variant</v-icon>
         </v-btn>
       </v-card-title>
     </v-col>
@@ -26,7 +29,7 @@
 </template>
 
 <script>
-import shareModal from "~/components/modals/share";
+import shareModal from "~/components/modals/Share";
 
 import { mapGetters } from "vuex";
 
@@ -41,13 +44,15 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor() {
-      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
-    },
+    /**
+     * returns attribute border bottom
+     *
+     * @return  {string}  return string
+     */
     borderColor() {
       return this.lightSwitch == 0
-        ? "border-bottom: 1px solid #b6b6b6"
-        : "border-bottom: 1px solid #535358";
+        ? "border-bottom: 1px solid #535358"
+        : "border-bottom: 1px solid #172431";
     }
   },
   data() {
@@ -290,7 +295,7 @@ export default {
         null
       ];
       if (this.journalCharts != null) {
-        const buyValue = this.journalCharts.data.buy_value;
+        let buyValue = this.journalCharts.data.buy_value;
 
         if (buyValue.length != 0) {
           for (let i = 0; i < buyValue.length; i++) {

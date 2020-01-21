@@ -253,17 +253,31 @@ export default {
       stock: "chart/stock",
       symbolid: "chart/symbolid"
     }),
-    tablesize: function() {
+    tablesize() {
       return this.fullscreen ? this.max : this.min;
     },
-    cardBackground: function() {
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   watch: {
+    /**
+     * watch sym_id changes and re-initialise
+     *
+     * @param   {String}  symbolid  stock id
+     *
+     * @return
+     */
     symbolid(symbolid) {
       this.initActivity(symbolid);
     },
+    /**
+     * update table size depends on ticker visibility
+     *
+     * @param   {Boolean}  value  true = open / false = close
+     *
+     * @return
+     */
     ticker(value) {
       if (value) {
         this.max = "calc(100vh - 295px)";
@@ -276,27 +290,44 @@ export default {
     this.initActivity(this.symbolid);
   },
   methods: {
-    shareActivity: function() {},
-    initActivity: function(symid) {
-      this.$api.journal.portfolio
-        .open({
+    /**
+     * share activity once clicked
+     * // TODO
+     * @return
+     */
+
+    shareActivity() {},
+
+    /**
+     * initialise and request from journal API
+     *
+     * @param   {String}  symid  stock symbol id
+     *
+     * @return
+     */
+    async initActivity(symid) {
+      try {
+        const open = await this.$api.journal.portfolio.open({
           fund: "real",
           stock_id: symid
-        })
-        .then(response => {
-          this.open = response.data.open;
         });
+        this.open = open.data.open;
 
-      this.$api.journal.portfolio
-        .tradelogs({
+        const logs = await this.$api.journal.portfolio.tradelogs({
           fund: "real",
           stock: symid
-        })
-        .then(response => {
-          this.items = response.data.logs;
         });
+        this.items = logs.data.logs;
+      } catch (error) {}
     },
-    changeType: function(value) {
+    /**
+     * detemine the color dymanically
+     *
+     * @param   {String}  value  change value
+     *
+     * @return  {Integer}       1 = Increase, 2 = Decrease, 0 = Neutral
+     */
+    changeType(value) {
       if (value > 0) {
         return 1;
       } else if (value < 0) {
@@ -305,14 +336,35 @@ export default {
         return 0;
       }
     },
-    displayBuyValue: function(item) {
+    /**
+     * display Buy Value after computation
+     *
+     * @param   {Object}  item  object values
+     *
+     * @return  {Float}      computed result
+     */
+    displayBuyValue(item) {
       return item.meta.average_price * item.amount;
     },
-    displayProfLoss: function(item) {
+    /**
+     * diplay profit / loss after computation
+     *
+     * @param   {Object}  item  object values
+     *
+     * @return  {Float}      computed result
+     */
+    displayProfLoss(item) {
       const bv = item.meta.average_price * item.amount;
       return item.total_value - bv;
     },
-    displayPercentage: function(item) {
+    /**
+     * display computed value of percentage
+     *
+     * @param   {Object}  item  object values
+     *
+     * @return  {Float}      computed result
+     */
+    displayPercentage(item) {
       const bv = item.meta.average_price * item.amount;
       const pl = item.total_value - bv;
       return (pl / bv) * 100;

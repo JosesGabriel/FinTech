@@ -51,10 +51,6 @@
           </v-col>
         </v-row>
       </v-col>
-
-      <!-- <v-card-actions>
-            <v-btn color="primary" @click.stop="show=false">Close</v-btn>
-      </v-card-actions>-->
     </v-card>
   </v-dialog>
 </template>
@@ -81,10 +77,20 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    /**
+     * returns string hexcode background color based on theme mode
+     *
+     * @return  {string}  returns string
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#DADADA" : "#0C1A2B";
     },
-    cardbackgroundBtn: function() {
+    /**
+     * returns string hexcode button background color based on theme mode
+     *
+     * @return  {string}  returns string
+     */
+    cardbackgroundBtn() {
       return this.lightSwitch == 0
         ? "confirmation_button-reset-not-light"
         : "confirmation_button-reset-not";
@@ -96,14 +102,31 @@ export default {
       disableReset: true
     };
   },
-  mounted() {
-    //   console.log(this.defaultPortfolioId)
+  watch: {
+    /**
+     * works on validation, confirmation word "HELL YEAH"
+     *
+     * @return  returns property true or false to disable or enable button reset
+     */
+    confirmResetModel() {
+      let confirmChecked = this.confirmResetModel.toUpperCase();
+      if (confirmChecked === "HELL YEAH") {
+        this.disableReset = false;
+      } else {
+        this.disableReset = true;
+      }
+    }
   },
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
+    /**
+     * resetNow function
+     *
+     * @return  {object}  returns confirmation reset info
+     */
     resetNow() {
       if (
         this.confirmResetModel == "HELL YEAH" ||
@@ -119,16 +142,6 @@ export default {
         });
       }
     }
-  },
-  watch: {
-    confirmResetModel: function() {
-      let confirmChecked = this.confirmResetModel.toUpperCase();
-      if (confirmChecked === "HELL YEAH") {
-        this.disableReset = false;
-      } else {
-        this.disableReset = true;
-      }
-    }
   }
 };
 </script>
@@ -139,17 +152,17 @@ export default {
   text-transform: uppercase;
 }
 .confirmation_button-reset-ok {
-  background: #00ffc3;
+  background: #03DAC5;
 }
 .confirmation_button-reset-not {
   background: #00080e;
 }
 .confirmation_button-reset-ok:hover {
-  background: #00ffc3;
+  background: #03DAC5;
   cursor: pointer;
 }
 .confirmation_button-reset-not:hover {
-  background: #00ffc3;
+  background: #03DAC5;
   cursor: pointer;
 }
 .confirmation_button-reset-ok:hover h1,

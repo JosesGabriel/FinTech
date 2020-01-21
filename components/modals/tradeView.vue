@@ -8,7 +8,7 @@
         <v-spacer></v-spacer>
         <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text class="px-1" color="success">
+            <v-btn v-on="on" text class="px-1" :color="lightSwitch == 0 ? '#000000' : '#FFFFFF' ">
               <span class="text-capitalize">Date:</span>
               <v-card-text class="pa-0" v-html="date"></v-card-text>
               <v-icon>mdi-chevron-down</v-icon>
@@ -79,9 +79,9 @@
 
                   <v-col cols="12" class="pa-0">
                     <v-row no-gutters>
-                      <v-card-title class="subtitle-1 px-0 py-2">Current Price</v-card-title>
+                      <v-card-title class="caption tertiary--text px-0 py-2">Current Price</v-card-title>
                       <v-spacer></v-spacer>
-                      <v-card-title class="subtitle-1 px-0 py-2">
+                      <v-card-title class="caption tertiary--text px-0 py-2">
                         {{ cprice }}
                         <span
                           class="caption pl-1"
@@ -120,7 +120,9 @@
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Volume</td>
-                              <td class="item_position-prop body-2 text-right py-1 px-1">{{ volm }}</td>
+                              <td
+                                class="item_position-prop body-2 text-right py-1 px-1"
+                              >{{ volm | numeral("0.00a") }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Trades</td>
@@ -164,7 +166,9 @@
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Value</td>
-                              <td class="item_position-prop body-2 text-right py-1 px-1">{{ vole }}</td>
+                              <td
+                                class="item_position-prop body-2 text-right py-1 px-1"
+                              >{{ vole | numeral("0.00a") }}</td>
                             </tr>
                             <tr id="table_tr_snap-cont">
                               <td class="item_position-prop body-2 py-1 px-1">Average</td>
@@ -180,7 +184,7 @@
                   </v-row>
                   <div class="px-3">
                     <v-card-title
-                      class="pa-0 justify-center mt-3 font-weight-thin caption"
+                      class="pa-0 justify-center secondary--text mt-3 font-weight-thin caption"
                     >Bid/ Ask Bar</v-card-title>
                     <v-progress-linear
                       :value="bidask"
@@ -190,7 +194,7 @@
                       class="mt-1"
                     ></v-progress-linear>
                     <v-card-title
-                      class="pa-0 justify-center mt-3 font-weight-thin caption"
+                      class="pa-0 justify-center secondary--text mt-3 font-weight-thin caption"
                     >Members Sentiments</v-card-title>
                     <v-progress-linear
                       value="50"
@@ -236,11 +240,11 @@
               <v-row no-gutters class="px-0 py-0">
                 <v-col sm="12" md="12" class="pa-0">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">Available Funds</v-card-title>
                     <v-spacer></v-spacer>
                     <v-card-title
-                      class="subtitle-1 px-0 py-2 secondary--text"
-                    >{{ nFormatter(availableFundsModel) }}</v-card-title>
+                      class="caption px-0 py-2 tertiary--text"
+                    >{{ availableFundsModel | numeral("0.00a") }}</v-card-title>
                   </v-row>
                   <v-select
                     :items="selectPortfolioModel"
@@ -256,7 +260,7 @@
                     :dark="lightSwitch == true"
                     :menu-props="{offsetY: true, dark: lightSwitch == true}"
                     light
-                    class="enter_amount-deposit-select ma-0 body-2"
+                    class="enter_amount-deposit-select ma-0 my-2 body-2"
                   >
                     <template slot="item" slot-scope="data">
                       <v-list-item-content
@@ -264,7 +268,7 @@
                         :style="{ background: cardbackground }"
                         style="padding: 12px 12px; margin: -16px;"
                       >
-                        <v-list-item-title v-html="data.item.name" class="text-uppercase caption"></v-list-item-title>
+                        <v-list-item-title v-html="data.item.name" class="text-capitalize caption"></v-list-item-title>
                       </v-list-item-content>
                     </template>
                   </v-select>
@@ -289,6 +293,7 @@
                     @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotModel"
                     text
                     icon
+                    small
                     color="success"
                   >
                     <v-icon>mdi-chevron-down</v-icon>
@@ -297,6 +302,7 @@
                     @click="quantityModel += parseFloat(boardLotModel)"
                     text
                     icon
+                    small
                     color="success"
                   >
                     <v-icon>mdi-chevron-up</v-icon>
@@ -321,16 +327,16 @@
                 </v-col>
                 <v-col cols="12">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title>
+                    <v-card-title class="caption pa-0 tertiary--text">Board lot</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                    <v-card-title class="caption pa-0 tertiary--text">{{ boardLotModel }}</v-card-title>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pb-5">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Total Cost</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">Total Cost</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostModel }}</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">{{ totalCostModel }}</v-card-title>
                   </v-row>
                 </v-col>
               </v-row>
@@ -364,7 +370,7 @@
                     <v-select
                       v-model="strategyModel"
                       append-icon="mdi-chevron-down"
-                      class="py-2 body-2"
+                      class="py-2 caption"
                       color="success"
                       :items="strategy"
                       item-color="success"
@@ -390,7 +396,7 @@
                       v-model="tradeplanModel"
                       item-color="success"
                       append-icon="mdi-chevron-down"
-                      class="py-2 body-2"
+                      class="py-2 caption"
                       color="success"
                       :dark="lightSwitch == true"
                       :menu-props="{offsetY: true, dark: lightSwitch == true}"
@@ -414,7 +420,7 @@
                     <v-select
                       v-model="emotionsModel"
                       item-color="success"
-                      class="py-2 body-2"
+                      class="py-2 caption"
                       color="success"
                       append-icon="mdi-chevron-down"
                       :items="emotions"
@@ -444,6 +450,7 @@
                 >
                   <v-textarea
                     color="white"
+                    :background-color="lightSwitch == 0 ? '#e3e9ed' : '#172431'"
                     class="white--text trading_notes-textarea body-2"
                     v-model="notesModel"
                     placeholder="Enter Notes"
@@ -519,18 +526,16 @@
                 </v-col>
                 <v-col cols="12">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title>
+                    <v-card-title class="caption pa-0 tertiary--text">Board lot</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                    <v-card-title class="caption pa-0 tertiary--text">{{ boardLotModel }}</v-card-title>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pb-5">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">Market Value</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title
-                      class="subtitle-1 px-0 py-2 secondary--text"
-                    >{{ totalCostSellModel }}</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">{{ totalCostSellModel }}</v-card-title>
                   </v-row>
                 </v-col>
               </v-row>
@@ -555,6 +560,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { BuyFees, SellFees } from "~/helpers/taxation";
 
 export default {
   props: ["visible"],
@@ -642,29 +648,60 @@ export default {
       stockList: "global/getStockList",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontcolor2: function() {
-      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+    /**
+     * fontcolor2 changes everytime user change theme, returns secondary font color
+     *
+     * @return  {string}  returns font color hexcode
+     */
+    fontcolor2() {
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6";
     },
-    fontColor: function() {
+    /**
+     * fontColor function it returns tertiary font color
+     *
+     * @return  {string}  returns font color hexcode
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#000000" : "#ffffff";
     },
-    fontColorTable: function() {
+    /**
+     * fontColorTable function it returns class
+     *
+     * @return  {string}  returns class name
+     */
+    fontColorTable() {
       return this.lightSwitch == 0
         ? "data_table-container"
         : "data_table-container-dark";
     },
-    fontColorDate: function() {
+    /**
+     * fontColorDate function it returns class
+     *
+     * @return  {string}  returns class name
+     */
+    fontColorDate() {
       return this.lightSwitch == 0
         ? "datepicker-container-light"
         : "datepicker-container";
     },
-    cardbackground: function() {
+    /**
+     * cardbackground function it returns hexcode
+     *
+     * @return  {string}  returns background color
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     show: {
+      /**
+       * get data from props this.visible
+       */
       get() {
         return this.visible;
       },
+      /**
+       * once close set data back to props
+       */
       set(value) {
         if (!value) {
           this.$emit("close");
@@ -701,40 +738,89 @@ export default {
     }
   },
   watch: {
-    openPosition: function() {
+    /**
+     * get all user trade
+     *
+     * @return  {[array]}  returns array of trades
+     */
+    openPosition() {
       this.getSellItems();
     },
-    stockList: function() {
+    /**
+     * get stocklist only info
+     *
+     * @return  {[array]}  returns array of stocklist data
+     */
+    stockList() {
       this.initPortfolio();
 
       this.stocklist = this.stockList.data;
       this.stocklistBuy = this.stockList.data;
     },
-    GetSelectStock: function() {
+    /**
+     * watch GetSelectStock model and execute function that
+     * enable or disable confirmbutton
+     *
+     * @return  returns prop to attribute confirm button
+     */
+    GetSelectStock() {
       this.selectWatch();
     },
-    priceModel: function(newValue) {
+    /**
+     * function pricemodel watch to assign a field required only in buy
+     *
+     * @return   {number}   returns calculated with fees
+     */
+    priceModel() {
       this.buyWatch();
-
-      const result = parseFloat(newValue);
-      this.priceModel = result;
     },
-    priceSellModel: function(newValue) {
+    /**
+     * function pricemodel watch to assign a field required only in sell
+     *
+     * @param    {number}  newValue  params that holds the new value of priceSellModel
+     *
+     * @return   {number}   returns calculated with fees
+     */
+    priceSellModel(newValue) {
       this.sellWatch();
       const result = parseFloat(newValue);
       this.priceSellModel = result;
     },
+    /**
+     * function quantityModel watch to assign a field required only in buy quantity
+     *
+     * @param    {number}  newValue  params that holds the new value of quantityModel
+     *
+     * @return   {number}   returns calculated with fees
+     */
     quantityModel(value) {
       this.buyWatch();
       this.quantityModel = parseFloat(value);
     },
+    /**
+     * function quantitySellModel watch to assign a field required only in sell quantity
+     *
+     * @param    {number}  newValue  params that holds the new value of quantitySellModel
+     *
+     * @return   {number}   returns calculated with fees
+     */
     quantitySellModel(value) {
       this.sellWatch();
       this.quantitySellModel = parseFloat(value);
     },
-    date: function() {
+    /**
+     * date function watch if changes
+     *
+     * @return   {date}   returns user inputted date
+     */
+    date() {
       this.dateWatch();
     },
+    /**
+     * get latest user portfolio list
+     *
+     * @return  {[array]}  returns array of portfolio list
+     */
     userPortfolio() {
       this.getUserPortfolio();
     }
@@ -751,12 +837,17 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
+    /**
+     * function initPortfolio on mount: date
+     *
+     * @return  {string}  returns formatted date
+     */
     initPortfolio() {
-      var tim = new Date();
-      var time =
+      let tim = new Date();
+      let time =
         tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var today = new Date(this.date),
+      let today = new Date(this.date),
         month = "" + (today.getMonth() + 1),
         day = "" + today.getDate(),
         year = today.getFullYear();
@@ -764,10 +855,15 @@ export default {
       if (month.length < 2) month = "0" + month;
       if (day.length < 2) day = "0" + day;
 
-      var dateTime = [day, month, year].join("-") + " " + time;
+      let dateTime = [day, month, year].join("-") + " " + time;
       this.dateModel = dateTime;
       this.YMDModel = [day, month, year].join("-");
     },
+    /**
+     * function to buy trade
+     *
+     * @return  {object}  returns confirmation trade
+     */
     buyListArray() {
       let portfolio_id = this.defaultPortfolioId;
       let stock = this.GetSelectStock;
@@ -821,7 +917,12 @@ export default {
           }
         });
     },
-    sellListArray: function() {
+    /**
+     * function to sell trade
+     *
+     * @return  {object}  returns confirmation trade
+     */
+    sellListArray() {
       let portfolio_id = this.defaultPortfolioId;
       let stock = this.GetSelectStock;
       let aveprice =
@@ -870,16 +971,31 @@ export default {
           }
         });
     },
+    /**
+     * function buy tab switch to buy
+     *
+     * @return  returns property true or false
+     */
     toBuy() {
       this.stocklist = this.stocklistBuy;
       this.continuesellBtn = false;
       this.continuebuyBtn = true;
     },
+    /**
+     * function buy tab switch to sell
+     *
+     * @return  returns property true or false
+     */
     toSell() {
       this.stocklist = this.openPosition;
       this.continuebuyBtn = false;
       this.continuesellBtn = true;
     },
+    /**
+     * function to get tradelogs
+     *
+     * @return  returns object of data
+     */
     getSellItems() {
       for (let i = 0; i < this.openPosition.length; i++) {
         this.openPosition[i] = {
@@ -889,6 +1005,13 @@ export default {
         };
       }
     },
+    /**
+     * function on change item, and assigned boardlot and plotting tradelog data to your new inpt
+     *
+     * @param   {object}  Obj  handles the object of changed item
+     *
+     * @return  {object}       return object data of item
+     */
     getStockDetails(Obj) {
       const params = {
         "symbol-id": Obj
@@ -896,7 +1019,6 @@ export default {
       this.$api.chart.stocks.history(params).then(
         function(result) {
           this.stockSymbolGet = result.data;
-          console.log(this.stockSymbolGet);
 
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.boardLotModel = 1000000;
@@ -922,8 +1044,8 @@ export default {
           this.high = result.data.high.toFixed(2);
           this.wklow = result.data.weekyearlow.toFixed(2);
           this.wkhigh = result.data.weekyearhigh.toFixed(2);
-          this.volm = this.nFormatter(result.data.volume);
-          this.vole = this.nFormatter(result.data.value);
+          this.volm = result.data.volum;
+          this.vole = result.data.value;
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
           this.priceModel = result.data.last;
@@ -936,7 +1058,6 @@ export default {
           let stockDataList = this.openPosition[i];
 
           if (stockDataList.stock_id == Obj) {
-            // this.priceSellModel = stockDataList.metas.buy_price;
             this.avepriceSell = stockDataList.average_price;
             this.quantitySellModel = stockDataList.position;
             this.AvailableBoardLot = stockDataList.position;
@@ -960,22 +1081,15 @@ export default {
         }.bind(this)
       );
     },
-    nFormatter(num) {
-      if (num >= 1000000000) {
-        return (num / 1000000000).toFixed(2).replace(/\.0$/, "") + "B";
-      }
-      if (num >= 1000000) {
-        return (num / 1000000).toFixed(2).replace(/\.0$/, "") + "M";
-      }
-      if (num >= 1000) {
-        return (num / 1000).toFixed(2).replace(/\.0$/, "") + "K";
-      }
-      return num;
-    },
+    /**
+     * get only all real portfolio
+     *
+     * @return  {[array]}  returns array of portfolio
+     */
     getUserPortfolio() {
       this.selectPortfolioModel = [];
       if (this.userPortfolio.length != 0) {
-        const toFindReal = "real"; // what we want to count
+        const toFindReal = "real";
         for (let i = 0; i < this.userPortfolio.length; i++) {
           let portfolioListPush1 = this.userPortfolio[i];
           if (portfolioListPush1.type === toFindReal) {
@@ -984,6 +1098,13 @@ export default {
         }
       }
     },
+    /**
+     * onchange function on which portfolio do you want to save trade
+     *
+     * @param   {object}  obj  object data of selected portfolio
+     *
+     * @return  {object}       returns select portfolio confirmation
+     */
     whereToSave(obj) {
       const portfoliofundsparams = {
         fund: obj
@@ -996,6 +1117,11 @@ export default {
         }.bind(this)
       );
     },
+    /**
+     * function to check if all fields are correctly inputted
+     *
+     * @return  returns property to button if true=disable or false=enable
+     */
     selectWatch() {
       if (this.typePortfolioModel != null) {
         this.continueButtonDisable = true;
@@ -1003,18 +1129,16 @@ export default {
         this.continueButtonDisable = false;
       }
     },
-    buyWatch(newValue) {
+    /**
+     * function validation on buy trade form
+     *
+     * @return  returns properties to confirmation button
+     */
+    buyWatch() {
       let buyResult =
         parseFloat(this.priceModel) * parseFloat(this.quantityModel);
-      let dpartcommission = buyResult * 0.0025;
-      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-      // TAX
-      let dtax = dcommission * 0.12;
-      // Transfer Fee
-      let dtransferfee = buyResult * 0.00005;
-      // SCCP
-      let dsccp = buyResult * 0.0001;
-      let dall = buyResult + dcommission + dtax + dtransferfee + dsccp;
+
+      let dall = BuyFees(buyResult);
       this.totalCostModel = dall
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -1044,21 +1168,17 @@ export default {
         }
       }
     },
+    /**
+     * function validation on sell trade form
+     *
+     * @return  returns properties to confirmation button
+     */
     sellWatch(newValue) {
       let sellResult =
         parseFloat(this.quantitySellModel) * parseFloat(this.priceSellModel);
-      let dpartcommission = sellResult * 0.0025;
-      let dcommission = dpartcommission > 20 ? dpartcommission : 20;
-      // TAX
-      let dtax = dcommission * 0.12;
-      // Transfer Fee
-      let dtransferfee = sellResult * 0.00005;
-      // SCCP
-      let dsccp = sellResult * 0.0001;
-      let dsell = sellResult * 0.006;
-      let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
-      let result = sellResult - dall;
-      this.totalCostSellModel = result
+
+      let dall = SellFees(sellResult);
+      this.totalCostSellModel = dall
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
@@ -1089,12 +1209,17 @@ export default {
         }
       }
     },
+    /**
+     * watch date function every keyup of a user if value changes
+     *
+     * @return  {string}  returns formatted date
+     */
     dateWatch() {
-      var tim = new Date();
-      var time =
+      let tim = new Date();
+      let time =
         tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
 
-      var today = new Date(this.date),
+      let today = new Date(this.date),
         month = "" + (today.getMonth() + 1),
         day = "" + today.getDate(),
         year = today.getFullYear();
@@ -1102,7 +1227,7 @@ export default {
       if (month.length < 2) month = "0" + month;
       if (day.length < 2) day = "0" + day;
 
-      var dateTime = [day, month, year].join("-") + " " + time;
+      let dateTime = [day, month, year].join("-") + " " + time;
       this.dateModel = dateTime;
       this.YMDModel = [day, month, year].join("-");
     }
@@ -1113,9 +1238,6 @@ export default {
 .tab_menu-top.v-tab--active {
   color: #03dac5 !important;
 }
-/* .menuable__content__active {
-  top: 180px !important;
-} */
 </style>
 <style>
 .data_table-container.v-data-table td,
@@ -1182,7 +1304,7 @@ export default {
 .separator {
   display: block;
   height: 1px;
-  background: #000;
+  background: #172431;
 }
 .confirmation_message-confirm input {
   text-align: right;
@@ -1217,5 +1339,14 @@ export default {
 .datepicker-container .v-date-picker-title__date,
 .theme--light.datepicker-container-light .v-date-picker-title__date {
   color: #03dac5 !important;
+}
+.positive {
+  color: #03dac5;
+}
+.negative {
+  color: #f44336;
+}
+.neutral {
+  color: #535358;
 }
 </style>

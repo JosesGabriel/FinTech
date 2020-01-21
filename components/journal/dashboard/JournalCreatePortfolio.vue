@@ -72,6 +72,11 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * returns background color
+     *
+     * @return  {function}  returns string
+     */
     cardbackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },

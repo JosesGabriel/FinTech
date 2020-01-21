@@ -146,11 +146,6 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Status",
-  data() {
-    return {
-      textcolor: "blue"
-    };
-  },
   computed: {
     ...mapGetters({
       stock: "chart/stock",
@@ -169,33 +164,84 @@ export default {
     })
   },
   watch: {
+    /**
+     * blink stock close value
+     *
+     * @return
+     */
     stock_close() {
       this.updateEffect("stock__close");
     },
+    /**
+     * blink stock open value
+     *
+     * @return
+     */
+
     stock_open() {
       this.updateEffect("stock__open");
     },
+    /**
+     * blink stock low value
+     *
+     * @return
+     */
     stock_low() {
       this.updateEffect("stock__low");
     },
+    /**
+     * blink stock high value
+     *
+     * @return
+     */
     stock_high() {
       this.updateEffect("stock__high");
     },
+    /**
+     * blink stock volume value
+     *
+     * @return
+     */
     stock_volume() {
       this.updateEffect("stock__volume");
     },
+    /**
+     * blink stock value value
+     *
+     * @return
+     */
     stock_value() {
       this.updateEffect("stock__value");
     },
+    /**
+     * blink stock average value
+     *
+     * @return
+     */
     stock_average() {
       this.updateEffect("stock__average");
     },
+    /**
+     * blink stock trades value
+     *
+     * @return
+     */
     stock_trades() {
       this.updateEffect("stock__trades");
     },
+    /**
+     * blink stock week year low value
+     *
+     * @return
+     */
     stock_weekyearlow() {
       this.updateEffect("stock__weekyearlow");
     },
+    /**
+     * blink stock week year high
+     *
+     * @return
+     */
     stock_weekyearhigh() {
       this.updateEffect("stock__weekyearhigh");
     }

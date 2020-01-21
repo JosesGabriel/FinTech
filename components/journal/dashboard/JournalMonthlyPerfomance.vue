@@ -2,10 +2,10 @@
   <v-col ref="componentWrapper" class="pa-0" cols="7" sm="7" md="7">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">MONTHLY PERFORMANCE</h6>
+      <h6 class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">MONTHLY PERFORMANCE</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon>mdi-share-variant</v-icon>
+        <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-col class="pa-0" cols="12" sm="12" md="12">
@@ -27,13 +27,39 @@
   </v-col>
 </template>
 <script>
-import shareModal from "~/components/modals/share";
+import shareModal from "~/components/modals/Share";
 
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
     shareModal
+  },
+  computed: {
+    ...mapGetters({
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      journalCharts: "journal/getJournalCharts",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    /**
+     * returns secondary font color
+     *
+     * @return  {string}  returns string
+     */
+    fontColor() {
+      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+    },
+    /**
+     * returns attribute border bottom
+     *
+     * @return  {string}  returns string
+     */
+    borderColor() {
+      return this.lightSwitch == 0
+        ? "border-bottom: 1px solid #535358"
+        : "border-bottom: 1px solid #172431";
+    }
   },
   data() {
     return {
@@ -204,24 +230,7 @@ export default {
       }
     };
   },
-  computed: {
-    ...mapGetters({
-      defaultPortfolioId: "journal/getDefaultPortfolioId",
-      renderPortfolioKey: "journal/getRenderPortfolioKey",
-      journalCharts: "journal/getJournalCharts",
-      lightSwitch: "global/getLightSwitch"
-    }),
-    fontColor() {
-      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
-    },
-    borderColor() {
-      return this.lightSwitch == 0
-        ? "border-bottom: 1px solid #b6b6b6"
-        : "border-bottom: 1px solid #535358";
-    }
-  },
   mounted() {
-    this.getMPerformance();
     this.lightSwitcher();
   },
   watch: {

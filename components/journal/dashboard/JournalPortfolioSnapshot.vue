@@ -2,10 +2,10 @@
   <v-col ref="componentWrapper" class="pa-0" cols="4" sm="4" md="4">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 pb-2 pt-5">
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">PORTFOLIO SNAPSHOT</h6>
+      <h6 class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">PORTFOLIO SNAPSHOT</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon>mdi-share-variant</v-icon>
+        <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-col class="pa-0">
@@ -27,22 +27,22 @@
         >
           <template v-slot:default>
             <tbody>
-              <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Starting Capital</td>
+              <tr id="table_tr_snap-cont tertiary--text">
+                <td class="item_position-prop tertiary--text px-3 py-1 caption">Starting Capital</td>
                 <td
-                  class="item_position-prop text-right px-3 py-1 caption"
+                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
                 >{{ startingCapital | numeral("0,0.00") }}</td>
               </tr>
-              <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Year to Date P/L</td>
+              <tr id="table_tr_snap-cont tertiary--text">
+                <td class="item_position-prop tertiary--text px-3 py-1 caption">Year to Date P/L</td>
                 <td
-                  class="item_position-prop text-right px-3 py-1 caption"
+                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
                 >{{ yearTDPL | numeral("0,0.00") }}</td>
               </tr>
-              <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Portfolio YTD %</td>
+              <tr id="table_tr_snap-cont tertiary--text">
+                <td class="item_position-prop tertiary--text px-3 py-1 caption">Portfolio YTD %</td>
                 <td
-                  class="item_position-prop text-right px-3 py-1 caption"
+                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
                 >{{ portfolioTDPL | numeral("0,0.00") }}</td>
               </tr>
             </tbody>
@@ -68,21 +68,21 @@
           <template v-slot:default>
             <tbody>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Deposits</td>
+                <td class="item_position-prop tertiary--text px-3 py-1 caption">Deposits</td>
                 <td
-                  class="item_position-prop text-right px-3 py-1 caption"
+                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
                 >{{ Deposits | numeral("0,0.00") }}</td>
               </tr>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Withdrawals</td>
+                <td class="item_position-prop tertiary--text px-3 py-1 caption">Withdrawals</td>
                 <td
-                  class="item_position-prop text-right px-3 py-1 caption"
+                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
                 >{{ Withdrawals | numeral("0,0.00") }}</td>
               </tr>
               <tr id="table_tr_snap-cont">
-                <td class="item_position-prop px-3 py-1 caption">Equity</td>
+                <td class="item_position-prop tertiary--text px-3 py-1 caption">Equity</td>
                 <td
-                  class="item_position-prop text-right px-3 py-1 caption"
+                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
                 >{{ Equity | numeral("0,0.00") }}</td>
               </tr>
             </tbody>
@@ -94,7 +94,7 @@
   </v-col>
 </template>
 <script>
-import shareModal from "~/components/modals/share";
+import shareModal from "~/components/modals/Share";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -108,14 +108,29 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    /**
+     * returns secondary font color
+     *
+     * @return  {string}  returns string
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    cardbackground: function() {
+    /**
+     * returns background color
+     *
+     * @return  {string}  returns string
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    borderColor: function() {
-      return this.lightSwitch == 0 ? "1px solid #b6b6b6" : "1px solid #535358";
+    /**
+     * returns border value
+     *
+     * @return  {string}  returns string
+     */
+    borderColor() {
+      return this.lightSwitch == 0 ? "1px solid #535358" : "1px solid #172431";
     }
   },
   data() {
@@ -172,7 +187,7 @@ export default {
       this.showShareForm = true;
     },
     /**
-     * getSnapshot will work on ploting/updating table 
+     * getSnapshot will work on ploting/updating table
      *
      * @return  {array}  data to update chart
      */
@@ -191,7 +206,7 @@ export default {
         });
       }
       this.componentKeys++;
-    },
+    }
   }
 };
 </script>

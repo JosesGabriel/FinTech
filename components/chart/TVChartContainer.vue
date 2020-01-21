@@ -113,8 +113,8 @@ export default {
       table: "chart/getTable",
       symbolid: "chart/symbolid",
       stock: "chart/stock",
-      maximize_table: "chart/getTableMaximize",
-      fullscreen_table: "chart/getTableFullscreen",
+      maximizeTable: "chart/getTableMaximize",
+      fullscreenTable: "chart/getTableFullscreen",
       lightSwitch: "global/getLightSwitch",
       marketCode: "chart/marketCode"
     }),
@@ -146,7 +146,7 @@ export default {
         this.chartViewClass = "chartViewClass_4";
       }
 
-      if (this.maximize_table) {
+      if (this.maximizeTable) {
         switch (this.chartViewId) {
           case 1:
             this.chartViewId = 5;
@@ -160,7 +160,7 @@ export default {
         }
       }
 
-      if (this.fullscreen_table) {
+      if (this.fullscreenTable) {
         this.chartViewId = 7;
         this.chartViewClass = "chartViewClass_7";
       }

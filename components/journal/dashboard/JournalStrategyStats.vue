@@ -7,8 +7,8 @@
         :style="borderColor"
       >
         <h6
-          class="font-weight-regular subtitle-2"
-          :style="{ color: fontColor }"
+          class="font-weight-bold subtitle-2"
+          :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
         >
           STRATEGY STATISTICS
         </h6>
@@ -19,7 +19,7 @@
           :dark="lightSwitch == 0 ? false : true"
           @click="showShareModal()"
         >
-          <v-icon>mdi-share-variant</v-icon>
+          <v-icon small color="tertiary">mdi-share-variant</v-icon>
         </v-btn>
       </v-card-title>
     </v-col>
@@ -40,7 +40,7 @@
 <script>
 import JournalStrategyStatsLogs from "~/components/journal/dashboard/JournalStrategyStatsLogs";
 import JournalWinLoss from "~/components/journal/dashboard/JournalWinLoss";
-import shareModal from "~/components/modals/share";
+import shareModal from "~/components/modals/Share";
 import { mapGetters } from "vuex";
 
 export default {
@@ -53,13 +53,23 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    /**
+     * returns secondary font color
+     *
+     * @return  {string}  returns string
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    borderColor: function() {
+    /**
+     * returns attribute border color
+     *
+     * @return  {string}  returns string
+     */
+    borderColor() {
       return this.lightSwitch == 0
-        ? "border-bottom: 1px solid #b6b6b6"
-        : "border-bottom: 1px solid #535358";
+        ? "border-bottom: 1px solid #535358"
+        : "border-bottom: 1px solid #172431";
     }
   },
   data() {
