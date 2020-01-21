@@ -58,7 +58,7 @@
               Broker
             </th>
             <th
-              class="text-right j_header secondary_color pt-2"
+              class="text-left j_header secondary_color pt-2"
               @click="sortArray('buy_volume')"
             >
               Volume

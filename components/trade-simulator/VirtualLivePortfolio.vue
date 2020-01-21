@@ -93,7 +93,6 @@
 
     </v-data-table>
 
-
     <v-row>
       <v-col
         style="font-size: 12px;"
@@ -101,7 +100,7 @@
         width="100%"
         :style="{ color: primaryColor }"
       >
-        Total Profit/Loss as of {{ this.date }}:
+        Total Profit/Loss as of {{ this.dateformat }}:
         <span
           class="ml-3 mr-4"
           :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')"
@@ -219,15 +218,17 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
+            text
             color="success"
-            class="text-capitalize black--text mt-0 mb-2"
+            class="text-capitalize mt-0 mb-2"
             light
             @click="showEditForm = false"
           >{{ (this.editDetails == 'edit' ? 'Cancel' : 'Close') }}</v-btn>
 
           <v-btn
+            text
             color="success"
-            class="text-capitalize black--text mt-0 mb-2"
+            class="text-capitalize mt-0 mb-2"
             light
             @click="editLive"
             :class="(this.editDetails == 'edit' ? '' : 'nodisplay')"
@@ -311,12 +312,20 @@ export default {
       totalmvalue: 0,
       dayprior: 0,
       priorProfitLoss: 0,
+      totalPriorProfitLoss: 0,
       date: new Date().toISOString().substr(0, 10),
       filtered: '',
       lastprice: 0,
       showDelete: false,
       confirmdelete: false,
       itemToDelete: '',
+      monthNames: [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+      ],
+      dateformat: '',
     };
   },
   components: {
@@ -371,6 +380,8 @@ export default {
       const openparams2 = {
         fund: this.simulatorPortfolioID
       };
+      let d = new Date();
+      this.dateformat = this.monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); 
       this.totalProfitLoss = 0;
       this.totalPerf = 0;
       this.openposition = [];
@@ -409,9 +420,11 @@ export default {
               this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
           }
            this.getDayChange();
+           
         }.bind(this)
       );
-      
+   
+
     },
     /**
      * delete confirmation
@@ -542,11 +555,15 @@ export default {
       let currentProfitLoss = 0;
       this.priorProfitLoss = 0;
       let daychangeperf = 0;
-
+      let mvalueprior = 0;
+      let dChange = [];
+      let pNum = 0;
+      let saveData = false;
       let d = new Date();
       let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
 
       for (let index = 0; index < this.portfolioLogs.length; index++) {
+           
            let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];     
                   const params = {
                     "symbol-id": this.portfolioLogs[index].metas.stock_id,
@@ -559,18 +576,30 @@ export default {
                       let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
                       let tcost =
                         this.portfolioLogs[index].position *
-                        this.portfolioLogs[index].average_price;                  
-                      if (pdate != dformat) {                        
+                        this.portfolioLogs[index].average_price;   
+
+                      //let retrievedObject = localStorage.getItem('SAMPLE7');
+                      //let priorDaychange = JSON.parse(retrievedObject);
+
+                     if (pdate != dformat) {      
+                        pNum++;                  
                         let priorPrice = result.data.c[1];
+                        console.log('Prior Price -'+ priorPrice);
                         let priorbuyResult =
                           this.portfolioLogs[index].position *
                           parseFloat(priorPrice).toFixed(2);
                         let priormvalue = this.fees(priorbuyResult);
+
+                        mvalueprior = mvalueprior + priorbuyResult;
+                        //console.log('Prior Market Value -'+ mvalueprior);
+
                         let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
                         this.priorProfitLoss =
-                          parseFloat(this.priorProfitLoss) + parseFloat(priorprofit);                              
-                      }
-                              
+                          parseFloat(this.priorProfitLoss) + parseFloat(priorprofit); 
+                                    
+                      } 
+                      
+
                       let currentPrice = result.data.c[0];
                       let currentbuyResult =
                         this.portfolioLogs[index].position *
@@ -579,21 +608,25 @@ export default {
                       let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
                       currentProfitLoss =
                         parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-                        
+                        console.log('Total Prior Profitssss -', this.priorProfitLoss);
                         let daychange =
                            parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
                         if(this.priorProfitLoss != 0 ){                          
                           let dperf = parseFloat(this.Capital) + this.priorProfitLoss;                        
                           daychangeperf = (daychange / dperf) * 100;
-                        }                     
+                        }             
+                            
                       this.$emit("DayChange", daychange);
                       this.$emit("DayChangePerc", daychangeperf);
 
                     }.bind(this)
                   );
+
       }
-      
+
+            
     },
+
     /**
      * Calculate the fees based on Price
      *

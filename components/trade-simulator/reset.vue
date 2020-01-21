@@ -10,7 +10,7 @@
         <h1 class="font-weight-regular body-1">
           This action is final and cannot be undone.
           <br />Give me
-          <span style="color:#00FFC3;">HELL YEAH</span> to confirm.
+          <span style="color:#03dac5;">HELL YEAH</span> to confirm.
         </h1>
       </v-card-title>
       <v-card color="transparent" class="d-flex justify-center" elevation="0"></v-card>
@@ -42,7 +42,7 @@
               <h1
                 class="font-weight-regular body-1"
                 @click="resetLive"
-                style="color:#00FFC3;"
+                style="color:#03dac5;"
               >I UNDERSTAND, DO IT</h1>
             </v-card-title>
           </v-col>
@@ -107,17 +107,17 @@ export default {
   text-transform: uppercase;
 }
 .confirmation_button-reset-ok {
-  background: #00ffc3;
+  background: #03dac5;
 }
 .confirmation_button-reset-not {
   background: #00080e;
 }
 .confirmation_button-reset-ok:hover {
-  background: #00ffc3;
+  background: #03dac5;
   cursor: pointer;
 }
 .confirmation_button-reset-not:hover {
-  background: #00ffc3;
+  background: #03dac5;
   cursor: pointer;
 }
 .confirmation_button-reset-ok:hover h1,
