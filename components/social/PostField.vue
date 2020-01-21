@@ -20,7 +20,7 @@
       <div class="postField__textareaContainer">
         <v-textarea
           v-if="$auth.loggedIn"
-          v-model="postFieldModel"
+          v-model="postField"
           :placeholder="
             'Hey ' +
               $auth.user.data.user.username +
@@ -35,21 +35,35 @@
           solo
           flat
           background-color="transparent"
-          :loading="postField__loading"
-          >{{ postFieldModel }}</v-textarea
+          :loading="postFieldLoader"
+          @keyup="catcher"
+          >{{ postField }}</v-textarea
         >
         <v-textarea
           v-else
-          v-model="postFieldModel"
+          v-model="postField"
           label="Hey Guest, penny for your thoughts?"
           class="pt-0"
           rows="3"
           row-height="25"
           color="primary"
           required
-          :loading="postField__loading"
-          >{{ postFieldModel }}</v-textarea
+          :loading="postFieldLoader"
+          >{{ postField }}</v-textarea
         >
+        <div v-if="stockTagMode" class="stockSuggestions__wrapper">
+          <v-btn
+            v-for="n in stockSuggestionsArray.length"
+            :key="n"
+            class="black--text mr-2 mb-2"
+            depressed
+            color="success"
+            x-small
+            @click="appendToField(stockSuggestionsArray[n - 1].symbol)"
+          >
+            {{ stockSuggestionsArray[n - 1].symbol }}
+          </v-btn>
+        </div>
         <v-divider class="postField__divider" />
         <div>
           <input
@@ -64,12 +78,12 @@
             <!-- <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
                             <v-icon color="white">mdi-close</v-icon>
                         </v-btn> -->
-            <!-- <img :src="postField__previewImage" class="postField__previewImage" v-if="post__isImage"/>
-                        <video controls :src="postField__previewImage" class="postField__previewImage" v-if="!post__isImage"/> -->
+            <!-- <img :src="previewImage" class="postField__previewImage" v-if="postIsImage"/>
+                        <video controls :src="previewImage" class="postField__previewImage" v-if="!postIsImage"/> -->
             <div class="postField__imageWrapper">
               <div
-                v-for="n in postField__imagesArray.length"
-                v-show="postField__imagesArray[n - 1] != ''"
+                v-for="n in imagesArray.length"
+                v-show="imagesArray[n - 1] != ''"
                 :key="n"
                 class="postField__imageCard px-1"
               >
@@ -84,14 +98,14 @@
                   <v-icon color="white">mdi-close</v-icon>
                 </v-btn>
                 <video
-                  v-if="!post__isImage"
+                  v-if="!postIsImage"
                   controls
-                  :src="postField__imagesArray[n - 1]"
+                  :src="imagesArray[n - 1]"
                   class="postField__imageWrapper--image"
                 />
                 <img
                   v-else
-                  :src="postField__imagesArray[n - 1]"
+                  :src="imagesArray[n - 1]"
                   class="postField__imageWrapper--image"
                 />
               </div>
@@ -133,7 +147,7 @@
             right
             absolute
             color="success"
-            :disabled="!postFieldModel"
+            :disabled="!postField"
             @click="postFieldSubmit"
           >
             Post
@@ -149,12 +163,15 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      post__isImage: null,
-      postFieldModel: null,
-      postField__previewImage: [],
-      postField__loading: false,
-      postField__imagesArray: [],
-      postField__cloudArray: [],
+      postIsImage: null,
+      postField: null,
+      previewImage: [],
+      postFieldLoader: false,
+      imagesArray: [],
+      cloudArray: [],
+      stockSuggestionsArray: [],
+      stockTagMode: false,
+      currentTaggedStock: "",
       loader: false
     };
   },
@@ -168,6 +185,73 @@ export default {
       setAlert: "global/setAlert"
     }),
     /**
+     * Fires when user clicks Suggested stock button. Appends to PostField.
+     *
+     * @param   {string}  symbol
+     *
+     * @return
+     */
+    appendToField(symbol) {
+      let index = this.postField.lastIndexOf("$");
+      this.postField = this.postField.slice(0, index + 1);
+      this.postField += symbol;
+    },
+    /**
+     * Searches from stock list based on stock that user is currently typing, fires when stockTagMode is true.
+     *
+     * @return
+     */
+    search() {
+      const params = {
+        exchange: "PSE",
+        query: this.currentTaggedStock,
+        limit: "20",
+        type: "stock"
+      };
+      this.$api.chart.charts.search(params).then(
+        function(result) {
+          this.stockSuggestionsArray = result.data;
+        }.bind(this)
+      );
+    },
+    /**
+     * Fires at keyup event on PostField. Used for stock tagging.
+     * Checks if user typed a dollar sign ($) then toggles stockTagMode
+     *
+     * @param   {object}  e
+     *
+     * @return
+     */
+    catcher(e) {
+      let regExp = /^[0-9a-zA-Z]+$/;
+      if (e.key == "$") {
+        this.stockTagMode = true;
+      } else if (this.stockTagMode && !regExp.test(e.key)) {
+        this.stockTagMode = false;
+        this.currentTaggedStock = "";
+      }
+
+      if (regExp.test(e.key) && e.key.length == 1 && this.stockTagMode) {
+        this.currentTaggedStock += e.key;
+        this.search();
+      } else if (e.key == "Backspace") {
+        this.currentTaggedStock = this.currentTaggedStock.slice(0, -1);
+      }
+
+      if (
+        this.stockTagMode &&
+        e.key == "Backspace" &&
+        this.currentTaggedStock == ""
+      ) {
+        this.stockTagMode = false;
+      }
+
+      if (this.postField == "") {
+        this.stockTagMode = false;
+        this.currentTaggedStock = "";
+      }
+    },
+    /**
      * Fires when user clicks post button in social
      * Will also run some specific code if user has images
      * attached to their post
@@ -175,13 +259,13 @@ export default {
      * @return
      */
     postFieldSubmit() {
-      this.postField__loading = true;
+      this.postFieldLoader = "success";
 
       if (this.$refs.postField__inputRef.files) {
         //text + image
         const params = {
-          content: this.postFieldModel,
-          attachments: this.postField__cloudArray,
+          content: this.postField,
+          attachments: this.cloudArray,
           visibility: "public",
           status: "active"
         };
@@ -199,7 +283,7 @@ export default {
       } else {
         // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
         const params = {
-          content: this.postFieldModel,
+          content: this.postField,
           visibility: "public",
           status: "active"
         };
@@ -239,7 +323,7 @@ export default {
           .create(formData)
           .then(
             function(response) {
-              this.postField__cloudArray.push(response.data.file.url);
+              this.cloudArray.push(response.data.file.url);
               this.loader = false;
             }.bind(this)
           )
@@ -277,9 +361,9 @@ export default {
       var reader = new FileReader();
       reader.onload = e => {
         type == "image"
-          ? (this.post__isImage = true)
-          : (this.post__isImage = false);
-        this.postField__imagesArray.push(e.target.result);
+          ? (this.postIsImage = true)
+          : (this.postIsImage = false);
+        this.imagesArray.push(e.target.result);
       };
       reader.readAsDataURL(file);
     },
@@ -291,7 +375,7 @@ export default {
      * @return
      */
     removeImage(closeId) {
-      this.$set(this.postField__imagesArray, closeId - 1, "");
+      this.$set(this.imagesArray, closeId - 1, "");
     },
     /**
      * clears post text field
@@ -302,8 +386,8 @@ export default {
      * @return
      */
     clearInputs(type, message) {
-      this.postFieldModel = "";
-      this.postField__loading = false;
+      this.postField = "";
+      this.postFieldLoader = false;
 
       let alert = {
         model: true,
@@ -370,5 +454,9 @@ export default {
 .postField__textarea {
   position: relative;
   bottom: 10px;
+}
+.stockSuggestions__wrapper {
+  position: relative;
+  right: 45px;
 }
 </style>
