@@ -1,13 +1,13 @@
 <template>
   <v-col class="pa-0">
     <v-content class="content__vynduebutton pl-2">
-        <img class="img__vyndue" @click="showVyndueChat" src="/icon/vyndue2.svg" title="Vyndue"></img
+        <img class="img__vyndue" src="/icon/vyndue2.svg" title="Vyndue" @click="showVyndueChat"></img
       >
     </v-content>
     <!---------------->
     <template>
       <v-container :class="this.show ? 'display' : 'no_display' " class="vyndue__chat">
-          <ChatClient v-on:showChat="ShowDialog"/>
+          <ChatClient @showChat="ShowDialog"/>
       </v-container>
     </template>
     <!---------------->
@@ -26,6 +26,7 @@
       </v-btn>
 
       <v-btn
+        v-show="false"
         small
         icon
         :color="ticker ? 'success' : '#BBB'"
@@ -119,6 +120,10 @@ export default {
       show: false,
     };
   },
+  mounted(){
+      console.log('hide ticker');
+      this.hideTicker();
+  },
   computed: {
     ...mapGetters({
       ticker: "chart/getTicker",
@@ -176,6 +181,15 @@ export default {
         this.$bus.$emit("adjustChartView");
       }
       this.activeTab = tab;
+    },
+    /**
+     * hide ticker upon load
+     * // TODO 
+     * @return 
+     */
+    hideTicker(){
+      this.setTicker(false);
+      this.$bus.$emit("adjustChartView");
     },
     /**
      * toggle view fullscreen of table component
