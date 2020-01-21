@@ -21,7 +21,7 @@
       <!-- top -->
       <v-content>
         <v-row class="ml-3 mr-1 mt-1 mb-1">
-          <v-col class="mr-12 mb-0 py-0 vt_realized">
+          <v-col class="mr-9 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Position
             </v-row>
@@ -32,7 +32,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-12 mb-0 py-0 vt_realized">
+          <v-col class="mr-9 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Ave. Price (<span class="caption">PHP</span>)
             </v-row>
@@ -43,7 +43,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-12 mb-0 py-0 vt_realized">
+          <v-col class="mr-9 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Total Cost (<span class="caption">PHP</span>)
             </v-row>
@@ -54,7 +54,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-12 mb-0 py-0 vt_realized">
+          <v-col class="mr-9 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Market Value (<span class="caption">PHP</span>)
             </v-row>
@@ -65,7 +65,7 @@
             </v-row>
           </v-col>
 
-          <v-col class="mr-12 mb-0 py-0 vt_realized">
+          <v-col class="mr-9 mb-0 py-0 vt_realized">
             <v-row class="mt-1 pl-3 caption">
               Profit (<span class="caption">PHP</span>)
             </v-row>
@@ -115,6 +115,7 @@
         class="data_table-container"
         :dark="lightSwitch == 1"
         dense
+        :loading="loading"
         fixed-header
         calculate-widths
         disable-pagination
@@ -125,7 +126,9 @@
         <template v-slot:item="props">
           <tr class="tr_custom">
             <td class="text-left pl-2" style="width:10%">
-              <span>{{ props.item.meta.date }}</span>
+              <span>{{
+                $moment(props.item.meta.date).format("YYYY-MM-DD")
+              }}</span>
             </td>
             <td class="text-right" style="width:10%">
               <span>{{ props.item.amount }}</span>
@@ -151,8 +154,9 @@
                   { decrease: props.item.changestatus == 2 },
                   { neutral: props.item.changestatus == 0 }
                 ]"
-                >{{ displayProfLoss(props.item) | numeral("0,0.00") }}</span
               >
+                {{ displayProfLoss(props.item) | numeral("0,0.00") }}
+              </span>
             </td>
             <td class="text-right pr-2" style="width:13%">
               <span
@@ -173,10 +177,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { BuyFees } from "~/helpers/taxation";
 
 export default {
   data() {
     return {
+      loading: "success",
       open: [],
       min: "105px",
       max: "calc(100vh - 295px)",
@@ -251,6 +257,8 @@ export default {
       ticker: "chart/getTicker",
       lightSwitch: "global/getLightSwitch",
       stock: "chart/stock",
+      sseInfo: "chart/sseInfo",
+      sseTrade: "chart/sseTrade",
       symbolid: "chart/symbolid"
     }),
     tablesize() {
@@ -284,6 +292,18 @@ export default {
       } else {
         this.max = "calc(100vh - 245px)";
       }
+    },
+    /**
+     * enable sse once loading is done
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return
+     */
+    sseTrade(value) {
+      if (this.loading === false) {
+        this.sseTradeFilter(value);
+      }
     }
   },
   mounted() {
@@ -307,6 +327,7 @@ export default {
      */
     async initActivity(symid) {
       try {
+        this.loading = "success";
         const open = await this.$api.journal.portfolio.open({
           fund: "real",
           stock_id: symid
@@ -318,6 +339,8 @@ export default {
           stock: symid
         });
         this.items = logs.data.logs;
+        console.log(this.items);
+        this.loading = false;
       } catch (error) {}
     },
     /**
@@ -367,7 +390,34 @@ export default {
     displayPercentage(item) {
       const bv = item.meta.average_price * item.amount;
       const pl = item.total_value - bv;
-      return (pl / bv) * 100;
+      const result = (pl / bv) * 100;
+      return isNaN(result) ? 0 : result;
+    },
+    /**
+     * initialise and listen to stock trade sse
+     *
+     * @param   {Object}  data  stock trade data
+     *
+     * @return
+     */
+    sseTradeFilter(data) {
+      try {
+        if (this.symbolid == undefined) return;
+        if (this.symbolid !== data.sym_id) return;
+
+        // market value
+        const p = this.open.position * data.exp;
+        const mv = BuyFees(p);
+
+        // profit / loss
+        const bv = this.open.average_price * this.open.position;
+        const pl = mv - bv;
+        this.open.profit_loss = pl;
+
+        // percentage
+        const perc = (pl / bv) * 100;
+        this.open.pl_percentage = isNaN(perc) ? 0 : perc;
+      } catch (error) {}
     }
   }
 };
@@ -385,7 +435,7 @@ export default {
   right: 8px;
 }
 .tr_custom {
-  line-height: 1.7rem !important;
+  line-height: 1.5rem !important;
   cursor: pointer;
 }
 .positive {
