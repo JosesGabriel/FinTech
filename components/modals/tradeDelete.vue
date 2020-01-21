@@ -1,12 +1,12 @@
 <template>
-  <v-dialog v-model="show" max-width="320px">
+  <v-dialog v-model="show" max-width="400px">
     <v-card :dark="lightSwitch == true">
       <v-card-title
-        class="text-center justify-center pa-5 pt-8 success--text text-uppercase subtitle-1 font-weight-bold"
-      >THIS IS PERMANENT</v-card-title>
+        class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
+      >Delete Confirmation</v-card-title>
       <v-card-title
-        class="text-center justify-center pa-0 subtitle-1 font-weight-thin"
-      >Are you sure you want to delete?</v-card-title>
+        class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+      >Are you sure you want to delete this trade?</v-card-title>
       <v-container class="px-5">
         <v-row no-gutters>
           <v-spacer></v-spacer>

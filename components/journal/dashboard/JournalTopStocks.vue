@@ -3,10 +3,10 @@
     <!-- Don't remove ref value. Used for sharing -->
     <v-col class="pa-0" cols="12" sm="12" md="12">
       <v-card-title class="text-left justify-left px-0 pb-2 pt-5" :style="borderColor">
-        <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">TOP STOCKS</h6>
+        <h6 class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">TOP STOCKS</h6>
         <v-spacer></v-spacer>
         <v-btn icon small :dark="lightSwitch == 0 ? false : true" @click="showShareModal()">
-          <v-icon>mdi-share-variant</v-icon>
+          <v-icon small color="tertiary">mdi-share-variant</v-icon>
         </v-btn>
       </v-card-title>
       <v-row no-gutters class="pt-3">
@@ -52,8 +52,8 @@ export default {
      */
     borderColor() {
       return this.lightSwitch == 0
-        ? "border-bottom: 1px solid #b6b6b6"
-        : "border-bottom: 1px solid #535358";
+        ? "border-bottom: 1px solid #535358"
+        : "border-bottom: 1px solid #172431";
     }
   },
   data() {

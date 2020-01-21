@@ -7,40 +7,40 @@
       <v-container class="px-5 pb-5">
         <v-row no-gutters>
           <v-col cols="12" sm="12" md="6">
-            <v-card-title class="subtitle-1 pa-0 my-2">
+            <v-card-title class="subtitle-2 tertiary--text pa-0 my-2">
               <span>Strategy</span>
             </v-card-title>
-            <v-card-title class="subtitle-1 pa-0 my-2">
+            <v-card-title class="subtitle-2 tertiary--text pa-0 my-2">
               <span>Trade Plan</span>
             </v-card-title>
-            <v-card-title class="subtitle-1 pa-0 my-2">
+            <v-card-title class="subtitle-2 tertiary--text pa-0 my-2">
               <span>Emotion</span>
             </v-card-title>
-            <v-card-title class="subtitle-1 pa-0 my-2">
+            <v-card-title class="subtitle-2 tertiary--text pa-0 my-2">
               <span>Outcome</span>
             </v-card-title>
           </v-col>
           <v-col cols="12" sm="12" md="6">
-            <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2">
+            <v-card-title class="subtitle-2 tertiary--text font-weight-semi-medium pa-0 my-2">
               <span>{{ visible ? details.metas.strategy ? details.metas.strategy : "-" : "" }}</span>
             </v-card-title>
-            <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2">
+            <v-card-title class="subtitle-2 tertiary--text font-weight-semi-medium pa-0 my-2">
               <span>{{ visible ? details.metas.plan ? details.metas.plan : "-" : "" }}</span>
             </v-card-title>
-            <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2">
+            <v-card-title class="subtitle-2 tertiary--text font-weight-semi-medium pa-0 my-2">
               <span>{{ visible ? details.metas.emotion ? details.metas.emotion : "-" : "" }}</span>
             </v-card-title>
-            <v-card-title class="subtitle-1 font-weight-bold pa-0 my-2">
+            <v-card-title class="subtitle-2 tertiary--text font-weight-semi-medium pa-0 my-2">
               <span
                 :class=" visible ? details.profit_loss > 0 ? 'positive' : details.profit_loss < 0 ? 'negative' : 'neutral' : '' "
               >{{ visible ? details.profit_loss > 0 ? "Gain" : details.profit_loss < 0 ? 'Loss' : '' : "" }}</span>
             </v-card-title>
           </v-col>
           <v-col class="pa-2 mt-2 trading_notes" cols="12" sm="12" md="12">
-            <v-card-title class="subtitle-2 pa-0">
+            <v-card-title class="subtitle-2 tertiary--text pa-0">
               <span>Trading Notes</span>
             </v-card-title>
-            <v-card-title class="caption pa-0 notes_text">
+            <v-card-title class="caption pa-0 tertiary--text notes_text">
               <span>{{ visible ? details.metas.notes ? details.metas.notes : "..." : '' }}</span>
             </v-card-title>
           </v-col>
@@ -91,7 +91,7 @@ export default {
 </script>
 <style scoped>
 .trading_notes {
-  border: 1px solid #b6b6b6;
+  background: hsla(0, 0%, 100%, 0.12);
   border-radius: 4px;
 }
 .notes_text {

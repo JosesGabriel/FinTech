@@ -34,7 +34,7 @@
       </v-btn>
 
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon>mdi-share-variant</v-icon>
+        <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-data-table
@@ -54,7 +54,7 @@
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.stock_id }}</span>
       </template>
       <template v-slot:item.date="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.date }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.date.substr(0, 10) }}</span>
       </template>
       <template v-slot:item.amount="{ item }">
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.amount }}</span>
@@ -111,22 +111,18 @@
         </div>
         <v-icon
           small
-          class="mr-2 secondary--text"
+          class="mr-2 tertiary--text"
           @mouseover="tradelogsmenuLogsShow(item)"
         >mdi-dots-horizontal</v-icon>
       </template>
     </v-data-table>
     <v-row>
-      <v-col class="text-right font-weight-regular subtitle-2" width="100%" style="color:#fff;">
-        Total Profit/Loss as of {{date}}:
+      <v-col class="text-right font-weight-bold caption" width="100%">
+        <span class="font-weight-bold" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">Total Profit/Loss as of {{date}}:</span>
         <span
           class="ml-3"
           :class="(totalProfitLoss < 0 ? 'negative' : 'positive')"
         >{{ totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
-        <span
-          class="ml-2"
-          :class="(totalProfitLoss < 0 ? 'negative' : 'positive')"
-        >{{ totalProfitLossPerf.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}%</span>
       </v-col>
     </v-row>
     <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
@@ -207,6 +203,7 @@ export default {
   },
   mounted() {
     if (this.defaultPortfolioId != 0 ? this.getTradeLogs() : "");
+    this.formatDate();
   },
   computed: {
     ...mapGetters({
@@ -323,6 +320,34 @@ export default {
     formatAvePrice(value) {
       let val = (value / 1).toFixed(3).replace(".", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    /**
+     * current date formatted
+     *
+     * @return  {string}  returns date
+     */
+    formatDate() {
+      let date = new Date();
+      let monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ];
+
+      let day = date.getDate();
+      let monthIndex = date.getMonth();
+      let year = date.getFullYear();
+
+      this.date = monthNames[monthIndex] + " " + day + ", " + year;
     }
   },
   watch: {

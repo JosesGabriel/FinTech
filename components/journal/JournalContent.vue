@@ -28,7 +28,7 @@
           item-value="id"
           return-object
           :menu-props="{offsetY: false, dark: lightSwitch == true}"
-          class="select_portfolio selectjournal_portfolio mt-2 success--text body-2"
+          class="select_portfolio selectjournal_portfolio mt-2 success--text subtitle-2 text-uppercase"
           item-color="success"
           append-icon="mdi-chevron-down"
           background-color="success"
@@ -36,7 +36,6 @@
           color="grey"
           dense
           solo
-          flat
           light
         >
           <template slot="item" slot-scope="data">
@@ -489,7 +488,7 @@ span.apexcharts-tooltip-text-label {
 }
 .select_portfolio .v-select__selection--comma {
   color: black;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
 }
 .select_portfolio .v-select__slot .v-label,
@@ -498,6 +497,7 @@ span.apexcharts-tooltip-text-label {
 }
 .select_portfolio .v-input__slot {
   margin: 0;
+  border-radius: 4px
 }
 .select_portfolio .v-input__control {
   min-height: auto !important;

@@ -2,10 +2,10 @@
   <v-col ref="componentWrapper" class="pa-0" cols="7" sm="7" md="7">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-      <h6 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">MONTHLY PERFORMANCE</h6>
+      <h6 class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">MONTHLY PERFORMANCE</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon>mdi-share-variant</v-icon>
+        <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-col class="pa-0" cols="12" sm="12" md="12">
@@ -57,8 +57,8 @@ export default {
      */
     borderColor() {
       return this.lightSwitch == 0
-        ? "border-bottom: 1px solid #b6b6b6"
-        : "border-bottom: 1px solid #535358";
+        ? "border-bottom: 1px solid #535358"
+        : "border-bottom: 1px solid #172431";
     }
   },
   data() {
@@ -231,7 +231,6 @@ export default {
     };
   },
   mounted() {
-    this.getMPerformance();
     this.lightSwitcher();
   },
   watch: {

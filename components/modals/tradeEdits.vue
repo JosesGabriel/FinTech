@@ -86,6 +86,7 @@
               <v-textarea
                 color="white"
                 class="white--text trading_notes-textarea body-2 mt-3"
+                :background-color="lightSwitch == 0 ? '#e3e9ed' : '#172431'"
                 v-model="notesModel"
                 placeholder="Trading Notes"
                 filled

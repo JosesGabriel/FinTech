@@ -2,7 +2,10 @@
   <v-col class="pa-0" ref="componentWrapper">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
-      <h1 class="font-weight-regular subtitle-2" :style="{ color: fontColor }">OPEN POSITION/S (PHP)</h1>
+      <h1
+        class="font-weight-bold subtitle-2"
+        :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+      >OPEN POSITION/S (PHP)</h1>
       <v-spacer></v-spacer>
       <v-btn
         outlined
@@ -38,7 +41,7 @@
       </v-btn>
 
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon>mdi-share-variant</v-icon>
+        <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-data-table
@@ -128,15 +131,11 @@
     </v-data-table>
     <v-row>
       <v-col class="text-right total_bottom" :style="{ color: fontColor }" width="100%">
-        Total Profit/Loss as of {{date}}:
+        <span class="font-weight-bold" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">Total Profit/Loss as of {{date}}:</span>
         <span
           class="ml-3"
           :class="(totalProfitLoss < 0 ? 'negative' : 'positive')"
         >{{ totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
-        <span
-          class="ml-2"
-          :class="(totalProfitLoss < 0 ? 'negative' : 'positive')"
-        >{{ totalProfitLossPerf.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}%</span>
       </v-col>
     </v-row>
     <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
@@ -302,6 +301,7 @@ export default {
      * function initSSE load on mounted
      */
     this.initSSE();
+    this.formatDate();
   },
   watch: {
     /**
@@ -472,10 +472,8 @@ export default {
         `${process.env.STREAM_API_URL}/sse/market-data/pse/all`
         // "http://localhost:8021/sse/market-data/pse/all"
       );
-      this.sse.onopen = function() {
-      };
-      this.sse.onerror = function(err) {
-      };
+      this.sse.onopen = function() {};
+      this.sse.onerror = function(err) {};
       this.sse.addEventListener("trade", function(e) {
         const data = JSON.parse(e.data);
         for (let i = 0; i < that.stockSym.length; i++) {
@@ -527,6 +525,34 @@ export default {
      */
     closeSSE() {
       this.sse.close();
+    },
+    /**
+     * current date formatted
+     *
+     * @return  {string}  returns date
+     */
+    formatDate() {
+      let date = new Date();
+      let monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ];
+
+      let day = date.getDate();
+      let monthIndex = date.getMonth();
+      let year = date.getFullYear();
+
+      this.date = monthNames[monthIndex] + " " + day + ", " + year;
     }
   },
   beforeDestroy() {
@@ -602,6 +628,7 @@ export default {
   box-shadow: none;
   margin: 0;
   outline-color: transparent;
+  font-size: 12px;
 }
 .v-data-table.data_table-container th:first-child {
   padding-left: 8px !important;

@@ -152,17 +152,17 @@ export default {
   text-transform: uppercase;
 }
 .confirmation_button-reset-ok {
-  background: #00ffc3;
+  background: #03DAC5;
 }
 .confirmation_button-reset-not {
   background: #00080e;
 }
 .confirmation_button-reset-ok:hover {
-  background: #00ffc3;
+  background: #03DAC5;
   cursor: pointer;
 }
 .confirmation_button-reset-not:hover {
-  background: #00ffc3;
+  background: #03DAC5;
   cursor: pointer;
 }
 .confirmation_button-reset-ok:hover h1,

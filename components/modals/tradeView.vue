@@ -8,7 +8,7 @@
         <v-spacer></v-spacer>
         <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text class="px-1" color="success">
+            <v-btn v-on="on" text class="px-1" :color="lightSwitch == 0 ? '#000000' : '#FFFFFF' ">
               <span class="text-capitalize">Date:</span>
               <v-card-text class="pa-0" v-html="date"></v-card-text>
               <v-icon>mdi-chevron-down</v-icon>
@@ -79,9 +79,9 @@
 
                   <v-col cols="12" class="pa-0">
                     <v-row no-gutters>
-                      <v-card-title class="subtitle-1 px-0 py-2">Current Price</v-card-title>
+                      <v-card-title class="caption tertiary--text px-0 py-2">Current Price</v-card-title>
                       <v-spacer></v-spacer>
-                      <v-card-title class="subtitle-1 px-0 py-2">
+                      <v-card-title class="caption tertiary--text px-0 py-2">
                         {{ cprice }}
                         <span
                           class="caption pl-1"
@@ -184,7 +184,7 @@
                   </v-row>
                   <div class="px-3">
                     <v-card-title
-                      class="pa-0 justify-center mt-3 font-weight-thin caption"
+                      class="pa-0 justify-center secondary--text mt-3 font-weight-thin caption"
                     >Bid/ Ask Bar</v-card-title>
                     <v-progress-linear
                       :value="bidask"
@@ -194,7 +194,7 @@
                       class="mt-1"
                     ></v-progress-linear>
                     <v-card-title
-                      class="pa-0 justify-center mt-3 font-weight-thin caption"
+                      class="pa-0 justify-center secondary--text mt-3 font-weight-thin caption"
                     >Members Sentiments</v-card-title>
                     <v-progress-linear
                       value="50"
@@ -240,10 +240,10 @@
               <v-row no-gutters class="px-0 py-0">
                 <v-col sm="12" md="12" class="pa-0">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">Available Funds</v-card-title>
                     <v-spacer></v-spacer>
                     <v-card-title
-                      class="subtitle-1 px-0 py-2 secondary--text"
+                      class="caption px-0 py-2 tertiary--text"
                     >{{ availableFundsModel | numeral("0.00a") }}</v-card-title>
                   </v-row>
                   <v-select
@@ -260,7 +260,7 @@
                     :dark="lightSwitch == true"
                     :menu-props="{offsetY: true, dark: lightSwitch == true}"
                     light
-                    class="enter_amount-deposit-select ma-0 body-2"
+                    class="enter_amount-deposit-select ma-0 my-2 body-2"
                   >
                     <template slot="item" slot-scope="data">
                       <v-list-item-content
@@ -268,7 +268,7 @@
                         :style="{ background: cardbackground }"
                         style="padding: 12px 12px; margin: -16px;"
                       >
-                        <v-list-item-title v-html="data.item.name" class="text-uppercase caption"></v-list-item-title>
+                        <v-list-item-title v-html="data.item.name" class="text-capitalize caption"></v-list-item-title>
                       </v-list-item-content>
                     </template>
                   </v-select>
@@ -293,6 +293,7 @@
                     @click="quantityModel == 0 ? quantityModel = 0 : quantityModel -= boardLotModel"
                     text
                     icon
+                    small
                     color="success"
                   >
                     <v-icon>mdi-chevron-down</v-icon>
@@ -301,6 +302,7 @@
                     @click="quantityModel += parseFloat(boardLotModel)"
                     text
                     icon
+                    small
                     color="success"
                   >
                     <v-icon>mdi-chevron-up</v-icon>
@@ -325,16 +327,16 @@
                 </v-col>
                 <v-col cols="12">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title>
+                    <v-card-title class="caption pa-0 tertiary--text">Board lot</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                    <v-card-title class="caption pa-0 tertiary--text">{{ boardLotModel }}</v-card-title>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pb-5">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Total Cost</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">Total Cost</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">{{ totalCostModel }}</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">{{ totalCostModel }}</v-card-title>
                   </v-row>
                 </v-col>
               </v-row>
@@ -368,7 +370,7 @@
                     <v-select
                       v-model="strategyModel"
                       append-icon="mdi-chevron-down"
-                      class="py-2 body-2"
+                      class="py-2 caption"
                       color="success"
                       :items="strategy"
                       item-color="success"
@@ -394,7 +396,7 @@
                       v-model="tradeplanModel"
                       item-color="success"
                       append-icon="mdi-chevron-down"
-                      class="py-2 body-2"
+                      class="py-2 caption"
                       color="success"
                       :dark="lightSwitch == true"
                       :menu-props="{offsetY: true, dark: lightSwitch == true}"
@@ -418,7 +420,7 @@
                     <v-select
                       v-model="emotionsModel"
                       item-color="success"
-                      class="py-2 body-2"
+                      class="py-2 caption"
                       color="success"
                       append-icon="mdi-chevron-down"
                       :items="emotions"
@@ -448,6 +450,7 @@
                 >
                   <v-textarea
                     color="white"
+                    :background-color="lightSwitch == 0 ? '#e3e9ed' : '#172431'"
                     class="white--text trading_notes-textarea body-2"
                     v-model="notesModel"
                     placeholder="Enter Notes"
@@ -523,18 +526,16 @@
                 </v-col>
                 <v-col cols="12">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Board lot</v-card-title>
+                    <v-card-title class="caption pa-0 tertiary--text">Board lot</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ boardLotModel }}</v-card-title>
+                    <v-card-title class="caption pa-0 tertiary--text">{{ boardLotModel }}</v-card-title>
                   </v-row>
                 </v-col>
                 <v-col cols="12" class="pb-5">
                   <v-row no-gutters>
-                    <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Market Value</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">Market Value</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title
-                      class="subtitle-1 px-0 py-2 secondary--text"
-                    >{{ totalCostSellModel }}</v-card-title>
+                    <v-card-title class="caption px-0 py-2 tertiary--text">{{ totalCostSellModel }}</v-card-title>
                   </v-row>
                 </v-col>
               </v-row>
@@ -1303,7 +1304,7 @@ export default {
 .separator {
   display: block;
   height: 1px;
-  background: #000;
+  background: #172431;
 }
 .confirmation_message-confirm input {
   text-align: right;
@@ -1338,5 +1339,14 @@ export default {
 .datepicker-container .v-date-picker-title__date,
 .theme--light.datepicker-container-light .v-date-picker-title__date {
   color: #03dac5 !important;
+}
+.positive {
+  color: #03dac5;
+}
+.negative {
+  color: #f44336;
+}
+.neutral {
+  color: #535358;
 }
 </style>

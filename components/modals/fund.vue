@@ -34,11 +34,11 @@
         >
           <v-container class="pa-0">
             <div class="separator"></div>
-            <v-row no-gutters>
-              <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title>
+            <v-row no-gutters class="my-2">
+              <v-card-title class="caption px-0 py-2 secondary--text">Available Funds</v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
-                class="subtitle-1 px-0 py-2 secondary--text"
+                class="caption px-0 py-2 secondary--text"
               >{{ availableFunds | numeral("0.00a") }}</v-card-title>
             </v-row>
             <v-text-field
@@ -55,15 +55,17 @@
               <span class="custom-dropdown big">
                 <v-select
                   :items="items"
-                  :menu-props="{offsetY: true, dark: lightSwitch == true}"
                   v-model="fundSourceModel"
+                  class="enter_amount-deposit-select ma-0 body-2"
                   item-text="name"
                   item-value="funds_source"
                   label="Fund Source"
                   item-color="success"
                   color="success"
                   dense
-                  class="enter_amount-deposit-select ma-0 body-2"
+                  :dark="lightSwitch == true"
+                  :menu-props="{offsetY: true, dark: lightSwitch == true}"
+                  light
                 >
                   <template slot="item" slot-scope="data">
                     <v-list-item-content
@@ -82,11 +84,11 @@
         <v-tab-item dark color="success" background-color="#0c1f33" :value="'funds-' + 2">
           <v-container class="pa-0">
             <div class="separator"></div>
-            <v-row no-gutters>
-              <v-card-title class="subtitle-1 px-0 py-2 secondary--text">Available Funds</v-card-title>
+            <v-row no-gutters class="my-2">
+              <v-card-title class="caption px-0 py-2 secondary--text">Available Funds</v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
-                class="subtitle-1 px-0 py-2 secondary--text"
+                class="caption px-0 py-2 secondary--text"
               >{{ availableFunds | numeral("0.00a") }}</v-card-title>
             </v-row>
             <v-text-field
@@ -167,20 +169,20 @@ export default {
   },
   data() {
     return {
-      withrawAmount: 0.00,
+      withrawAmount: 0.0,
       items: [
         { funds_source: "dividend_income", name: "Dividend Income" },
         { funds_source: "deposit", name: "Fresh Funds" }
       ],
-      quantity: 0.00,
-      enterAmount: 0.00,
+      quantity: 0.0,
+      enterAmount: 0.0,
       fundSourceModel: null,
       disableButtonSave: true,
       disableWithdrawButtonSave: true,
       hideWithdrawButton: false,
       hideDepositButton: true,
-      availableFunds: 0.00,
-      fund: 0,
+      availableFunds: 0.0,
+      fund: 0
     };
   },
   watch: {
