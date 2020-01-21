@@ -269,7 +269,7 @@
             </v-row>
           </v-stepper-content>
 
-          <v-stepper-content step="3" class="pt-2">
+          <v-stepper-content step="3" class="pt-2 pa-2">
             <v-container class="pt-0">
               <v-row no-gutters class="mt-2 px-0 py-0">
                 <v-col sm="12" md="12">
