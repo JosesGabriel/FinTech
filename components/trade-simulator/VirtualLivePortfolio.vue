@@ -10,7 +10,9 @@
         class="text-capitalize mr-2 resetbtn"
         @click.stop="showResetForm=true"
         height="23"
-      >Reset</v-btn>
+      >
+        <span class="resetBtn">Reset</span>
+      </v-btn>
       <v-btn
         outlined
         color="success"
@@ -18,7 +20,9 @@
         dark
         class="text-capitalize mr-2 resetbtn"
         height="23"
-      >Trade</v-btn>
+      >
+      <span class="trdeBtn">Trade</span>
+      </v-btn>
 
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon>mdi-share-variant</v-icon>
@@ -578,21 +582,17 @@ export default {
                         this.portfolioLogs[index].position *
                         this.portfolioLogs[index].average_price;   
 
-                      //let retrievedObject = localStorage.getItem('SAMPLE7');
-                      //let priorDaychange = JSON.parse(retrievedObject);
-
                      if (pdate != dformat) {      
                         pNum++;                  
                         let priorPrice = result.data.c[1];
-                        console.log('Prior Price -'+ priorPrice);
+                        
                         let priorbuyResult =
                           this.portfolioLogs[index].position *
                           parseFloat(priorPrice).toFixed(2);
                         let priormvalue = this.fees(priorbuyResult);
 
                         mvalueprior = mvalueprior + priorbuyResult;
-                        //console.log('Prior Market Value -'+ mvalueprior);
-
+                      
                         let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
                         this.priorProfitLoss =
                           parseFloat(this.priorProfitLoss) + parseFloat(priorprofit); 
@@ -608,7 +608,7 @@ export default {
                       let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
                       currentProfitLoss =
                         parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-                        console.log('Total Prior Profitssss -', this.priorProfitLoss);
+                        
                         let daychange =
                            parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
                         if(this.priorProfitLoss != 0 ){                          
@@ -952,6 +952,12 @@ export default {
   background: #03dac5;
   color: #00121e !important;
   border: unset !important;
+}
+.resetBtn:hover{
+  color: #00121e !important;
+}
+.trdeBtn:hover{
+  color: #00121e !important;
 }
 
 .theme--light.v-data-table thead tr th {

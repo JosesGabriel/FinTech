@@ -211,9 +211,17 @@ export default {
     }
   },
   watch: {
+    /**
+     *
+     * Call Live Portfolio Data based on new Portfolio ID
+     */
     simulatorPortfolioID(){
       this.getPortfolio();
     },
+    /**
+     * TOtal COst is initialized when BUy/Sell button is changed
+     *
+     */
     simulatorConfirmedBuySell() {
       if (this.simulatorConfirmedBuySell == "sell") {
         let tcost =
@@ -224,10 +232,18 @@ export default {
         if (this.Reset == true ? (this.totalCost = 0) : "");
       }
     },
+    /**
+     * Initialized Quantity/Total COst if Buy Price is changed
+     *
+     */
     BuyPrice() {
       if (this.simulatorConfirmedBuySell == "buy" ? (this.quantity = 0) : "");
       this.totalCost = 0;
     },
+    /**
+     * Set Quantity to the value of new Position
+     *
+     */
     Position() {
       this.quantity = this.Position;
       this.setSimulatorPositions(this.quantity);
