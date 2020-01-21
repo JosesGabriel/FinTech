@@ -179,7 +179,7 @@ export default {
       itemsPerPage: 10,
       search: "",
       headers: [
-        { text: "Stocks", value: "stock_id", align: "left", sortable: false },
+        { text: "Stocks", value: "stock_id", align: "left" },
         { text: "Date", value: "date", align: "right" },
         { text: "Volume", value: "amount", align: "right" },
         { text: "Ave. Price", value: "average_price", align: "right" },
@@ -237,10 +237,41 @@ export default {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
+  watch: {
+    /**
+     * Watch defaultPortfolioId vuex if id changed perform function inside
+     *
+     * @return  {string}  getting the current portfolio id
+     */
+    defaultPortfolioId() {
+      this.getTradeLogs();
+    },
+    /**
+     * Watch renderPortfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    renderPortfolioKey() {
+      this.getTradeLogs();
+    },
+    /**
+     * if trade edit or remove succed renderEditKey will increment
+     *
+     * @return  {number}  increment key
+     */
+    renderEditKey() {
+      this.getTradeLogs();
+    }
+  },
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
+    /**
+     * Capture components then draw to canvas and share
+     *
+     * @return  {image}  get captured components as canvas
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -249,15 +280,31 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
-    deleteLive: function(item) {
+    /**
+     * passing credentials of each item to be deleted to this.itemDetails (to props)
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    deleteLive(item) {
       this.itemDetails = item;
     },
-    detailsLive: function(item) {
+    /**
+     * passing credentials of each item to details to this.itemDetails (to props)
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    detailsLive(item) {
       this.itemDetails = item;
     },
-    editLive: function(item) {
-      this.itemDetails = item;
-    },
+    /**
+     * getTradeLogs gets update when getTradeLogs triggered
+     *
+     * @return  {[array]} returned array
+     */
     getTradeLogs() {
       const tradelogsparams = {
         fund: this.defaultPortfolioId
@@ -305,11 +352,18 @@ export default {
       );
       this.componentKeys++;
     },
-    tradelogsmenuLogsShow: function(item) {
+    /**
+     * if trades are hovered item will show, item will assigned as hovered with this function
+     *
+     * @param   {object}  item  object from hovered item
+     *
+     * @return  {string}        passing this string "block" to hovered item
+     */
+    tradelogsmenuLogsShow(item) {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "block";
     },
-    tradelogsmenuLogsHide: function(item) {
+    tradelogsmenuLogsHide(item) {
       let tl = document.getElementById(`tl_${item.id}`);
       tl.style.display = "none";
     },
@@ -348,17 +402,6 @@ export default {
       let year = date.getFullYear();
 
       this.date = monthNames[monthIndex] + " " + day + ", " + year;
-    }
-  },
-  watch: {
-    defaultPortfolioId: function() {
-      this.getTradeLogs();
-    },
-    renderPortfolioKey: function() {
-      this.getTradeLogs();
-    },
-    renderEditKey: function() {
-      this.getTradeLogs();
     }
   }
 };
