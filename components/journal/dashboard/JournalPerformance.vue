@@ -41,9 +41,19 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * returns secondary font color
+     *
+     * @return  {string}  returns string
+     */
     fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
+    /**
+     * returns attribute border bottom
+     *
+     * @return  {string}  returns string
+     */
     borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"

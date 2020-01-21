@@ -108,13 +108,28 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    /**
+     * returns secondary font color
+     *
+     * @return  {string}  returns string
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    cardbackground: function() {
+    /**
+     * returns background color
+     *
+     * @return  {string}  returns string
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
-    borderColor: function() {
+    /**
+     * returns border value
+     *
+     * @return  {string}  returns string
+     */
+    borderColor() {
       return this.lightSwitch == 0 ? "1px solid #b6b6b6" : "1px solid #535358";
     }
   },
@@ -172,7 +187,7 @@ export default {
       this.showShareForm = true;
     },
     /**
-     * getSnapshot will work on ploting/updating table 
+     * getSnapshot will work on ploting/updating table
      *
      * @return  {array}  data to update chart
      */
@@ -191,7 +206,7 @@ export default {
         });
       }
       this.componentKeys++;
-    },
+    }
   }
 };
 </script>

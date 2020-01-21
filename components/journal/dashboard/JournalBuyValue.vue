@@ -41,9 +41,19 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * returns string font color
+     *
+     * @return  {string}  retruns string
+     */
     fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
+    /**
+     * returns attribute border bottom
+     *
+     * @return  {string}  return string
+     */
     borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"
@@ -290,7 +300,7 @@ export default {
         null
       ];
       if (this.journalCharts != null) {
-        const buyValue = this.journalCharts.data.buy_value;
+        let buyValue = this.journalCharts.data.buy_value;
 
         if (buyValue.length != 0) {
           for (let i = 0; i < buyValue.length; i++) {

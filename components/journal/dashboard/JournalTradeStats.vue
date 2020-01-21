@@ -63,17 +63,37 @@ export default {
       journalCharts: "journal/getJournalCharts",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * returns secondary font color
+     *
+     * @return  {string}  returns string
+     */
     fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
+    /**
+     * returns attribute border bottom
+     *
+     * @return  {string}  returns string
+     */
     borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"
         : "border-bottom: 1px solid #535358";
     },
+    /**
+     * returns computed value once win or loss changes value
+     *
+     * @return  {number}  returns result number
+     */
     winlossresult() {
       return (this.result = parseInt(this.win) + parseInt(this.loss));
     },
+    /**
+     * returns computed value once win or loss changes value 
+     *
+     * @return  {number}  returns percentage number
+     */
     winrateresult() {
       let NaNcon = ((this.win * 100) / this.result).toFixed(0);
       if (NaNcon == "NaN") {

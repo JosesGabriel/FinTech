@@ -191,6 +191,40 @@ export default {
     tradeEdits,
     tradeDelete
   },
+  computed: {
+    ...mapGetters({
+      defaultPortfolioId: "journal/getDefaultPortfolioId",
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      renderEditKey: "journal/getRenderEditKey",
+      selectedPortfolio: "journal/getSelectedPortfolio",
+      userPortfolio: "journal/getUserPortfolio",
+      lightSwitch: "global/getLightSwitch"
+    }),
+    /**
+     * returns hexcode for secondary font color if current theme is dark or light
+     *
+     * @return  {string}  returns string
+     */
+    fontColor() {
+      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
+    },
+    /**
+     * returns hexcode for tertiary font color if current theme is dark or light
+     *
+     * @return  {string}  returns string
+     */
+    fontcolor2() {
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
+    },
+    /**
+     * returns hexcode for card color if current theme is dark or light
+     *
+     * @return  {string}  returns string
+     */
+    cardbackground() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
+  },
   data() {
     return {
       shareLink: "",
@@ -244,40 +278,6 @@ export default {
       totalProfitLossPerf: 0,
       date: new Date().toISOString().substr(0, 10)
     };
-  },
-  computed: {
-    ...mapGetters({
-      defaultPortfolioId: "journal/getDefaultPortfolioId",
-      renderPortfolioKey: "journal/getRenderPortfolioKey",
-      renderEditKey: "journal/getRenderEditKey",
-      selectedPortfolio: "journal/getSelectedPortfolio",
-      userPortfolio: "journal/getUserPortfolio",
-      lightSwitch: "global/getLightSwitch"
-    }),
-    /**
-     * returns hexcode for secondary font color if current theme is dark or light
-     *
-     * @return  {string}  returns string
-     */
-    fontColor() {
-      return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
-    },
-    /**
-     * returns hexcode for tertiary font color if current theme is dark or light
-     *
-     * @return  {string}  returns string
-     */
-    fontcolor2() {
-      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
-    },
-    /**
-     * returns hexcode for card color if current theme is dark or light
-     *
-     * @return  {string}  returns string
-     */
-    cardbackground() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-    }
   },
   mounted() {
     /**

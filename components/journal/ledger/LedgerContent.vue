@@ -132,12 +132,27 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * returns secondary font color
+     *
+     * @return  {string}  returns string
+     */
     fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
+    /**
+     * returns tertiary font color
+     *
+     * @return  {string}  returns string
+     */
     fontcolor2() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     },
+    /**
+     * returns background color
+     *
+     * @return  {string}  returns string
+     */
     cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }

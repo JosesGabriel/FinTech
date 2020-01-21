@@ -101,7 +101,6 @@
             @click.stop="showSellDetails=true"
             v-on:click="detailsLive(item)"
           >Details</v-btn>
-          <!-- <v-btn small class="caption" text color="success" @click.stop="showSellEdit=true" v-on:click="editLive(item)">Edit</v-btn> -->
           <v-btn
             small
             class="caption btn_sidemenu"
@@ -141,11 +140,7 @@
         ></v-pagination>
       </v-card>
     </v-card>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
     <sell-delete
       :visible="showSellDelete"
       :itemDetails="itemDetails"
@@ -220,13 +215,28 @@ export default {
       renderEditKey: "journal/getRenderEditKey",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    /**
+     * returns secondary font color
+     *
+     * @return  {string}  returns string
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    fontcolor2: function() {
+    /**
+     * returns tertiary font color
+     *
+     * @return  {string}  returns string
+     */
+    fontcolor2() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
     },
-    cardbackground: function() {
+    /**
+     * returns background color
+     *
+     * @return  {string}  returns string
+     */
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },

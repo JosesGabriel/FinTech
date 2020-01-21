@@ -67,10 +67,20 @@ export default {
       stockList: "global/getStockList",
       lightSwitch: "global/getLightSwitch"
     }),
-    fontColor: function() {
+    /**
+     * returns font secondary font color
+     *
+     * @return  {string}  returns string
+     */
+    fontColor() {
       return this.lightSwitch == 0 ? "#494949" : "#e5e5e5";
     },
-    borderColor: function() {
+    /**
+     * returns border bottom attribute
+     *
+     * @return  {string}  returns string
+     */
+    borderColor() {
       return this.lightSwitch == 0
         ? "border-bottom: 1px solid #b6b6b6"
         : "border-bottom: 1px solid #535358";

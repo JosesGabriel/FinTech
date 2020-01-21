@@ -229,9 +229,19 @@ export default {
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * returns primary font color
+     *
+     * @return  {string}  returns string
+     */
     fontColor() {
       return this.lightSwitch == 0 ? "#000000" : "#ffffff";
     },
+    /**
+     * returns background color
+     *
+     * @return  {string}  returns string
+     */
     cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
