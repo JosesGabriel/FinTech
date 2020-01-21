@@ -126,13 +126,13 @@ export default {
     /**
      * run sse only once loading is finish
      *
-     * @param   {[type]}  value  [value description]
+     * @param   {Object}  value response info sse
      *
-     * @return  {[type]}         [return description]
+     * @return
      */
     sseInfo(value) {
       if (this.loading === false) {
-        this.sseAllInfo(value);
+        //this.sseAllInfo(value);
       }
     }
   },

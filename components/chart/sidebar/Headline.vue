@@ -250,9 +250,9 @@ export default {
         if (this.symbolid == undefined) return;
         const data = JSON.parse(e.data);
         // set sse info to state
-        //this.setSSEInfo(data);
+        this.setSSEInfo(data);
         // emit sse info
-        nativeBus.$emit("b-tv-sse-all", data);
+        //nativeBus.$emit("b-tv-sse-all", data);
 
         if (this.symbolid !== data.sym_id) return;
 

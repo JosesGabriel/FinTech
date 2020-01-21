@@ -142,7 +142,7 @@ export default {
      */
     sseInfo(value) {
       if (this.loading === false) {
-        this.sseAllInfo(value);
+        //this.sseAllInfo(value);
       }
     }
   },

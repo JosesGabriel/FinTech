@@ -12,16 +12,33 @@
     </template>
     <!---------------->
     <v-content class="content__btncontainer">
+      
+    <v-btn
+        v-show="maximize && !fullscreen"
+        small
+        icon
+        color="success"
+        :class="[{ button__disable: !maximize && !fullscreen }]"
+        title="Hide"
+        @click="toggleTabs(activeTab)"
+      >
+        <v-icon>mdi-chevron-double-down</v-icon>
+       
+      </v-btn>
+
+
       <v-btn
         v-show="maximize || fullscreen"
         small
         icon
-        :color="fullscreen ? 'success' : '#b6b6b6'"
+        color="success"
         :class="[{ button__disable: !maximize && !fullscreen }]"
-        title="Maximize Table"
+        :title="fullscreen ? 'Minimize' : 'Maximize'"
         @click="toggleTabsFullscreen"
       >
-        <v-icon class="icon-flipped-y">mdi-window-maximize</v-icon>
+        <v-icon>    
+            {{ fullscreen ? 'mdi-chevron-down-box' : 'mdi-chevron-up-box' }}
+        </v-icon>
        
       </v-btn>
 
@@ -121,7 +138,6 @@ export default {
     };
   },
   mounted(){
-      console.log('hide ticker');
       this.hideTicker();
   },
   computed: {
