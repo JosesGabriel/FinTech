@@ -8,7 +8,7 @@
     <v-card :dark="lightSwitch == true" :style="{ background: cardBackground }">
       <v-card-title
         class="text-left justify-left pa-5 pb-3 px-5 success--text"
-        style="font-size:16px;"
+        style="font-size:16px; font-weight: 700;"
       >TRADE</v-card-title>
       <v-stepper
         v-model="e1"
@@ -29,6 +29,7 @@
                       depressed
                       text
                       tile
+                      style="font-size: 1rem;"
                       width="100%"
                       @click="btnBuy"                   
                     >Buy</v-btn>
@@ -42,6 +43,7 @@
                       depressed
                       text
                       tile
+                      style="font-size: 1rem;"
                       width="100%"
                       @click="btnSell"
                     >Sell</v-btn>
@@ -240,9 +242,9 @@
               >Continue</v-btn>
             </v-row>
           </v-stepper-content>
-          <v-stepper-content step="2" class="pt-2">
+          <v-stepper-content step="2" class="pt-2 pa-2">
             <!-- -----Second View of Trade Modal----- -->
-            <v-container class="pa-5 pt-0 px-0">
+            <v-container class="pt-0 px-0">
               <v-row no-gutters>
                 <BuyTrade
                   :Position="dataVolume"
@@ -357,7 +359,9 @@
                     v-model="notes"
                     :dark="lightSwitch == true"
                     :style="{ background: cardBackground }"
-                  ></v-textarea>
+                    :background-color="lightSwitch == 0 ? '#e3e9ed' : '#172431'"
+                  >
+                  </v-textarea>
                 </v-col>
               </v-row>
             </v-container>
@@ -855,6 +859,6 @@ export default {
 .enter_strategy > .v-input__control > .v-input__slot > .v-select__slot > label,
 .enter_tplan > .v-input__control > .v-input__slot > .v-select__slot > label,
 .enter_emotion > .v-input__control > .v-input__slot > .v-select__slot > label {
-  font-size: 13px;
+  font-size: 16px;
 }
 </style>

@@ -86,7 +86,7 @@
       </v-dialog>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon>mdi-share-variant</v-icon>
+        <v-icon style="font-size:16px;">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-data-table

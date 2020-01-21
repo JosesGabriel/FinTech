@@ -104,13 +104,11 @@
       :style="{ background: primaryBackground }"
       dark
     >
-      <v-tab
-        :style="{ color: toggleFontColor }"
+      <v-tab           
         class="tab_menu-top text-capitalize"
         :href="`#tab-1`"
       >Live Portfolio</v-tab>
       <v-tab
-        :style="{ color: toggleFontColor }"
         class="tab_menu-top text-capitalize"
         :href="`#tab-2`"  
       >Tradelogs</v-tab>
@@ -174,7 +172,7 @@
         color="success"
         background-color="black"
         :value="'tab-' + 1"
-        :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #172431')"
+        :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #dadada' : 'background:transparent; border-top: 1px solid #172431')"
       >
         <v-container class="pa-0">
           <VirtualLivePortfolio

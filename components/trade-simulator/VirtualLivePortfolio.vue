@@ -25,7 +25,7 @@
       </v-btn>
 
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon>mdi-share-variant</v-icon>
+        <v-icon style="font-size:16px;">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
 
@@ -79,15 +79,15 @@
                 <v-btn
                   small
                   class="caption btn_sidemenu"
-                  @click.stop="showEditForm=true"
-                  v-on:click="details(item.action, 'details')"
+                  @click.stop="showTradeDetails=true"
+                  v-on:click="detailsLive(item)"
                   text
                 >Details</v-btn>
                 <v-btn
                   small
                   class="caption btn_sidemenu"
-                  v-on:click="details(item.action, 'edit')"
-                  @click.stop="showEditForm=true"
+                  @click.stop="showEditDetails=true"
+                  v-on:click="editLive(item.action)"
                   text
                 >Edit</v-btn>
                 <v-btn small class="caption btn_sidemenu"  @click.stop="showDelete=true" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
@@ -110,137 +110,12 @@
           :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')"
         >{{ this.addcomma(this.totalProfitLoss) }}</span>
         <span
-          class="ml-12 mr-5"
+          class="ml-12 mr-5 totalpercentage"
           :class="(this.totalPerf < 0 ? 'negative' : 'positive')"
         >{{ this.addcomma(this.totalPerf) }}%</span>
       </v-col>
     </v-row>
     
-    <v-dialog
-      v-model="showEditForm"
-      max-width="290"
-      dark
-      :dark="lightSwitch == true"
-      :style="{ background: cardBackground }"
-    >
-      <v-card>
-        <v-card-title class="success--text" style="font-size: 16px;" >{{ (this.editDetails == 'edit' ? 'EDIT' : 'TRADE DETAILS') }}</v-card-title>
-        <v-card-text>
-          <v-col sm="12" md="12" class="my-0">
-            <div>
-              <v-select
-                offset-y="true"
-                :readonly="(this.editDetails == 'edit' ? false : true)"
-                item-color="success"
-                :append-icon="(this.editDetails == 'edit' ? 'mdi-chevron-down' : '')"
-                class="mb-5"
-                :items="strategy"
-                v-model="selectedstrategy"
-                :label="(this.editDetails == 'edit' ? 'Enter Strategy' : 'Strategy')"
-                dense
-                flat
-              >
-                 <template slot="item" slot-scope="data">
-                    <v-list-item-content
-                      :dark="lightSwitch == true"
-                      :style="{ background: cardBackground }"
-                      style="padding: 21px 12px; margin: -16px;"
-                    >
-                      <v-list-item-title v-html="data.item"></v-list-item-title>
-                    </v-list-item-content>
-                  </template>
-              </v-select>
-            </div>
-            <div>
-              <v-select
-                offset-y="true"
-                :readonly="(this.editDetails == 'edit' ? false : true)"
-                item-color="success"
-                :append-icon="(this.editDetails == 'edit' ? 'mdi-chevron-down' : '')"
-                class="mb-5"
-                :items="tradeplan"
-                v-model="selectedtradeplan"
-                :label="(this.editDetails == 'edit' ? 'Enter Trade Plan' : 'Trade Plan')"
-                dense
-                flat
-              >
-                  <template slot="item" slot-scope="data">
-                    <v-list-item-content
-                      :dark="lightSwitch == true"
-                      :style="{ background: cardBackground }"
-                      style="padding: 21px 12px; margin: -16px;"
-                    >
-                      <v-list-item-title v-html="data.item"></v-list-item-title>
-                    </v-list-item-content>
-                  </template>
-              </v-select>
-            </div>
-            <div>
-              <v-select
-                offset-y="true"
-                :readonly="(this.editDetails == 'edit' ? false : true)"
-                item-color="success"
-                :append-icon="(this.editDetails == 'edit' ? 'mdi-chevron-down' : '')"
-                :items="emotions"
-                v-model="selectedemotions"
-                :label="(this.editDetails == 'edit' ? 'Enter Emotions' : 'Emotions')"
-                class="mb-1"
-                dense
-                flat
-              >
-                  <template slot="item" slot-scope="data">
-                    <v-list-item-content
-                      :dark="lightSwitch == true"
-                      :style="{ background: cardBackground }"
-                      style="padding: 21px 12px; margin: -16px;"
-                    >
-                      <v-list-item-title v-html="data.item"></v-list-item-title>
-                    </v-list-item-content>
-                  </template>
-              </v-select>
-            </div>
-          </v-col>
-          <v-col style="color: #03dac5; font-size: 12px; padding-top:0px; padding-bottom:0px;">
-            Notes
-          </v-col>
-          <v-col
-            cols="12"
-            sm="12"
-            md="12"
-            class="pa-0 mt-3 justify-right d-flex align-center text-right"
-          >
-            <v-textarea
-              color="white"
-              class="white--text trading_notes-textarea body-2 mb-0 pb-0"
-              v-model="notes"
-              :readonly="(this.editDetails == 'edit' ? false : true)"
-              filled
-            ></v-textarea>
-          </v-col>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            text
-            color="success"
-            class="text-capitalize mt-0 mb-2"
-            light
-            @click="showEditForm = false"
-          >{{ (this.editDetails == 'edit' ? 'Cancel' : 'Close') }}</v-btn>
-
-          <v-btn
-            text
-            color="success"
-            class="text-capitalize mt-0 mb-2"
-            light
-            @click="editLive"
-            :class="(this.editDetails == 'edit' ? '' : 'nodisplay')"
-          >Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
     <TradeModal
       :visible="EnterTradeModal"
       :OpenPosition="openposition"
@@ -254,6 +129,17 @@
       :imageid="shareLink"
       @closeModal="showShareForm = false"
     />
+    <trade-edits
+      :visible="showEditDetails"
+       v-on:confirmedUpdate="updateConfirm"
+      :itemDetails="itemDetails"
+      @close="showEditDetails=false"
+    />
+    <trade-details
+      :visible="showTradeDetails"
+      :itemDetails="itemDetails"
+      @close="showTradeDetails=false"
+    />
   </v-col>
 </template>
 <script>
@@ -261,6 +147,8 @@ import TradeModal from "~/components/trade-simulator/TradeModal";
 import resetModal from "~/components/trade-simulator/reset";
 import shareModal from "~/components/modals/Share";
 import tradeDelete from "~/components/modals/TradeDelete";
+import tradeEdits from "~/components/trade-simulator/TradeEdits";
+import tradeDetails from "~/components/modals/TradeDetails";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -275,6 +163,7 @@ export default {
       menuShow: false,
       sse: null,
       counter: 0,
+      showTradeDetails: false,
       headers: [
         { text: "Stocks", value: "stock_id", align: "left", sortable: false },
         { text: "Position", value: "Position", align: "right" },
@@ -296,6 +185,7 @@ export default {
       trade_modal: false,
       showResetForm: false,
       showEditForm: false,
+      showEditDetails: false,
       showScheduleForm: false,
       strategy: [
         "Bottom Picking",
@@ -322,6 +212,7 @@ export default {
       lastprice: 0,
       showDelete: false,
       confirmdelete: false,
+      confirmupdate: false,
       itemToDelete: '',
       monthNames: [
         "January", "February", "March",
@@ -336,7 +227,9 @@ export default {
     TradeModal,
     resetModal,
     shareModal,
-    tradeDelete
+    tradeDelete,
+    tradeEdits,
+    tradeDetails,
   },
   props: {
     Capital: {
@@ -357,6 +250,9 @@ export default {
     },
     confirmdelete(){
       this.execute(this.itemToDelete);
+    },
+    confirmupdate(){
+      this.getOpenPositions();
     }  
 
   },
@@ -394,7 +290,7 @@ export default {
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
           this.portfolioLogs = result.data.open;
-         
+          console.log('PORt',this.portfolioLogs);
           for (let i = 0; i < result.data.open.length; i++) {
               this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
               this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
@@ -439,7 +335,9 @@ export default {
     deleteConfirm(value){
       this.confirmdelete = value;
     },
-
+    updateConfirm(value){
+      this.confirmupdate = value;
+    },
     /**
      * Execute Live Delete
      *
@@ -481,18 +379,25 @@ export default {
      * @param   {[type]}  edit  [edit description]
      *
      */
-    details(item, edit) {
+    detailsLive(item) {
+      this.itemDetails = item;
+    },
+    /*details(item, edit) {
       this.editDetails = edit;
       this.selectedstrategy = item.strategy;
       this.selectedtradeplan = item.tradeplan;
       this.selectedemotions = item.emotion;
       this.notes = item.notes;
       this.edit_id = item.id;
-    },
+    },*/
     /**
      * Execute Edit 
      *
      */
+    editLive(item) {
+      this.itemDetails = item;
+    },
+    /*
     editLive() {
       if (confirm("Save changes?")) {
           const editparams = {
@@ -511,7 +416,7 @@ export default {
               }
             });
       }
-    },
+    },*/
 
     /**
      * Blink effect in Real Time changes
@@ -962,6 +867,10 @@ export default {
 
 .theme--light.v-data-table thead tr th {
   color: #494949;
+}
+.totalpercentage{
+ /* visibility: hidden;*/
+  display: none;
 }
 
 .btn_sidemenu:hover {
