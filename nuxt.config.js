@@ -94,11 +94,6 @@ export default {
                 }
             }
         },
-        redirect: {
-            login: "/login",
-            home: "/",
-            logout: "/login"
-        }
     },
     router: {
         middleware: ["auth"]
