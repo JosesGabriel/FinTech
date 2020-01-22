@@ -189,7 +189,7 @@ export default {
         const response = await this.$api.chart.stocks.bidask({
           "symbol-id": symid,
           "filter-by-last": true,
-          limit: 2
+          limit: 10
         });
         const asks = Object.values(response.data.asks);
         const bids = Object.values(response.data.bids);
