@@ -98,14 +98,13 @@ import { mapActions, mapGetters } from "vuex";
 import Jockey from "~/components/chart/table/Jockey";
 import Activity from "~/components/chart/table/Activity";
 import Trade from "~/components/chart/table/Trade";
-// TODO  import ChatClient from "~/components/modals/VyndueChatClient";
+// FIXME  removed because of access token error import ChatClient from "~/components/modals/VyndueChatClient";
 
 export default {
   components: {
     Jockey,
     Activity,
     Trade,
-    ChatClient
   },
   data() {
     return {
