@@ -51,8 +51,8 @@ export default {
      ** Plugins to load before mounting the App
      */
     plugins: [
-        "~/plugins/axios",
         "~/plugins/global-method",
+        { src: "~/plugins/axios", mode: "client" },
         { src: "~/plugins/bus", mode: "client" },
         { src: "~/plugins/repository", mode: "client" },
         { src: "~/plugins/tradingview", mode: "client" },
