@@ -5,11 +5,11 @@
       >
     </v-content>
     <!---------------->
-    <template>
+    <!--<template>
       <v-container :class="this.show ? 'display' : 'no_display' " class="vyndue__chat">
           <ChatClient @showChat="ShowDialog"/>
       </v-container>
-    </template>
+    </template>-->
     <!---------------->
     <v-content class="content__btncontainer">
       
@@ -98,7 +98,7 @@ import { mapActions, mapGetters } from "vuex";
 import Jockey from "~/components/chart/table/Jockey";
 import Activity from "~/components/chart/table/Activity";
 import Trade from "~/components/chart/table/Trade";
-import ChatClient from "~/components/modals/VyndueChatClient";
+// TODO  import ChatClient from "~/components/modals/VyndueChatClient";
 
 export default {
   components: {
