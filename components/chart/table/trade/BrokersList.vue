@@ -26,7 +26,6 @@
             <template v-slot:activator="{ on }">
               <v-img
                 :alt="item.title"
-                :title="item.title"
                 :class="[{ fix_image: item.modal == false }]"
                 class="img__trades"
                 :src="`/icon/chart/trades/${item.img}`"
