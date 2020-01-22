@@ -3,7 +3,7 @@
     <v-card :dark="lightSwitch == true">
       <v-card-title
         class="text-left justify-left pa-3 px-5 success--text subtitle-1"
-      >CREATE PORTFOLIO</v-card-title>
+      >Create Portfolio</v-card-title>
       <v-container class="px-8">
         <v-card-title class="text-left justify-left px-0 body-2">Enter Portfolio Name</v-card-title>
         <v-text-field
@@ -16,6 +16,7 @@
         <v-text-field
           v-model="initialCapitalModel"
           color="success"
+          type="number"
           :dark="lightSwitch == true"
           class="stock_selector pa-0 pb-5 font-weight-bold body-2"
         ></v-text-field>
@@ -50,7 +51,7 @@
         <v-btn color="white" class="text-capitalize" text light @click.stop="show = false">Close</v-btn>
         <v-btn
           color="success"
-          class="text-capitalize"
+          class="text-capitalize black--text"
           depressed
           light
           :disabled="saveButtonDisable"
@@ -69,7 +70,7 @@ export default {
   props: ["visible"],
   computed: {
     ...mapGetters({
-      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      portfolioKey: "journal/getPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
     /**
@@ -99,7 +100,7 @@ export default {
       ],
       portfolioModel: "",
       saveButtonDisable: true,
-      namePortfolioModel: "",
+      namePortfolioModel: null,
       initialCapitalModel: null,
       typePortfolioModel: null,
       keyCreateCounter: 2
@@ -117,16 +118,11 @@ export default {
     /**
      * initialCapitalModel changing numbers into string and add separators and decimals
      *
-     * @param   {number}  newValue  [newValue description]
      *
      * @return  {string}  number with comma separator and 2 decimal points
      */
-    initialCapitalModel(newValue) {
+    initialCapitalModel() {
       this.fieldsWatch();
-      const result = newValue
-        .replace(/\D/g, "")
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      this.initialCapitalModel = result;
     },
     /**
      * typePortfolioModel watching type of portfolio
@@ -139,8 +135,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-      setDefaultPortfolioId: "journal/setDefaultPortfolioId"
+      setDefaultPortfolioId: "journal/setDefaultPortfolioId",
+      setPortfolioKey: "journal/setPortfolioKey"
     }),
     /**
      * Watch fields under create portfolio forms
@@ -149,9 +145,9 @@ export default {
      */
     fieldsWatch() {
       if (
-        this.typePortfolioModel != "" &&
-        this.initialCapital != "" &&
-        this.namePortfolioModel != ""
+        this.typePortfolioModel != null &&
+        parseFloat(this.initialCapitalModel) > 1 &&
+        this.namePortfolioModel != null
       ) {
         this.saveButtonDisable = false;
       } else {
@@ -164,21 +160,24 @@ export default {
      * @return  creating portfolio
      */
     createPortfolio() {
-      const convertedNumbers = this.initialCapitalModel.replace(/,/g, "");
       const createportfolioparams = {
         currency_code: "PHP",
         name: this.namePortfolioModel,
         description: "My Portfolio",
         type: this.typePortfolioModel,
-        balance: parseInt(convertedNumbers)
+        balance: parseFloat(this.initialCapitalModel)
       };
       this.$api.journal.portfolio
         .createportfolio(createportfolioparams)
         .then(response => {
           if (response.success) {
-            this.keyCreateCounter = this.renderPortfolioKey;
+            (this.namePortfolioModel = null),
+              (this.initialCapitalModel = null),
+              (this.typePortfolioModel = null);
+
+            this.keyCreateCounter = this.portfolioKey;
             this.keyCreateCounter++;
-            this.setRenderPortfolioKey(this.keyCreateCounter);
+            this.setPortfolioKey(this.keyCreateCounter);
             // this.setDefaultPortfolioId(response.data.fund.id); // hide for now
           }
         });

@@ -48,13 +48,12 @@ export default $axios => ({
     },
     history(historyparams) {
         let query = buildParams(historyparams);
-        
-        return $axios.$get(`${baseChartURL}/history/latest${query.length > 0 ? "?" + query : ""}`
-        );
+
+        return $axios.$get(`${baseChartURL}/history/latest${query.length > 0 ? "?" + query : ""}`);
     },
     list(listparams) {
         let query = buildParams(listparams);
-        
+
         return $axios.$get(`${baseChartURL}/list${query.length > 0 ? "?" + query : ""}`);
     },
     edittrade(edittradeparams) {
@@ -62,7 +61,7 @@ export default $axios => ({
     },
     deposit(portfolio_id, params) {
         let query = buildParams(params);
-       
+
         return $axios.$post(
             `${baseURL}/funds/${portfolio_id}/transactions/deposit${
             query.length > 0 ? "?" + query : ""
@@ -71,7 +70,7 @@ export default $axios => ({
     },
     withdraw(portfolio_id, params) {
         let query = buildParams(params);
-       
+
         return $axios.$post(
             `${baseURL}/funds/${portfolio_id}/transactions/withdraw${
             query.length > 0 ? "?" + query : ""
@@ -105,6 +104,10 @@ export default $axios => ({
     tradeedit(fund_id, stock_id, params) {
         return $axios.$post(
             `${baseURL}/funds/${fund_id}/update/${stock_id}`, params);
+    },
+    deleteportfolio(fund_id) {
+        return $axios.$delete(
+            `${baseURL}/funds/${fund_id}`);
     },
 });
 

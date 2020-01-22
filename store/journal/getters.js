@@ -5,6 +5,9 @@ export default {
     getRenderPortfolioKey(state) {
         return state.renderPortfolioKey;
     },
+    getPortfolioKey(state) {
+        return state.portfolioKey;
+    },
     getRenderEditKey(state) {
         return state.renderEditKey;
     },
