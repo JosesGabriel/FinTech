@@ -249,13 +249,15 @@ export default {
       try {
         if (this.symbolid == undefined) return;
         const data = JSON.parse(e.data);
+
         // set sse info to state
         this.setSSEInfo(data);
+
         // emit sse info
-        //nativeBus.$emit("b-tv-sse-all", data);
+        nativeBus.$emit("b-tv-sse-all", data);
 
         if (this.symbolid !== data.sym_id) return;
-
+        
         this.$store.commit("chart/SET_STOCK_OBJ", {
           trades: parseInt(data.tr)
         });

@@ -2,13 +2,17 @@ import { IsInArray } from "~/helpers/arrays/urls";
 
 /**
  * Extends the nuxt-axios package
- * 
+ *
  * @param {*} {}
  */
 export default function({ $axios, redirect }) {
   if (process.client) {
     // list of exempted urls
-    const urls = [process.env.CHART_API_URL, process.env.STREAM_API_URL];
+    const urls = [
+      process.env.CHART_API_URL,
+      process.env.STREAM_API_URL,
+      process.env.VYNDUE_API_URL
+    ];
 
     // region custom handlers
     /**

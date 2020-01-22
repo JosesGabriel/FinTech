@@ -107,8 +107,8 @@
     </div>
 
     <v-content class="mx-1">
-      <span class="subtitle-2 ml-2">Trade History</span>
-      <v-divider></v-divider>
+      <span class="subtitle-2 ml-2 text-uppercase">Trade History</span>
+      <v-divider class="mt-2"></v-divider>
       <v-data-table
         :headers="headers"
         :items="items"
@@ -341,7 +341,10 @@ export default {
         this.items = logs.data.logs;
         console.log(this.items);
         this.loading = false;
-      } catch (error) {}
+      } catch (error) {
+        this.items = [];
+        this.loading = false;
+      }
     },
     /**
      * detemine the color dymanically
