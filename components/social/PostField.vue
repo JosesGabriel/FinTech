@@ -1,138 +1,143 @@
 <template>
-  <v-card
-    class="pa-4 transparent__bg pb-3"
-    :dark="lightSwitch == 0 ? false : true"
-    :loading="loader"
-    outlined
-  >
-    <v-form enctype="multipart/form-data">
-      <v-avatar size="45" class="postField__avatar">
-        <img
-          class="avatar__border"
-          alt="Avatar"
-          :src="
-            $auth.user.data.user.profile_image
-              ? $auth.user.data.user.profile_image
-              : 'default.png'
-          "
-        />
-      </v-avatar>
-      <div class="postField__textareaContainer">
-        <v-textarea
-          v-if="$auth.loggedIn"
-          v-model="postField"
-          :placeholder="
-            'Hey ' +
-              $auth.user.data.user.username +
-              ', penny for your thoughts?'
-          "
-          class="pt-0 caption postField__textarea"
-          rows="3"
-          row-height="25"
-          color="primary"
-          required
-          no-resize
-          solo
-          flat
-          background-color="transparent"
-          :loading="postFieldLoader"
-          @keyup="catcher"
-          >{{ postField }}</v-textarea
-        >
-        <v-textarea
-          v-else
-          v-model="postField"
-          label="Hey Guest, penny for your thoughts?"
-          class="pt-0"
-          rows="3"
-          row-height="25"
-          color="primary"
-          required
-          :loading="postFieldLoader"
-          >{{ postField }}</v-textarea
-        >
-        <div v-if="stockTagMode" class="stockSuggestions__wrapper">
-          <v-btn
-            v-for="n in stockSuggestionsArray.length"
-            :key="n"
-            class="black--text mr-2 mb-2"
-            depressed
-            color="success"
-            x-small
-            @click="appendToField(stockSuggestionsArray[n - 1].symbol)"
-          >
-            {{ stockSuggestionsArray[n - 1].symbol }}
-          </v-btn>
-        </div>
-        <v-divider class="postField__divider" />
-        <div>
-          <input
-            ref="postField__inputRef"
-            type="file"
-            class="d-none"
-            multiple
-            accept=".jpg, .jpeg, .png, .mp4, .webm, .gif"
-            @change="onInputFileChange"
+  <div>
+    <v-card
+      class="pa-4 transparent__bg pb-3"
+      :dark="lightSwitch == 0 ? false : true"
+      :loading="loader"
+      outlined
+    >
+      <v-form enctype="multipart/form-data">
+        <v-avatar size="45" class="postField__avatar">
+          <img
+            class="avatar__border"
+            alt="Avatar"
+            :src="
+              $auth.user.data.user.profile_image
+                ? $auth.user.data.user.profile_image
+                : 'default.png'
+            "
           />
-          <div class="postField__preview pt-2">
-            <!-- <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
+        </v-avatar>
+        <div class="postField__textareaContainer">
+          <v-textarea
+            v-if="$auth.loggedIn"
+            v-model="postField"
+            :placeholder="
+              'Hey ' +
+                $auth.user.data.user.username +
+                ', penny for your thoughts?'
+            "
+            class="pt-0 caption postField__textarea"
+            rows="3"
+            row-height="25"
+            color="primary"
+            required
+            no-resize
+            solo
+            flat
+            background-color="transparent"
+            :loading="postFieldLoader"
+            @keyup="catcher"
+            >{{ postField }}</v-textarea
+          >
+          <v-textarea
+            v-else
+            v-model="postField"
+            label="Hey Guest, penny for your thoughts?"
+            class="pt-0"
+            rows="3"
+            row-height="25"
+            color="primary"
+            required
+            :loading="postFieldLoader"
+            >{{ postField }}</v-textarea
+          >
+          <div v-if="stockTagMode" class="stockSuggestions__wrapper">
+            <v-btn
+              v-for="n in stockSuggestionsArray.length"
+              :key="n"
+              class="black--text mr-2 mb-2"
+              depressed
+              color="success"
+              x-small
+              @click="
+                appendToField(stockSuggestionsArray[n - 1].symbol),
+                  (hasTaggedStock = true),
+                  (taggedStocks = [stockSuggestionsArray[n - 1].id_str])
+              "
+            >
+              {{ stockSuggestionsArray[n - 1].symbol }}
+            </v-btn>
+          </div>
+          <v-divider class="postField__divider" />
+          <div>
+            <input
+              ref="postField__inputRef"
+              type="file"
+              class="d-none"
+              multiple
+              accept=".jpg, .jpeg, .png, .mp4, .webm, .gif"
+              @change="onInputFileChange"
+            />
+            <div class="postField__preview pt-2">
+              <!-- <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
                             <v-icon color="white">mdi-close</v-icon>
                         </v-btn> -->
-            <!-- <img :src="previewImage" class="postField__previewImage" v-if="postIsImage"/>
+              <!-- <img :src="previewImage" class="postField__previewImage" v-if="postIsImage"/>
                         <video controls :src="previewImage" class="postField__previewImage" v-if="!postIsImage"/> -->
-            <div class="postField__imageWrapper">
-              <div
-                v-for="n in imagesArray.length"
-                v-show="imagesArray[n - 1] != ''"
-                :key="n"
-                class="postField__imageCard px-1"
-              >
-                <v-btn
-                  color="rgba(000,000,000,0.70)"
-                  fab
-                  x-small
-                  dark
-                  class="postField__imageWrapper--closebtn"
-                  @click="removeImage(n)"
+              <div class="postField__imageWrapper">
+                <div
+                  v-for="n in imagesArray.length"
+                  v-show="imagesArray[n - 1] != ''"
+                  :key="n"
+                  class="postField__imageCard px-1"
                 >
-                  <v-icon color="white">mdi-close</v-icon>
-                </v-btn>
-                <video
-                  v-if="!postIsImage"
-                  controls
-                  :src="imagesArray[n - 1]"
-                  class="postField__imageWrapper--image"
-                />
-                <img
-                  v-else
-                  :src="imagesArray[n - 1]"
-                  class="postField__imageWrapper--image"
-                />
+                  <v-btn
+                    color="rgba(000,000,000,0.70)"
+                    fab
+                    x-small
+                    dark
+                    class="postField__imageWrapper--closebtn"
+                    @click="removeImage(n)"
+                  >
+                    <v-icon color="white">mdi-close</v-icon>
+                  </v-btn>
+                  <video
+                    v-if="!postIsImage"
+                    controls
+                    :src="imagesArray[n - 1]"
+                    class="postField__imageWrapper--image"
+                  />
+                  <img
+                    v-else
+                    :src="imagesArray[n - 1]"
+                    class="postField__imageWrapper--image"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <v-btn
-            class="postField__btn"
-            small
-            :dark="lightSwitch == 0 ? false : true"
-            icon
-            @click="onClickImageUploadBtn"
-          >
-            <v-icon color="success">mdi-image-outline</v-icon
-            ><span class="success--text">Photo</span>
-          </v-btn>
-          <v-btn
-            class="postField__btn p-10"
-            small
-            :dark="lightSwitch == 0 ? false : true"
-            icon
-            @click="onClickImageUploadBtn"
-          >
-            <img class="mr-1" src="/icon/video.svg" width="20" />
-            <span class="success--text">Video</span>
-          </v-btn>
-          <!-- TODO after launching -->
-          <!-- <v-btn
+            <v-btn
+              class="postField__btn"
+              small
+              :dark="lightSwitch == 0 ? false : true"
+              icon
+              @click="onClickImageUploadBtn"
+            >
+              <v-icon color="success">mdi-image-outline</v-icon
+              ><span class="success--text">Photo</span>
+            </v-btn>
+            <v-btn
+              class="postField__btn p-10"
+              small
+              :dark="lightSwitch == 0 ? false : true"
+              icon
+              @click="onClickImageUploadBtn"
+            >
+              <img class="mr-1" src="/icon/video.svg" width="20" />
+              <span class="success--text">Video</span>
+            </v-btn>
+            <!-- TODO after launching -->
+            <!-- <v-btn
             class="postField__btn"
             small
             :dark="lightSwitch == 0 ? false : true"
@@ -141,22 +146,73 @@
             <img class="mr-1" src="/icon/polls.svg" width="17" />
             <span class="success--text">Polls</span>
           </v-btn> -->
-          <v-btn
-            rounded
-            outlined
-            small
-            right
-            absolute
-            color="success"
-            :disabled="!postField"
-            @click="postFieldSubmit"
-          >
-            Post
-          </v-btn>
+
+            <div v-if="hasTaggedStock" class="d-inline">
+              <v-btn
+                class="authorSentiment__button--bull"
+                icon
+                outlined
+                fab
+                width="24"
+                height="24"
+                x-small
+                right
+                absolute
+                color="success"
+                @click="authorSentiment = 'bull'"
+              >
+                <img src="/icon/bullish.svg" width="12" /> </v-btn
+              ><v-btn
+                class="authorSentiment__button--bear"
+                icon
+                outlined
+                fab
+                width="24"
+                height="24"
+                x-small
+                right
+                absolute
+                color="error"
+                @click="authorSentiment = 'bear'"
+              >
+                <img src="/icon/bearish.svg" width="12" />
+              </v-btn>
+            </div>
+            <v-btn
+              rounded
+              outlined
+              small
+              right
+              absolute
+              color="success"
+              :disabled="!postField"
+              @click="
+                taggedStocks.length > 0
+                  ? getTaggedStockValues()
+                  : postFieldSubmit()
+              "
+            >
+              Post
+            </v-btn>
+          </div>
         </div>
-      </div>
-    </v-form>
-  </v-card>
+      </v-form>
+    </v-card>
+
+    <div v-if="hasTaggedStock" class="postField__dropdown d-inline">
+      <div class="postField__dropdown--caret"></div>
+      <v-card
+        :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+        :dark="lightSwitch == 0 ? false : true"
+        outlined
+        max-width="250px"
+      >
+        <v-card-actions class="d-block">
+          <span class="caption">Register your sentiment for this stock.</span>
+        </v-card-actions>
+      </v-card>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -173,6 +229,9 @@ export default {
       stockSuggestionsArray: [],
       stockTagMode: false,
       currentTaggedStock: "",
+      hasTaggedStock: false,
+      taggedStocks: [],
+      authorSentiment: false,
       loader: false
     };
   },
@@ -196,6 +255,7 @@ export default {
       let index = this.postField.lastIndexOf("$");
       this.postField = this.postField.slice(0, index + 1);
       this.postField += symbol;
+      this.stockTagMode = false;
     },
     /**
      * Searches from stock list based on stock that user is currently typing, fires when stockTagMode is true.
@@ -206,7 +266,7 @@ export default {
       const params = {
         exchange: "PSE",
         query: this.currentTaggedStock,
-        limit: "20",
+        limit: "30",
         type: "stock"
       };
       this.$api.chart.charts.search(params).then(
@@ -227,16 +287,19 @@ export default {
       let regExp = /^[0-9a-zA-Z]+$/;
       if (e.key == "$") {
         this.stockTagMode = true;
+        this.search();
       } else if (this.stockTagMode && !regExp.test(e.key)) {
         this.stockTagMode = false;
         this.currentTaggedStock = "";
       }
 
       if (regExp.test(e.key) && e.key.length == 1 && this.stockTagMode) {
+        this.hasTaggedStock = true;
         this.currentTaggedStock += e.key;
         this.search();
-      } else if (e.key == "Backspace") {
+      } else if (e.key == "Backspace" && this.stockTagMode) {
         this.currentTaggedStock = this.currentTaggedStock.slice(0, -1);
+        this.search();
       }
 
       if (
@@ -245,11 +308,35 @@ export default {
         this.currentTaggedStock == ""
       ) {
         this.stockTagMode = false;
+        this.search();
+      } else if (this.stockTagMode && e.key == "Backspace") {
+        this.search();
       }
 
       if (this.postField == "") {
         this.stockTagMode = false;
         this.currentTaggedStock = "";
+        this.hasTaggedStock = false;
+        this.taggedStocks = [];
+      }
+    },
+    /**
+     * Parses entire post text and finds if author tagged a stock or not
+     *
+     * @return
+     */
+    postHasTaggedStock() {
+      let isStockTagged;
+      let stockTagged;
+      let postArray = this.postField.split(" ");
+      for (let i = 0; i < postArray.length; i++) {
+        if (postArray[i].charAt(0) == "$" && postArray[i].length > 1) {
+          isStockTagged = true;
+          stockTagged = postArray[i];
+          break;
+        } else {
+          isStockTagged = false;
+        }
       }
     },
     /**
@@ -259,17 +346,35 @@ export default {
      *
      * @return
      */
-    postFieldSubmit() {
+    postFieldSubmit(stockValues) {
       this.postFieldLoader = "success";
       this.stockTagMode = false;
       this.currentTaggedStock = "";
+      this.taggedStocks = [];
+      this.hasTaggedStock = false;
+      let taggedStocks = [];
+      if (stockValues) {
+        taggedStocks = [
+          {
+            tag_id: this.taggedStocks[0],
+            tag_type: "stock",
+            tag_meta: {
+              last: stockValues.last,
+              changepercentage: stockValues.change,
+              sentiment: this.authorSentiment
+            }
+          }
+        ];
+      }
+
       if (this.$refs.postField__inputRef.files) {
         //text + image
         const params = {
           content: this.postField,
           attachments: this.cloudArray,
           visibility: "public",
-          status: "active"
+          status: "active",
+          tags: taggedStocks
         };
         this.$api.social.actions
           .create(params)
@@ -287,7 +392,8 @@ export default {
         const params = {
           content: this.postField,
           visibility: "public",
-          status: "active"
+          status: "active",
+          tags: taggedStocks
         };
         this.$api.social.actions
           .create(params)
@@ -301,6 +407,26 @@ export default {
             this.clearInputs(false, error.response.data.message);
           });
       }
+    },
+    /**
+     * gets price and last change percentage of tagged stock.
+     * fires before posting a post
+     *
+     * @return
+     */
+    getTaggedStockValues() {
+      const params = {
+        "symbol-id": this.taggedStocks[0]
+      };
+      this.$api.chart.stocks.history(params).then(
+        function(result) {
+          let values = {
+            last: result.data.last,
+            change: result.data.changepercentage
+          };
+          this.postFieldSubmit(values);
+        }.bind(this)
+      );
     },
     /**
      * clicks actual input type file button. lisod i-style ang <input type="file">
@@ -338,7 +464,7 @@ export default {
      * Detects when input field triggers a change
      * splits file name to get file type and pass to generateImagePreviews()
      *
-     * @param   {[type]}  e
+     * @param   {object}  e
      *
      * @return
      */
@@ -405,6 +531,28 @@ export default {
 </script>
 
 <style>
+.authorSentiment__button--bull {
+  right: 130px !important;
+  bottom: 12px;
+}
+.authorSentiment__button--bear {
+  right: 95px !important;
+  bottom: 12px;
+}
+.postField__dropdown--caret {
+  position: relative;
+  left: 100px;
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 10px solid rgb(182, 182, 182, 0.2);
+}
+.postField__dropdown {
+  position: absolute;
+  right: 450px;
+  z-index: 1;
+}
 .postField__divider {
   position: absolute;
   width: 526px;
