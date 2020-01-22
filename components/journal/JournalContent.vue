@@ -73,16 +73,25 @@
             </v-list-item>
             <v-list-item
               ripple
+              @click.stop="showManagePortfolio=true"
+              :dark="lightSwitch == true"
+              :style="{ background: cardbackground }"
+            >
+              <v-list-item-content>
+                <v-list-item-title class="text-uppercase caption">Manage Portfolio</v-list-item-title>
+              </v-list-item-content>
+              <v-icon color="success" class="body-2">mdi-settings-outline</v-icon>
+            </v-list-item>
+            <v-list-item
+              ripple
               @click.stop="showCreatePortForm=true"
               :dark="lightSwitch == true"
               :style="{ background: cardbackground }"
             >
               <v-list-item-content>
-                <v-list-item-title class="text-uppercase caption">
-                  Create Portfolio
-                  <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon>
-                </v-list-item-title>
+                <v-list-item-title class="text-uppercase caption">Create Portfolio</v-list-item-title>
               </v-list-item-content>
+              <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon>
             </v-list-item>
           </template>
         </v-select>
@@ -155,6 +164,11 @@
       </v-tab-item>
     </v-tabs>
     <create-modal :visible="showCreatePortForm" @close="showCreatePortForm=false" />
+    <manage-modal
+      :visible="showManagePortfolio"
+      @clicked="deletedItem"
+      @close="showManagePortfolio=false"
+    />
     <!-- <ChartTesting/> -->
   </v-col>
 </template>
@@ -181,6 +195,7 @@ import TradelogsContent from "~/components/journal/tradelogs/TradelogContent";
 //Ledger tab
 import LedgerContent from "~/components/journal/ledger/LedgerContent";
 import createModal from "~/components/journal/dashboard/JournalCreatePortfolio";
+import manageModal from "~/components/modals/Manage";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -206,7 +221,8 @@ export default {
     TradelogsContent,
     //Ledger tab
     LedgerContent,
-    createModal
+    createModal,
+    manageModal
   },
   data() {
     return {
@@ -217,6 +233,7 @@ export default {
       portfolioDropdownModel: null,
       selectedProfile: null,
       showCreatePortForm: false,
+      showManagePortfolio: false,
       componentKey: 0,
       showSelect: false
     };
@@ -226,6 +243,7 @@ export default {
       userPortfolio: "journal/getUserPortfolio",
       defaultPortfolioId: "journal/getDefaultPortfolioId",
       renderPortfolioKey: "journal/getRenderPortfolioKey",
+      portfolioKey: "journal/getPortfolioKey",
       lightSwitch: "global/getLightSwitch"
     }),
     /**
@@ -264,12 +282,21 @@ export default {
      */
     renderPortfolioKey() {
       this.getJournalCharts();
+    },
+    /**
+     * Watch portfolioKey vuex if key changed perform function inside
+     *
+     * @return  {number}  get increment key
+     */
+    portfolioKey() {
+      this.getUserPortfolioList();
     }
   },
   methods: {
     ...mapActions({
       setUserPortfolio: "journal/setUserPortfolio",
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+      setPortfolioKey: "journal/setPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
       setJournalCharts: "journal/setJournalCharts"
     }),
@@ -338,6 +365,7 @@ export default {
      * @return  {array}  array of item, all portfolios
      */
     getUserPortfolioList() {
+      this.portfolioListPush = []
       this.$api.journal.portfolio.portfolio().then(
         function(result) {
           this.portfolioList = result.data.logs;
@@ -359,6 +387,7 @@ export default {
               }
             }
           }
+          this.portfolioListPush.push({ divider: true });
           if (!defaultPort) {
             const createportfolioparams = {
               currency_code: "PHP",
@@ -377,7 +406,6 @@ export default {
               );
           }
           if (this.portfolioList.length != 0) {
-            this.portfolioListPush.push({ divider: true });
             const toFindVirtual = "virtual"; // what we want to count
             for (let i = 0; i < this.portfolioList.length; i++) {
               let portfolioListPush2 = this.portfolioList[i];
@@ -388,6 +416,7 @@ export default {
           }
         }.bind(this)
       );
+      this.componentKeys++;
     },
     /**
      * function to get data for charts and assigned to journalCharts state
@@ -406,6 +435,21 @@ export default {
           });
       }
       this.componentKeys++;
+    },
+    /**
+     * catch the delete item then set render key to update the list or portfolio
+     *
+     * @param   {object}  value  object handler of item deleted
+     *
+     * @return  {number}         returns key to refresh portfolio list
+     */
+    deletedItem(value) {
+      if (value.confirm == true) {
+        this.keyCreateCounter = this.portfolioKey;
+        this.keyCreateCounter++;
+        this.setPortfolioKey(this.keyCreateCounter);
+        this.setRenderPortfolioKey(this.keyCreateCounter);
+      }
     }
   }
 };
@@ -497,7 +541,7 @@ span.apexcharts-tooltip-text-label {
 }
 .select_portfolio .v-input__slot {
   margin: 0;
-  border-radius: 4px
+  border-radius: 4px;
 }
 .select_portfolio .v-input__control {
   min-height: auto !important;

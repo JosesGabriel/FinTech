@@ -153,7 +153,7 @@
     <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
     <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
-    <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" />
+    <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" class="asdasd"/>
     <trade-details
       :visible="showTradeDetails"
       :itemDetails="itemDetails"
