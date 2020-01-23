@@ -257,7 +257,7 @@ export default {
         nativeBus.$emit("b-tv-sse-all", data);
 
         if (this.symbolid !== data.sym_id) return;
-        
+
         this.$store.commit("chart/SET_STOCK_OBJ", {
           trades: parseInt(data.tr)
         });

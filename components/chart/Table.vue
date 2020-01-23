@@ -77,6 +77,7 @@
         :href="`#tab-${item.id}`"
         class="text-capitalize subtitle-1"
         style="font-size: .8rem !important;"
+        :disabled="item.disabled"
         @click="toggleTabs(item.id)"
       >
         {{ item.title }}
@@ -116,21 +117,21 @@ export default {
           icon: "mdi-cash-usd-outline",
           title: "Jockey",
           component: "Jockey",
-          disabled: false
+          disabled: true
         },
         {
           id: 2,
           icon: "mdi-format-list-bulleted-square",
           title: "Activity",
           component: "Activity",
-          disabled: false
+          disabled: true
         },
         {
           id: 3,
           icon: "mdi-card-search-outline",
           title: "Trade",
           component: "Trade",
-          disabled: false
+          disabled: true
         }
       ],
       show: false,
@@ -145,7 +146,8 @@ export default {
       maximize: "chart/getTableMaximize",
       fullscreen: "chart/getTableFullscreen",
       sidebarboard: "chart/getSidebar",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      index: "chart/index"
     }),
     /**
      * toggle card background dark/light
@@ -154,6 +156,26 @@ export default {
      */
     cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
+  },
+  watch: {
+      /**
+     * check if stock selected is index
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return 
+     */
+    index(value){
+        this.tabsContent.forEach((val, key) => {
+            this.tabsContent[key].disabled = value;
+        });
+        // close the table tabs
+        if(value===true){
+            if(this.maximize){
+                this.toggleTabs(this.activeTab);
+            }
+        }
     }
   },
   methods: {

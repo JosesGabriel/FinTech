@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 import Login from "@/components/chart/table/trade/Login.vue";
 import TradeView from "@/components/chart/table/trade/TradeView.vue";
@@ -51,7 +51,6 @@ export default {
   },
   data() {
     return {
-      showBrokers: true,
       itemsTop: [
         {
           id: 1,
@@ -102,14 +101,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      tradeLogin: "chart/tradeLogin",
-      lightSwitch: "global/getLightSwitch"
-    })
-  },
-  methods: {
-    ...mapActions({
-      setTradeLogin: "chart/setTradeLogin",
-      setTradeBroker: "chart/setTradeBroker"
+      lightSwitch: "global/getLightSwitch",
+      showBrokers: "chart/showBrokers"
     })
   }
 };

@@ -68,6 +68,10 @@ export default {
     state.tradeLogin = data;
   },
 
+  SET_SHOW_BROKERS(state, data) {
+    state.showBrokers = data;
+  },
+
   SET_TRADE_BROKER(state, data) {
     state.tradeBroker = data;
   },
