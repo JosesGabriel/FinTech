@@ -5,7 +5,7 @@
     class="gameGlobal"
     :style="{ background: cardBackground }"
   >
-    <!-- <Header /> -->
+    <Header />
     <div class="spacer__content"></div>
     <div class="content__main">
       <div class="content__left">
@@ -14,7 +14,7 @@
           <v-col class="col-12">
             <v-slide-y-transition>
               <v-content v-show="ticker" class="ticker__container">
-                <!-- <Ticker /> -->
+                <Ticker />
               </v-content>
             </v-slide-y-transition>
           </v-col>
@@ -24,7 +24,7 @@
         <v-row no-gutters>
           <v-col class="col-12">
             <v-content class="chart__container">
-              <!-- <nuxt /> -->
+              <nuxt />
             </v-content>
           </v-col>
         </v-row>
@@ -34,7 +34,7 @@
           <v-col class="col-12">
             <v-slide-y-reverse-transition>
               <v-content class="table__container">
-                <!-- <Table /> -->
+                <Table />
               </v-content>
             </v-slide-y-reverse-transition>
           </v-col>
@@ -51,7 +51,7 @@
           { right_light_mode: lightSwitch == 0 }
         ]"
       >
-        <!-- <Sidebar /> -->
+        <Sidebar />
       </div>
     </div>
   </v-app>
