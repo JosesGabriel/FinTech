@@ -14,7 +14,7 @@
           <v-col class="col-12">
             <v-slide-y-transition>
               <v-content v-show="ticker" class="ticker__container">
-                <Ticker />
+                <!-- <Ticker /> -->
               </v-content>
             </v-slide-y-transition>
           </v-col>
