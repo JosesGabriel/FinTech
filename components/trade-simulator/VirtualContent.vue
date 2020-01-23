@@ -472,6 +472,7 @@ export default {
           function(result) {
             let defaultPort = false;
             for (let i = 0; i < result.data.logs.length; i++) {
+              //console.log('Portfolio- ', result);
               if (
                 result.data.logs[i].type == "virtual"
               ) {

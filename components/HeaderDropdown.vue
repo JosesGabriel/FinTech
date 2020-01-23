@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="userSettings__dropdown--caret"></div>
+    <!--<div class="userSettings__dropdown--caret"></div>-->
     <v-card
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
@@ -8,17 +8,39 @@
       max-width="150px"
       class="userSettings__dropdown"
     >
-      <v-card-actions class="d-block">
-        <router-link to="/settings" class="no-transform">
-          <v-btn outlined text block class="mb-2">Settings</v-btn></router-link
-        >
-        <v-btn outlined text block @click="logout()">Logout</v-btn>
-        <v-switch
-          v-model="lightSwitch_m"
-          color="warning"
-          :label="lightSwitch_m ? 'Light' : 'Dark'"
-        ></v-switch>
+     <v-card-actions class="d-block">
+        <v-row class="userSettings__settings">
+          <v-col class="pt-0 pb-2 userSettings__dropdown--border">
+              <router-link to="/settings" class="no-transform" :style="{ color: toggleFontColor }">
+                <span class="userSettings__dropdown--settings"> Settings</span>
+              </router-link>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col style="padding-top: 9px;" class="ml-1 pb-0 userSettings__dropdown--border">
+              Lights
+          </v-col>
+           <v-col style="padding-top: 9px;" class="mr-1 pb-0 pl-6 pr-0 userSettings__dropdown--border">
+               <v-switch
+                dense
+                v-model="lightSwitch_m"
+                color="success"
+              ></v-switch>
+          </v-col>
+        </v-row>
+        <v-row class="userSettings__logout">
+          <v-col  @click="logout()"  style="font-size:14px;" class="text-left pl-3 pb-0 pt-2">
+            <!--<v-btn 
+              class="ml-1 pt-2 text-capitalize userSettings__logoutBtn"  
+              text 
+              style="font-size:14px;"
+              @click="logout()"
+              >Logout</v-btn> --> 
+              Logout
+          </v-col>   
+        </v-row>
       </v-card-actions>
+
     </v-card>
   </div>
 </template>
@@ -37,7 +59,12 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
-    })
+    }),
+    toggleFontColor() {
+      return this.lightSwitch == 0
+        ? "#000000 !important"
+        : "#ffffff !important";
+    },
   },
   watch: {
     /**
@@ -72,7 +99,7 @@ export default {
 <style>
 .userSettings__dropdown {
   position: absolute;
-  top: 53px;
+  top: 33px;
   right: 10px;
   margin-right: 10px;
 }
@@ -85,5 +112,54 @@ export default {
   position: absolute;
   right: 40px;
   top: 36px;
+}
+.userSettings__dropdown--border {
+  border-bottom:  1px solid rgb(182, 182, 182, 0.2);
+  font-size: 14px;
+}
+.userSettings__logout:hover{
+  cursor: pointer;
+  color:black !important;
+}
+.v-input--switch > .v-input__control > .v-messages.theme--dark{
+  display: none;
+}
+.v-btn:hover:before{
+  background: transparent;
+}
+.v-input--switch__thumb {
+  background-color: #03dac5;
+}
+.userSettings__settings:hover{
+ background-color: #03dac5;
+ color: black !important;
+}
+.userSettings__settings{
+  padding-top: 8px;
+  margin-top: -9px;
+  margin-left: -8px;
+  margin-right: -8px;
+}
+.userSettings__logout:hover {
+ background-color: #03dac5;
+ color: black;
+}
+.userSettings__logout{
+  margin-bottom: -8px;
+  padding-bottom: 10px;
+  margin-left: -8px;
+  margin-right: -8px;
+}
+.userSettings__logoutBtn:hover{
+  color: black;
+}
+.userSettings__dropdown--settings:hover{
+  color: black !important;
+}
+.userSettings__dropdown--settings{
+  font-size: 14px;
+}
+.userSettings__dropdown--border > .v-input--switch > .v-input__control {
+  height: 30px !important;
 }
 </style>
