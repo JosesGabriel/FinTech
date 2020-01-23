@@ -150,9 +150,9 @@
             <td class="text-right" style="width:13%">
               <span
                 :class="[
-                  { increase: props.item.changestatus == 1 },
-                  { decrease: props.item.changestatus == 2 },
-                  { neutral: props.item.changestatus == 0 }
+                  { increase: displayProfLoss(props.item) > 0 },
+                  { decrease: displayProfLoss(props.item) < 0 },
+                  { neutral: displayProfLoss(props.item) == 0 }
                 ]"
               >
                 {{ displayProfLoss(props.item) | numeral("0,0.00") }}
@@ -161,9 +161,9 @@
             <td class="text-right pr-2" style="width:13%">
               <span
                 :class="[
-                  { increase: props.item.changestatus == 1 },
-                  { decrease: props.item.changestatus == 2 },
-                  { neutral: props.item.changestatus == 0 }
+                  { increase: displayPercentage(props.item) > 0 },
+                  { decrease: displayPercentage(props.item) < 0 },
+                  { neutral: displayPercentage(props.item) == 0 }
                 ]"
                 >{{ displayPercentage(props.item) | numeral("0,0.00") }}</span
               >
@@ -339,7 +339,6 @@ export default {
           stock: symid
         });
         this.items = logs.data.logs;
-        console.log(this.items);
         this.loading = false;
       } catch (error) {
         this.items = [];

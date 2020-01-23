@@ -56,7 +56,8 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      tradeLogin: "chart/tradeLogin"
+      tradeLogin: "chart/tradeLogin",
+      showBrokers: "chart/showBrokers"
     }),
     /**
      * Toggle between dark/light
@@ -86,7 +87,8 @@ export default {
   methods: {
     ...mapActions({
       setTradeLogin: "chart/setTradeLogin",
-      setTradeBroker: "chart/setTradeBroker"
+      setTradeBroker: "chart/setTradeBroker",
+      setShowBrokers: "chart/setShowBrokers"
     }),
     /**
      * show modal once trigger
@@ -96,8 +98,9 @@ export default {
      * @return
      */
     showModal: function(item) {
+      // if paper trade, no need to show login
       if (item.modal == false) {
-        this.showBrokers = false;
+        //this.setShowBrokers(false);
         return;
       }
       this.setTradeBroker(item);

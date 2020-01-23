@@ -46,6 +46,10 @@ export default {
     await commit("SET_TRADE_BROKER", data);
   },
 
+  async setShowBrokers({ commit }, data) {
+    await commit("SET_SHOW_BROKERS", data);
+  },
+
   async setMarketCode({ commit }, data) {
     await commit("SET_MARKET_CODE", data);
   },

@@ -32,6 +32,7 @@
                 <v-text-field
                   v-show="tradeBroker.id != 3"
                   label="Email/Username"
+                  class="login__textfield"
                   color="success"
                   required
                 ></v-text-field>
@@ -45,6 +46,7 @@
                   <v-col class="col-5 pa-0">
                     <v-text-field
                       label="User ID"
+                      class="login__textfield"
                       color="success"
                       required
                     ></v-text-field>
@@ -65,9 +67,14 @@
                   color="success"
                   type="password"
                   required
+                  class="login__textfield"
                 ></v-text-field>
                 <v-content class="text-right">
-                  <span id="forget_password" class="caption font-weight-bold">
+                  <span
+                    id="forget_password"
+                    class="caption font-weight-bold"
+                    @click="showForgotPassword"
+                  >
                     Forget Password
                   </span>
                 </v-content>
@@ -93,7 +100,7 @@
                   text
                   rounded
                   block
-                  :dark="lightSwitch == 1"
+                  color="success"
                   @click="setTradeLogin(false)"
                   >CLOSE</v-btn
                 >
@@ -111,22 +118,25 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Login",
-  methods: {
-    ...mapActions({
-      setTradeLogin: "chart/setTradeLogin"
-    })
-  },
-  watch: {
-    tradeBroker(value) {
-      //console.log(value);
-    }
-  },
   computed: {
     ...mapGetters({
       tradeLogin: "chart/tradeLogin",
       tradeBroker: "chart/tradeBroker",
       lightSwitch: "global/getLightSwitch"
     })
+  },
+  methods: {
+    ...mapActions({
+      setTradeLogin: "chart/setTradeLogin"
+    }),
+    /**
+     * show modal forgot password
+     *
+     * @return
+     */
+    showForgotPassword() {
+      return;
+    }
   }
 };
 </script>
@@ -147,5 +157,16 @@ export default {
   margin-top: -47px;
   position: absolute;
   right: 0;
+}
+.login__textfield
+  .v-input__control
+  .v-input__slot
+  .v-input__append-inner
+  .v-input__icon
+  i {
+  font-size: 20px;
+}
+.login__textfield .v-input__control .v-input__slot .v-text-field__slot label {
+  font-size: 14px;
 }
 </style>
