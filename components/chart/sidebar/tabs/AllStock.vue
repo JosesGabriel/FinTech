@@ -98,7 +98,7 @@ export default {
         { text: "Last", value: "last", class: "text-right" },
         {
           text: "%Change",
-          value: "change",
+          value: "changepercentage",
           class: "text-right"
         },
         {
