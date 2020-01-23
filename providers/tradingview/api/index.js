@@ -145,13 +145,11 @@ export default {
    */
   onReady: cb => {
     setTimeout(() => {
-      if (process.client) {
-        // get tradingview config
-        axios.get(CONFIG_URL).then(({ data }) => {
-          // write to callback
-          cb(data.data);
-        });
-      }
+      // get tradingview config
+      axios.get(CONFIG_URL).then(({ data }) => {
+        // write to callback
+        cb(data.data);
+      });
     }, 0);
   },
   /**
@@ -175,19 +173,17 @@ export default {
       limit: 30
     };
 
-    if (process.client) {
-      // get tradingview search
-      axios
-        .get(SEARCH_URL, {
-          params: params
-        })
-        .then(({ data }) => {
-          onResultReadyCallback(data.data);
-        })
-        .catch(error => {
-          onResultReadyCallback([]);
-        });
-    }
+    // get tradingview search
+    axios
+      .get(SEARCH_URL, {
+        params: params
+      })
+      .then(({ data }) => {
+        onResultReadyCallback(data.data);
+      })
+      .catch(error => {
+        onResultReadyCallback([]);
+      });
   },
   /**
    * Resolvesymbol is fired when the user clicks the symbol from search bar
@@ -229,19 +225,17 @@ export default {
     };
 
     setTimeout(function() {
-      if (process.client) {
-        // get tradingview resolve
-        axios
-          .get(RESOLVE_URL, {
-            params: params
-          })
-          .then(({ data }) => {
-            onSymbolResolvedCallback(data.data);
-          })
-          .catch(error => {
-            onResolveErrorCallback({});
-          });
-      }
+      // get tradingview resolve
+      axios
+        .get(RESOLVE_URL, {
+          params: params
+        })
+        .then(({ data }) => {
+          onSymbolResolvedCallback(data.data);
+        })
+        .catch(error => {
+          onResolveErrorCallback({});
+        });
     }, 0);
   },
   /**
@@ -279,53 +273,51 @@ export default {
       params.resolution = "1m";
     }
 
-    if (process.client) {
-      // get tradingview history
-      axios
-        .get(HISTORY_URL, {
-          params: params
-        })
-        .then(response => {
-          const data = response.data.data;
-          const nodata = data.s === "no_data";
+    // get tradingview history
+    axios
+      .get(HISTORY_URL, {
+        params: params
+      })
+      .then(response => {
+        const data = response.data.data;
+        const nodata = data.s === "no_data";
 
-          if (data.s !== "ok" && !nodata) {
-            onErrorCallback(data.s);
-          }
-          let bars = [];
-          let barsCount = nodata ? 0 : data.t.length;
-          let volumePresent = typeof data.v != "undefined";
-          for (let i = 0; i < barsCount; i++) {
-            let barValue = {
-              time: data.t[i] * 1000,
-              close: parseFloat(data.c[i]),
-              open: parseFloat(data.o[i]),
-              high: parseFloat(data.h[i]),
-              low: parseFloat(data.l[i])
-            };
+        if (data.s !== "ok" && !nodata) {
+          onErrorCallback(data.s);
+        }
+        let bars = [];
+        let barsCount = nodata ? 0 : data.t.length;
+        let volumePresent = typeof data.v != "undefined";
+        for (let i = 0; i < barsCount; i++) {
+          let barValue = {
+            time: data.t[i] * 1000,
+            close: parseFloat(data.c[i]),
+            open: parseFloat(data.o[i]),
+            high: parseFloat(data.h[i]),
+            low: parseFloat(data.l[i])
+          };
 
-            if (volumePresent) {
-              barValue.volume = parseFloat(data.v[i]);
-              barValue.foreign = parseFloat(data.v[i]);
-            }
-
-            bars.push(barValue);
+          if (volumePresent) {
+            barValue.volume = parseFloat(data.v[i]);
+            barValue.foreign = parseFloat(data.v[i]);
           }
 
-          // get the last bar
-          lastBarData = bars[barsCount - 1];
+          bars.push(barValue);
+        }
 
-          let meta = { noData: nodata };
-          if (nodata && data.nb) {
-            meta.nextTime = data.nb;
-          }
+        // get the last bar
+        lastBarData = bars[barsCount - 1];
 
-          onHistoryCallback(bars, meta);
-        })
-        .catch(error => {
-          onErrorCallback([]);
-        });
-    }
+        let meta = { noData: nodata };
+        if (nodata && data.nb) {
+          meta.nextTime = data.nb;
+        }
+
+        onHistoryCallback(bars, meta);
+      })
+      .catch(error => {
+        onErrorCallback([]);
+      });
   },
   /**
    * Subscribebars connects to a stream for realtime update
@@ -415,19 +407,17 @@ export default {
       params.resolution = "1m";
     }
 
-    if (process.client) {
-      // get tradingview history
-      axios
-        .get(TIMESCALE_MARKS_TIME_URL, {
-          params: params
-        })
-        .then(({ data }) => {
-          onDataCallback(data.data);
-        })
-        .catch(error => {
-          onDataCallback([]);
-        });
-    }
+    // get tradingview history
+    axios
+      .get(TIMESCALE_MARKS_TIME_URL, {
+        params: params
+      })
+      .then(({ data }) => {
+        onDataCallback(data.data);
+      })
+      .catch(error => {
+        onDataCallback([]);
+      });
   },
   /**
    * GetServerTime is executed with onready event and used for time synchornization
@@ -435,12 +425,10 @@ export default {
    * @return  {Function}  callback response with the server time
    */
   getServerTime: cb => {
-    if (process.client) {
-      // get tradingview config
-      axios.get(SERVER_TIME_URL).then(({ data }) => {
-        // write to callback
-        cb(data.data.time);
-      });
-    }
+    // get tradingview config
+    axios.get(SERVER_TIME_URL).then(({ data }) => {
+      // write to callback
+      cb(data.data.time);
+    });
   }
 };
