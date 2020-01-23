@@ -32,7 +32,7 @@
       </v-col>
       <v-col cols="12" class="cover_info pa-0">
         <v-list-item>
-          <v-list-item-avatar size="200">
+          <v-list-item-avatar size="180">
             <span class="profile-badge">ALPHA</span>
             <v-img
               class="profile_photo"
@@ -77,7 +77,7 @@
                 <v-list-item-title class="white--text subtitle-1 text-shadow">@LizaSoberano</v-list-item-title>
               </div>
             </v-card>
-            <v-card class="pa-2 profile_suminfo d-block" color="transparent" outlined tile>
+            <v-card class="px-2 pt-1 profile_suminfo d-block" color="transparent" outlined tile>
               <v-row no-gutters>
                 <div class="text-center pr-4">
                   <v-list-item-title class="white--text caption">Reputation</v-list-item-title>
@@ -144,7 +144,7 @@ export default {
 </script>
 <style scoped>
 .cover_info {
-  margin-top: -150px;
+  margin-top: -140px;
 }
 .profile_photo {
   border: 4px solid #fff;

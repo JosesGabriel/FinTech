@@ -554,7 +554,7 @@ export default {
 
 .v-menu__content
   .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-  color: #03dac5 !important;
+  /* color: #03dac5 !important; */
 }
 .select_portfolio .v-select__slot .v-label,
 .select_portfolio .v-select__slot .v-icon {

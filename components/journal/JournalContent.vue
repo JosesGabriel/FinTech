@@ -80,7 +80,7 @@
               <v-list-item-content>
                 <v-list-item-title class="text-uppercase caption">Manage Portfolio</v-list-item-title>
               </v-list-item-content>
-              <v-icon color="success" class="body-2">mdi-settings-outline</v-icon>
+              <v-icon :color="lightSwitch == true ? 'white' : 'black'" class="body-2">mdi-settings-outline</v-icon>
             </v-list-item>
             <v-list-item
               ripple
@@ -91,7 +91,7 @@
               <v-list-item-content>
                 <v-list-item-title class="text-uppercase caption">Create Portfolio</v-list-item-title>
               </v-list-item-content>
-              <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon>
+              <v-icon :color="lightSwitch == true ? 'white' : 'black'" class="body-2">mdi-plus-circle-outline</v-icon>
             </v-list-item>
           </template>
         </v-select>
@@ -476,7 +476,7 @@ export default {
 }
 .v-menu__content
   .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-  color: #03dac5 !important;
+  /* color: #03dac5 !important; */
 }
 /* reset trade fund css */
 .rtf_top-btn.v-btn--outlined:hover,
