@@ -199,7 +199,7 @@
                 >Average Price Calculator</v-list-item-title
               >
             </v-list-item-content>
-            <v-dialog v-model="averagePriceDialog" max-width="290">
+            <v-dialog v-model="averagePriceDialog" max-width="350">
               <AveragePriceCalculator />
             </v-dialog>
           </v-list-item>

@@ -56,7 +56,7 @@
                   <v-card-title class="pa-0 text-right justify-end">
                     <v-col sm="12" md="12" class="pa-0">
                       <v-select
-                        offset-y="true"
+                        :menu-props="{offsetY: true, dark: lightSwitch == true}"
                         item-color="success"
                         :dark="lightSwitch == true"
                         color="success"

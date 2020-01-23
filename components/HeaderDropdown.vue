@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!--<div class="userSettings__dropdown--caret"></div>-->
+    <div class="userSettings__dropdown--caret"></div>
     <v-card
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
@@ -99,8 +99,8 @@ export default {
 <style>
 .userSettings__dropdown {
   position: absolute;
-  top: 33px;
-  right: 10px;
+  top: 40px;
+  right: 20px;
   margin-right: 10px;
 }
 .userSettings__dropdown--caret {
@@ -111,7 +111,7 @@ export default {
   border-bottom: 17px solid rgb(182, 182, 182, 0.2);
   position: absolute;
   right: 40px;
-  top: 36px;
+  top: 33px;
 }
 .userSettings__dropdown--border {
   border-bottom:  1px solid rgb(182, 182, 182, 0.2);

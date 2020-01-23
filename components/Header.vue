@@ -48,12 +48,15 @@
         width="180"
         tile
       >
+
+      <div class="userSettings__dropdown--caret"></div>
+
         <v-list-item class="listItem__marketSentiments">
           <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
             <v-list-item-title class="listItem__marketSentiments" >Market Sentiments</v-list-item-title>
           </router-link>
         </v-list-item>
-       <v-list-item class="listItem__learn">
+       <!--<v-list-item class="listItem__learn">
           <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
             <v-list-item-title class="listItem__learn">Learn</v-list-item-title>
           </router-link>
@@ -67,19 +70,63 @@
           <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
             <v-list-item-title class="listItem__bulletin">Bulletin</v-list-item-title>
           </router-link>
-        </v-list-item>
-        <v-list-item class="listItem__powerTools">
-          <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__powerTools">Power Tools</v-list-item-title>
-          </router-link>
-        </v-list-item>
+        </v-list-item> -->
+      
+            <v-list-item 
+              class="listItem__powerTools" 
+              @mouseover="displayPowerTools = true"
+              @mouseleave="displayPowerTools = false"
+              > 
+              <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
+                <v-list-item-title 
+                  class="listItem__powerTools"
+                  >Power Tools</v-list-item-title>
+              </router-link>
+            </v-list-item>
       </v-card>
-     
-      <router-link to="/" class="social__router">
+
+          <v-card
+            class="mx-auto header__menuIcon--powerTools"
+            :class="this.displayPowerTools ? 'display' : 'noDisplay'"
+            width="180"
+            tile
+            @mouseover="displayPowerTools = true"
+            @mouseleave="displayPowerTools = false"
+          >
+           <v-list-item class="listItem__buySellCalc" @click.stop="buySellDialog = true">
+              <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
+                <v-list-item-title class="listItem__buySellCalc" >Buy/Sell Calculator</v-list-item-title>
+              </router-link>
+                <v-dialog v-model="buySellDialog" max-width="500">
+                  <BuySellCalculator />
+                </v-dialog>
+            </v-list-item>
+
+            <v-list-item class="listItem__varCalc"  @click.stop="varDialog = true">
+              <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
+                <v-list-item-title class="listItem__varCalc" >VAR Calculator</v-list-item-title>
+              </router-link>
+                <v-dialog v-model="varDialog" max-width="320">
+                <VARCalculator :data="varDialog" />
+              </v-dialog>
+            </v-list-item>
+
+            <v-list-item class="listItem__avCalc" @click.stop="averagePriceDialog = true" >
+              <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
+                <v-list-item-title class="listItem__avCalc" >Average Price Calculator</v-list-item-title>
+              </router-link>
+               <v-dialog v-model="averagePriceDialog" max-width="350">
+                <AveragePriceCalculator />
+              </v-dialog>
+            </v-list-item>
+          </v-card> 
+
+      <router-link to="" class="social__router">
         <v-btn class="header__button" text>
           Notification
         </v-btn>
       </router-link>
+
       <router-link to="/" class="social__router">
         <v-btn class="header__button" text>
           Vyndue
@@ -109,11 +156,20 @@
 import { mapActions, mapGetters } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
 import HeaderDropdown from "~/components/HeaderDropdown";
+import BuySellCalculator from "~/components/calculators/BuySellCalculator";
+import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
+import VARCalculator from "~/components/calculators/VARCalculator";
 export default {
   components: {
     LoginRegister,
-    HeaderDropdown
+    HeaderDropdown,
+    BuySellCalculator,
+    AveragePriceCalculator,
+    VARCalculator
   },
+  data: {
+      type: Boolean
+    },
   data() {
     return {
       searchButtonIsVisible: true,
@@ -122,6 +178,10 @@ export default {
       tab: null,
       showDropdown: false,
       display: false,
+      displayPowerTools: false,
+      buySellDialog: false,
+      averagePriceDialog: false,
+      varDialog: false,
     };
   },
   computed: {
@@ -216,7 +276,7 @@ export default {
 .header__menuIcon--lists{
   position: absolute;
   right: 325px;
-  top: 30px;
+  top: 40px;
   border: thin solid rgba(255, 255, 255, 0.12);
   box-shadow: 0px 5px 1px -2px rgba(0, 0, 0, 0.2), 0px 5px 2px 0px rgba(0, 0, 0, 0.14), 0px 15px 5px 0px rgba(0, 0, 0, 0.12)
 }
@@ -237,6 +297,38 @@ export default {
 }
 .searchBar__container {
   width: 630px;
+}
+.userSettings__dropdown--caret {
+  width: 0;
+  height: 0;
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-bottom: 17px solid rgb(182, 182, 182, 0.2);
+  position: absolute;
+  right: 0px;
+  top: -8px;
+  z-index: -1;
+}
+.header__menuIcon--powerTools{
+  position: absolute;
+  right: 145px;
+  top: 80px;
+  border: thin solid rgba(255, 255, 255, 0.12);
+}
+.listItem__buySellCalc,
+.listItem__varCalc,
+.listItem__avCalc {
+  font-size: 14px;
+}
+.listItem__buySellCalc:hover,
+.listItem__varCalc:hover,
+.listItem__avCalc:hover {
+ background-color: #03dac5;
+ color: black;
+}
+.header__menuIcon--powerTools > .v-list-item{
+  min-height: 38px !important;
+  border-bottom: thin solid rgba(255, 255, 255, 0.02);
 }
 </style>
 
