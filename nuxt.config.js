@@ -101,12 +101,12 @@ export default {
       login: "/login",
       home: "/",
       logout: "/login"
-    }
+    },
+    plugins: [{ src: "~/plugins/auth", mode: "client" }]
   },
   router: {
     middleware: ["auth"]
   },
-  axios: {},
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
