@@ -20,7 +20,7 @@
     "emoji-mart-vue": "^2.6.6",
     "eventsource-polyfill": "^0.9.6",
     "matrix-js-sdk": "^2.4.6",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "nuxt": "2.11.0",
     "qrcanvas-vue": "^2.0.3",
     "request": "^2.88.0",
