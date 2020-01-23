@@ -1,17 +1,17 @@
 import moment from "moment";
 
 /**
- * Add hours, minutes, seconds to date time.
+ * Add hours, minutes, seconds to date time string.
  *
  * @param   {Date}  inputDateTime  input date time
  * @param   {Number}  addend         number to be added
  * @param   {String}  unit           unit of addend
  * @param   {String}  format         desired format
  *
- * @return  {String}                 formatted added date time 
+ * @return  {String}                 returns formatted string
  */
-export function Add(inputDateTime, addend, unit, format='LL'){
-    let time = moment.utc(inputDateTime).local()
+export function AddTime(inputDateTime, addend, unit, format='YYYY-MM-DD HH:mm:ss'){
+    let time = moment.utc(inputDateTime)
     
     switch (unit) {
         case 'm':
@@ -25,10 +25,9 @@ export function Add(inputDateTime, addend, unit, format='LL'){
             break;
         default:
             return null // cannot parse
-            break;
     }
 
-    return formatter(time, format)
+    return time.format(format)
 }
 
 /**
