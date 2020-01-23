@@ -24,7 +24,7 @@
         <v-row no-gutters>
           <v-col class="col-12">
             <v-content class="chart__container">
-              <nuxt />
+              <!-- <nuxt /> -->
             </v-content>
           </v-col>
         </v-row>
