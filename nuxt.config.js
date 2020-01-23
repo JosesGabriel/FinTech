@@ -55,7 +55,6 @@ export default {
    */
   plugins: [
     "~/plugins/global-method",
-    { src: "~/plugins/axios", mode: "client" },
     { src: "~/plugins/bus", mode: "client" },
     { src: "~/plugins/repository", mode: "client" },
     { src: "~/plugins/tradingview", mode: "client" },
@@ -102,7 +101,7 @@ export default {
       home: "/",
       logout: "/login"
     },
-    plugins: [{ src: "~/plugins/auth", mode: "client" }]
+    plugins: [{ src: '~/plugins/axios', ssr: true }, "~/plugins/auth"]
   },
   router: {
     middleware: ["auth"]
