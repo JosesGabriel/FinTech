@@ -407,6 +407,8 @@ export default {
         if (this.symbolid == undefined) return;
         if (this.symbolid !== data.sym_id) return;
 
+        if (parseInt(this.open.position) == 0) return;
+
         // market value
         const p = this.open.position * data.exp;
         const mv = BuyFees(p);
