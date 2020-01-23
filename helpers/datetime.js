@@ -49,6 +49,7 @@ export function Add(inputDateTime, addend, unit, format='LL'){
  */
 export function LocalFormat(inputDateTime, format = "LL") {
     let time = moment.utc(inputDateTime).local()
+
     return formatter(time, format)
 }
 
@@ -63,12 +64,11 @@ export function LocalFormat(inputDateTime, format = "LL") {
 function formatter(datetime, format){
     switch (format) {
         case 'fn':
-            datetime = datetime.fromNow()
+            datetime = datetime.fromNow() // result will be '31 minutes ago'
             break;
-            // result will be '31 minutes ago'
         default:
-            datetime = datetime.format(format)
-                // result will be 'June 9 2014'
+            datetime = datetime.format(format) // result will be desired format
     }
+
     return datetime
 }
