@@ -57,7 +57,7 @@
         <div class="watchlist__top">
           <div class="top__left pl-2">
             <span class="span__symbolid" @click="setSymbolID(item.id)">{{
-              item.symbol
+              item.market_code
             }}</span>
           </div>
           <div class="top__right pr-2">
@@ -160,6 +160,7 @@ export default {
             sym_id: data.stock_id,
             symbol: symbol.pop(),
             description: data.description,
+            market_code: data.market_code,
             last: data.last,
             changepercentage: data.change_percentage,
             change: data.change,
