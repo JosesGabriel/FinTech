@@ -6,6 +6,7 @@ import { IsInArray } from "~/helpers/arrays/urls";
  * @param {*} {}
  */
 export default function({ $axios, redirect }) {
+  if (process.client) {
     // list of exempted urls
     const urls = [
       process.env.CHART_API_URL,
@@ -59,4 +60,5 @@ export default function({ $axios, redirect }) {
       //   }
     });
     // endregion override
+  }
 }
