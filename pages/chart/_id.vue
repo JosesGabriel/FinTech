@@ -5,7 +5,6 @@
         :dataFeed="dataFeed"
         :chartsStorageUrl="'https://saveload.tradingview.com'"
         :symbol="'PSE:PSEI'"
-        :clientId="'lyduz.com/chart'"
       ></tv-chart-container>
     </v-content>
   </v-content>
