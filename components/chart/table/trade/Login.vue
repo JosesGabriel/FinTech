@@ -87,7 +87,6 @@
                   class="mt-10"
                   color="success"
                   outlined=""
-                  text
                   rounded
                   block
                   disabled
@@ -97,7 +96,6 @@
                 <v-btn
                   class="my-2"
                   outlined
-                  text
                   rounded
                   block
                   color="success"
