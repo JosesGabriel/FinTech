@@ -46,6 +46,13 @@ export default {
   tradeLogin: state => {
     return state.tradeLogin;
   },
+  showBrokers: state => {
+    return state.showBrokers;
+  },
+  tradeBroker: state => {
+    return state.tradeBroker;
+  },
+
   marketCode: state => {
     return state.marketCode;
   },

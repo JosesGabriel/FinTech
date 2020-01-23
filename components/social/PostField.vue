@@ -18,6 +18,33 @@
             "
           />
         </v-avatar>
+
+        <v-btn
+          class="postField__emoji--btn"
+          absolute
+          right
+          icon
+          @click="emojiToggle = !emojiToggle"
+        >
+          <v-icon color="#B2B7BB">mdi-emoticon-happy-outline</v-icon>
+        </v-btn>
+
+        <client-only
+          ><Picker
+            v-if="emojiToggle"
+            class="emojiPicker"
+            :class="
+              lightSwitch == 0
+                ? 'lightcard emojiPicker--light'
+                : 'darkcard emojiPicker--dark'
+            "
+            color="#03DAC5"
+            title=""
+            emoji="dollar"
+            set="twitter"
+            :show-preview="false"
+            @select="addEmoji"
+        /></client-only>
         <div class="postField__textareaContainer">
           <v-textarea
             v-if="$auth.loggedIn"
@@ -216,12 +243,16 @@
 </template>
 
 <script>
+import { Picker } from "emoji-mart-vue";
 import { mapGetters, mapActions } from "vuex";
 export default {
+  components: {
+    Picker
+  },
   data() {
     return {
       postIsImage: null,
-      postField: null,
+      postField: "",
       previewImage: [],
       postFieldLoader: false,
       imagesArray: [],
@@ -232,7 +263,8 @@ export default {
       hasTaggedStock: false,
       taggedStocks: [],
       authorSentiment: false,
-      loader: false
+      loader: false,
+      emojiToggle: false
     };
   },
   computed: {
@@ -244,6 +276,16 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    /**
+     * Appends selected emoji to post field
+     *
+     * @param   {object}  e
+     *
+     * @return  {[type]}
+     */
+    addEmoji(e) {
+      this.postField += e.native;
+    },
     /**
      * Fires when user clicks Suggested stock button. Appends to PostField.
      *
@@ -531,6 +573,24 @@ export default {
 </script>
 
 <style>
+.postField__emoji--btn {
+  top: 70px;
+  z-index: 1;
+}
+.emojiPicker {
+  position: absolute;
+  z-index: 1;
+  top: 110px;
+  right: 0;
+}
+.emojiPicker--dark .emoji-mart-category-label span {
+  background-color: #0c1a2b !important;
+  color: white;
+}
+.emojiPicker--light .emoji-mart-category-label span {
+  background-color: #f2f2f2 !important;
+  color: black;
+}
 .authorSentiment__button--bull {
   right: 130px !important;
   bottom: 12px;
@@ -550,7 +610,7 @@ export default {
 }
 .postField__dropdown {
   position: absolute;
-  right: 450px;
+  margin-left: 250px;
   z-index: 1;
 }
 .postField__divider {

@@ -68,6 +68,14 @@ export default {
     state.tradeLogin = data;
   },
 
+  SET_SHOW_BROKERS(state, data) {
+    state.showBrokers = data;
+  },
+
+  SET_TRADE_BROKER(state, data) {
+    state.tradeBroker = data;
+  },
+
   SET_MARKET_CODE(state, data) {
     state.marketCode = data;
   },

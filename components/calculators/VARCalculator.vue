@@ -438,7 +438,7 @@ export default {
 >
 .v-menu__content
   .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-  color: #03dac5 !important;
+  /* color: #03dac5 !important; */
 }
 .v-menu__content > .v-select-list > .v-list.theme--dark {
   padding: unset;

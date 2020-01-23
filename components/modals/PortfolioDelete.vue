@@ -68,11 +68,11 @@ export default {
       setRenderEditKey: "journal/setRenderEditKey"
     }),
     /**
-     * emitting 
+     * emitting back the data with the confirm property
      *
-     * @param   {[type]}  event  [event description]
+     * @param   {object}  event  object handler of item to be deleted
      *
-     * @return  {[type]}         [return description]
+     * @return  {object}         returns object item deleted
      */
     deleteItem(event) {
       if (this.data != null) {

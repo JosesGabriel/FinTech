@@ -2,8 +2,8 @@
   <v-container class="px-0" dark>
     <v-row no-gutters>
       <v-col class="px-0" cols="12" sm="12" md="12" lg="12">
-        <v-tabs color="success" background-color="transparent" dark>
-          <v-tabs-slider></v-tabs-slider>
+        <v-tabs background-color="transparent" dark>
+          <v-tabs-slider color="success"></v-tabs-slider>
 
           <v-tab :href="`#tab-1`" class="text-capitalize subtitle-1">Profile</v-tab>
           <v-tab :href="`#tab-2`" class="text-capitalize subtitle-1">Activities</v-tab>
@@ -33,7 +33,7 @@
           <!-- Activities tab -->
           <v-tab-item class="mt-10" :value="'tab-2'">
             <v-row no-gutters>
-              <v-col cols="12" sm="12" md="5" lg="5">
+              <v-col cols="12" sm="12" md="5" lg="5" class="pr-4">
                 <!-- <ProfileIdeas class="my-3" /> -->
                 <ProfileFollowing class="my-3" />
                 <div class="activity_sticky-sidebar">
@@ -44,7 +44,7 @@
                 </div>
               </v-col>
               <v-col cols="12" sm="12" md="7" lg="7">
-                <v-container>
+                <v-container class="px-md-0 pr-lg-0">
                   <PostField class="mb-3" @authorNewPost="authorNewPost" />
                   <Newsfeed :new-post="newPost" />
                 </v-container>
@@ -147,5 +147,10 @@ export default {
 }
 .edit_about-textarea.v-textarea.theme--dark fieldset {
   border-color: #1f2e39;
+}
+.activity_sticky-sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 57px;
 }
 </style>

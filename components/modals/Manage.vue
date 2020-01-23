@@ -138,6 +138,14 @@ export default {
 
       this.itemDetails = itemWIndex;
     },
+    /**
+     * catch the delete item then set render key to update the list or portfolio then pass it
+     * to journalContent to execute refresh. to get the updated list of portfolio
+     *
+     * @param   {object}  value  object handler of item deleted
+     *
+     * @return  {number}         returns key to refresh portfolio list
+     */
     deletedItem(value) {
       if (value.confirm == true) {
         const fund_id = value.id;

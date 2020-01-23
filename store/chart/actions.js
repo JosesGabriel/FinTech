@@ -32,6 +32,7 @@ export default {
   async setTrades({ commit }, data) {
     await commit("SET_TRADES", data);
   },
+
   async setIndex({ commit }, data) {
     await commit("SET_INDEX", data);
   },
@@ -41,6 +42,14 @@ export default {
   async setTradeLogin({ commit }, data) {
     await commit("SET_TRADE_LOGIN", data);
   },
+  async setTradeBroker({ commit }, data) {
+    await commit("SET_TRADE_BROKER", data);
+  },
+
+  async setShowBrokers({ commit }, data) {
+    await commit("SET_SHOW_BROKERS", data);
+  },
+
   async setMarketCode({ commit }, data) {
     await commit("SET_MARKET_CODE", data);
   },

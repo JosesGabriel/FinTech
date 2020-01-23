@@ -2,17 +2,18 @@
   <v-container class="pa-0" dark>
     <v-card class="transparent__bg pa-3 mb-2" outlined dark>
       <v-row no-gutters>
-        <span class="white--text pa-2 d-block subtitle-1">
+        <span class="white--text pa-2 d-block body-2">
           Following ·
-          <span class="secondary--text">10,000</span>
+          <span class="tertiary--text caption">10,000</span>
         </span>
-        <!-- <v-spacer></v-spacer>
-        <v-btn color="success" icon>
+        <!-- <v-spacer></v-spacer> -->
+        <!-- <span class="tertiary--text pa-2 caption">See all</span> -->
+        <!-- <v-btn color="success" icon>
           <v-icon small>mdi-pencil</v-icon>
         </v-btn> -->
       </v-row>
       <v-row no-gutters>
-        <v-col v-for="n in 6" :key="n" class="pa-2" cols="4">
+        <v-col v-for="n in 6" :key="n" class="pa-1" cols="4">
           <v-card flat tile class="d-flex">
             <v-img
               :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
@@ -27,7 +28,7 @@
               </template>
             </v-img>
           </v-card>
-          <v-card flat class="d-block body-2 text-center pa-2">Alexandra Keuls</v-card>
+          <v-card flat class="d-block success--text caption text-center pa-2 pb-0 pt-1">Alexandra Keuls</v-card>
         </v-col>
       </v-row>
     </v-card>

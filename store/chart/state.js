@@ -70,6 +70,13 @@ export default () => ({
     }
   ],
   tradeLogin: false,
+  showBrokers: true,
+  tradeBroker: {
+    id: 0,
+    title: "",
+    img: "",
+    show: false
+  },
   responsiveHeight: 510,
 
   sse: null,
