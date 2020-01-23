@@ -254,7 +254,7 @@ export default {
         this.setSSEInfo(data);
 
         // emit sse info
-        //nativeBus.$emit("b-tv-sse-all", data);
+        nativeBus.$emit("b-tv-sse-all", data);
 
         if (this.symbolid !== data.sym_id) return;
 

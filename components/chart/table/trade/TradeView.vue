@@ -124,6 +124,7 @@
           color="success"
           :dark="lightSwitch == 1"
           class="caption mt-2"
+          @click="setShowBrokers(true)"
           >ENTER</v-btn
         >
       </v-col>
@@ -132,7 +133,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "TradeView",
@@ -156,6 +157,11 @@ export default {
     cardBackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
+  },
+  methods: {
+    ...mapActions({
+      setShowBrokers: "chart/setShowBrokers"
+    })
   }
 };
 </script>

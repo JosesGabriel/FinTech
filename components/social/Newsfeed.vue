@@ -40,9 +40,10 @@
                   {{ postsObject[n - 1].user.last_name }}
                 </strong>
               </v-list-item-title>
+              <span>{{postsObject[n - 1].created_at}}</span>
               <v-list-item-subtitle class="overline no-transform">
                 {{
-                $moment(postsObject[n - 1].created_at).fromNow()
+                localFormat(postsObject[n - 1].created_at, 'fn')
                 }}
                 <v-icon class="overline mt-0">mdi-earth</v-icon>
                 <span class="success--text overline post--sentiment pa-05">Bullish</span>
@@ -257,6 +258,8 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { LocalFormat } from "~/helpers/datetime";
+
 import List from "~/components/social/feed/comments/List";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
 import Share from "~/components/modals/Share";
@@ -336,11 +339,17 @@ export default {
       this.loadPosts();
     }
     if (this.$route.name == "index") this.scroll();
+
+    setInterval(() => {
+      console.log(this.postsObject[0].created_at = '2020-01-23 06:55:09')
+    }, 10000)
   },
   methods: {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    localFormat: LocalFormat,
+
     /**
      * fires when user clicks follow button
      *
@@ -407,6 +416,7 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
+            console.log(this.postsObject)
           }
         })
         .catch(e => {
