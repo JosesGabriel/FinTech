@@ -101,7 +101,7 @@ export default {
       home: "/",
       logout: "/login"
     },
-    plugins: [{ src: '~/plugins/axios', ssr: true }, "~/plugins/auth"]
+    plugins: [{ src: '~/plugins/axios', mode: 'client' }, "~/plugins/auth"]
   },
   router: {
     middleware: ["auth"]
