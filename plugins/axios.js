@@ -11,7 +11,6 @@ export default function({ $axios, redirect }) {
     process.env.CHART_API_URL,
     process.env.STREAM_API_URL,
     process.env.VYNDUE_API_URL,
-    "https://saveload.tradingview.com"
   ];
 
   // region custom handlers
