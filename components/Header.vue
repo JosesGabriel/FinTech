@@ -51,7 +51,10 @@
 
       <div class="userSettings__dropdown--caret"></div>
 
-        <v-list-item class="listItem__marketSentiments">
+        <v-list-item 
+          class="listItem__marketSentiments"
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          >
           <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
             <v-list-item-title class="listItem__marketSentiments" >Market Sentiments</v-list-item-title>
           </router-link>
@@ -74,6 +77,7 @@
       
             <v-list-item 
               class="listItem__powerTools" 
+              :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
               @mouseover="displayPowerTools = true"
               @mouseleave="displayPowerTools = false"
               > 
@@ -93,7 +97,10 @@
             @mouseover="displayPowerTools = true"
             @mouseleave="displayPowerTools = false"
           >
-           <v-list-item class="listItem__buySellCalc" @click.stop="buySellDialog = true">
+           <v-list-item 
+            class="listItem__buySellCalc" 
+            :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+            @click.stop="buySellDialog = true">
               <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
                 <v-list-item-title class="listItem__buySellCalc" >Buy/Sell Calculator</v-list-item-title>
               </router-link>
@@ -102,7 +109,9 @@
                 </v-dialog>
             </v-list-item>
 
-            <v-list-item class="listItem__varCalc"  @click.stop="varDialog = true">
+            <v-list-item class="listItem__varCalc" 
+              :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+             @click.stop="varDialog = true">
               <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
                 <v-list-item-title class="listItem__varCalc" >VAR Calculator</v-list-item-title>
               </router-link>
@@ -111,7 +120,9 @@
               </v-dialog>
             </v-list-item>
 
-            <v-list-item class="listItem__avCalc" @click.stop="averagePriceDialog = true" >
+            <v-list-item class="listItem__avCalc" 
+            :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+            @click.stop="averagePriceDialog = true" >
               <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
                 <v-list-item-title class="listItem__avCalc" >Average Price Calculator</v-list-item-title>
               </router-link>
@@ -287,14 +298,7 @@ export default {
 .header__menuIcon--lists > .v-list-item a > .v-list-item__title{
   font-size: 14px !important;
 }
-.listItem__marketSentiments:hover, 
-.listItem__learn:hover, 
-.listItem__ideas:hover,
-.listItem__bulletin:hover,
-.listItem__powerTools:hover{
- background-color: #03dac5;
- color: black;
-}
+
 .searchBar__container {
   width: 630px;
 }
@@ -311,8 +315,8 @@ export default {
 }
 .header__menuIcon--powerTools{
   position: absolute;
-  right: 145px;
-  top: 80px;
+  right: 325px;
+  top: 117px;
   border: thin solid rgba(255, 255, 255, 0.12);
 }
 .listItem__buySellCalc,
@@ -320,12 +324,14 @@ export default {
 .listItem__avCalc {
   font-size: 14px;
 }
-.listItem__buySellCalc:hover,
-.listItem__varCalc:hover,
-.listItem__avCalc:hover {
- background-color: #03dac5;
- color: black;
+
+.darkModeHover:hover{
+  background-color: #142530;
 }
+.lightModeHover:hover{
+  background-color: #B2B7BB;
+}
+
 .header__menuIcon--powerTools > .v-list-item{
   min-height: 38px !important;
   border-bottom: thin solid rgba(255, 255, 255, 0.02);
