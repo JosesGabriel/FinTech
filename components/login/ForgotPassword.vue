@@ -1,9 +1,5 @@
 <template>
-  <v-card
-    height="584px"
-    :dark="isLightMode == 0 ? false : true"
-    :loading="isLoading"
-  >
+  <v-card height="584px">
     <div class="headline font-weight-bold loginCard--intro">
       Forgot Password
     </div>
