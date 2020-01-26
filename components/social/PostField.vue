@@ -513,10 +513,7 @@ export default {
     postFieldSubmit(stockValues) {
       this.postFieldLoader = "success";
       this.stockTagMode = false;
-      this.currentTaggedStock = "";
-      this.taggedStocks = [];
-      this.hasTaggedStock = false;
-      let taggedStocks = [];
+      let taggedStocks;
       if (stockValues) {
         taggedStocks = [
           {
@@ -538,7 +535,14 @@ export default {
           attachments: this.cloudArray,
           visibility: "public",
           status: "active",
-          tags: taggedStocks
+          tags: taggedStocks,
+          tagged_stocks: [
+            {
+              tag_meta: {
+                sentiment: this.authorSentiment
+              }
+            }
+          ]
         };
         this.$api.social.actions
           .create(params)
@@ -557,7 +561,14 @@ export default {
           content: this.postField,
           visibility: "public",
           status: "active",
-          tags: taggedStocks
+          tags: taggedStocks,
+          tagged_stocks: [
+            {
+              tag_meta: {
+                sentiment: this.authorSentiment
+              }
+            }
+          ]
         };
         this.$api.social.actions
           .create(params)
@@ -571,6 +582,10 @@ export default {
             this.clearInputs(false, error.response.data.message);
           });
       }
+
+      this.currentTaggedStock = "";
+      this.taggedStocks = [];
+      this.hasTaggedStock = false;
     },
     /**
      * gets price and last change percentage of tagged stock.
