@@ -446,7 +446,7 @@ export default {
         password: this.password
       };
       this.cardLoader = "success";
-      this.$api.accounts.updateAccount
+      this.$api.accounts.account
         .putnoid(payload)
         .then(response => {
           this.alert.push(true);
@@ -516,7 +516,7 @@ export default {
       this.alert = [];
 
       this.cardLoader = "success";
-      this.$api.accounts.updateAccount
+      this.$api.accounts.account
         .putnoid(payload)
         .then(response => {
           this.alert.push(true);

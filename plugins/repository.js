@@ -42,7 +42,7 @@ export default (ctx, inject) => {
       verify: initApiRepository("/verify")
     },
     accounts: {
-      updateAccount: initApiRepository("/users"),
+      account: initApiRepository("/users"),
       updateSettings: initApiRepository("/users/settings")
     }
   };
