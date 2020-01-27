@@ -120,28 +120,28 @@ export default {
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfasfasf",
+          title: "afasfa123sfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfasfasf",
+          title: "afas31423rdsffasfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfasfasf",
+          title: "afasfa231423fdssfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfasfasf",
+          title: "afasfa123123sfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         }
