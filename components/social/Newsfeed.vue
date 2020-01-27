@@ -305,7 +305,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { LocalFormat } from "~/helpers/datetime";
+import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
 
 import List from "~/components/social/feed/comments/List";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
@@ -392,6 +392,7 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    addDynamicTime: AddDynamicTime,
     localFormat: LocalFormat,
 
     /**
@@ -460,6 +461,15 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
+            /**
+             * set interval dinamic time changing on posts
+             * 10000ms interval
+             */
+            setInterval(() => {
+              this.postsObject.map(
+                x => (x.created_at = this.addDynamicTime(x.created_at))
+              );
+            }, 10000);
           }
         })
         .catch(e => {

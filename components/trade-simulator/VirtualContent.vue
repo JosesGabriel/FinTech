@@ -287,6 +287,9 @@ export default {
     },
     unrealized() {
       this.getTradeLogs();
+    },
+    realized(){
+      this.getTradeLogs();
     }
   },
   methods: {
@@ -468,7 +471,7 @@ export default {
      *
      */
     getPorfolio(key){
-       
+        this.getTradeLogs();
         this.$api.journal.portfolio.portfolio().then(
           function(result) {
             let defaultPort = false;
@@ -525,7 +528,7 @@ export default {
     }
   },
   mounted() {
-      this.getPorfolio('initial');
+      this.getPorfolio('initial');   
   },
   components: {
     VirtualLivePortfolio,

@@ -15,7 +15,7 @@
         </v-row>
         <v-row class="pt-4">
           <v-col cols="12">
-            <v-text-field label="Email Address"></v-text-field>
+            <v-text-field v-model="email" label="Email Address"></v-text-field>
           </v-col>
         </v-row>
       </v-container>
@@ -27,7 +27,7 @@
         outlined
         rounded
         color="success"
-        @click="login()"
+        @click="submitEmail()"
       >
         Submit
       </v-btn>
@@ -52,10 +52,46 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      email: ""
+    };
   },
-  methods: {}
+  methods: {
+    ...mapActions({
+      setAlertDialog: "global/setAlertDialog"
+    }),
+    submitEmail() {
+      const payload = {
+        email: this.email
+      };
+      this.$api.authentication.forgotPassword.create(payload).then(
+        function(result) {
+          if (result.success) {
+            const alert = {
+              model: true,
+              state: true,
+              header: "Awesome!",
+              body: "Your request has been successfully sent to your email.",
+              subtext: this.email
+            };
+            this.setAlertDialog(alert);
+            const hideAlert = {
+              modal: false
+            };
+            setTimeout(
+              function() {
+                this.setAlertDialog(hideAlert);
+                this.$emit("stepper", 2);
+              }.bind(this),
+              3000
+            );
+          }
+        }.bind(this)
+      );
+    }
+  }
 };
 </script>

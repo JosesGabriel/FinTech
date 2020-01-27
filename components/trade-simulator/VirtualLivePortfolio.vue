@@ -221,6 +221,7 @@ export default {
         "November", "December"
       ],
       dateformat: '',
+     
     };
   },
   components: {
@@ -253,7 +254,8 @@ export default {
     },
     confirmupdate(){
       this.getOpenPositions();
-    }  
+    },
+    
 
   },
   methods: {
@@ -323,7 +325,7 @@ export default {
         }.bind(this)
       );
    
-
+      
     },
     /**
      * delete confirmation
@@ -400,7 +402,7 @@ export default {
       item.style.background = "rgb(182,182,182,.2)";
       setTimeout(function() {
         item.style.background = "";
-      }, 400);
+      }, 800);
     },
     menuLogsShow(item) {
       let pl = document.getElementById(`pl_${item.id}`);
@@ -570,57 +572,32 @@ export default {
      *
      */
     trigger(symbol, lprice){
-              
         let profit = 0;
         let perf = 0;
-        let tploss = 0;
-        let tplossperf = 0;
-        let tmvalue = 0;
-        let totalprofit = 0;
-       
-        for (let i = 0; i < this.portfolioLogs.length; i++) {
-            if(this.portfolioLogs[i].metas.stock_id == symbol){
-                let oldvalue = this.portfolioLogs[i].MarketValue;
-                let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
-                let mvalue = this.fees(buyResult);
-                let tcost = this.portfolioLogs[i].position *
-                            this.portfolioLogs[i].average_price; //this.portfolioLogs[i].TotalCost;
-                profit = parseFloat(mvalue) - parseFloat(tcost);
-                perf = (profit / tcost) * 100;
+       for (let i = 0; i < this.portfolioLogs.length; i++) {
+         if(this.portfolioLogs[i].metas.stock_id == symbol){
+           let oldvalue = this.portfolioLogs[i].MarketValue;
+           let convertedNumbers = this.portfolioLogs[i].Profit.replace(/,/g, "");
+           let oldprofit = parseFloat(convertedNumbers);
+           let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
+           let mvalue = this.fees(buyResult);
+           let tcost = this.portfolioLogs[i].position *
+                            this.portfolioLogs[i].average_price;
+           profit = parseFloat(mvalue) - parseFloat(tcost);
+           perf = (profit / tcost) * 100;
+           this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
+           this.portfolioLogs[i].Profit = this.addcomma(profit);
+           this.portfolioLogs[i].Perf = this.addcomma(perf);
 
-                tploss = parseFloat(tploss) + parseFloat(profit);
-                //totalprofit = parseFloat(this.totalProfitLoss) - parseFloat(this.portfolioLogs[i].Profit);
+            if(oldvalue != this.portfolioLogs[i].MarketValue){
+              let ploss = parseFloat(this.totalProfitLoss) - parseFloat(oldprofit);
+              this.totalProfitLoss = ploss + parseFloat(profit);
+              let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
+              this.portfolioLogs.splice(i, 1, updatedItem);
+              this.updateEffect(this.portfolioLogs[i].stock_id);
+              this.$emit("totalUnrealized", this.totalProfitLoss);
 
-                this.filtered = mvalue;
-                this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
-                this.portfolioLogs[i].Profit = this.addcomma(profit);
-                this.portfolioLogs[i].Perf = this.addcomma(perf);
-                tmvalue = parseFloat(tmvalue) + parseFloat(mvalue);   
-                
-               // let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
-               // this.portfolioLogs.splice(i, 1, updatedItem);
-
-                if(oldvalue != this.portfolioLogs[i].MarketValue){
-                  let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
-                  this.portfolioLogs.splice(i, 1, updatedItem);
-                  this.updateEffect(this.portfolioLogs[i].stock_id);
-                }
-                //this.totalProfitLoss = totalprofit + profit;
-                //tploss = parseFloat(tploss) + parseFloat(profit);
-            }else{
-                profit = parseFloat(this.portfolioLogs[i].Profit);
-                perf = parseFloat(this.portfolioLogs[i].Perf);
-                tmvalue = parseFloat(tmvalue) + parseFloat(this.portfolioLogs[i].MarketValue);
-                tploss = parseFloat(tploss) + parseFloat(profit);
-            }
-                //tploss = parseFloat(tploss) + parseFloat(profit);
-                tplossperf = parseFloat(tplossperf) + parseFloat(perf);  
-                
-                this.totalProfitLoss = tploss;
-                this.totalPerf = tplossperf;   
-                this.totalmvalue = tmvalue;
-                this.$emit("totalUnrealized", this.totalProfitLoss);
-                this.$emit("totalMarketValue", this.totalmvalue.toFixed(2)); 
+              /*
               //========================================================================
                 let daychangeperf = 0;
                 let daychange =
@@ -632,10 +609,14 @@ export default {
                   }                     
                 this.$emit("DayChange", daychange);
                 this.$emit("DayChangePerc", daychangeperf);
-        } 
-       
-    },
 
+              */
+             
+            }
+         }
+       }
+        
+    },
   },
   computed: {
     ...mapGetters({

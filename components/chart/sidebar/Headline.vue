@@ -71,7 +71,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { nativeBus } from "~/helpers/native-bus";
+import { nativeBus } from "~/assets/js/helpers/native-bus";
 
 export default {
   name: "Headline",
