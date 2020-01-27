@@ -26,6 +26,7 @@ export function AddTime(inputDateTime, added, unit, format = 'YYYY-MM-DD HH:mm:s
         default:
             return null // cannot parse
     }
+    
     return time.format(format)
 }
 
