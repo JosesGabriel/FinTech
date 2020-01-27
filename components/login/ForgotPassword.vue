@@ -15,7 +15,7 @@
         </v-row>
         <v-row class="pt-4">
           <v-col cols="12">
-            <v-text-field label="Email Address"></v-text-field>
+            <v-text-field v-model="email" label="Email Address"></v-text-field>
           </v-col>
         </v-row>
       </v-container>
@@ -27,7 +27,7 @@
         outlined
         rounded
         color="success"
-        @click="login()"
+        @click="submitEmail()"
       >
         Submit
       </v-btn>
@@ -54,8 +54,21 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      email: ""
+    };
   },
-  methods: {}
+  methods: {
+    submitEmail() {
+      const payload = {
+        email: this.email
+      };
+      this.$api.authentication.forgotPassword.create(payload).then(
+        function(result) {
+          console.log(result);
+        }.bind(this)
+      );
+    }
+  }
 };
 </script>
