@@ -79,10 +79,13 @@ export default {
         return this.$api.authentication.providers
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
-            console.log(data);
             if (data.success) {
-              alert("hatdog");
+              localStorage.setItem(
+                "auth._token.local",
+                data.token.access_token
+              );
               this.setAlert({
+                model: true,
                 state: "success",
                 message: data.message
               });
