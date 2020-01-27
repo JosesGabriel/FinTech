@@ -6,6 +6,29 @@
       :loading="loader"
       outlined
     >
+      <!-- <v-row align="center" justify="start">
+        <v-col v-for="n in taggedUsers.length" :key="n" class="shrink">
+          <v-chip
+            contenteditable="true"
+            x-small
+            close
+            @click:close="taggedUsers.splice(n - 1, 1)"
+          >
+            {{ taggedUsers[n - 1] }}
+          </v-chip>
+        </v-col>
+      </v-row> -->
+      <!-- <v-list>
+        <template v-for="(item, i) in categories">
+          <v-list-item
+            v-if="!selected.includes(i)"
+            :key="i"
+            @click="selected.push(i)"
+          >
+            <v-list-item-title v-text="item.text"></v-list-item-title>
+          </v-list-item>
+        </template>
+      </v-list> -->
       <v-form enctype="multipart/form-data">
         <v-avatar size="45" class="postField__avatar">
           <img
@@ -88,13 +111,54 @@
               color="success"
               x-small
               @click="
-                appendToField(stockSuggestionsArray[n - 1].symbol),
+                appendToField(stockSuggestionsArray[n - 1].symbol, 'stock'),
                   (hasTaggedStock = true),
                   (taggedStocks = [stockSuggestionsArray[n - 1].id_str])
               "
             >
               {{ stockSuggestionsArray[n - 1].symbol }}
             </v-btn>
+          </div>
+          <div v-if="userTagMode">
+            <div
+              v-if="userSuggestionsArrray.length > 1"
+              class="userSuggestions__dropdownCaret"
+            ></div>
+            <v-list dense avatar class="userSuggestions__vlist py-0">
+              <v-list-item-group color="primary">
+                <v-list-item
+                  v-for="n in userSuggestionsArrray.length > 5
+                    ? 5
+                    : userSuggestionsArrray.length"
+                  :key="n"
+                  @click="
+                    appendToField(userSuggestionsArrray[n - 1].name, 'user'),
+                      (hasTaggedUser = true),
+                      (userTagMode = false),
+                      taggedUsers.push(userSuggestionsArrray[n - 1].name)
+                  "
+                >
+                  <v-list-item-avatar size="30">
+                    <v-img
+                      :src="
+                        userSuggestionsArrray[n - 1].profile_image
+                          ? userSuggestionsArrray[n - 1].profile_image
+                          : 'default.png'
+                      "
+                    ></v-img>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      v-text="
+                        userSuggestionsArrray[n - 1].first_name +
+                          ' ' +
+                          userSuggestionsArrray[n - 1].last_name
+                      "
+                    ></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
           </div>
           <v-divider class="postField__divider" />
           <div>
@@ -258,13 +322,20 @@ export default {
       imagesArray: [],
       cloudArray: [],
       stockSuggestionsArray: [],
+      userSuggestionsArrray: [],
       stockTagMode: false,
+      userTagMode: false,
       currentTaggedStock: "",
+      currentTaggedUser: "",
       hasTaggedStock: false,
+      hasTaggedUser: false,
       taggedStocks: [],
+      taggedUsers: [],
       authorSentiment: false,
       loader: false,
-      emojiToggle: false
+      emojiToggle: false,
+      value: "val",
+      selected: []
     };
   },
   computed: {
@@ -276,6 +347,9 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    callback(e) {
+      console.log(e.type, e.detail);
+    },
     /**
      * Appends selected emoji to post field
      *
@@ -293,29 +367,48 @@ export default {
      *
      * @return
      */
-    appendToField(symbol) {
-      let index = this.postField.lastIndexOf("$");
+    appendToField(value, type) {
+      let index;
+      if (type == "stock") {
+        index = this.postField.lastIndexOf("$");
+        this.stockTagMode = false;
+      } else if (type == "user") {
+        index = this.postField.lastIndexOf("@");
+      }
       this.postField = this.postField.slice(0, index + 1);
-      this.postField += symbol;
-      this.stockTagMode = false;
+      this.postField += value;
     },
     /**
      * Searches from stock list based on stock that user is currently typing, fires when stockTagMode is true.
      *
      * @return
      */
-    search() {
-      const params = {
-        exchange: "PSE",
-        query: this.currentTaggedStock,
-        limit: "30",
-        type: "stock"
-      };
-      this.$api.chart.charts.search(params).then(
-        function(result) {
-          this.stockSuggestionsArray = result.data;
-        }.bind(this)
-      );
+    search(type) {
+      if (type == "stock") {
+        const params = {
+          exchange: "PSE",
+          query: this.currentTaggedStock,
+          limit: "30",
+          type: "stock"
+        };
+        this.$api.chart.charts.search(params).then(
+          function(result) {
+            this.stockSuggestionsArray = result.data;
+          }.bind(this)
+        );
+      } else if (type == "user") {
+        let payload = {
+          name: this.currentTaggedUser
+        };
+        this.$api.accounts.account
+          .index(payload)
+          .then(response => {
+            this.userSuggestionsArrray = response.data.users;
+            console.log(response);
+          })
+          .catch(e => {})
+          .finally(function() {}.bind(this));
+      }
     },
     /**
      * Fires at keyup event on PostField. Used for stock tagging.
@@ -329,30 +422,54 @@ export default {
       let regExp = /^[0-9a-zA-Z]+$/;
       if (e.key == "$") {
         this.stockTagMode = true;
-        this.search();
+        this.search("stock");
       } else if (this.stockTagMode && !regExp.test(e.key)) {
         this.stockTagMode = false;
         this.currentTaggedStock = "";
       }
-
       if (regExp.test(e.key) && e.key.length == 1 && this.stockTagMode) {
         this.hasTaggedStock = true;
         this.currentTaggedStock += e.key;
-        this.search();
+        this.search("stock");
       } else if (e.key == "Backspace" && this.stockTagMode) {
         this.currentTaggedStock = this.currentTaggedStock.slice(0, -1);
-        this.search();
+        this.search("stock");
       }
-
       if (
         this.stockTagMode &&
         e.key == "Backspace" &&
         this.currentTaggedStock == ""
       ) {
         this.stockTagMode = false;
-        this.search();
+        this.search("stock");
       } else if (this.stockTagMode && e.key == "Backspace") {
-        this.search();
+        this.search("stock");
+      }
+
+      ////USER TAGGED
+      if (e.key == "@") {
+        this.userTagMode = true;
+      } else if (this.userTagMode && !regExp.test(e.key)) {
+        this.userTagMode = false;
+        this.currentTaggedUser = "";
+      }
+      if (regExp.test(e.key) && e.key.length == 1 && this.userTagMode) {
+        this.hasTaggedUser = true;
+        this.currentTaggedUser += e.key;
+        this.search("user");
+      } else if (e.key == "Backspace" && this.userTagMode) {
+        this.currentTaggedUser = this.currentTaggedUser.slice(0, -1);
+        this.search("user");
+      }
+      if (
+        this.userTagMode &&
+        e.key == "Backspace" &&
+        this.currentTaggedUser == ""
+      ) {
+        this.userTagMode = false;
+        this.search("user");
+      } else if (this.userTagMode && e.key == "Backspace") {
+        this.search("user");
       }
 
       if (this.postField == "") {
@@ -360,6 +477,11 @@ export default {
         this.currentTaggedStock = "";
         this.hasTaggedStock = false;
         this.taggedStocks = [];
+
+        this.userTagMode = false;
+        this.currentTaggedUser = "";
+        this.hasTaggedUser = false;
+        this.taggedUsers = [];
       }
     },
     /**
@@ -391,10 +513,7 @@ export default {
     postFieldSubmit(stockValues) {
       this.postFieldLoader = "success";
       this.stockTagMode = false;
-      this.currentTaggedStock = "";
-      this.taggedStocks = [];
-      this.hasTaggedStock = false;
-      let taggedStocks = [];
+      let taggedStocks;
       if (stockValues) {
         taggedStocks = [
           {
@@ -416,7 +535,14 @@ export default {
           attachments: this.cloudArray,
           visibility: "public",
           status: "active",
-          tags: taggedStocks
+          tags: taggedStocks,
+          tagged_stocks: [
+            {
+              tag_meta: {
+                sentiment: this.authorSentiment
+              }
+            }
+          ]
         };
         this.$api.social.actions
           .create(params)
@@ -435,7 +561,14 @@ export default {
           content: this.postField,
           visibility: "public",
           status: "active",
-          tags: taggedStocks
+          tags: taggedStocks,
+          tagged_stocks: [
+            {
+              tag_meta: {
+                sentiment: this.authorSentiment
+              }
+            }
+          ]
         };
         this.$api.social.actions
           .create(params)
@@ -449,6 +582,10 @@ export default {
             this.clearInputs(false, error.response.data.message);
           });
       }
+
+      this.currentTaggedStock = "";
+      this.taggedStocks = [];
+      this.hasTaggedStock = false;
     },
     /**
      * gets price and last change percentage of tagged stock.
@@ -573,6 +710,30 @@ export default {
 </script>
 
 <style>
+.userSuggestions__dropdownCaret {
+  width: 0;
+  height: 0;
+  border-left: 13px solid transparent;
+  border-right: 13px solid transparent;
+  border-bottom: 17px solid rgb(182, 182, 182, 0.2);
+  position: absolute;
+  bottom: 46px;
+}
+.userSuggestions__vlist {
+  position: absolute;
+  z-index: 1;
+  border: thin solid rgba(255, 255, 255, 0.12);
+}
+.userSuggestions__vlist .v-item-group .v-list-item--link:hover {
+  background-color: #03dac5;
+}
+.userSuggestions__vlist
+  .v-item-group
+  .v-list-item
+  .v-list-item__content
+  .v-list-item__title {
+  font-weight: 600;
+}
 .postField__emoji--btn {
   top: 70px;
   z-index: 1;

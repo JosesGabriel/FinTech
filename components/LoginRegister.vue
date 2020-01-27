@@ -89,6 +89,10 @@
               >
             </v-card>
           </v-stepper-content>
+
+          <v-stepper-content step="5" class="pa-0">
+            <ForgotPassword @alert="showAlert" @stepper="changeStep" />
+          </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
     </v-card>
@@ -99,11 +103,13 @@
 import { mapActions, mapGetters } from "vuex";
 import Login from "~/components/login/Login";
 import Register from "~/components/login/Register";
+import ForgotPassword from "~/components/login/ForgotPassword";
 
 export default {
   components: {
     Login,
-    Register
+    Register,
+    ForgotPassword
   },
   props: {
     value: Boolean
@@ -204,7 +210,7 @@ export default {
   position: absolute;
   bottom: 0;
   width: 100%;
-  padding: 50px;
+  padding: 40px;
 }
 .loginCard--intro {
   padding: 30px;

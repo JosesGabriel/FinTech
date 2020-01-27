@@ -58,7 +58,7 @@
               Broker
             </th>
             <th
-              class="text-left j_header secondary_color pt-2"
+              class="text-center j_header secondary_color pt-2"
               @click="sortArray('buy_volume')"
             >
               Volume
@@ -203,7 +203,7 @@ export default {
     }
   },
   mounted() {
-    
+     this.initJockey(this.symbolid);
   },
   methods: {
     addcomma(n, sep, decimals) {
@@ -360,9 +360,10 @@ export default {
       const item = document.getElementById(dom);
       if (item == null) return;
       item.style.background = "rgb(182,182,182,.2)";
+       //item.style.background = "rgb(3,218,197,0.27)";
       setTimeout(function() {
         item.style.background = "";
-      }, 200);
+      }, 800);
     },
 
     /**

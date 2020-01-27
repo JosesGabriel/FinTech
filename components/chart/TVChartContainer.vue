@@ -41,7 +41,7 @@ export default {
       type: String
     },
     clientId: {
-      default: "lyduz.com/chart",
+      default: "tradingview.com",
       type: String
     },
     userId: {

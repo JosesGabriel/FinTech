@@ -290,7 +290,6 @@ export default {
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
           this.portfolioLogs = result.data.open;
-          console.log('PORt',this.portfolioLogs);
           for (let i = 0; i < result.data.open.length; i++) {
               this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
               this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
@@ -382,14 +381,7 @@ export default {
     detailsLive(item) {
       this.itemDetails = item;
     },
-    /*details(item, edit) {
-      this.editDetails = edit;
-      this.selectedstrategy = item.strategy;
-      this.selectedtradeplan = item.tradeplan;
-      this.selectedemotions = item.emotion;
-      this.notes = item.notes;
-      this.edit_id = item.id;
-    },*/
+    
     /**
      * Execute Edit 
      *
@@ -397,26 +389,6 @@ export default {
     editLive(item) {
       this.itemDetails = item;
     },
-    /*
-    editLive() {
-      if (confirm("Save changes?")) {
-          const editparams = {
-            strategy: this.selectedstrategy,
-            plan: this.selectedtradeplan,
-            emotion: this.selectedemotions,
-            notes: this.notes
-          };
-          
-        this.$api.journal.portfolio
-        .tradeedit(this.simulatorPortfolioID, this.edit_id, editparams)
-        .then(response => {
-              if (response.success) {
-                this.showEditForm = false;
-                this.getOpenPositions();
-              }
-            });
-      }
-    },*/
 
     /**
      * Blink effect in Real Time changes
@@ -490,7 +462,7 @@ export default {
                      if (pdate != dformat) {      
                         pNum++;                  
                         let priorPrice = result.data.c[1];
-                        
+                        //console.log(this.portfolioLogs[index].stock_symbol + ' Prior Price -'+ priorPrice);
                         let priorbuyResult =
                           this.portfolioLogs[index].position *
                           parseFloat(priorPrice).toFixed(2);
@@ -604,6 +576,7 @@ export default {
         let tploss = 0;
         let tplossperf = 0;
         let tmvalue = 0;
+        let totalprofit = 0;
        
         for (let i = 0; i < this.portfolioLogs.length; i++) {
             if(this.portfolioLogs[i].metas.stock_id == symbol){
@@ -615,25 +588,32 @@ export default {
                 profit = parseFloat(mvalue) - parseFloat(tcost);
                 perf = (profit / tcost) * 100;
 
+                tploss = parseFloat(tploss) + parseFloat(profit);
+                //totalprofit = parseFloat(this.totalProfitLoss) - parseFloat(this.portfolioLogs[i].Profit);
+
                 this.filtered = mvalue;
                 this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
                 this.portfolioLogs[i].Profit = this.addcomma(profit);
                 this.portfolioLogs[i].Perf = this.addcomma(perf);
                 tmvalue = parseFloat(tmvalue) + parseFloat(mvalue);   
                 
-                let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
-                this.portfolioLogs.splice(i, 1, updatedItem);
+               // let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
+               // this.portfolioLogs.splice(i, 1, updatedItem);
 
                 if(oldvalue != this.portfolioLogs[i].MarketValue){
+                  let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
+                  this.portfolioLogs.splice(i, 1, updatedItem);
                   this.updateEffect(this.portfolioLogs[i].stock_id);
                 }
-
+                //this.totalProfitLoss = totalprofit + profit;
+                //tploss = parseFloat(tploss) + parseFloat(profit);
             }else{
                 profit = parseFloat(this.portfolioLogs[i].Profit);
                 perf = parseFloat(this.portfolioLogs[i].Perf);
                 tmvalue = parseFloat(tmvalue) + parseFloat(this.portfolioLogs[i].MarketValue);
-            }
                 tploss = parseFloat(tploss) + parseFloat(profit);
+            }
+                //tploss = parseFloat(tploss) + parseFloat(profit);
                 tplossperf = parseFloat(tplossperf) + parseFloat(perf);  
                 
                 this.totalProfitLoss = tploss;

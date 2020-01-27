@@ -41,11 +41,41 @@
                 </strong>
               </v-list-item-title>
               <v-list-item-subtitle class="overline no-transform">
-                {{
-                localFormat(postsObject[n - 1].created_at, 'fn')
-                }}
-                <v-icon class="overline mt-0">mdi-earth</v-icon>
-                <span class="success--text overline post--sentiment pa-05">Bullish</span>
+                {{ localFormat(postsObject[n - 1].created_at, "fn") }}
+                <v-icon class="body-2 mt-0">mdi-earth</v-icon>
+                <span
+                  v-if="
+                    postsObject[n - 1].tagged_stocks &&
+                      postsObject[n - 1].tagged_stocks.length != 0
+                  "
+                  class="success--text overline post--sentiment pa-05"
+                >
+                  <v-btn
+                    v-if="
+                      postsObject[n - 1].tagged_stocks[0].tag_meta.sentiment ==
+                        'bull'
+                    "
+                    icon
+                    outlined
+                    fab
+                    width="14"
+                    height="14"
+                    color="success"
+                  >
+                    <img src="/icon/bullish.svg" width="6" />
+                  </v-btn>
+                  <v-btn
+                    v-else
+                    icon
+                    outlined
+                    fab
+                    width="14"
+                    height="14"
+                    color="error"
+                  >
+                    <img src="/icon/bearish.svg" width="6" />
+                  </v-btn>
+                </span>
               </v-list-item-subtitle>
             </v-col>
             <v-col class="text-right">
@@ -74,7 +104,8 @@
                         x-small
                         text
                         v-on="on"
-                      >Delete</v-btn>
+                        >Delete</v-btn
+                      >
                     </template>
 
                     <v-card
@@ -84,7 +115,8 @@
                       <v-card-title
                         class="headline success--text lighten-2"
                         primary-title
-                      >Delete Post?</v-card-title>
+                        >Delete Post?</v-card-title
+                      >
 
                       <v-card-text>
                         Are you sure you want to permanently remove this post
@@ -110,7 +142,8 @@
                             deletePost(postsObject[n - 1].id, n - 1),
                               (deleteDialog = false)
                           "
-                        >Delete</v-btn>
+                          >Delete</v-btn
+                        >
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -124,7 +157,8 @@
                     @click="
                       (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
-                  >Edit</v-btn>
+                    >Edit</v-btn
+                  >
                   <v-btn
                     v-if="
                       postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
@@ -132,7 +166,8 @@
                     x-small
                     text
                     @click="followAccount(postsObject[n - 1].user.uuid)"
-                  >Follow</v-btn>
+                    >Follow</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -169,9 +204,12 @@
                 ),
                   (editPostMode = false)
               "
-            >Done Editing</v-btn>
+              >Done Editing</v-btn
+            >
           </div>
-          <span v-else class="caption px-5 pb-3">{{ postsObject[n - 1].content }}</span>
+          <span v-else class="caption px-5 pb-3">{{
+            postsObject[n - 1].content
+          }}</span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
         </v-list-item-content>
@@ -208,7 +246,13 @@
           <v-icon>mdi-comment-text-outline</v-icon>
         </v-btn>
         <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
-        <v-btn icon fab x-small color="secondary" @click="showShareModal(postsObject[n - 1].id)">
+        <v-btn
+          icon
+          fab
+          x-small
+          color="secondary"
+          @click="showShareModal(postsObject[n - 1].id)"
+        >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
         <span class="caption">1000</span>
@@ -251,7 +295,11 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
   </v-col>
 </template>
 
@@ -326,6 +374,7 @@ export default {
           first_name: this.$auth.user.data.user.first_name,
           last_name: this.$auth.user.data.user.last_name
         },
+        tagged_stocks: this.newPost.tagged_stocks,
         comments: [],
         comments_count: 0
       });

@@ -39,10 +39,11 @@ export default (ctx, inject) => {
     authentication: {
       register: initApiRepository("/register"),
       providers: providerRepository(ctx.$axios),
-      verify: initApiRepository("/verify")
+      verify: initApiRepository("/verify"),
+      forgotPassword: initApiRepository("/auth/password/reset")
     },
     accounts: {
-      updateAccount: initApiRepository("/users"),
+      account: initApiRepository("/users"),
       updateSettings: initApiRepository("/users/settings")
     }
   };

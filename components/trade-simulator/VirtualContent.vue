@@ -384,8 +384,9 @@ export default {
      */
     portperf() {
       this.port_total = parseFloat(this.realized) + parseFloat(this.unrealized);
-      let portperf = (this.port_total / 100000) * 100;
-      return this.addComma(portperf);
+      let portperf = (this.port_total / parseFloat(this.port_capital)) * 100;
+      //return this.addComma(portperf);
+      return portperf.toFixed(2);
     },
 
     /**

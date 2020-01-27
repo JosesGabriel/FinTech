@@ -6,7 +6,13 @@
       color="transparent"
       :dark="lightSwitch == 0 ? false : true"
     >
-      <v-toolbar-title><strong>Account Settings</strong></v-toolbar-title>
+      <v-toolbar-title
+        ><strong>{{
+          deleteAccountToggle
+            ? "Deleting Your Account and Information"
+            : "Account Settings"
+        }}</strong></v-toolbar-title
+      >
     </v-toolbar>
     <v-divider
       class="settings__divider"
@@ -21,7 +27,7 @@
       flat
     >
       <v-card-text class="py-0">
-        <v-container class="pa-0">
+        <v-container v-if="!deleteAccountToggle" class="pa-0">
           <v-row>
             <v-col cols="4">
               <span :class="lightSwitch == 0 ? '' : 'white--text'">Name</span>
@@ -328,12 +334,15 @@
           </v-row>
           <v-row>
             <v-col cols="12">
-              <a :class="lightSwitch == 0 ? '' : 'white--text'"
+              <a
+                :class="lightSwitch == 0 ? '' : 'white--text'"
+                @click="deleteAccountToggle = true"
                 >Delete Your Account and Information</a
               >
             </v-col>
           </v-row>
         </v-container>
+        <DeleteAccount v-else @cancel="deleteAccountToggle = false"/>
       </v-card-text>
     </v-card>
     <v-dialog
@@ -376,7 +385,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import DeleteAccount from "~/components/settings/DeleteAccount.vue";
 export default {
+  components: {
+    DeleteAccount
+  },
   data() {
     return {
       settingsLabelList: [
@@ -391,6 +404,7 @@ export default {
       contactToggle: false,
       emailToggle: false,
       passwordToggle: false,
+      deleteAccountToggle: false,
       mobileDialog: false,
       firstNameChanged: false,
       lastNameChanged: false,
@@ -446,7 +460,7 @@ export default {
         password: this.password
       };
       this.cardLoader = "success";
-      this.$api.accounts.updateAccount
+      this.$api.accounts.account
         .putnoid(payload)
         .then(response => {
           this.alert.push(true);
@@ -516,7 +530,7 @@ export default {
       this.alert = [];
 
       this.cardLoader = "success";
-      this.$api.accounts.updateAccount
+      this.$api.accounts.account
         .putnoid(payload)
         .then(response => {
           this.alert.push(true);
