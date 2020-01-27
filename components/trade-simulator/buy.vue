@@ -145,6 +145,33 @@
         </v-row>
       </v-col>
     </v-row>
+
+  <v-dialog v-model="errorShow" max-width="400px">
+    <v-card :dark="lightSwitch == true">
+      <v-card-title
+        class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
+      >Error</v-card-title>
+      <v-card-title
+        class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+      >Not Enough Funds</v-card-title>
+      <v-container class="px-5">
+        <v-row no-gutters>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="secondary"
+            class="text-capitalize mt-2"
+            depressed
+            text
+            :dark="lightSwitch == true"
+            light
+            @click.stop="errorShow = false"
+          >Close</v-btn>
+
+        </v-row>
+      </v-container>
+    </v-card>
+  </v-dialog>
+
   </v-container>
 </template>
 
@@ -160,7 +187,8 @@ export default {
       portfolio: [],
       item: "",
       fund_id: "",
-      defaultValue: ""
+      defaultValue: "",
+      errorShow: false,
     };
   },
   computed: {
@@ -298,6 +326,12 @@ export default {
       let add =
         parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
       let addfees = this.fees(add);
+      let convertedNumbers = this.availableFunds.replace(/,/g, "");
+        if(parseFloat(addfees) > parseFloat(convertedNumbers)){
+          this.errorShow = true;
+          this.quantity = 0;
+          this.totalCost = 0;
+        }
       this.setSimulatorPositions(this.quantity);
       this.totalCost = this.addComma(addfees);
       this.$emit("totalPosition", this.quantity);
@@ -364,17 +398,25 @@ export default {
      */
     keypress() {
       let press = 0;
+      let pressfees = 0;
       if (this.simulatorConfirmedBuySell == "sell") {
         if (this.quantity > this.Position) {
           press = parseFloat(this.Position) * parseFloat(this.BuyPrice);
-          let pressfees = this.fees(press);
+          pressfees = this.fees(press);
           this.totalCost = this.addComma(pressfees);
           this.$emit("totalPosition", this.quantity);
           return (this.quantity = this.Position);
         }
+         
       }
       press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.BuyPrice);
-      let pressfees = this.fees(press);
+      pressfees = this.fees(press);
+      let convertedNumbers = this.availableFunds.replace(/,/g, "");
+        if(parseFloat(pressfees) > parseFloat(convertedNumbers)){
+          this.errorShow = true;
+          this.quantity = 0;
+          this.totalCost = 0;
+        }
       this.setSimulatorPositions(this.quantity);
       this.totalCost = this.addComma(pressfees);
       this.$emit("totalPosition", this.quantity);

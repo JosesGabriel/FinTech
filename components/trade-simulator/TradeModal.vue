@@ -10,6 +10,7 @@
         class="text-left justify-left pa-5 pb-3 px-5 success--text"
         style="font-size:16px; font-weight: 700;"
       >TRADE</v-card-title>
+      <span></span>
       <v-stepper
         v-model="e1"
         :dark="lightSwitch == true"
@@ -685,12 +686,15 @@ export default {
      *
      */
     getDetails(selectObj) {
+     //let zone = this.$moment('Asia/Manila');
+    //console.log('Local Time-', zone);
 
       const params = {
         "symbol-id": selectObj
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
+          //console.log('Live-', result);
           if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
             this.dboard = 1000000;
           } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {

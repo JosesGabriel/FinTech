@@ -40,7 +40,15 @@
         class="header__menuIcon"
         @click="toggleMenu"
         >mdi-menu</v-icon>
+        <div 
+          :class="this.display ? 'display' : 'noDisplay'" 
+           class="userSettings__dropdown--caret">
+           <div class="empty" :class="this.lightSwitch == 0 ? 'caretLight' : 'caretDark'">
+            </div>
+
+        </div>
       </div>
+      
 
       <v-card
         class="mx-auto header__menuIcon--lists"
@@ -49,7 +57,7 @@
         tile
       >
 
-      <div class="userSettings__dropdown--caret"></div>
+      <!--<div class="userSettings__dropdown--caret"></div>-->
 
         <v-list-item 
           class="listItem__marketSentiments"
@@ -78,7 +86,7 @@
             <v-list-item 
               class="listItem__powerTools" 
               :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
-              @mouseover="displayPowerTools = true"
+              @click="displayPowerTools = true"
               @mouseleave="displayPowerTools = false"
               > 
               <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
@@ -245,7 +253,7 @@ export default {
 </script>
 <style scoped>
 .header__searchbar {
-  transform: scale(0.5);
+  transform: scale(0.6);
   transform-origin: top center;
   border-bottom: 1px solid;
 }
@@ -289,7 +297,7 @@ export default {
   right: 325px;
   top: 40px;
   border: thin solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0px 5px 1px -2px rgba(0, 0, 0, 0.2), 0px 5px 2px 0px rgba(0, 0, 0, 0.14), 0px 15px 5px 0px rgba(0, 0, 0, 0.12)
+  box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
 }
 .header__menuIcon--lists > .v-list-item{
   min-height: 38px !important;
@@ -308,16 +316,28 @@ export default {
   border-left: 13px solid transparent;
   border-right: 13px solid transparent;
   border-bottom: 17px solid rgb(182, 182, 182, 0.2);
-  position: absolute;
-  right: 0px;
+  position: relative;
+  right: -12px;
   top: -8px;
   z-index: -1;
 }
+.userSettings__dropdown--caret .empty {
+  position: absolute;
+  top: 3px;
+  left: -21px;
+  width: 0;
+  /*border-bottom: solid 13px white; */
+  border-right: solid 10px transparent;
+  border-left: solid 21px transparent;
+}
+
+
 .header__menuIcon--powerTools{
   position: absolute;
   right: 325px;
   top: 117px;
   border: thin solid rgba(255, 255, 255, 0.12);
+   box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
 }
 .listItem__buySellCalc,
 .listItem__varCalc,
@@ -329,12 +349,36 @@ export default {
   background-color: #142530;
 }
 .lightModeHover:hover{
-  background-color: #B2B7BB;
+  background-color: #E5E5E5;
 }
 
 .header__menuIcon--powerTools > .v-list-item{
   min-height: 38px !important;
   border-bottom: thin solid rgba(255, 255, 255, 0.02);
+}
+
+.caretLight{
+  position: absolute;
+  top: 3px;
+  left: -21px;
+  width: 0;
+  border-bottom: solid 13px white;
+  border-right: solid 10px transparent;
+  border-left: solid 21px transparent;
+}
+.caretDark{
+  position: absolute;
+  top: 3px;
+  left: -21px;
+  width: 0;
+  border-bottom: solid 13px #222f39;
+  border-right: solid 10px transparent;
+  border-left: solid 21px transparent;
+}
+</style>
+<style>
+.header__searchbar > .v-input__control > .v-input__slot > .v-text-field__slot > input {
+  font-size: 20px;
 }
 </style>
 

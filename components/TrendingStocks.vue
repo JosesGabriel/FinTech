@@ -51,20 +51,27 @@ export default {
     return {
       tStocksObject: "",
       trendingStocks: [
-        { last: "", change: "" },
-        { last: "", change: "" },
-        { last: "", change: "" },
-        { last: "", change: "" },
-        { last: "", change: "" }
+        { last: "", change: "", stock_id: "" },
+        { last: "", change: "", stock_id: "" },
+        { last: "", change: "", stock_id: "" },
+        { last: "", change: "", stock_id: "" },
+        { last: "", change: "", stock_id: "" }
       ],
-      stockCode: ["", "", "", "", ""],
+      //stockCode: ["", "", "", "", ""],
+      stockCode: [],
       loader: false
     };
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      sseInfo: "social/sseInfo"
     })
+  },
+  watch: {
+    sseInfo: function(data){
+        this.realTime(data);
+    }
   },
   mounted() {
     this.getTrendingStocks();
@@ -87,6 +94,17 @@ export default {
         }.bind(this)
       );
     },
+    realTime(data){
+
+      for (let index = 0; index < this.trendingStocks.length; index++) {        
+          if(this.trendingStocks[index].stock_id == data.sym_id){     
+              this.trendingStocks[index].last = data.c;
+              this.trendingStocks[index].change = data.chgpc.toFixed(2);
+          }    
+      }
+
+    },
+
     /**
      * gets last price and change percentage of those stocks
      *
@@ -97,7 +115,6 @@ export default {
         //removes index from string because it returns PSE:ABA
         let x = this.tStocksObject.data.stocks[i].market_code.split(":");
         this.stockCode[i] = x[1];
-
         const params = {
           "symbol-id": this.tStocksObject.data.stocks[i].stock_id
         };
@@ -107,6 +124,7 @@ export default {
             this.trendingStocks[
               i
             ].change = result.data.changepercentage.toFixed(2);
+            this.trendingStocks[i].stock_id = this.tStocksObject.data.stocks[i].stock_id;
             this.loader = false;
           }.bind(this)
         );
