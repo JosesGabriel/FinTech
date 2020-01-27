@@ -7,7 +7,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Datafeed from "~/providers/tradingview/api";
-import __customIndicators from "../../static/vendor/charting_library/custom-indicator.js";
+import __customIndicators from "~/static/vendor/charting_library/custom-indicator.js";
 
 export default {
   name: "TVChartContainer",
@@ -260,9 +260,7 @@ export default {
         locale: this.getLanguageFromURL() || "en",
         charts_storage_url: this.chartsStorageUrl,
         custom_indicators_getter: PineJS => {
-
           return Promise.resolve(__customIndicators(PineJS));
-          
         },
         custom_css_url: this.customCssUrl,
         library_path: this.libraryPath,
