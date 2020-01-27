@@ -84,6 +84,7 @@ export default {
                 "auth._token.local",
                 data.token.access_token
               );
+              localStorage.setItem("hat", "12321321");
               this.setAlert({
                 model: true,
                 state: "success",
