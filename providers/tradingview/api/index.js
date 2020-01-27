@@ -9,7 +9,7 @@
 
 import axios from "axios";
 import moment from "moment";
-import { nativeBus } from "~/helpers/native-bus";
+import { nativeBus } from "~/assets/js/helpers/native-bus";
 
 // BASE CONSTANTS
 const BASE_URL = process.env.CHART_API_URL + "/charts";

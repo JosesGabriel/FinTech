@@ -305,7 +305,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { AddDynamicTime, LocalFormat } from "~/helpers/datetime";
+import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
 
 import List from "~/components/social/feed/comments/List";
 import PhotoCarousel from "~/components/social/PhotoCarousel";

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { AddDynamicTime } from "~/helpers/datetime";
+import { AddDynamicTime } from "~/assets/js/helpers/datetime";
 
 export default {
   name: "List",

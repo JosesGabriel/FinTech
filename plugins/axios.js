@@ -1,4 +1,4 @@
-import { IsInArray } from "~/helpers/arrays/urls";
+import { IsInArray } from "~/assets/js/helpers/arrays/urls";
 
 /**
  * Extends the nuxt-axios package

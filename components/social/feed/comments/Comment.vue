@@ -42,7 +42,7 @@
 </template>
 <script>
 import List from "~/components/social/feed/comments/List";
-import { LocalFormat } from "~/helpers/datetime";
+import { LocalFormat } from "~/assets/js/helpers/datetime";
 
 export default {
   name: "Comment",

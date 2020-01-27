@@ -178,7 +178,7 @@ import tradeEdits from "~/components/modals/TradeEdits";
 import tradeDelete from "~/components/modals/TradeDelete";
 
 import { mapActions, mapGetters } from "vuex";
-import { BuyFees } from "~/helpers/taxation";
+import { BuyFees } from "~/assets/js/helpers/taxation";
 
 export default {
   components: {

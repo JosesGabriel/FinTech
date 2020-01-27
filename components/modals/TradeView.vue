@@ -562,7 +562,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { BuyFees, SellFees } from "~/helpers/taxation";
+import { BuyFees, SellFees } from "~/assets/js/helpers/taxation";
 
 export default {
   props: ["visible"],
