@@ -121,7 +121,7 @@ export default {
   mounted() {},
   methods: {
     ...mapActions({
-      setAlert: "global/setAlert"
+      setAlertDialog: "global/setAlertDialog"
     }),
     changePassword() {
       const payload = {
@@ -131,15 +131,22 @@ export default {
       this.$axios
         .$get(process.env.API_URL + this.$route.fullPath.substr(param), payload)
         .then(response => {
-          const alert = {
-            model: true,
-            state: true,
-            message: response.message
-          };
-          this.setAlert(alert);
-          setTimeout(() => {
-            this.$router.push("login");
-          }, 3000);
+          if (response.success) {
+            const alert = {
+              model: true,
+              state: true,
+              header: "Awesome!",
+              body: "Your password has been successfully reset."
+            };
+            this.setAlertDialog(alert);
+            setTimeout(() => {
+              const hideAlert = {
+                modal: false
+              };
+              this.setAlertDialog(hideAlert);
+              this.$router.push("login");
+            }, 3000);
+          }
         });
     }
   }
