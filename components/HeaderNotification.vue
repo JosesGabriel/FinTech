@@ -92,56 +92,56 @@ export default {
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
+          title: "asdasd asdasd",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
+          title: "sdgdsagds safasfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
+          title: "dgsdgsdgsdg",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
+          title: "afasfasfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
+          title: "afasfasfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
+          title: "afasfasfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
+          title: "afasfasfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         },
         {
           icon: "mdi-account",
           iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
+          title: "afasfasfasf",
           subtitle: "Free Watchlist’s",
           created_at: "2 months ago"
         }
