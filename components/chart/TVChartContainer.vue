@@ -7,6 +7,7 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Datafeed from "~/providers/tradingview/api";
+import __customIndicators from "../../static/vendor/charting_library/custom-indicator.js";
 
 export default {
   name: "TVChartContainer",
@@ -207,7 +208,7 @@ export default {
         this.passTickerToChart(params);
       }
       this.first_load = false;
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -258,6 +259,11 @@ export default {
         datafeed: this.dataFeed,
         locale: this.getLanguageFromURL() || "en",
         charts_storage_url: this.chartsStorageUrl,
+        custom_indicators_getter: PineJS => {
+
+          return Promise.resolve(__customIndicators(PineJS));
+          
+        },
         custom_css_url: this.customCssUrl,
         library_path: this.libraryPath,
         symbol: symbol,
@@ -280,21 +286,9 @@ export default {
         //onHeaderReady event
         //TODO: add custom headers, this is a guide
         tvWidget.headerReady().then(() => {
-          /*this.widgetCreateButton(
-          "Click to show a notification popup",
-          "Setting",
-          function() {
-            tvWidget.showNoticeDialog({
-              title: "Notification",
-              body:
-                "TradingView Charting Library API works correctly <button>Ticker</button>",
-              callback: () => {
-                // eslint-disable-next-line no-console
-                console.log("Noticed!");
-              }
-            });
-          }
-        );*/
+          this.widgetCreateButton("Support and Resistance", "S&R", function() {
+            tvWidget.chart().createStudy("Support and Resistance", false, false);
+          });
         });
 
         // chart onSymbolChanged event
@@ -333,7 +327,6 @@ export default {
      */
     passTickerToChart(object) {
       if (object && this.tvWidget) {
-        //console.log(object);
         if (object.symbolid != null) {
           this.setSymbolID(object.symbolid);
         }
@@ -357,7 +350,7 @@ export default {
       button.setAttribute("title", title);
       //button.classList.add('apply-common-tooltip');
       button.addEventListener("click", callback);
-      button.innerHTML = content;
+      button.innerHTML = `<div class="tradingview-custom-btn">${content}</div>`;
     }
   },
   mounted() {
