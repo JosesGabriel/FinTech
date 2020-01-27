@@ -4,30 +4,49 @@ import moment from "moment";
  * Add hours, minutes, seconds to date time string.
  *
  * @param   {Date}  inputDateTime  input date time
- * @param   {Number}  addend         number to be added
- * @param   {String}  unit           unit of addend
+ * @param   {Number}  added         number to be added
+ * @param   {String}  unit           unit of added
  * @param   {String}  format         desired format
  *
  * @return  {String}                 returns formatted string
  */
-export function AddTime(inputDateTime, addend, unit, format='YYYY-MM-DD HH:mm:ss'){
+export function AddTime(inputDateTime, added, unit, format = 'YYYY-MM-DD HH:mm:ss') {
     let time = moment.utc(inputDateTime)
-    
+
     switch (unit) {
         case 'm':
-            time = time.add(addend, 'minutes')
+            time = time.subtract(added, 'minutes')
             break;
         case 'h':
-            time = time.add(addend, 'hours')
+            time = time.subtract(added, 'hours')
             break;
         case 's':
-            time = time.add(addend, 'seconds')
+            time = time.subtract(added, 'seconds')
             break;
         default:
             return null // cannot parse
     }
-
     return time.format(format)
+}
+
+/**
+ * Get time difference of current date and posts date, format it
+ * to AddTime function
+ *
+ * @param   {Date}  inputDateTime  posts date
+ * @param   {String}  format       returns string default date format
+ *
+ * @return  {Date}                 returns posts date, date difference, time unit
+ */
+export function AddDynamicTime(inputDateTime, format = 'YYYY-MM-DD HH:mm:ss') {
+    let newDate = new Date() //current date
+    let md = moment.utc(newDate).format(format) //2020-01-24 HH:mm:ss
+
+    let nd = moment.utc(md) //moment {_isAMomentObject: true, _i: "2020-01-24 07:26:54", _f: "YYYY-MM-DD HH:mm:ss"}
+
+    let fdf = nd.diff(inputDateTime, 'years', 'days', 'hours', 'minutes', 'seconds') // get the difference of current date and posts date
+
+    return AddTime(inputDateTime, fdf, 's') //returns functio(posts_date, difference_date, unit_time)
 }
 
 /**
@@ -46,7 +65,7 @@ export function AddTime(inputDateTime, addend, unit, format='YYYY-MM-DD HH:mm:ss
  *
  * @return  {string}                 returns date formatted
  */
-export function LocalFormat(inputDateTime, format = "LL") {
+export function LocalFormat(inputDateTime, format = "YYYY-MM-DD HH:mm:ss") {
     let time = moment.utc(inputDateTime).local()
 
     return formatter(time, format)
@@ -60,7 +79,7 @@ export function LocalFormat(inputDateTime, format = "LL") {
  *
  * @return  {String}            formatted string
  */
-function formatter(datetime, format){
+function formatter(datetime, format) {
     switch (format) {
         case 'fn':
             datetime = datetime.fromNow() // result will be '31 minutes ago'

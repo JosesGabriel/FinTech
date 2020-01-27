@@ -40,7 +40,6 @@
                   {{ postsObject[n - 1].user.last_name }}
                 </strong>
               </v-list-item-title>
-              <span>{{postsObject[n - 1].created_at}}</span>
               <v-list-item-subtitle class="overline no-transform">
                 {{
                 localFormat(postsObject[n - 1].created_at, 'fn')
@@ -258,7 +257,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { LocalFormat } from "~/helpers/datetime";
+import { AddDynamicTime, LocalFormat } from "~/helpers/datetime";
 
 import List from "~/components/social/feed/comments/List";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
@@ -339,15 +338,12 @@ export default {
       this.loadPosts();
     }
     if (this.$route.name == "index") this.scroll();
-
-    setInterval(() => {
-      console.log(this.postsObject[0].created_at = '2020-01-23 06:55:09')
-    }, 10000)
   },
   methods: {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    addDynamicTime: AddDynamicTime,
     localFormat: LocalFormat,
 
     /**
@@ -416,7 +412,15 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-            console.log(this.postsObject)
+            /**
+             * set interval dinamic time changing on posts
+             * 10000ms interval
+             */
+            setInterval(() => {
+              this.postsObject.map(
+                x => (x.created_at = this.addDynamicTime(x.created_at))
+              );
+            }, 10000);
           }
         })
         .catch(e => {
