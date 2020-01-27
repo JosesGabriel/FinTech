@@ -9,7 +9,7 @@
 
 import axios from "axios";
 import moment from "moment";
-import { nativeBus } from "~/helpers/native-bus";
+import { nativeBus } from "~/assets/js/helpers/native-bus";
 
 // BASE CONSTANTS
 const BASE_URL = process.env.CHART_API_URL + "/charts";
@@ -32,7 +32,8 @@ let symbolInfoObj = {
 let lastBarData = {};
 
 // INITIALIZE DEFAULTS
-axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
+const instance = axios.create()
+instance.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
 
 /**
  * Listens to SSE INFO native bus event.
@@ -146,7 +147,7 @@ export default {
   onReady: cb => {
     setTimeout(() => {
       // get tradingview config
-      axios.get(CONFIG_URL).then(({ data }) => {
+      instance.get(CONFIG_URL).then(({ data }) => {
         // write to callback
         cb(data.data);
       });
@@ -174,7 +175,7 @@ export default {
     };
 
     // get tradingview search
-    axios
+    instance
       .get(SEARCH_URL, {
         params: params
       })
@@ -226,7 +227,7 @@ export default {
 
     setTimeout(function() {
       // get tradingview resolve
-      axios
+      instance
         .get(RESOLVE_URL, {
           params: params
         })
@@ -274,7 +275,7 @@ export default {
     }
 
     // get tradingview history
-    axios
+    instance
       .get(HISTORY_URL, {
         params: params
       })
@@ -408,7 +409,7 @@ export default {
     }
 
     // get tradingview history
-    axios
+    instance
       .get(TIMESCALE_MARKS_TIME_URL, {
         params: params
       })
@@ -426,7 +427,7 @@ export default {
    */
   getServerTime: cb => {
     // get tradingview config
-    axios.get(SERVER_TIME_URL).then(({ data }) => {
+    instance.get(SERVER_TIME_URL).then(({ data }) => {
       // write to callback
       cb(data.data.time);
     });

@@ -36,7 +36,9 @@
         </v-row>
       </v-container>
       <small class="ml-3"
-        ><a class="success--text">Forgot your password?</a></small
+        ><a class="success--text" @click="$emit('stepper', 5)"
+          >Forgot your password?</a
+        ></small
       >
       <small
         ><v-checkbox

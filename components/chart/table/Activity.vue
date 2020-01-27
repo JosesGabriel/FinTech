@@ -177,7 +177,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { BuyFees } from "~/helpers/taxation";
+import { BuyFees } from "~/assets/js/helpers/taxation";
 
 export default {
   data() {

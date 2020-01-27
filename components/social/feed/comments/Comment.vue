@@ -30,9 +30,11 @@
           <v-icon>mdi-reply-outline</v-icon>
         </v-btn>
         <!-- | -->
-        <span class="px-2 overline no-transform">{{
-          $moment(comment.created_at).format("MMM DD hh:mm A")
-        }}</span>
+        <span class="px-2 overline no-transform">
+          {{
+          localFormat(comment.created_at, 'fn')
+          }}
+        </span>
         <List v-if="comment.comments" :comments="comment.comments" />
       </v-container>
     </v-list-item-content>
@@ -40,6 +42,7 @@
 </template>
 <script>
 import List from "~/components/social/feed/comments/List";
+import { LocalFormat } from "~/assets/js/helpers/datetime";
 
 export default {
   name: "Comment",
@@ -53,6 +56,9 @@ export default {
       },
       type: Object
     }
+  },
+  methods: {
+    localFormat: LocalFormat,
   }
 };
 </script>

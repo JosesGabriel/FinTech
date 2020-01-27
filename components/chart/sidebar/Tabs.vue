@@ -120,7 +120,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .lightmode__text {
   color: #494949;
 }

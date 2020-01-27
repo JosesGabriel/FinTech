@@ -130,15 +130,29 @@ export default {
      *
      * @return
      */
-    cardBackground: function() {
+    cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   watch: {
+    /**
+     * re run intbidask everytime symbol id changes
+     *
+     * @param   {String}  symid  stock id
+     *
+     * @return
+     */
     symbolid(symid) {
       this.initBidask(symid);
     },
-    loading: function(value) {
+    /**
+     * run sse once loading is done
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return
+     */
+    loading(value) {
       if (value === false) {
         this.sse.addEventListener("bidask", this.sseBidask);
       }
@@ -157,7 +171,7 @@ export default {
      *
      * @return  {String}      formatted
      */
-    formatItem: function(item, key = null) {
+    formatItem(item, key = null) {
       if (item == undefined) return;
       let result = null;
       switch (key) {
@@ -189,10 +203,13 @@ export default {
         const response = await this.$api.chart.stocks.bidask({
           "symbol-id": symid,
           "filter-by-last": true,
-          limit: 10
+          limit: 20
         });
+
         const asks = Object.values(response.data.asks);
-        const bids = Object.values(response.data.bids);
+        const bids = Object.values(response.data.bids).sort(
+          (a, b) => b.price - a.price
+        );
         const limit = Math.max(asks.length, bids.length);
         const bidask = {
           asks,
@@ -201,10 +218,7 @@ export default {
         };
         this.setBidask(bidask);
         this.loading = false;
-        // console.log("bidask response", bidask);
-      } catch (error) {
-        //console.log("bidask error", error);
-      }
+      } catch (error) {}
     },
     /**
      * initialise and listen to bidask server-side event
@@ -213,13 +227,11 @@ export default {
      *
      * @return
      */
-    sseBidask: function(e) {
+    sseBidask(e) {
       if (this.bidask.asks !== undefined && this.bidask.bids !== undefined) {
         if (this.symbolid == undefined) return;
         const data = JSON.parse(e.data);
         this.setSSEBidask(data);
-        // console.log(data);
-        // console.log(this.symbolid);
         if (this.symbolid !== data.sym_id) return;
 
         if (data.ov == "B") {
@@ -228,36 +240,38 @@ export default {
           this.$store.commit(
             "chart/SET_BIDS",
             bids.sort((a, b) => b.price - a.price)
-            // bids.sort(this.sortBy("price", "desc"))
           );
         } else if (data.ov == "S") {
           // ask
-          // if (data.ty != "a" || data.ty != "au") return;
           const asks = this.updateBidAndAsks(this.bidask.asks, data);
           this.$store.commit(
             "chart/SET_ASKS",
-            asks.sort((a, b) => b.price - a.price)
-            // asks.sort(this.sortBy("price", "desc"))
+            asks.sort((a, b) => a.price - b.price)
           );
         }
-        // console.log(this.bidask);
       }
     },
     /**
      * update the list depend on sent condition
+     * idn = p * 10000 / formula
+     *
+     * a = add new order
+     * au = add/update = deduct count and volume to the same id. then add new order with new id. idn is required
+     * d = delete/cancel order, deduct count by 1, if no count left remove from the list
+     * u = update = remove data.id on the list then add new using idn. same with au
+     * fd = full executed delete, deduct count and volume to the same id.
+     * pd = partial delete executed order, deduct volume only
+     *
      *
      * @param   {Array}  list  list items bid/ask
      * @param   {Object}  data  sent data from sse
      *
      * @return  {Object}  new list item formatted
      */
-    updateBidAndAsks: function(list, data) {
+    updateBidAndAsks(list, data) {
       const index = list.findIndex(item => item.id === data.id);
-      //   console.log("update bidask", data.ty);
-      //   console.log(index);
-      //   console.log(list);
-      //   console.log(data);
       if (data.ty == "a") {
+        // add new data/order in table if data is not exists
         if (typeof list[index] !== "undefined") {
           list[index].count++;
           list[index].volume += data.vol;
@@ -281,17 +295,25 @@ export default {
       } else if (data.ty == "fd") {
         // decrement data.id's count by 1, if count is zero, remove from list
         list = this.updateBidAskCount(list, index, -1, 0);
-
-        list = this.updateBidAskVolume(list, index, -1 * data.vol);
       } else if (data.ty == "pd") {
-        list = this.updateBidAskVolume(list, index, data.vol);
+        list = this.updateBidAskVolume(list, index, -1, data.vol);
       }
 
       const limit = Math.max(this.bidask.asks.length, this.bidask.bids.length);
       this.$store.commit("chart/SET_BIDASK_LIMIT", limit);
       return list;
     },
-    updateBidAskCount: function(list, id, increment, volume) {
+    /**
+     * Update bid/ask count and volume, and once count is less 0 then remove
+     *
+     * @param   {Array}  list       array of displayed items
+     * @param   {Integer}  id         id of bid/ask
+     * @param   {Integer}  increment  value to increment
+     * @param   {Float}  volume     volume value
+     *
+     * @return  {Array}           new array with updated object
+     */
+    updateBidAskCount(list, id, increment, volume) {
       if (typeof list[id] !== "undefined") {
         list[id].count += increment;
         list[id].volume += volume * increment;
@@ -302,37 +324,35 @@ export default {
       }
       return list;
     },
-    updateBidAskVolume: function(list, id, increment) {
+    /**
+     * update volume of existing item price in the bidask list
+     *
+     * @param   {Object}  list       object items of bid/ask
+     * @param   {Integer}  id         key id on object in array
+     * @param   {Interger}  increment  Volume amount
+     *
+     * @return  {Object}           return object
+     */
+    updateBidAskVolume(list, id, increment, volume) {
       if (typeof list[id] !== "undefined") {
-        list[id].volume += increment;
+        list[id].volume += increment * volume;
       }
       return list;
     },
-    addToBidAskList: function(id, data) {
+    /**
+     * add new item on the lists
+     *
+     * @param   {Integer}  id    id = price * 10000
+     * @param   {Object}  data   object to be added
+     *
+     * @return  {Object}     created object
+     */
+    addToBidAskList(id, data) {
       return {
         count: 1,
         id: id,
         price: data.p,
         volume: data.vol
-      };
-    },
-    sortBy: function(key, order = "asc") {
-      return function innerSort(a, b) {
-        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-          // property doesn't exist on either object
-          return 0;
-        }
-
-        const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
-        const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
-
-        let comparison = 0;
-        if (varA > varB) {
-          comparison = 1;
-        } else if (varA < varB) {
-          comparison = -1;
-        }
-        return order === "desc" ? comparison * -1 : comparison;
       };
     }
   },

@@ -15,6 +15,16 @@ export default () => ({
     model: false,
     state: "",
     message: ""
-  }
+  },
   //end global snackbar
+
+  //Global dialog alert
+  alertDialog: {
+    model: false,
+    header: "",
+    state: "",
+    body: "",
+    subtext: ""
+  }
+  //end global dialog alert
 });
