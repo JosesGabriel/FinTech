@@ -127,21 +127,20 @@ export default {
       const payload = {
         password: this.password
       };
-      this.$api.accounts.account.putnoid(payload).then(
-        function(result) {
-          if (result.success) {
-            const alert = {
-              model: true,
-              state: true,
-              message: result.message
-            };
-            this.setAlert(alert);
-            setTimeout(() => {
-              this.$router.push("login");
-            }, 3000);
-          }
-        }.bind(this)
-      );
+      const param = this.$route.fullPath.indexOf("?");
+      this.$axios
+        .$get(process.env.API_URL + this.$route.fullPath.substr(param), payload)
+        .then(response => {
+          const alert = {
+            model: true,
+            state: true,
+            message: response.message
+          };
+          this.setAlert(alert);
+          setTimeout(() => {
+            this.$router.push("login");
+          }, 3000);
+        });
     }
   }
 };
