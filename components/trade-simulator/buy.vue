@@ -110,12 +110,12 @@
                     ? 'boardlotsell'
                     : 'boardlotbuy'
                 "
-                class="pa-0 secondary--text"
+                class="pa-0"
               >Board lot</v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
                 :style="{ color: toggleFontColor }"
-                class="pa-0 secondary--text"
+                class="pa-0"
                 style="font-size:13px !important"
               >{{ this.BoardLot }}</v-card-title>
             </v-row>
@@ -126,7 +126,7 @@
               <v-card-title
                 style="font-size:13px !important"
                 :style="{ color: toggleFontColor }"
-                class="px-0 py-2 secondary--text"
+                class="px-0 py-2"
               >
                 {{
                 this.simulatorConfirmedBuySell == "sell"
@@ -137,7 +137,7 @@
               <v-spacer></v-spacer>
               <v-card-title
                 :style="{ color: toggleFontColor }"
-                class="px-0 py-2 secondary--text"
+                class="px-0 py-2"
                 style="font-size:13px !important"
               >{{ this.totalCost }}</v-card-title>
             </v-row>
@@ -158,7 +158,7 @@
         <v-row no-gutters>
           <v-spacer></v-spacer>
           <v-btn
-            color="secondary"
+            :style="{ color: toggleFontColor }"
             class="text-capitalize mt-2"
             depressed
             text

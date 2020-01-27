@@ -154,7 +154,7 @@
       </a>
       <HeaderNotification v-if="showNotification && $auth.loggedIn" />
 
-      <router-link to="/" class="social__router">
+      <router-link to="" class="social__router">
         <v-btn class="header__button" text>Vyndue</v-btn>
       </router-link>
       <a class="social__router">

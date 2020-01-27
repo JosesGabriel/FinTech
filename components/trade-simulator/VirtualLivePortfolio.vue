@@ -325,7 +325,7 @@ export default {
         }.bind(this)
       );
    
-
+      
     },
     /**
      * delete confirmation
