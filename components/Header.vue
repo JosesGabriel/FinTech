@@ -57,10 +57,7 @@
         width="180"
         tile
       >
-        <div class="userSettings__dropdown--caret"></div>
-
-      <!--<div class="userSettings__dropdown--caret"></div>-->
-
+      
         <v-list-item 
           class="listItem__marketSentiments"
           :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
