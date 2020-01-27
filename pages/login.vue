@@ -79,7 +79,9 @@ export default {
         return this.$api.authentication.providers
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
+            console.log(data);
             if (data.success) {
+              alert("hatdog");
               this.setAlert({
                 state: "success",
                 message: data.message
