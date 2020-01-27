@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -59,13 +60,35 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      setAlertDialog: "global/setAlertDialog"
+    }),
     submitEmail() {
       const payload = {
         email: this.email
       };
       this.$api.authentication.forgotPassword.create(payload).then(
         function(result) {
-          console.log(result);
+          if (result.success) {
+            const alert = {
+              model: true,
+              state: true,
+              header: "Awesome!",
+              body: "Your request has been successfully sent to your email.",
+              subtext: this.email
+            };
+            this.setAlertDialog(alert);
+            const hideAlert = {
+              modal: false
+            };
+            setTimeout(
+              function() {
+                this.setAlertDialog(hideAlert);
+                this.$emit("stepper", 2);
+              }.bind(this),
+              3000
+            );
+          }
         }.bind(this)
       );
     }
