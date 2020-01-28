@@ -8,7 +8,6 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
 export default function({ $axios, redirect }) {
   // list of exempted urls
   const urls = [
-    process.env.CHART_API_URL,
     process.env.STREAM_API_URL,
     process.env.VYNDUE_API_URL,
   ];
