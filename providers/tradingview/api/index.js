@@ -10,10 +10,10 @@
 import axios from "axios";
 import moment from "moment";
 import { nativeBus } from "~/assets/js/helpers/native-bus";
+import { BuildQueryParams } from "~/assets/js/helpers/api";
 
 // BASE CONSTANTS
-const BASE_URL = process.env.CHART_API_URL + "/charts";
-const TOKEN = process.env.CHART_CLIENT_SECRET;
+const BASE_URL = process.env.API_URL + "/data/v2/charts";
 
 // URL LIST
 const CONFIG_URL = `${BASE_URL}/tradingview/config`;
@@ -31,10 +31,9 @@ let symbolInfoObj = {
 // holds the last bar of any subscribed chart
 let lastBarData = {};
 
-// INITIALIZE DEFAULTS
-const instance = axios.create()
-instance.defaults.headers.common["Authorization"] = `Bearer ${TOKEN}`;
-
+if (process.client){
+  axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
+}
 /**
  * Listens to SSE INFO native bus event.
  *
@@ -147,7 +146,7 @@ export default {
   onReady: cb => {
     setTimeout(() => {
       // get tradingview config
-      instance.get(CONFIG_URL).then(({ data }) => {
+      axios.post(CONFIG_URL).then(({ data }) => {
         // write to callback
         cb(data.data);
       });
@@ -175,10 +174,9 @@ export default {
     };
 
     // get tradingview search
-    instance
-      .get(SEARCH_URL, {
-        params: params
-      })
+    let query = BuildQueryParams(params);
+    axios
+      .post(`${SEARCH_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(({ data }) => {
         onResultReadyCallback(data.data);
       })
@@ -226,11 +224,10 @@ export default {
     };
 
     setTimeout(function() {
+      const query = BuildQueryParams(params)
       // get tradingview resolve
-      instance
-        .get(RESOLVE_URL, {
-          params: params
-        })
+      axios
+        .post(`${RESOLVE_URL}${query.length > 0 ? "?" + query : ""}`)
         .then(({ data }) => {
           onSymbolResolvedCallback(data.data);
         })
@@ -275,10 +272,10 @@ export default {
     }
 
     // get tradingview history
-    instance
-      .get(HISTORY_URL, {
-        params: params
-      })
+    const query = BuildQueryParams(params);
+
+    axios
+      .post(`${HISTORY_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(response => {
         const data = response.data.data;
         const nodata = data.s === "no_data";
@@ -409,10 +406,10 @@ export default {
     }
 
     // get tradingview history
-    instance
-      .get(TIMESCALE_MARKS_TIME_URL, {
-        params: params
-      })
+    const query = BuildQueryParams(params)
+
+    axios
+      .post(`${TIMESCALE_MARKS_TIME_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(({ data }) => {
         onDataCallback(data.data);
       })
@@ -427,7 +424,7 @@ export default {
    */
   getServerTime: cb => {
     // get tradingview config
-    instance.get(SERVER_TIME_URL).then(({ data }) => {
+    axios.post(SERVER_TIME_URL).then(({ data }) => {
       // write to callback
       cb(data.data.time);
     });
