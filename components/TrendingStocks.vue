@@ -16,6 +16,7 @@
               <v-list-item-title class="caption d-flex justify-space-between"
                 ><span>{{ stockCode[n - 1] }}</span
                 ><span v-if="tStocksObject"
+                    :id="stockCode[n - 1]"
                   >₱{{ trendingStocks[n - 1].last }}</span
                 ></v-list-item-title
               >
@@ -100,9 +101,18 @@ export default {
           if(this.trendingStocks[index].stock_id == data.sym_id){     
               this.trendingStocks[index].last = data.c;
               this.trendingStocks[index].change = data.chgpc.toFixed(2);
+              this.updateEffect(this.stockCode[index]);
           }    
       }
 
+    },
+    updateEffect: dom => {
+      const item = document.getElementById(dom);
+      if (item == null) return;
+      item.style.background = "rgb(182,182,182,.2)";
+      setTimeout(function() {
+        item.style.background = "";
+      }, 800);
     },
 
     /**
