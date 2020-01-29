@@ -41,15 +41,10 @@
           class="header__menuIcon"
           @click="toggleMenu"
         >mdi-menu</v-icon>
-        <div 
-          :class="this.display ? 'display' : 'noDisplay'" 
-           class="userSettings__dropdown--caret">
-           <div class="empty" :class="this.lightSwitch == 0 ? 'caretLight' : 'caretDark'">
-            </div>
-
+        <div :class="this.display ? 'display' : 'noDisplay'" class="userSettings__dropdown--caret">
+          <div class="empty" :class="this.lightSwitch == 0 ? 'caretLight' : 'caretDark'"></div>
         </div>
       </div>
-      
 
       <v-card
         class="mx-auto header__menuIcon--lists"
@@ -57,8 +52,7 @@
         width="180"
         tile
       >
-      
-        <v-list-item 
+        <v-list-item
           class="listItem__marketSentiments"
           :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
         >
@@ -80,20 +74,18 @@
           <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
             <v-list-item-title class="listItem__bulletin">Bulletin</v-list-item-title>
           </router-link>
-        </v-list-item> -->
-      
-            <v-list-item 
-              class="listItem__powerTools" 
-              :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
-              @click="displayPowerTools = true"
-              @mouseleave="displayPowerTools = false"
-              > 
-              <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
-                <v-list-item-title 
-                  class="listItem__powerTools"
-                  >Power Tools</v-list-item-title>
-              </router-link>
-            </v-list-item>
+        </v-list-item>-->
+
+        <v-list-item
+          class="listItem__powerTools"
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          @click="displayPowerTools = true"
+          @mouseleave="displayPowerTools = false"
+        >
+          <router-link to class="no-transform" :style="{color: toggleFontColor }">
+            <v-list-item-title class="listItem__powerTools">Power Tools</v-list-item-title>
+          </router-link>
+        </v-list-item>
       </v-card>
 
       <v-card
@@ -152,11 +144,14 @@
           @click="showNotification = !showNotification"
         >Notification</v-btn>
       </a>
-      <HeaderNotification v-if="showNotification && $auth.loggedIn" />
+      <HeaderNotification
+        :dataNotification="dataNotification"
+        v-if="showNotification && $auth.loggedIn"
+      />
 
-        <a :href="'https://vyndue.com'" target="_blank" class="social__router">
-          <v-btn class="header__button" text>Vyndue</v-btn>
-        </a>
+      <a :href="'https://vyndue.com'" target="_blank" class="social__router">
+        <v-btn class="header__button" text>Vyndue</v-btn>
+      </a>
       <a class="social__router">
         <v-btn
           ref="accountBtn"
@@ -176,6 +171,10 @@
   </v-toolbar>
 </template>
 <script>
+import {
+  UserNotificationEventsList,
+  AllNotificationEventsList
+} from "~/assets/js/config/notification";
 import { mapActions, mapGetters } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
 import HeaderDropdown from "~/components/HeaderDropdown";
@@ -183,6 +182,7 @@ import HeaderNotification from "~/components/HeaderNotification";
 import BuySellCalculator from "~/components/calculators/BuySellCalculator";
 import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
 import VARCalculator from "~/components/calculators/VARCalculator";
+
 export default {
   components: {
     LoginRegister,
@@ -203,6 +203,7 @@ export default {
       tab: null,
       showDropdown: false,
       showNotification: false,
+      dataNotification: [],
       display: false,
       displayPowerTools: false,
       buySellDialog: false,
@@ -213,6 +214,7 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
+      notification: "global/getNotification",
       stockList: "global/getStockList"
     }),
     toggleFontColor() {
@@ -237,14 +239,25 @@ export default {
     }
 
     document.addEventListener("click", this.close);
+
+    this.getNotification();
+    this.initSSE();
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
   },
+  watch: {
+    notification() {
+      console.log(this.notification);
+    }
+  },
   methods: {
     ...mapActions({
-      setStockList: "global/setStockList"
+      setStockList: "global/setStockList",
+      setNotification: "global/setNotification"
     }),
+    userNotificationEventsList: UserNotificationEventsList,
+    allNotificationEventsList: AllNotificationEventsList,
     toggleMenu() {
       if (this.display ? (this.display = false) : (this.display = true));
     },
@@ -254,7 +267,141 @@ export default {
         this.showDropdown = false;
         this.showNotification = false;
       }
+    },
+    getNotification() {
+      this.$api.social.notification.notifications().then(response => {
+        if (response.success) {
+          this.dataNotification = response.data.notifications;
+        }
+      });
+    },
+    initSSE() {
+      /**
+       * all notifications here
+       */
+      const evtSourceAll = new EventSource(
+        `${process.env.STREAM_API_URL}/sse/notifications/all`
+      );
+
+      evtSourceAll.onerror = function(err) {
+        console.log(err);
+      };
+
+      const allNotificationList = this.allNotificationEventsList();
+
+      allNotificationList.forEach(eventName => {
+        evtSourceAll.addEventListener(eventName, e => {
+          console.log(eventName, JSON.parse(e.data), "all");
+          this.notificationHandler(eventName, JSON.parse(e.data));
+        });
+      });
+
+      /**
+       * this is for specific user notification
+       *
+       * @return  {object}  returns objects
+       */
+      if (this.$auth.user != null) {
+        const evtSource = new EventSource(
+          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}`
+        );
+
+        evtSource.onerror = function(err) {
+          console.log(err);
+        };
+
+        const userNotificationList = this.userNotificationEventsList();
+
+        userNotificationList.forEach(eventName => {
+          evtSource.addEventListener(eventName, e => {
+            console.log(eventName, JSON.parse(e.data), "User");
+            this.allNotificationHandler(eventName, JSON.parse(e.data));
+          });
+        });
+      }
+    },
+    notificationHandler(eventName, data) {
+      switch (eventName) {
+        case "social.comment.comment":
+          this.onSocialReplyComment(data);
+          break;
+        case "social.comment.sentiment":
+          this.onSocialCommentSentiment(data);
+          break;
+        case "social.comment.tag:user":
+          this.onSocialTagUserComment(data);
+          break;
+        case "social.post.comment":
+          this.onSocialUserPostComment(data);
+          break;
+        case "social.post.sentiment":
+          this.onSocialUserPostSentiment(data);
+          break;
+        case "social.post.tag:user":
+          this.onSocialUserTagUser(data);
+          break;
+        case "social.user.follow":
+          this.onSocialUserFollowUser(data);
+          break;
+
+        default:
+          break;
+      }
+    },
+    allNotificationHandler(eventName, data) {
+      switch (eventName) {
+        case "social.post.comment":
+          this.onSocialAllPostComment(data);
+          break;
+
+        default:
+          break;
+      }
+    },
+    // start Specific User Notification
+    onSocialReplyComment(data) {
+      const alert = {
+        model: false,
+        sender_picture:
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg/220px-Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg",
+        full_name: data.name,
+        message: "Commented on your post"
+      };
+      this.setNotification(alert);
+    },
+    onSocialCommentSentiment(data) {
+      console.log(data);
+    },
+    onSocialTagUserComment(data) {
+      console.log(data);
+    },
+    onSocialUserPostComment(data) {
+      console.log(data);
+    },
+    onSocialUserPostSentiment(data) {
+      console.log(data);
+    },
+    onSocialUserTagUser(data) {
+      console.log(data);
+    },
+    onSocialUserFollowUser(data) {
+      console.log(data);
+    },
+    // end Specific User Notification
+
+    // start All Notification
+    onSocialAllPostComment(data) {
+      console.log(data);
+      const alert = {
+        model: false,
+        sender_picture:
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg/220px-Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg",
+        full_name: data.name,
+        message: "Commented on your post"
+      };
+      this.setNotification(alert);
     }
+    // end All Notification
   }
 };
 </script>
@@ -307,7 +454,8 @@ export default {
   right: 325px;
   top: 40px;
   border: thin solid rgba(255, 255, 255, 0.12);
-  box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
 }
 .header__menuIcon--lists > .v-list-item {
   min-height: 38px !important;
@@ -341,13 +489,13 @@ export default {
   border-left: solid 21px transparent;
 }
 
-
-.header__menuIcon--powerTools{
+.header__menuIcon--powerTools {
   position: absolute;
   right: 325px;
   top: 117px;
   border: thin solid rgba(255, 255, 255, 0.12);
-   box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
 }
 .listItem__buySellCalc,
 .listItem__varCalc,
@@ -358,8 +506,8 @@ export default {
 .darkModeHover:hover {
   background-color: #142530;
 }
-.lightModeHover:hover{
-  background-color: #E5E5E5;
+.lightModeHover:hover {
+  background-color: #e5e5e5;
 }
 
 .header__menuIcon--powerTools > .v-list-item {
@@ -367,7 +515,7 @@ export default {
   border-bottom: thin solid rgba(255, 255, 255, 0.02);
 }
 
-.caretLight{
+.caretLight {
   position: absolute;
   top: 3px;
   left: -21px;
@@ -376,7 +524,7 @@ export default {
   border-right: solid 10px transparent;
   border-left: solid 21px transparent;
 }
-.caretDark{
+.caretDark {
   position: absolute;
   top: 3px;
   left: -21px;
@@ -387,7 +535,11 @@ export default {
 }
 </style>
 <style>
-.header__searchbar > .v-input__control > .v-input__slot > .v-text-field__slot > input {
+.header__searchbar
+  > .v-input__control
+  > .v-input__slot
+  > .v-text-field__slot
+  > input {
   font-size: 20px;
 }
 </style>

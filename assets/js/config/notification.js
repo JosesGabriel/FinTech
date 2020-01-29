@@ -16,3 +16,18 @@ export function UserNotificationEventsList() {
         'social.user.follow'
     ]
 }
+
+/**
+ * Returns all notification event list for listener consumption.
+ *
+ *
+ * @return  {Array}          array of string list
+ */
+export function AllNotificationEventsList() {
+    return [
+        // social event names
+        'social.post',
+        'social.post.comment',
+        'social.post.sentiment'
+    ]
+}

@@ -5,168 +5,71 @@
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
       outlined
-      max-height=" 445px"
-      max-width="430px"
-      width="430px"
+      max-height="445px"
+      max-width="350px"
+      width="350px"
       class="userMessage__dropdown"
     >
-      <v-container dark class="pa-0">
-        <v-row no-gutters class="userMessage_dropdown-header">
-          <span class="white--text pa-4 pb-2 body-2">Notifications</span>
+      <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
+        <v-row no-gutters class="userMessage__dropdown-header">
+          <span class="pa-4 pb-2 body-2">Notifications</span>
         </v-row>
-        <v-list class="pt-0 userMessage__dropdown-body scrollbar">
-          <v-list-item v-for="item in items" :key="item.title" @click>
-            <v-list-item-avatar class="mr-3" size="35">
-              <img src="/Icon/user-default.svg" />
-            </v-list-item-avatar>
-
-            <v-list-item-content class="py-2">
-              <v-list-item-title class="caption font-weight-bold ma-0" v-text="item.title"></v-list-item-title>
-              <v-list-item-subtitle class="caption" v-text="item.subtitle"></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <span class="overline no-transform tertiary--text" v-text="item.created_at"></span>
-            </v-list-item-action>
-          </v-list-item>
+        <v-list class="py-0 userMessage__dropdown-body scrollbar">
+            <NotificationCard v-for="(item, index) in dataNotification" :key="index" :notification="item" />
         </v-list>
-        <v-row no-gutters class="userMessage_dropdown-footer text-center">
-          <span class="white--text pa-2 caption d-block seeall_dropdown-footer">See All</span>
+        <v-row no-gutters class="userMessage__dropdown-footer text-center">
+          <span class="pa-2 caption d-block seeall_dropdown-footer">See All</span>
         </v-row>
       </v-container>
     </v-card>
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import NotificationCard from "./notification/NotificationCard";
 
 export default {
+  components: {
+    NotificationCard
+  },
+  props: {
+    dataNotification: {
+      default() {
+        return [];
+      },
+      type: Array
+    }
+  },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      notification: "global/getNotification"
     }),
     toggleFontColor() {
       return this.lightSwitch == 0
         ? "#000000 !important"
         : "#ffffff !important";
     }
-  },
-  data() {
-    return {
-      items: [
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Lyduz Public Community",
-          subtitle: "All Things Tradings",
-          created_at: "a few seconds ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Traders Lounge",
-          subtitle: "Ms. Gandah’s Trading Strategies",
-          created_at: "3 minutes ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Feedback and Suggestions",
-          subtitle: "How do we improve Lyduz",
-          created_at: "2 hours ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Charting + News",
-          subtitle: "Share your chart picks and latest news updates!",
-          created_at: "a week ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "asdasd asdasd",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "sdgdsagds safasfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "dgsdgsdgsdg",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfasfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfa123sfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afas31423rdsffasfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfa231423fdssfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfa123123sfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        }
-      ]
-    };
-  },
-  mounted() {
-    console.log("profile");
   }
 };
 </script>
 <style scoped>
+.userMessage__dropdown-title {
+  font-weight: 700;
+}
 .seeall_dropdown-footer {
   width: 100%;
 }
-.userMessage__dropdown.theme--dark .userMessage_dropdown-header {
+.userMessage__dropdown.theme--dark .userMessage__dropdown-header {
   background: #00121e;
 }
-.userMessage__dropdown.theme--light .userMessage_dropdown-header {
+.userMessage__dropdown.theme--light .userMessage__dropdown-header {
   background: #fff;
 }
-.userMessage__dropdown.theme--dark .userMessage_dropdown-footer {
+.userMessage__dropdown.theme--dark .userMessage__dropdown-footer {
   background: #00121e;
 }
-.userMessage__dropdown.theme--light .userMessage_dropdown-footer {
+.userMessage__dropdown.theme--light .userMessage__dropdown-footer {
   background: #fff;
 }
 .userMessage__dropdown-body {

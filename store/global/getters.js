@@ -1,22 +1,26 @@
 export default {
-  getLightSwitch(state) {
-    return state.lightSwitch;
-  },
-  //region stock data
-  getStockList(state) {
-    return state.stockList;
-  },
-  //end region stock data
+    getLightSwitch(state) {
+        return state.lightSwitch;
+    },
+    //region stock data
+    getStockList(state) {
+        return state.stockList;
+    },
+    //end region stock data
 
-  favicon: state => {
-    return state.favicon;
-  },
+    favicon: state => {
+        return state.favicon;
+    },
 
-  getAlert(state) {
-    return state.alert;
-  },
+    getNotification(state) {
+        return state.notification;
+    },
 
-  getAlertDialog(state) {
-    return state.alertDialog;
-  }
+    getAlert(state) {
+        return state.alert;
+    },
+
+    getAlertDialog(state) {
+        return state.alertDialog;
+    }
 };

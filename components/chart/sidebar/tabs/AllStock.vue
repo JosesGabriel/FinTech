@@ -53,7 +53,7 @@
                   { decrease: props.item.change < 0 }
                 ]"
               >
-                {{ props.item.last | numeral("0.0a") }}
+                {{ props.item.last | numeralDecimal(false) }}
               </span>
             </td>
             <td class="text-right" style="width:55px">
