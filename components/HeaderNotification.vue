@@ -15,20 +15,7 @@
           <span class="pa-4 pb-2 body-2">Notifications</span>
         </v-row>
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
-          <v-list-item v-for="item in dataNotification" :key="item.index" @click three-line>
-            <v-list-item-avatar class="mr-3" size="35">
-              <img :src="item.notificable.meta.user.profile_image ? item.notificable.meta.user.profile_image : '/Icon/user-default.svg'" />
-            </v-list-item-avatar>
-
-            <v-list-item-content class="py-2">
-              <v-list-item-subtitle class="body-2 ma-0 userMessage__dropdown-title">
-                <span class="body-2 ma-0 userMessage__message">{{ item.notificable.message }}</span>
-              </v-list-item-subtitle>
-              <span class="caption tertiary--text">{{ localFormat(item.created_at, "fn") }}</span>
-            </v-list-item-content>
-
-            <v-list-item-action></v-list-item-action>
-          </v-list-item>
+            <NotificationCard v-for="(item, index) in dataNotification" :key="index" :notification="item" />
         </v-list>
         <v-row no-gutters class="userMessage__dropdown-footer text-center">
           <span class="pa-2 caption d-block seeall_dropdown-footer">See All</span>
@@ -39,9 +26,12 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { LocalFormat } from "~/assets/js/helpers/datetime";
+import NotificationCard from "./notification/NotificationCard";
 
 export default {
+  components: {
+    NotificationCard
+  },
   props: {
     dataNotification: {
       default() {
@@ -60,15 +50,6 @@ export default {
         ? "#000000 !important"
         : "#ffffff !important";
     }
-  },
-  data() {
-    return {};
-  },
-  mounted() {
-      console.log(this.dataNotification)
-  },
-  methods: {
-    localFormat: LocalFormat
   }
 };
 </script>
