@@ -11,27 +11,26 @@
       class="userMessage__dropdown"
     >
       <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
-        <v-row no-gutters class="userMessage_dropdown-header">
+        <v-row no-gutters class="userMessage__dropdown-header">
           <span class="pa-4 pb-2 body-2">Notifications</span>
         </v-row>
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
-          <v-list-item v-for="item in message" :key="item.index" @click three-line>
+          <v-list-item v-for="item in dataNotification" :key="item.index" @click three-line>
             <v-list-item-avatar class="mr-3" size="35">
-              <img :src="item.sender_picture" />
+              <img :src="item.notificable.meta.user.profile_image ? item.notificable.meta.user.profile_image : '/Icon/user-default.svg'" />
             </v-list-item-avatar>
 
             <v-list-item-content class="py-2">
-              <v-list-item-subtitle class="body-2 ma-0 userMessage_dropdown-title">
-                {{ item.full_name }}
-                <span class="body-2 ma-0">{{ item.message }}</span>
+              <v-list-item-subtitle class="body-2 ma-0 userMessage__dropdown-title">
+                <span class="body-2 ma-0 userMessage__message">{{ item.notificable.message }}</span>
               </v-list-item-subtitle>
-              <span class="caption tertiary--text">{{ localFormat(new Date(), "fn") }}</span>
+              <span class="caption tertiary--text">{{ localFormat(item.created_at, "fn") }}</span>
             </v-list-item-content>
 
             <v-list-item-action></v-list-item-action>
           </v-list-item>
         </v-list>
-        <v-row no-gutters class="userMessage_dropdown-footer text-center">
+        <v-row no-gutters class="userMessage__dropdown-footer text-center">
           <span class="pa-2 caption d-block seeall_dropdown-footer">See All</span>
         </v-row>
       </v-container>
@@ -43,6 +42,14 @@ import { mapGetters, mapActions } from "vuex";
 import { LocalFormat } from "~/assets/js/helpers/datetime";
 
 export default {
+  props: {
+    dataNotification: {
+      default() {
+        return [];
+      },
+      type: Array
+    }
+  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
@@ -55,40 +62,33 @@ export default {
     }
   },
   data() {
-    return {
-      message: []
-    };
-  },
-  watch: {
-    notification() {
-        this.message.unshift(this.notification)
-    }
+    return {};
   },
   mounted() {
-    console.log(this.notification);
+      console.log(this.dataNotification)
   },
   methods: {
-      localFormat : LocalFormat
+    localFormat: LocalFormat
   }
 };
 </script>
 <style scoped>
-.userMessage_dropdown-title {
+.userMessage__dropdown-title {
   font-weight: 700;
 }
 .seeall_dropdown-footer {
   width: 100%;
 }
-.userMessage__dropdown.theme--dark .userMessage_dropdown-header {
+.userMessage__dropdown.theme--dark .userMessage__dropdown-header {
   background: #00121e;
 }
-.userMessage__dropdown.theme--light .userMessage_dropdown-header {
+.userMessage__dropdown.theme--light .userMessage__dropdown-header {
   background: #fff;
 }
-.userMessage__dropdown.theme--dark .userMessage_dropdown-footer {
+.userMessage__dropdown.theme--dark .userMessage__dropdown-footer {
   background: #00121e;
 }
-.userMessage__dropdown.theme--light .userMessage_dropdown-footer {
+.userMessage__dropdown.theme--light .userMessage__dropdown-footer {
   background: #fff;
 }
 .userMessage__dropdown-body {
