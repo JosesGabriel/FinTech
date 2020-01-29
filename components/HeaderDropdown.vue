@@ -102,6 +102,8 @@ export default {
   top: 40px;
   right: 20px;
   margin-right: 10px;
+  box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
+
 }
 .userSettings__dropdown--caret {
   width: 0;
@@ -140,7 +142,7 @@ export default {
   background-color: #142530;
 }
 .lightModeHover:hover{
-  background-color: #B2B7BB;
+  background-color: #E5E5E5;
 }
 .userSettings__logout{
   margin-bottom: -8px;

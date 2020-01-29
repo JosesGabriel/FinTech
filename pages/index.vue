@@ -13,7 +13,7 @@
         <Newsfeed :new-post="newPost" />
       </v-col>
       <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
-        <!-- <TrendingStocks /> -->
+        <TrendingStocks /> 
         <WhoToMingle />
         <MiniWatchlist />
         <!-- TODO put back when implementing -->
@@ -34,6 +34,8 @@ import PostField from "~/components/social/PostField";
 import MiniWatchlist from "~/components/MiniWatchlist";
 import Bulletin from "~/components/Bulletin";
 
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   layout: "main",
   components: {
@@ -44,7 +46,7 @@ export default {
     MiniWatchlist,
     Bulletin,
     FooterSidebar,
-    PostField
+    PostField,
   },
   data() {
     return {
@@ -53,6 +55,10 @@ export default {
     };
   },
   methods: {
+     ...mapActions({
+      setSSE: "social/setSSE",
+      setSSEInfo: "social/setSSEInfo"
+    }),
     /**
      * Captures when post field emits that user has posted new post
      *
@@ -62,7 +68,44 @@ export default {
      */
     authorNewPost(value) {
       this.newPost = value;
+    },
+
+    initSSE() {
+      if (this.sse !== null) {
+        this.sse.close();
+      }
+
+      this.setSSE(
+        new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
+       // new EventSource("http://localhost:8021/sse/market-data/pse/all")
+      );
+
+      this.sse.onopen = function() {};
+
+      this.sse.onerror = function() {};
+      
+      this.sse.addEventListener("info",this.sseInfo);
+
+
+    },
+    sseInfo(e) {
+       const data = JSON.parse(e.data);
+
+        // set sse info to state
+        this.setSSEInfo(data);
     }
+
+  },
+  mounted() {
+    this.initSSE();
+  },
+  beforeDestroy() {
+     this.sse.close();
+  },
+  computed: {
+     ...mapGetters({
+      sse: "social/sse",
+    }),     
   }
 };
 </script>

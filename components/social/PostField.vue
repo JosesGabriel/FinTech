@@ -276,7 +276,7 @@
               right
               absolute
               color="success"
-              :disabled="!postField"
+              :disabled="postBtnDisable"
               @click="
                 taggedStocks.length > 0
                   ? getTaggedStockValues()
@@ -315,6 +315,7 @@ export default {
   },
   data() {
     return {
+      postBtnDisable: true,
       postIsImage: null,
       postField: "",
       previewImage: [],
@@ -342,6 +343,15 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     })
+  },
+  watch: {
+    postField() {
+      if (this.postField) {
+        this.postBtnDisable = false;
+      } else {
+        this.postBtnDisable = true;
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -631,6 +641,7 @@ export default {
           .then(
             function(response) {
               this.cloudArray.push(response.data.file.url);
+              this.postBtnDisable = false;
               this.loader = false;
             }.bind(this)
           )

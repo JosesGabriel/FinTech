@@ -29,6 +29,7 @@
           </div>
           <div>
             <span
+              :id="stockData[index].stockSym"
               >₱{{
                 stockData[index] ? stockData[index].currentPrice : ""
               }}</span
@@ -73,6 +74,7 @@ export default {
       watchCardLoading: "success",
       watchListObject: "",
       isLightMode: 0,
+      dataSeries: [],
       series: [
         {
           name: "series1",
@@ -223,7 +225,8 @@ export default {
   computed: {
     ...mapGetters({
       renderChartKey: "watchers/getRenderChartKey",
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      sseInfo: "social/sseInfo"
     })
   },
   watch: {
@@ -235,6 +238,9 @@ export default {
      */
     renderChartKey() {
       this.watchCardMount();
+    },
+    sseInfo: function(data){
+        this.realTime(data);
     }
   },
   mounted() {
@@ -273,6 +279,7 @@ export default {
           };
           this.$api.chart.charts.latest(params).then(
             function(result) {
+              this.dataSeries[i] = result.data.c.reverse();
               this.$refs.closePriceChart[i].updateSeries([
                 {
                   data: result.data.c.reverse()
@@ -324,7 +331,54 @@ export default {
           this.watchCardLoading = false;
         }
       });
-    }
+    },
+    realTime(data){
+
+        for (let index = 0; index < this.stockData.length; index++) {
+
+               if(this.watchListObject[index].stock_id == data.sym_id){  
+                   let oldprice = this.stockData[index].currentPrice;   
+                   this.stockData[index].currentPrice = data.c;
+                   this.stockData[index].change = data.chgpc.toFixed(2);
+                   if(oldprice != this.stockData[index].currentPrice){
+                      this.updateEffect(this.stockData[index].stockSym);    
+                        //for (let i = 0; i < 5; i++) {
+                         // this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
+                       // }
+                 /*       this.dataSeries[index][4] = this.stockData[index].currentPrice; 
+                        this.$refs.closePriceChart[index].updateSeries([
+                          {
+                            data: this.dataSeries[index]
+                          }
+                        ]);*/
+
+                   }
+
+
+                      for (let i = 0; i < 5; i++) {
+                          this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
+                        }
+                        this.dataSeries[index][4] = this.stockData[index].currentPrice; 
+                        this.$refs.closePriceChart[index].updateSeries([
+                          {
+                            data: this.dataSeries[index]
+                          }
+                        ]);
+
+              }    
+                  
+        }
+    },
+    updateEffect: dom => {
+      const item = document.getElementById(dom);
+      if (item == null) return;
+      item.style.background = "rgb(182,182,182,.2)";
+      setTimeout(function() {
+        item.style.background = "";
+      }, 800);
+    },
+
+
   }
 };
 </script>
