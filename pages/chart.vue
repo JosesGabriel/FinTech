@@ -2,8 +2,11 @@
   <v-content>
     <v-content>
       <tv-chart-container
-        :dataFeed="dataFeed"
-        :chartsStorageUrl="'https://saveload.tradingview.com'"
+        :data-feed="dataFeed"
+        :charts-storage-url="`https://dev-api.arbitrage.ph/api/chart_template`"
+        charts-storage-api-version="v1"
+        client-id="lyduz.com"
+        :user-id="userId"
         :symbol="'PSE:PSEI'"
       ></tv-chart-container>
     </v-content>
@@ -15,10 +18,14 @@ import Datafeed from "~/providers/tradingview/api";
 
 export default {
   layout: "chart",
-  data(){
+  data() {
     return {
+      userId: "",
       dataFeed: Datafeed
-    }
+    };
+  },
+  mounted() {
+    this.userId = this.$auth.user.data.user.uuid;
   }
 };
 </script>

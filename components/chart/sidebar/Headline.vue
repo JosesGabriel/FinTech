@@ -31,12 +31,12 @@
       >
         <div class="hcontainer_top">
           <span class="htitle">{{
-            $globalMethod.limitDisplayString(stock.description, 18, true)
+            stock.description | limitString(18, true)
           }}</span>
         </div>
         <div class="hcontainer_mid">
           <span id="stock__last" class="hlast">{{
-            stock.last | numeral("0,0.00")
+            stock.last | numeralDecimal
           }}</span>
           <span
             class="hchange"

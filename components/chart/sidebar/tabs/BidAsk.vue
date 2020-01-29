@@ -182,7 +182,7 @@ export default {
           result = Object.values(item)[1];
           break;
         case "price":
-          result = numeral(Object.values(item)[2]).format("0,0.00");
+          result = this.$globalFilters.numeralDecimal(Object.values(item)[2]);
           break;
         case "volume":
           result = numeral(Object.values(item)[3]).format("0.0a");
