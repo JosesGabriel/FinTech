@@ -61,7 +61,7 @@
             }}</span>
           </div>
           <div class="top__right pr-2">
-            <span class="">{{ item.last | numeral("0,0.00") }}</span>
+            <span class="">{{ item.last | numberDecimal }}</span>
           </div>
         </div>
         <div class="watchlist__bottom">
@@ -72,9 +72,7 @@
                 { darkmode__text: lightSwitch == 1 },
                 { lightmode__text: lightSwitch == 0 }
               ]"
-              >{{
-                $globalMethod.limitDisplayString(item.description, 15, true)
-              }}</span
+              >{{ item.description | limitString(15, true) }}</span
             >
           </div>
           <div class="bottom__right overline pr-2">

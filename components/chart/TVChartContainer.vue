@@ -208,7 +208,7 @@ export default {
         this.passTickerToChart(params);
       }
       this.first_load = false;
-    },
+    }
   },
   methods: {
     ...mapActions({
@@ -285,7 +285,9 @@ export default {
         //TODO: add custom headers, this is a guide
         tvWidget.headerReady().then(() => {
           this.widgetCreateButton("Support and Resistance", "S&R", function() {
-            tvWidget.chart().createStudy("Support and Resistance", false, false);
+            tvWidget
+              .chart()
+              .createStudy("Support and Resistance", false, false);
           });
         });
 

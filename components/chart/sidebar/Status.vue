@@ -13,7 +13,7 @@
             <td class="tleft__label">Previous</td>
             <td class="tleft__column">
               <span id="stock__close">
-                {{ stock.close | numeral("0,0.00") }}
+                {{ stock.close | numeralDecimal }}
               </span>
             </td>
           </tr>
@@ -27,7 +27,7 @@
               }"
             >
               <span id="stock__low">
-                {{ stock.low | numeral("0,0.00") }}
+                {{ stock.low | numeralDecimal }}
               </span>
             </td>
           </tr>
@@ -41,7 +41,7 @@
               }"
             >
               <span id="stock__weekyearlow">
-                {{ stock.weekyearlow | numeral("0,0.00") }}
+                {{ stock.weekyearlow | numeralDecimal }}
               </span>
             </td>
           </tr>
@@ -81,7 +81,7 @@
               }"
             >
               <span id="stock__open">
-                {{ stock.open | numeral("0,0.00") }}
+                {{ stock.open | numeralDecimal }}
               </span>
             </td>
           </tr>
@@ -95,7 +95,7 @@
               }"
             >
               <span id="stock__high">
-                {{ stock.high | numeral("0,0.00") }}
+                {{ stock.high | numeralDecimal }}
               </span>
             </td>
           </tr>
@@ -109,7 +109,7 @@
               }"
             >
               <span id="stock__weekyearhigh">
-                {{ stock.weekyearhigh | numeral("0,0.00") }}
+                {{ stock.weekyearhigh | numeralDecimal }}
               </span>
             </td>
           </tr>
@@ -131,7 +131,7 @@
               }"
             >
               <span id="stock__average">
-                {{ stock.average | numeral("0,0.00") }}
+                {{ stock.average | numeralDecimal }}
               </span>
             </td>
           </tr>

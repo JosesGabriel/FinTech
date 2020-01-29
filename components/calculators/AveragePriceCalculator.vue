@@ -3,77 +3,75 @@
     :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
     :dark="lightSwitch == 0 ? false : true"
   >
-    <v-card-title 
-    class="title--avprice"
-    >AVERAGE PRICE CALCULATOR</v-card-title>
+    <v-card-title class="title--avprice">AVERAGE PRICE CALCULATOR</v-card-title>
     <v-container>
       <!--------------------------------------------->
-        <v-row v-for="n in positionKey" :key="n">
-          <v-col cols="4" style="text-align: left; align-self: flex-end;">
-            <span style="font-size: 14px;">{{ stringifyNumber(n) }} Tranch</span>
-          </v-col>
-          <v-col cols="4">
-            <v-text-field
-              v-model="position[n - 1]"
-              label="Position"
-              filled
-              dense
-              hide-details
-              color="success"
-              background-color="transparent"
-              class="input--field"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="4">
-            <v-text-field
-              v-model="positionPrice[n - 1]"
-              label="Price"
-              filled
-              dense
-              hide-details
-              color="success"
-              background-color="transparent"
-              class="input--field"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2" style="padding-left: 25px;">
-            <v-icon 
-            :style="{color: toggleFontColor }"
+      <v-row v-for="n in positionKey" :key="n">
+        <v-col cols="4" style="text-align: left; align-self: flex-end;">
+          <span style="font-size: 14px;">{{ stringifyNumber(n) }} Tranch</span>
+        </v-col>
+        <v-col cols="4">
+          <v-text-field
+            v-model="position[n - 1]"
+            label="Position"
+            filled
+            dense
+            hide-details
+            color="success"
+            background-color="transparent"
+            class="input--field"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="4">
+          <v-text-field
+            v-model="positionPrice[n - 1]"
+            label="Price"
+            filled
+            dense
+            hide-details
+            color="success"
+            background-color="transparent"
+            class="input--field"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="2" style="padding-left: 25px;">
+          <v-icon
+            :style="{ color: toggleFontColor }"
             class="addButton"
-             @click="
+            @click="
               positionKey++;
               position.push(0);
               positionPrice.push(0);
             "
-            >mdi-plus-circle-outline</v-icon>
-          </v-col>
-          <v-col cols="6" style="text-align:right;">
-            <v-btn 
-              text 
-              small 
-              class="text-capitalize"
-              dense 
-              :style="{color: toggleFontColor }"
-              @click="clear()"
+            >mdi-plus-circle-outline</v-icon
+          >
+        </v-col>
+        <v-col cols="6" style="text-align:right;">
+          <v-btn
+            text
+            small
+            class="text-capitalize"
+            dense
+            :style="{ color: toggleFontColor }"
+            @click="clear()"
             >Clear</v-btn
           >
-          </v-col>
-          <v-col cols="4" style="padding-left: 0px;"> 
-              <v-btn
-                rounded
-                small
-                class="text-capitalize"
-                dense
-                color="success"
-                @click="calculate()"
-                >
-                <span style="color:black;">Calculate</span>
-                </v-btn
-              >
-          </v-col>
-        </v-row>
+        </v-col>
+        <v-col cols="4" style="padding-left: 0px;">
+          <v-btn
+            rounded
+            small
+            class="text-capitalize"
+            dense
+            color="success"
+            @click="calculate()"
+          >
+            <span style="color:black;">Calculate</span>
+          </v-btn>
+        </v-col>
+      </v-row>
       <!--------------------------------------------->
       <v-row>
         <v-col cols="12"
@@ -108,7 +106,7 @@
             background-color="transparent"
           ></v-text-field
         ></v-col>
-      </v-row>  
+      </v-row>
     </v-container>
   </v-card>
 </template>
@@ -132,8 +130,8 @@ export default {
       lightSwitch: "global/getLightSwitch"
     }),
     toggleFontColor() {
-      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; 
-    },
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6";
+    }
   },
   methods: {
     /**
@@ -158,11 +156,41 @@ export default {
      * @return  {string}   Converted number
      */
     stringifyNumber(n) {
-      let special = ['zeroth','First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth', 'eleventh', 'twelfth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth'];
-      let deca = ['twent', 'thirt', 'fort', 'fift', 'sixt', 'sevent', 'eight', 'ninet'];
+      let special = [
+        "zeroth",
+        "First",
+        "Second",
+        "Third",
+        "Fourth",
+        "Fifth",
+        "Sixth",
+        "Seventh",
+        "Eighth",
+        "Ninth",
+        "Tenth",
+        "eleventh",
+        "twelfth",
+        "thirteenth",
+        "fourteenth",
+        "fifteenth",
+        "sixteenth",
+        "seventeenth",
+        "eighteenth",
+        "nineteenth"
+      ];
+      let deca = [
+        "twent",
+        "thirt",
+        "fort",
+        "fift",
+        "sixt",
+        "sevent",
+        "eight",
+        "ninet"
+      ];
       if (n < 20) return special[n];
-      if (n%10 === 0) return deca[Math.floor(n/10)-2] + 'ieth';
-      return deca[Math.floor(n/10)-2] + 'y-' + special[n%10];
+      if (n % 10 === 0) return deca[Math.floor(n / 10) - 2] + "ieth";
+      return deca[Math.floor(n / 10) - 2] + "y-" + special[n % 10];
     },
     /**
      * Fires when user presses Calculate button
@@ -224,17 +252,17 @@ export default {
 };
 </script>
 <style scoped>
-.title--avprice{
+.title--avprice {
   font-size: 16px !important;
   color: #03dac5;
   justify-content: center;
 }
-.addButton:hover{
+.addButton:hover {
   cursor: pointer;
 }
 </style>
 <style>
-.input--field > .v-input__control > .v-input__slot{
+.input--field > .v-input__control > .v-input__slot {
   padding: 0px !important;
 }
 </style>

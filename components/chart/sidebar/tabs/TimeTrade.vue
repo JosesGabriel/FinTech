@@ -50,13 +50,13 @@
               {{ item.executed_volume | numeral("0.0a") }}
             </td>
             <td class="text-right" style="width:40px;">
-              {{ item.executed_price | numeral("0,0.00") }}
+              {{ item.executed_price | numeralDecimal }}
             </td>
             <td class="pl-2 text-right" style="width:30px;">
-              {{ $globalMethod.limitDisplayString(item.buyer, 6) }}
+              {{ item.buyer | limitString(6) }}
             </td>
             <td class="pl-2 pr-2 text-right" style="width:30px;">
-              {{ $globalMethod.limitDisplayString(item.seller, 6) }}
+              {{ item.seller | limitString(6) }}
             </td>
             <td class="font-weight-bold" style="width:5px;"></td>
           </tr>
