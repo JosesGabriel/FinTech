@@ -244,7 +244,7 @@ export default {
     }
   },
   mounted() {
-    this.watchCardMount();
+   // this.watchCardMount();
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
@@ -332,6 +332,7 @@ export default {
         }
       });
     },
+
     realTime(data){
 
         for (let index = 0; index < this.stockData.length; index++) {
@@ -342,33 +343,22 @@ export default {
                    this.stockData[index].change = data.chgpc.toFixed(2);
                    if(oldprice != this.stockData[index].currentPrice){
                       this.updateEffect(this.stockData[index].stockSym);    
-                        //for (let i = 0; i < 5; i++) {
-                         // this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
-                       // }
-                 /*       this.dataSeries[index][4] = this.stockData[index].currentPrice; 
-                        this.$refs.closePriceChart[index].updateSeries([
-                          {
-                            data: this.dataSeries[index]
-                          }
-                        ]);*/
-
                    }
-
-
-                      for (let i = 0; i < 5; i++) {
-                          this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
+                    for (let i = 0; i < 5; i++) {
+                        this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
+                      }
+                      this.dataSeries[index][4] = this.stockData[index].currentPrice; 
+                      this.$refs.closePriceChart[index].updateSeries([
+                        {
+                          data: this.dataSeries[index]
                         }
-                        this.dataSeries[index][4] = this.stockData[index].currentPrice; 
-                        this.$refs.closePriceChart[index].updateSeries([
-                          {
-                            data: this.dataSeries[index]
-                          }
-                        ]);
+                      ]);
 
               }    
                   
         }
     },
+
     updateEffect: dom => {
       const item = document.getElementById(dom);
       if (item == null) return;
