@@ -167,6 +167,7 @@
   </v-toolbar>
 </template>
 <script>
+import { UserNotificationEventsList } from "~/assets/js/config/notification";
 import { mapActions, mapGetters } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
 import HeaderDropdown from "~/components/HeaderDropdown";
@@ -174,6 +175,7 @@ import HeaderNotification from "~/components/HeaderNotification";
 import BuySellCalculator from "~/components/calculators/BuySellCalculator";
 import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
 import VARCalculator from "~/components/calculators/VARCalculator";
+
 export default {
   components: {
     LoginRegister,
@@ -204,6 +206,7 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
+      notification: "global/getNotification",
       stockList: "global/getStockList"
     }),
     toggleFontColor() {
@@ -228,14 +231,24 @@ export default {
     }
 
     document.addEventListener("click", this.close);
+
+    this.getNotification();
+    this.initSSE();
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
   },
+  watch: {
+    notification() {
+      console.log(this.notification)
+    }
+  },
   methods: {
     ...mapActions({
-      setStockList: "global/setStockList"
+      setStockList: "global/setStockList",
+      setNotification: "global/setNotification"
     }),
+    userNotificationEventsList: UserNotificationEventsList,
     toggleMenu() {
       if (this.display ? (this.display = false) : (this.display = true));
     },
@@ -245,6 +258,88 @@ export default {
         this.showDropdown = false;
         this.showNotification = false;
       }
+    },
+    getNotification() {
+      this.$api.social.notification.notifications().then(response => {
+        console.log("test");
+        console.log(response);
+        if (response.success) {
+        }
+      });
+    },
+    initSSE() {
+      if (this.$auth.user != null) {
+        const evtSource = new EventSource(
+          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}`
+        );
+
+        evtSource.onerror = function(err) {
+          console.log(err);
+        };
+
+        const userNotificationList = this.userNotificationEventsList();
+
+        userNotificationList.forEach(eventName => {
+          evtSource.addEventListener(eventName, e => {
+            this.notificationHandler(eventName, JSON.parse(e.data));
+          });
+        });
+      }
+    },
+    notificationHandler(eventName, data) {
+      switch (eventName) {
+        case "social.comment.comment":
+          this.onSocialReplyComment(data);
+          break;
+        case "social.comment.sentiment":
+          this.onSocialCommentSentiment(data);
+          break;
+        case "social.comment.tag:user":
+          this.onSocialTagUserComment(data);
+          break;
+        case "social.post.comment":
+          this.onSocialUserPostComment(data);
+          break;
+        case "social.post.sentiment":
+          this.onSocialUserPostSentiment(data);
+          break;
+        case "social.post.tag:user":
+          this.onSocialUserTagUser(data);
+          break;
+        case "social.user.follow":
+          this.onSocialUserFollowUser(data);
+          break;
+
+        default:
+          break;
+      }
+    },
+    onSocialReplyComment(data) {
+      const alert = {
+        model: false,
+        sender_picture: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg/220px-Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg",
+        full_name: data.name,
+        message: "Commented on your post"
+      };
+      this.setNotification(alert)
+    },
+    onSocialCommentSentiment(data) {
+      console.log(data);
+    },
+    onSocialTagUserComment(data) {
+      console.log(data);
+    },
+    onSocialUserPostComment(data) {
+      console.log(data);
+    },
+    onSocialUserPostSentiment(data) {
+      console.log(data);
+    },
+    onSocialUserTagUser(data) {
+      console.log(data);
+    },
+    onSocialUserFollowUser(data) {
+      console.log(data);
     }
   }
 };

@@ -5,45 +5,48 @@
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
       outlined
-      max-height=" 445px"
-      max-width="430px"
-      width="430px"
+      max-height="445px"
+      max-width="350px"
+      width="350px"
       class="userMessage__dropdown"
     >
-      <v-container dark class="pa-0">
+      <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
         <v-row no-gutters class="userMessage_dropdown-header">
-          <span class="white--text pa-4 pb-2 body-2">Notifications</span>
+          <span class="pa-4 pb-2 body-2">Notifications</span>
         </v-row>
-        <v-list class="pt-0 userMessage__dropdown-body scrollbar">
-          <v-list-item v-for="item in items" :key="item.title" @click>
+        <v-list class="py-0 userMessage__dropdown-body scrollbar">
+          <v-list-item v-for="item in message" :key="item.index" @click three-line>
             <v-list-item-avatar class="mr-3" size="35">
-              <img src="/Icon/user-default.svg" />
+              <img :src="item.sender_picture" />
             </v-list-item-avatar>
 
             <v-list-item-content class="py-2">
-              <v-list-item-title class="caption font-weight-bold ma-0" v-text="item.title"></v-list-item-title>
-              <v-list-item-subtitle class="caption" v-text="item.subtitle"></v-list-item-subtitle>
+              <v-list-item-subtitle class="body-2 ma-0 userMessage_dropdown-title">
+                {{ item.full_name }}
+                <span class="body-2 ma-0">{{ item.message }}</span>
+              </v-list-item-subtitle>
+              <span class="caption tertiary--text">{{ localFormat(new Date(), "fn") }}</span>
             </v-list-item-content>
 
-            <v-list-item-action>
-              <span class="overline no-transform tertiary--text" v-text="item.created_at"></span>
-            </v-list-item-action>
+            <v-list-item-action></v-list-item-action>
           </v-list-item>
         </v-list>
         <v-row no-gutters class="userMessage_dropdown-footer text-center">
-          <span class="white--text pa-2 caption d-block seeall_dropdown-footer">See All</span>
+          <span class="pa-2 caption d-block seeall_dropdown-footer">See All</span>
         </v-row>
       </v-container>
     </v-card>
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
+import { LocalFormat } from "~/assets/js/helpers/datetime";
 
 export default {
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      notification: "global/getNotification"
     }),
     toggleFontColor() {
       return this.lightSwitch == 0
@@ -53,107 +56,26 @@ export default {
   },
   data() {
     return {
-      items: [
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Lyduz Public Community",
-          subtitle: "All Things Tradings",
-          created_at: "a few seconds ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Traders Lounge",
-          subtitle: "Ms. Gandah’s Trading Strategies",
-          created_at: "3 minutes ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Feedback and Suggestions",
-          subtitle: "How do we improve Lyduz",
-          created_at: "2 hours ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Charting + News",
-          subtitle: "Share your chart picks and latest news updates!",
-          created_at: "a week ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "Master Lists",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "asdasd asdasd",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "sdgdsagds safasfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "dgsdgsdgsdg",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfasfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfa123sfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afas31423rdsffasfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfa231423fdssfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        },
-        {
-          icon: "mdi-account",
-          iconClass: "grey lighten-1 darkchart--text",
-          title: "afasfa123123sfasf",
-          subtitle: "Free Watchlist’s",
-          created_at: "2 months ago"
-        }
-      ]
+      message: []
     };
   },
+  watch: {
+    notification() {
+        this.message.unshift(this.notification)
+    }
+  },
   mounted() {
-    console.log("profile");
+    console.log(this.notification);
+  },
+  methods: {
+      localFormat : LocalFormat
   }
 };
 </script>
 <style scoped>
+.userMessage_dropdown-title {
+  font-weight: 700;
+}
 .seeall_dropdown-footer {
   width: 100%;
 }
