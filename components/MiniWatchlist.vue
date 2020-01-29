@@ -244,7 +244,7 @@ export default {
     }
   },
   mounted() {
-   // this.watchCardMount();
+    this.watchCardMount();
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
   },
   methods: {
@@ -344,9 +344,9 @@ export default {
                    if(oldprice != this.stockData[index].currentPrice){
                       this.updateEffect(this.stockData[index].stockSym);    
                    }
-                    for (let i = 0; i < 5; i++) {
-                        this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
-                      }
+                    //for (let i = 0; i < 5; i++) {
+                        //this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
+                      //}
                       this.dataSeries[index][4] = this.stockData[index].currentPrice; 
                       this.$refs.closePriceChart[index].updateSeries([
                         {
