@@ -6,29 +6,6 @@
       :loading="loader"
       outlined
     >
-      <!-- <v-row align="center" justify="start">
-        <v-col v-for="n in taggedUsers.length" :key="n" class="shrink">
-          <v-chip
-            contenteditable="true"
-            x-small
-            close
-            @click:close="taggedUsers.splice(n - 1, 1)"
-          >
-            {{ taggedUsers[n - 1] }}
-          </v-chip>
-        </v-col>
-      </v-row> -->
-      <!-- <v-list>
-        <template v-for="(item, i) in categories">
-          <v-list-item
-            v-if="!selected.includes(i)"
-            :key="i"
-            @click="selected.push(i)"
-          >
-            <v-list-item-title v-text="item.text"></v-list-item-title>
-          </v-list-item>
-        </template>
-      </v-list> -->
       <v-form enctype="multipart/form-data">
         <v-avatar size="45" class="postField__avatar">
           <img
@@ -69,40 +46,56 @@
             @select="addEmoji"
         /></client-only>
         <div class="postField__textareaContainer">
-          <v-textarea
-            v-if="$auth.loggedIn"
-            v-model="postField"
-            :placeholder="
-              'Hey ' +
-                $auth.user.data.user.username +
-                ', penny for your thoughts?'
+          <at
+            :class="
+              lightSwitch == 0
+                ? 'postField__tagging--light'
+                : 'postField__tagging--dark'
             "
-            class="pt-0 caption postField__textarea"
-            rows="3"
-            row-height="25"
-            color="primary"
-            required
-            no-resize
-            solo
-            flat
-            background-color="transparent"
-            :loading="postFieldLoader"
-            @keyup="catcher"
-            >{{ postField }}</v-textarea
+            :members="members != [] ? members : ''"
+            :ats="['@', '＠', '$']"
+            :name-key="stockTagMode ? 'symbol' : 'name'"
           >
-          <v-textarea
-            v-else
-            v-model="postField"
-            label="Hey Guest, penny for your thoughts?"
-            class="pt-0"
-            rows="3"
-            row-height="25"
-            color="primary"
-            required
-            :loading="postFieldLoader"
-            >{{ postField }}</v-textarea
-          >
-          <div v-if="stockTagMode" class="stockSuggestions__wrapper">
+            <template slot="item" slot-scope="s">
+              <v-avatar v-if="userTagMode" size="22">
+                <v-img
+                  :src="
+                    s.item.profile_image
+                      ? s.item.profile_image
+                      : 'user_default.png'
+                  "
+                >
+                </v-img>
+              </v-avatar>
+              <span
+                class="pl-2"
+                @click="clickUserSuggestion(s)"
+                v-text="stockTagMode ? s.item.symbol : s.item.name"
+              ></span>
+            </template>
+            <v-textarea
+              id="postField__textarea"
+              v-model="postField"
+              :placeholder="
+                'Hey ' +
+                  $auth.user.data.user.username +
+                  ', penny for your thoughts?'
+              "
+              class="pt-0 caption postField__textarea"
+              rows="3"
+              row-height="25"
+              color="primary"
+              required
+              no-resize
+              solo
+              flat
+              background-color="transparent"
+              :loading="postFieldLoader"
+              @keyup="catcher"
+              >{{ postField }}</v-textarea
+            >
+          </at>
+          <!-- <div v-if="stockTagMode" class="stockSuggestions__wrapper">
             <v-btn
               v-for="n in stockSuggestionsArray.length"
               :key="n"
@@ -159,7 +152,7 @@
                 </v-list-item>
               </v-list-item-group>
             </v-list>
-          </div>
+          </div> -->
           <v-divider class="postField__divider" />
           <div>
             <input
@@ -336,7 +329,9 @@ export default {
       loader: false,
       emojiToggle: false,
       value: "val",
-      selected: []
+      selected: [],
+      members: [],
+      text: ""
     };
   },
   computed: {
@@ -357,8 +352,13 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
-    callback(e) {
-      console.log(e.type, e.detail);
+    clickUserSuggestion(selected) {
+      this.taggedUsers.push({
+        uuid: selected.item.uuid,
+        name: selected.item.name
+      });
+      // this.members = [];
+      this.currentTaggedUser = "";
     },
     /**
      * Appends selected emoji to post field
@@ -398,26 +398,29 @@ export default {
         const params = {
           exchange: "PSE",
           query: this.currentTaggedStock,
-          limit: "30",
+          limit: "10",
           type: "stock"
         };
         this.$api.chart.charts.search(params).then(
           function(result) {
-            this.stockSuggestionsArray = result.data;
+            this.members = result.data;
+            console.log(this.members);
           }.bind(this)
         );
       } else if (type == "user") {
-        let payload = {
-          name: this.currentTaggedUser
-        };
-        this.$api.accounts.account
-          .index(payload)
-          .then(response => {
-            this.userSuggestionsArrray = response.data.users;
-            console.log(response);
-          })
-          .catch(e => {})
-          .finally(function() {}.bind(this));
+        if (this.currentTaggedUser != "") {
+          let payload = {
+            name: this.currentTaggedUser
+          };
+          this.$api.accounts.account
+            .index(payload)
+            .then(response => {
+              this.members = response.data.users;
+              console.log(this.members);
+            })
+            .catch(e => {})
+            .finally(function() {}.bind(this));
+        }
       }
     },
     /**
@@ -451,7 +454,6 @@ export default {
         this.currentTaggedStock == ""
       ) {
         this.stockTagMode = false;
-        this.search("stock");
       } else if (this.stockTagMode && e.key == "Backspace") {
         this.search("stock");
       }
@@ -477,7 +479,6 @@ export default {
         this.currentTaggedUser == ""
       ) {
         this.userTagMode = false;
-        this.search("user");
       } else if (this.userTagMode && e.key == "Backspace") {
         this.search("user");
       }
@@ -523,9 +524,9 @@ export default {
     postFieldSubmit(stockValues) {
       this.postFieldLoader = "success";
       this.stockTagMode = false;
-      let taggedStocks;
+      let postTags = [];
       if (stockValues) {
-        taggedStocks = [
+        postTags = [
           {
             tag_id: this.taggedStocks[0],
             tag_type: "stock",
@@ -537,6 +538,21 @@ export default {
           }
         ];
       }
+      if (this.taggedUsers) {
+        for (let i = 0; i < this.taggedUsers.length; i++) {
+          if (this.postField.indexOf(this.taggedUsers[i].name) > 0) {
+            postTags.push({
+              tag_id: this.taggedUsers[i].uuid,
+              tag_type: "user",
+              tag_meta: [
+                {
+                  name: this.taggedUsers[i].name
+                }
+              ]
+            });
+          }
+        }
+      }
 
       if (this.$refs.postField__inputRef.files) {
         //text + image
@@ -545,14 +561,7 @@ export default {
           attachments: this.cloudArray,
           visibility: "public",
           status: "active",
-          tags: taggedStocks,
-          tagged_stocks: [
-            {
-              tag_meta: {
-                sentiment: this.authorSentiment
-              }
-            }
-          ]
+          tags: postTags
         };
         this.$api.social.actions
           .create(params)
@@ -571,14 +580,7 @@ export default {
           content: this.postField,
           visibility: "public",
           status: "active",
-          tags: taggedStocks,
-          tagged_stocks: [
-            {
-              tag_meta: {
-                sentiment: this.authorSentiment
-              }
-            }
-          ]
+          tags: postTags
         };
         this.$api.social.actions
           .create(params)
@@ -721,6 +723,33 @@ export default {
 </script>
 
 <style>
+.postField__tagging--dark .atwho-panel .atwho-inner .atwho-view .atwho-ul {
+  background-color: #00121e;
+  color: white;
+}
+.postField__tagging--light .atwho-panel .atwho-inner .atwho-view .atwho-ul {
+  background-color: #f2f2f2;
+  color: black;
+}
+.atwho-ul {
+  padding: 0 !important;
+  max-height: unset;
+}
+.atwho-li {
+  border-bottom: 1px solid #142530;
+  padding: 15px 10px;
+}
+.atwho-view {
+  bottom: unset;
+  top: 15px;
+  overflow-y: unset;
+  max-height: unset;
+  border: 2px solid #142530;
+  box-shadow: unset;
+}
+.atwho-cur {
+  background-color: #03dac5;
+}
 .userSuggestions__dropdownCaret {
   width: 0;
   height: 0;
