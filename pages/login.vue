@@ -80,16 +80,16 @@ export default {
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
             if (data.success) {
-              localStorage.setItem(
-                "auth._token.local",
-                data.token.access_token
-              );
+              // localStorage.setItem(
+              //   "auth._token.local",
+              //   data.token.access_token
+              // );
               localStorage.setItem("hat", "12321321");
               console.log("sAKSES");
               this.setAlert({
                 model: true,
                 state: "success",
-                message: data.message
+                message: "yes"
               });
             }
           })
