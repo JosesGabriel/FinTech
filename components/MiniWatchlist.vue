@@ -28,8 +28,7 @@
             />
           </div>
           <div>
-            <span
-              :id="stockData[index].stockSym"
+            <span :id="stockData[index].stockSym"
               >₱{{
                 stockData[index] ? stockData[index].currentPrice : ""
               }}</span
@@ -239,8 +238,8 @@ export default {
     renderChartKey() {
       this.watchCardMount();
     },
-    sseInfo: function(data){
-        this.realTime(data);
+    sseInfo: function(data) {
+      this.realTime(data);
     }
   },
   mounted() {
@@ -282,7 +281,7 @@ export default {
               this.dataSeries[i] = result.data.c.reverse();
               this.$refs.closePriceChart[i].updateSeries([
                 {
-                  data: result.data.c.reverse()
+                  data: result.data.c
                 }
               ]);
             }.bind(this)
@@ -333,30 +332,26 @@ export default {
       });
     },
 
-    realTime(data){
-
-        for (let index = 0; index < this.stockData.length; index++) {
-
-               if(this.watchListObject[index].stock_id == data.sym_id){  
-                   let oldprice = this.stockData[index].currentPrice;   
-                   this.stockData[index].currentPrice = data.c;
-                   this.stockData[index].change = data.chgpc.toFixed(2);
-                   if(oldprice != this.stockData[index].currentPrice){
-                      this.updateEffect(this.stockData[index].stockSym);    
-                   }
-                    //for (let i = 0; i < 5; i++) {
-                        //this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
-                      //}
-                      this.dataSeries[index][4] = this.stockData[index].currentPrice; 
-                      this.$refs.closePriceChart[index].updateSeries([
-                        {
-                          data: this.dataSeries[index]
-                        }
-                      ]);
-
-              }    
-                  
+    realTime(data) {
+      for (let index = 0; index < this.stockData.length; index++) {
+        if (this.watchListObject[index].stock_id == data.sym_id) {
+          let oldprice = this.stockData[index].currentPrice;
+          this.stockData[index].currentPrice = data.c;
+          this.stockData[index].change = data.chgpc.toFixed(2);
+          if (oldprice != this.stockData[index].currentPrice) {
+            this.updateEffect(this.stockData[index].stockSym);
+          }
+          //for (let i = 0; i < 5; i++) {
+          //this.dataSeries[index][i] = this.dataSeries[index][i+1];
+          //}
+          this.dataSeries[index][4] = this.stockData[index].currentPrice;
+          this.$refs.closePriceChart[index].updateSeries([
+            {
+              data: this.dataSeries[index]
+            }
+          ]);
         }
+      }
     },
 
     updateEffect: dom => {
@@ -366,9 +361,7 @@ export default {
       setTimeout(function() {
         item.style.background = "";
       }, 800);
-    },
-
-
+    }
   }
 };
 </script>

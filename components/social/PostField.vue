@@ -46,7 +46,6 @@
             @select="addEmoji"
         /></client-only>
         <div class="postField__textareaContainer">
-          {{ members }}
           <at
             :class="
               lightSwitch == 0
