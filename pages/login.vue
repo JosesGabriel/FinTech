@@ -79,6 +79,10 @@ export default {
         return this.$api.authentication.providers
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
+            console.log("////////////");
+            console.log(data);
+
+            console.log("////////////");
             if (data.success) {
               // localStorage.setItem(
               //   "auth._token.local",
