@@ -79,13 +79,10 @@ export default {
         return this.$api.authentication.providers
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
-            console.log("////////////");
-            console.log(data);
-            console.log("////////////");
             if (data.success) {
               localStorage.setItem(
                 "auth._token.local",
-                data.data.token.access_token
+                "Bearer " + data.data.token.access_token
               );
               this.setAlert({
                 model: true,
@@ -95,8 +92,8 @@ export default {
             }
           })
           .catch(e => {
-            console.log("Error occured  " + e);
             this.setAlert({
+              model: true,
               state: "error",
               message: "An error has occurred."
             });
