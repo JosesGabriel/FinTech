@@ -10,6 +10,9 @@ export default {
     },
     async setSimulatorConfirmedBuySell({ commit }, data) {
       await commit("SET_SIMULATORCONFIRMEDBUYSELL", data);
+    },
+    async setMarketStatus({ commit }, data) {
+      await commit("SET_MARKETSTATUS", data);
     }      
   };
   

@@ -82,15 +82,15 @@
           <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
             <v-row class="ma-0 pa-0 overline">
               <v-col
-                :class="(this.daychangepercentage > 0 ? 'positive' : this.daychangepercentage < 0 ? 'negative' : 'neutral')"
+                :class="(this.changep > 0 ? 'positive' : this.changep < 0 ? 'negative' : 'neutral')"
                 class="ma-0 pa-0"
-              >( {{ this.addComma(this.daychangepercentage) }}%)</v-col>
+              >( {{ this.addComma(this.changep) }}%)</v-col>
             </v-row>
             <v-row class="ma-0 pa-0">
               <v-col
-                :class="(this.daychange > 0 ? 'positive' : this.daychange < 0 ? 'negative' : 'neutral')"
+                :class="(this.change > 0 ? 'positive' : this.change < 0 ? 'negative' : 'neutral')"
                 class="ma-0 pa-0"
-              >{{ this.addComma(this.daychange) }}</v-col>
+              >{{ this.addComma(this.change) }}</v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -230,6 +230,8 @@ export default {
       item: {},
       state: false,
       port_capital: 0,
+      change: 0,
+      changep: 0,
     };
   },
   created() {},
@@ -287,9 +289,11 @@ export default {
     },
     unrealized() {
       this.getTradeLogs();
+      this.getDayChange();
     },
     realized(){
       this.getTradeLogs();
+      this.getDayChange();
     }
   },
   methods: {
@@ -392,6 +396,23 @@ export default {
       return portperf.toFixed(2);
     },
 
+    getDayChange(){
+
+      if(this.daychange == 0){
+        let getlocal = localStorage.getItem(this.simulatorPortfolioID);
+        getlocal = JSON.parse(getlocal);
+        if(getlocal != null){
+          this.daychange = getlocal.priorprofit;
+        }else{
+          this.daychange = 0;
+        }
+      }
+           let yesterdaysProfit = this.daychange;
+           this.change = parseFloat(this.unrealized) - parseFloat(yesterdaysProfit);
+           let dperf = parseFloat(this.port_capital) + parseFloat(yesterdaysProfit); 
+           this.changep = (this.change / dperf) * 100;
+    },
+
     /**
  * Add comma separator
  *
@@ -422,7 +443,7 @@ export default {
       let totalProfitLossPerf = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
-          //console.log('Result', result.data);
+         
           let plossperc = [];
           let profitLoss = 0;
           let profitLossPer = 0;
@@ -481,7 +502,6 @@ export default {
                 result.data.logs[i].type == "virtual"
               ) {
 
-                
                 let portfolio_params = {
                   name: result.data.logs[i].name,
                   id: result.data.logs[i].id,
