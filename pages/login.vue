@@ -85,6 +85,7 @@ export default {
                 data.token.access_token
               );
               localStorage.setItem("hat", "12321321");
+              console.log("sAKSES");
               this.setAlert({
                 model: true,
                 state: "success",
@@ -92,7 +93,8 @@ export default {
               });
             }
           })
-          .catch(() => {
+          .catch(e => {
+            console.log("tangina " + e);
             this.setAlert({
               state: "error",
               message: "An error has occurred."
