@@ -81,24 +81,21 @@ export default {
           .then(({ data }) => {
             console.log("////////////");
             console.log(data);
-
             console.log("////////////");
             if (data.success) {
-              // localStorage.setItem(
-              //   "auth._token.local",
-              //   data.token.access_token
-              // );
-              localStorage.setItem("hat", "12321321");
-              console.log("sAKSES");
+              localStorage.setItem(
+                "auth._token.local",
+                data.data.token.access_token
+              );
               this.setAlert({
                 model: true,
                 state: "success",
-                message: "yes"
+                message: data.message
               });
             }
           })
           .catch(e => {
-            console.log("tangina " + e);
+            console.log("Error occured  " + e);
             this.setAlert({
               state: "error",
               message: "An error has occurred."
