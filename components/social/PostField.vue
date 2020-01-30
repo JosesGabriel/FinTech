@@ -46,18 +46,19 @@
             @select="addEmoji"
         /></client-only>
         <div class="postField__textareaContainer">
+          {{ members }}
           <at
             :class="
               lightSwitch == 0
                 ? 'postField__tagging--light'
                 : 'postField__tagging--dark'
             "
-            :members="members"
+            :members="members != [] ? members : ''"
             :ats="['@', '＠', '$']"
-            name-key="name"
+            :name-key="stockTagMode ? 'symbol' : 'name'"
           >
             <template slot="item" slot-scope="s">
-              <v-avatar size="22">
+              <v-avatar v-if="userTagMode" size="22">
                 <v-img
                   :src="
                     s.item.profile_image
@@ -70,7 +71,7 @@
               <span
                 class="pl-2"
                 @click="clickUserSuggestion(s)"
-                v-text="s.item.name"
+                v-text="stockTagMode ? s.item.symbol : s.item.name"
               ></span>
             </template>
             <v-textarea
@@ -95,7 +96,7 @@
               >{{ postField }}</v-textarea
             >
           </at>
-          <div v-if="stockTagMode" class="stockSuggestions__wrapper">
+          <!-- <div v-if="stockTagMode" class="stockSuggestions__wrapper">
             <v-btn
               v-for="n in stockSuggestionsArray.length"
               :key="n"
@@ -152,7 +153,7 @@
                 </v-list-item>
               </v-list-item-group>
             </v-list>
-          </div>
+          </div> -->
           <v-divider class="postField__divider" />
           <div>
             <input
@@ -357,7 +358,7 @@ export default {
         uuid: selected.item.uuid,
         name: selected.item.name
       });
-      this.userSuggestionsArrray = [];
+      // this.members = [];
       this.currentTaggedUser = "";
     },
     /**
@@ -398,12 +399,13 @@ export default {
         const params = {
           exchange: "PSE",
           query: this.currentTaggedStock,
-          limit: "30",
+          limit: "10",
           type: "stock"
         };
         this.$api.chart.charts.search(params).then(
           function(result) {
             this.members = result.data;
+            console.log(this.members);
           }.bind(this)
         );
       } else if (type == "user") {
@@ -415,6 +417,7 @@ export default {
             .index(payload)
             .then(response => {
               this.members = response.data.users;
+              console.log(this.members);
             })
             .catch(e => {})
             .finally(function() {}.bind(this));
@@ -452,7 +455,6 @@ export default {
         this.currentTaggedStock == ""
       ) {
         this.stockTagMode = false;
-        this.search("stock");
       } else if (this.stockTagMode && e.key == "Backspace") {
         this.search("stock");
       }
@@ -478,7 +480,6 @@ export default {
         this.currentTaggedUser == ""
       ) {
         this.userTagMode = false;
-        this.search("user");
       } else if (this.userTagMode && e.key == "Backspace") {
         this.search("user");
       }
