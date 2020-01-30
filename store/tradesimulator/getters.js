@@ -10,6 +10,9 @@ export default {
     },
     getSimulatorConfirmedBuySell(state) {
       return state.simulatorConfirmedBuySell;
+    },
+    getMarketStatus(state) {
+      return state.marketStatus;
     }
   };
   

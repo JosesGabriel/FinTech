@@ -10,5 +10,8 @@ export default {
     },
     SET_SIMULATORCONFIRMEDBUYSELL(state, data) {
       state.simulatorConfirmedBuySell = data;
+    },
+    SET_MARKETSTATUS(state, data) {
+      state.marketStatus = data;
     }
   };

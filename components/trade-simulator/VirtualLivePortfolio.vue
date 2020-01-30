@@ -187,6 +187,7 @@ export default {
       showEditForm: false,
       showEditDetails: false,
       showScheduleForm: false,
+      yesterdaysEquity: 0,
       strategy: [
         "Bottom Picking",
         "Breakout Play",
@@ -242,18 +243,23 @@ export default {
   watch: {
     simulatorOpenPosition() {
       this.getOpenPositions();
+      this.marketStatus();
     },
     simulatorPortfolioID() {
       this.getOpenPositions();
+      this.marketStatus();
     },
     EnterTradeModal() {
       this.trade_modal = this.EnterTradeModal;
+      this.marketStatus();
     },
     confirmdelete(){
       this.execute(this.itemToDelete);
+      this.marketStatus();
     },
     confirmupdate(){
       this.getOpenPositions();
+      this.marketStatus();
     },
     
 
@@ -262,6 +268,7 @@ export default {
     ...mapActions({
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
       setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
+      setMarketStatus: "tradesimulator/setMarketStatus",
       setSimulatorConfirmedBuySell:
         "tradesimulator/setSimulatorConfirmedBuySell"
     }),
@@ -279,6 +286,7 @@ export default {
      *
      */
     getOpenPositions() {
+     
       const openparams2 = {
         fund: this.simulatorPortfolioID
       };
@@ -291,6 +299,7 @@ export default {
       this.totalmvalue = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
+        
           this.portfolioLogs = result.data.open;
           for (let i = 0; i < result.data.open.length; i++) {
               this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
@@ -320,7 +329,8 @@ export default {
               this.$emit("totalUnrealized", this.totalProfitLoss);
               this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
           }
-           this.getDayChange();
+           this.marketStatus();
+           this.getDayPrior();
            
         }.bind(this)
       );
@@ -434,19 +444,18 @@ export default {
      * Calculate Day Change
      *
      */
-    getDayChange() {
-      let currentProfitLoss = 0;
-      this.priorProfitLoss = 0;
-      let daychangeperf = 0;
-      let mvalueprior = 0;
-      let dChange = [];
-      let pNum = 0;
-      let saveData = false;
-      let d = new Date();
-      let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
-
-      for (let index = 0; index < this.portfolioLogs.length; index++) {
-           
+    getDayPrior(){
+    let currentProfitLoss = 0;
+    this.priorProfitLoss = 0;
+    let daychangeperf = 0;
+    let mvalueprior = 0;
+    let d = new Date();
+    let localprofit = 0;
+    let counter = 0;
+    let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
+ 
+    //===============================================================
+    for (let index = 0; index < this.portfolioLogs.length; index++) {       
            let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];     
                   const params = {
                     "symbol-id": this.portfolioLogs[index].metas.stock_id,
@@ -459,12 +468,9 @@ export default {
                       let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
                       let tcost =
                         this.portfolioLogs[index].position *
-                        this.portfolioLogs[index].average_price;   
+                        this.portfolioLogs[index].average_price; 
 
-                     if (pdate != dformat) {      
-                        pNum++;                  
                         let priorPrice = result.data.c[1];
-                        //console.log(this.portfolioLogs[index].stock_symbol + ' Prior Price -'+ priorPrice);
                         let priorbuyResult =
                           this.portfolioLogs[index].position *
                           parseFloat(priorPrice).toFixed(2);
@@ -475,10 +481,36 @@ export default {
                         let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
                         this.priorProfitLoss =
                           parseFloat(this.priorProfitLoss) + parseFloat(priorprofit); 
-                                    
-                      } 
-                      
 
+                        let priordata = {
+                          'id': this.simulatorPortfolioID,
+                          'date': dformat,
+                          'priorprofit': this.priorProfitLoss
+                        };                       
+                        //localStorage.removeItem(this.simulatorPortfolioID);
+                        let totalarray = this.portfolioLogs.length - 1;
+
+                        let getlocal = localStorage.getItem(this.simulatorPortfolioID);
+                        getlocal = JSON.parse(getlocal);
+                        
+                        if(getlocal != null){
+                              if(counter == totalarray){
+                                  if(getlocal.date != dformat){
+                                    localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
+                                  }else{
+                                    localprofit = getlocal.priorprofit;
+                                  }
+                              }else{
+                                    localprofit = getlocal.priorprofit;
+                                  }
+                        }else{                   
+                            if(totalarray == counter){
+                                localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
+                            }
+                            localprofit = this.priorProfitLoss;
+                        }
+                        counter++;
+                    
                       let currentPrice = result.data.c[0];
                       let currentbuyResult =
                         this.portfolioLogs[index].position *
@@ -489,21 +521,39 @@ export default {
                         parseFloat(currentProfitLoss) + parseFloat(currentprofit);
                         
                         let daychange =
-                           parseFloat(currentProfitLoss) - parseFloat(this.priorProfitLoss);
-                        if(this.priorProfitLoss != 0 ){                          
-                          let dperf = parseFloat(this.Capital) + this.priorProfitLoss;                        
+                           parseFloat(currentProfitLoss) - parseFloat(localprofit);
+                        if(localprofit != 0 ){                          
+                          let dperf = parseFloat(this.Capital) + localprofit;                        
                           daychangeperf = (daychange / dperf) * 100;
-                        }             
-                            
-                      this.$emit("DayChange", daychange);
-                      this.$emit("DayChangePerc", daychangeperf);
-
+                        }      
+                        
+                      this.$emit("DayChange", localprofit);
+                       
                     }.bind(this)
                   );
 
-      }
+              } 
+    },
 
-            
+    marketStatus(){
+      let currentDate = new Date();
+
+      let open_am = new Date();
+          open_am.setHours(9,30,0);
+      let close_am = new Date();
+          close_am.setHours(11,59,59);
+      let open_pm = new Date();
+          open_pm.setHours(13,30,0);
+      let close_pm = new Date();
+          close_pm.setHours(15,30,0);
+
+       if((Date.parse(currentDate) > Date.parse(open_am) && Date.parse(currentDate) < Date.parse(close_am)) || (Date.parse(currentDate) > Date.parse(open_pm) && Date.parse(currentDate) < Date.parse(close_pm))) {
+         this.setMarketStatus(true);
+         console.log('Market Hour True');
+       }else{
+         this.setMarketStatus(false);
+         console.log('Market Hour false');
+       }
     },
 
     /**
@@ -541,21 +591,22 @@ export default {
         //"http://localhost:8021/sse/market-data/pse/all"
         process.env.SSE_STREAM + "market-data/pse/all"
       );
-
+      const that = this;
       this.sse.onopen = function() {
+        //that.setMarketStatus(true);
         console.log("open sse"); //
       };
 
       this.sse.onerror = function(err) {
+        //that.setMarketStatus(false);
         console.log("error");
         //console.log(err);
       };
       let len = this.stockSym.length;
-      const that = this;
+      //const that = this;
       
       this.sse.addEventListener("trade",function(e) {
            const data = JSON.parse(e.data);  
-           
           for(let i =0; i< that.stockSym.length; i++){ 
             if(that.stockSym[i] == data.sym_id){
                 that.trigger(data.sym_id, data.exp);
@@ -576,6 +627,7 @@ export default {
         let perf = 0;
        for (let i = 0; i < this.portfolioLogs.length; i++) {
          if(this.portfolioLogs[i].metas.stock_id == symbol){
+           this.marketStatus();
            let oldvalue = this.portfolioLogs[i].MarketValue;
            let convertedNumbers = this.portfolioLogs[i].Profit.replace(/,/g, "");
            let oldprofit = parseFloat(convertedNumbers);
@@ -596,21 +648,6 @@ export default {
               this.portfolioLogs.splice(i, 1, updatedItem);
               this.updateEffect(this.portfolioLogs[i].stock_id);
               this.$emit("totalUnrealized", this.totalProfitLoss);
-
-              /*
-              //========================================================================
-                let daychangeperf = 0;
-                let daychange =
-                    parseFloat(tploss) - parseFloat(this.priorProfitLoss);
-                  if(this.priorProfitLoss != 0 ){  
-                    //daychangeperf = (daychange / this.priorProfitLoss) * 100;
-                    let dperf = parseFloat(this.Capital) + this.priorProfitLoss;
-                      daychangeperf = (daychange / dperf) * 100;
-                  }                     
-                this.$emit("DayChange", daychange);
-                this.$emit("DayChangePerc", daychangeperf);
-
-              */
              
             }
          }
