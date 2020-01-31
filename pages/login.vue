@@ -81,7 +81,7 @@ export default {
           .then(({ data }) => {
             if (data.success) {
               this.$auth
-                .setUserToken("Bearer " + data.data.token.access_token)
+                .setUserToken(data.data.token.access_token)
                 .then(() => (window.location.href = "/"));
               this.setAlert({
                 model: true,
