@@ -80,16 +80,9 @@ export default {
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
             if (data.success) {
-              console.log(
-                "This is the token provided [ " +
-                  data.data.token.access_token +
-                  " ]"
-              );
-              localStorage.setItem(
-                "auth._token.local",
-                "Bearer " + data.data.token.access_token
-              );
-              window.location.href = "/";
+              this.$auth
+                .setUserToken("Bearer " + data.data.token.access_token)
+                .then(() => (window.location.href = "/"));
               this.setAlert({
                 model: true,
                 state: "success",
