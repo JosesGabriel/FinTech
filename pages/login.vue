@@ -89,6 +89,7 @@ export default {
                 "auth._token.local",
                 "Bearer " + data.data.token.access_token
               );
+              this.$router.replace("watchlist");
               this.setAlert({
                 model: true,
                 state: "success",
