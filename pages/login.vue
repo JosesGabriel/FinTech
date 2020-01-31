@@ -80,6 +80,11 @@ export default {
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
             if (data.success) {
+              console.log(
+                "This is the token provided [ " +
+                  data.data.token.access_token +
+                  " ]"
+              );
               localStorage.setItem(
                 "auth._token.local",
                 "Bearer " + data.data.token.access_token
