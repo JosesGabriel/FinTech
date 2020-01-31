@@ -27,6 +27,7 @@
         fixed-header
         disable-pagination
         hide-default-footer
+        :custom-sort="customSort"
         :height="`calc(100vh - ${responsiveHeight - 160}px)`"
         :style="{ background: cardBackground }"
       >
@@ -187,7 +188,8 @@ export default {
             changepercentage,
             value,
             trades,
-            description
+            description,
+            dateshortstring
           } = data;
           this.allStocks.push({
             stockidstr,
@@ -197,7 +199,8 @@ export default {
             changepercentage,
             value,
             trades,
-            description
+            description,
+            dateshortstring
           });
         });
         this.loading = false;
@@ -227,6 +230,52 @@ export default {
         });
         this.updateEffect(stock.stockidstr);
       } catch (error) {}
+    },
+    /**
+     * sort all stock customized
+     *
+     * @param   {Array}  items   lists of stocks
+     * @param   {Array}  index   array index - name of header
+     * @param   {Boolean}  isDesc  is descending
+     *
+     * @return  {Array}        new list of item
+     */
+    customSort: function(items, index, isDesc) {
+      items.sort((a, b) => {
+        const key = index[0];
+        const desc = isDesc[0];
+        if (key == "symbol") {
+          if (!desc) {
+            return a[index].toLowerCase().localeCompare(b[index].toLowerCase());
+          } else {
+            return b[index].toLowerCase().localeCompare(a[index].toLowerCase());
+          }
+        } else if (key == "last") {
+          // Price is only important when dates are the same
+          if (a.shortshortstring == b.shortshortstring) {
+            if (!desc) {
+              // ascending
+              return a[index] - b[index];
+            } else {
+              // descending
+              return b[index] - a[index];
+            }
+          }
+          // sort dates
+          return new Date(a.shortshortstring) > new Date(b.shortshortstring)
+            ? 1
+            : -1;
+        } else {
+          if (!desc) {
+            // ascending
+            return a[index] - b[index];
+          } else {
+            // descending
+            return b[index] - a[index];
+          }
+        }
+      });
+      return items;
     }
   },
   mounted() {
