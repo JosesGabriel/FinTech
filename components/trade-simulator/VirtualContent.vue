@@ -144,7 +144,6 @@
                 <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
               </v-list-item-content>
             </template>
-
             <template
               v-slot:append-item
               :dark="lightSwitch == true"
@@ -163,7 +162,22 @@
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
+
+                <v-list-item
+                  ripple
+                  :dark="lightSwitch == true"
+                  :style="{ background: primaryBackground }"
+                   @click.stop="showDeletePortForm=true"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title class="text-uppercase">
+                      Delete Portfolio
+                      <v-icon color="success" class="body-2">mdi-minus-circle-outline</v-icon>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>           
             </template>
+
           </v-select>
         </v-col>
       </v-row>
@@ -203,12 +217,14 @@
       </v-tab-item>
     </v-tabs>
     <create-modal :visible="showCreatePortForm" @close="showCreatePortForm=false" />
+    <DeletePortModal v-on:DeleteConfirm="DeleteConfirm" :visible="showDeletePortForm" @close="showDeletePortForm=false" />
   </v-col>
 </template>
 <script>
 import VirtualLivePortfolio from "~/components/trade-simulator/VirtualLivePortfolio";
 import TradelogsContent from "~/components/trade-simulator/VirtualTradelogs";
 import createModal from "~/components/trade-simulator/VirtualCreatePortfolio";
+import DeletePortModal from "~/components/trade-simulator/VirtualDeletePortfolio";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -216,6 +232,7 @@ export default {
     return {
       portfolio: [],
       showCreatePortForm: false,
+      showDeletePortForm: false,
       default_port: "0",
       realized: 0,
       unrealized: 0,
@@ -232,6 +249,7 @@ export default {
       port_capital: 0,
       change: 0,
       changep: 0,
+      deleteconfirm: '',
     };
   },
   created() {},
@@ -294,6 +312,9 @@ export default {
     realized(){
       this.getTradeLogs();
       this.getDayChange();
+    },
+    deleteconfirm(){
+      this.getPorfolio('initial');
     }
   },
   methods: {
@@ -364,6 +385,10 @@ export default {
      */
     TotalMax(value) {
       this.totalmax = value;
+    },
+    DeleteConfirm(value){
+      this.deleteconfirm = value;
+      this.portfolio.splice(value);
     },
     /**
      * Initialized Day Change
@@ -492,6 +517,7 @@ export default {
      *
      */
     getPorfolio(key){
+        
         this.getTradeLogs();
         this.$api.journal.portfolio.portfolio().then(
           function(result) {
@@ -545,6 +571,7 @@ export default {
             }
           }.bind(this)
         );
+        this.deleteconfirm = false;
     }
   },
   mounted() {
@@ -553,7 +580,8 @@ export default {
   components: {
     VirtualLivePortfolio,
     TradelogsContent,
-    createModal
+    createModal,
+    DeletePortModal
   }
 };
 </script>
@@ -579,7 +607,7 @@ export default {
 
 .v-menu__content
   .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-  /* color: #03dac5 !important; */
+   color: #03dac5 !important; 
 }
 .select_portfolio .v-select__slot .v-label,
 .select_portfolio .v-select__slot .v-icon {

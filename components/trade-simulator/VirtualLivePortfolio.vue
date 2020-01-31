@@ -463,7 +463,9 @@ export default {
                     limit: 2
                   };
                   this.$api.chart.charts.latest(params).then(
-                    function(result) {                          
+                    function(result) {   
+                        console.log('PRIOR DATA', result); 
+                       // console.log('Symbol ID', this.portfolioLogs[index].metas.stock_id);                   
                       let prior_date = new Date(result.data.t[1]*1000);
                       let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
                       let tcost =
@@ -471,12 +473,18 @@ export default {
                         this.portfolioLogs[index].average_price; 
 
                         let priorPrice = result.data.c[1];
+                        
+                        if(isNaN(priorPrice)){
+                          console.log('NAN');
+                          priorPrice = result.data.c[0];
+                        }
+
                         let priorbuyResult =
-                          this.portfolioLogs[index].position *
+                          parseFloat(this.portfolioLogs[index].position) *
                           parseFloat(priorPrice).toFixed(2);
                         let priormvalue = this.fees(priorbuyResult);
 
-                        mvalueprior = mvalueprior + priorbuyResult;
+                        mvalueprior = parseFloat(mvalueprior) + parseFloat(priorbuyResult);
                       
                         let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
                         this.priorProfitLoss =
@@ -486,13 +494,17 @@ export default {
                           'id': this.simulatorPortfolioID,
                           'date': dformat,
                           'priorprofit': this.priorProfitLoss
-                        };                       
+                        };        
+                        console.log('Prior Mvlaue -'+ this.priorProfitLoss); 
+                        //console.log('Prior tcost -'+ tcost); 
+                         //console.log('Prior Data', priordata);    
+                         //console.log('Prior -'+ priorprofit);                   
                         //localStorage.removeItem(this.simulatorPortfolioID);
                         let totalarray = this.portfolioLogs.length - 1;
-
+                        
                         let getlocal = localStorage.getItem(this.simulatorPortfolioID);
                         getlocal = JSON.parse(getlocal);
-                        
+                        //console.log('Prior Total Profit Loss -'+ getlocal.priorprofit); 
                         if(getlocal != null){
                               if(counter == totalarray){
                                   if(getlocal.date != dformat){
@@ -548,11 +560,9 @@ export default {
           close_pm.setHours(15,30,0);
 
        if((Date.parse(currentDate) > Date.parse(open_am) && Date.parse(currentDate) < Date.parse(close_am)) || (Date.parse(currentDate) > Date.parse(open_pm) && Date.parse(currentDate) < Date.parse(close_pm))) {
-         this.setMarketStatus(true);
-         console.log('Market Hour True');
+         this.setMarketStatus(true);    
        }else{
          this.setMarketStatus(false);
-         console.log('Market Hour false');
        }
     },
 
