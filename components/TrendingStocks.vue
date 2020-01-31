@@ -11,8 +11,8 @@
       <v-divider></v-divider>
       <v-list class="mt-1 transparent">
         <v-list-item class="px-0">
-          <v-list-item-content v-if="tStocksObject" class="pt-0">
-            <div v-for="n in tStocksObject.length" :key="n" class="pb-3">
+          <v-list-item-content class="pt-0">
+            <div v-for="n in 5" :key="n" class="pb-3">
               <v-list-item-title class="caption d-flex justify-space-between"
                 ><span>{{ stockCode[n - 1] }}</span
                 ><span v-if="trendingStocks" :id="stockCode[n - 1]"
