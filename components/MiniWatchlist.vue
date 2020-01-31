@@ -10,12 +10,47 @@
       <div class="body-2 font-weight-black">Watchlist</div>
       <v-divider></v-divider>
       <v-list class="transparent pt-0">
-        <v-list-item
-          v-for="(n, index) in watchListObject.length"
-          :key="n"
-          class="px-0"
-        >
-          <div>
+        <v-container class="pa-0">
+          <v-list-item
+            v-for="(n, index) in watchListObject.length"
+            :key="n"
+            class="px-0"
+          >
+            <v-row>
+              <v-col cols="1"
+                ><span class="stockSymbol__span">{{
+                  stockData[index] ? stockData[index].stockSym : ""
+                }}</span></v-col
+              >
+              <v-col cols="8" class="no-wrap pa-0">
+                <apexcharts
+                  ref="closePriceChart"
+                  type="line"
+                  height="100"
+                  width="140"
+                  :options="chartOptions"
+                  :series="series"
+                />
+              </v-col>
+              <v-col cols="1" class="pa-0"
+                ><span :id="stockData[index].stockSym"
+                  >₱{{
+                    stockData[index] ? stockData[index].currentPrice : ""
+                  }}</span
+                >
+                <span
+                  :class="
+                    stockData[index].change > 0
+                      ? 'success--text'
+                      : stockData[index].change < 0
+                      ? 'error--text'
+                      : 'watchlistCard__text--gray'
+                  "
+                  >{{ stockData[index] ? stockData[index].change : "" }}%</span
+                ></v-col
+              >
+            </v-row>
+            <!-- <div>
             <span>{{ stockData[index] ? stockData[index].stockSym : "" }}</span>
           </div>
           <div class="no-wrap">
@@ -23,6 +58,7 @@
               ref="closePriceChart"
               type="line"
               height="100"
+              width="170"
               :options="chartOptions"
               :series="series"
             />
@@ -43,8 +79,9 @@
               "
               >{{ stockData[index] ? stockData[index].change : "" }}%</span
             >
-          </div>
-        </v-list-item>
+          </div> -->
+          </v-list-item>
+        </v-container>
         <router-link
           v-if="watchListObject.length == 0"
           class="d-block mWatchlist__text--noData px-5 success--text overline no-transform"
@@ -83,6 +120,7 @@ export default {
       chartOptions: {
         chart: {
           height: 100,
+          width: 170,
           zoom: {
             enabled: false
           },
@@ -370,5 +408,8 @@ export default {
 .mWatchlist__text--noData {
   padding-top: 45px;
   padding-bottom: 45px;
+}
+.stockSymbol__span {
+  white-space: nowrap;
 }
 </style>

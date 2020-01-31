@@ -13,7 +13,7 @@
         <Newsfeed :new-post="newPost" />
       </v-col>
       <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
-        <!-- <TrendingStocks />  -->
+        <TrendingStocks />
         <WhoToMingle />
         <MiniWatchlist />
         <!-- TODO put back when implementing -->
@@ -46,7 +46,7 @@ export default {
     MiniWatchlist,
     Bulletin,
     FooterSidebar,
-    PostField,
+    PostField
   },
   data() {
     return {
@@ -55,7 +55,7 @@ export default {
     };
   },
   methods: {
-     ...mapActions({
+    ...mapActions({
       setSSE: "social/setSSE",
       setSSEInfo: "social/setSSEInfo"
     }),
@@ -77,35 +77,32 @@ export default {
 
       this.setSSE(
         new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
-       // new EventSource("http://localhost:8021/sse/market-data/pse/all")
+        // new EventSource("http://localhost:8021/sse/market-data/pse/all")
       );
 
       this.sse.onopen = function() {};
 
       this.sse.onerror = function() {};
-      
-      this.sse.addEventListener("info",this.sseInfo);
 
-
+      this.sse.addEventListener("info", this.sseInfo);
     },
     sseInfo(e) {
-       const data = JSON.parse(e.data);
+      const data = JSON.parse(e.data);
 
-        // set sse info to state
-        this.setSSEInfo(data);
+      // set sse info to state
+      this.setSSEInfo(data);
     }
-
   },
   mounted() {
     this.initSSE();
   },
   beforeDestroy() {
-     this.sse.close();
+    this.sse.close();
   },
   computed: {
-     ...mapGetters({
-      sse: "social/sse",
-    }),     
+    ...mapGetters({
+      sse: "social/sse"
+    })
   }
 };
 </script>
