@@ -11,7 +11,7 @@
         style="font-size:16px; font-weight: 700;"
       >
       <v-col class="pa-0"><span>TRADE</span></v-col>  
-      <v-col class="pa-0"><span :class="this.marketStatus ? 'nodisplay': 'display'" class="caption" style="text-align: right;">Market Closed.</span></v-col>
+      
       </v-card-title>
       
       <v-stepper
@@ -236,6 +236,7 @@
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
+              <span :class="this.marketStatus ? 'nodisplay': 'display'" class="caption pt-2" style="text-align: right;">Market Closed.</span>
               <v-btn text @click.stop="show=false" class="text-capitalize">Close</v-btn>
               <v-btn
                 color="success ml-1"
@@ -245,6 +246,7 @@
                 :disabled="(GetSelectStock != '' && this.marketStatus ? false : true)"
               >Continue</v-btn>
             </v-row>
+           
           </v-stepper-content>
           <v-stepper-content step="2" class="pt-2 pa-2">
             <!-- -----Second View of Trade Modal----- -->
