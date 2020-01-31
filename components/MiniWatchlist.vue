@@ -17,7 +17,7 @@
             class="px-0"
           >
             <v-row>
-              <v-col cols="1"
+              <v-col cols="1" class="pr-6"
                 ><span class="stockSymbol__span">{{
                   stockData[index] ? stockData[index].stockSym : ""
                 }}</span></v-col
@@ -27,18 +27,19 @@
                   ref="closePriceChart"
                   type="line"
                   height="100"
-                  width="140"
+                  width="160"
                   :options="chartOptions"
                   :series="series"
                 />
               </v-col>
-              <v-col cols="1" class="pa-0"
-                ><span :id="stockData[index].stockSym"
+              <v-col cols="1" class="pa-0 stockPrices"
+                ><span :id="stockData[index].stockSym" class="stockSymbol__span"
                   >₱{{
                     stockData[index] ? stockData[index].currentPrice : ""
                   }}</span
                 >
                 <span
+                  class="stockSymbol__span"
                   :class="
                     stockData[index].change > 0
                       ? 'success--text'
@@ -120,7 +121,7 @@ export default {
       chartOptions: {
         chart: {
           height: 100,
-          width: 170,
+          width: 160,
           zoom: {
             enabled: false
           },
@@ -411,5 +412,9 @@ export default {
 }
 .stockSymbol__span {
   white-space: nowrap;
+}
+.stockPrices {
+  position: relative;
+  right: 20px;
 }
 </style>

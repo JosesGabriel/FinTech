@@ -124,12 +124,15 @@ export default {
       setAlertDialog: "global/setAlertDialog"
     }),
     changePassword() {
-      const payload = {
-        password: this.password
-      };
       const param = this.$route.fullPath.indexOf("?");
       this.$axios
-        .$get(process.env.API_URL + this.$route.fullPath.substr(param), payload)
+        .$get(
+          process.env.API_URL +
+            "?password=" +
+            this.password +
+            "&" +
+            this.$route.fullPath.substr(param + 1)
+        )
         .then(response => {
           if (response.success) {
             const alert = {
