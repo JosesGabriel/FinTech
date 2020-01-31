@@ -67,13 +67,15 @@
                 {{ props.item.changepercentage | numeral("0,0.00") }}
               </span>
             </td>
-            <td class="text-right" style="width:60px">
+            <td class="text-right" style="width:40px">
               <span class="text-uppercase">{{
                 props.item.value | numeral("0.00a")
               }}</span>
             </td>
             <td class="text-right text-uppercase" style="width:45px">
-              <span class="">{{ props.item.trades | numeral("0,0") }}</span>
+              <span class="">
+                {{ props.item.trades | numeral("0,0") }}
+              </span>
             </td>
             <td style="width:5px"></td>
           </tr>
@@ -189,7 +191,7 @@ export default {
             value,
             trades,
             description,
-            dateshortstring
+            lastupdatetime
           } = data;
           this.allStocks.push({
             stockidstr,
@@ -200,7 +202,7 @@ export default {
             value,
             trades,
             description,
-            dateshortstring
+            lastupdatetime
           });
         });
         this.loading = false;
@@ -241,6 +243,15 @@ export default {
      * @return  {Array}        new list of item
      */
     customSort: function(items, index, isDesc) {
+      if (index[0] != "symbol" && index.length > 0) {
+        items = items.filter(data => {
+          return (
+            this.$moment(data.lastupdatetime).format("YYYYMMDD") ==
+            this.$moment().format("YYYYMMDD")
+          );
+        });
+      }
+
       items.sort((a, b) => {
         const key = index[0];
         const desc = isDesc[0];
@@ -251,20 +262,22 @@ export default {
             return b[index].toLowerCase().localeCompare(a[index].toLowerCase());
           }
         } else if (key == "last") {
-          // Price is only important when dates are the same
-          if (a.shortshortstring == b.shortshortstring) {
-            if (!desc) {
-              // ascending
-              return a[index] - b[index];
-            } else {
-              // descending
-              return b[index] - a[index];
+          // convert date to yyyymmdd
+          const adate = this.$moment(a.lastupdatetime).format("YYYYMMDD");
+          const bdate = this.$moment(b.lastupdatetime).format("YYYYMMDD");
+          if (!desc) {
+            let rv = adate - bdate;
+            if (rv === 0) {
+              rv = a[index] - b[index];
             }
+            return rv;
+          } else {
+            let rv = bdate - adate;
+            if (rv === 0) {
+              rv = b[index] - a[index];
+            }
+            return rv;
           }
-          // sort dates
-          return new Date(a.shortshortstring) > new Date(b.shortshortstring)
-            ? 1
-            : -1;
         } else {
           if (!desc) {
             // ascending

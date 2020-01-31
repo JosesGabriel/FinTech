@@ -354,8 +354,6 @@ export default {
     }
   },
   mounted() {
-    console.log("chart userid");
-    console.log(this.userId);
     if (localStorage.currentMode) {
       this.setLightSwitch(localStorage.currentMode);
     }
