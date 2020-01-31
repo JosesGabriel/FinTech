@@ -9,8 +9,9 @@
       <v-card-title
         class="text-left justify-left pa-5 pb-3 px-5 success--text"
         style="font-size:16px; font-weight: 700;"
-      >TRADE 
-        <span :class="this.marketStatus ? 'nodisplay': 'display'" class="ml-10 caption">Market Status: {{ this.mstatus }} </span>
+      >
+      <v-col class="pa-0"><span>TRADE</span></v-col>  
+      <v-col class="pa-0"><span :class="this.marketStatus ? 'nodisplay': 'display'" class="caption" style="text-align: right;">Market Closed.</span></v-col>
       </v-card-title>
       
       <v-stepper
