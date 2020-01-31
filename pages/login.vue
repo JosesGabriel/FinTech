@@ -80,22 +80,18 @@ export default {
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
             if (data.success) {
-              // localStorage.setItem(
-              //   "auth._token.local",
-              //   data.token.access_token
-              // );
-              localStorage.setItem("hat", "12321321");
-              console.log("sAKSES");
-              this.setAlert({
-                model: true,
-                state: "success",
-                message: "yes"
-              });
+              this.$auth.setUserToken(data.data.token.access_token).then(() =>
+                this.setAlert({
+                  model: true,
+                  state: "success",
+                  message: data.message
+                })
+              );
             }
           })
           .catch(e => {
-            console.log("tangina " + e);
             this.setAlert({
+              model: true,
               state: "error",
               message: "An error has occurred."
             });

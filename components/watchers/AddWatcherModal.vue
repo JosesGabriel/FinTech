@@ -99,6 +99,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
+  props: {
+    addnewstock: {}
+  },
   data: () => ({
     dialog: false,
     keyCounter: 2,
@@ -141,6 +144,15 @@ export default {
      */
     takeProfitModel() {
       this.fieldsWatch();
+    },
+    addnewstock() {
+      this.dialog = true;
+      for (let i = 0; this.stockList.length > i; i++) {
+        if (this.stockList[i].id_str == this.addnewstock) {
+          this.stocksDropdownModel = this.stockList[i];
+          break;
+        }
+      }
     }
   },
   mounted() {

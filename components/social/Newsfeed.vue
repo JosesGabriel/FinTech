@@ -36,8 +36,7 @@
             <v-col>
               <v-list-item-title class="subtitle-2">
                 <strong>
-                  {{ postsObject[n - 1].user.first_name }}
-                  {{ postsObject[n - 1].user.last_name }}
+                  {{ postsObject[n - 1].user.name }}
                 </strong>
               </v-list-item-title>
               <v-list-item-subtitle class="overline no-transform">
