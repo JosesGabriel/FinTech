@@ -80,14 +80,13 @@ export default {
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
             if (data.success) {
-              this.$auth
-                .setUserToken(data.data.token.access_token)
-                .then(() => (window.location.href = "/"));
-              this.setAlert({
-                model: true,
-                state: "success",
-                message: data.message
-              });
+              this.$auth.setUserToken(data.data.token.access_token).then(() =>
+                this.setAlert({
+                  model: true,
+                  state: "success",
+                  message: data.message
+                })
+              );
             }
           })
           .catch(e => {
