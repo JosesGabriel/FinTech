@@ -361,13 +361,10 @@ export default {
       postOptionsMode: false,
       showShare: false,
       sharePostID: "",
-<<<<<<< HEAD
       numberPost: 0,
-      showBanner: false
-=======
+      showBanner: false,
       reactButtons: false,
       commentValue: ""
->>>>>>> 5dc0e6544a98d454c1f73ef11fd0852dbbbdfbc4
     };
   },
   computed: {
