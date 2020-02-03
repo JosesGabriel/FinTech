@@ -74,7 +74,12 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: ["@nuxtjs/axios", "@nuxtjs/dotenv", "@nuxtjs/auth"],
+  modules: [
+    "@nuxtjs/axios",
+    "@nuxtjs/dotenv",
+    "@nuxtjs/auth",
+    "@nuxtjs/google-gtag"
+  ],
   auth: {
     strategies: {
       local: {
