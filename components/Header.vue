@@ -131,7 +131,7 @@
             <v-list-item-title class="listItem__avCalc">Average Price Calculator</v-list-item-title>
           </router-link>
           <v-dialog v-model="averagePriceDialog" max-width="350">
-            <AveragePriceCalculator />
+            <AveragePriceCalculator  v-on:showDialog="ShowDialog" />
           </v-dialog>
         </v-list-item>
       </v-card>
@@ -208,7 +208,8 @@ export default {
       displayPowerTools: false,
       buySellDialog: false,
       averagePriceDialog: false,
-      varDialog: false
+      varDialog: false,
+      showdialog: false,
     };
   },
   computed: {
@@ -249,6 +250,11 @@ export default {
   watch: {
     notification() {
       console.log(this.notification);
+    },
+    showdialog() {
+      if(!this.showdialog){
+        this.averagePriceDialog = false;
+      }
     }
   },
   methods: {
@@ -266,6 +272,12 @@ export default {
         this.display = false;
         this.showDropdown = false;
         this.showNotification = false;
+      }
+    },
+    ShowDialog(value){
+       this.showdialog = value;
+       if(!this.showdialog){
+        this.averagePriceDialog = false;
       }
     },
     getNotification() {
