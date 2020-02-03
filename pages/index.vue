@@ -1,9 +1,6 @@
 <template>
-  <v-container
-    class="page__wrapper"
-    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-    dark
-  >
+  <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
+
     <v-row class="mb-5" no-gutters>
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar active="social" />
@@ -47,6 +44,11 @@ export default {
     Bulletin,
     FooterSidebar,
     PostField
+  },
+  computed: {
+    ...mapGetters({
+      sse: "social/sse"
+    })
   },
   data() {
     return {

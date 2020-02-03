@@ -209,7 +209,7 @@
               @click="onClickImageUploadBtn"
             >
               <img
-                class="mr-1"
+                class="mr-1 media__button"
                 src="/icon/postfield/photo.svg"
                 width="20"
               /><span class="black--text">Photo</span>
@@ -222,7 +222,11 @@
               :dark="lightSwitch == 0 ? false : true"
               @click="onClickImageUploadBtn"
             >
-              <img class="mr-1" src="/icon/postfield/video.svg" width="20" />
+              <img
+                class="mr-1 media__button"
+                src="/icon/postfield/video.svg"
+                width="20"
+              />
               <span class="black--text">Video</span>
             </v-btn>
             <!-- TODO after launching -->
@@ -760,6 +764,9 @@ export default {
 }
 .atwho-cur {
   background-color: #03dac5;
+}
+.media__button {
+  margin-left: -3px;
 }
 .userSuggestions__dropdownCaret {
   width: 0;

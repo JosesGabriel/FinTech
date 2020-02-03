@@ -1,5 +1,9 @@
 <template>
   <v-col class="pa-0">
+    <span class="newPosts_banner caption black--text" @click="fetchNewPost()" v-show="showBanner">
+      <v-icon small color="black">mdi-arrow-up</v-icon>
+      <span class="font-weight-bold">New posts</span>
+    </span>
     <!-- Written by Joses | December 2019 -->
     <!-- Docs: Posts object is retrieved on mount, then mag iterate thru the entire
     object as can be seen sa v-card underneath. Then if post has comments, mag loop thru lang gihapon sa length.
@@ -15,7 +19,7 @@
     <v-card
       v-for="n in postsObject.length"
       :key="n"
-      class="centerPanel__card mb-3 transparent__bg"
+      class="centerPanel__card mb-3"
       :dark="lightSwitch == 0 ? false : true"
       outlined
     >
@@ -259,7 +263,8 @@
           <v-icon>mdi-comment-text-outline</v-icon>
         </v-btn>
         <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
-        <v-btn
+        <!-- TODO Share counter -->
+        <!-- <v-btn
           icon
           fab
           x-small
@@ -268,7 +273,7 @@
         >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
-        <span class="caption">1000</span>
+        <span class="caption">1000</span> -->
       </v-card-actions>
       <v-divider></v-divider>
       <List :comments="postsObject[n - 1].comments" />
@@ -356,13 +361,16 @@ export default {
       postOptionsMode: false,
       showShare: false,
       sharePostID: "",
+      numberPost: 0,
+      showBanner: false,
       reactButtons: false,
       commentValue: ""
     };
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      newPosts: "global/getNewPosts"
     })
   },
   watch: {
@@ -394,6 +402,17 @@ export default {
         comments: [],
         comments_count: 0
       });
+    },
+    newPosts() {
+      console.log(this.newPosts);
+      if(this.newPosts.event_name === "social.post") {
+        this.postCounter();
+      } else if (this.newPosts.event_name === "social.post.comment") {
+        this.putNumberComment();
+      } else if (this.newPosts.event_name === "social.post.sentiment") {
+        this.putNumberSentiments();
+      }
+      this.numberPost = this.newPosts.number_posts;
     }
   },
   mounted() {
@@ -411,6 +430,29 @@ export default {
     addDynamicTime: AddDynamicTime,
     localFormat: LocalFormat,
 
+    postCounter() {
+      if (this.numberPost >= 1) {
+        this.showBanner = true;
+      } else {
+        this.showBanner = false;
+      }
+    },
+    putNumberComment() {
+      for(let i = 0; i<this.postsObject.length; i++) {
+        if(this.postsObject[i].id === this.newPosts.data.post.id) {
+          this.postsObject[i].comments_count += 1
+          console.log('putNumberComment')
+        }
+      }
+    },
+    putNumberSentiments() {
+      for(let i = 0; i<this.postsObject.length; i++) {
+        if(this.postsObject[i].id === this.newPosts.data.post.id) {
+          console.log(this.postsObject[i])
+          console.log('putNumberSentiments')
+        }
+      }
+    },
     /**
      * fires when user clicks follow button
      *
@@ -487,6 +529,30 @@ export default {
                 x => (x.created_at = this.addDynamicTime(x.created_at))
               );
             }, 10000);
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    /**
+     * triggered if user fetched new posts to latest posts
+     *
+     * @return
+     */
+    fetchNewPost() {
+      const params = {
+        page: 1
+      };
+      this.postsObject = [];
+      this.$api.social.posts
+        .get(params)
+        .then(response => {
+          if (response.success) {
+            this.postsObject = this.postsObject.concat(response.data.posts);
+            this.loader = false;
+            this.showBanner = false;
+            this.numberPost = 0;
           }
         })
         .catch(e => {

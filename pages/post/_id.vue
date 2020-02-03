@@ -7,7 +7,7 @@
     <v-row class="mb-5" no-gutters>
       <v-col class="hidden-xs-only px-3" sm="2" md="2" lg="3"> </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
-        <v-dialog v-model="newsFeedModal" persistent max-width="520">
+        <v-dialog v-model="newsFeedModal" :dark="lightSwitch == 0 ? false : true" persistent max-width="520">
           <Newsfeed :postid="$route.params.id" @postData="parsePost" />
         </v-dialog>
       </v-col>

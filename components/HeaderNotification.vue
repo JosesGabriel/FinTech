@@ -15,10 +15,20 @@
           <span class="pa-4 pb-2 body-2">Notifications</span>
         </v-row>
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
-            <NotificationCard v-for="(item, index) in dataNotification" :key="index" :notification="item" />
+          <NotificationCard
+            v-if="index <= 2"
+            v-for="(item, index) in dataNotification"
+            :key="index"
+            :notification="item"
+          />
         </v-list>
-        <v-row no-gutters class="userMessage__dropdown-footer text-center">
-          <span class="pa-2 caption d-block seeall_dropdown-footer">See All</span>
+        <v-row no-gutters class="userMessage__dropdown-footer">
+          <router-link to="/notification" class="no-transform userMessage__dropdown-link text-center">
+            <span
+              :class="lightSwitch == 0 ? 'secondary--text' : 'white--text'"
+              class="pa-2 caption d-block seeall_dropdown-footer"
+            >See All</span>
+          </router-link>
         </v-row>
       </v-container>
     </v-card>
@@ -42,8 +52,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch",
-      notification: "global/getNotification"
+      lightSwitch: "global/getLightSwitch"
     }),
     toggleFontColor() {
       return this.lightSwitch == 0
@@ -134,5 +143,8 @@ export default {
 }
 .userMessage__dropdown--border > .v-input--switch > .v-input__control {
   height: 30px !important;
+}
+.userMessage__dropdown-link {
+  width: 100%;
 }
 </style>

@@ -1,5 +1,4 @@
-export default () => ({  
+export default () => ({
     sse: null,
-    sseInfo: null 
-  });
-  
+    sseInfo: null
+});
