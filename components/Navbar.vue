@@ -203,7 +203,8 @@
               <AveragePriceCalculator />
             </v-dialog>
           </v-list-item>
-          <v-list-item>
+          <!-- TODO put back when implenting multicharts -->
+          <!-- <v-list-item>
             <v-list-item-icon class="mr-4">
               <v-icon color="secondary">mdi-chart-areaspline</v-icon>
             </v-list-item-icon>
@@ -213,7 +214,7 @@
                 >Multicharts</v-list-item-title
               >
             </v-list-item-content>
-          </v-list-item>
+          </v-list-item> -->
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
