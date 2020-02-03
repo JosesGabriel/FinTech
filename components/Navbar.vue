@@ -43,7 +43,7 @@
               :color="active == 'social' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'social' ? 'success' : 'secondary'"
+                <v-icon :color="active == 'social' ? 'success' : ''"
                   >mdi-account-supervisor-circle</v-icon
                 >
               </v-list-item-icon>
@@ -60,7 +60,7 @@
               :color="active == 'chart' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'chart' ? 'success' : 'secondary'"
+                <v-icon :color="active == 'chart' ? 'success' : ''"
                   >mdi-chart-bar</v-icon
                 >
               </v-list-item-icon>
@@ -78,7 +78,7 @@
               :color="active == 'journal' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'journal' ? 'success' : 'secondary'"
+                <v-icon :color="active == 'journal' ? 'success' : ''"
                   >mdi-library-books</v-icon
                 >
               </v-list-item-icon>
@@ -96,8 +96,7 @@
               :color="active == 'virtualtrade' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon
-                  :color="active == 'virtualtrade' ? 'success' : 'secondary'"
+                <v-icon :color="active == 'virtualtrade' ? 'success' : ''"
                   >mdi-cloud-print-outline</v-icon
                 >
               </v-list-item-icon>
@@ -115,7 +114,7 @@
               :color="active == 'game' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'game' ? 'success' : 'secondary'"
+                ><v-icon :color="active == 'game' ? 'success' : ''"
                   >mdi-gamepad</v-icon
                 ></v-list-item-icon
               >
@@ -132,8 +131,7 @@
               :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon
-                  :color="active == 'watchlist' ? 'success' : 'secondary'"
+                ><v-icon :color="active == 'watchlist' ? 'success' : ''"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
