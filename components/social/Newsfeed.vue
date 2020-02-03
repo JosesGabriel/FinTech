@@ -472,6 +472,7 @@ export default {
       this.$api.social.posts
         .get(params)
         .then(response => {
+          console.log(response);
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
@@ -562,6 +563,7 @@ export default {
               last_name: this.$auth.user.data.user.last_name
             }
           });
+          this.postsObject[index].comments_count++;
         } else {
           this.triggerAlert(false, response.message);
         }
