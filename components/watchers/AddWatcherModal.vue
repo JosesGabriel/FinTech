@@ -216,7 +216,10 @@ export default {
       if (!stockExists) {
         let params = {
           user_id: this.$auth.user.data.user.uuid,
-          stock_id: this.stocksDropdownModel,
+          stock_id:
+            typeof this.stocksDropdownModel == "string"
+              ? this.stocksDropdownModel
+              : this.addnewstock,
           entry_price: this.entryPriceModel,
           take_profit: this.takeProfitModel,
           stop_loss: this.stopLossModel
