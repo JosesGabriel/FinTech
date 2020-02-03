@@ -1,116 +1,207 @@
 <template>
-    <v-card class="navbar__card" max-width="240" flat color="transparent">
-        <v-navigation-drawer disable-resize-watcher mobile-break-point :mini-variant="$vuetify.breakpoint.mdAndDown" class="navbarDrawer__card" dark color="transparent">
-            <v-list>
-                <v-list-item>
-                    <v-list-item-avatar>
-                        <v-img src="test.jpg"></v-img>
-                    </v-list-item-avatar>
+  <v-card class="navbar__card pt-2" max-width="240" flat color="transparent">
+    <v-navigation-drawer
+      disable-resize-watcher
+      mobile-break-point
+      :mini-variant="data ? true : $vuetify.breakpoint.mdAndDown"
+      class="navbarDrawer__card"
+      :class="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+      :dark="lightSwitch == 0 ? false : true"
+      color="transparent"
+      floating
+    >
+      <v-list nav dense rounded>
+        <v-list-item-group>
+          <router-link to="/profile" class="navbar__links">
+            <v-list-item>
+              <v-list-item-avatar class="mr-4" size="24">
+                <v-img
+                  class="avatar__border"
+                  :src="
+                    $auth.user.data.user.profile_image
+                      ? $auth.user.data.user.profile_image
+                      : 'default.png'
+                  "
+                ></v-img>
+              </v-list-item-avatar>
+              <v-list-item-content
+                ><v-list-item-title class="font-weight-black">
+                  {{
+                    $auth.loggedIn
+                      ? $auth.user.data.user.first_name +
+                        " " +
+                        $auth.user.data.user.last_name
+                      : "Guest"
+                  }}</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
+          <router-link to="/" class="navbar__links">
+            <v-list-item
+              :class="active == 'social' ? 'v-list-item--active' : ''"
+              :color="active == 'social' ? 'success' : ''"
+            >
+              <v-list-item-icon class="mr-4">
+                <v-icon :color="active == 'social' ? 'success' : ''"
+                  >mdi-account-supervisor-circle</v-icon
+                >
+              </v-list-item-icon>
+              <v-list-item-content
+                ><v-list-item-title class="font-weight-black"
+                  >Social Wall</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
+          <router-link to="/chart" class="navbar__links">
+            <v-list-item
+              :class="active == 'chart' ? 'v-list-item--active' : ''"
+              :color="active == 'chart' ? 'success' : ''"
+            >
+              <v-list-item-icon class="mr-4">
+                <v-icon :color="active == 'chart' ? 'success' : ''"
+                  >mdi-chart-bar</v-icon
+                >
+              </v-list-item-icon>
+              <v-list-item-content
+                ><v-list-item-title class="font-weight-medium"
+                  >Interactive Chart</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
 
-                    <v-list-item-content>
-                        <v-list-item-title class="caption"><strong>Eazy-E</strong></v-list-item-title>
-                        <v-list-item-subtitle class="overline">@cruisindown</v-list-item-subtitle>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
-            <v-divider></v-divider>
-            <v-list nav dense rounded>
-                <v-list-item-group>
-                    <router-link to="/" class="navbar__links">
-                        <v-list-item>
-                            <v-list-item-icon><v-icon color="#dc8607">mdi-vector-square</v-icon></v-list-item-icon>
-                            <v-list-item-content><v-list-item-title>Social Wall</v-list-item-title></v-list-item-content>
-                        </v-list-item>
-                    </router-link>
-                    <router-link to="/chart" class="navbar__links">
-                        <v-list-item>
-                            <v-list-item-icon><v-icon color="#bfb538">mdi-chart-bar</v-icon></v-list-item-icon>
-                            <v-list-item-content><v-list-item-title>Interactive Chart</v-list-item-title></v-list-item-content>
-                        </v-list-item>
-                    </router-link>
+          <router-link to="/journal" class="navbar__links">
+            <v-list-item
+              :class="active == 'journal' ? 'v-list-item--active' : ''"
+              :color="active == 'journal' ? 'success' : ''"
+            >
+              <v-list-item-icon class="mr-4">
+                <v-icon :color="active == 'journal' ? 'success' : ''"
+                  >mdi-library-books</v-icon
+                >
+              </v-list-item-icon>
+              <v-list-item-content
+                ><v-list-item-title class="font-weight-medium"
+                  >Trading Journal</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
 
-                    <router-link to="/journal" class="navbar__links">
-                        <v-list-item>
-                            <v-list-item-icon><v-icon color="#367e45">mdi-library-books</v-icon></v-list-item-icon>
-                            <v-list-item-content><v-list-item-title>Trading Journal</v-list-item-title></v-list-item-content>
-                        </v-list-item>
-                    </router-link>
-
-                    <router-link to="/watchlist" class="navbar__links">
-                        <v-list-item>
-                            <v-list-item-icon><v-icon color="#1a71b8">mdi-eye-plus-outline</v-icon></v-list-item-icon>
-                            <v-list-item-content><v-list-item-title>Watchers & Alerts</v-list-item-title></v-list-item-content>
-                        </v-list-item>
-                    </router-link>
-                    <router-link to="/game" class="navbar__links">
-                        <v-list-item>
-                            <v-list-item-icon><v-icon color="#9126a7">mdi-gamepad</v-icon></v-list-item-icon>
-                            <v-list-item-content><v-list-item-title>Games</v-list-item-title></v-list-item-content>
-                        </v-list-item>
-                    </router-link>
-
-                    <router-link to="/vyndue" class="navbar__links">
-                        <v-list-item>
-                            <v-list-item-icon><v-icon color="#e01d61">mdi-alpha-v-circle-outline</v-icon></v-list-item-icon>
-                            <v-list-item-content><v-list-item-title>Vyndue</v-list-item-title></v-list-item-content>
-                        </v-list-item>
-                    </router-link>
-                </v-list-item-group>
-
-                <v-list-item-group>
-                    <v-list-item-icon>
-                        <v-list-item-title class="caption">Power Tools</v-list-item-title>
-                    </v-list-item-icon>
-                    <v-list-item>
-                        <v-list-item-icon>
-                        <v-icon color="#3283a6">mdi-calculator</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                        <v-list-item-title>Buy/Sell Calculators</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-icon>
-                        <v-icon color="#823289">mdi-page-layout-header-footer</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                        <v-list-item-title>VAR Calculator</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-icon>
-                        <v-icon color="#b81f78">mdi-tag-text-outline</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                        <v-list-item-title>Average Price Calculator</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                        <v-list-item-icon>
-                        <v-icon color="#b4be26">mdi-chart-areaspline</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                        <v-list-item-title>Multicharts</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list-item-group>
-            </v-list>
-        </v-navigation-drawer>
-    </v-card>
+          <router-link to="/trade-simulator" class="navbar__links">
+            <v-list-item
+              :class="active == 'virtualtrade' ? 'v-list-item--active' : ''"
+              :color="active == 'virtualtrade' ? 'success' : ''"
+            >
+              <v-list-item-icon class="mr-4">
+                <v-icon :color="active == 'virtualtrade' ? 'success' : ''"
+                  >mdi-cloud-print-outline</v-icon
+                >
+              </v-list-item-icon>
+              <v-list-item-content
+                ><v-list-item-title class="font-weight-medium"
+                  >Virtual Trading</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
+          <!-- TODO put back after launch -->
+          <!-- <router-link to="/game" class="navbar__links">
+            <v-list-item
+              :class="active == 'game' ? 'v-list-item--active' : ''"
+              :color="active == 'game' ? 'success' : ''"
+            >
+              <v-list-item-icon class="mr-4"
+                ><v-icon :color="active == 'game' ? 'success' : ''"
+                  >mdi-gamepad</v-icon
+                ></v-list-item-icon
+              >
+              <v-list-item-content
+                ><v-list-item-title class="font-weight-medium"
+                  >Games</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link> -->
+          <router-link to="/watchlist" class="navbar__links">
+            <v-list-item
+              :class="active == 'watchlist' ? 'v-list-item--active' : ''"
+              :color="active == 'watchlist' ? 'success' : ''"
+            >
+              <v-list-item-icon class="mr-4"
+                ><v-icon :color="active == 'watchlist' ? 'success' : ''"
+                  >mdi-eye-plus-outline</v-icon
+                ></v-list-item-icon
+              >
+              <v-list-item-content
+                ><v-list-item-title class="font-weight-medium"
+                  >Watchlist</v-list-item-title
+                ></v-list-item-content
+              >
+            </v-list-item>
+          </router-link>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+  </v-card>
 </template>
+<script>
+import { mapGetters } from "vuex";
+export default {
+  layout: "main",
+  props: {
+    data: {
+      type: Boolean
+    },
+    active: {
+      default: "social",
+      type: String
+    }
+  },
+  data() {
+    return {
+      buySellDialog: false,
+      averagePriceDialog: false,
+      varDialog: false,
+      isLightMode: 0,
+      darkText: false
+    };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
+  },
+  mounted() {
+    if (localStorage.currentMode) {
+      this.isLightMode = localStorage.currentMode;
+      localStorage.currentMode == 0
+        ? (this.darkText = true)
+        : (this.darkText = false);
+    } else {
+      localStorage.currentMode = 0;
+      this.darkText = true;
+    }
+  }
+};
+</script>
 <style scoped>
-.navbarDrawer__card {
-    /* background-color: #fbfcfe; */
-}
 .navbar__card {
-    position: fixed;
+  position: fixed;
 }
 .navbar__links {
-    color: white;
-    text-decoration: none;
+  color: white;
+  text-decoration: none;
+}
+.v-list-item:hover::before {
+  opacity: 0;
+}
+.v-list-item--active::before {
+  opacity: 0;
+}
+.v-list-item--active .v-list-item__content .v-list-item__title {
+  font-weight: bold;
 }
 </style>

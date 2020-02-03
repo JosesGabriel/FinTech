@@ -5,11 +5,8 @@
         <nuxt />
       </v-container>
     </v-content>
-    <v-footer
-      app
-      color="transparent"
-    >
-      <span class="overline">Arbitrage &copy; 2019</span>
+    <v-footer app color="transparent">
+      <span class="overline">Lyduz &copy; {{ date.getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
@@ -24,19 +21,10 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      
-    }
-  },
-  head () {
-    return {
-      title: 'Arbitrage',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
-      ]
-    }
+      date: new Date()
+    };
   }
-}
+};
 </script>

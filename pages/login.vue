@@ -1,160 +1,112 @@
 <template>
-   <v-container>
-        <div class="text-center">
-            <logo/>
-            <v-img src="/Arbitrage.png" class="arbitrage__logo" width="181px"></v-img>
-        </div>
-        <v-row class="center mt-3">
-            <v-card class="mx-auto loginForm__card" width="400" elevation="24" dark raised>
-                <form class="ma-5 loginForm" v-show="isOpen">
-                    <v-text-field
-                    prepend-inner-icon="mdi-at"
-                    label="Email Address"
-                    type="email"
-                    required
-                    outlined
-                    shaped
-                    dark
-                    ></v-text-field>
-                    <v-text-field
-                    label="Password"
-                    type="password"
-                    prepend-inner-icon="mdi-lock"
-                    required
-                    outlined
-                    dark
-                    shaped
-                    ></v-text-field>
-                    <v-checkbox
-                    label="Keep me signed in"
-                    required
-                    ></v-checkbox>
-
-                    
-                    <router-link to="/" class="login__router">
-                        <v-btn color="primary" block rounded outlined>
-                            login
-                        </v-btn>
-                    </router-link>
-                </form>
-                <form class="ma-5 signupForm" v-show="!isOpen">
-                    <v-row>
-                        <v-col cols="12" sm="6">
-                        <v-text-field
-                            label="First Name"
-                            prepend-inner-icon="mdi-account"
-                            required
-                            dark
-                        ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6">
-                        <v-text-field
-                            label="Last Name"
-                            required
-                            dark
-                        ></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-text-field
-                        label="Username or Trading Name"
-                        prepend-inner-icon="mdi-account"
-                        required
-                        dark
-                    ></v-text-field>
-                    <v-text-field
-                        label="Email"
-                        prepend-inner-icon="mdi-at"
-                        type="email"
-                        required
-                        dark
-                    ></v-text-field>
-                    <v-text-field
-                        label="Password"
-                        type="password"
-                        prepend-inner-icon="mdi-lock"
-                        required
-                        dark
-                    ></v-text-field>
-                    <v-text-field
-                        label="Confirm Password"
-                        type="password"
-                        prepend-inner-icon="mdi-lock"
-                        required
-                        dark
-                    ></v-text-field>
-                    <v-btn class="mb-3" color="primary" block outlined rounded>
-                        Sign Up
-                    </v-btn>
-                    <v-btn class="mb-3" color="secondary" block outlined rounded>
-                        Secondary
-                    </v-btn>
-                    <v-btn class="mb-3" color="success" block outlined rounded>
-                        Success
-                    </v-btn>
-                    <v-btn class="mb-3" color="warning" block outlined rounded>
-                        Warning
-                    </v-btn>
-                    <v-btn class="mb-3" color="error" block outlined rounded>
-                        Error
-                    </v-btn>
-                    <v-btn class="mb-3" color="info" block outlined rounded>
-                        Info
-                    </v-btn>
-                </form>
-                <v-btn class="loginButton__toggle" fab absolute light @click="toggle()">
-                    <v-icon>mdi-account-plus</v-icon>
-                </v-btn>
-            </v-card>
-        </v-row>
-    </v-container>
+  <v-card class="login__card text-center" color="transparent" dark flat>
+    <span class="display-4 text-center d-inline-block">
+      <span class="font-weight-thin">
+        <img
+          class="pl-2 pt-1"
+          src="lyduz_loader.gif"
+          alt=""
+          width="285"
+          height="285"
+        />
+      </span>
+    </span>
+  </v-card>
 </template>
-<style scoped>
-    .loginForm__card {
-        background-color: rgba(20, 44, 70, 0.69);
-    }
-    .arbitrage__logo {
-        position: absolute;
-        right: 612px;
-        top: 54px;
-    }
-    .loginButton__toggle {
-        position: absolute;
-        bottom: -70px;
-        left: 175px;
-    }
-    .button__toggleContainer {
-        width: 100%;
-        bottom: 0;
-        text-align: center;
-    }
-    .login__router {
-        text-decoration: none;
-    }
-</style>
+
 <script>
-import Logo from '~/components/Logo.vue'
+import { mapActions } from "vuex";
 export default {
-  components: {
-    Logo
+  head() {
+    return {
+      title: "Lyduz",
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          property: "description",
+          hid: "description",
+          content:
+            "Lyduz is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
+        },
+        { property: "og:title", content: "Lyduz" },
+        {
+          property: "og:description",
+          content:
+            "Lyduz is a free stock trading platform in the Philippines. Effectively trade the Philippine Equity Market with our realtime market data & multiple stock trading tools."
+        },
+        { property: "og:type", content: "website" },
+        {
+          property: "og:url",
+          content: "https://lyduz.com/login"
+        },
+        {
+          property: "og:image",
+          content: this.postImage
+        },
+        {
+          property: "fb:app_id",
+          content: "407039123333666"
+        }
+      ]
+    };
   },
+  layout: "main",
+  middleware: ["auth"],
   data() {
-      return {
-          isOpen: true
-      }
+    return {
+      isOpen: true,
+      postImage: "https://lyduz.com/png_logo.png"
+    };
+  },
+  mounted() {
+    this.retrieveParams();
   },
   methods: {
-    toggle: function(){
-        this.isOpen = !this.isOpen
-    }
-  },
-  head () {
-    return {
-      title: 'Arbitrage',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
-      ]
+    ...mapActions({
+      setAlert: "global/setAlert",
+      setLoginModalState: "login/setLoginModalState"
+    }),
+    /**
+     * Redirect for auth provider (facebook)
+     *
+     * @return
+     */
+    retrieveParams() {
+      let param = this.$route.fullPath;
+      const { query } = this.$route;
+      if (Object.prototype.hasOwnProperty.call(query, "auth_provider")) {
+        return this.$api.authentication.providers
+          .getRedirectCallback(query["auth_provider"], query)
+          .then(({ data }) => {
+            if (data.success) {
+              this.$auth.setUserToken(data.data.token.access_token).then(() =>
+                this.setAlert({
+                  model: true,
+                  state: "success",
+                  message: data.message
+                })
+              );
+            }
+          })
+          .catch(e => {
+            this.setAlert({
+              model: true,
+              state: "error",
+              message: "An error has occurred."
+            });
+          });
+      }
+      if (param.includes("redirected=true")) {
+        this.setLoginModalState(true);
+      }
     }
   }
-}
+};
 </script>
+
+<style>
+.login__card {
+  margin-top: 150px;
+}
+</style>

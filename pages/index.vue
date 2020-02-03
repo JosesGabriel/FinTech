@@ -1,69 +1,108 @@
 <template>
-    <v-container class="socialWall__container" :class="{'pa-0': $vuetify.breakpoint.xsOnly}" dark>
-        <v-row class="mb-5" no-gutters>
-            <v-col class="navbar__container hidden-xs-only px-3" cols="3" sm="2" md="3" lg="3">
-              <Navbar/>
-            </v-col>
-            <v-col xs="12" sm="10" md="6" lg="6">
-              <PostField/>
-              <Newsfeed/>
-            </v-col>
-            <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
-                <Trendingstocks/>
-                <Whotomingle/>
-                <Footersidebar/>
-            </v-col>
-        </v-row>
-    </v-container>
+  <v-container
+    class="page__wrapper"
+    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+    dark
+  >
+    <v-row class="mb-5" no-gutters>
+      <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
+        <Navbar active="social" />
+      </v-col>
+      <v-col xs="12" sm="10" md="6" lg="6">
+        <PostField class="mb-3" @authorNewPost="authorNewPost" />
+        <Newsfeed :new-post="newPost" />
+      </v-col>
+      <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
+        <TrendingStocks />
+        <WhoToMingle />
+        <MiniWatchlist />
+        <!-- TODO put back when implementing -->
+        <!-- <Bulletin /> -->
+        <FooterSidebar />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
-<style scoped>
-    .socialWall__container {
-        max-width: 1080px;
-        margin-top: 40px;
-    }
-</style>
+
 <script>
-import Navbar from '~/components/Navbar'
-import Newsfeed from '~/components/Newsfeed'
-import Trendingstocks from '~/components/Trendingstocks.vue'
-import Whotomingle from '~/components/Whotomingle.vue'
-import Footersidebar from '~/components/Footersidebar.vue'
-import PostField from '~/components/PostField.vue'
-import axios from '~/node_modules/axios'
+import Navbar from "~/components/Navbar";
+import Newsfeed from "~/components/social/Newsfeed";
+import TrendingStocks from "~/components/TrendingStocks";
+import WhoToMingle from "~/components/WhoToMingle";
+import FooterSidebar from "~/components/FooterSidebar";
+import PostField from "~/components/social/PostField";
+import MiniWatchlist from "~/components/MiniWatchlist";
+import Bulletin from "~/components/Bulletin";
+
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  layout: 'main',
+  layout: "main",
   components: {
-      Navbar,
-      Newsfeed,
-      Trendingstocks,
-      Whotomingle,
-      Footersidebar,
-      PostField
+    Navbar,
+    Newsfeed,
+    TrendingStocks,
+    WhoToMingle,
+    MiniWatchlist,
+    Bulletin,
+    FooterSidebar,
+    PostField
   },
   data() {
-      return {
-          isOpen: true,
-      }
-  },
-  mounted() {
-    axios
-      .get('https://dev-api.arbitrage.ph/api/social/posts/33937358302875648')
-      .then(response => (this.info = response.data))
+    return {
+      isOpen: true,
+      newPost: {}
+    };
   },
   methods: {
-    toggle: function(){
-        this.isOpen = !this.isOpen
+    ...mapActions({
+      setSSE: "social/setSSE",
+      setSSEInfo: "social/setSSEInfo"
+    }),
+    /**
+     * Captures when post field emits that user has posted new post
+     *
+     * @param   {integer}  value
+     *
+     * @return  {function}
+     */
+    authorNewPost(value) {
+      this.newPost = value;
+    },
+
+    initSSE() {
+      if (this.sse !== null) {
+        this.sse.close();
+      }
+
+      this.setSSE(
+        new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
+        // new EventSource("http://localhost:8021/sse/market-data/pse/all")
+      );
+
+      this.sse.onopen = function() {};
+
+      this.sse.onerror = function() {};
+
+      this.sse.addEventListener("info", this.sseInfo);
+    },
+    sseInfo(e) {
+      const data = JSON.parse(e.data);
+
+      // set sse info to state
+      this.setSSEInfo(data);
     }
   },
-  head () {
-    return {
-      title: 'Arbitrage',
-      meta: [
-        // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-        { hid: 'description', name: 'description', content: 'My custom description' }
-      ]
-    }
+  mounted() {
+    this.initSSE();
+  },
+  beforeDestroy() {
+    this.sse.close();
+  },
+  computed: {
+    ...mapGetters({
+      sse: "social/sse"
+    })
   }
-}
+};
 </script>
