@@ -404,7 +404,6 @@ export default {
       });
     },
     newPosts() {
-      console.log(this.newPosts);
       if(this.newPosts.event_name === "social.post") {
         this.postCounter();
       } else if (this.newPosts.event_name === "social.post.comment") {
@@ -441,15 +440,13 @@ export default {
       for(let i = 0; i<this.postsObject.length; i++) {
         if(this.postsObject[i].id === this.newPosts.data.post.id) {
           this.postsObject[i].comments_count += 1
-          console.log('putNumberComment')
         }
       }
     },
     putNumberSentiments() {
       for(let i = 0; i<this.postsObject.length; i++) {
         if(this.postsObject[i].id === this.newPosts.data.post.id) {
-          console.log(this.postsObject[i])
-          console.log('putNumberSentiments')
+          
         }
       }
     },
