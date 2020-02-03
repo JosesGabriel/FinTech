@@ -44,14 +44,14 @@ const __customIndicators = PineJS => [
             linewidth: 1,
             plottype: 2,
             trackPrice: true,
-            color: "#03DAC5"
+            color: "#03dac5"
           },
           plot_3: {
             linestyle: 0,
             linewidth: 1,
             plottype: 2,
             trackPrice: true,
-            color: "#03DAC5"
+            color: "#03dac5"
           }
         },
         inputs: {
