@@ -201,24 +201,29 @@
               </div>
             </div>
             <v-btn
-              class="postField__btn"
+              class="postField__btn px-2"
+              color="#D4F6F2"
               small
+              rounded
               :dark="lightSwitch == 0 ? false : true"
-              icon
               @click="onClickImageUploadBtn"
             >
-              <v-icon color="success">mdi-image-outline</v-icon
-              ><span class="success--text">Photo</span>
+              <img
+                class="mr-1"
+                src="/icon/postfield/photo.svg"
+                width="20"
+              /><span class="black--text">Photo</span>
             </v-btn>
             <v-btn
-              class="postField__btn p-10"
+              class="postField__btn px-2 ml-2"
+              color="#D4F6F2"
               small
+              rounded
               :dark="lightSwitch == 0 ? false : true"
-              icon
               @click="onClickImageUploadBtn"
             >
-              <img class="mr-1" src="/icon/video.svg" width="20" />
-              <span class="success--text">Video</span>
+              <img class="mr-1" src="/icon/postfield/video.svg" width="20" />
+              <span class="black--text">Video</span>
             </v-btn>
             <!-- TODO after launching -->
             <!-- <v-btn
@@ -850,11 +855,9 @@ export default {
 }
 .postField__btn {
   position: relative;
-  right: 30px;
+  right: 50px;
   text-transform: none;
-}
-.p-10 {
-  margin: 0 50px;
+  font-weight: 600;
 }
 .postField__btn::before {
   color: transparent;
