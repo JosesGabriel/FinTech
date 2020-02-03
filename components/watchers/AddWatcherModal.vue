@@ -228,6 +228,9 @@ export default {
           function(response) {
             this.watchCardModalLoading = false;
             if (response.success) {
+              if (typeof this.stocksDropdownModel == "string") {
+                this.$emit("addFromMostWatched");
+              }
               let alert = {
                 model: true,
                 state: true,

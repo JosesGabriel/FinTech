@@ -23,7 +23,10 @@
               <SectorIndexList @pseiData="getPSEIData" />
             </v-col>
             <v-col cols="4">
-              <MostWatchedStocks @add-watchlist-data="getEmitID" />
+              <MostWatchedStocks
+                :key="addMostWatched"
+                @add-watchlist-data="getEmitID"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -43,7 +46,11 @@
           </div>
           <div class="mb-2 d-flex justify-end">
             <div class="d-flex">
-              <AddWatcherModal v-if="!loadingBar" :addnewstock="emitID" />
+              <AddWatcherModal
+                v-if="!loadingBar"
+                :addnewstock="emitID"
+                @addFromMostWatched="addMostWatched++"
+              />
               <EditDeleteWatcherModal v-if="!loadingBar" />
             </div>
           </div>
@@ -92,7 +99,8 @@ export default {
       navbarMiniVariantSetter: true,
       loadingBar: true,
       pseData: [],
-      emitID: ""
+      emitID: "",
+      addMostWatched: ""
     };
   },
   computed: {
@@ -142,13 +150,20 @@ export default {
      * @return
      */
     getUserWatchList() {
-      this.$api.watchlist.watchlists.index().then(
-        function(response) {
-          this.watchListObject = response.data.watchlist;
-          this.setUserWatchedStocks(response.data.watchlist);
-          this.loadingBar = false;
-        }.bind(this)
-      );
+      this.$api.watchlist.watchlists
+        .index()
+        .then(
+          function(response) {
+            this.watchListObject = response.data.watchlist;
+            this.setUserWatchedStocks(response.data.watchlist);
+            this.loadingBar = false;
+          }.bind(this)
+        )
+        .catch(error => {
+          if (error.response.status == 404) {
+            this.loadingBar = false;
+          }
+        });
     }
   }
 };
