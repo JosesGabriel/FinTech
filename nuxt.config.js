@@ -28,6 +28,10 @@ export default {
         rel: "icon",
         type: "image/x-icon",
         href: `${process.env.APP_URL}/_/favicon.ico?v2`
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap"
       }
     ],
     script: [

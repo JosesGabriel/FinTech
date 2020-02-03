@@ -259,7 +259,8 @@
           <v-icon>mdi-comment-text-outline</v-icon>
         </v-btn>
         <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
-        <v-btn
+        <!-- TODO Share counter -->
+        <!-- <v-btn
           icon
           fab
           x-small
@@ -268,7 +269,7 @@
         >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
-        <span class="caption">1000</span>
+        <span class="caption">1000</span> -->
       </v-card-actions>
       <v-divider></v-divider>
       <List :comments="postsObject[n - 1].comments" />
