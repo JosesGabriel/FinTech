@@ -474,7 +474,6 @@ export default {
       this.$api.social.posts
         .get(params)
         .then(response => {
-          console.log(response);
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;

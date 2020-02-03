@@ -524,6 +524,7 @@ export default {
     postFieldSubmit(stockValues) {
       this.postFieldLoader = "success";
       this.stockTagMode = false;
+      this.imagesArray = [];
       let postTags = [];
       if (stockValues) {
         postTags = [
@@ -708,6 +709,11 @@ export default {
     clearInputs(type, message) {
       this.postField = "";
       this.postFieldLoader = false;
+      this.cloudArray = [];
+      this.postBtnDisable = true;
+
+      this.$refs.postField__inputRef.type = "text";
+      this.$refs.postField__inputRef.type = "file";
 
       let alert = {
         model: true,
