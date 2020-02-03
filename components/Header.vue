@@ -300,7 +300,7 @@ export default {
         status: "unread"
       };
       this.$api.social.notification.count(params).then(response => {
-        if (response.success) {
+        if (response.success) { 
           if (response.data.notifications.length > 0) {
             this.showBadge = response.data.notifications.length;
           } else {
