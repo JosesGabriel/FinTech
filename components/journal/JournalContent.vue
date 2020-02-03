@@ -316,7 +316,8 @@ export default {
      * @param   {object}  obj  object of changed item
      *
      * @return  {object}       object data onchange
-     */ changePortfolio(obj) {
+     */ 
+    changePortfolio(obj) {
       this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
       const openparams = {
         fund: this.portfolioDropdownModel.id

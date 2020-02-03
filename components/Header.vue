@@ -142,7 +142,9 @@
           class="header__button"
           text
           @click="showNotification = !showNotification"
-        >Notification</v-btn>
+        >
+          <v-badge :value="showBadge" color="success" small dot>Notification</v-badge>
+        </v-btn>
       </a>
       <HeaderNotification
         :dataNotification="dataNotification"
@@ -195,6 +197,7 @@ export default {
   data: {
     type: Boolean
   },
+  props: ["ticks"],
   data() {
     return {
       searchButtonIsVisible: true,
@@ -208,13 +211,14 @@ export default {
       displayPowerTools: false,
       buySellDialog: false,
       averagePriceDialog: false,
-      varDialog: false
+      varDialog: false,
+      numberPost: 0,
+      showBadge: 0
     };
   },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      notification: "global/getNotification",
       stockList: "global/getStockList"
     }),
     toggleFontColor() {
@@ -241,20 +245,23 @@ export default {
     document.addEventListener("click", this.close);
 
     this.getNotification();
-    this.initSSE();
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
   },
   watch: {
+    ticks() {
+      this.initSSE();
+    },
     notification() {
-      console.log(this.notification);
+      this.newNotication();
     }
   },
   methods: {
     ...mapActions({
       setStockList: "global/setStockList",
-      setNotification: "global/setNotification"
+      setNotification: "global/setNotification",
+      setNewPosts: "global/setNewPosts"
     }),
     userNotificationEventsList: UserNotificationEventsList,
     allNotificationEventsList: AllNotificationEventsList,
@@ -268,10 +275,37 @@ export default {
         this.showNotification = false;
       }
     },
+    newNotication() {
+      const m = {
+        meta: {}
+      };
+      m.meta = this.notification;
+      const n = {
+        notificable: {}
+      };
+      n.notificable = {
+        ...m,
+        message: this.notification._message,
+        id: this.notification.post.id
+      };
+      this.dataNotification.unshift(n);
+    },
     getNotification() {
       this.$api.social.notification.notifications().then(response => {
         if (response.success) {
           this.dataNotification = response.data.notifications;
+        }
+      });
+      const params = {
+        status: "unread"
+      };
+      this.$api.social.notification.count(params).then(response => {
+        if (response.success) {
+          if (response.data.notifications.length > 0) {
+            this.showBadge = response.data.notifications.length;
+          } else {
+            this.showBadge = 0;
+          }
         }
       });
     },
@@ -283,16 +317,11 @@ export default {
         `${process.env.STREAM_API_URL}/sse/notifications/all`
       );
 
-      evtSourceAll.onerror = function(err) {
-        console.log(err);
-      };
-
       const allNotificationList = this.allNotificationEventsList();
 
       allNotificationList.forEach(eventName => {
         evtSourceAll.addEventListener(eventName, e => {
-          console.log(eventName, JSON.parse(e.data), "all");
-          this.notificationHandler(eventName, JSON.parse(e.data));
+          this.allNotificationHandler(eventName, JSON.parse(e.data));
         });
       });
 
@@ -306,100 +335,53 @@ export default {
           `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}`
         );
 
-        evtSource.onerror = function(err) {
-          console.log(err);
-        };
-
         const userNotificationList = this.userNotificationEventsList();
 
         userNotificationList.forEach(eventName => {
           evtSource.addEventListener(eventName, e => {
-            console.log(eventName, JSON.parse(e.data), "User");
-            this.allNotificationHandler(eventName, JSON.parse(e.data));
+            this.notificationHandler(eventName, JSON.parse(e.data));
           });
         });
       }
     },
     notificationHandler(eventName, data) {
-      switch (eventName) {
-        case "social.comment.comment":
-          this.onSocialReplyComment(data);
-          break;
-        case "social.comment.sentiment":
-          this.onSocialCommentSentiment(data);
-          break;
-        case "social.comment.tag:user":
-          this.onSocialTagUserComment(data);
-          break;
-        case "social.post.comment":
-          this.onSocialUserPostComment(data);
-          break;
-        case "social.post.sentiment":
-          this.onSocialUserPostSentiment(data);
-          break;
-        case "social.post.tag:user":
-          this.onSocialUserTagUser(data);
-          break;
-        case "social.user.follow":
-          this.onSocialUserFollowUser(data);
-          break;
-
-        default:
-          break;
-      }
+      this.setNotification(data);
     },
-    allNotificationHandler(eventName, data) {
-      switch (eventName) {
-        case "social.post.comment":
-          this.onSocialAllPostComment(data);
-          break;
-
-        default:
-          break;
-      }
-    },
-    // start Specific User Notification
-    onSocialReplyComment(data) {
-      const alert = {
-        model: false,
-        sender_picture:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg/220px-Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg",
-        full_name: data.name,
-        message: "Commented on your post"
-      };
-      this.setNotification(alert);
-    },
-    onSocialCommentSentiment(data) {
-      console.log(data);
-    },
-    onSocialTagUserComment(data) {
-      console.log(data);
-    },
-    onSocialUserPostComment(data) {
-      console.log(data);
-    },
-    onSocialUserPostSentiment(data) {
-      console.log(data);
-    },
-    onSocialUserTagUser(data) {
-      console.log(data);
-    },
-    onSocialUserFollowUser(data) {
-      console.log(data);
-    },
-    // end Specific User Notification
 
     // start All Notification
-    onSocialAllPostComment(data) {
-      console.log(data);
-      const alert = {
-        model: false,
-        sender_picture:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg/220px-Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg",
-        full_name: data.name,
-        message: "Commented on your post"
-      };
-      this.setNotification(alert);
+    allNotificationHandler(eventName, data) {
+      switch (eventName) {
+        case "social.post":
+          this.numberPost += 1;
+          const posts = {
+            number_posts: this.numberPost,
+            event_name: eventName,
+            message: data.message
+          };
+          this.setNewPosts(posts);
+          break;
+
+        case "social.post.comment":
+          const comment = {
+            event_name: eventName,
+            message: data.message,
+            data: data.data
+          };
+          this.setNewPosts(comment);
+          break;
+
+        case "social.post.sentiment":
+          const sentiment = {
+            event_name: eventName,
+            message: data.message,
+            data: data.data
+          };
+          this.setNewPosts(sentiment);
+          break;
+
+        default:
+          break;
+      }
     }
     // end All Notification
   }

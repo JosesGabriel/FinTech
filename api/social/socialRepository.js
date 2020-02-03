@@ -33,6 +33,14 @@ export default $axios => ({
     },
     notifications() {
         return $axios.$get(`${process.env.API_URL}/notifications`);
+    },
+    count(params) {
+        let query = buildParams(params);
+
+        return $axios.$get(`${process.env.API_URL}/notifications${query.length > 0 ? "?" + query : ""}`);
+    },
+    read(params) {
+        return $axios.$put(`${process.env.API_URL}/notifications/` + params);
     }
 });
 

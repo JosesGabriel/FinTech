@@ -16,6 +16,10 @@ export default {
         return state.notification;
     },
 
+    getNewPosts(state) {
+        return state.newPosts;
+    },
+
     getAlert(state) {
         return state.alert;
     },

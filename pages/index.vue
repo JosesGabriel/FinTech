@@ -1,9 +1,6 @@
 <template>
-  <v-container
-    class="page__wrapper"
-    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-    dark
-  >
+  <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
+
     <v-row class="mb-5" no-gutters>
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar active="social" />
@@ -46,7 +43,12 @@ export default {
     MiniWatchlist,
     Bulletin,
     FooterSidebar,
-    PostField,
+    PostField
+  },
+  computed: {
+    ...mapGetters({
+      sse: "social/sse"
+    })
   },
   data() {
     return {
@@ -55,7 +57,7 @@ export default {
     };
   },
   methods: {
-     ...mapActions({
+    ...mapActions({
       setSSE: "social/setSSE",
       setSSEInfo: "social/setSSEInfo"
     }),
@@ -77,35 +79,27 @@ export default {
 
       this.setSSE(
         new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
-       // new EventSource("http://localhost:8021/sse/market-data/pse/all")
+        // new EventSource("http://localhost:8021/sse/market-data/pse/all")
       );
 
       this.sse.onopen = function() {};
 
       this.sse.onerror = function() {};
-      
-      this.sse.addEventListener("info",this.sseInfo);
 
-
+      this.sse.addEventListener("info", this.sseInfo);
     },
     sseInfo(e) {
-       const data = JSON.parse(e.data);
+      const data = JSON.parse(e.data);
 
-        // set sse info to state
-        this.setSSEInfo(data);
+      // set sse info to state
+      this.setSSEInfo(data);
     }
-
   },
   mounted() {
     this.initSSE();
   },
   beforeDestroy() {
-     this.sse.close();
-  },
-  computed: {
-     ...mapGetters({
-      sse: "social/sse",
-    }),     
+    this.sse.close();
   }
 };
 </script>
