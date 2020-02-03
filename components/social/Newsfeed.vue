@@ -295,6 +295,7 @@
             color="primary"
             :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
             :dark="lightSwitch == 0 ? false : true"
+            :value="commentValue"
             @keyup.enter="
               postComment(postsObject[n - 1].id, $event.target.value, n - 1)
             "
@@ -355,7 +356,8 @@ export default {
       postOptionsMode: false,
       showShare: false,
       sharePostID: "",
-      reactButtons: false
+      reactButtons: false,
+      commentValue: ""
     };
   },
   computed: {
@@ -551,6 +553,14 @@ export default {
         user_id: this.$auth.user.data.user.uuid,
         content: content
       };
+
+      //Important!! do not remove. Used to empty comment textfield on submit
+      if (this.commentValue == " ") {
+        this.commentValue = "";
+      } else {
+        this.commentValue = " ";
+      }
+
       this.$api.social.posts.postComment(id, payload).then(response => {
         if (response.success) {
           this.triggerAlert(true, response.message);
