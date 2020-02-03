@@ -43,7 +43,7 @@
               :color="active == 'social' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'social' ? 'success' : 'secondary'"
+                <v-icon :color="active == 'social' ? 'success' : ''"
                   >mdi-account-supervisor-circle</v-icon
                 >
               </v-list-item-icon>
@@ -60,7 +60,7 @@
               :color="active == 'chart' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'chart' ? 'success' : 'secondary'"
+                <v-icon :color="active == 'chart' ? 'success' : ''"
                   >mdi-chart-bar</v-icon
                 >
               </v-list-item-icon>
@@ -78,7 +78,7 @@
               :color="active == 'journal' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'journal' ? 'success' : 'secondary'"
+                <v-icon :color="active == 'journal' ? 'success' : ''"
                   >mdi-library-books</v-icon
                 >
               </v-list-item-icon>
@@ -96,8 +96,7 @@
               :color="active == 'virtualtrade' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon
-                  :color="active == 'virtualtrade' ? 'success' : 'secondary'"
+                <v-icon :color="active == 'virtualtrade' ? 'success' : ''"
                   >mdi-cloud-print-outline</v-icon
                 >
               </v-list-item-icon>
@@ -115,7 +114,7 @@
               :color="active == 'game' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'game' ? 'success' : 'secondary'"
+                ><v-icon :color="active == 'game' ? 'success' : ''"
                   >mdi-gamepad</v-icon
                 ></v-list-item-icon
               >
@@ -132,8 +131,7 @@
               :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon
-                  :color="active == 'watchlist' ? 'success' : 'secondary'"
+                ><v-icon :color="active == 'watchlist' ? 'success' : ''"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
@@ -144,76 +142,6 @@
               >
             </v-list-item>
           </router-link>
-          <v-list-item @click="powerToolsToggle = !powerToolsToggle">
-            <v-list-item-icon class="mr-4">
-              <v-icon color="secondary">mdi-dots-horizontal</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content
-              ><v-list-item-title class="font-weight-medium"
-                >More</v-list-item-title
-              ></v-list-item-content
-            >
-          </v-list-item>
-        </v-list-item-group>
-
-        <v-list-item-group v-if="powerToolsToggle">
-          <v-list-item-icon>
-            <v-list-item-title class="caption">Power Tools</v-list-item-title>
-          </v-list-item-icon>
-          <v-list-item @click.stop="buySellDialog = true">
-            <v-list-item-icon class="mr-4">
-              <v-icon color="secondary">mdi-calculator-variant</v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium"
-                >Buy/Sell Calculator</v-list-item-title
-              >
-            </v-list-item-content>
-            <v-dialog v-model="buySellDialog" max-width="500">
-              <BuySellCalculator />
-            </v-dialog>
-          </v-list-item>
-          <v-list-item @click.stop="varDialog = true">
-            <v-list-item-icon class="mr-4">
-              <!-- <img src="/icon/navbar-icons/varCalculator.svg" width="25" /> -->
-              <v-icon color="secondary">mdi-alert-outline</v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium"
-                >VAR Calculator</v-list-item-title
-              >
-            </v-list-item-content>
-            <v-dialog v-model="varDialog" max-width="320">
-              <VARCalculator :data="varDialog" />
-            </v-dialog>
-          </v-list-item>
-          <v-list-item @click.stop="averagePriceDialog = true">
-            <v-list-item-icon class="mr-4">
-              <v-icon color="secondary">mdi-set-center</v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium"
-                >Average Price Calculator</v-list-item-title
-              >
-            </v-list-item-content>
-            <v-dialog v-model="averagePriceDialog" max-width="350">
-              <AveragePriceCalculator />
-            </v-dialog>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-icon class="mr-4">
-              <v-icon color="secondary">mdi-chart-areaspline</v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium"
-                >Multicharts</v-list-item-title
-              >
-            </v-list-item-content>
-          </v-list-item>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -221,15 +149,7 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import BuySellCalculator from "~/components/calculators/BuySellCalculator";
-import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
-import VARCalculator from "~/components/calculators/VARCalculator";
 export default {
-  components: {
-    BuySellCalculator,
-    AveragePriceCalculator,
-    VARCalculator
-  },
   layout: "main",
   props: {
     data: {
@@ -246,8 +166,7 @@ export default {
       averagePriceDialog: false,
       varDialog: false,
       isLightMode: 0,
-      darkText: false,
-      powerToolsToggle: false
+      darkText: false
     };
   },
   computed: {

@@ -90,14 +90,14 @@
     </v-row>
 
     <v-dialog v-model="dialog" width="50%">
-      <v-card>
+      <v-card class="black">
         <v-carousel hide-delimiters>
           <v-carousel-item v-for="(index, n) in images" :key="n">
             <v-img
               v-if="mediaTypeCheck(images[n]['url'])"
               :src="images[n]['url']"
+              contain
               height="100%"
-              width="100%"
             ></v-img>
             <video
               v-else
@@ -124,7 +124,6 @@
 .fullWidth {
   width: 100%;
 }
-
 </style>
 <script>
 export default {

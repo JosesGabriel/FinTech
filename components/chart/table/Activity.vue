@@ -106,9 +106,9 @@
       </v-content>
     </div>
 
-    <v-content class="mx-1">
-      <span class="subtitle-2 ml-2 text-uppercase">Trade History</span>
-      <v-divider class="mt-2"></v-divider>
+    <v-content class="mr-1 ml-3">
+      <span class="subtitle-2 ml-1 text-uppercase">Trade History</span>
+      <v-divider class="mb-2" :dark="lightSwitch == 1"></v-divider>
       <v-data-table
         :headers="headers"
         :items="items"

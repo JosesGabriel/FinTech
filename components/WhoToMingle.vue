@@ -63,13 +63,6 @@ export default {
   data() {
     return {
       suggestedUsersObject: "",
-      trendingStocks: [
-        { last: "", change: "" },
-        { last: "", change: "" },
-        { last: "", change: "" },
-        { last: "", change: "" },
-        { last: "", change: "" }
-      ],
       stockCode: ["", "", "", "", ""],
       loader: false
     };

@@ -23,7 +23,10 @@
               <SectorIndexList @pseiData="getPSEIData" />
             </v-col>
             <v-col cols="4">
-              <MostWatchedStocks />
+              <MostWatchedStocks
+                :key="addMostWatched"
+                @add-watchlist-data="getEmitID"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -43,7 +46,11 @@
           </div>
           <div class="mb-2 d-flex justify-end">
             <div class="d-flex">
-              <AddWatcherModal v-if="!loadingBar" />
+              <AddWatcherModal
+                v-if="!loadingBar"
+                :addnewstock="emitID"
+                @addFromMostWatched="addMostWatched++"
+              />
               <EditDeleteWatcherModal v-if="!loadingBar" />
             </div>
           </div>
@@ -91,7 +98,9 @@ export default {
       watchListObject: "",
       navbarMiniVariantSetter: true,
       loadingBar: true,
-      pseData: []
+      pseData: [],
+      emitID: "",
+      addMostWatched: ""
     };
   },
   computed: {
@@ -121,6 +130,9 @@ export default {
       setRenderChartKey: "watchers/setRenderChartKey",
       lightSwitch: "global/getLightSwitch"
     }),
+    getEmitID(val) {
+      this.emitID = val;
+    },
     /**
      * Captures emit from sectorindexlist which already contains PSEI data
      * In order to prevent doing another request, this data is then passed to the PSEICard component
@@ -138,13 +150,20 @@ export default {
      * @return
      */
     getUserWatchList() {
-      this.$api.watchlist.watchlists.index().then(
-        function(response) {
-          this.watchListObject = response.data.watchlist;
-          this.setUserWatchedStocks(response.data.watchlist);
-          this.loadingBar = false;
-        }.bind(this)
-      );
+      this.$api.watchlist.watchlists
+        .index()
+        .then(
+          function(response) {
+            this.watchListObject = response.data.watchlist;
+            this.setUserWatchedStocks(response.data.watchlist);
+            this.loadingBar = false;
+          }.bind(this)
+        )
+        .catch(error => {
+          if (error.response.status == 404) {
+            this.loadingBar = false;
+          }
+        });
     }
   }
 };

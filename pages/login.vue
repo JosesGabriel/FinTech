@@ -80,20 +80,18 @@ export default {
           .getRedirectCallback(query["auth_provider"], query)
           .then(({ data }) => {
             if (data.success) {
-              localStorage.setItem(
-                "auth._token.local",
-                data.token.access_token
+              this.$auth.setUserToken(data.data.token.access_token).then(() =>
+                this.setAlert({
+                  model: true,
+                  state: "success",
+                  message: data.message
+                })
               );
-              localStorage.setItem("hat", "12321321");
-              this.setAlert({
-                model: true,
-                state: "success",
-                message: data.message
-              });
             }
           })
-          .catch(() => {
+          .catch(e => {
             this.setAlert({
+              model: true,
               state: "error",
               message: "An error has occurred."
             });

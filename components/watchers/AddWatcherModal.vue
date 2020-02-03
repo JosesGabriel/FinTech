@@ -99,6 +99,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 export default {
+  props: {
+    addnewstock: {}
+  },
   data: () => ({
     dialog: false,
     keyCounter: 2,
@@ -141,6 +144,15 @@ export default {
      */
     takeProfitModel() {
       this.fieldsWatch();
+    },
+    addnewstock() {
+      this.dialog = true;
+      for (let i = 0; this.stockList.length > i; i++) {
+        if (this.stockList[i].id_str == this.addnewstock) {
+          this.stocksDropdownModel = this.stockList[i];
+          break;
+        }
+      }
     }
   },
   mounted() {
@@ -204,7 +216,10 @@ export default {
       if (!stockExists) {
         let params = {
           user_id: this.$auth.user.data.user.uuid,
-          stock_id: this.stocksDropdownModel,
+          stock_id:
+            typeof this.stocksDropdownModel == "string"
+              ? this.stocksDropdownModel
+              : this.addnewstock,
           entry_price: this.entryPriceModel,
           take_profit: this.takeProfitModel,
           stop_loss: this.stopLossModel
@@ -213,6 +228,9 @@ export default {
           function(response) {
             this.watchCardModalLoading = false;
             if (response.success) {
+              if (typeof this.stocksDropdownModel == "string") {
+                this.$emit("addFromMostWatched");
+              }
               let alert = {
                 model: true,
                 state: true,

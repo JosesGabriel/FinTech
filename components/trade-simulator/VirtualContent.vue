@@ -82,15 +82,15 @@
           <v-col md="12" class="text-right pt-0 pb-0 pl-0 pr-3">
             <v-row class="ma-0 pa-0 overline">
               <v-col
-                :class="(this.daychangepercentage > 0 ? 'positive' : this.daychangepercentage < 0 ? 'negative' : 'neutral')"
+                :class="(this.changep > 0 ? 'positive' : this.changep < 0 ? 'negative' : 'neutral')"
                 class="ma-0 pa-0"
-              >( {{ this.addComma(this.daychangepercentage) }}%)</v-col>
+              >( {{ this.addComma(this.changep) }}%)</v-col>
             </v-row>
             <v-row class="ma-0 pa-0">
               <v-col
-                :class="(this.daychange > 0 ? 'positive' : this.daychange < 0 ? 'negative' : 'neutral')"
+                :class="(this.change > 0 ? 'positive' : this.change < 0 ? 'negative' : 'neutral')"
                 class="ma-0 pa-0"
-              >{{ this.addComma(this.daychange) }}</v-col>
+              >{{ this.addComma(this.change) }}</v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -144,7 +144,6 @@
                 <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
               </v-list-item-content>
             </template>
-
             <template
               v-slot:append-item
               :dark="lightSwitch == true"
@@ -163,7 +162,22 @@
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
+
+                <v-list-item
+                  ripple
+                  :dark="lightSwitch == true"
+                  :style="{ background: primaryBackground }"
+                   @click.stop="showDeletePortForm=true"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title class="text-uppercase">
+                      Delete Portfolio
+                      <v-icon color="success" class="body-2">mdi-minus-circle-outline</v-icon>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>           
             </template>
+
           </v-select>
         </v-col>
       </v-row>
@@ -203,12 +217,14 @@
       </v-tab-item>
     </v-tabs>
     <create-modal :visible="showCreatePortForm" @close="showCreatePortForm=false" />
+    <DeletePortModal v-on:DeleteConfirm="DeleteConfirm" :visible="showDeletePortForm" @close="showDeletePortForm=false" />
   </v-col>
 </template>
 <script>
 import VirtualLivePortfolio from "~/components/trade-simulator/VirtualLivePortfolio";
 import TradelogsContent from "~/components/trade-simulator/VirtualTradelogs";
 import createModal from "~/components/trade-simulator/VirtualCreatePortfolio";
+import DeletePortModal from "~/components/trade-simulator/VirtualDeletePortfolio";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -216,6 +232,7 @@ export default {
     return {
       portfolio: [],
       showCreatePortForm: false,
+      showDeletePortForm: false,
       default_port: "0",
       realized: 0,
       unrealized: 0,
@@ -230,6 +247,9 @@ export default {
       item: {},
       state: false,
       port_capital: 0,
+      change: 0,
+      changep: 0,
+      deleteconfirm: '',
     };
   },
   created() {},
@@ -287,9 +307,14 @@ export default {
     },
     unrealized() {
       this.getTradeLogs();
+      this.getDayChange();
     },
     realized(){
       this.getTradeLogs();
+      this.getDayChange();
+    },
+    deleteconfirm(){
+      this.getPorfolio('initial');
     }
   },
   methods: {
@@ -361,6 +386,10 @@ export default {
     TotalMax(value) {
       this.totalmax = value;
     },
+    DeleteConfirm(value){
+      this.deleteconfirm = value;
+      this.portfolio.splice(value);
+    },
     /**
      * Initialized Day Change
      *
@@ -390,6 +419,23 @@ export default {
       let portperf = (this.port_total / parseFloat(this.port_capital)) * 100;
       //return this.addComma(portperf);
       return portperf.toFixed(2);
+    },
+
+    getDayChange(){
+
+      if(this.daychange == 0){
+        let getlocal = localStorage.getItem(this.simulatorPortfolioID);
+        getlocal = JSON.parse(getlocal);
+        if(getlocal != null){
+          this.daychange = getlocal.priorprofit;
+        }else{
+          this.daychange = 0;
+        }
+      }
+           let yesterdaysProfit = this.daychange;
+           this.change = parseFloat(this.unrealized) - parseFloat(yesterdaysProfit);
+           let dperf = parseFloat(this.port_capital) + parseFloat(yesterdaysProfit); 
+           this.changep = (this.change / dperf) * 100;
     },
 
     /**
@@ -422,7 +468,7 @@ export default {
       let totalProfitLossPerf = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
-          //console.log('Result', result.data);
+         
           let plossperc = [];
           let profitLoss = 0;
           let profitLossPer = 0;
@@ -471,6 +517,7 @@ export default {
      *
      */
     getPorfolio(key){
+        
         this.getTradeLogs();
         this.$api.journal.portfolio.portfolio().then(
           function(result) {
@@ -481,7 +528,6 @@ export default {
                 result.data.logs[i].type == "virtual"
               ) {
 
-                
                 let portfolio_params = {
                   name: result.data.logs[i].name,
                   id: result.data.logs[i].id,
@@ -525,6 +571,7 @@ export default {
             }
           }.bind(this)
         );
+        this.deleteconfirm = false;
     }
   },
   mounted() {
@@ -533,7 +580,8 @@ export default {
   components: {
     VirtualLivePortfolio,
     TradelogsContent,
-    createModal
+    createModal,
+    DeletePortModal
   }
 };
 </script>
@@ -559,7 +607,7 @@ export default {
 
 .v-menu__content
   .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-  /* color: #03dac5 !important; */
+   color: #03dac5 !important; 
 }
 .select_portfolio .v-select__slot .v-label,
 .select_portfolio .v-select__slot .v-icon {

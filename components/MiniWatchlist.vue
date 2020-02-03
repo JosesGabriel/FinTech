@@ -10,12 +10,48 @@
       <div class="body-2 font-weight-black">Watchlist</div>
       <v-divider></v-divider>
       <v-list class="transparent pt-0">
-        <v-list-item
-          v-for="(n, index) in watchListObject.length"
-          :key="n"
-          class="px-0"
-        >
-          <div>
+        <v-container class="pa-0">
+          <v-list-item
+            v-for="(n, index) in watchListObject.length"
+            :key="n"
+            class="px-0"
+          >
+            <v-row>
+              <v-col cols="1" class="pr-6"
+                ><span class="stockSymbol__span">{{
+                  stockData[index] ? stockData[index].stockSym : ""
+                }}</span></v-col
+              >
+              <v-col cols="8" class="no-wrap pa-0">
+                <apexcharts
+                  ref="closePriceChart"
+                  type="line"
+                  height="100"
+                  width="160"
+                  :options="chartOptions"
+                  :series="series"
+                />
+              </v-col>
+              <v-col cols="1" class="pa-0 stockPrices"
+                ><span :id="stockData[index].stockSym" class="stockSymbol__span"
+                  >₱{{
+                    stockData[index] ? stockData[index].currentPrice : ""
+                  }}</span
+                >
+                <span
+                  class="stockSymbol__span"
+                  :class="
+                    stockData[index].change > 0
+                      ? 'success--text'
+                      : stockData[index].change < 0
+                      ? 'error--text'
+                      : 'watchlistCard__text--gray'
+                  "
+                  >{{ stockData[index] ? stockData[index].change : "" }}%</span
+                ></v-col
+              >
+            </v-row>
+            <!-- <div>
             <span>{{ stockData[index] ? stockData[index].stockSym : "" }}</span>
           </div>
           <div class="no-wrap">
@@ -23,13 +59,13 @@
               ref="closePriceChart"
               type="line"
               height="100"
+              width="170"
               :options="chartOptions"
               :series="series"
             />
           </div>
           <div>
-            <span
-              :id="stockData[index].stockSym"
+            <span :id="stockData[index].stockSym"
               >₱{{
                 stockData[index] ? stockData[index].currentPrice : ""
               }}</span
@@ -44,8 +80,9 @@
               "
               >{{ stockData[index] ? stockData[index].change : "" }}%</span
             >
-          </div>
-        </v-list-item>
+          </div> -->
+          </v-list-item>
+        </v-container>
         <router-link
           v-if="watchListObject.length == 0"
           class="d-block mWatchlist__text--noData px-5 success--text overline no-transform"
@@ -84,6 +121,7 @@ export default {
       chartOptions: {
         chart: {
           height: 100,
+          width: 160,
           zoom: {
             enabled: false
           },
@@ -239,8 +277,8 @@ export default {
     renderChartKey() {
       this.watchCardMount();
     },
-    sseInfo: function(data){
-        this.realTime(data);
+    sseInfo: function(data) {
+      this.realTime(data);
     }
   },
   mounted() {
@@ -282,7 +320,7 @@ export default {
               this.dataSeries[i] = result.data.c.reverse();
               this.$refs.closePriceChart[i].updateSeries([
                 {
-                  data: result.data.c.reverse()
+                  data: result.data.c
                 }
               ]);
             }.bind(this)
@@ -332,43 +370,29 @@ export default {
         }
       });
     },
-    realTime(data){
 
-        for (let index = 0; index < this.stockData.length; index++) {
-
-               if(this.watchListObject[index].stock_id == data.sym_id){  
-                   let oldprice = this.stockData[index].currentPrice;   
-                   this.stockData[index].currentPrice = data.c;
-                   this.stockData[index].change = data.chgpc.toFixed(2);
-                   if(oldprice != this.stockData[index].currentPrice){
-                      this.updateEffect(this.stockData[index].stockSym);    
-                        //for (let i = 0; i < 5; i++) {
-                         // this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
-                       // }
-                 /*       this.dataSeries[index][4] = this.stockData[index].currentPrice; 
-                        this.$refs.closePriceChart[index].updateSeries([
-                          {
-                            data: this.dataSeries[index]
-                          }
-                        ]);*/
-
-                   }
-
-
-                      for (let i = 0; i < 5; i++) {
-                          this.dataSeries[index][i] = this.dataSeries[index][i+1]; 
-                        }
-                        this.dataSeries[index][4] = this.stockData[index].currentPrice; 
-                        this.$refs.closePriceChart[index].updateSeries([
-                          {
-                            data: this.dataSeries[index]
-                          }
-                        ]);
-
-              }    
-                  
+    realTime(data) {
+      for (let index = 0; index < this.stockData.length; index++) {
+        if (this.watchListObject[index].stock_id == data.sym_id) {
+          let oldprice = this.stockData[index].currentPrice;
+          this.stockData[index].currentPrice = data.c;
+          this.stockData[index].change = data.chgpc.toFixed(2);
+          if (oldprice != this.stockData[index].currentPrice) {
+            this.updateEffect(this.stockData[index].stockSym);
+          }
+          //for (let i = 0; i < 5; i++) {
+          //this.dataSeries[index][i] = this.dataSeries[index][i+1];
+          //}
+          this.dataSeries[index][4] = this.stockData[index].currentPrice;
+          this.$refs.closePriceChart[index].updateSeries([
+            {
+              data: this.dataSeries[index]
+            }
+          ]);
         }
+      }
     },
+
     updateEffect: dom => {
       const item = document.getElementById(dom);
       if (item == null) return;
@@ -376,9 +400,7 @@ export default {
       setTimeout(function() {
         item.style.background = "";
       }, 800);
-    },
-
-
+    }
   }
 };
 </script>
@@ -387,5 +409,12 @@ export default {
 .mWatchlist__text--noData {
   padding-top: 45px;
   padding-bottom: 45px;
+}
+.stockSymbol__span {
+  white-space: nowrap;
+}
+.stockPrices {
+  position: relative;
+  right: 20px;
 }
 </style>

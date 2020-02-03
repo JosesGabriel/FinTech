@@ -30,7 +30,14 @@
           >{{ mWatchedStocksObject[n - 1].stock_count }} Following</span
         >
         <br />
-        <v-btn x-small outlined rounded color="success" class="no-transform"
+        <v-btn
+          v-if="!mWatchedStocksObject[n - 1].user_follows"
+          x-small
+          outlined
+          rounded
+          color="success"
+          class="no-transform"
+          @click="addToWatchlist(mWatchedStocksObject[n - 1].stock_id)"
           >+ Watchlist</v-btn
         >
       </div>
@@ -77,6 +84,9 @@ export default {
           this.loader = false;
         }.bind(this)
       );
+    },
+    addToWatchlist(id) {
+      this.$emit("add-watchlist-data", id);
     }
   }
 };

@@ -40,8 +40,7 @@
             <v-col>
               <v-list-item-title class="subtitle-2">
                 <strong>
-                  {{ postsObject[n - 1].user.first_name }}
-                  {{ postsObject[n - 1].user.last_name }}
+                  {{ postsObject[n - 1].user.name }}
                 </strong>
               </v-list-item-title>
               <v-list-item-subtitle class="overline no-transform">
@@ -68,7 +67,15 @@
                   >
                     <img src="/icon/bullish.svg" width="6" />
                   </v-btn>
-                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
+                  <v-btn
+                    v-else
+                    icon
+                    outlined
+                    fab
+                    width="14"
+                    height="14"
+                    color="error"
+                  >
                     <img src="/icon/bearish.svg" width="6" />
                   </v-btn>
                 </span>
@@ -100,7 +107,8 @@
                         x-small
                         text
                         v-on="on"
-                      >Delete</v-btn>
+                        >Delete</v-btn
+                      >
                     </template>
 
                     <v-card
@@ -110,7 +118,8 @@
                       <v-card-title
                         class="headline success--text lighten-2"
                         primary-title
-                      >Delete Post?</v-card-title>
+                        >Delete Post?</v-card-title
+                      >
 
                       <v-card-text>
                         Are you sure you want to permanently remove this post
@@ -136,7 +145,8 @@
                             deletePost(postsObject[n - 1].id, n - 1),
                               (deleteDialog = false)
                           "
-                        >Delete</v-btn>
+                          >Delete</v-btn
+                        >
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -150,7 +160,8 @@
                     @click="
                       (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
-                  >Edit</v-btn>
+                    >Edit</v-btn
+                  >
                   <v-btn
                     v-if="
                       postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
@@ -158,7 +169,8 @@
                     x-small
                     text
                     @click="followAccount(postsObject[n - 1].user.uuid)"
-                  >Follow</v-btn>
+                    >Follow</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -195,12 +207,11 @@
                 ),
                   (editPostMode = false)
               "
-            >Done Editing</v-btn>
+              >Done Editing</v-btn
+            >
           </div>
           <span v-else class="caption px-5 pb-3">
-            {{
-            postsObject[n - 1].content
-            }}
+            {{ postsObject[n - 1].content }}
           </span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
@@ -216,6 +227,13 @@
           width="24"
           height="24"
           color="success"
+          :class="
+            postsObject[n - 1].my_sentiment &&
+            postsObject[n - 1].my_sentiment.type == 'bull'
+              ? 'bull__btn--active'
+              : ''
+          "
+          :disabled="reactButtons"
           @click="postReact(postsObject[n - 1].id, 'bull', n - 1)"
         >
           <img src="/icon/bullish.svg" width="12" />
@@ -228,6 +246,13 @@
           width="24"
           height="24"
           color="error"
+          :class="
+            postsObject[n - 1].my_sentiment &&
+            postsObject[n - 1].my_sentiment.type == 'bear'
+              ? 'bear__btn--active'
+              : ''
+          "
+          :disabled="reactButtons"
           @click="postReact(postsObject[n - 1].id, 'bear', n - 1)"
         >
           <img src="/icon/bearish.svg" width="12" />
@@ -238,10 +263,17 @@
           <v-icon>mdi-comment-text-outline</v-icon>
         </v-btn>
         <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
-        <v-btn icon fab x-small color="secondary" @click="showShareModal(postsObject[n - 1].id)">
+        <!-- TODO Share counter -->
+        <!-- <v-btn
+          icon
+          fab
+          x-small
+          color="secondary"
+          @click="showShareModal(postsObject[n - 1].id)"
+        >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
-        <span class="caption">1000</span>
+        <span class="caption">1000</span> -->
       </v-card-actions>
       <v-divider></v-divider>
       <List :comments="postsObject[n - 1].comments" />
@@ -268,6 +300,7 @@
             color="primary"
             :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
             :dark="lightSwitch == 0 ? false : true"
+            :value="commentValue"
             @keyup.enter="
               postComment(postsObject[n - 1].id, $event.target.value, n - 1)
             "
@@ -281,7 +314,11 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
   </v-col>
 </template>
 
@@ -324,8 +361,13 @@ export default {
       postOptionsMode: false,
       showShare: false,
       sharePostID: "",
+<<<<<<< HEAD
       numberPost: 0,
       showBanner: false
+=======
+      reactButtons: false,
+      commentValue: ""
+>>>>>>> 5dc0e6544a98d454c1f73ef11fd0852dbbbdfbc4
     };
   },
   computed: {
@@ -579,6 +621,14 @@ export default {
         user_id: this.$auth.user.data.user.uuid,
         content: content
       };
+
+      //Important!! do not remove. Used to empty comment textfield on submit
+      if (this.commentValue == " ") {
+        this.commentValue = "";
+      } else {
+        this.commentValue = " ";
+      }
+
       this.$api.social.posts.postComment(id, payload).then(response => {
         if (response.success) {
           this.triggerAlert(true, response.message);
@@ -591,6 +641,7 @@ export default {
               last_name: this.$auth.user.data.user.last_name
             }
           });
+          this.postsObject[index].comments_count++;
         } else {
           this.triggerAlert(false, response.message);
         }
@@ -607,23 +658,101 @@ export default {
      * @return
      */
     postReact(post_id, type, index) {
+      this.reactButtons = true;
       const params = post_id;
-      if (type == "bull") {
-        this.$api.social.posts.bullish(params).then(response => {
-          if (response.success) {
-            this.postsObject[index].bulls_count += 1;
-          } else {
-            this.triggerAlert(false, response.message);
-          }
-        });
+      if (
+        type == "bull" &&
+        this.postsObject[index].my_sentiment &&
+        this.postsObject[index].my_sentiment.type == "bull"
+      ) {
+        this.$api.social.posts
+          .unbullish(params)
+          .then(response => {
+            if (response.success) {
+              this.postsObject[index].bulls_count--;
+              this.postsObject[index].my_sentiment = null;
+              this.reactButtons = false;
+            } else {
+              this.triggerAlert(false, response.message);
+              this.reactButtons = false;
+            }
+          })
+          .catch(e => {
+            this.reactButtons = false;
+            this.triggerAlert(false, e.message);
+          });
+      } else if (type == "bull") {
+        this.$api.social.posts
+          .bullish(params)
+          .then(response => {
+            if (response.success) {
+              this.postsObject[index].bulls_count += 1;
+              if (
+                this.postsObject[index].my_sentiment &&
+                this.postsObject[index].my_sentiment.type == "bear"
+              ) {
+                this.postsObject[index].bears_count--;
+              }
+
+              this.postsObject[index].my_sentiment = {
+                type: "bull"
+              };
+              this.reactButtons = false;
+            } else {
+              this.triggerAlert(false, response.message);
+              this.reactButtons = false;
+            }
+          })
+          .catch(e => {
+            this.reactButtons = false;
+            this.triggerAlert(false, e.message);
+          });
+      }
+
+      if (
+        type == "bear" &&
+        this.postsObject[index].my_sentiment &&
+        this.postsObject[index].my_sentiment.type == "bear"
+      ) {
+        this.$api.social.posts
+          .unbearish(params)
+          .then(response => {
+            if (response.success) {
+              this.postsObject[index].bears_count--;
+              this.postsObject[index].my_sentiment = null;
+              this.reactButtons = false;
+            } else {
+              this.triggerAlert(false, response.message);
+            }
+          })
+          .catch(e => {
+            this.reactButtons = false;
+            this.triggerAlert(false, e.message);
+          });
       } else if (type == "bear") {
-        this.$api.social.posts.bearish(params).then(response => {
-          if (response.success) {
-            this.postsObject[index].bears_count += 1;
-          } else {
-            this.triggerAlert(false, response.message);
-          }
-        });
+        this.$api.social.posts
+          .bearish(params)
+          .then(response => {
+            if (response.success) {
+              this.postsObject[index].bears_count += 1;
+              if (
+                this.postsObject[index].my_sentiment &&
+                this.postsObject[index].my_sentiment.type == "bull"
+              ) {
+                this.postsObject[index].bulls_count--;
+              }
+              this.postsObject[index].my_sentiment = {
+                type: "bear"
+              };
+              this.reactButtons = false;
+            } else {
+              this.triggerAlert(false, response.message);
+            }
+          })
+          .catch(e => {
+            this.reactButtons = false;
+            this.triggerAlert(false, e.message);
+          });
       }
     },
     /**
@@ -669,3 +798,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.bull__btn--active {
+  background-color: #03dac599;
+}
+.bear__btn--active {
+  background-color: #f4433699;
+}
+</style>

@@ -20,12 +20,9 @@ export default {
   layout: "chart",
   data() {
     return {
-      userId: "",
+      userId: this.$auth.$state.user.data.user.uuid,
       dataFeed: Datafeed
     };
-  },
-  mounted() {
-    this.userId = this.$auth.user.data.user.uuid;
   }
 };
 </script>

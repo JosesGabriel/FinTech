@@ -10,7 +10,7 @@
         <Newsfeed :new-post="newPost" />
       </v-col>
       <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
-        <!-- <TrendingStocks />  -->
+        <TrendingStocks />
         <WhoToMingle />
         <MiniWatchlist />
         <!-- TODO put back when implementing -->
@@ -100,6 +100,11 @@ export default {
   },
   beforeDestroy() {
     this.sse.close();
+  },
+  computed: {
+    ...mapGetters({
+      sse: "social/sse"
+    })
   }
 };
 </script>

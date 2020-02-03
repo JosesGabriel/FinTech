@@ -1,69 +1,66 @@
 <template>
-  <v-hover v-slot:default="{ hover }" open-delay="200">
-    <v-card
-      class="mb-1 watchCard"
-      :class="!hover ? 'watchCard--unfocused' : ''"
-      :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
-      :dark="lightSwitch == 0 ? false : true"
-      max-height="282"
-      :loading="watchCardLoading"
-    >
+  <v-card
+    class="mb-1 watchCard"
+    :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+    :dark="lightSwitch == 0 ? false : true"
+    max-height="282"
+    :loading="watchCardLoading"
+  >
+    <div>
+      <strong class="caption">{{ stockExchange }}: {{ stockSymbol }}</strong
+      ><br />
+      <span class="watchlistCard__stockDescription d-block">{{
+        stockDescription
+      }}</span>
+    </div>
+    <apexcharts
+      ref="closePriceChart"
+      type="line"
+      height="150"
+      :options="chartOptions"
+      :series="series"
+    />
+    <v-card-actions class="watchlistCard__items caption">
       <div>
-        <strong class="caption">{{ stockExchange }}: {{ stockSymbol }}</strong
-        ><br />
-        <span class="watchlistCard__stockDescription d-block">{{
-          stockDescription
-        }}</span>
+        <span class="float-right">
+          ₱{{ stockCurrentPrice }} |
+          <span
+            :class="
+              stockCurrentChange > 0
+                ? 'success--text'
+                : stockCurrentChange < 0
+                ? 'error--text'
+                : 'watchlistCard__text--gray'
+            "
+          >
+            {{ stockCurrentChange }}%</span
+          >
+        </span>
+        <br />
       </div>
-      <apexcharts
-        ref="closePriceChart"
-        type="line"
-        height="150"
-        :options="chartOptions"
-        :series="series"
-      />
-      <v-card-actions class="watchlistCard__items caption">
-        <div>
-          <span class="float-right">
-            ₱{{ stockCurrentPrice }} |
-            <span
-              :class="
-                stockCurrentChange > 0
-                  ? 'success--text'
-                  : stockCurrentChange < 0
-                  ? 'error--text'
-                  : 'watchlistCard__text--gray'
-              "
-            >
-              {{ stockCurrentChange }}%</span
-            >
-          </span>
-          <br />
-        </div>
-        <div>
-          <span>Entry Price: </span>
-          <span class="float-right"
-            >₱{{ userWatchedStocks[data].entry_price }}</span
-          >
-        </div>
-        <div>
-          <span>Take Profit: </span>
-          <span class="float-right"
-            >₱{{ userWatchedStocks[data].take_profit }}</span
-          >
-        </div>
-        <div>
-          <span>Stop Loss: </span>
-          <span class="float-right"
-            >₱{{ userWatchedStocks[data].stop_loss }}</span
-          >
-        </div>
-      </v-card-actions>
-      <div class="watchlistCard__percentbar">
-        <MarketDepth :stocksym="userWatchedStocks[data].stock_id" />
+      <div>
+        <span>Entry Price: </span>
+        <span class="float-right"
+          >₱{{ userWatchedStocks[data].entry_price }}</span
+        >
       </div>
-    </v-card>
-  </v-hover>
+      <div>
+        <span>Take Profit: </span>
+        <span class="float-right"
+          >₱{{ userWatchedStocks[data].take_profit }}</span
+        >
+      </div>
+      <div>
+        <span>Stop Loss: </span>
+        <span class="float-right"
+          >₱{{ userWatchedStocks[data].stop_loss }}</span
+        >
+      </div>
+    </v-card-actions>
+    <div class="watchlistCard__percentbar">
+      <MarketDepth :stocksym="userWatchedStocks[data].stock_id" />
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -335,9 +332,6 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   font-size: 8px;
-}
-.watchCard--unfocused {
-  opacity: 0.5;
 }
 .watchlistCard__bar--green {
   background-color: #03dac5;

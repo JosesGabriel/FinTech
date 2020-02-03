@@ -9,8 +9,11 @@
       <v-card-title
         class="text-left justify-left pa-5 pb-3 px-5 success--text"
         style="font-size:16px; font-weight: 700;"
-      >TRADE</v-card-title>
-      <span></span>
+      >
+      <v-col class="pa-0"><span>TRADE</span></v-col>  
+      
+      </v-card-title>
+      
       <v-stepper
         v-model="e1"
         :dark="lightSwitch == true"
@@ -233,15 +236,17 @@
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
+              <span :class="this.marketStatus ? 'nodisplay': 'display'" class="caption pt-2" style="text-align: right;">Market Closed.</span>
               <v-btn text @click.stop="show=false" class="text-capitalize">Close</v-btn>
               <v-btn
                 color="success ml-1"
                 @click="e1 = 2"
                 class="text-capitalize black--text"
                 light
-                :disabled="(GetSelectStock != '' ? false : true)"
+                :disabled="(GetSelectStock != '' && this.marketStatus ? false : true)"
               >Continue</v-btn>
             </v-row>
+           
           </v-stepper-content>
           <v-stepper-content step="2" class="pt-2 pa-2">
             <!-- -----Second View of Trade Modal----- -->
@@ -443,7 +448,8 @@ export default {
       dataVolume: 0,
       buyprice: 0,
       boardlot: 0,
-      totalposition: 0
+      totalposition: 0,
+      mstatus: '',
     };
   },
   props: ["visible", "OpenPosition", "Trade_Modal"],
@@ -452,6 +458,7 @@ export default {
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
       simulatorPositions: "tradesimulator/getSimulatorPositions",
       simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
+      marketStatus: "tradesimulator/getMarketStatus",
       simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
       lightSwitch: "global/getLightSwitch"
     }),
@@ -506,6 +513,13 @@ export default {
         this.totalposition = 0;
         this.dataVolume = 0;
         this.setSimulatorConfirmedBuySell("buy");
+      }
+    },
+    marketStatus(){
+      if(this.marketStatus){
+        this.mstatus = 'Open'
+      }else{
+        this.mstatus = 'Closed'
       }
     }
   },
@@ -687,7 +701,7 @@ export default {
      */
     getDetails(selectObj) {
      //let zone = this.$moment('Asia/Manila');
-    //console.log('Local Time-', zone);
+    //console.log('Symid-', selectObj);
 
       const params = {
         "symbol-id": selectObj
@@ -844,6 +858,13 @@ export default {
 }
 .stock_details {
   font-size: 12px !important;
+}
+.display{
+  display: block;
+  color: #fe4949;
+}
+.nodisplay{
+  display: none;
 }
 </style>
 <style>

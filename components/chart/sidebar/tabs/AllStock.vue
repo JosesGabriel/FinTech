@@ -27,6 +27,7 @@
         fixed-header
         disable-pagination
         hide-default-footer
+        :custom-sort="customSort"
         :height="`calc(100vh - ${responsiveHeight - 160}px)`"
         :style="{ background: cardBackground }"
       >
@@ -66,13 +67,15 @@
                 {{ props.item.changepercentage | numeral("0,0.00") }}
               </span>
             </td>
-            <td class="text-right" style="width:60px">
+            <td class="text-right" style="width:40px">
               <span class="text-uppercase">{{
                 props.item.value | numeral("0.00a")
               }}</span>
             </td>
             <td class="text-right text-uppercase" style="width:45px">
-              <span class="">{{ props.item.trades | numeral("0,0") }}</span>
+              <span class="">
+                {{ props.item.trades | numeral("0,0") }}
+              </span>
             </td>
             <td style="width:5px"></td>
           </tr>
@@ -187,7 +190,8 @@ export default {
             changepercentage,
             value,
             trades,
-            description
+            description,
+            lastupdatetime
           } = data;
           this.allStocks.push({
             stockidstr,
@@ -197,7 +201,8 @@ export default {
             changepercentage,
             value,
             trades,
-            description
+            description,
+            lastupdatetime
           });
         });
         this.loading = false;
@@ -227,6 +232,63 @@ export default {
         });
         this.updateEffect(stock.stockidstr);
       } catch (error) {}
+    },
+    /**
+     * sort all stock customized
+     *
+     * @param   {Array}  items   lists of stocks
+     * @param   {Array}  index   array index - name of header
+     * @param   {Boolean}  isDesc  is descending
+     *
+     * @return  {Array}        new list of item
+     */
+    customSort: function(items, index, isDesc) {
+      if (index[0] != "symbol" && index.length > 0) {
+        items = items.filter(data => {
+          return (
+            this.$moment(data.lastupdatetime).format("YYYYMMDD") ==
+            this.$moment().format("YYYYMMDD")
+          );
+        });
+      }
+
+      items.sort((a, b) => {
+        const key = index[0];
+        const desc = isDesc[0];
+        if (key == "symbol") {
+          if (!desc) {
+            return a[index].toLowerCase().localeCompare(b[index].toLowerCase());
+          } else {
+            return b[index].toLowerCase().localeCompare(a[index].toLowerCase());
+          }
+        } else if (key == "last") {
+          // convert date to yyyymmdd
+          const adate = this.$moment(a.lastupdatetime).format("YYYYMMDD");
+          const bdate = this.$moment(b.lastupdatetime).format("YYYYMMDD");
+          if (!desc) {
+            let rv = adate - bdate;
+            if (rv === 0) {
+              rv = a[index] - b[index];
+            }
+            return rv;
+          } else {
+            let rv = bdate - adate;
+            if (rv === 0) {
+              rv = b[index] - a[index];
+            }
+            return rv;
+          }
+        } else {
+          if (!desc) {
+            // ascending
+            return a[index] - b[index];
+          } else {
+            // descending
+            return b[index] - a[index];
+          }
+        }
+      });
+      return items;
     }
   },
   mounted() {
