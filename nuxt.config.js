@@ -112,6 +112,26 @@ export default {
       { src: "~/plugins/auth", mode: "client" }
     ]
   },
+  "google-gtag": {
+    id: "UA-157586166-1",
+    config: {
+      anonymize_ip: true, // anonymize IP
+      send_page_view: false, // might be necessary to avoid duplicated page track on page reload
+      linker: {
+        domains: ["lyduz.com"]
+      }
+    },
+    debug: true, // enable to track in dev mode
+    disableAutoPageTrack: false, // disable if you don't want to track each page route with router.afterEach(...).
+    additionalAccounts: [
+      // {
+      //   id: "AW-XXXX-XX", // required if you are adding additional accounts
+      //   config: {
+      //     send_page_view: false // optional configurations
+      //   }
+      // }
+    ]
+  },
   router: {
     middleware: ["auth"]
   },
