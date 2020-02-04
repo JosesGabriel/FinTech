@@ -34,6 +34,9 @@ export default {
       navbarMiniVariantSetter: true
     };
   },
+  mounted() {
+    console.log('test')
+  },
   methods: {
     toggle: function() {
       this.isOpen = !this.isOpen;

@@ -490,15 +490,25 @@ export default {
                         this.priorProfitLoss =
                           parseFloat(this.priorProfitLoss) + parseFloat(priorprofit); 
 
+                        //==================================
+                          let currentPrice = result.data.c[0];
+                          let currentbuyResult =
+                            this.portfolioLogs[index].position *
+                            parseFloat(currentPrice).toFixed(2);
+                          let currentmvalue = this.fees(currentbuyResult);
+                          let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
+                          currentProfitLoss =
+                            parseFloat(currentProfitLoss) + parseFloat(currentprofit);
+                        //===============================================
                         let priordata = {
                           'id': this.simulatorPortfolioID,
                           'date': dformat,
-                          'priorprofit': this.priorProfitLoss
-                        };        
-                        console.log('Prior Mvlaue -'+ this.priorProfitLoss); 
-                        //console.log('Prior tcost -'+ tcost); 
-                         //console.log('Prior Data', priordata);    
-                         //console.log('Prior -'+ priorprofit);                   
+                          'priorprofit': this.priorProfitLoss,
+                          'currentprofit': currentProfitLoss
+                        };   
+                        console.log('Prior -'+ priorprofit);      
+                        console.log('Prior Total -'+ this.priorProfitLoss); 
+                   
                         //localStorage.removeItem(this.simulatorPortfolioID);
                         let totalarray = this.portfolioLogs.length - 1;
                         
@@ -506,8 +516,9 @@ export default {
                         getlocal = JSON.parse(getlocal);
                         //console.log('Prior Total Profit Loss -'+ getlocal.priorprofit); 
                         if(getlocal != null){
-                              if(counter == totalarray){
-                                  if(getlocal.date != dformat){
+                              if(getlocal.date != dformat){
+                                  if(counter == totalarray){
+                                  //if(getlocal.date != dformat){
                                     localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
                                   }else{
                                     localprofit = getlocal.priorprofit;
@@ -523,15 +534,7 @@ export default {
                         }
                         counter++;
                     
-                      let currentPrice = result.data.c[0];
-                      let currentbuyResult =
-                        this.portfolioLogs[index].position *
-                        parseFloat(currentPrice).toFixed(2);
-                      let currentmvalue = this.fees(currentbuyResult);
-                      let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
-                      currentProfitLoss =
-                        parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-                        
+                    //=======================================================================
                         let daychange =
                            parseFloat(currentProfitLoss) - parseFloat(localprofit);
                         if(localprofit != 0 ){                          

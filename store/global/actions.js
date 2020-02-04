@@ -13,6 +13,9 @@ export default {
     async setNotification({ commit }, data) {
         await commit("SET_NOTIFICATION", data);
     },
+    async setNewPosts({ commit }, data) {
+        await commit("SET_NEWPOSTS", data);
+    },
     async setAlert({ commit }, data) {
         await commit("SET_ALERT", data);
     },

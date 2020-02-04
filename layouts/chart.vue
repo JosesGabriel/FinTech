@@ -1,8 +1,14 @@
 <template>
   <!-- hello world -->
-  <v-app class="gameGlobal" :style="{ background: cardBackground }">
-    <Header />
+  <v-app
+    id="chart_body"
+    class="gameGlobal"
+    :style="{ background: cardBackground }"
+  >
+    <Header :ticks="ticks" />
     <div class="spacer__content"></div>
+
+    <vue-snotify></vue-snotify>
     <div class="content__main">
       <div class="content__left">
         <!-- ticker -->
@@ -59,6 +65,7 @@ import Header from "~/components/Header";
 import Sidebar from "~/components/chart/Sidebar";
 import Table from "~/components/chart/Table";
 import Ticker from "~/components/chart/Ticker";
+import { UserNotificationAlertLayout } from "~/assets/js/helpers/notification";
 
 export default {
   components: {
@@ -73,7 +80,8 @@ export default {
       sidebar: "chart/getSidebar",
       lightSwitch: "global/getLightSwitch",
       sse: "chart/sse",
-      symbolid: "chart/symbolid"
+      symbolid: "chart/symbolid",
+      notification: "global/getNotification"
     }),
     /**
      * toggle between ligth/dark mode
@@ -84,12 +92,45 @@ export default {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
+  data() {
+    return {
+      ticks: 1
+    };
+  },
+  watch: {
+    /**
+     * This function it'll only show if user received notifications
+     * Also used helpers this.userNotificationAlertLayout it'll return html code
+     * based on the user notification
+     *
+     * @return  returns alert
+     */
+    notification() {
+      const user = this.notification.user;
+      this.$snotify.html(
+        this.userNotificationAlertLayout(
+          user.profile_image,
+          this.notification._message
+        ),
+        {
+          timeout: 10000,
+          showProgressBar: false,
+          pauseOnHover: true,
+          config: {
+            newItemsOnTop: false,
+            closeOnClick: true
+          }
+        }
+      );
+    }
+  },
   methods: {
     ...mapActions({
       setTicker: "chart/setTicker",
       setSidebar: "chart/setSidebar",
       setSSE: "chart/setSSE"
     }),
+    userNotificationAlertLayout: UserNotificationAlertLayout,
     /**
      * Close SSE connection, set back dafault favicon
      *
@@ -123,6 +164,13 @@ export default {
   },
   mounted() {
     this.initSSE();
+
+    /**
+     * Need to refactor
+     */
+    this.$nextTick(() => {
+      this.ticks = 2;
+    });
   },
   beforeDestroy() {
     this.closeSSE();
