@@ -89,22 +89,24 @@ export default {
      * @return  returns alert
      */
     notification() {
-      const user = this.notification.user;
-      this.$snotify.html(
-        this.userNotificationAlertLayout(
-          user.profile_image,
-          this.notification._message
-        ),
-        {
-          timeout: 10000,
-          showProgressBar: false,
-          pauseOnHover: true,
-          config: {
-            newItemsOnTop: false,
-            closeOnClick: true
+      if (this.notification) {
+        const user = this.notification.user;
+        this.$snotify.html(
+          this.userNotificationAlertLayout(
+            user.profile_image,
+            this.notification._message
+          ),
+          {
+            timeout: 10000,
+            showProgressBar: false,
+            pauseOnHover: true,
+            config: {
+              newItemsOnTop: false,
+              closeOnClick: true
+            }
           }
-        }
-      );
+        );
+      }
     }
   },
   methods: {

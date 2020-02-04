@@ -290,8 +290,6 @@ export default {
         id: this.notification.post.id
       };
       this.dataNotification.unshift(n);
-
-      console.log(this.notification)
     },
     getNotification() {
       this.$api.social.notification.notifications().then(response => {

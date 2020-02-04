@@ -446,7 +446,12 @@ export default {
     putNumberSentiments() {
       for(let i = 0; i<this.postsObject.length; i++) {
         if(this.postsObject[i].id === this.newPosts.data.post.id) {
-          
+          if(this.newPosts.data.sentiment.type === "bull") {
+            this.postsObject[i].bulls_count += 1
+
+          }
+          console.log(this.newPosts.data.sentiment)
+
         }
       }
     },
@@ -516,7 +521,7 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-
+            console.log(this.postsObject)
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
