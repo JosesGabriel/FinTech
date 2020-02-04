@@ -125,13 +125,7 @@ export default {
      * @return
      */
     symbolid(symid) {
-      const tab = parseInt(this.activeTab.substr(4));
-      if (tab == 1) {
-        this.initTimetrade(symid);
-        this.currentTab = true;
-      } else {
-        this.currentTab = false;
-      }
+      this.initTimetrade(symid);
     },
     /**
      * Once a trade data coming in, create a simlple blink effect
@@ -156,25 +150,9 @@ export default {
      * @return
      */
     loading(value) {
-      if (value === false && this.currentTab === true) {
+      if (value === false) {
         this.tempTrades = this.trades;
         this.sse.addEventListener("trade", this.sseTrade);
-      }
-    },
-    /**
-     * fetch what is the current active tab
-     *
-     * @param   {String}  value  tab id name
-     *
-     * @return
-     */
-    activeTab(value) {
-      const tab = parseInt(value.substr(4));
-      if (tab == 1) {
-        this.initTimetrade(this.symbolid);
-        this.currentTab = true;
-      } else {
-        this.currentTab = false;
       }
     }
   },

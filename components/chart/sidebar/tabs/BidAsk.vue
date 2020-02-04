@@ -164,13 +164,7 @@ export default {
      * @return
      */
     symbolid(symid) {
-      const tab = parseInt(this.activeTab.substr(4));
-      if (tab == 1) {
-        this.initBidask(symid);
-        this.currentTab = true;
-      } else {
-        this.currentTab = false;
-      }
+      this.initBidask(symid);
     },
     /**
      * run sse once loading is done
@@ -180,24 +174,8 @@ export default {
      * @return
      */
     loading(value) {
-      if (value === false && this.currentTab === true) {
+      if (value === false) {
         this.sse.addEventListener("bidask", this.sseBidask);
-      }
-    },
-    /**
-     * fetch what is the current active tab
-     *
-     * @param   {String}  value  tab id name
-     *
-     * @return
-     */
-    activeTab(value) {
-      const tab = parseInt(value.substr(4));
-      if (tab == 1) {
-        this.initBidask(this.symbolid);
-        this.currentTab = true;
-      } else {
-        this.currentTab = false;
       }
     }
   },

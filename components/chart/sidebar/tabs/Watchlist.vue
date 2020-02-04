@@ -131,7 +131,11 @@ export default {
      * @return
      */
     sseInfo(value) {
-      if (this.loading === false && this.currentTab === true) {
+      if (
+        this.loading === false &&
+        this.currentTab === true &&
+        this.noItems === false
+      ) {
         this.sseAllInfo(value);
       }
     },

@@ -17,10 +17,8 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "TransactionBar",
-  props: ["activeTab"],
   data() {
     return {
-      currentTab: false,
       progbar: {
         loading: true,
         value: 100
@@ -42,29 +40,7 @@ export default {
      * @return
      */
     symbolid(symid) {
-      const tab = parseInt(this.activeTab.substr(4));
-      if (tab == 1) {
-        this.initTransbar(symid);
-        this.currentTab = true;
-      } else {
-        this.currentTab = false;
-      }
-    },
-    /**
-     * fetch what is the current active tab
-     *
-     * @param   {String}  value  tab id name
-     *
-     * @return
-     */
-    activeTab(value) {
-      const tab = parseInt(value.substr(4));
-      if (tab == 1) {
-        this.initTransbar(this.symbolid);
-        this.currentTab = true;
-      } else {
-        this.currentTab = false;
-      }
+      this.initTransbar(symid);
     }
   },
   mounted() {
