@@ -9,7 +9,6 @@
           :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
           :dark="lightSwitch == 0 ? false : true"
           outlined
-          class="userMessage__dropdown"
         >
           <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
             <v-row no-gutters class="userMessage__dropdown-header">
