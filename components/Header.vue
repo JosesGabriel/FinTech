@@ -315,7 +315,7 @@ export default {
        * all notifications here
        */
       const evtSourceAll = new EventSource(
-        `${process.env.STREAM_API_URL}/sse/notifications/all`
+        `${process.env.STREAM_API_URL}/sse/notifications/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`
       );
 
       const allNotificationList = this.allNotificationEventsList();
@@ -333,7 +333,7 @@ export default {
        */
       if (this.$auth.user != null) {
         const evtSource = new EventSource(
-          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}`
+          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${this.$auth.getToken('local').replace('Bearer ','')}`
         );
 
         const userNotificationList = this.userNotificationEventsList();

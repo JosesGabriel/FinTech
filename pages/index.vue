@@ -78,7 +78,7 @@ export default {
       }
 
       this.setSSE(
-        new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
+        new EventSource(`${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`)
         // new EventSource("http://localhost:8021/sse/market-data/pse/all")
       );
 
