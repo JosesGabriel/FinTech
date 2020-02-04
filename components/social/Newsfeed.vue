@@ -496,7 +496,7 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-            console.log(this.postsObject);
+            
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
