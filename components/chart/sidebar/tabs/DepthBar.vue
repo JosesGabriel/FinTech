@@ -54,8 +54,10 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "DepthBar",
+  props: ["activeTab"],
   data() {
     return {
+      currentTab: false,
       toggleButton: false,
       progbar: {
         loading: true,
@@ -95,7 +97,29 @@ export default {
      * @return
      */
     symbolid(symid) {
-      this.initDepthbar(symid);
+      const tab = parseInt(this.activeTab.substr(4));
+      if (tab == 1) {
+        this.initDepthbar(symid);
+        this.currentTab = true;
+      } else {
+        this.currentTab = false;
+      }
+    },
+    /**
+     * fetch what is the current active tab
+     *
+     * @param   {String}  value  tab id name
+     *
+     * @return
+     */
+    activeTab(value) {
+      const tab = parseInt(value.substr(4));
+      if (tab == 1) {
+        this.initDepthbar(this.symbolid);
+        this.currentTab = true;
+      } else {
+        this.currentTab = false;
+      }
     }
   },
   mounted() {

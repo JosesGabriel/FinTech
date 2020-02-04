@@ -1,9 +1,26 @@
 <template>
   <v-content>
     <v-card
+      v-show="loading"
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      :loading="loading"
+      class="mt-2 mr-2"
+      flat
+      tile
+    >
+      <v-progress-linear
+        color="success"
+        indeterminate
+        buffer-value="100"
+        height="5"
+        class="mt-3"
+      ></v-progress-linear>
+    </v-card>
+
+    <v-card
+      v-show="!loading"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :style="`height: calc(100vh - ${responsiveHeight + 20}px)`"
       class="card__timetrade pl-1 pr-2"
       flat
@@ -71,9 +88,11 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "TimeTrade",
+  props: ["activeTab"],
   data() {
     return {
-      loading: "success",
+      loading: true,
+      currentTab: false,
       tempTrades: [],
       ctrTrades: 0
     };
@@ -106,7 +125,13 @@ export default {
      * @return
      */
     symbolid(symid) {
-      this.initTimetrade(symid);
+      const tab = parseInt(this.activeTab.substr(4));
+      if (tab == 1) {
+        this.initTimetrade(symid);
+        this.currentTab = true;
+      } else {
+        this.currentTab = false;
+      }
     },
     /**
      * Once a trade data coming in, create a simlple blink effect
@@ -131,9 +156,25 @@ export default {
      * @return
      */
     loading(value) {
-      if (value === false) {
+      if (value === false && this.currentTab === true) {
         this.tempTrades = this.trades;
         this.sse.addEventListener("trade", this.sseTrade);
+      }
+    },
+    /**
+     * fetch what is the current active tab
+     *
+     * @param   {String}  value  tab id name
+     *
+     * @return
+     */
+    activeTab(value) {
+      const tab = parseInt(value.substr(4));
+      if (tab == 1) {
+        this.initTimetrade(this.symbolid);
+        this.currentTab = true;
+      } else {
+        this.currentTab = false;
       }
     }
   },
@@ -150,7 +191,7 @@ export default {
      * @return
      */
     initTimetrade(symid) {
-      this.loading = "success";
+      this.loading = true;
       this.$api.chart.stocks
         .trades({
           "symbol-id": symid,

@@ -9,6 +9,24 @@
     >
       All Stock
     </div>
+
+    <v-card
+      v-show="loading"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+      class="mt-2 mr-2"
+      flat
+      tile
+    >
+      <v-progress-linear
+        color="success"
+        indeterminate
+        buffer-value="100"
+        height="5"
+        class="mt-3"
+      ></v-progress-linear>
+    </v-card>
+
     <v-card
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
@@ -17,15 +35,6 @@
       flat
       tile
     >
-      <v-progress-linear
-        v-show="loading"
-        color="success"
-        indeterminate
-        buffer-value="100"
-        height="5"
-        class="mt-3"
-      ></v-progress-linear>
-
       <v-data-table
         v-show="!loading"
         :headers="headers"
@@ -40,9 +49,6 @@
         :height="`calc(100vh - ${responsiveHeight - 160}px)`"
         :style="{ background: cardBackground }"
       >
-        <!-- <template #item.symbol="{item}">
-            SYM
-        </template> -->
         <template v-slot:item="props">
           <tr
             :id="props.item.stockidstr"
@@ -159,6 +165,13 @@ export default {
         this.sseAllInfo(value);
       }
     },
+    /**
+     * fetch what is the current active tab
+     *
+     * @param   {String}  value  tab id name
+     *
+     * @return
+     */
     activeTab(value) {
       const tab = parseInt(value.substr(4));
       if (tab == 2) {
