@@ -352,8 +352,15 @@ export default {
     notificationHandler(eventName, data) {
       this.setNotification(data);
     },
-
-    // start All Notification
+    /**
+     * This will trigger if there is a global announcement
+     * announcement are: New Post, New Comment on a Post, New Sentiments on a Post
+     *
+     * @param   {[type]}  eventName  [eventName description]
+     * @param   {[type]}  data       [data description]
+     *
+     * @return  {[type]}             [return description]
+     */
     allNotificationHandler(eventName, data) {
       switch (eventName) {
         case "social.post":
@@ -388,7 +395,6 @@ export default {
           break;
       }
     }
-    // end All Notification
   }
 };
 </script>

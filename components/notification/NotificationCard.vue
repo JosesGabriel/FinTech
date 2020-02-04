@@ -8,12 +8,11 @@
       <img :src="profileImage" />
     </v-list-item-avatar>
 
-    <v-list-item-content class="listItem__content py-2">
+    <v-list-item-content class="listItem__content py-1">
       <div class="body-2 ma-0 userMessage__dropdown-title">
-        <span class="body-2 ma-0 userMessage__message">{{ notification.notificable.message }}</span>
+        <span class="body-2 ma-0 userMessage__message caption">{{ notification.notificable.message }}</span>
       </div>
-        <br />
-        <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
+      <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>
   </v-list-item>
 </template>
