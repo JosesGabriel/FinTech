@@ -32,7 +32,7 @@
 
                 <v-list-item-content class="py-2">
                   <v-list-item-subtitle class="body-2 ma-0 userMessage__dropdown-title">
-                    <span class="body-2 ma-0 userMessage__message">{{ item.notificable.message }}</span>
+                    <span class="body-2 ma-0 userMessage__message caption font-weight-bold">{{ item.notificable.message }}</span>
                   </v-list-item-subtitle>
                   <span class="caption tertiary--text">{{ localFormat(item.created_at, "fn") }}</span>
                 </v-list-item-content>
