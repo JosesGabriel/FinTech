@@ -37,7 +37,7 @@
             flat
           >
             <v-card-text class="pa-0 ma-0">
-              <component :is="item.component" />
+              <component :is="item.component" :active-tab="activeTab" />
             </v-card-text>
           </v-card>
         </v-tab-item>

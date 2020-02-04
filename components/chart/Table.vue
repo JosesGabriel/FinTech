@@ -82,7 +82,7 @@
         :disabled="item.disabled"
         @click="toggleTabs(item.id)"
       >
-        <strong>{{ item.title }}</strong>
+        <b>{{ item.title }}</b>
       </v-tab>
 
       <v-tab-item
