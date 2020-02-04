@@ -12,13 +12,22 @@
     <v-card
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      :loading="loading"
       class="pl-3 pr-2"
       :style="`height: calc(100vh - ${responsiveHeight - 170}px)`"
       flat
       tile
     >
+      <v-progress-linear
+        v-show="loading"
+        color="success"
+        indeterminate
+        buffer-value="100"
+        height="5"
+        class="mt-3"
+      ></v-progress-linear>
+
       <v-data-table
+        v-show="!loading"
         :headers="headers"
         :items="allStocks"
         class="data_table-container custom_table"
@@ -90,6 +99,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "AllStock",
+  props: ["activeTab"],
   data() {
     return {
       headers: [
@@ -115,7 +125,8 @@ export default {
           class: "text-right"
         }
       ],
-      loading: "success",
+      loading: true,
+      currentTab: true,
       allStocks: []
     };
   },
@@ -144,8 +155,17 @@ export default {
      * @return
      */
     sseInfo(value) {
-      if (this.loading === false) {
-        //this.sseAllInfo(value);
+      if (this.loading === false && this.currentTab === true) {
+        this.sseAllInfo(value);
+      }
+    },
+    activeTab(value) {
+      const tab = parseInt(value.substr(4));
+      if (tab == 2) {
+        this.initAllStock();
+        this.currentTab = true;
+      } else {
+        this.currentTab = false;
       }
     }
   },
@@ -174,7 +194,8 @@ export default {
      * @return
      */
     async initAllStock() {
-      this.loading = "success";
+      this.loading = true;
+      this.allStocks = [];
       try {
         const response = await this.$api.chart.stocks.history({
           exchange: "PSE"
