@@ -39,9 +39,7 @@
           <v-row>
             <v-col>
               <v-list-item-title class="subtitle-2">
-                <strong>
-                  {{ postsObject[n - 1].user.name }}
-                </strong>
+                <strong>{{ postsObject[n - 1].user.name }}</strong>
               </v-list-item-title>
               <v-list-item-subtitle class="overline no-transform">
                 {{ localFormat(postsObject[n - 1].created_at, "fn") }}
@@ -67,15 +65,7 @@
                   >
                     <img src="/icon/bullish.svg" width="6" />
                   </v-btn>
-                  <v-btn
-                    v-else
-                    icon
-                    outlined
-                    fab
-                    width="14"
-                    height="14"
-                    color="error"
-                  >
+                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
                     <img src="/icon/bearish.svg" width="6" />
                   </v-btn>
                 </span>
@@ -107,8 +97,7 @@
                         x-small
                         text
                         v-on="on"
-                        >Delete</v-btn
-                      >
+                      >Delete</v-btn>
                     </template>
 
                     <v-card
@@ -118,8 +107,7 @@
                       <v-card-title
                         class="headline success--text lighten-2"
                         primary-title
-                        >Delete Post?</v-card-title
-                      >
+                      >Delete Post?</v-card-title>
 
                       <v-card-text>
                         Are you sure you want to permanently remove this post
@@ -145,8 +133,7 @@
                             deletePost(postsObject[n - 1].id, n - 1),
                               (deleteDialog = false)
                           "
-                          >Delete</v-btn
-                        >
+                        >Delete</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -160,8 +147,7 @@
                     @click="
                       (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
-                    >Edit</v-btn
-                  >
+                  >Edit</v-btn>
                   <v-btn
                     v-if="
                       postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
@@ -169,8 +155,7 @@
                     x-small
                     text
                     @click="followAccount(postsObject[n - 1].user.uuid)"
-                    >Follow</v-btn
-                  >
+                  >Follow</v-btn>
                 </div>
               </div>
             </v-col>
@@ -207,12 +192,9 @@
                 ),
                   (editPostMode = false)
               "
-              >Done Editing</v-btn
-            >
+            >Done Editing</v-btn>
           </div>
-          <span v-else class="caption px-5 pb-3">
-            {{ postsObject[n - 1].content }}
-          </span>
+          <span v-else class="caption px-5 pb-3">{{ postsObject[n - 1].content }}</span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
         </v-list-item-content>
@@ -273,7 +255,7 @@
         >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
-        <span class="caption">1000</span> -->
+        <span class="caption">1000</span>-->
       </v-card-actions>
       <v-divider></v-divider>
       <List :comments="postsObject[n - 1].comments" />
@@ -314,11 +296,7 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share
-      v-if="showShare"
-      :postid="sharePostID"
-      @closeModal="showShare = false"
-    />
+    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
   </v-col>
 </template>
 
@@ -404,7 +382,7 @@ export default {
       });
     },
     newPosts() {
-      if(this.newPosts.event_name === "social.post") {
+      if (this.newPosts.event_name === "social.post") {
         this.postCounter();
       } else if (this.newPosts.event_name === "social.post.comment") {
         this.putNumberComment();
@@ -437,21 +415,18 @@ export default {
       }
     },
     putNumberComment() {
-      for(let i = 0; i<this.postsObject.length; i++) {
-        if(this.postsObject[i].id === this.newPosts.data.post.id) {
-          this.postsObject[i].comments_count += 1
+      for (let i = 0; i < this.postsObject.length; i++) {
+        if (this.postsObject[i].id === this.newPosts.data.post.id) {
+          this.postsObject[i].comments_count += 1;
         }
       }
     },
     putNumberSentiments() {
-      for(let i = 0; i<this.postsObject.length; i++) {
-        if(this.postsObject[i].id === this.newPosts.data.post.id) {
-          if(this.newPosts.data.sentiment.type === "bull") {
-            this.postsObject[i].bulls_count += 1
-
-          }
-          console.log(this.newPosts.data.sentiment)
-
+      for (let i = 0; i < this.postsObject.length; i++) {
+        if (this.postsObject[i].id === this.newPosts.data.post.id) {
+          this.postsObject[i].bulls_count = this.newPosts.data.post.bulls;
+          this.postsObject[i].bears_count = this.newPosts.data.post.bears;
+          this.postsObject[i].my_sentiment = this.newPosts.data.sentiment.type;
         }
       }
     },
@@ -521,7 +496,7 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-            console.log(this.postsObject)
+            console.log(this.postsObject);
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
@@ -685,7 +660,7 @@ export default {
           .bullish(params)
           .then(response => {
             if (response.success) {
-              this.postsObject[index].bulls_count += 1;
+              // this.postsObject[index].bulls_count += 1;
               if (
                 this.postsObject[index].my_sentiment &&
                 this.postsObject[index].my_sentiment.type == "bear"
@@ -733,7 +708,7 @@ export default {
           .bearish(params)
           .then(response => {
             if (response.success) {
-              this.postsObject[index].bears_count += 1;
+              // this.postsObject[index].bears_count += 1;
               if (
                 this.postsObject[index].my_sentiment &&
                 this.postsObject[index].my_sentiment.type == "bull"
