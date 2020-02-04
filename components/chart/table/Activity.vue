@@ -190,42 +190,42 @@ export default {
         {
           text: "Date",
           value: "date",
-          class: "text-left pl-2 caption font-weight-bold"
+          class: "text-left pl-2 th_activity font-weight-bold"
         },
         {
           text: "Volume",
           value: "volume",
-          class: "text-right caption font-weight-bold"
+          class: "text-right th_activity font-weight-bold"
         },
         {
           text: "Ave. Price",
           value: "aveprice",
-          class: "text-right caption font-weight-bold"
+          class: "text-right th_activity font-weight-bold"
         },
         {
           text: "Buy Value",
           value: "buyvalue",
-          class: "text-right caption font-weight-bold"
+          class: "text-right th_activity font-weight-bold"
         },
         {
           text: "Sell Price",
           value: "sellprice",
-          class: "text-right caption font-weight-bold"
+          class: "text-right th_activity font-weight-bold"
         },
         {
           text: "Sell Value",
           value: "sellvalue",
-          class: "text-right caption font-weight-bold"
+          class: "text-right th_activity font-weight-bold"
         },
         {
           text: "Profit/Loss",
           value: "profitloss",
-          class: "text-right caption font-weight-bold"
+          class: "text-right th_activity font-weight-bold"
         },
         {
           text: "%",
           value: "percentage",
-          class: "text-right caption font-weight-bold pr-2"
+          class: "text-right th_activity font-weight-bold pr-2"
         }
       ],
       items: [
@@ -428,6 +428,9 @@ export default {
 </script>
 
 <style scoped>
+.th_activity {
+  font-size: 11px !important;
+}
 #top {
   height: 120px;
 }
