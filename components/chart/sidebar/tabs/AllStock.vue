@@ -253,30 +253,12 @@ export default {
       }
 
       items.sort((a, b) => {
-        const key = index[0];
         const desc = isDesc[0];
-        if (key == "symbol") {
+        if (index[0] == "symbol") {
           if (!desc) {
             return a[index].toLowerCase().localeCompare(b[index].toLowerCase());
           } else {
             return b[index].toLowerCase().localeCompare(a[index].toLowerCase());
-          }
-        } else if (key == "last") {
-          // convert date to yyyymmdd
-          const adate = this.$moment(a.lastupdatetime).format("YYYYMMDD");
-          const bdate = this.$moment(b.lastupdatetime).format("YYYYMMDD");
-          if (!desc) {
-            let rv = adate - bdate;
-            if (rv === 0) {
-              rv = a[index] - b[index];
-            }
-            return rv;
-          } else {
-            let rv = bdate - adate;
-            if (rv === 0) {
-              rv = b[index] - a[index];
-            }
-            return rv;
           }
         } else {
           if (!desc) {

@@ -55,7 +55,7 @@
                     :items="listDataArr"
                     item-text="symbol"
                     item-value="id_str"
-                    label="Select Stock"
+                    label="Select a Stock"
                     color="success"
                     dense
                     :dark="lightSwitch == true"
