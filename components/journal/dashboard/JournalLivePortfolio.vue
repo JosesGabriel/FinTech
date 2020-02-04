@@ -469,7 +469,7 @@ export default {
         this.counter = 0;
       }
       this.sse = new EventSource(
-        `${process.env.STREAM_API_URL}/sse/market-data/pse/all`
+        `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`
         // "http://localhost:8021/sse/market-data/pse/all"
       );
       this.sse.onopen = function() {};
