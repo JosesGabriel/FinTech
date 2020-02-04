@@ -5,15 +5,16 @@
         <Navbar active="social" />
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
+        <v-row no-gutters class="userMessage__dropdown-header" :class="lightSwitch == 0 ? 'black--text' : 'secondary--text'">
+          <span class="pa-4 pl-0 pb-2 body-2 font-weight-bold">Notifications</span>
+        </v-row>
         <v-card
           :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
           :dark="lightSwitch == 0 ? false : true"
           outlined
+          class="userMessage_container"
         >
           <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
-            <v-row no-gutters class="userMessage__dropdown-header">
-              <span class="pa-4 pb-2 body-2">Notifications</span>
-            </v-row>
             <v-list class="py-0 userMessage__dropdown-body scrollbar">
               <v-list-item
                 v-for="(item, index) in dataNotification"
@@ -161,3 +162,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.userMessage_container {
+  overflow: hidden;
+}
+</style>
