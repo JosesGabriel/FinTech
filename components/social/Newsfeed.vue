@@ -615,7 +615,7 @@ export default {
               last_name: this.$auth.user.data.user.last_name
             }
           });
-          this.postsObject[index].comments_count++;
+          // this.postsObject[index].comments_count++;
         } else {
           this.triggerAlert(false, response.message);
         }
