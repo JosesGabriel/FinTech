@@ -244,7 +244,9 @@
         <v-btn icon fab x-small color="secondary">
           <v-icon>mdi-comment-text-outline</v-icon>
         </v-btn>
-        <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
+        <span class="caption">{{
+          postsObject[n - 1].comment_descendants_count
+        }}</span>
         <!-- TODO Share counter -->
         <!-- <v-btn
           icon
@@ -258,7 +260,11 @@
         <span class="caption">1000</span>-->
       </v-card-actions>
       <v-divider></v-divider>
-      <List :comments="postsObject[n - 1].comments" />
+      <List
+        :comments="postsObject[n - 1].comments"
+        :postindex="n - 1"
+        :postid="postsObject[n - 1].id"
+      />
       <!-- Start of Comment -->
       <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
@@ -348,7 +354,8 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      newPosts: "global/getNewPosts"
+      newPosts: "global/getNewPosts",
+      newComment: "social/getNewComment"
     })
   },
   watch: {
@@ -373,12 +380,11 @@ export default {
         created_at: new Date(),
         user: {
           profile_image: this.$auth.user.data.user.profile_image,
-          first_name: this.$auth.user.data.user.first_name,
-          last_name: this.$auth.user.data.user.last_name
+          name: this.$auth.user.data.user.name
         },
         tagged_stocks: this.newPost.tagged_stocks,
         comments: [],
-        comments_count: 0
+        comment_descendants_count: 0
       });
     },
     newPosts() {
@@ -390,6 +396,11 @@ export default {
         this.putNumberSentiments();
       }
       this.numberPost = this.newPosts.number_posts;
+    },
+    newComment() {
+      this.postsObject[this.newComment.postIndex].comments[
+        this.newComment.commentIndex
+      ].comments.push(this.newComment.data);
     }
   },
   mounted() {

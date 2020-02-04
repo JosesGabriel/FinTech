@@ -1,4 +1,5 @@
 export default () => ({
-    sse: null,
-    sseInfo: null
+  sse: null,
+  sseInfo: null,
+  newComment: {}
 });
