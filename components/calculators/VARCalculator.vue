@@ -25,7 +25,7 @@
               :menu-props="{offsetY: true, dark: lightSwitch == true}"
               :items="stockList"
               v-model="stocksDropdownModel"
-              label="Select Stock"
+              label="Select a Stock"
               item-text="symbol"
               item-value="id_str"
               item-color="success"

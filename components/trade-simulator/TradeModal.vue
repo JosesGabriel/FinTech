@@ -71,7 +71,7 @@
                         :item-value="(this.sellSelected ? 'stockidstr' : 'id_str')"
                         v-model="GetSelectStock"
                         v-on:change="getDetails"
-                        label="Select Stock"
+                        label="Select a Stock"
                       >
                         <template slot="item" slot-scope="data">
                           <v-list-item-content
