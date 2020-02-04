@@ -1,10 +1,6 @@
 <template>
   <!-- hello world -->
-  <v-app
-    id="chart_body"
-    class="gameGlobal"
-    :style="{ background: cardBackground }"
-  >
+  <v-app class="gameGlobal" :style="{ background: cardBackground }">
     <Header />
     <div class="spacer__content"></div>
     <div class="content__main">
@@ -149,9 +145,12 @@ export default {
 .gameGlobal ::-webkit-scrollbar-thumb:hover {
   background: #03dac5;
 }
-#chart_body {
+/* #chart_body {
   font-family: "Nunito Sans", sans-serif !important;
 }
+.v-application {
+  font-family: "Nunito Sans", sans-serif !important;
+} */
 .chart__container {
 }
 .ticker__container {
