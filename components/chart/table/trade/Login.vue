@@ -94,7 +94,7 @@
                   block
                   disabled
                   @click="setTradeLogin(false)"
-                  >CONNECT</v-btn
+                  >Connect</v-btn
                 >
                 <v-btn
                   class="my-2"
@@ -103,7 +103,7 @@
                   block
                   color="success"
                   @click="setTradeLogin(false)"
-                  >CLOSE</v-btn
+                  >Close</v-btn
                 >
               </v-col>
             </v-row>
