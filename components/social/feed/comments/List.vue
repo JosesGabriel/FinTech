@@ -1,7 +1,14 @@
 <template>
   <v-list dense>
     <template v-for="(comment, index) in comments">
-      <Comment :key="index" :comment="comment" />
+      <Comment
+        :key="index"
+        :keyprop="iteration ? 0 : index"
+        :comment="comment"
+        :postindex="postindex"
+        :postid="postid"
+        :iteration="iteration"
+      />
     </template>
   </v-list>
 </template>
@@ -20,6 +27,22 @@ export default {
         return [];
       },
       type: Array
+    },
+    postindex: {
+      default() {
+        return "";
+      },
+      type: Number
+    },
+    postid: {
+      default() {
+        return "";
+      }
+    },
+    iteration: {
+      default() {
+        return "";
+      }
     }
   },
   mounted() {
@@ -33,7 +56,7 @@ export default {
     }, 10000);
   },
   methods: {
-    addDynamicTime: AddDynamicTime,
+    addDynamicTime: AddDynamicTime
   }
 };
 </script>

@@ -1,138 +1,119 @@
 <template>
   <v-content>
-    <span class="mx-3 mb-3 body-2">Available Funds 100,000,000.00</span>
+  
+   <!-- <span class="mx-3 mb-3 body-2 _backBtn" style="float:right;" @click="setShowBrokers(true)">Back</span>-->
     <v-row class="ma-0 mt-4 pa-0">
-      <v-col class="col___left col-9 pa-0">
+      <v-col class="col___left col-12 pa-0">
         <v-container class="d-flex flex-row pa-0">
-          <v-card
-            v-for="item in cardContent"
-            :key="item.id"
-            class="ml-4 pa-0"
-            tile
-            outlined
-            min-width="165"
-            min-height="70"
-            :style="{ background: cardBackground }"
-            :dark="lightSwitch == 1"
-          >
-            <v-card-text class="pa-0">
-              <v-row class="ma-0">
-                <v-col class="text-left pa-0 pl-2 pt-2">
-                  <span
-                    class="overline font-weight-bold"
-                    :class="[
-                      { 'black--text': lightSwitch == 0 },
-                      { 'white--text': lightSwitch == 1 }
-                    ]"
-                    >{{ item.title }}</span
-                  >
-                </v-col>
-              </v-row>
-              <v-row class="ma-0">
-                <v-col
-                  class="text-right pa-0 pr-2 pt-2 body-1"
-                  :class="[
-                    { 'black--text': lightSwitch == 0 },
-                    { 'white--text': lightSwitch == 1 }
-                  ]"
-                  ><span v-show="item.php" class="overline">PHP</span
-                  >{{ item.amount }}</v-col
+
+    <v-tabs
+      color="success"
+      background-color="transparent"
+      :dark="lightSwitch == true"
+      class="my-0 ml-4 py-0 paperTab"
+    >
+      <v-tab           
+        class="tab_menu-top text-capitalize"
+        :dark="lightSwitch == true"
+        :href="`#tab-1`"
+      >Buy</v-tab>
+      <v-tab
+        class="tab_menu-top text-capitalize"
+        :dark="lightSwitch == true"
+        :href="`#tab-2`"  
+      >Sell</v-tab>
+
+      <v-row>
+        <v-col cols="6" class="pr-0 mr-0" style="text-align:center;">
+          <v-radio-group 
+            :dark="lightSwitch == true"
+            dense 
+            v-model="row" 
+            class="mt-0 pt-0 pr-0 mr-0"
+            style="float: right;"
+            row>
+            <v-radio disabled :dark="lightSwitch == true" label="GTC" value="radio-1"></v-radio>
+            <v-radio :dark="lightSwitch == true" label="Day(default)" value="radio-2"></v-radio>
+            <v-radio disabled :dark="lightSwitch == true" label="GTD" value="radio-3"></v-radio>
+          </v-radio-group>
+        </v-col>
+        <v-col cols="6" class="mt-0 pt-0">
+
+              <v-dialog
+                ref="dialog"
+                v-model="modal"
+                :return-value.sync="date"
+                persistent
+                width="290px"
+                :dark="lightSwitch == true"
+                :style="{ background: cardBackground }"
+                class="mt-0 pt-0"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn v-on="on" text class="px-0 mt-0 pt-0" color="success">
+                    <v-text-field
+                      label="mm/dd/yy"
+                      solo
+                      dense
+                      background-color="transparent"
+                      outlined
+                    ></v-text-field>
+                  </v-btn>
+                </template>
+                <v-date-picker
+                  v-model="date"
+                  color="#00121e"
+                  :dark="lightSwitch == true"
+                  :style="{ background: cardBackground }"
+                  class="datepicker-container"
+                  scrollable
                 >
-              </v-row>
-            </v-card-text>
-          </v-card>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="success" @click="modal = false">Cancel</v-btn>
+                  <v-btn text color="success" @click="modal = false">Confirm</v-btn>
+                </v-date-picker>
+             </v-dialog>
+               <span 
+                style="font-size:14px;float:right;padding-top: 16px;"   
+                :style="{ color: toggleFontColor }"   
+                >Broker: Paper Trade</span>
+        </v-col>
+      </v-row>
+
+      <v-tab-item
+        dark
+        color="success"
+        background-color="black"
+        :value="'tab-' + 1"
+        :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #dadada' : 'background:transparent; border-top: 1px solid #172431')"
+      >
+        <v-container class="pa-0">
+          <BuyTab       
+          />
         </v-container>
-      </v-col>
-      <v-col class="col___right col-3 pa-0">
-        <v-container class="d-flex flex-row-reverse pa-0 pt-10 pr-3">
-          <v-btn
-            small
-            :color="lightSwitch == 1 ? 'lightchart' : 'darkchart'"
-            outlined
-            :dark="lightSwitch == 1"
-            class="caption ml-2"
-            >BUY</v-btn
-          >
-          <v-btn
-            small
-            :color="lightSwitch == 1 ? 'lightchart' : 'darkchart'"
-            outlined
-            :dark="lightSwitch == 1"
-            class="caption"
-            >SELL</v-btn
-          >
+      </v-tab-item>
+      <v-tab-item
+        dark
+        color="success"
+        background-color="transparent"
+        :value="'tab-' + 2"
+        :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #b6b6b6' : 'background:transparent; border-top: 1px solid #535358')"
+      >
+        <v-container class="pa-0">
+          <SellTab
+          />
         </v-container>
-      </v-col>
-    </v-row>
-    <v-row class="ma-0 mt-1 pa-0">
-      <v-col class="col-3 pa-0 ma-0">
-        <v-content class="pa-0 ma-0 pt-3 px-4">
-          <v-select
-            :items="items"
-            class="select__trade ma-0 pa-0"
-            item-color="success"
-            append-icon="mdi-chevron-down"
-            background-color="success"
-            label="Select Strategy"
-            color="success"
-            dense
-            solo
-          ></v-select>
-          <v-select
-            :items="items"
-            class="select__trade ma-0 pa-0"
-            item-color="success"
-            append-icon="mdi-chevron-down"
-            background-color="success"
-            label="Select Trade Plan"
-            color="success"
-            dense
-            solo
-          ></v-select>
-          <v-select
-            :items="items"
-            class="select__trade ma-0 pa-0"
-            item-color="success"
-            append-icon="mdi-chevron-down"
-            background-color="success"
-            label="Select Emotion"
-            color="success"
-            dense
-            solo
-          ></v-select>
-        </v-content>
-      </v-col>
-      <v-col class="col-7">
-        <v-content
-          ><v-textarea
-            outlined
-            no-resize
-            color="success"
-            :dark="lightSwitch == 1"
-            full-width
-            height="110px"
-            label="Notes"
-          ></v-textarea
-        ></v-content>
-      </v-col>
-      <v-col class="col-2 text-left">
-        <br />
-        <br />
-        <br />
-        <v-btn
-          small
-          color="success"
-          :dark="lightSwitch == 1"
-          class="caption mt-2"
-          @click="setShowBrokers(true)"
-          >ENTER</v-btn
-        >
+      </v-tab-item>
+    </v-tabs>
+        </v-container>
       </v-col>
     </v-row>
   </v-content>
 </template>
 
 <script>
+import BuyTab from "~/components/chart/table/trade/Buy";
+import SellTab from "~/components/chart/table/trade/Sell";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -143,7 +124,10 @@ export default {
       { id: 2, title: "Quantity", amount: "10,000", php: false },
       { id: 3, title: "Total", amount: "1,000,000.00", php: true }
     ],
-    items: ["test 1", "test 2"]
+    items: ["test 1", "test 2"],
+    modal: false,
+    date: new Date().toISOString().substr(0, 10),
+    row: 'radio-2',
   }),
   computed: {
     ...mapGetters({
@@ -156,14 +140,36 @@ export default {
      */
     cardBackground: function() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-    }
+    },
+    toggleFontColor() {
+      return this.lightSwitch == 0
+        ? "#000000 !important"
+        : "#ffffff !important";
+    },
   },
   methods: {
     ...mapActions({
       setShowBrokers: "chart/setShowBrokers"
-    })
-  }
+    }),
+    
+  },
+   components: {
+      BuyTab,
+      SellTab
+   },
 };
 </script>
 
-<style></style>
+<style scoped>
+._backBtn:hover{
+  cursor: pointer;
+}
+</style>
+<style>
+.paperTab > .v-tabs-bar {
+ /* height: 30px;*/
+}
+.v-label {
+    font-size: 14px;
+  }
+</style>

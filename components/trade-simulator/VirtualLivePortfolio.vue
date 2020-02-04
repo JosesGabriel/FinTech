@@ -465,7 +465,7 @@ export default {
                   this.$api.chart.charts.latest(params).then(
                     function(result) {   
                         console.log('PRIOR DATA', result); 
-                       // console.log('Symbol ID', this.portfolioLogs[index].metas.stock_id);                   
+                      console.log('Symbol ID', this.portfolioLogs[index].metas.stock_id);                   
                       let prior_date = new Date(result.data.t[1]*1000);
                       let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
                       let tcost =
