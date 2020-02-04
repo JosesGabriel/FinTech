@@ -602,7 +602,7 @@ export default {
 
       this.sse = new EventSource(
         //"http://localhost:8021/sse/market-data/pse/all"
-        process.env.SSE_STREAM + "market-data/pse/all"
+        `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`
       );
       const that = this;
       this.sse.onopen = function() {

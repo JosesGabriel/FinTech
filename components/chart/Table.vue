@@ -82,7 +82,7 @@
         :disabled="item.disabled"
         @click="toggleTabs(item.id)"
       >
-        {{ item.title }}
+        <b>{{ item.title }}</b>
       </v-tab>
 
       <v-tab-item
@@ -311,6 +311,6 @@ export default {
   z-index: 3;
 }
 .tabSelected{
-    font-weight: bold !important;
+    /* font-weight: bold !important; */
 }
 </style>

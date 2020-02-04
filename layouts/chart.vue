@@ -1,6 +1,6 @@
 <template>
   <!-- hello world -->
-  <v-app id="chart_body" class="gameGlobal" :style="{ background: cardBackground }">
+  <v-app class="gameGlobal" :style="{ background: cardBackground }">
     <Header :ticks="ticks" />
     <div class="spacer__content"></div>
 
@@ -150,7 +150,13 @@ export default {
       }
 
       this.setSSE(
-        new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
+        new EventSource(
+          `${
+            process.env.STREAM_API_URL
+          }/sse/market-data/pse/all?token=${this.$auth
+            .getToken("local")
+            .replace("Bearer ", "")}`
+        )
       );
 
       this.sse.onopen = function() {};
@@ -189,9 +195,12 @@ export default {
 .gameGlobal ::-webkit-scrollbar-thumb:hover {
   background: #03dac5;
 }
-#chart_body {
+/* #chart_body {
   font-family: "Nunito Sans", sans-serif !important;
 }
+.v-application {
+  font-family: "Nunito Sans", sans-serif !important;
+} */
 .chart__container {
 }
 .ticker__container {

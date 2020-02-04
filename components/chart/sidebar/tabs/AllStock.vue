@@ -9,16 +9,34 @@
     >
       All Stock
     </div>
+
+    <v-card
+      v-show="loading"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
+      class="mt-2 mr-2"
+      flat
+      tile
+    >
+      <v-progress-linear
+        color="success"
+        indeterminate
+        buffer-value="100"
+        height="5"
+        class="mt-3"
+      ></v-progress-linear>
+    </v-card>
+
     <v-card
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      :loading="loading"
       class="pl-3 pr-2"
       :style="`height: calc(100vh - ${responsiveHeight - 170}px)`"
       flat
       tile
     >
       <v-data-table
+        v-show="!loading"
         :headers="headers"
         :items="allStocks"
         class="data_table-container custom_table"
@@ -31,9 +49,6 @@
         :height="`calc(100vh - ${responsiveHeight - 160}px)`"
         :style="{ background: cardBackground }"
       >
-        <!-- <template #item.symbol="{item}">
-            SYM
-        </template> -->
         <template v-slot:item="props">
           <tr
             :id="props.item.stockidstr"
@@ -90,6 +105,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "AllStock",
+  props: ["activeTab"],
   data() {
     return {
       headers: [
@@ -115,7 +131,8 @@ export default {
           class: "text-right"
         }
       ],
-      loading: "success",
+      loading: true,
+      currentTab: true,
       allStocks: []
     };
   },
@@ -144,8 +161,24 @@ export default {
      * @return
      */
     sseInfo(value) {
-      if (this.loading === false) {
-        //this.sseAllInfo(value);
+      if (this.loading === false && this.currentTab === true) {
+        this.sseAllInfo(value);
+      }
+    },
+    /**
+     * fetch what is the current active tab
+     *
+     * @param   {String}  value  tab id name
+     *
+     * @return
+     */
+    activeTab(value) {
+      const tab = parseInt(value.substr(4));
+      if (tab == 2) {
+        this.initAllStock();
+        this.currentTab = true;
+      } else {
+        this.currentTab = false;
       }
     }
   },
@@ -174,7 +207,8 @@ export default {
      * @return
      */
     async initAllStock() {
-      this.loading = "success";
+      this.loading = true;
+      this.allStocks = [];
       try {
         const response = await this.$api.chart.stocks.history({
           exchange: "PSE"
@@ -253,30 +287,12 @@ export default {
       }
 
       items.sort((a, b) => {
-        const key = index[0];
         const desc = isDesc[0];
-        if (key == "symbol") {
+        if (index[0] == "symbol") {
           if (!desc) {
             return a[index].toLowerCase().localeCompare(b[index].toLowerCase());
           } else {
             return b[index].toLowerCase().localeCompare(a[index].toLowerCase());
-          }
-        } else if (key == "last") {
-          // convert date to yyyymmdd
-          const adate = this.$moment(a.lastupdatetime).format("YYYYMMDD");
-          const bdate = this.$moment(b.lastupdatetime).format("YYYYMMDD");
-          if (!desc) {
-            let rv = adate - bdate;
-            if (rv === 0) {
-              rv = a[index] - b[index];
-            }
-            return rv;
-          } else {
-            let rv = bdate - adate;
-            if (rv === 0) {
-              rv = b[index] - a[index];
-            }
-            return rv;
           }
         } else {
           if (!desc) {

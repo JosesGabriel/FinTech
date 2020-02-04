@@ -41,6 +41,7 @@
 import { mapActions, mapGetters } from "vuex";
 import rbHeader from "~/components/Header";
 import { UserNotificationAlertLayout } from "~/assets/js/helpers/notification";
+import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
 export default {
   components: {
@@ -74,7 +75,7 @@ export default {
       this.setLightSwitch(localStorage.currentMode);
     }
     /**
-     * Need to refactor
+     * For avoid duplicating mount need to refactor
      */
     this.$nextTick(() => {
       this.ticks = 2;
@@ -89,22 +90,26 @@ export default {
      * @return  returns alert
      */
     notification() {
-      const user = this.notification.user;
-      this.$snotify.html(
-        this.userNotificationAlertLayout(
-          user.profile_image,
-          this.notification._message
-        ),
-        {
-          timeout: 10000,
-          showProgressBar: false,
-          pauseOnHover: true,
-          config: {
+      if (this.notification) {
+        const user = this.notification.user;
+        this.$snotify.html(
+          this.userNotificationAlertLayout(
+            user.profile_image,
+            this.notification._message,
+            this.notification.post.id
+          ),
+          {
+            timeout: 10000,
+            showProgressBar: false,
+            pauseOnHover: true,
+            position: SnotifyPosition.leftBottom,
             newItemsOnTop: false,
-            closeOnClick: true
+            config: {
+              closeOnClick: true
+            }
           }
-        }
-      );
+        );
+      }
     }
   },
   methods: {

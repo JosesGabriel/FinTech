@@ -65,12 +65,15 @@
                 <v-text-field
                   label="Password"
                   color="success"
-                  type="password"
                   required
                   class="login__textfield"
+                  :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show ? 'text' : 'password'"
+                  @click:append="show = !show"
                 ></v-text-field>
                 <v-content class="text-right">
                   <span
+                    v-show="false"
                     id="forget_password"
                     class="caption font-weight-bold"
                     @click="showForgotPassword"
@@ -116,6 +119,11 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Login",
+  data() {
+    return {
+      show: false
+    };
+  },
   computed: {
     ...mapGetters({
       tradeLogin: "chart/tradeLogin",

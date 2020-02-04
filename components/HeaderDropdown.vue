@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="userSettings__dropdown--caret"></div>
     <v-card
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
@@ -99,21 +98,10 @@ export default {
 <style>
 .userSettings__dropdown {
   position: absolute;
-  top: 40px;
+  top: 45px;
   right: 20px;
   margin-right: 10px;
-  box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
-
-}
-.userSettings__dropdown--caret {
-  width: 0;
-  height: 0;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 17px solid rgb(182, 182, 182, 0.2);
-  position: absolute;
-  right: 40px;
-  top: 33px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }
 .userSettings__dropdown--border {
   border-bottom:  1px solid rgb(182, 182, 182, 0.2);
@@ -156,5 +144,43 @@ export default {
 }
 .userSettings__dropdown--border > .v-input--switch > .v-input__control {
   height: 30px !important;
+}
+</style>
+<style>
+.userSettings__dropdown.theme--dark:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #00121e;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userSettings__dropdown.theme--dark:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid #1f2f39;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userSettings__dropdown.theme--light:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #fff;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userSettings__dropdown.theme--light:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.12);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
 }
 </style>

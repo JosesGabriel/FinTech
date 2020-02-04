@@ -9,11 +9,30 @@
     >
       Bid and Ask
     </div>
-    <!-- bid and ask -->
+
     <v-card
+      v-show="loading"
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      :loading="loading"
+      class="mt-2 mr-2"
+      style="height:105px;"
+      flat
+      tile
+    >
+      <v-progress-linear
+        color="success"
+        indeterminate
+        buffer-value="100"
+        height="5"
+        class="mt-3"
+      ></v-progress-linear>
+    </v-card>
+
+    <!-- bid and ask -->
+    <v-card
+      v-show="!loading"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       style="height:105px;"
       flat
       tile
@@ -79,7 +98,7 @@
       </v-simple-table>
     </v-card>
     <!-- depthbar -->
-    <DepthBar />
+    <DepthBar :active-tab="activeTab" />
 
     <!-- time and trades -->
     <div
@@ -91,10 +110,10 @@
     >
       Time and Trade
     </div>
-    <TimeTrade />
+    <TimeTrade :active-tab="activeTab" />
 
     <!-- TransactionBar -->
-    <TransactionBar />
+    <TransactionBar :active-tab="activeTab" />
   </v-content>
 </template>
 
@@ -113,9 +132,11 @@ export default {
     TimeTrade,
     TransactionBar
   },
+  props: ["activeTab"],
   data() {
     return {
-      loading: "success"
+      currentTab: false,
+      loading: true
     };
   },
   computed: {
@@ -198,7 +219,7 @@ export default {
      * @return
      */
     initBidask: async function(symid) {
-      this.loading = "success";
+      this.loading = true;
       try {
         const response = await this.$api.chart.stocks.bidask({
           "symbol-id": symid,
@@ -218,7 +239,9 @@ export default {
         };
         this.setBidask(bidask);
         this.loading = false;
-      } catch (error) {}
+      } catch (error) {
+        this.loading = false;
+      }
     },
     /**
      * initialise and listen to bidask server-side event

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="userMessage__dropdown--caret"></div>
     <v-card
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
@@ -11,21 +10,23 @@
       class="userMessage__dropdown"
     >
       <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
-        <v-row no-gutters class="userMessage__dropdown-header">
-          <span class="pa-4 pb-2 body-2">Notifications</span>
-        </v-row>
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
           <NotificationCard
             v-if="index <= 2"
             v-for="(item, index) in dataNotification"
             :key="index"
             :notification="item"
+            @click="closeDropdown()"
           />
         </v-list>
         <v-row no-gutters class="userMessage__dropdown-footer">
-          <router-link to="/notification" class="no-transform userMessage__dropdown-link text-center">
+          <router-link
+            to="/notification"
+            class="no-transform userMessage__dropdown-link text-center"
+          >
             <span
-              :class="lightSwitch == 0 ? 'secondary--text' : 'white--text'"
+              @click="closeDropdown()"
+              :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
               class="pa-2 caption d-block seeall_dropdown-footer"
             >See All</span>
           </router-link>
@@ -59,48 +60,39 @@ export default {
         ? "#000000 !important"
         : "#ffffff !important";
     }
+  },
+  methods: {
+    closeDropdown(event) {
+      this.$emit("clicked");
+    }
   }
 };
 </script>
 <style scoped>
-.userMessage__dropdown-title {
-  font-weight: 700;
-}
 .seeall_dropdown-footer {
   width: 100%;
 }
-.userMessage__dropdown.theme--dark .userMessage__dropdown-header {
-  background: #00121e;
-}
-.userMessage__dropdown.theme--light .userMessage__dropdown-header {
-  background: #fff;
-}
 .userMessage__dropdown.theme--dark .userMessage__dropdown-footer {
   background: #00121e;
+  border-radius: 10px;
 }
 .userMessage__dropdown.theme--light .userMessage__dropdown-footer {
   background: #fff;
+  border-radius: 10px;
 }
 .userMessage__dropdown-body {
   overflow: auto;
   max-height: 360px;
+  border-bottom-left-radius: unset;
+  border-bottom-right-radius: unset;
 }
 /* Notification dropdown */
 .userMessage__dropdown {
   position: absolute;
-  top: 40px;
+  top: 45px;
   right: 216px;
   margin-right: 10px;
-}
-.userMessage__dropdown--caret {
-  width: 0;
-  height: 0;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 17px solid rgb(182, 182, 182, 0.2);
-  position: absolute;
-  right: 237px;
-  top: 33px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }
 .userMessage__dropdown--border {
   border-bottom: 1px solid rgb(182, 182, 182, 0.2);
@@ -137,7 +129,6 @@ export default {
   margin-left: -8px;
   margin-right: -8px;
 }
-
 .userMessage__dropdown--settings {
   font-size: 14px;
 }
@@ -146,5 +137,60 @@ export default {
 }
 .userMessage__dropdown-link {
   width: 100%;
+}
+</style>
+
+<style>
+.userMessage__dropdown-title {
+  font-weight: 700;
+  white-space: normal;
+  white-space: inherit;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+}
+.listItem__content {
+  align-items: unset !important;
+}
+.userMessage__message {
+  line-height: 15px !important;
+  display: block;
+}
+.userMessage__dropdown.theme--dark:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #00121e;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userMessage__dropdown.theme--dark:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid #1f2f39;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userMessage__dropdown.theme--light:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #fff;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userMessage__dropdown.theme--light:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.12);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
 }
 </style>

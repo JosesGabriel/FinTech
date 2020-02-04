@@ -61,6 +61,7 @@ export default {
         { src: "~/plugins/tradingview", mode: "client" },
         { src: "~/plugins/vue-numeral-filter.js", mode: "client" },
         { src: "~/plugins/components/chart/vue-apexcharts", mode: "client" },
+        { src: "~/plugins/components/alerts/vue-snotify", mode: "client" },
         { src: "~/plugins/vue-native-websocket", mode: "client" },
         { src: "~/plugins/vue-html2canvas", mode: "client" },
         { src: "~/plugins/custom-filters", mode: "client" },

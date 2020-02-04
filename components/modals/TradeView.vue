@@ -62,7 +62,7 @@
                     v-model="GetSelectStock"
                     class="pa-0 ma-0 body-2"
                     append-icon="mdi-chevron-down"
-                    label="Select Stock"
+                    label="Select a Stock"
                     color="success"
                     dense
                   >

@@ -7,9 +7,17 @@
       flat
       tile
     >
-      <Headline />
-      <Status />
-      <Sentiment />
+      <v-img
+        v-show="headlineLoading"
+        src="lyduz_loader.gif"
+        height="215px"
+        width="270px"
+        contain="true"
+      ></v-img>
+
+      <Headline v-show="!headlineLoading" />
+      <Status v-show="!headlineLoading" />
+      <Sentiment v-show="!headlineLoading" />
     </v-card>
     <v-divider></v-divider>
     <Tabs />
