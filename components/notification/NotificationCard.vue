@@ -1,22 +1,20 @@
 <template>
   <v-list-item
     @click="linkTo(notification.notificable.meta.post.id ? notification.notificable.meta.post.id : '#', notification.id)"
-    three-line
-    class="notification__item"
+    class="notification__item py-1"
     :class="notification.status"
   >
     <v-list-item-avatar class="mr-3" size="35">
       <img :src="profileImage" />
     </v-list-item-avatar>
 
-    <v-list-item-content class="py-2">
-      <v-list-item-subtitle class="body-2 ma-0 userMessage__dropdown-title">
+    <v-list-item-content class="listItem__content py-2">
+      <div class="body-2 ma-0 userMessage__dropdown-title">
         <span class="body-2 ma-0 userMessage__message">{{ notification.notificable.message }}</span>
-      </v-list-item-subtitle>
-      <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
+      </div>
+        <br />
+        <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>
-
-    <v-list-item-action></v-list-item-action>
   </v-list-item>
 </template>
 <script>
@@ -44,7 +42,7 @@ export default {
   methods: {
     localFormat: LocalFormat,
     addDynamicTime: AddDynamicTime,
-    
+
     /**
      * building link for each item
      *

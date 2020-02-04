@@ -95,7 +95,8 @@ export default {
         this.$snotify.html(
           this.userNotificationAlertLayout(
             user.profile_image,
-            this.notification._message
+            this.notification._message,
+            this.notification.post.id
           ),
           {
             timeout: 10000,

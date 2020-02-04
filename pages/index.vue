@@ -26,9 +26,9 @@ import Navbar from "~/components/Navbar";
 import Newsfeed from "~/components/social/Newsfeed";
 import TrendingStocks from "~/components/TrendingStocks";
 import WhoToMingle from "~/components/WhoToMingle";
+import MiniWatchlist from "~/components/MiniWatchlist";
 import FooterSidebar from "~/components/FooterSidebar";
 import PostField from "~/components/social/PostField";
-import MiniWatchlist from "~/components/MiniWatchlist";
 import Bulletin from "~/components/Bulletin";
 
 import { mapActions, mapGetters } from "vuex";
