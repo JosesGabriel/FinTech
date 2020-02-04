@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="userMessage__dropdown--caret"></div>
     <v-card
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
@@ -10,7 +9,7 @@
       width="350px"
       class="userMessage__dropdown"
     >
-      <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0 pt-3">
+      <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
           <NotificationCard
             v-if="index <= 2"
@@ -73,39 +72,27 @@ export default {
 .seeall_dropdown-footer {
   width: 100%;
 }
-.userMessage__dropdown.theme--dark .userMessage__dropdown-header {
-  background: #00121e;
-}
-.userMessage__dropdown.theme--light .userMessage__dropdown-header {
-  background: rgb(155, 151, 151);
-}
 .userMessage__dropdown.theme--dark .userMessage__dropdown-footer {
   background: #00121e;
+  border-radius: 10px;
 }
 .userMessage__dropdown.theme--light .userMessage__dropdown-footer {
   background: #fff;
+  border-radius: 10px;
 }
 .userMessage__dropdown-body {
   overflow: auto;
   max-height: 360px;
+  border-bottom-left-radius: unset;
+  border-bottom-right-radius: unset;
 }
 /* Notification dropdown */
 .userMessage__dropdown {
   position: absolute;
-  top: 40px;
+  top: 45px;
   right: 216px;
   margin-right: 10px;
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
-}
-.userMessage__dropdown--caret {
-  width: 0;
-  height: 0;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 17px solid rgba(216, 216, 216, 0.62);
-  position: absolute;
-  right: 237px;
-  top: 33px;
 }
 .userMessage__dropdown--border {
   border-bottom: 1px solid rgb(182, 182, 182, 0.2);
@@ -165,5 +152,45 @@ export default {
 }
 .listItem__content {
   align-items: unset !important;
+}
+.userMessage__message {
+  line-height: 15px !important;
+  display: block;
+}
+.userMessage__dropdown.theme--dark:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #00121e;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userMessage__dropdown.theme--dark:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid #1f2f39;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userMessage__dropdown.theme--light:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #fff;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.userMessage__dropdown.theme--light:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.12);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
 }
 </style>
