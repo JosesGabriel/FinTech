@@ -1,9 +1,26 @@
 <template>
   <v-content>
     <v-card
+      v-show="loading"
       :dark="lightSwitch == 1"
       :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
-      :loading="loading"
+      class="mt-2 mr-2"
+      flat
+      tile
+    >
+      <v-progress-linear
+        color="success"
+        indeterminate
+        buffer-value="100"
+        height="5"
+        class="mt-3"
+      ></v-progress-linear>
+    </v-card>
+
+    <v-card
+      v-show="!loading"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :style="`height: calc(100vh - ${responsiveHeight + 20}px)`"
       class="card__timetrade pl-1 pr-2"
       flat
@@ -71,9 +88,11 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "TimeTrade",
+  props: ["activeTab"],
   data() {
     return {
-      loading: "success",
+      loading: true,
+      currentTab: false,
       tempTrades: [],
       ctrTrades: 0
     };
@@ -150,7 +169,7 @@ export default {
      * @return
      */
     initTimetrade(symid) {
-      this.loading = "success";
+      this.loading = true;
       this.$api.chart.stocks
         .trades({
           "symbol-id": symid,
