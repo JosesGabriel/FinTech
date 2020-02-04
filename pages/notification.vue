@@ -40,9 +40,6 @@
                 <v-list-item-action></v-list-item-action>
               </v-list-item>
             </v-list>
-            <v-row no-gutters class="userMessage__dropdown-footer text-center">
-              <span class="pa-2 caption d-block seeall_dropdown-footer">See All</span>
-            </v-row>
           </v-container>
         </v-card>
       </v-col>

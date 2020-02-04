@@ -408,7 +408,7 @@ export default {
     localFormat: LocalFormat,
 
     postCounter() {
-      if (this.numberPost >= 1) {
+      if (this.numberPost >= 5) {
         this.showBanner = true;
       } else {
         this.showBanner = false;

@@ -147,6 +147,7 @@
         </v-btn>
       </a>
       <HeaderNotification
+        @clicked="closeDropdown"
         :dataNotification="dataNotification"
         v-if="showNotification && $auth.loggedIn"
       />
@@ -275,6 +276,9 @@ export default {
         this.showDropdown = false;
         this.showNotification = false;
       }
+    },
+    closeDropdown() {
+      this.showNotification = false
     },
     newNotication() {
       const m = {
