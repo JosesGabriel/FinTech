@@ -149,13 +149,14 @@ export default {
         this.closeSSE();
       }
 
+      const sseToken =
+        this.$auth.getToken("local") != false
+          ? this.$auth.getToken("local").replace("Bearer ", "")
+          : null;
+
       this.setSSE(
         new EventSource(
-          `${
-            process.env.STREAM_API_URL
-          }/sse/market-data/pse/all?token=${this.$auth
-            .getToken("local")
-            .replace("Bearer ", "")}`
+          `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${sseToken}`
         )
       );
 

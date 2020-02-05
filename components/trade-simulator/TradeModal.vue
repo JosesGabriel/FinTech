@@ -243,7 +243,7 @@
                 @click="e1 = 2"
                 class="text-capitalize black--text"
                 light
-                :disabled="(GetSelectStock != '' && this.marketStatus ? false : true)"
+                :disabled="(GetSelectStock != '' ? false : true)"
               >Continue</v-btn>
             </v-row>
            
@@ -677,18 +677,25 @@ export default {
           }
         };   
 
-         this.$api.journal.portfolio
-        .tradebuy(fund_id, stock_id, buyparams)
-        .then(response => {
-            if (response.success) {          
-              this.setSimulatorOpenPosition(this.OpenPosition);
-              this.e1 = 1;
-              this.onreset = false;
-              this.buySelected = true;
-              this.sellSelected = false;
-              this.GetSelectStock = "";
-            }
-          });
+        try {
+           this.$api.journal.portfolio
+            .tradebuy(fund_id, stock_id, buyparams)
+            .then(response => {
+                if (response.success) {          
+                  this.setSimulatorOpenPosition(this.OpenPosition);
+                  this.e1 = 1;
+                  this.onreset = false;
+                  this.buySelected = true;
+                  this.sellSelected = false;
+                  this.GetSelectStock = "";
+                }
+              });
+          
+        }
+        catch(err) {
+            console.log(err);
+        }
+       
       }
      
     },

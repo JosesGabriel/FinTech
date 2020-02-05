@@ -57,6 +57,7 @@
                       dense
                       background-color="transparent"
                       outlined
+                      v-model="computedDateFormatted"
                     ></v-text-field>
                   </v-btn>
                 </template>
@@ -70,7 +71,7 @@
                 >
                   <v-spacer></v-spacer>
                   <v-btn text color="success" @click="modal = false">Cancel</v-btn>
-                  <v-btn text color="success" @click="modal = false">Confirm</v-btn>
+                  <v-btn text color="success" @click.stop="modal = false" @click="$refs.dialog.save(date)">Confirm</v-btn>
                 </v-date-picker>
              </v-dialog>
                <span 
@@ -88,7 +89,8 @@
         :style="(this.lightSwitch == 0 ? 'background:transparent; border-top: 1px solid #dadada' : 'background:transparent; border-top: 1px solid #172431')"
       >
         <v-container class="pa-0">
-          <BuyTab       
+          <BuyTab  
+            :BuyDate="computedDateFormatted"     
           />
         </v-container>
       </v-tab-item>
@@ -101,6 +103,7 @@
       >
         <v-container class="pa-0">
           <SellTab
+            :SellDate="computedDateFormatted"
           />
         </v-container>
       </v-tab-item>
@@ -146,12 +149,19 @@ export default {
         ? "#000000 !important"
         : "#ffffff !important";
     },
+    computedDateFormatted () {
+        return this.formatDate(this.date)
+      },
   },
   methods: {
     ...mapActions({
       setShowBrokers: "chart/setShowBrokers"
     }),
-    
+    formatDate (date) {
+        if (!date) return null
+        const [year, month, day] = date.split('-')
+        return `${month}/${day}/${year}`
+      },
   },
    components: {
       BuyTab,

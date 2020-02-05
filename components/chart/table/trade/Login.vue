@@ -86,39 +86,31 @@
                 Not yet ready
               </v-content>
               <v-col cols="12 pa-0 text-center">
-                <v-btn
-                  class="mt-10 text-capitalize"
-                  color="success"
-                  rounded
-                  block
-                  depressed
-                  disabled
-                  @click="setTradeLogin(false)"
-                >
-                  <span
-                    :class="[
-                      { 'black--text': lightSwitch == 0 },
-                      { 'white--text': lightSwitch == 1 }
-                    ]"
-                    >Connect</span
-                  ></v-btn
-                >
-                <v-btn
-                  class="my-2 text-capitalize"
-                  rounded
-                  block
-                  depressed
-                  color="success"
-                  @click="setTradeLogin(false)"
-                >
-                  <span
-                    :class="[
-                      { 'black--text': lightSwitch == 0 },
-                      { 'white--text': lightSwitch == 1 }
-                    ]"
-                    >Close</span
+                <v-hover v-slot:default="{ hover }">
+                  <v-btn
+                    class="mt-10 text-capitalize"
+                    rounded
+                    block
+                    disabled
+                    :color="!hover ? 'success' : 'successhover'"
+                    @click="setTradeLogin(false)"
                   >
-                </v-btn>
+                    <span class="black--text font-weight-bold"
+                      >Connect</span
+                    ></v-btn
+                  >
+                </v-hover>
+                <v-hover v-slot:default="{ hover }">
+                  <v-btn
+                    class="my-2 text-capitalize"
+                    rounded
+                    block
+                    :color="!hover ? 'success' : 'successhover'"
+                    @click="setTradeLogin(false)"
+                  >
+                    <span class="black--text font-weight-bold">Close</span>
+                  </v-btn>
+                </v-hover>
               </v-col>
             </v-row>
           </v-card-text>

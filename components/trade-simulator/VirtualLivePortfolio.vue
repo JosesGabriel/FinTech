@@ -238,6 +238,11 @@ export default {
       default() {
         return "";
       }
+    },
+    Realized: {
+      default() {
+        return "";
+      }
     }
   },
   watch: {
@@ -464,8 +469,7 @@ export default {
                   };
                   this.$api.chart.charts.latest(params).then(
                     function(result) {   
-                        console.log('PRIOR DATA', result); 
-                      console.log('Symbol ID', this.portfolioLogs[index].metas.stock_id);                   
+                                    
                       let prior_date = new Date(result.data.t[1]*1000);
                       let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
                       let tcost =
@@ -475,7 +479,7 @@ export default {
                         let priorPrice = result.data.c[1];
                         
                         if(isNaN(priorPrice)){
-                          console.log('NAN');
+                         
                           priorPrice = result.data.c[0];
                         }
 
@@ -504,11 +508,10 @@ export default {
                           'id': this.simulatorPortfolioID,
                           'date': dformat,
                           'priorprofit': this.priorProfitLoss,
+                          'priortlogsprofit': this.Realized,
                           'currentprofit': currentProfitLoss
                         };   
-                        console.log('Prior -'+ priorprofit);      
-                        console.log('Prior Total -'+ this.priorProfitLoss); 
-                   
+                                           
                         //localStorage.removeItem(this.simulatorPortfolioID);
                         let totalarray = this.portfolioLogs.length - 1;
                         

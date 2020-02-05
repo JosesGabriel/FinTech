@@ -37,12 +37,19 @@
 
       <div>
         <v-icon
-          :style="{color: toggleFontColor }"
+          :style="{ color: toggleFontColor }"
           class="header__menuIcon"
           @click="toggleMenu"
-        >mdi-menu</v-icon>
-        <div :class="this.display ? 'display' : 'noDisplay'" class="userSettings__dropdown--caret">
-          <div class="empty" :class="this.lightSwitch == 0 ? 'caretLight' : 'caretDark'"></div>
+          >mdi-menu</v-icon
+        >
+        <div
+          :class="this.display ? 'display' : 'noDisplay'"
+          class="userSettings__dropdown--caret"
+        >
+          <div
+            class="empty"
+            :class="this.lightSwitch == 0 ? 'caretLight' : 'caretDark'"
+          ></div>
         </div>
       </div>
 
@@ -54,10 +61,16 @@
       >
         <v-list-item
           class="listItem__marketSentiments"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
         >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__marketSentiments">Market Sentiments</v-list-item-title>
+          <router-link
+            to
+            class="no-transform"
+            :style="{ color: toggleFontColor }"
+          >
+            <v-list-item-title class="listItem__marketSentiments"
+              >Market Sentiments</v-list-item-title
+            >
           </router-link>
         </v-list-item>
         <!--<v-list-item class="listItem__learn">
@@ -78,12 +91,18 @@
 
         <v-list-item
           class="listItem__powerTools"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
           @click="displayPowerTools = true"
           @mouseleave="displayPowerTools = false"
         >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__powerTools">Power Tools</v-list-item-title>
+          <router-link
+            to
+            class="no-transform"
+            :style="{ color: toggleFontColor }"
+          >
+            <v-list-item-title class="listItem__powerTools"
+              >Power Tools</v-list-item-title
+            >
           </router-link>
         </v-list-item>
       </v-card>
@@ -98,11 +117,17 @@
       >
         <v-list-item
           class="listItem__buySellCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
           @click.stop="buySellDialog = true"
         >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__buySellCalc">Buy/Sell Calculator</v-list-item-title>
+          <router-link
+            to
+            class="no-transform"
+            :style="{ color: toggleFontColor }"
+          >
+            <v-list-item-title class="listItem__buySellCalc"
+              >Buy/Sell Calculator</v-list-item-title
+            >
           </router-link>
           <v-dialog v-model="buySellDialog" max-width="500">
             <BuySellCalculator />
@@ -111,11 +136,17 @@
 
         <v-list-item
           class="listItem__varCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
           @click.stop="varDialog = true"
         >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__varCalc">VAR Calculator</v-list-item-title>
+          <router-link
+            to
+            class="no-transform"
+            :style="{ color: toggleFontColor }"
+          >
+            <v-list-item-title class="listItem__varCalc"
+              >VAR Calculator</v-list-item-title
+            >
           </router-link>
           <v-dialog v-model="varDialog" max-width="320">
             <VARCalculator :data="varDialog" />
@@ -124,11 +155,17 @@
 
         <v-list-item
           class="listItem__avCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
           @click.stop="averagePriceDialog = true"
         >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__avCalc">Average Price Calculator</v-list-item-title>
+          <router-link
+            to
+            class="no-transform"
+            :style="{ color: toggleFontColor }"
+          >
+            <v-list-item-title class="listItem__avCalc"
+              >Average Price Calculator</v-list-item-title
+            >
           </router-link>
           <v-dialog v-model="averagePriceDialog" max-width="350">
             <AveragePriceCalculator />
@@ -143,13 +180,15 @@
           text
           @click="showNotification = !showNotification"
         >
-          <v-badge :value="showBadge" color="success" small dot>Notification</v-badge>
+          <v-badge :value="showBadge" color="success" small dot
+            >Notification</v-badge
+          >
         </v-btn>
       </a>
       <HeaderNotification
-        @clicked="closeDropdown"
-        :dataNotification="dataNotification"
         v-if="showNotification && $auth.loggedIn"
+        :data-notification="dataNotification"
+        @clicked="closeDropdown"
       />
 
       <a :href="'https://vyndue.com'" target="_blank" class="social__router">
@@ -165,7 +204,10 @@
               ? (showDropdown = !showDropdown)
               : (registerDialogModel = true)
           "
-        >{{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}</v-btn>
+          >{{
+            $auth.loggedIn ? $auth.user.data.user.username : "Account"
+          }}</v-btn
+        >
       </a>
       <HeaderDropdown v-if="showDropdown && $auth.loggedIn" />
     </v-toolbar-items>
@@ -195,10 +237,12 @@ export default {
     AveragePriceCalculator,
     VARCalculator
   },
-  data: {
-    type: Boolean
-  },
   props: ["ticks"],
+  data: function() {
+    return {
+      type: Boolean
+    };
+  },
   data() {
     return {
       searchButtonIsVisible: true,
@@ -229,6 +273,14 @@ export default {
         : "#ffffff !important";
     }
   },
+  watch: {
+    ticks() {
+      this.initSSE();
+    },
+    notification() {
+      this.newNotication();
+    }
+  },
   mounted() {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
     if (this.stockList.length == 0) {
@@ -251,14 +303,6 @@ export default {
   beforeDestroy() {
     document.removeEventListener("click", this.close);
   },
-  watch: {
-    ticks() {
-      this.initSSE();
-    },
-    notification() {
-      this.newNotication();
-    }
-  },
   methods: {
     ...mapActions({
       setStockList: "global/setStockList",
@@ -278,7 +322,7 @@ export default {
       }
     },
     closeDropdown() {
-      this.showNotification = false
+      this.showNotification = false;
     },
     newNotication() {
       const m = {
@@ -318,8 +362,14 @@ export default {
       /**
        * all notifications here
        */
+
+      const sseToken =
+        this.$auth.getToken("local") != false
+          ? this.$auth.getToken("local").replace("Bearer ", "")
+          : null;
+
       const evtSourceAll = new EventSource(
-        `${process.env.STREAM_API_URL}/sse/notifications/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`
+        `${process.env.STREAM_API_URL}/sse/notifications/all?token=${sseToken}`
       );
 
       const allNotificationList = this.allNotificationEventsList();
@@ -337,7 +387,7 @@ export default {
        */
       if (this.$auth.user != null) {
         const evtSource = new EventSource(
-          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${this.$auth.getToken('local').replace('Bearer ','')}`
+          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${sseToken}`
         );
 
         const userNotificationList = this.userNotificationEventsList();
@@ -536,4 +586,3 @@ export default {
   font-size: 20px;
 }
 </style>
-
