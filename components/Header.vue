@@ -275,7 +275,7 @@ export default {
   },
   watch: {
     ticks() {
-      this.initSSE();
+      //this.initSSE();
     },
     notification() {
       this.newNotication();
@@ -369,7 +369,7 @@ export default {
           : null;
 
       const evtSourceAll = new EventSource(
-        `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${sseToken}`
+        `${process.env.STREAM_API_URL}/sse/notifications/all?token=${sseToken}`
       );
 
       const allNotificationList = this.allNotificationEventsList();
@@ -386,14 +386,9 @@ export default {
        * @return  {object}  returns objects
        */
       if (this.$auth.user != null) {
-        let eventSource = "";
-        if (this.$auth.getToken("local") != false) {
-          eventSource = `${process.env.STREAM_API_URL}/sse/notification/${
-            this.$auth.user.data.user.uuid
-          }?token=${this.$auth.getToken("local").replace("Bearer ", "")}`;
-        }
-
-        const evtSource = new EventSource(eventSource);
+        const evtSource = new EventSource(
+          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}/?token=${sseToken}`
+        );
 
         const userNotificationList = this.userNotificationEventsList();
 
