@@ -1,6 +1,10 @@
 <template>
   <v-col class="pa-0">
-    <span class="newPosts_banner caption black--text" @click="fetchNewPost()" v-show="showBanner">
+    <span
+      v-show="showBanner"
+      class="newPosts_banner caption black--text"
+      @click="fetchNewPost()"
+    >
       <v-icon small color="black">mdi-arrow-up</v-icon>
       <span class="font-weight-bold">New posts</span>
     </span>
@@ -65,7 +69,15 @@
                   >
                     <img src="/icon/bullish.svg" width="6" />
                   </v-btn>
-                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
+                  <v-btn
+                    v-else
+                    icon
+                    outlined
+                    fab
+                    width="14"
+                    height="14"
+                    color="error"
+                  >
                     <img src="/icon/bearish.svg" width="6" />
                   </v-btn>
                 </span>
@@ -97,7 +109,8 @@
                         x-small
                         text
                         v-on="on"
-                      >Delete</v-btn>
+                        >Delete</v-btn
+                      >
                     </template>
 
                     <v-card
@@ -107,7 +120,8 @@
                       <v-card-title
                         class="headline success--text lighten-2"
                         primary-title
-                      >Delete Post?</v-card-title>
+                        >Delete Post?</v-card-title
+                      >
 
                       <v-card-text>
                         Are you sure you want to permanently remove this post
@@ -133,7 +147,8 @@
                             deletePost(postsObject[n - 1].id, n - 1),
                               (deleteDialog = false)
                           "
-                        >Delete</v-btn>
+                          >Delete</v-btn
+                        >
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -147,7 +162,8 @@
                     @click="
                       (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
-                  >Edit</v-btn>
+                    >Edit</v-btn
+                  >
                   <v-btn
                     v-if="
                       postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
@@ -155,7 +171,8 @@
                     x-small
                     text
                     @click="followAccount(postsObject[n - 1].user.uuid)"
-                  >Follow</v-btn>
+                    >Follow</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -192,9 +209,12 @@
                 ),
                   (editPostMode = false)
               "
-            >Done Editing</v-btn>
+              >Done Editing</v-btn
+            >
           </div>
-          <span v-else class="caption px-5 pb-3">{{ postsObject[n - 1].content }}</span>
+          <span v-else class="caption px-5 pb-3">{{
+            postsObject[n - 1].content
+          }}</span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
         </v-list-item-content>
@@ -302,7 +322,11 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
   </v-col>
 </template>
 
@@ -355,7 +379,8 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
       newPosts: "global/getNewPosts",
-      newComment: "social/getNewComment"
+      newComment: "social/getNewComment",
+      deleteComment: "social/getDeleteComment"
     })
   },
   watch: {
@@ -401,6 +426,25 @@ export default {
       this.postsObject[this.newComment.postIndex].comments[
         this.newComment.commentIndex
       ].comments.push(this.newComment.data);
+    },
+    deleteComment() {
+      if (this.deleteComment.isChild) {
+        let parentComment = this.postsObject[this.deleteComment.postIndex]
+          .comments[this.deleteComment.commentIndex].comments;
+
+        for (let i = 0; i < parentComment.length; i++) {
+          if (parentComment[i].id == this.deleteComment.data.id) {
+            this.postsObject[this.deleteComment.postIndex].comments[
+              this.deleteComment.commentIndex
+            ].comments.splice(i, 1);
+          }
+        }
+      } else {
+        this.postsObject[this.deleteComment.postIndex].comments.splice(
+          this.deleteComment.commentIndex,
+          1
+        );
+      }
     }
   },
   mounted() {
@@ -507,7 +551,7 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-            
+            console.log(response);
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
@@ -618,12 +662,17 @@ export default {
         if (response.success) {
           this.triggerAlert(true, response.message);
           this.postsObject[index].comments.push({
+            id: response.data.comment.id,
+            post_id: response.data.comment.post_id,
+            user_id: response.data.comment.user_id,
+            parent_id: response.data.comment.parent_id,
+            comments: [],
             content: content,
             created_at: new Date(),
             user: {
               profile_image: this.$auth.user.data.user.profile_image,
-              first_name: this.$auth.user.data.user.first_name,
-              last_name: this.$auth.user.data.user.last_name
+              name: this.$auth.user.data.user.name,
+              uuid: this.$auth.user.data.user.uuid
             }
           });
           // this.postsObject[index].comments_count++;

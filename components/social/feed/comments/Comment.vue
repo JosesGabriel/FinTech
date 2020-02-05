@@ -15,6 +15,19 @@
       <v-container class="pa-0 body-2">
         <strong class="text--darken-2 caption">{{ comment.user.name }}</strong>
         <span class="caption">{{ comment.content }}</span>
+
+        <span v-if="comment.user.uuid == $auth.user.data.user.uuid">
+          <v-btn
+            icon
+            x-small
+            @click="commentSettingsToggle = !commentSettingsToggle"
+            ><v-icon>mdi-dots-horizontal</v-icon></v-btn
+          >
+        </span>
+        <span v-if="commentSettingsToggle">
+          <v-btn x-small>Edit</v-btn>
+          <v-btn x-small @click="deleteComment(comment.id)">Delete</v-btn>
+        </span>
       </v-container>
       <v-container class="pa-0 ma-0">
         <v-btn icon outlined fab width="21" height="21" color="secondary">
@@ -39,12 +52,15 @@
         <span class="px-2 overline no-transform">
           {{ localFormat(comment.created_at, "fn") }}
         </span>
+
         <List
           v-if="comment.comments"
           :comments="comment.comments"
           :postid="postid"
           :iteration="comment.id"
           :postindex="postindex"
+          :ischild="true"
+          :keyprop="keyprop"
         />
       </v-container>
       <span>
@@ -104,13 +120,25 @@ export default {
       default() {
         return "";
       }
+    },
+    childkeyprop: {
+      default() {
+        return "";
+      }
+    },
+    ischild: {
+      default() {
+        return false;
+      },
+      type: Boolean
     }
   },
   data() {
     return {
       replyCommentMode: false,
       currentCommentIndex: "",
-      commentValue: ""
+      commentValue: "",
+      commentSettingsToggle: false
     };
   },
   computed: {
@@ -121,9 +149,29 @@ export default {
   methods: {
     ...mapActions({
       setAlert: "global/setAlert",
-      setNewComment: "social/setNewComment"
+      setNewComment: "social/setNewComment",
+      setDeleteComment: "social/setDeleteComment"
     }),
     localFormat: LocalFormat,
+
+    deleteComment(id) {
+      this.$api.social.posts.deleteComment(this.postid, id).then(response => {
+        if (response.success) {
+          this.setDeleteComment({
+            data: response.data.comment,
+            postIndex: this.postindex,
+            commentIndex: this.ischild ? this.childkeyprop : this.keyprop,
+            isChild: this.ischild
+          });
+          const alert = {
+            model: true,
+            state: true,
+            message: response.message
+          };
+          this.setAlert(alert);
+        }
+      });
+    },
     /**
      * Fires when user replies to a comment
      * Includes an if condition which checks if comment being replied to is 'top-level' or 'child-level'
@@ -168,7 +216,7 @@ export default {
             this.setNewComment({
               data: responseObject,
               postIndex: this.postindex,
-              commentIndex: this.keyprop
+              commentIndex: this.ischild ? this.childkeyprop : this.keyprop
             });
             const alert = {
               model: true,

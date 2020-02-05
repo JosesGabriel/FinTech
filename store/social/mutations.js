@@ -7,5 +7,8 @@ export default {
   },
   SET_NEWCOMMENT(state, data) {
     state.newComment = data;
+  },
+  SET_DELETECOMMENT(state, data) {
+    state.deleteComment = data;
   }
 };
