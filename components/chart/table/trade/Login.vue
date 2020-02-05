@@ -91,6 +91,7 @@
                     class="mt-10 text-capitalize"
                     rounded
                     block
+                    disabled
                     :color="!hover ? 'success' : 'successhover'"
                     @click="setTradeLogin(false)"
                   >

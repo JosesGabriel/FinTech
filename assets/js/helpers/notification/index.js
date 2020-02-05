@@ -13,8 +13,8 @@ export function UserNotificationAlertLayout(image, message, post_id) {
         image = image
     }
     const alert =
-        `<a href="/post/${post_id}" class="no-transform">
-        <div class="container alertContainer pa-2">
+        `<a href="/post/${post_id}" class="alertLink__a no-transform">
+        <div class="container alertContainer pa-2 black--text">
             <div class="row">
                 <div class="col-sm-3 py-1">
                     <div class="alertLeft__container">

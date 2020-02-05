@@ -99,7 +99,7 @@ export default {
             this.notification.post.id
           ),
           {
-            timeout: 10000,
+            timeout: 1000000,
             showProgressBar: false,
             pauseOnHover: true,
             position: SnotifyPosition.leftBottom,

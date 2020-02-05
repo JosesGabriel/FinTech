@@ -428,7 +428,7 @@ export default {
     putNumberComment() {
       for (let i = 0; i < this.postsObject.length; i++) {
         if (this.postsObject[i].id === this.newPosts.data.post.id) {
-          this.postsObject[i].comments_count += 1;
+          this.postsObject[i].comment_descendants_count += 1;
         }
       }
     },

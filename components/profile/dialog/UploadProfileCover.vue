@@ -10,8 +10,8 @@
         class="d-flex justify-center align-center mt-2 upload-container"
       >
         <div class="image_preview-container d-flex justify-center align-center">
-          <img :src="imageArray[0]" :height="245" />
-          <v-btn icon class="image_close" v-show="imageDefault != true" @click="imageArray = []">
+          <img :src="imageArray[0]" height="100%" width="auto" />
+          <v-btn icon class="image_close" v-show="imageDefault != true" @click="clearInputs ,imageArray = []">
             <v-icon class="pa-1">mdi-close</v-icon>
           </v-btn>
         </div>
@@ -45,8 +45,17 @@
           medium
           outlined
           color="success"
+          v-show="showUpload"
           @click="onClickImageUploadBtn"
         >Upload</v-btn>
+        <v-btn
+          class="ma-1 text-capitalize"
+          medium
+          outlined
+          color="success"
+          v-show="showSave"
+          @click="save"
+        >Save</v-btn>
       </v-card>
     </v-container>
   </v-dialog>
@@ -76,15 +85,19 @@ export default {
   data() {
     return {
       imageArray: [],
-      imageDefault: true
+      imageDefault: true,
+      showUpload: true,
+      showSave: false,
+      cloudString: null
     };
   },
   methods: {
-    onClickImageUploadBtn: function() {
+    onClickImageUploadBtn() {
       this.$refs.postField__inputRef.click();
     },
 
-    onInputFileChange: function(e) {
+    onInputFileChange(e) {
+      this.upload();
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       for (var i = 0; i < files.length; i++) {
@@ -93,13 +106,47 @@ export default {
       }
     },
 
-    generateImagePreviews: function(file, type) {
+    generateImagePreviews(file, type) {
       this.imageArray = [];
       var reader = new FileReader();
       reader.onload = e => {
         this.imageArray.push(e.target.result);
       };
       reader.readAsDataURL(file);
+    },
+
+    upload() {
+      this.cloudString = "";
+      let formData = new FormData();
+      formData.append("file", this.$refs.postField__inputRef.files[0]);
+      this.$api.social.upload
+        .create(formData)
+        .then(
+          function(response) {
+            this.showUpload = false;
+            this.showSave = true;
+
+            this.cloudString = response.data.file.url;
+          }.bind(this)
+        )
+    },
+
+    save() {
+      const payload = {
+        cover_image: this.cloudString
+      };
+      this.$api.accounts.account.putnoid(payload).then(response => {
+        if (response.success) {
+          this.showUpload = true;
+          this.showSave = false;
+        }
+      });
+    },
+
+    clearInputs() {
+      this.imageArray = [];
+      this.showUpload = true;
+      this.showSave = false;
     }
   },
   watch: {
