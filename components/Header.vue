@@ -275,7 +275,7 @@ export default {
   },
   watch: {
     ticks() {
-      //this.initSSE();
+      this.initSSE();
     },
     notification() {
       this.newNotication();
