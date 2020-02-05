@@ -1,6 +1,9 @@
 <template>
-  <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
-
+  <v-container
+    class="page__wrapper"
+    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+    dark
+  >
     <v-row class="mb-5" no-gutters>
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar active="social" />
@@ -77,9 +80,15 @@ export default {
         this.sse.close();
       }
 
+      const sseToken =
+        this.$auth.getToken("local") != false
+          ? this.$auth.getToken("local").replace("Bearer ", "")
+          : null;
+
       this.setSSE(
-        new EventSource(`${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`)
-        // new EventSource("http://localhost:8021/sse/market-data/pse/all")
+        new EventSource(
+          `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${sseToken}`
+        )
       );
 
       this.sse.onopen = function() {};

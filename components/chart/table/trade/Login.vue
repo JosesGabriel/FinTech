@@ -86,25 +86,30 @@
                 Not yet ready
               </v-content>
               <v-col cols="12 pa-0 text-center">
-                <v-btn
-                  class="mt-10"
-                  color="success"
-                  outlined=""
-                  rounded
-                  block
-                  disabled
-                  @click="setTradeLogin(false)"
-                  >CONNECT</v-btn
-                >
-                <v-btn
-                  class="my-2"
-                  outlined
-                  rounded
-                  block
-                  color="success"
-                  @click="setTradeLogin(false)"
-                  >CLOSE</v-btn
-                >
+                <v-hover v-slot:default="{ hover }">
+                  <v-btn
+                    class="mt-10 text-capitalize"
+                    rounded
+                    block
+                    :color="!hover ? 'success' : 'successhover'"
+                    @click="setTradeLogin(false)"
+                  >
+                    <span class="black--text font-weight-bold"
+                      >Connect</span
+                    ></v-btn
+                  >
+                </v-hover>
+                <v-hover v-slot:default="{ hover }">
+                  <v-btn
+                    class="my-2 text-capitalize"
+                    rounded
+                    block
+                    :color="!hover ? 'success' : 'successhover'"
+                    @click="setTradeLogin(false)"
+                  >
+                    <span class="black--text font-weight-bold">Close</span>
+                  </v-btn>
+                </v-hover>
               </v-col>
             </v-row>
           </v-card-text>
