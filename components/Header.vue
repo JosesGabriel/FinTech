@@ -387,7 +387,7 @@ export default {
        */
       if (this.$auth.user != null) {
         const evtSource = new EventSource(
-          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}/?token=${sseToken}`
+          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${sseToken}`
         );
 
         const userNotificationList = this.userNotificationEventsList();
