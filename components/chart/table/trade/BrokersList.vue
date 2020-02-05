@@ -100,7 +100,7 @@ export default {
     showModal: function(item) {
       // if paper trade, no need to show login
       if (item.modal == false) {
-        //this.setShowBrokers(false);
+        this.setShowBrokers(false);
         return;
       }
       this.setTradeBroker(item);

@@ -126,17 +126,7 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-row>
-        <v-col cols="12" style="text-align:center;">
-          <v-btn
-            text
-            class="text-capitalize"
-            dense
-            :style="{ color: toggleFontColor }"
-            @click="closeDialog"
-            >Close</v-btn>
-        </v-col>
-      </v-row>
+
   </div>    
   <div :class="calcu ? 'calc_display': 'calc_nodisplay'">  
   

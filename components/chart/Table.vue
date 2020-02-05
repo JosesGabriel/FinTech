@@ -77,12 +77,10 @@
         :key="item.id"
         active-class="tabSelected"
         :href="`#tab-${item.id}`"
-        class="text-capitalize subtitle-1"
-        style="font-size: .8rem !important;"
         :disabled="item.disabled"
         @click="toggleTabs(item.id)"
       >
-        <b>{{ item.title }}</b>
+        <span class="font-weight-bold body-2 text-capitalize">{{ item.title }}</span>
       </v-tab>
 
       <v-tab-item

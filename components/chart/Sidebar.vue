@@ -12,7 +12,7 @@
         src="lyduz_loader.gif"
         height="215px"
         width="270px"
-        contain="true"
+        contain
       ></v-img>
 
       <Headline v-show="!headlineLoading" />
