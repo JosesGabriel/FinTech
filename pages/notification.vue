@@ -5,7 +5,11 @@
         <Navbar active="social" />
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
-        <v-row no-gutters class="userMessage__dropdown-header" :class="lightSwitch == 0 ? 'black--text' : 'secondary--text'">
+        <v-row
+          no-gutters
+          class="userMessage__dropdown-header"
+          :class="lightSwitch == 0 ? 'black--text' : 'secondary--text'"
+        >
           <span class="pa-4 pl-0 pb-2 body-2 font-weight-bold">Notifications</span>
         </v-row>
         <v-card
@@ -32,12 +36,13 @@
 
                 <v-list-item-content class="py-2">
                   <v-list-item-subtitle class="body-2 ma-0 userMessage__dropdown-title">
-                    <span class="body-2 ma-0 userMessage__message caption font-weight-bold">{{ item.notificable.message }}</span>
+                    <span
+                      class="body-2 ma-0 userMessage__message caption font-weight-bold"
+                    >{{ item.notificable.message }}</span>
                   </v-list-item-subtitle>
-                  <span class="caption tertiary--text">{{ localFormat(item.created_at, "fn") }}</span>
                 </v-list-item-content>
 
-                <v-list-item-action></v-list-item-action>
+                <span class="caption tertiary--text">{{ localFormat(item.created_at, "fn") }}</span>
               </v-list-item>
             </v-list>
           </v-container>

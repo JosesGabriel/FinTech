@@ -31,6 +31,9 @@ export default $axios => ({
     followAccount(params) {
         return $axios.$post(`${baseURL}/users/` + params + `/follow`);
     },
+    follow(params) {
+        return $axios.$get(`${baseURL}/users/` + params);
+    },
     notifications() {
         return $axios.$get(`${process.env.API_URL}/notifications`);
     },
