@@ -1,5 +1,5 @@
 <template>
-  <v-col ref="componentWrapper" class="pa-0">
+  <v-col class="pa-0" ref="componentWrapper">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
       <v-spacer></v-spacer>
@@ -8,28 +8,23 @@
         color="success"
         dark
         class="text-capitalize mr-2 resetbtn"
+        @click.stop="showResetForm=true"
         height="23"
-        @click.stop="showResetForm = true"
       >
         <span class="resetBtn">Reset</span>
       </v-btn>
       <v-btn
         outlined
         color="success"
+        @click.stop="EnterTradeModal=true"
         dark
         class="text-capitalize mr-2 resetbtn"
         height="23"
-        @click.stop="EnterTradeModal = true"
       >
-        <span class="trdeBtn">Trade</span>
+      <span class="trdeBtn">Trade</span>
       </v-btn>
 
-      <v-btn
-        icon
-        small
-        :dark="lightSwitch == 0 ? false : true"
-        @click="showShareModal()"
-      >
+      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon style="font-size:16px;">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
@@ -39,103 +34,67 @@
       :items="portfolioLogs"
       :page.sync="page"
       hide-default-footer
+      @page-count="pageCount = $event"
       :dark="lightSwitch == true"
       :style="{ background: cardBackground }"
       class="data_table-container pl-10 secondary--text"
-      @page-count="pageCount = $event"
-    >
-      <template v-slot:item.stock_id="{ item }">
-        <span class="pl-3" :style="{ color: secondaryColor }">{{
-          item.stock_id
-        }}</span>
-      </template>
-      <template v-slot:item.Position="{ item }">
-        <span class="pl-3" :style="{ color: secondaryColor }">{{
-          item.Position
-        }}</span>
-      </template>
-      <template v-slot:item.AvgPrice="{ item }">
-        <span class="pl-3" :style="{ color: secondaryColor }">{{
-          item.AvgPrice
-        }}</span>
-      </template>
-      <template v-slot:item.TotalCost="{ item }">
-        <span class="pl-3" :style="{ color: secondaryColor }">{{
-          item.TotalCost
-        }}</span>
-      </template>
+    >  
+        
+            <template v-slot:item.stock_id="{ item }" >
+              <span class="pl-3" :style="{ color: secondaryColor }">{{ item.stock_id }}</span>
+            </template>
+            <template v-slot:item.Position="{ item }">
+              <span class="pl-3" :style="{ color: secondaryColor }">{{ item.Position }}</span>
+            </template>
+            <template v-slot:item.AvgPrice="{ item }">
+              <span class="pl-3" :style="{ color: secondaryColor }">{{ item.AvgPrice }}</span>
+            </template>
+            <template v-slot:item.TotalCost="{ item }">
+              <span class="pl-3" :style="{ color: secondaryColor }">{{ item.TotalCost }}</span>
+            </template>
 
-      <template v-slot:item.MarketValue="{ item }">
-        <span
-          :id="item.stock_id"
-          class="pl-3"
-          :style="{ color: secondaryColor }"
-          >{{ item.MarketValue }}</span
-        >
-      </template>
-      <template v-slot:item.Profit="{ item }">
-        <span
-          :class="
-            parseFloat(item.Profit) > 0
-              ? 'positive'
-              : parseFloat(item.Profit) < 0
-              ? 'negative'
-              : ''
-          "
-          >{{ item.Profit }}</span
-        >
-      </template>
-      <template v-slot:item.Perf="{ item }">
-        <span
-          :class="
-            parseFloat(item.Perf) > 0
-              ? 'positive'
-              : parseFloat(item.Perf) < 0
-              ? 'negative'
-              : ''
-          "
-          >{{ item.Perf }}%</span
-        >
-      </template>
-      <template v-slot:item.action="{ item }">
-        <div
-          v-show="menuShow"
-          :id="`pl_${item.id}`"
-          class="sidemenu_actions"
-          :dark="lightSwitch == true"
-          :style="{ background: cardBackground }"
-          @mouseover="menuLogsShow(item)"
-          @mouseleave="menuLogsHide(item)"
-        >
-          <v-btn
-            small
-            class="caption btn_sidemenu"
-            text
-            @click.stop="showTradeDetails = true"
-            @click="detailsLive(item)"
-            >Details</v-btn
-          >
-          <v-btn
-            small
-            class="caption btn_sidemenu"
-            text
-            @click.stop="showEditDetails = true"
-            @click="editLive(item.action)"
-            >Edit</v-btn
-          >
-          <v-btn
-            small
-            class="caption btn_sidemenu"
-            text
-            @click.stop="showDelete = true"
-            @click="deleteLive(item.action)"
-            >Delete</v-btn
-          >
-        </div>
-        <v-icon small class="mr-2" @mouseover="menuLogsShow(item)"
-          >mdi-dots-horizontal</v-icon
-        >
-      </template>
+            <template v-slot:item.MarketValue="{ item }" >
+              <span class="pl-3" :id="item.stock_id" :style="{ color: secondaryColor }">{{ item.MarketValue }}</span>
+            </template>
+            <template v-slot:item.Profit="{ item }">
+              <span
+                :class="(parseFloat(item.Profit) > 0 ? 'positive' : parseFloat(item.Profit) < 0 ? 'negative' : '')"
+              >{{ item.Profit }}</span>
+            </template>
+            <template v-slot:item.Perf="{ item }">
+              <span    
+                :class="(parseFloat(item.Perf) > 0 ? 'positive' : parseFloat(item.Perf) < 0 ? 'negative' : '')"
+              >{{ item.Perf }}%</span>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <div
+                v-show="menuShow"
+                class="sidemenu_actions"
+                :dark="lightSwitch == true"
+                :style="{ background: cardBackground }"
+                :id="`pl_${item.id}`"
+                @mouseover="menuLogsShow(item)"
+                @mouseleave="menuLogsHide(item)"
+              >
+                <v-btn
+                  small
+                  class="caption btn_sidemenu"
+                  @click.stop="showTradeDetails=true"
+                  v-on:click="detailsLive(item)"
+                  text
+                >Details</v-btn>
+                <v-btn
+                  small
+                  class="caption btn_sidemenu"
+                  @click.stop="showEditDetails=true"
+                  v-on:click="editLive(item.action)"
+                  text
+                >Edit</v-btn>
+                <v-btn small class="caption btn_sidemenu"  @click.stop="showDelete=true" v-on:click="deleteLive(item.action)" text>Delete</v-btn>
+              </div>
+              <v-icon small class="mr-2" @mouseover="menuLogsShow(item)">mdi-dots-horizontal</v-icon>
+            </template> 
+
     </v-data-table>
 
     <v-row>
@@ -148,30 +107,23 @@
         Total Profit/Loss as of {{ this.dateformat }}:
         <span
           class="ml-3 mr-4"
-          :class="this.totalProfitLoss < 0 ? 'negative' : 'positive'"
-          >{{ this.addcomma(this.totalProfitLoss) }}</span
-        >
+          :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')"
+        >{{ this.addcomma(this.totalProfitLoss) }}</span>
         <span
           class="ml-12 mr-5 totalpercentage"
-          :class="this.totalPerf < 0 ? 'negative' : 'positive'"
-          >{{ this.addcomma(this.totalPerf) }}%</span
-        >
+          :class="(this.totalPerf < 0 ? 'negative' : 'positive')"
+        >{{ this.addcomma(this.totalPerf) }}%</span>
       </v-col>
     </v-row>
-
+    
     <TradeModal
       :visible="EnterTradeModal"
-      :open-position="openposition"
-      :trade-modal="trade_modal"
-      @close="EnterTradeModal = false"
+      :OpenPosition="openposition"
+      :Trade_Modal="trade_modal"
+      @close="EnterTradeModal=false"
     />
-    <reset-modal :visible="showResetForm" @close="showResetForm = false" />
-    <trade-delete
-      :visible="showDelete"
-      :item-details="itemDetails"
-      @confirmedDelete="deleteConfirm"
-      @close="showDelete = false"
-    />
+    <reset-modal :visible="showResetForm" @close="showResetForm=false" />
+    <trade-delete :visible="showDelete" v-on:confirmedDelete="deleteConfirm" :itemDetails="itemDetails" @close="showDelete=false" />
     <share-modal
       v-if="showShareForm"
       :imageid="shareLink"
@@ -179,14 +131,14 @@
     />
     <trade-edits
       :visible="showEditDetails"
-      :item-details="itemDetails"
-      @confirmedUpdate="updateConfirm"
-      @close="showEditDetails = false"
+       v-on:confirmedUpdate="updateConfirm"
+      :itemDetails="itemDetails"
+      @close="showEditDetails=false"
     />
     <trade-details
       :visible="showTradeDetails"
-      :item-details="itemDetails"
-      @close="showTradeDetails = false"
+      :itemDetails="itemDetails"
+      @close="showTradeDetails=false"
     />
   </v-col>
 </template>
@@ -200,21 +152,6 @@ import tradeDetails from "~/components/modals/TradeDetails";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  components: {
-    TradeModal,
-    resetModal,
-    shareModal,
-    tradeDelete,
-    tradeEdits,
-    tradeDetails
-  },
-  props: {
-    capital: {
-      default() {
-        return "";
-      }
-    }
-  },
   data() {
     return {
       shareLink: "",
@@ -272,28 +209,41 @@ export default {
       priorProfitLoss: 0,
       totalPriorProfitLoss: 0,
       date: new Date().toISOString().substr(0, 10),
-      filtered: "",
+      filtered: '',
       lastprice: 0,
       showDelete: false,
       confirmdelete: false,
       confirmupdate: false,
-      itemToDelete: "",
+      itemToDelete: '',
       monthNames: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
       ],
-      dateformat: ""
+      dateformat: '',
+     
     };
+  },
+  components: {
+    TradeModal,
+    resetModal,
+    shareModal,
+    tradeDelete,
+    tradeEdits,
+    tradeDetails,
+  },
+  props: {
+    Capital: {
+      default() {
+        return "";
+      }
+    },
+    Realized: {
+      default() {
+        return "";
+      }
+    }
   },
   watch: {
     simulatorOpenPosition() {
@@ -308,14 +258,16 @@ export default {
       this.trade_modal = this.EnterTradeModal;
       this.marketStatus();
     },
-    confirmdelete() {
+    confirmdelete(){
       this.execute(this.itemToDelete);
       this.marketStatus();
     },
-    confirmupdate() {
+    confirmupdate(){
       this.getOpenPositions();
       this.marketStatus();
-    }
+    },
+    
+
   },
   methods: {
     ...mapActions({
@@ -333,22 +285,18 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
-
+    
     /**
      * Get Live Portfolio Data
      *
      */
     getOpenPositions() {
+     
       const openparams2 = {
         fund: this.simulatorPortfolioID
       };
       let d = new Date();
-      this.dateformat =
-        this.monthNames[d.getMonth()] +
-        " " +
-        d.getDate() +
-        ", " +
-        d.getFullYear();
+      this.dateformat = this.monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); 
       this.totalProfitLoss = 0;
       this.totalPerf = 0;
       this.openposition = [];
@@ -356,52 +304,43 @@ export default {
       this.totalmvalue = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
+        
           this.portfolioLogs = result.data.open;
           for (let i = 0; i < result.data.open.length; i++) {
-            this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
-            this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
-            this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol;
-            this.portfolioLogs[i].Position = this.portfolioLogs[i].position;
-            this.portfolioLogs[i].AvgPrice = this.portfolioLogs[
-              i
-            ].average_price.toFixed(3);
-            this.portfolioLogs[i].TotalCost = this.addcomma(
-              this.portfolioLogs[i].total_value
-            );
-            this.portfolioLogs[i].MarketValue = this.addcomma(
-              this.portfolioLogs[i].market_value
-            );
-            this.portfolioLogs[i].Profit = this.addcomma(
-              this.portfolioLogs[i].profit_loss
-            );
-            this.portfolioLogs[i].Perf = this.portfolioLogs[
-              i
-            ].pl_percentage.toFixed(2);
-            this.portfolioLogs[i].action = {
-              id: this.portfolioLogs[i].metas.stock_id,
-              strategy: this.portfolioLogs[i].metas.strategy,
-              tradeplan: this.portfolioLogs[i].metas.plan,
-              emotion: this.portfolioLogs[i].metas.emotion,
-              notes: this.portfolioLogs[i].metas.notes,
-              fund: this.simulatorPortfolioID,
-              action: this.portfolioLogs[i].metas.stock_id
-            };
-            this.totalmvalue =
-              parseFloat(this.totalmvalue) +
-              parseFloat(this.portfolioLogs[i].market_value);
-            this.totalProfitLoss =
-              parseFloat(this.totalProfitLoss) +
-              parseFloat(this.portfolioLogs[i].profit_loss);
-            this.totalPerf =
-              parseFloat(this.totalPerf) +
-              parseFloat(this.portfolioLogs[i].pl_percentage);
-            this.$emit("totalUnrealized", this.totalProfitLoss);
-            this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
+              this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
+              this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
+              this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol;
+              this.portfolioLogs[i].Position = this.portfolioLogs[i].position;
+              this.portfolioLogs[i].AvgPrice = this.portfolioLogs[i].average_price.toFixed(3);
+              this.portfolioLogs[i].TotalCost = this.addcomma(this.portfolioLogs[i].total_value);
+              this.portfolioLogs[i].MarketValue = this.addcomma(this.portfolioLogs[i].market_value);
+              this.portfolioLogs[i].Profit = this.addcomma(this.portfolioLogs[i].profit_loss);
+              this.portfolioLogs[i].Perf = this.portfolioLogs[i].pl_percentage.toFixed(2);
+              this.portfolioLogs[i].action = {
+                  id: this.portfolioLogs[i].metas.stock_id,
+                  strategy: this.portfolioLogs[i].metas.strategy,
+                  tradeplan: this.portfolioLogs[i].metas.plan,
+                  emotion: this.portfolioLogs[i].metas.emotion,
+                  notes: this.portfolioLogs[i].metas.notes,
+                  fund: this.simulatorPortfolioID,
+                  action: this.portfolioLogs[i].metas.stock_id
+                };
+              this.totalmvalue =
+                  parseFloat(this.totalmvalue) + parseFloat(this.portfolioLogs[i].market_value);
+              this.totalProfitLoss =
+                    parseFloat(this.totalProfitLoss) + parseFloat(this.portfolioLogs[i].profit_loss);
+              this.totalPerf =
+                    parseFloat(this.totalPerf) + parseFloat(this.portfolioLogs[i].pl_percentage);
+              this.$emit("totalUnrealized", this.totalProfitLoss);
+              this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
           }
-          this.marketStatus();
-          this.getDayPrior();
+           this.marketStatus();
+           this.getDayPrior();
+           
         }.bind(this)
       );
+   
+      
     },
     /**
      * delete confirmation
@@ -409,10 +348,10 @@ export default {
      * @param   {boolean}  value  true/false
      *
      */
-    deleteConfirm(value) {
+    deleteConfirm(value){
       this.confirmdelete = value;
     },
-    updateConfirm(value) {
+    updateConfirm(value){
       this.confirmupdate = value;
     },
     /**
@@ -421,19 +360,18 @@ export default {
      * @param   {[type]}  item  Stock ID
      *
      */
-    execute(item) {
-      if (this.confirmdelete) {
+    execute(item){
+      if(this.confirmdelete){
         let profit = 0;
         let perc = 0;
         for (let index = 0; index < this.portfolioLogs.length; index++) {
-          if (this.portfolioLogs[index].metas.stock_id == item) {
+          if(this.portfolioLogs[index].metas.stock_id == item){            
             profit = this.portfolioLogs[index].Profit;
             perc = this.portfolioLogs[index].Perf;
-            this.openposition.splice(index, 1);
+            this.openposition.splice(index,1);
             this.portfolioLogs.splice(index, 1);
-            this.totalProfitLoss =
-              parseFloat(this.totalProfitLoss) - parseFloat(profit);
-            this.totalPerf = parseFloat(this.totalPerf) - parseFloat(perc);
+            this.totalProfitLoss = parseFloat(this.totalProfitLoss) - parseFloat(profit);
+            this.totalPerf = parseFloat(this.totalPerf) - parseFloat(perc);   
             this.$emit("totalUnrealized", this.totalProfitLoss);
           }
         }
@@ -445,7 +383,7 @@ export default {
      * @param   {object}  item  item details
      *
      */
-    deleteLive(item) {
+    deleteLive(item) {    
       this.confirmdelete = false;
       this.itemDetails = item;
       this.itemToDelete = item.id;
@@ -460,9 +398,9 @@ export default {
     detailsLive(item) {
       this.itemDetails = item;
     },
-
+    
     /**
-     * Execute Edit
+     * Execute Edit 
      *
      */
     editLive(item) {
@@ -511,142 +449,127 @@ export default {
      * Calculate Day Change
      *
      */
-    getDayPrior() {
-      let currentProfitLoss = 0;
-      this.priorProfitLoss = 0;
-      let daychangeperf = 0;
-      let mvalueprior = 0;
-      let d = new Date();
-      let localprofit = 0;
-      let counter = 0;
-      let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
+    getDayPrior(){
+    let currentProfitLoss = 0;
+    this.priorProfitLoss = 0;
+    let daychangeperf = 0;
+    let mvalueprior = 0;
+    let d = new Date();
+    let localprofit = 0;
+    let counter = 0;
+    let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
+ 
+    //===============================================================
+    for (let index = 0; index < this.portfolioLogs.length; index++) {       
+           let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];     
+                  const params = {
+                    "symbol-id": this.portfolioLogs[index].metas.stock_id,
+                    resolution: "1D",
+                    limit: 2
+                  };
+                  this.$api.chart.charts.latest(params).then(
+                    function(result) {   
+                                    
+                      let prior_date = new Date(result.data.t[1]*1000);
+                      let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
+                      let tcost =
+                        this.portfolioLogs[index].position *
+                        this.portfolioLogs[index].average_price; 
 
-      //===============================================================
-      for (let index = 0; index < this.portfolioLogs.length; index++) {
-        let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];
-        const params = {
-          "symbol-id": this.portfolioLogs[index].metas.stock_id,
-          resolution: "1D",
-          limit: 2
-        };
-        this.$api.chart.charts.latest(params).then(
-          function(result) {
-            console.log("PRIOR DATA", result);
-            console.log("Symbol ID", this.portfolioLogs[index].metas.stock_id);
-            let prior_date = new Date(result.data.t[1] * 1000);
-            let dformat_prior = [
-              prior_date.getMonth() + 1,
-              prior_date.getDate(),
-              prior_date.getFullYear()
-            ].join("/");
-            let tcost =
-              this.portfolioLogs[index].position *
-              this.portfolioLogs[index].average_price;
+                        let priorPrice = result.data.c[1];
+                        
+                        if(isNaN(priorPrice)){
+                         
+                          priorPrice = result.data.c[0];
+                        }
 
-            let priorPrice = result.data.c[1];
+                        let priorbuyResult =
+                          parseFloat(this.portfolioLogs[index].position) *
+                          parseFloat(priorPrice).toFixed(2);
+                        let priormvalue = this.fees(priorbuyResult);
 
-            if (isNaN(priorPrice)) {
-              console.log("NAN");
-              priorPrice = result.data.c[0];
-            }
+                        mvalueprior = parseFloat(mvalueprior) + parseFloat(priorbuyResult);
+                      
+                        let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
+                        this.priorProfitLoss =
+                          parseFloat(this.priorProfitLoss) + parseFloat(priorprofit); 
 
-            let priorbuyResult =
-              parseFloat(this.portfolioLogs[index].position) *
-              parseFloat(priorPrice).toFixed(2);
-            let priormvalue = this.fees(priorbuyResult);
-
-            mvalueprior = parseFloat(mvalueprior) + parseFloat(priorbuyResult);
-
-            let priorprofit = parseFloat(priormvalue) - parseFloat(tcost);
-            this.priorProfitLoss =
-              parseFloat(this.priorProfitLoss) + parseFloat(priorprofit);
-
-            //==================================
-            let currentPrice = result.data.c[0];
-            let currentbuyResult =
-              this.portfolioLogs[index].position *
-              parseFloat(currentPrice).toFixed(2);
-            let currentmvalue = this.fees(currentbuyResult);
-            let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
-            currentProfitLoss =
-              parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-            //===============================================
-            let priordata = {
-              id: this.simulatorPortfolioID,
-              date: dformat,
-              priorprofit: this.priorProfitLoss,
-              currentprofit: currentProfitLoss
-            };
-            console.log("Prior -" + priorprofit);
-            console.log("Prior Total -" + this.priorProfitLoss);
-
-            //localStorage.removeItem(this.simulatorPortfolioID);
-            let totalarray = this.portfolioLogs.length - 1;
-
-            let getlocal = localStorage.getItem(this.simulatorPortfolioID);
-            getlocal = JSON.parse(getlocal);
-            //console.log('Prior Total Profit Loss -'+ getlocal.priorprofit);
-            if (getlocal != null) {
-              if (getlocal.date != dformat) {
-                if (counter == totalarray) {
-                  //if(getlocal.date != dformat){
-                  localStorage.setItem(
-                    this.simulatorPortfolioID,
-                    JSON.stringify(priordata)
+                        //==================================
+                          let currentPrice = result.data.c[0];
+                          let currentbuyResult =
+                            this.portfolioLogs[index].position *
+                            parseFloat(currentPrice).toFixed(2);
+                          let currentmvalue = this.fees(currentbuyResult);
+                          let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
+                          currentProfitLoss =
+                            parseFloat(currentProfitLoss) + parseFloat(currentprofit);
+                        //===============================================
+                        let priordata = {
+                          'id': this.simulatorPortfolioID,
+                          'date': dformat,
+                          'priorprofit': this.priorProfitLoss,
+                          'priortlogsprofit': this.Realized,
+                          'currentprofit': currentProfitLoss
+                        };   
+                                           
+                        //localStorage.removeItem(this.simulatorPortfolioID);
+                        let totalarray = this.portfolioLogs.length - 1;
+                        
+                        let getlocal = localStorage.getItem(this.simulatorPortfolioID);
+                        getlocal = JSON.parse(getlocal);
+                        //console.log('Prior Total Profit Loss -'+ getlocal.priorprofit); 
+                        if(getlocal != null){
+                              if(getlocal.date != dformat){
+                                  if(counter == totalarray){
+                                  //if(getlocal.date != dformat){
+                                    localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
+                                  }else{
+                                    localprofit = getlocal.priorprofit;
+                                  }
+                              }else{
+                                    localprofit = getlocal.priorprofit;
+                                  }
+                        }else{                   
+                            if(totalarray == counter){
+                                localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
+                            }
+                            localprofit = this.priorProfitLoss;
+                        }
+                        counter++;
+                    
+                    //=======================================================================
+                        let daychange =
+                           parseFloat(currentProfitLoss) - parseFloat(localprofit);
+                        if(localprofit != 0 ){                          
+                          let dperf = parseFloat(this.Capital) + localprofit;                        
+                          daychangeperf = (daychange / dperf) * 100;
+                        }      
+                        
+                      this.$emit("DayChange", localprofit);
+                       
+                    }.bind(this)
                   );
-                } else {
-                  localprofit = getlocal.priorprofit;
-                }
-              } else {
-                localprofit = getlocal.priorprofit;
-              }
-            } else {
-              if (totalarray == counter) {
-                localStorage.setItem(
-                  this.simulatorPortfolioID,
-                  JSON.stringify(priordata)
-                );
-              }
-              localprofit = this.priorProfitLoss;
-            }
-            counter++;
 
-            //=======================================================================
-            let daychange =
-              parseFloat(currentProfitLoss) - parseFloat(localprofit);
-            if (localprofit != 0) {
-              let dperf = parseFloat(this.Capital) + localprofit;
-              daychangeperf = (daychange / dperf) * 100;
-            }
-
-            this.$emit("DayChange", localprofit);
-          }.bind(this)
-        );
-      }
+              } 
     },
 
-    marketStatus() {
+    marketStatus(){
       let currentDate = new Date();
 
       let open_am = new Date();
-      open_am.setHours(9, 30, 0);
+          open_am.setHours(9,30,0);
       let close_am = new Date();
-      close_am.setHours(11, 59, 59);
+          close_am.setHours(11,59,59);
       let open_pm = new Date();
-      open_pm.setHours(13, 30, 0);
+          open_pm.setHours(13,30,0);
       let close_pm = new Date();
-      close_pm.setHours(15, 30, 0);
+          close_pm.setHours(15,30,0);
 
-      if (
-        (Date.parse(currentDate) > Date.parse(open_am) &&
-          Date.parse(currentDate) < Date.parse(close_am)) ||
-        (Date.parse(currentDate) > Date.parse(open_pm) &&
-          Date.parse(currentDate) < Date.parse(close_pm))
-      ) {
-        this.setMarketStatus(true);
-      } else {
-        this.setMarketStatus(false);
-      }
+       if((Date.parse(currentDate) > Date.parse(open_am) && Date.parse(currentDate) < Date.parse(close_am)) || (Date.parse(currentDate) > Date.parse(open_pm) && Date.parse(currentDate) < Date.parse(close_pm))) {
+         this.setMarketStatus(true);    
+       }else{
+         this.setMarketStatus(false);
+       }
     },
 
     /**
@@ -669,7 +592,7 @@ export default {
       let dall = dcommission + dtax + dtransferfee + dsccp + dsell;
       return buyResult - dall;
     },
-
+     
     /**
      * SSE initialization
      *
@@ -680,15 +603,10 @@ export default {
         this.counter = 0;
       }
 
-      const sseToken =
-        this.$auth.getToken("local") != false
-          ? this.$auth.getToken("local").replace("Bearer ", "")
-          : null;
-
       this.sse = new EventSource(
-        `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${sseToken}`
+        //"http://localhost:8021/sse/market-data/pse/all"
+        `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`
       );
-
       const that = this;
       this.sse.onopen = function() {
         //that.setMarketStatus(true);
@@ -702,15 +620,16 @@ export default {
       };
       let len = this.stockSym.length;
       //const that = this;
-
-      this.sse.addEventListener("trade", function(e) {
-        const data = JSON.parse(e.data);
-        for (let i = 0; i < that.stockSym.length; i++) {
-          if (that.stockSym[i] == data.sym_id) {
-            that.trigger(data.sym_id, data.exp);
+      
+      this.sse.addEventListener("trade",function(e) {
+           const data = JSON.parse(e.data);  
+          for(let i =0; i< that.stockSym.length; i++){ 
+            if(that.stockSym[i] == data.sym_id){
+                that.trigger(data.sym_id, data.exp);
+            }
           }
-        }
       });
+     
     },
     /**
      * Real time calculations
@@ -719,41 +638,38 @@ export default {
      * @param   {[type]}  lprice  incoming last price
      *
      */
-    trigger(symbol, lprice) {
-      let profit = 0;
-      let perf = 0;
-      for (let i = 0; i < this.portfolioLogs.length; i++) {
-        if (this.portfolioLogs[i].metas.stock_id == symbol) {
-          this.marketStatus();
-          let oldvalue = this.portfolioLogs[i].MarketValue;
-          let convertedNumbers = this.portfolioLogs[i].Profit.replace(/,/g, "");
-          let oldprofit = parseFloat(convertedNumbers);
-          let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
-          let mvalue = this.fees(buyResult);
-          let tcost =
-            this.portfolioLogs[i].position *
-            this.portfolioLogs[i].average_price;
-          profit = parseFloat(mvalue) - parseFloat(tcost);
-          perf = (profit / tcost) * 100;
-          this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
-          this.portfolioLogs[i].Profit = this.addcomma(profit);
-          this.portfolioLogs[i].Perf = this.addcomma(perf);
+    trigger(symbol, lprice){
+        let profit = 0;
+        let perf = 0;
+       for (let i = 0; i < this.portfolioLogs.length; i++) {
+         if(this.portfolioLogs[i].metas.stock_id == symbol){
+           this.marketStatus();
+           let oldvalue = this.portfolioLogs[i].MarketValue;
+           let convertedNumbers = this.portfolioLogs[i].Profit.replace(/,/g, "");
+           let oldprofit = parseFloat(convertedNumbers);
+           let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
+           let mvalue = this.fees(buyResult);
+           let tcost = this.portfolioLogs[i].position *
+                            this.portfolioLogs[i].average_price;
+           profit = parseFloat(mvalue) - parseFloat(tcost);
+           perf = (profit / tcost) * 100;
+           this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
+           this.portfolioLogs[i].Profit = this.addcomma(profit);
+           this.portfolioLogs[i].Perf = this.addcomma(perf);
 
-          if (oldvalue != this.portfolioLogs[i].MarketValue) {
-            let ploss =
-              parseFloat(this.totalProfitLoss) - parseFloat(oldprofit);
-            this.totalProfitLoss = ploss + parseFloat(profit);
-            let updatedItem = {
-              ...this.portfolioLogs[i],
-              ...{ MarketValue: this.portfolioLogs[i].MarketValue }
-            };
-            this.portfolioLogs.splice(i, 1, updatedItem);
-            this.updateEffect(this.portfolioLogs[i].stock_id);
-            this.$emit("totalUnrealized", this.totalProfitLoss);
-          }
-        }
-      }
-    }
+            if(oldvalue != this.portfolioLogs[i].MarketValue){
+              let ploss = parseFloat(this.totalProfitLoss) - parseFloat(oldprofit);
+              this.totalProfitLoss = ploss + parseFloat(profit);
+              let updatedItem = {...this.portfolioLogs[i], ...{ MarketValue: this.portfolioLogs[i].MarketValue }};
+              this.portfolioLogs.splice(i, 1, updatedItem);
+              this.updateEffect(this.portfolioLogs[i].stock_id);
+              this.$emit("totalUnrealized", this.totalProfitLoss);
+             
+            }
+         }
+       }
+        
+    },
   },
   computed: {
     ...mapGetters({
@@ -769,7 +685,7 @@ export default {
      *
      * @return  {String}  hex code
      */
-
+   
     cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
@@ -787,7 +703,8 @@ export default {
      */
     secondaryColor() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; // #eae8e8
-    }
+    },
+   
   },
 
   mounted() {
@@ -795,8 +712,9 @@ export default {
     this.initSSE();
   },
   beforeDestroy() {
-    this.sse.close();
+     this.sse.close();
   }
+    
 };
 </script>
 <style scoped>
@@ -875,7 +793,7 @@ export default {
   height: 24px;
 }
 .v-data-table thead tr th {
-  padding-left: 10px !important;
+    padding-left: 10px !important;
 }
 .v-data-table td {
   font-size: 12px;
@@ -954,18 +872,18 @@ export default {
   color: #00121e !important;
   border: unset !important;
 }
-.resetBtn:hover {
+.resetBtn:hover{
   color: #00121e !important;
 }
-.trdeBtn:hover {
+.trdeBtn:hover{
   color: #00121e !important;
 }
 
 .theme--light.v-data-table thead tr th {
   color: #494949;
 }
-.totalpercentage {
-  /* visibility: hidden;*/
+.totalpercentage{
+ /* visibility: hidden;*/
   display: none;
 }
 

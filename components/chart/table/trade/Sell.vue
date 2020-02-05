@@ -1,7 +1,7 @@
 <template>
     <v-row class="ma-0 mt-1 pa-0">
       <v-col class="col-3 pa-0 ma-0">
-        <v-content class="pa-0 ma-0 pt-3 px-4">
+        <v-content class="pa-0 ma-0 pt-6 px-4">
           <v-text-field
             label="Normal Trade"
             class="normalTrade"
@@ -25,7 +25,7 @@
       </v-col>
     
      <v-col class="col-3 pa-0 ma-0">
-        <v-content class="pa-0 ma-0 pt-3 px-4">
+        <v-content class="pa-0 ma-0 pt-6 px-4">
         <v-row style="font-size: 14px;">  
             <v-col >
                 <span>Board lot</span>
@@ -43,10 +43,11 @@
         </v-content>
       </v-col>
       <v-col class="col-3 pa-0 ma-0">
-        <v-content class="pa-0 ma-0 pt-3 px-4">
+        <v-content class="pa-0 ma-0 pt-8 px-4">
            <v-text-field
            :dark="lightSwitch == true"
            :value="this.stock_last"
+           readonly
             dense
             label="Sell Price"
           ></v-text-field>
@@ -73,15 +74,15 @@
       </v-col>
 
       <v-col class="col-3">
-        <v-content> 
+        <v-content class="pt-3"> 
           <v-row style="font-size: 14px;" class="mt-0 pt-0">      
-            <v-col class="mt-3 pt-3">    
+            <v-col class="mb-6">    
                 Peso Value 
                 <span style="float:right;">{{ this.totalcost }}</span>     
             </v-col>
          </v-row>
         <v-btn
-            class="ml-12 mt-2 text-capitalize"
+            class="ml-11 text-capitalize"
             text
             :dark="lightSwitch == true"
             dense
@@ -90,15 +91,48 @@
            Cancel
           </v-btn>
         <v-btn
-          small
           :dark="lightSwitch == 1"
-          class="mt-2 text-capitalize"
-          :disabled="this.portfolio.length != 0 ? false : true"
-          @click="confirmSell"
+          class="text-capitalize mr-0"
+          :disabled="this.portfolio.length != 0 && this.portvalue != '' && this.quantity > 0 ? false : true"
+          @click="showConfirm = true"
           >Continue</v-btn
         >
         </v-content>
       </v-col>
+            <v-dialog v-model="showConfirm" max-width="400px">
+            <v-card :dark="lightSwitch == true">
+            <v-card-title
+                class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
+            >Sell Confirmation</v-card-title>
+            <v-card-title
+                class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+            >Are you sure you want to sell this stock?</v-card-title>
+            <v-container class="px-5">
+                <v-row no-gutters>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="secondary"
+                    class="text-capitalize mt-2"
+                    depressed
+                    text
+                    :dark="lightSwitch == true"
+                    light
+                    @click.stop="showConfirm = false"
+                >Cancel</v-btn>
+                <v-btn
+                    color="success"
+                    class="ml-1 text-capitalize mt-2 black--text"
+                    depressed
+                    light
+                    @click="confirmSell"
+                    @click.stop="showConfirm = false"
+                >Confirm</v-btn>
+                </v-row>
+            </v-container>
+            </v-card>
+        </v-dialog>
+
+
     </v-row>
 </template>
 <script>
@@ -114,6 +148,7 @@ export default {
         quantity: 0,
         position: 0,  
         avprice: 0,
+        showConfirm: false,
     }),
     computed: {
         ...mapGetters({
@@ -121,6 +156,13 @@ export default {
         symbolid: "chart/symbolid",
         stock_last: "chart/stock_last",
         }),
+    },
+    props: {
+        SellDate: {
+            default() {
+                return "";
+            }
+        }
     },
     watch: {
         symbolid() {
@@ -271,12 +313,9 @@ export default {
         confirmSell(){
             const stock_id = this.symbolid;
             let fund_id = this.portvalue;
-            let d = new Date(),
-                dformat =
-                [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/") +
-                " " +
-                [d.getHours(), d.getMinutes(), d.getSeconds()].join(":"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format      
-            const sellparams = {
+            let d = new Date();
+            let sdate = this.SellDate + " " + [d.getHours(), d.getMinutes(), d.getSeconds()].join(":");
+           const sellparams = {
                 position: this.quantity,
                 stock_price: this.stock_last,
                 transaction_meta: {
@@ -285,23 +324,25 @@ export default {
                     plan: '',
                     emotion: '',
                     notes: '',
-                    date: dformat
+                    date: sdate
                 }
                 };
-
+            if(fund_id != '' && this.quantity != 0){
                 this.$api.journal.portfolio
                 .tradesell(fund_id, stock_id, sellparams)
                 .then(response => {
                         if (response.success) {         
-                            console.log('Sell Success');
+                             console.log('Sell Success');
+                             this.quantity = 0;
+                             this.portvalue = '';
                              this.setShowBrokers(true);
                         }else{
                             console.log(response); 
                         }
                     });
-                console.log('Sell Params -', sellparams);
-                console.log('Stock ID -' + stock_id);
-                console.log('Fund ID -' + fund_id);
+            }else{
+                console.log('Please enter portfolio');
+            }
         }
     },
     mounted() {
