@@ -7,6 +7,7 @@
             class="normalTrade"
             :dark="lightSwitch == true"
             outlined
+            disabled
             dense
           ></v-text-field>
           <v-select
@@ -313,7 +314,8 @@ export default {
             notes: this.notes,
             date: bdate
           }
-        };    
+        }; 
+        try {   
             this.$api.journal.portfolio
             .tradebuy(fund_id, stock_id, buyparams)
             .then(response => {
@@ -321,12 +323,17 @@ export default {
                     console.log('Buy Success');
                     this.quantity = 0;
                     this.portvalue = '';
+                    this.notes = '';
                     this.setShowBrokers(true);
 
                 }else{
                     console.log(response); 
                 }
             });
+        }
+        catch(err) {
+            console.log(err);
+        }
     },
     addButton() {
       this.quantity = parseInt(this.quantity) + parseInt(this.dboard);
