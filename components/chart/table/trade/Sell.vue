@@ -131,8 +131,29 @@
             </v-container>
             </v-card>
         </v-dialog>
-
-
+            <v-dialog v-model="errorMsg" max-width="400px">
+                <v-card :dark="lightSwitch == true">
+                <v-card-title
+                    class="text-center justify-left pa-4 success--text subtitle-1 font-weight-bold"
+                >{{ this.errmsgsell }}</v-card-title>
+                <v-card-title
+                    class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+                >{{ this.errmsg }}</v-card-title>
+                <v-container class="px-5">
+                    <v-row no-gutters>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="secondary"
+                        class="text-capitalize mt-2"
+                        text
+                        :dark="lightSwitch == true"
+                        light
+                        @click.stop="errorMsg = false"
+                    >Close</v-btn>
+                    </v-row>
+                </v-container>
+                </v-card>
+            </v-dialog>
     </v-row>
 </template>
 <script>
@@ -149,6 +170,9 @@ export default {
         position: 0,  
         avprice: 0,
         showConfirm: false,
+        errorMsg: false,
+        errmsgsell: '',
+        errmsg: '',
     }),
     computed: {
         ...mapGetters({
@@ -198,15 +222,9 @@ export default {
                     ? this.position
                     : (this.quantity =
                         parseInt(this.quantity) + parseInt(this.dboard));
-            let add =
-                parseFloat(this.quantity).toFixed(2) * parseFloat(this.stock_last);
-            let addfees = this.fees(add);
-            /*let convertedNumbers = this.availableFunds.replace(/,/g, "");
-                if(parseFloat(addfees) > parseFloat(convertedNumbers)){
-                this.errorShow = true;
-                this.quantity = 0;
-                this.totalCost = 0;
-                }*/
+                let add =
+                    parseFloat(this.quantity).toFixed(2) * parseFloat(this.stock_last);
+                let addfees = this.fees(add);
                 this.totalcost = this.addcomma(addfees);
             },
         minusButton() {
@@ -327,7 +345,7 @@ export default {
                     date: sdate
                 }
                 };
-            if(fund_id != '' && this.quantity != 0){
+           
                 this.$api.journal.portfolio
                 .tradesell(fund_id, stock_id, sellparams)
                 .then(response => {
@@ -339,10 +357,13 @@ export default {
                         }else{
                             console.log(response); 
                         }
+                    }).catch(error => {
+                        this.errmsg = error.response.data.message;
+                        //this.errmsg = 'Stock is currently closed';
+                        this.errmsgsell = 'Unable to sell';
+                        this.errorMsg = true;
                     });
-            }else{
-                console.log('Please enter portfolio');
-            }
+           
         }
     },
     mounted() {
