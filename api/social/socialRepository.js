@@ -39,7 +39,6 @@ export default $axios => ({
     },
     count(params) {
         let query = buildParams(params);
-
         return $axios.$get(`${process.env.API_URL}/notifications${query.length > 0 ? "?" + query : ""}`);
     },
     read(params) {
