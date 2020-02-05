@@ -10,7 +10,7 @@
         class="d-flex justify-center align-center mt-2 upload-container"
       >
         <div class="image_preview-container d-flex justify-center align-center">
-          <img :src="imageArray[0]" width="100%" height="auto" />
+          <img :src="imageArray[0]" height="100%" width="auto" />
           <v-btn icon class="image_close" v-show="imageDefault != true" @click="clearInputs ,imageArray = []">
             <v-icon class="pa-1">mdi-close</v-icon>
           </v-btn>
