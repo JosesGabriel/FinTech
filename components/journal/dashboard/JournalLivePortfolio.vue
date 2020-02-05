@@ -1,19 +1,21 @@
 <template>
-  <v-col class="pa-0" ref="componentWrapper">
+  <v-col ref="componentWrapper" class="pa-0">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
       <h1
         class="font-weight-bold subtitle-2"
         :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
-      >OPEN POSITION/S (PHP)</h1>
+      >
+        OPEN POSITION/S (PHP)
+      </h1>
       <v-spacer></v-spacer>
       <v-btn
         outlined
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
-        @click.stop="showResetForm=true"
         height="23"
+        @click.stop="showResetForm = true"
       >
         <span class="v-btn__content">Reset</span>
       </v-btn>
@@ -22,9 +24,9 @@
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
-        @click.stop="showTradeViewForm=true"
         :disabled="ifVirtualShow"
         height="23"
+        @click.stop="showTradeViewForm = true"
       >
         <span class="v-btn__content">Trade</span>
       </v-btn>
@@ -33,14 +35,19 @@
         color="success"
         dark
         class="rtf_top-btn text-capitalize"
-        @click.stop="showFundsForm=true"
         :disabled="fundsShow"
         height="23"
+        @click.stop="showFundsForm = true"
       >
         <span class="v-btn__content">Fund</span>
       </v-btn>
 
-      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+      <v-btn
+        icon
+        small
+        :dark="lightSwitch == 0 ? false : true"
+        @click="showShareModal()"
+      >
         <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
@@ -51,52 +58,67 @@
       :items-per-page="itemsPerPage"
       :dark="lightSwitch == true"
       hide-default-footer
-      @page-count="pageCount = $event"
       :loading="livePortfolioLoading"
       loading-text="Loading..."
       class="data_table-container pl-10 secondary--text"
+      @page-count="pageCount = $event"
     >
       <template v-slot:item.stock_symbol="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.stock_symbol }}</span>
+        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+          item.stock_symbol
+        }}</span>
       </template>
       <template v-slot:item.position="{ item }">
-        <span
-          class="pl-3"
-          :style="{ color: fontcolor2 }"
-        >{{ item.position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
+        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+          item.position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        }}</span>
       </template>
       <template v-slot:item.average_price="{ item }">
-        <span
-          class="pl-3"
-          :style="{ color: fontcolor2 }"
-        >{{ item.average_price | numeral("0,0.000") }}</span>
+        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+          item.average_price | numeral("0,0.000")
+        }}</span>
       </template>
       <template v-slot:item.total_value="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{ item.total_value | numeral("0,0.00") }}</span>
+        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+          item.total_value | numeral("0,0.00")
+        }}</span>
       </template>
       <template v-slot:item.market_value="{ item }">
-        <span
-          class="pl-3"
-          :style="{ color: fontcolor2 }"
-        >{{ item.market_value | numeral("0,0.00") }}</span>
+        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+          item.market_value | numeral("0,0.00")
+        }}</span>
       </template>
       <template v-slot:item.profit_loss="{ item }">
         <span
-          :class="item.profit_loss > 0 ? 'positive' : item.profit_loss < 0 ? 'negative' : 'neutral' "
-        >{{ item.profit_loss | numeral("0,0.00") }}</span>
+          :class="
+            item.profit_loss > 0
+              ? 'positive'
+              : item.profit_loss < 0
+              ? 'negative'
+              : 'neutral'
+          "
+          >{{ item.profit_loss | numeral("0,0.00") }}</span
+        >
       </template>
       <template v-slot:item.pl_percentage="{ item }">
         <span
-          :class="item.pl_percentage > 0 ? 'positive' : item.pl_percentage < 0 ? 'negative' : 'neutral' "
-        >{{ item.pl_percentage | numeral("0,0.00") }}%</span>
+          :class="
+            item.pl_percentage > 0
+              ? 'positive'
+              : item.pl_percentage < 0
+              ? 'negative'
+              : 'neutral'
+          "
+          >{{ item.pl_percentage | numeral("0,0.00") }}%</span
+        >
       </template>
       <template v-slot:item.action="{ item }">
         <div
           v-show="menuShow"
+          :id="`pl_${item.id}`"
           :dark="lightSwitch == true"
           :style="{ background: cardbackground }"
           class="sidemenu_actions"
-          :id="`pl_${item.id}`"
           @mouseover="menuLogsShow(item)"
           @mouseleave="menuLogsHide(item)"
         >
@@ -104,67 +126,94 @@
             small
             class="caption btn_sidemenu"
             text
-            @click.stop="showTradeDetails=true"
-            v-on:click="detailsLive(item)"
-          >Details</v-btn>
+            @click.stop="showTradeDetails = true"
+            @click="detailsLive(item)"
+            >Details</v-btn
+          >
           <v-btn
             small
             class="caption btn_sidemenu"
             text
-            @click.stop="showEditDetails=true"
-            v-on:click="editLive(item)"
-          >Edit</v-btn>
+            @click.stop="showEditDetails = true"
+            @click="editLive(item)"
+            >Edit</v-btn
+          >
           <v-btn
             small
             class="caption btn_sidemenu"
             text
-            @click.stop="showDelete=true"
-            v-on:click="deleteLive(item)"
-          >Delete</v-btn>
+            @click.stop="showDelete = true"
+            @click="deleteLive(item)"
+            >Delete</v-btn
+          >
         </div>
         <v-icon
           small
           class="mr-2 secondary--text"
           @mouseover="menuLogsShow(item)"
-        >mdi-dots-horizontal</v-icon>
+          >mdi-dots-horizontal</v-icon
+        >
       </template>
     </v-data-table>
     <v-row>
-      <v-col class="text-right total_bottom" :style="{ color: fontColor }" width="100%">
-        <span class="font-weight-bold" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">Total Profit/Loss as of {{date}}:</span>
+      <v-col
+        class="text-right total_bottom"
+        :style="{ color: fontColor }"
+        width="100%"
+      >
+        <span
+          class="font-weight-bold"
+          :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+          >Total Profit/Loss as of {{ date }}:</span
+        >
         <span
           class="ml-3"
-          :class="(totalProfitLoss < 0 ? 'negative' : 'positive')"
-        >{{ totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",") }}</span>
+          :class="totalProfitLoss < 0 ? 'negative' : 'positive'"
+          >{{
+            totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }}</span
+        >
       </v-col>
     </v-row>
     <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
       <v-card color="transparent" elevation="0">
         <v-pagination
+          v-model="page"
           class="d-flex flex-end lp_data_table-pagination"
           color="transparent"
           dark
-          v-model="page"
           :length="pageCount"
         ></v-pagination>
       </v-card>
     </v-card>
     <!-- Dialog boxes -->
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
-    <reset-modal :visible="showResetForm" @close="showResetForm=false" />
-    <funds-modal :visible="showFundsForm" @close="showFundsForm=false" />
-    <trade-view :visible="showTradeViewForm" @close="showTradeViewForm=false" class="asdasd"/>
+    <share-modal
+      v-if="showShareForm"
+      :imageid="shareLink"
+      @closeModal="showShareForm = false"
+    />
+    <reset-modal :visible="showResetForm" @close="showResetForm = false" />
+    <funds-modal :visible="showFundsForm" @close="showFundsForm = false" />
+    <trade-view
+      :visible="showTradeViewForm"
+      class="asdasd"
+      @close="showTradeViewForm = false"
+    />
     <trade-details
       :visible="showTradeDetails"
-      :itemDetails="itemDetails"
-      @close="showTradeDetails=false"
+      :item-details="itemDetails"
+      @close="showTradeDetails = false"
     />
     <trade-edits
       :visible="showEditDetails"
-      :itemDetails="itemDetails"
-      @close="showEditDetails=false"
+      :item-details="itemDetails"
+      @close="showEditDetails = false"
     />
-    <trade-delete :visible="showDelete" :itemDetails="itemDetails" @close="showDelete=false" />
+    <trade-delete
+      :visible="showDelete"
+      :item-details="itemDetails"
+      @close="showDelete = false"
+    />
     <!-- Dialog boxes -->
   </v-col>
 </template>
@@ -278,31 +327,6 @@ export default {
       date: new Date().toISOString().substr(0, 10)
     };
   },
-  mounted() {
-    /**
-     * function will not load if portfolio ID is null
-     *
-     * @return  {[object]}  [return description]
-     */
-    if (this.defaultPortfolioId != null ? this.getOpenPositions() : "");
-    /**
-     * if portfolio type is virtual then the fund or trade button will assign as disabled
-     *
-     * @return  {[type]}  [return description]
-     */
-    if (!this.selectedPortfolio) {
-      if (this.selectedPortfolio.type === "virtual") {
-        this.ifVirtualShow = true;
-      } else {
-        this.ifVirtualShow = false;
-      }
-    }
-    /**
-     * function initSSE load on mounted
-     */
-    this.initSSE();
-    this.formatDate();
-  },
   watch: {
     /**
      * Watching selectedPortfolio if portolio type selected is virtual
@@ -341,6 +365,31 @@ export default {
     renderEditKey() {
       this.getOpenPositions();
     }
+  },
+  mounted() {
+    /**
+     * function will not load if portfolio ID is null
+     *
+     * @return  {[object]}  [return description]
+     */
+    if (this.defaultPortfolioId != null ? this.getOpenPositions() : "");
+    /**
+     * if portfolio type is virtual then the fund or trade button will assign as disabled
+     *
+     * @return  {[type]}  [return description]
+     */
+    if (!this.selectedPortfolio) {
+      if (this.selectedPortfolio.type === "virtual") {
+        this.ifVirtualShow = true;
+      } else {
+        this.ifVirtualShow = false;
+      }
+    }
+    /**
+     * function initSSE load on mounted
+     */
+    this.initSSE();
+    this.formatDate();
   },
   methods: {
     ...mapActions({
@@ -468,10 +517,16 @@ export default {
         this.sse.close();
         this.counter = 0;
       }
+
+      const sseToken =
+        this.$auth.getToken("local") != false
+          ? this.$auth.getToken("local").replace("Bearer ", "")
+          : null;
+
       this.sse = new EventSource(
-        `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`
-        // "http://localhost:8021/sse/market-data/pse/all"
+        `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${sseToken}`
       );
+
       this.sse.onopen = function() {};
       this.sse.onerror = function(err) {};
       this.sse.addEventListener("trade", function(e) {
@@ -500,7 +555,7 @@ export default {
         if (this.portfolioLogs[i].stock_id == symbol) {
           let buyResult = this.portfolioLogs[i].position * parseFloat(lprice);
           let mvalue = BuyFees(buyResult);
-          
+
           let tcost =
             this.portfolioLogs[i].position *
             this.portfolioLogs[i].average_price;
