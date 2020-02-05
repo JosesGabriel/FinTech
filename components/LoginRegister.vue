@@ -9,11 +9,42 @@
         <v-stepper-items>
           <v-stepper-content step="1" class="pa-0">
             <v-card height="584px">
-              <div
-                class="text-center display-1 font-weight-bold loginCard--intro"
-              >
+              <div class="text-center display-1 font-weight-bold pt-10">
                 Welcome, Mate!
               </div>
+
+              <v-carousel
+                id="login_carousel"
+                cycle
+                height="350"
+                interval="7500"
+                :show-arrows="false"
+                hide-delimiter
+                hide-delimiter-background
+              >
+                <v-carousel-item v-for="slide in slides" :key="slide.image">
+                  <v-sheet height="100%">
+                    <v-row class="fill-height" align="center" justify="center">
+                      <v-img
+                        :src="`/login/${slide.image}`"
+                        height="250"
+                        contain
+                        class="py-0 my-0"
+                      ></v-img>
+                      <div class="slide__container">
+                        <span class="font-weight-bold body-2">{{
+                          slide.title
+                        }}</span>
+                        <br />
+                        <div class="slide__subtitle caption">
+                          {{ slide.subtitle }}
+                        </div>
+                      </div>
+                    </v-row>
+                  </v-sheet>
+                </v-carousel-item>
+              </v-carousel>
+
               <div class="loginButtons--wrapper">
                 <v-btn
                   block
@@ -125,7 +156,27 @@ export default {
       registerLoading: false,
       isLightMode: 0,
       tab: null,
-      stepper: ""
+      stepper: "",
+      slides: [
+        {
+          image: "wolf.gif",
+          title: "Be ahead of the pack",
+          subtitle:
+            "No need to read through the fine prints because at Lyduz, the meat is delivered to you bite-sized and hot."
+        },
+        {
+          image: "computer.gif",
+          title: "Participate with Ease",
+          subtitle:
+            "Everything you need is only a click away. Lyduz is designed with user experience in mind."
+        },
+        {
+          image: "atom.gif",
+          title: "Learn within budget",
+          subtitle:
+            "High-quality learning modules at a cost that makes sense. Learning has never been this accessible."
+        }
+      ]
     };
   },
   computed: {
@@ -206,6 +257,27 @@ export default {
 </script>
 
 <style>
+#login_carousel .v-carousel__controls {
+  display: none;
+}
+.slide__container {
+  height: 100px;
+  text-align: center;
+  width: 95%;
+}
+.slide__title {
+  margin-top: 15px;
+  position: absolute;
+  text-align: center;
+  width: 95%;
+  margin-top: -35px;
+}
+.slide__subtitle {
+  padding-left: 50px;
+  padding-right: 50px;
+  line-height: 1.3 !important;
+  margin-top: 20px;
+}
 .loginButtons--wrapper {
   position: absolute;
   bottom: 0;
