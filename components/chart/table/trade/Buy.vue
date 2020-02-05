@@ -42,6 +42,7 @@
          </v-row>
           <v-text-field
             dense
+            readonly
             :value="this.stock_last"
             :dark="lightSwitch == true"
             label="Buy Price"
@@ -66,7 +67,7 @@
             </v-col>
           </v-row>
           <v-row style="font-size: 14px;" class="mt-0 pt-0">      
-            <v-col class="mt-0 pt-0">    
+            <v-col class="mt-0 pb-1 pt-0">    
                 Total Cost 
                 <span style="float:right;">{{ this.totalcost }}</span>     
             </v-col>
@@ -122,7 +123,7 @@
           ></v-textarea    
         >
         <v-btn
-            class="ml-12 mt-2 text-capitalize"
+            class="ml-11 text-capitalize"
             text
             :dark="lightSwitch == true"
             dense
@@ -131,14 +132,44 @@
            Cancel
           </v-btn>
         <v-btn
-          small
           :dark="lightSwitch == 1"
-          class="mt-2 text-capitalize"
-          @click="confirmBuy"
+          class="text-capitalize mr-0"
+          :disabled="this.portvalue != '' && this.quantity > 0 ? false : true"
+          @click="showConfirm = true"
           >Continue</v-btn
         >
         </v-content>
       </v-col>
+       <v-dialog v-model="showConfirm" max-width="400px">
+                <v-card :dark="lightSwitch == true">
+                <v-card-title
+                    class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
+                >Buy Confirmation</v-card-title>
+                <v-card-title
+                    class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+                >Are you sure you want to buy this stock?</v-card-title>
+                <v-container class="px-5">
+                    <v-row no-gutters>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="secondary"
+                        class="text-capitalize mt-2"
+                        text
+                        :dark="lightSwitch == true"
+                        light
+                        @click.stop="showConfirm = false"
+                    >Cancel</v-btn>
+                    <v-btn
+                        color="success"
+                        class="ml-1 text-capitalize mt-2 black--text"
+                        light
+                        @click="confirmBuy"
+                        @click.stop="showConfirm = false"
+                    >Confirm</v-btn>
+                    </v-row>
+                </v-container>
+                </v-card>
+            </v-dialog>
     </v-row>
 </template>
 <script>
@@ -149,6 +180,7 @@ export default {
     getBalance: [],
     balance: 0,
     portvalue: '',
+    showConfirm: false,
     dboard: 0,
     notes: '',
     strat: '',
@@ -171,6 +203,13 @@ export default {
         symbolid: "chart/symbolid",
         stock_last: "chart/stock_last",
         }),
+    },
+    props: {
+        BuyDate: {
+            default() {
+                return "";
+            }
+        }
     },
     watch: {
         stock_last() {
@@ -262,11 +301,8 @@ export default {
     confirmBuy(){
       const stock_id = this.symbolid;
       let fund_id = this.portvalue;
-      let d = new Date(),
-                dformat =
-                [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/") +
-                " " +
-                [d.getHours(), d.getMinutes(), d.getSeconds()].join(":"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format      
+      let d = new Date();
+      let bdate = this.BuyDate + " " + [d.getHours(), d.getMinutes(), d.getSeconds()].join(":");
       const buyparams = {
           position: this.quantity,
           stock_price: this.stock_last,
@@ -275,25 +311,22 @@ export default {
             plan: this.tplan,
             emotion: this.emot,
             notes: this.notes,
-            date: dformat
+            date: bdate
           }
-        }; 
-      console.log('Buy Params -', buyparams);
-      console.log('Stock ID -' + stock_id);
-      console.log('Fund ID -' + fund_id);
+        };    
+            this.$api.journal.portfolio
+            .tradebuy(fund_id, stock_id, buyparams)
+            .then(response => {
+                if (response.success) {          
+                    console.log('Buy Success');
+                    this.quantity = 0;
+                    this.portvalue = '';
+                    this.setShowBrokers(true);
 
-        this.$api.journal.portfolio
-        .tradebuy(fund_id, stock_id, buyparams)
-        .then(response => {
-            if (response.success) {          
-                console.log('Buy Success');
-                this.setShowBrokers(true);
-            }else{
-               console.log(response); 
-            }
-          });
-
-
+                }else{
+                    console.log(response); 
+                }
+            });
     },
     addButton() {
       this.quantity = parseInt(this.quantity) + parseInt(this.dboard);
