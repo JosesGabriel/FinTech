@@ -236,7 +236,7 @@
             </v-container>
             <v-row no-gutters>
               <v-spacer></v-spacer>
-              <span :class="this.marketStatus ? 'nodisplay': 'display'" class="caption pt-2" style="text-align: right;">Market Closed.</span>
+              <!--<span :class="this.marketStatus ? 'nodisplay': 'display'" class="caption pt-2" style="text-align: right;">Market Closed.</span>-->
               <v-btn text @click.stop="show=false" class="text-capitalize">Close</v-btn>
               <v-btn
                 color="success ml-1"
@@ -385,8 +385,32 @@
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
+              <v-dialog v-model="errorMsg" max-width="400px">
+                <v-card :dark="lightSwitch == true">
+                <v-card-title
+                    class="text-center justify-left pa-4 success--text subtitle-1 font-weight-bold"
+                >{{ this.errmsgbuysell }}</v-card-title>
+                <v-card-title
+                    class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+                >{{ this.errmsg }}</v-card-title>
+                <v-container class="px-5">
+                    <v-row no-gutters>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="secondary"
+                        class="text-capitalize mt-2"
+                        text
+                        :dark="lightSwitch == true"
+                        light
+                        @click.stop="errorMsg = false"
+                    >Close</v-btn>
+                    </v-row>
+                </v-container>
+                </v-card>
+            </v-dialog>
     </v-card>
   </v-dialog>
+
 </template>
 <script>
 import BuyTrade from "~/components/trade-simulator/buy";
@@ -423,6 +447,8 @@ export default {
       GetSelectStock: "",
       selectedTab: null,
       avprice: 0,
+      errmsg: '',
+      errmsgbuysell: '',
 
       selectedstrategy: "",
       selectedtradeplan: "",
@@ -445,6 +471,7 @@ export default {
       buySelected: true,
       quantity_reset: false,
       onreset: false,
+      errorMsg: false,
       dataVolume: 0,
       buyprice: 0,
       boardlot: 0,
@@ -660,7 +687,12 @@ export default {
                 this.sellSelected = false;
                 this.GetSelectStock = "";
               }
-            });
+            }).catch(error => {
+                this.errmsg = error.response.data.message;
+                //this.errmsg = 'Stock is currently closed';
+                this.errmsgbuysell = 'Unable to sell';
+                this.errorMsg = true;
+              });
         }
       } else {
         // if Buy is selected
@@ -677,7 +709,6 @@ export default {
           }
         };   
 
-        try {
            this.$api.journal.portfolio
             .tradebuy(fund_id, stock_id, buyparams)
             .then(response => {
@@ -689,12 +720,12 @@ export default {
                   this.sellSelected = false;
                   this.GetSelectStock = "";
                 }
+              }).catch(error => {
+                this.errmsg = error.response.data.message;
+                //this.errmsg = 'Stock is currently closed';
+                this.errmsgbuysell = 'Unable to buy';
+                this.errorMsg = true;
               });
-          
-        }
-        catch(err) {
-            console.log(err);
-        }
        
       }
      

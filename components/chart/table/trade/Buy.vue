@@ -171,6 +171,29 @@
                 </v-container>
                 </v-card>
             </v-dialog>
+            <v-dialog v-model="errorMsg" max-width="400px">
+                <v-card :dark="lightSwitch == true">
+                <v-card-title
+                    class="text-center justify-left pa-4 success--text subtitle-1 font-weight-bold"
+                >{{ this.errmsgbuy }}</v-card-title>
+                <v-card-title
+                    class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+                >{{ this.errmsg }}</v-card-title>
+                <v-container class="px-5">
+                    <v-row no-gutters>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        color="secondary"
+                        class="text-capitalize mt-2"
+                        text
+                        :dark="lightSwitch == true"
+                        light
+                        @click.stop="errorMsg = false"
+                    >Close</v-btn>
+                    </v-row>
+                </v-container>
+                </v-card>
+            </v-dialog>
     </v-row>
 </template>
 <script>
@@ -187,6 +210,9 @@ export default {
     strat: '',
     tplan: '',
     emot: '',
+    errorMsg: false,
+    errmsgbuy: '',
+    errmsg: '',
     strategy: [
         "Bottom Picking",
         "Breakout Play",
@@ -315,7 +341,7 @@ export default {
             date: bdate
           }
         }; 
-        try {   
+     
             this.$api.journal.portfolio
             .tradebuy(fund_id, stock_id, buyparams)
             .then(response => {
@@ -326,14 +352,14 @@ export default {
                     this.notes = '';
                     this.setShowBrokers(true);
 
-                }else{
-                    console.log(response); 
                 }
-            });
-        }
-        catch(err) {
-            console.log(err);
-        }
+            }).catch(error => {
+                this.errmsg = error.response.data.message;
+                //this.errmsg = 'Stock is currently closed';
+                this.errmsgbuy = 'Unable to buy';
+                this.errorMsg = true;
+              });
+       
     },
     addButton() {
       this.quantity = parseInt(this.quantity) + parseInt(this.dboard);
