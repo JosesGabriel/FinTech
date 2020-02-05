@@ -652,7 +652,6 @@ export default {
           .create(formData)
           .then(
             function(response) {
-              console.log(response)
               this.cloudArray.push(response.data.file.url);
               this.postBtnDisable = false;
               this.loader = false;
