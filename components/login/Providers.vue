@@ -1,11 +1,13 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-icon @click="getUrl('facebook')">mdi-facebook</v-icon>
+  <v-content>
+    <v-row align="center" justify="center">
+      <v-col cols="12" sm="4">
+        <v-btn text icon color="pink">
+          <v-icon @click="getUrl('facebook')">mdi-facebook</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
-  </v-container>
+  </v-content>
 </template>
 <script>
 export default {

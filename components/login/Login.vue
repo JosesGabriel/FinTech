@@ -47,18 +47,21 @@
         ></v-checkbox
       ></small>
     </v-card-text>
+
     <Providers />
+
     <div class="loginButtons--wrapper">
-      <v-btn
-        class="mb-2"
-        block
-        outlined
-        rounded
-        color="success"
-        @click="login()"
-      >
-        Sign In
-      </v-btn>
+      <v-hover v-slot:default="{ hover }">
+        <v-btn
+          block
+          rounded
+          class="black--text font-weight-bold text-capitalize mb-2"
+          :color="!hover ? 'success' : 'successhover'"
+          @click="login()"
+        >
+          Sign In
+        </v-btn>
+      </v-hover>
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
         <a class="text-center success--text" @click="$emit('stepper', 3)"

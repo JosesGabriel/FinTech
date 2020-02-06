@@ -84,17 +84,18 @@
         </v-container>
       </v-card-text>
       <div class="loginButtons--wrapper">
-        <v-btn
-          block
-          class="mb-2"
-          outlined
-          rounded
-          color="success"
-          type="submit"
-          :disabled="!registerForm"
-        >
-          Sign Up
-        </v-btn>
+        <v-hover v-slot:default="{ hover }">
+          <v-btn
+            block
+            rounded
+            class="black--text font-weight-bold text-capitalize mb-2"
+            :color="!hover ? 'success' : 'successhover'"
+            type="submit"
+            :disabled="!registerForm"
+          >
+            Sign Up
+          </v-btn>
+        </v-hover>
         <span class="text-center d-block  caption w-100"
           >Already have an account?
           <a class="text-center success--text" @click="$emit('stepper', 2)"

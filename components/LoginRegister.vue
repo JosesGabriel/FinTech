@@ -23,10 +23,10 @@
                 hide-delimiter-background
               >
                 <v-carousel-item v-for="slide in slides" :key="slide.image">
-                  <v-sheet height="100%">
+                  <v-sheet height="100%" :light="lightSwitch == 0">
                     <v-row class="fill-height" align="center" justify="center">
                       <v-img
-                        :src="`/login/${slide.image}`"
+                        :src="`/login/${slideTheme}_${slide.image}`"
                         height="250"
                         contain
                         class="py-0 my-0"
@@ -46,25 +46,28 @@
               </v-carousel>
 
               <div class="loginButtons--wrapper">
-                <v-btn
-                  block
-                  outlined
-                  rounded
-                  color="success"
-                  class="mb-2"
-                  @click="stepper = 2"
-                >
-                  Log In
-                </v-btn>
-                <v-btn
-                  block
-                  outlined
-                  rounded
-                  color="success"
-                  @click="stepper = 3"
-                >
-                  Sign up for free
-                </v-btn>
+                <v-hover v-slot:default="{ hover }">
+                  <v-btn
+                    block
+                    rounded
+                    class="black--text font-weight-bold text-capitalize mb-2"
+                    :color="!hover ? 'success' : 'successhover'"
+                    @click="stepper = 2"
+                  >
+                    Log In
+                  </v-btn>
+                </v-hover>
+                <v-hover v-slot:default="{ hover }">
+                  <v-btn
+                    block
+                    rounded
+                    class="black--text font-weight-bold text-capitalize"
+                    :color="!hover ? 'success' : 'successhover'"
+                    @click="stepper = 3"
+                  >
+                    Sign up for free
+                  </v-btn>
+                </v-hover>
               </div>
             </v-card>
           </v-stepper-content>
@@ -196,6 +199,14 @@ export default {
       set(value) {
         this.$emit("input", value);
       }
+    },
+    /**
+     * toggle between light and dark mode for gif slider
+     *
+     * @return  {String}  dark/light
+     */
+    slideTheme() {
+      return this.lightSwitch == 0 ? "light" : "dark";
     }
   },
   watch: {
