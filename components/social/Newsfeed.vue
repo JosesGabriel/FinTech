@@ -380,7 +380,8 @@ export default {
       lightSwitch: "global/getLightSwitch",
       newPosts: "global/getNewPosts",
       newComment: "social/getNewComment",
-      deleteComment: "social/getDeleteComment"
+      deleteComment: "social/getDeleteComment",
+      updateComment: "social/getUpdateComment"
     })
   },
   watch: {
@@ -398,12 +399,15 @@ export default {
         attachments[i]["url"] = this.newPost.attachments[i];
       }
       this.postsObject.unshift({
+        id: this.newPost.id,
+        user_id: this.newPosts.user_id,
         content: this.newPost.content,
         attachments: attachments,
         bears_count: 0,
         bulls_count: 0,
         created_at: new Date(),
         user: {
+          uuid: this.newPost.user.uuid,
           profile_image: this.$auth.user.data.user.profile_image,
           name: this.$auth.user.data.user.name
         },
@@ -426,6 +430,27 @@ export default {
       this.postsObject[this.newComment.postIndex].comments[
         this.newComment.commentIndex
       ].comments.push(this.newComment.data);
+    },
+    updateComment() {
+      if (this.updateComment.isChild) {
+        let parentComment = this.postsObject[this.updateComment.postIndex]
+          .comments[this.updateComment.commentIndex].comments;
+
+        for (let i = 0; i < parentComment.length; i++) {
+          if (parentComment[i].id == this.updateComment.data.id) {
+            this.postsObject[this.updateComment.postIndex].comments[
+              this.updateComment.commentIndex
+            ].comments[i].content = this.updateComment.data.content;
+          }
+        }
+      } else {
+        this.postsObject[this.updateComment.postIndex].comments[
+          this.updateComment.commentIndex
+        ].content = {};
+        this.postsObject[this.updateComment.postIndex].comments[
+          this.updateComment.commentIndex
+        ].content = this.updateComment.data.content;
+      }
     },
     deleteComment() {
       if (this.deleteComment.isChild) {

@@ -10,5 +10,8 @@ export default {
   },
   async setDeleteComment({ commit }, data) {
     await commit("SET_DELETECOMMENT", data);
+  },
+  async setUpdateComment({ commit }, data) {
+    await commit("SET_UPDATECOMMENT", data);
   }
 };

@@ -2,5 +2,6 @@ export default () => ({
   sse: null,
   sseInfo: null,
   newComment: {},
-  deleteComment: {}
+  deleteComment: {},
+  updateComment: {}
 });

@@ -10,5 +10,8 @@ export default {
   },
   getDeleteComment(state) {
     return state.deleteComment;
+  },
+  getUpdateComment(state) {
+    return state.updateComment;
   }
 };

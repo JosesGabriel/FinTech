@@ -577,7 +577,12 @@ export default {
           .create(params)
           .then(
             function(response) {
-              this.$emit("authorNewPost", params);
+              let responsePost = response.data.post;
+              responsePost.attachments = this.cloudArray;
+              responsePost.user = {
+                uuid: this.$auth.user.data.user.uuid
+              };
+              this.$emit("authorNewPost", responsePost);
               this.clearInputs(true, response.message);
             }.bind(this)
           )
@@ -596,7 +601,11 @@ export default {
           .create(params)
           .then(
             function(response) {
-              this.$emit("authorNewPost", params);
+              let responsePost = response.data.post;
+              responsePost.user = {
+                uuid: this.$auth.user.data.user.uuid
+              };
+              this.$emit("authorNewPost", response.data.post);
               this.clearInputs(true, response.message);
             }.bind(this)
           )
