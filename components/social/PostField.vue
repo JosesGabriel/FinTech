@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card
-      class="pa-4 transparent__bg pb-3"
+      class="pa-4 pb-3"
       :dark="lightSwitch == 0 ? false : true"
       :loading="loader"
       outlined
