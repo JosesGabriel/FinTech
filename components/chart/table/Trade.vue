@@ -125,10 +125,10 @@ export default {
   font-size: 14px;
   font-weight: 600;
 }
-.select__trade .v-select__slot .v-label,
+/*.select__trade .v-select__slot .v-label,
 .select__trade .v-select__slot .v-icon {
   color: black !important;
-}
+}*/
 .select__trade .v-input__slot {
   margin: 0;
 }

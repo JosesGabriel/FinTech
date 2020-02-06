@@ -6,8 +6,8 @@
     outlined
     :loading="watchCardLoading"
   >
-    <v-card-text class="pa-0 pl-2">
-      <div class="body-2 font-weight-black">Watchlist</div>
+    <div class="pa-0 pl-2">
+      <div class="body-2 font-weight-black pb-2 pl-2">Watchlist</div>
       <v-divider></v-divider>
       <v-list class="transparent pt-0">
         <v-container class="pa-0">
@@ -97,7 +97,7 @@
           Show more
         </router-link>
       </v-list>
-    </v-card-text>
+    </div>
   </v-card>
 </template>
 

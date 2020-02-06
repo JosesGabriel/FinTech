@@ -167,6 +167,7 @@ export default {
           error: "#F44336",
           success: "#03DAC5",
           tertiary: "#B6B6B6",
+          tertiarytext: "#546E7A",
           darkcard: "#0c1a2b",
           lightcard: "#f2f2f2",
           darkchart: "#00121e",

@@ -2,14 +2,6 @@
     <v-row class="ma-0 mt-1 pa-0">
       <v-col class="col-3 pa-0 ma-0">
         <v-content class="pa-0 ma-0 pt-3 px-4">
-          <v-text-field
-            label="Normal Trade"
-            class="normalTrade"
-            :dark="lightSwitch == true"
-            outlined
-            disabled
-            dense
-          ></v-text-field>
           <v-select
             v-model="portvalue"
             :items="portfolio"
@@ -22,6 +14,15 @@
             dense
             solo
           ></v-select>
+          <v-select
+              v-model="nmTrade"
+              :items="normalTrade"
+              class="select__trade ma-0 pa-0"
+              append-icon="mdi-chevron-down"
+              label="Select Trade"
+              dense
+              solo
+            ></v-select>
          <v-row style="font-size: 14px;">  
             <v-col class="ml-3">
                 <span>Board lot</span>
@@ -59,10 +60,10 @@
                 ></v-text-field>
             </v-col>    
             <v-col cols="4" class="mx-0 mb-0 px-0 pb-0">
-                    <v-btn @click="minusButton" text icon color="success">
+                    <v-btn @click="minusButton" text icon :dark="lightSwitch == true">
                     <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
-                    <v-btn @click="addButton" text icon color="success">
+                    <v-btn @click="addButton" text icon :dark="lightSwitch == true">
                     <v-icon>mdi-chevron-up</v-icon>
                     </v-btn>
             </v-col>
@@ -116,10 +117,11 @@
             outlined
             no-resize
             color="success"
+            class="__tradenotes"
             :dark="lightSwitch == 1"
             full-width
             v-model="notes"
-            height="110px"
+            height="123px"
             label="Notes"
           ></v-textarea    
         >
@@ -141,19 +143,78 @@
         >
         </v-content>
       </v-col>
-       <v-dialog v-model="showConfirm" max-width="400px">
+       <v-dialog v-model="showConfirm" max-width="330px">
                 <v-card :dark="lightSwitch == true">
                 <v-card-title
-                    class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
-                >Buy Confirmation</v-card-title>
-                <v-card-title
-                    class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
-                >Are you sure you want to buy this stock?</v-card-title>
-                <v-container class="px-5">
+                    class="text-center justify-left pa-4 text-capitalize font-weight-bold"
+                    style="font-size: 16px;"
+                >Review Order</v-card-title>
+                <v-spacer></v-spacer>
+
+               <v-container class="px-5" style="font-size: 14px; line-height:.5;">
+                <v-row>
+                  <v-col class="pl-6 mb-6">
+                    Fill Type
+                  </v-col>
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
+                    Day
+                  </v-col>  
+                </v-row>
+                <v-spacer></v-spacer>
+                <v-row>
+                  <v-col class="pl-6"> 
+                   Buy Price
+                  </v-col>
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
+                    {{ this.stock_last.toFixed(2) }}
+                  </v-col>  
+                </v-row>
+                <v-row >
+                  <v-col class="pl-6">
+                   Quantity
+                  </v-col>
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
+                    {{ this.quantity.toFixed(2) }}
+                  </v-col>  
+                </v-row>
+                <v-row>
+                  <v-col class="pl-6 mb-6">
+                   Total Cost
+                  </v-col>
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
+                    {{ this.totalcost }}
+                  </v-col>  
+                </v-row>
+                <v-spacer></v-spacer>
+                <v-row>
+                  <v-col class="pl-6">
+                   Strategy
+                  </v-col>
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
+                    {{ this.strat }}
+                  </v-col>  
+                </v-row>
+                <v-row>
+                  <v-col class="pl-6">
+                   Trade Plan
+                  </v-col>
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
+                     {{ this.tplan }}
+                  </v-col>  
+                </v-row>
+                <v-row>
+                  <v-col class="pl-6 mb-6">
+                  Emotions
+                  </v-col>
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
+                    {{ this.emot }}
+                  </v-col>  
+                </v-row>
+               
+               
                     <v-row no-gutters>
                     <v-spacer></v-spacer>
                     <v-btn
-                        color="secondary"
                         class="text-capitalize mt-2"
                         text
                         :dark="lightSwitch == true"
@@ -162,7 +223,7 @@
                     >Cancel</v-btn>
                     <v-btn
                         color="success"
-                        class="ml-1 text-capitalize mt-2 black--text"
+                        class="ml-1 mb-6 text-capitalize mt-2 black--text"
                         light
                         @click="confirmBuy"
                         @click.stop="showConfirm = false"
@@ -171,6 +232,7 @@
                 </v-container>
                 </v-card>
             </v-dialog>
+
             <v-dialog v-model="errorMsg" max-width="400px">
                 <v-card :dark="lightSwitch == true">
                 <v-card-title
@@ -213,6 +275,8 @@ export default {
     errorMsg: false,
     errmsgbuy: '',
     errmsg: '',
+    normalTrade: ["Normal Trade",
+        "Quick Trade"],
     strategy: [
         "Bottom Picking",
         "Breakout Play",
@@ -232,6 +296,11 @@ export default {
         }),
     },
     props: {
+      /**
+       * Get Buy Date
+       *
+       * @return  {string}  date value
+       */
         BuyDate: {
             default() {
                 return "";
@@ -239,6 +308,11 @@ export default {
         }
     },
     watch: {
+      /**
+       * 
+       * if last price is changed
+       * get latest Board Lot
+       */
         stock_last() {
             this.getBoardLot(this.stock_last);
         }
@@ -251,6 +325,11 @@ export default {
         ...mapActions({
             setShowBrokers: "chart/setShowBrokers"
         }), 
+        /**
+         * Get list of Portfolios
+         *
+         * @return  {array}  list of portfolios
+         */
         getPorfolio(){             
             this.$api.journal.portfolio.portfolio().then(
             function(result) {
@@ -259,7 +338,6 @@ export default {
                 if (
                     result.data.logs[i].type == "virtual"
                 ) {
-
                     let portfolio_params = {
                     name: result.data.logs[i].name,
                     id: result.data.logs[i].id,
@@ -274,24 +352,38 @@ export default {
             );
             
         },
-    getBoardLot(lastprice){
-        if (lastprice >= 0.0001 && lastprice <= 0.0099) {
-        this.dboard = 1000000;
-        } else if (lastprice >= 0.01 && lastprice <= 0.049) {
-        this.dboard = 100000;
-        } else if (lastprice >= 0.05 && lastprice <= 0.495) {
-        this.dboard = 10000;
-        } else if (lastprice >= 0.5 && lastprice <= 4.99) {
-        this.dboard = 1000;
-        } else if (lastprice >= 5 && lastprice <= 49.95) {
-        this.dboard = 100;
-        } else if (lastprice >= 50 && lastprice <= 999.5) {
-        this.dboard = 10;
-        } else if (lastprice >= 1000) {
-        this.dboard = 5;
-        }
-        return this.dboard;
-    },
+        /**
+         * Get Board Lot value
+         *
+         * @param   {int}  lastprice  latest price
+         *
+         * @return  {int}  board lot value
+         */
+        getBoardLot(lastprice){
+            if (lastprice >= 0.0001 && lastprice <= 0.0099) {
+            this.dboard = 1000000;
+            } else if (lastprice >= 0.01 && lastprice <= 0.049) {
+            this.dboard = 100000;
+            } else if (lastprice >= 0.05 && lastprice <= 0.495) {
+            this.dboard = 10000;
+            } else if (lastprice >= 0.5 && lastprice <= 4.99) {
+            this.dboard = 1000;
+            } else if (lastprice >= 5 && lastprice <= 49.95) {
+            this.dboard = 100;
+            } else if (lastprice >= 50 && lastprice <= 999.5) {
+            this.dboard = 10;
+            } else if (lastprice >= 1000) {
+            this.dboard = 5;
+            }
+            return this.dboard;
+        },
+    /**
+     * Get Available balance
+     *
+     * @param   {string}  selectObj  Portfolio ID
+     *
+     * @return  {Float}    balance
+     */
     getFunds(selectObj){
         for (let index = 0; index < this.getBalance.length; index++) {
             if(selectObj == this.getBalance[index].id){
@@ -299,6 +391,10 @@ export default {
             }        
         }
     },
+    /**
+     * add comma function
+     *
+     */
     addcomma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
@@ -306,6 +402,11 @@ export default {
         n.toLocaleString().split(sep)[0] + sep + n.toFixed(2).split(sep)[1]
       );
     },
+    /**
+     * Change Total Cost if quantity is pressed
+     *
+     * @return  {int}  total cost
+     */
     keypress() {
       let press = 0;
       let pressfees = 0;
@@ -313,6 +414,13 @@ export default {
       pressfees = this.fees(press);    
       this.totalcost = this.addcomma(pressfees);   
     },
+    /**
+     * Buy/Sell Fees
+     *
+     * @param   {float}  buyResult  buy result
+     *
+     * @return  {float}   total fees
+     */
     fees(buyResult) {
       let dpartcommission = buyResult * 0.0025;
       let dcommission = dpartcommission > 20 ? dpartcommission : 20;
@@ -325,6 +433,10 @@ export default {
       let dall = dcommission + dtax + dtransferfee + dsccp;
       return buyResult + dall;
     },
+    /**
+     * Buy Confirmation
+     *
+     */
     confirmBuy(){
       const stock_id = this.symbolid;
       let fund_id = this.portvalue;
@@ -361,19 +473,23 @@ export default {
               });
        
     },
+    /**
+     * Get total cost if Up arrow Button is pressed
+     *
+     * @return  {float} Total COst
+     */
     addButton() {
       this.quantity = parseInt(this.quantity) + parseInt(this.dboard);
       let add =
         parseFloat(this.quantity).toFixed(2) * parseFloat(this.stock_last);
       let addfees = this.fees(add);
-      /*let convertedNumbers = this.availableFunds.replace(/,/g, "");
-        if(parseFloat(addfees) > parseFloat(convertedNumbers)){
-          this.errorShow = true;
-          this.quantity = 0;
-          this.totalCost = 0;
-        }*/
-        this.totalcost = this.addcomma(addfees);
+      this.totalcost = this.addcomma(addfees);
     },
+    /**
+     * Get total cost if Up down Button is pressed
+     *
+     * @return  {float} Total COst
+     */
     minusButton() {
       this.quantity =
         this.quantity <= 0 || this.quantity < parseInt(this.dboard)
@@ -394,4 +510,12 @@ export default {
 .normalTrade > .v-input__control > .v-input__slot {
     border-radius: unset;
 }
+.select__trade > .v-input__control > .v-input__slot {
+  border: 1px solid;
+  box-shadow: unset !important;
+}
+.__tradenotes > .v-input__control > .v-input__slot {
+  border-radius: unset !important;
+}
+
 </style>

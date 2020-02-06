@@ -1,5 +1,5 @@
 <template>
-  <v-card class="navbar__card pt-2" max-width="240" flat color="transparent">
+  <v-card class="navbar__card" max-width="240" flat color="transparent">
     <v-navigation-drawer
       disable-resize-watcher
       mobile-break-point
@@ -10,7 +10,7 @@
       color="transparent"
       floating
     >
-      <v-list nav dense rounded>
+      <v-list nav dense rounded class="py-0">
         <v-list-item-group>
           <router-link to="/profile" class="navbar__links">
             <v-list-item>
@@ -25,25 +25,26 @@
                 ></v-img>
               </v-list-item-avatar>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-black">
+                ><v-list-item-title class="navbar__name">
                   {{
-                    $auth.loggedIn
-                      ? $auth.user.data.user.first_name +
-                        " " +
-                        $auth.user.data.user.last_name
-                      : "Guest"
+                    $auth.loggedIn ? $auth.user.data.user.name : "Guest"
                   }}</v-list-item-title
-                ></v-list-item-content
-              >
+                >
+                <span class="overline no-transform"
+                  >@{{ $auth.user.data.user.username }}</span
+                >
+              </v-list-item-content>
             </v-list-item>
+            <v-divider></v-divider>
+            <v-divider class="mb-1"></v-divider>
           </router-link>
           <router-link to="/" class="navbar__links">
             <v-list-item
               :class="active == 'social' ? 'v-list-item--active' : ''"
-              :color="active == 'social' ? 'success' : ''"
+              :color="active == 'social' ? 'success' : 'tertiarytext'"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'social' ? 'success' : ''"
+                <v-icon :color="active == 'social' ? 'success' : 'tertiarytext'"
                   >mdi-account-supervisor-circle</v-icon
                 >
               </v-list-item-icon>
@@ -57,10 +58,10 @@
           <router-link to="/chart" class="navbar__links">
             <v-list-item
               :class="active == 'chart' ? 'v-list-item--active' : ''"
-              :color="active == 'chart' ? 'success' : ''"
+              :color="active == 'chart' ? 'success' : 'tertiarytext'"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'chart' ? 'success' : ''"
+                <v-icon :color="active == 'chart' ? 'success' : 'tertiarytext'"
                   >mdi-chart-bar</v-icon
                 >
               </v-list-item-icon>
@@ -75,10 +76,11 @@
           <router-link to="/journal" class="navbar__links">
             <v-list-item
               :class="active == 'journal' ? 'v-list-item--active' : ''"
-              :color="active == 'journal' ? 'success' : ''"
+              :color="active == 'journal' ? 'success' : 'tertiarytext'"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'journal' ? 'success' : ''"
+                <v-icon
+                  :color="active == 'journal' ? 'success' : 'tertiarytext'"
                   >mdi-library-books</v-icon
                 >
               </v-list-item-icon>
@@ -93,10 +95,11 @@
           <router-link to="/trade-simulator" class="navbar__links">
             <v-list-item
               :class="active == 'virtualtrade' ? 'v-list-item--active' : ''"
-              :color="active == 'virtualtrade' ? 'success' : ''"
+              :color="active == 'virtualtrade' ? 'success' : 'tertiarytext'"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'virtualtrade' ? 'success' : ''"
+                <v-icon
+                  :color="active == 'virtualtrade' ? 'success' : 'tertiarytext'"
                   >mdi-cloud-print-outline</v-icon
                 >
               </v-list-item-icon>
@@ -111,10 +114,10 @@
           <!-- <router-link to="/game" class="navbar__links">
             <v-list-item
               :class="active == 'game' ? 'v-list-item--active' : ''"
-              :color="active == 'game' ? 'success' : ''"
+              :color="active == 'game' ? 'success' : 'tertiarytext'"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'game' ? 'success' : ''"
+                ><v-icon :color="active == 'game' ? 'success' : 'tertiarytext'"
                   >mdi-gamepad</v-icon
                 ></v-list-item-icon
               >
@@ -128,10 +131,11 @@
           <router-link to="/watchlist" class="navbar__links">
             <v-list-item
               :class="active == 'watchlist' ? 'v-list-item--active' : ''"
-              :color="active == 'watchlist' ? 'success' : ''"
+              :color="active == 'watchlist' ? 'success' : 'tertiarytext'"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'watchlist' ? 'success' : ''"
+                ><v-icon
+                  :color="active == 'watchlist' ? 'success' : 'tertiarytext'"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
@@ -189,11 +193,15 @@ export default {
 </script>
 <style scoped>
 .navbar__card {
-  position: fixed;
+  position: relative;
+  bottom: 1px;
 }
 .navbar__links {
   color: white;
   text-decoration: none;
+}
+.navbar__name {
+  font-weight: 600 !important;
 }
 .v-list-item:hover::before {
   opacity: 0;

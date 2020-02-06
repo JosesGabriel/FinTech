@@ -99,37 +99,71 @@
         >
         </v-content>
       </v-col>
-            <v-dialog v-model="showConfirm" max-width="400px">
+            <v-dialog v-model="showConfirm" max-width="330px">
             <v-card :dark="lightSwitch == true">
-            <v-card-title
-                class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
-            >Sell Confirmation</v-card-title>
-            <v-card-title
-                class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
-            >Are you sure you want to sell this stock?</v-card-title>
-            <v-container class="px-5">
-                <v-row no-gutters>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="secondary"
-                    class="text-capitalize mt-2"
-                    depressed
-                    text
-                    :dark="lightSwitch == true"
-                    light
-                    @click.stop="showConfirm = false"
-                >Cancel</v-btn>
-                <v-btn
-                    color="success"
-                    class="ml-1 text-capitalize mt-2 black--text"
-                    depressed
-                    light
-                    @click="confirmSell"
-                    @click.stop="showConfirm = false"
-                >Confirm</v-btn>
+             <v-card-title
+                    class="text-center justify-left pa-4 text-capitalize font-weight-bold"
+                    style="font-size: 16px;"
+                >Review Order</v-card-title>
+            <v-spacer></v-spacer>
+
+               <v-container class="px-5" style="font-size: 14px; line-height:.5;">
+                <v-row>
+                  <v-col class="pl-12 mb-6">
+                    Fill Type
+                  </v-col>
+                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                    Day
+                  </v-col>  
                 </v-row>
-            </v-container>
+                <v-spacer></v-spacer>
+                <v-row>
+                  <v-col class="pl-12"> 
+                   Sell Price
+                  </v-col>
+                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                    {{ this.stock_last.toFixed(2) }}
+                  </v-col>  
+                </v-row>
+                <v-row >
+                  <v-col class="pl-12">
+                   Quantity
+                  </v-col>
+                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                    {{ this.quantity.toFixed(2) }}
+                  </v-col>  
+                </v-row>
+                <v-row>
+                  <v-col class="pl-12 mb-6">
+                   Total Cost
+                  </v-col>
+                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                    {{ this.totalcost }}
+                  </v-col>  
+                </v-row>
+                <v-spacer></v-spacer>
+                
+                    <v-row no-gutters>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        class="text-capitalize mt-2"
+                        text
+                        :dark="lightSwitch == true"
+                        light
+                        @click.stop="showConfirm = false"
+                    >Cancel</v-btn>
+                    <v-btn
+                        color="success"
+                        class="ml-1 mb-6 text-capitalize mt-2 black--text"
+                        light
+                        @click="confirmBuy"
+                        @click.stop="showConfirm = false"
+                    >Confirm</v-btn>
+                    </v-row>
+                </v-container>
             </v-card>
+
+
         </v-dialog>
             <v-dialog v-model="errorMsg" max-width="400px">
                 <v-card :dark="lightSwitch == true">
@@ -197,6 +231,13 @@ export default {
         ...mapActions({
             setShowBrokers: "chart/setShowBrokers"
         }),
+        /**
+         * Get Board Lot value
+         *
+         * @param   {int}  lastprice  latest price
+         *
+         * @return  {int}  board lot value
+         */
         getBoardLot(lastprice){
             if (lastprice >= 0.0001 && lastprice <= 0.0099) {
             this.dboard = 1000000;
@@ -215,8 +256,13 @@ export default {
             }
             return this.dboard;
         },
+         /**
+         * Get total cost if Up arrow Button is pressed
+         *
+         * @return  {float} Total COst
+         */
         addButton() {
-            //this.quantity = parseInt(this.quantity) + parseInt(this.dboard);
+            
              this.quantity =
                 this.position <= this.quantity
                     ? this.position
@@ -227,6 +273,11 @@ export default {
                 let addfees = this.fees(add);
                 this.totalcost = this.addcomma(addfees);
             },
+        /**
+         * Get total cost if Up down Button is pressed
+         *
+         * @return  {float} Total COst
+         */
         minusButton() {
             this.quantity =
                 this.quantity <= 0 || this.quantity < parseInt(this.dboard)
@@ -237,6 +288,13 @@ export default {
             let minfees = this.fees(min);
             this.totalcost = this.addcomma(minfees);
         },
+        /**
+         * Buy/Sell Fees
+         *
+         * @param   {float}  buyResult  buy result
+         *
+         * @return  {float}   total fees
+         */
         fees(buyResult) {
             let dpartcommission = buyResult * 0.0025;
             let dcommission = dpartcommission > 20 ? dpartcommission : 20;
@@ -272,6 +330,13 @@ export default {
             pressfees = this.fees(press);    
             this.totalcost = this.addcomma(pressfees);   
         },
+        /**
+         * Get Available balance
+         *
+         * @param   {string}  selectObj  Portfolio ID
+         *
+         * @return  {Float}    balance
+         */
         getFunds(selectObj){
             for (let index = 0; index < this.getBalance.length; index++) {
                 if(selectObj == this.getBalance[index].id){
@@ -282,7 +347,11 @@ export default {
                 }        
             }
         },
-
+        /**
+         * Get list of Portfolios
+         *
+         * @return  {array}  list of portfolios
+         */
         getPorfolio(){   
             this.portfolio = [];   
             this.getBalance = [];     
@@ -328,6 +397,10 @@ export default {
             }.bind(this)
             );       
         },
+        /**
+         * Sell Confirmation
+         *
+         */
         confirmSell(){
             const stock_id = this.symbolid;
             let fund_id = this.portvalue;
@@ -354,8 +427,6 @@ export default {
                              this.quantity = 0;
                              this.portvalue = '';
                              this.setShowBrokers(true);
-                        }else{
-                            console.log(response); 
                         }
                     }).catch(error => {
                         this.errmsg = error.response.data.message;
