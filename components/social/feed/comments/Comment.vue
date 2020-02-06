@@ -11,7 +11,19 @@
         class="avatar__border"
       ></v-img>
     </v-list-item-avatar>
-    <v-list-item-content class="pa-0 ma-0">
+    <v-text-field
+      v-if="editModeToggle"
+      class="py-3"
+      outlined
+      dense
+      rounded
+      :value="comment.content"
+      hint="Press Esc to Cancel"
+      persistent-hint
+      @keydown.esc="editModeToggle = false"
+      @keydown.enter="editComment(comment.id, $event.target.value)"
+    ></v-text-field>
+    <v-list-item-content v-else class="pa-0 ma-0">
       <v-container class="pa-0 body-2">
         <strong class="text--darken-2 caption">{{ comment.user.name }}</strong>
         <span class="caption">{{ comment.content }}</span>
@@ -25,7 +37,7 @@
           >
         </span>
         <span v-if="commentSettingsToggle">
-          <v-btn x-small>Edit</v-btn>
+          <v-btn x-small @click="editModeToggle = !editModeToggle">Edit</v-btn>
           <v-btn x-small @click="deleteComment(comment.id)">Delete</v-btn>
         </span>
       </v-container>
@@ -138,7 +150,8 @@ export default {
       replyCommentMode: false,
       currentCommentIndex: "",
       commentValue: "",
-      commentSettingsToggle: false
+      commentSettingsToggle: false,
+      editModeToggle: false
     };
   },
   computed: {
@@ -150,9 +163,35 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert",
       setNewComment: "social/setNewComment",
-      setDeleteComment: "social/setDeleteComment"
+      setDeleteComment: "social/setDeleteComment",
+      setUpdateComment: "social/setUpdateComment"
     }),
     localFormat: LocalFormat,
+
+    editComment(comment_id, content) {
+      const payload = {
+        content: content
+      };
+      this.$api.social.posts
+        .updateComment(this.postid, comment_id, payload)
+        .then(response => {
+          if (response.success) {
+            this.setUpdateComment({
+              data: response.data.comment,
+              postIndex: this.postindex,
+              commentIndex: this.ischild ? this.childkeyprop : this.keyprop,
+              isChild: this.ischild
+            });
+            this.editModeToggle = false;
+            const alert = {
+              model: true,
+              state: true,
+              message: response.message
+            };
+            this.setAlert(alert);
+          }
+        });
+    },
 
     deleteComment(id) {
       this.$api.social.posts.deleteComment(this.postid, id).then(response => {

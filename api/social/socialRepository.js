@@ -13,6 +13,13 @@ export default $axios => ({
     return $axios.$post(`${baseURL}/posts/` + params + `/comments`, payload);
   },
 
+  updateComment(post_id, parent_id, payload) {
+    return $axios.$put(
+      `${baseURL}/posts/` + post_id + `/comments/` + parent_id,
+      payload
+    );
+  },
+
   deleteComment(post_id, parent_id) {
     return $axios.$delete(
       `${baseURL}/posts/` + post_id + `/comments/` + parent_id

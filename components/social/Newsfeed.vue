@@ -380,7 +380,8 @@ export default {
       lightSwitch: "global/getLightSwitch",
       newPosts: "global/getNewPosts",
       newComment: "social/getNewComment",
-      deleteComment: "social/getDeleteComment"
+      deleteComment: "social/getDeleteComment",
+      updateComment: "social/getUpdateComment"
     })
   },
   watch: {
@@ -426,6 +427,27 @@ export default {
       this.postsObject[this.newComment.postIndex].comments[
         this.newComment.commentIndex
       ].comments.push(this.newComment.data);
+    },
+    updateComment() {
+      if (this.updateComment.isChild) {
+        let parentComment = this.postsObject[this.updateComment.postIndex]
+          .comments[this.updateComment.commentIndex].comments;
+
+        for (let i = 0; i < parentComment.length; i++) {
+          if (parentComment[i].id == this.updateComment.data.id) {
+            this.postsObject[this.updateComment.postIndex].comments[
+              this.updateComment.commentIndex
+            ].comments[i].content = this.updateComment.data.content;
+          }
+        }
+      } else {
+        this.postsObject[this.updateComment.postIndex].comments[
+          this.updateComment.commentIndex
+        ].content = {};
+        this.postsObject[this.updateComment.postIndex].comments[
+          this.updateComment.commentIndex
+        ].content = this.updateComment.data.content;
+      }
     },
     deleteComment() {
       if (this.deleteComment.isChild) {

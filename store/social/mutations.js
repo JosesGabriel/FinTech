@@ -10,5 +10,8 @@ export default {
   },
   SET_DELETECOMMENT(state, data) {
     state.deleteComment = data;
+  },
+  SET_UPDATECOMMENT(state, data) {
+    state.updateComment = data;
   }
 };
