@@ -84,18 +84,14 @@
               </v-list-item-subtitle>
             </v-col>
             <v-col class="text-right">
-              <v-btn
-                icon
-                fab
-                small
-                class="postOptions__btn"
+              <v-icon
                 color="secondary"
+                class="postOptions__btn"
                 @click="
                   (postOptionsMode = !postOptionsMode), (currentPost = n - 1)
                 "
+                >mdi-dots-horizontal</v-icon
               >
-                <v-icon>mdi-dots-horizontal</v-icon>
-              </v-btn>
               <div v-if="postOptionsMode && currentPost == n - 1">
                 <div class="postOptions__dropdown--caret"></div>
                 <div class="postOptions__container">
@@ -221,7 +217,7 @@
       </v-list-item>
       <!-- End of Post Body -->
       <v-divider></v-divider>
-      <v-card-actions class="pl-5 py-1">
+      <v-card-actions class="pl-4 py-2">
         <v-btn
           icon
           outlined
@@ -261,9 +257,7 @@
         </v-btn>
         <span class="px-2 caption">{{ postsObject[n - 1].bears_count }}</span>
         <v-spacer></v-spacer>
-        <v-btn icon fab x-small color="secondary">
-          <v-icon>mdi-comment-text-outline</v-icon>
-        </v-btn>
+        <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
         <span class="caption">{{
           postsObject[n - 1].comment_descendants_count
         }}</span>
@@ -298,7 +292,7 @@
             "
           ></v-img>
         </v-list-item-avatar>
-        <v-list-item-content class="pt-0 mb-0">
+        <v-list-item-content class="pt-2 mb-0">
           <v-text-field
             dense
             rounded
@@ -864,5 +858,13 @@ export default {
 }
 .bear__btn--active {
   background-color: #f4433699;
+}
+.postOptions__btn {
+  position: relative;
+  bottom: 8px;
+  left: 4px;
+}
+.postOptions__btn:focus {
+  background-color: transparent;
 }
 </style>

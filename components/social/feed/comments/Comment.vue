@@ -1,6 +1,6 @@
 <template>
-  <v-list-item :key="comment.id" class="ma-0">
-    <v-list-item-avatar style="align-self: flex-start">
+  <v-list-item :key="comment.id" class="ma-0 pt-3">
+    <v-list-item-avatar style="align-self: flex-start" class="mt-0">
       <v-img
         :src="
           comment.user.profile_image
@@ -26,7 +26,6 @@
     <v-list-item-content v-else class="pa-0 ma-0">
       <v-container class="pa-0 body-2">
         <strong class="text--darken-2 caption">{{ comment.user.name }}</strong>
-        <span class="caption">{{ comment.content }}</span>
 
         <span v-if="comment.user.uuid == $auth.user.data.user.uuid">
           <v-btn
@@ -36,10 +35,15 @@
             ><v-icon>mdi-dots-horizontal</v-icon></v-btn
           >
         </span>
+
         <span v-if="commentSettingsToggle">
           <v-btn x-small @click="editModeToggle = !editModeToggle">Edit</v-btn>
           <v-btn x-small @click="deleteComment(comment.id)">Delete</v-btn>
         </span>
+        <div class="overline no-transform">
+          {{ localFormat(comment.created_at, "fn") }}
+        </div>
+        <div class="caption py-3">{{ comment.content }}</div>
       </v-container>
       <v-container class="pa-0 ma-0">
         <v-btn icon outlined fab width="21" height="21" color="secondary">
@@ -61,9 +65,6 @@
         >
           <v-icon>mdi-reply-outline</v-icon>
         </v-btn>
-        <span class="px-2 overline no-transform">
-          {{ localFormat(comment.created_at, "fn") }}
-        </span>
 
         <List
           v-if="comment.comments"
@@ -169,6 +170,7 @@ export default {
     localFormat: LocalFormat,
 
     editComment(comment_id, content) {
+      this.commentSettingsToggle = false;
       const payload = {
         content: content
       };
@@ -194,6 +196,7 @@ export default {
     },
 
     deleteComment(id) {
+      this.commentSettingsToggle = false;
       this.$api.social.posts.deleteComment(this.postid, id).then(response => {
         if (response.success) {
           this.setDeleteComment({

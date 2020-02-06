@@ -7,7 +7,9 @@
     :loading="loader"
   >
     <div class="pa-0 pl-2">
-      <div class="body-2 font-weight-black">Suggested Connections</div>
+      <div class="body-2 font-weight-black pl-2 pb-2">
+        Suggested Connections
+      </div>
       <v-divider></v-divider>
       <v-list class="transparent">
         <v-list-item

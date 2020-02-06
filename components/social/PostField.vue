@@ -78,7 +78,7 @@
               v-model="postField"
               :placeholder="
                 'Hey ' +
-                  $auth.user.data.user.username +
+                  $auth.user.data.user.name +
                   ', penny for your thoughts?'
               "
               class="pt-0 caption postField__textarea"
@@ -154,7 +154,7 @@
             </v-list>
           </div> -->
           <v-divider class="postField__divider" />
-          <div>
+          <div class="pt-2">
             <input
               ref="postField__inputRef"
               type="file"
@@ -202,7 +202,8 @@
             </div>
             <v-btn
               class="postField__btn px-2"
-              color="#D4F6F2"
+              color="rgba(3, 218, 197, 0.2)"
+              depressed
               small
               rounded
               :dark="lightSwitch == 0 ? false : true"
@@ -212,11 +213,12 @@
                 class="mr-1 media__button"
                 src="/icon/postfield/photo.svg"
                 width="20"
-              /><span class="black--text">Photo</span>
+              /><span>Photo</span>
             </v-btn>
             <v-btn
               class="postField__btn px-2 ml-2"
-              color="#D4F6F2"
+              color="rgba(3, 218, 197, 0.2)"
+              depressed
               small
               rounded
               :dark="lightSwitch == 0 ? false : true"
@@ -227,7 +229,7 @@
                 src="/icon/postfield/video.svg"
                 width="20"
               />
-              <span class="black--text">Video</span>
+              <span>Video</span>
             </v-btn>
             <!-- TODO after launching -->
             <!-- <v-btn
@@ -272,10 +274,11 @@
               </v-btn>
             </div>
             <v-btn
+              class="no-transform post__button"
               rounded
-              outlined
               small
               right
+              depressed
               absolute
               color="success"
               :disabled="postBtnDisable"
@@ -826,6 +829,9 @@ export default {
 .authorSentiment__button--bear {
   right: 95px !important;
   bottom: 12px;
+}
+.post__button {
+  font-weight: 600;
 }
 .postField__dropdown--caret {
   position: relative;
