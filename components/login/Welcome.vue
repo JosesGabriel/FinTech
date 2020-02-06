@@ -1,11 +1,11 @@
 <template>
-  <v-card height="584px" :dark="lightSwitch == 0 ? false : true">
+  <v-card height="584px" :dark="isLightMode == 0 ? false : true">
     <div
       class="display-1 font-weight-bold loginCard--intro text-center py-2 pt-6"
     >
       Welcome to the community!
     </div>
-    <div class="body-2 text-center secondary--text">
+    <div class="body-2 text-center">
       Check your email to verify your account
     </div>
     <v-card-text class="pa-0">
@@ -15,10 +15,10 @@
             <v-img src="/login/castle.png" contain></v-img>
           </v-col>
         </v-row>
-        <div class="body-2 text-center secondary--text login__cardtext">
+        <div class="body-2 text-center login__cardtext">
           What's a humble brag between peers? <br />Let them know you're in
         </div>
-        <div class="body-2 text-center secondary--text">
+        <div class="body-2 text-center">
           <v-hover v-slot:default="{ hover }">
             <v-btn x-large class="display-1 mr-4" icon>
               <v-icon x-large :color="!hover ? '' : 'success'"
@@ -37,7 +37,7 @@
       </v-container>
     </v-card-text>
     <a
-      class="float-right no-transform success--text skip__btn overline"
+      class="float-right secondarytext--text skip__btn font-weight-bold overline"
       @click="$emit('stepper', 2)"
       >Skip</a
     >
@@ -47,6 +47,9 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
+  data: () => ({
+    isLightMode: 0
+  }),
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"

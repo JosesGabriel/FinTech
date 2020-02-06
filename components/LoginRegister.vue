@@ -53,7 +53,7 @@
                     class="black--text font-weight-bold text-capitalize mb-2"
                     :color="!hover ? 'success' : 'successhover'"
                     elevation="1"
-                    @click="stepper = 2"
+                    @click="stepper = 4"
                   >
                     Log In
                   </v-btn>
