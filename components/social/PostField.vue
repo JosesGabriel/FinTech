@@ -45,6 +45,13 @@
             :show-preview="false"
             @select="addEmoji"
         /></client-only>
+        <v-progress-circular
+          class="characterLimit overline"
+          :value="characterLimit"
+          size="23"
+          width="3"
+          :color="200 - postField.length >= 0 ? 'success' : 'error'"
+        ></v-progress-circular>
         <div class="postField__textareaContainer">
           <at
             :class="
@@ -343,7 +350,8 @@ export default {
       value: "val",
       selected: [],
       members: [],
-      text: ""
+      text: "",
+      characterLimit: 0
     };
   },
   computed: {
@@ -358,6 +366,7 @@ export default {
       } else {
         this.postBtnDisable = true;
       }
+      this.characterLimit = this.postField.length / 2;
     }
   },
   methods: {
@@ -570,7 +579,7 @@ export default {
       if (this.$refs.postField__inputRef.files) {
         //text + image
         const params = {
-          content: this.postField,
+          content: this.postField.substring(0, 200),
           attachments: this.cloudArray,
           visibility: "public",
           status: "active",
@@ -595,7 +604,7 @@ export default {
       } else {
         // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
         const params = {
-          content: this.postField,
+          content: this.postField.substring(0, 200),
           visibility: "public",
           status: "active",
           tags: postTags
@@ -813,6 +822,12 @@ export default {
   z-index: 1;
   top: 110px;
   right: 0;
+}
+.characterLimit {
+  position: absolute;
+  z-index: 1;
+  top: 77px;
+  right: 54px;
 }
 .emojiPicker--dark .emoji-mart-category-label span {
   background-color: #0c1a2b !important;

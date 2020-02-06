@@ -41,10 +41,10 @@
           <router-link to="/" class="navbar__links">
             <v-list-item
               :class="active == 'social' ? 'v-list-item--active' : ''"
-              :color="active == 'social' ? 'success' : 'tertiarytext'"
+              :color="active == 'social' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'social' ? 'success' : 'tertiarytext'"
+                <v-icon :color="active == 'social' ? 'success' : ''"
                   >mdi-account-supervisor-circle</v-icon
                 >
               </v-list-item-icon>
@@ -58,10 +58,10 @@
           <router-link to="/chart" class="navbar__links">
             <v-list-item
               :class="active == 'chart' ? 'v-list-item--active' : ''"
-              :color="active == 'chart' ? 'success' : 'tertiarytext'"
+              :color="active == 'chart' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'chart' ? 'success' : 'tertiarytext'"
+                <v-icon :color="active == 'chart' ? 'success' : ''"
                   >mdi-chart-bar</v-icon
                 >
               </v-list-item-icon>
@@ -76,11 +76,10 @@
           <router-link to="/journal" class="navbar__links">
             <v-list-item
               :class="active == 'journal' ? 'v-list-item--active' : ''"
-              :color="active == 'journal' ? 'success' : 'tertiarytext'"
+              :color="active == 'journal' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon
-                  :color="active == 'journal' ? 'success' : 'tertiarytext'"
+                <v-icon :color="active == 'journal' ? 'success' : ''"
                   >mdi-library-books</v-icon
                 >
               </v-list-item-icon>
@@ -95,11 +94,10 @@
           <router-link to="/trade-simulator" class="navbar__links">
             <v-list-item
               :class="active == 'virtualtrade' ? 'v-list-item--active' : ''"
-              :color="active == 'virtualtrade' ? 'success' : 'tertiarytext'"
+              :color="active == 'virtualtrade' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon
-                  :color="active == 'virtualtrade' ? 'success' : 'tertiarytext'"
+                <v-icon :color="active == 'virtualtrade' ? 'success' : ''"
                   >mdi-cloud-print-outline</v-icon
                 >
               </v-list-item-icon>
@@ -114,10 +112,10 @@
           <!-- <router-link to="/game" class="navbar__links">
             <v-list-item
               :class="active == 'game' ? 'v-list-item--active' : ''"
-              :color="active == 'game' ? 'success' : 'tertiarytext'"
+              :color="active == 'game' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'game' ? 'success' : 'tertiarytext'"
+                ><v-icon :color="active == 'game' ? 'success' : ''"
                   >mdi-gamepad</v-icon
                 ></v-list-item-icon
               >
@@ -131,11 +129,10 @@
           <router-link to="/watchlist" class="navbar__links">
             <v-list-item
               :class="active == 'watchlist' ? 'v-list-item--active' : ''"
-              :color="active == 'watchlist' ? 'success' : 'tertiarytext'"
+              :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
-                ><v-icon
-                  :color="active == 'watchlist' ? 'success' : 'tertiarytext'"
+                ><v-icon :color="active == 'watchlist' ? 'success' : ''"
                   >mdi-eye-plus-outline</v-icon
                 ></v-list-item-icon
               >
