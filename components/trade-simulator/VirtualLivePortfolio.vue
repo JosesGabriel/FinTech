@@ -456,6 +456,7 @@ export default {
     let mvalueprior = 0;
     let d = new Date();
     let localprofit = 0;
+    let tlogsprofit = 0;
     let counter = 0;
     let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
  
@@ -525,15 +526,18 @@ export default {
                                     localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
                                   }else{
                                     localprofit = getlocal.priorprofit;
+                                    tlogsprofit = getlocal.priortlogsprofit;
                                   }
                               }else{
                                     localprofit = getlocal.priorprofit;
+                                    tlogsprofit = getlocal.priortlogsprofit;
                                   }
                         }else{                   
                             if(totalarray == counter){
                                 localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
                             }
                             localprofit = this.priorProfitLoss;
+                            tlogsprofit = this.Realized;
                         }
                         counter++;
                     
@@ -546,6 +550,7 @@ export default {
                         }      
                         
                       this.$emit("DayChange", localprofit);
+                      this.$emit("DayChangeTlogs", tlogsprofit);
                        
                     }.bind(this)
                   );

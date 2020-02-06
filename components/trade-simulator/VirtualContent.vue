@@ -213,6 +213,7 @@
             ref="tradelogsComponent"
             v-on:totalRealized="Realized"
             v-on:MaxDrawdown="TotalMax"
+            v-on:DayChangeTlogs ="DayChangeTlogs"
           />
         </v-container>
       </v-tab-item>
@@ -251,6 +252,7 @@ export default {
       change: 0,
       changep: 0,
       deleteconfirm: '',
+      daychangetlogs: 0,
     };
   },
   created() {},
@@ -305,6 +307,7 @@ export default {
       this.port_total = 0;
       this.default_port = this.simulatorPortfolioID;
       this.getPorfolio('newdata');
+      this.getDayChange();
     },
     unrealized() {
       this.getTradeLogs();
@@ -400,6 +403,9 @@ export default {
     DayChange(value) {
       this.daychange = value;
     },
+    DayChangeTlogs(value) {
+      this.daychangetlogs = value;
+    },
     /**
      * Initialized Change Percentage
      *
@@ -456,13 +462,16 @@ export default {
         getlocal = JSON.parse(getlocal);
         if(getlocal != null){
           this.daychange = getlocal.priorprofit;
+          this.daychangetlogs = getlocal.priortlogsprofit;
         }else{
           this.daychange = 0;
+          this.daychangetlogs = 0;
         }
       }
            let yesterdaysProfit = this.daychange;  
            let ptotal =  parseFloat(this.realized) + parseFloat(this.unrealized);  
-           yequity = parseFloat(prior_realized) + parseFloat(yesterdaysProfit) + parseFloat(this.port_capital);
+           //yequity = parseFloat(prior_realized) + parseFloat(yesterdaysProfit) + parseFloat(this.port_capital);
+           yequity = parseFloat(this.daychangetlogs) + parseFloat(yesterdaysProfit) + parseFloat(this.port_capital);
            tequity = ptotal + parseFloat(this.port_capital);
            this.change = parseFloat(tequity) - parseFloat(yequity);
     

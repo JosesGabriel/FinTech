@@ -2,7 +2,7 @@
   <v-content>
   
    <!-- <span class="mx-3 mb-3 body-2 _backBtn" style="float:right;" @click="setShowBrokers(true)">Back</span>-->
-    <v-row class="ma-0 mt-4 pa-0">
+    <v-row class="ma-0 pa-0">
       <v-col class="col___left col-12 pa-0">
         <v-container class="d-flex flex-row pa-0">
 
@@ -32,8 +32,8 @@
             class="mt-0 pt-0 pr-0 mr-0"
             style="float: right;"
             row>
+            <v-radio :dark="lightSwitch == true" label="Day" value="radio-2"></v-radio>
             <v-radio disabled :dark="lightSwitch == true" label="GTC" value="radio-1"></v-radio>
-            <v-radio :dark="lightSwitch == true" label="Day(default)" value="radio-2"></v-radio>
             <v-radio disabled :dark="lightSwitch == true" label="GTD" value="radio-3"></v-radio>
           </v-radio-group>
         </v-col>
@@ -50,13 +50,15 @@
                 class="mt-0 pt-0"
               >
                 <template v-slot:activator="{ on }">
-                  <v-btn v-on="on" text class="px-0 mt-0 pt-0" color="success">
+                  <v-btn v-on="on" disabled text class="px-0 mt-0 pt-1" color="success">
                     <v-text-field
                       label="mm/dd/yy"
+                      class="__tradeDate"
                       solo
                       dense
                       background-color="transparent"
-                      outlined
+                      outlined 
+                      disabled       
                       v-model="computedDateFormatted"
                     ></v-text-field>
                   </v-btn>
@@ -182,4 +184,12 @@ export default {
 .v-label {
     font-size: 14px;
   }
+.__tradeDate > .v-input__control > .v-input__slot {
+  box-shadow: unset !important;
+  min-height: 33px !important;
+}
+.__tradeDate {
+border-radius: 0px !important;
+}
+
 </style>

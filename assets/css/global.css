@@ -36,6 +36,7 @@
 .no-transform {
     text-transform: none !important;
     text-decoration: none !important;
+    letter-spacing: unset !important;
 }
 
 .page__wrapper {

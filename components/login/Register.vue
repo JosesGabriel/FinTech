@@ -9,7 +9,7 @@
       v-model="registerForm"
       @submit.prevent="signUp()"
     >
-      <div class="display-1 font-weight-bold loginCard--intro">
+      <div class="display-1 font-weight-bold loginCard--intro pb-0 mb-0">
         Sign Up
       </div>
       <v-card-text>
@@ -75,29 +75,40 @@
               ></v-text-field>
             </v-col>
 
-            <span class="mt-3 pl-4 caption secondary--text"
+            <span class="mt-3 pl-4 caption"
               >By signing up you agree to
-              <a class="success--text">Lyduz Terms</a> and
-              <a class="success--text">Policies.</a></span
+              <a class="secondarytext--text font-weight-bold">Lyduz Terms</a>
+              and
+              <a class="secondarytext--text font-weight-bold"
+                >Policies.</a
+              ></span
             >
           </v-row>
         </v-container>
+        <v-row align="center" justify="center" class="mb-1">
+          <span class="caption">Sign up with</span>
+        </v-row>
+        <Providers />
       </v-card-text>
       <div class="loginButtons--wrapper">
-        <v-btn
-          block
-          class="mb-2"
-          outlined
-          rounded
-          color="success"
-          type="submit"
-          :disabled="!registerForm"
-        >
-          Sign Up
-        </v-btn>
+        <v-hover v-slot:default="{ hover }">
+          <v-btn
+            block
+            rounded
+            class="black--text font-weight-bold text-capitalize mb-2"
+            :color="!hover ? 'success' : 'successhover'"
+            type="submit"
+            elevation="1"
+            :disabled="!registerForm"
+          >
+            Sign Up
+          </v-btn>
+        </v-hover>
         <span class="text-center d-block  caption w-100"
           >Already have an account?
-          <a class="text-center success--text" @click="$emit('stepper', 2)"
+          <a
+            class="text-center secondarytext--text font-weight-bold"
+            @click="$emit('stepper', 2)"
             >Sign In</a
           ></span
         >
@@ -108,8 +119,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Providers from "./Providers";
 
 export default {
+  components: {
+    Providers
+  },
   data() {
     return {
       showPassword: false,
@@ -148,7 +163,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userWatchedStocks: "watchers/getUserWatchedStocks",
       lightSwitch: "global/getLightSwitch",
       loginModalState: "login/getLoginModalState"
     }),

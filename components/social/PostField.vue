@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card
-      class="pa-4 transparent__bg pb-3"
+      class="pa-4 pb-3"
       :dark="lightSwitch == 0 ? false : true"
       :loading="loader"
       outlined
@@ -45,6 +45,13 @@
             :show-preview="false"
             @select="addEmoji"
         /></client-only>
+        <v-progress-circular
+          class="characterLimit overline"
+          :value="characterLimit"
+          size="23"
+          width="3"
+          :color="200 - postField.length >= 0 ? 'success' : 'error'"
+        ></v-progress-circular>
         <div class="postField__textareaContainer">
           <at
             :class="
@@ -78,7 +85,7 @@
               v-model="postField"
               :placeholder="
                 'Hey ' +
-                  $auth.user.data.user.username +
+                  $auth.user.data.user.name +
                   ', penny for your thoughts?'
               "
               class="pt-0 caption postField__textarea"
@@ -154,7 +161,7 @@
             </v-list>
           </div> -->
           <v-divider class="postField__divider" />
-          <div>
+          <div class="pt-2">
             <input
               ref="postField__inputRef"
               type="file"
@@ -202,7 +209,8 @@
             </div>
             <v-btn
               class="postField__btn px-2"
-              color="#D4F6F2"
+              color="rgba(3, 218, 197, 0.2)"
+              depressed
               small
               rounded
               :dark="lightSwitch == 0 ? false : true"
@@ -212,11 +220,12 @@
                 class="mr-1 media__button"
                 src="/icon/postfield/photo.svg"
                 width="20"
-              /><span class="black--text">Photo</span>
+              /><span>Photo</span>
             </v-btn>
             <v-btn
               class="postField__btn px-2 ml-2"
-              color="#D4F6F2"
+              color="rgba(3, 218, 197, 0.2)"
+              depressed
               small
               rounded
               :dark="lightSwitch == 0 ? false : true"
@@ -227,7 +236,7 @@
                 src="/icon/postfield/video.svg"
                 width="20"
               />
-              <span class="black--text">Video</span>
+              <span>Video</span>
             </v-btn>
             <!-- TODO after launching -->
             <!-- <v-btn
@@ -272,10 +281,11 @@
               </v-btn>
             </div>
             <v-btn
+              class="no-transform post__button"
               rounded
-              outlined
               small
               right
+              depressed
               absolute
               color="success"
               :disabled="postBtnDisable"
@@ -340,7 +350,8 @@ export default {
       value: "val",
       selected: [],
       members: [],
-      text: ""
+      text: "",
+      characterLimit: 0
     };
   },
   computed: {
@@ -355,6 +366,7 @@ export default {
       } else {
         this.postBtnDisable = true;
       }
+      this.characterLimit = this.postField.length / 2;
     }
   },
   methods: {
@@ -567,7 +579,7 @@ export default {
       if (this.$refs.postField__inputRef.files) {
         //text + image
         const params = {
-          content: this.postField,
+          content: this.postField.substring(0, 200),
           attachments: this.cloudArray,
           visibility: "public",
           status: "active",
@@ -577,7 +589,12 @@ export default {
           .create(params)
           .then(
             function(response) {
-              this.$emit("authorNewPost", params);
+              let responsePost = response.data.post;
+              responsePost.attachments = this.cloudArray;
+              responsePost.user = {
+                uuid: this.$auth.user.data.user.uuid
+              };
+              this.$emit("authorNewPost", responsePost);
               this.clearInputs(true, response.message);
             }.bind(this)
           )
@@ -587,7 +604,7 @@ export default {
       } else {
         // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
         const params = {
-          content: this.postField,
+          content: this.postField.substring(0, 200),
           visibility: "public",
           status: "active",
           tags: postTags
@@ -596,7 +613,11 @@ export default {
           .create(params)
           .then(
             function(response) {
-              this.$emit("authorNewPost", params);
+              let responsePost = response.data.post;
+              responsePost.user = {
+                uuid: this.$auth.user.data.user.uuid
+              };
+              this.$emit("authorNewPost", response.data.post);
               this.clearInputs(true, response.message);
             }.bind(this)
           )
@@ -802,6 +823,12 @@ export default {
   top: 110px;
   right: 0;
 }
+.characterLimit {
+  position: absolute;
+  z-index: 1;
+  top: 77px;
+  right: 54px;
+}
 .emojiPicker--dark .emoji-mart-category-label span {
   background-color: #0c1a2b !important;
   color: white;
@@ -817,6 +844,9 @@ export default {
 .authorSentiment__button--bear {
   right: 95px !important;
   bottom: 12px;
+}
+.post__button {
+  font-weight: 600;
 }
 .postField__dropdown--caret {
   position: relative;

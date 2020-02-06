@@ -74,6 +74,7 @@
         <v-col class="mx-3 py-0 my-0">
           <v-text-field 
             label="Position"
+            type="number"
             flat
             v-model="pos"
             ></v-text-field>
@@ -83,6 +84,7 @@
         <v-col class="mx-3 py-0 my-0">
           <v-text-field 
           label="Price"
+          type="number"
           flat
           v-model="price"
           ></v-text-field>
