@@ -75,10 +75,13 @@
               ></v-text-field>
             </v-col>
 
-            <span class="mt-3 pl-4 caption secondary--text"
+            <span class="mt-3 pl-4 caption"
               >By signing up you agree to
-              <a class="success--text">Lyduz Terms</a> and
-              <a class="success--text">Policies.</a></span
+              <a class="secondarytext--text font-weight-bold">Lyduz Terms</a>
+              and
+              <a class="secondarytext--text font-weight-bold"
+                >Policies.</a
+              ></span
             >
           </v-row>
         </v-container>
@@ -103,7 +106,9 @@
         </v-hover>
         <span class="text-center d-block  caption w-100"
           >Already have an account?
-          <a class="text-center success--text" @click="$emit('stepper', 2)"
+          <a
+            class="text-center secondarytext--text font-weight-bold"
+            @click="$emit('stepper', 2)"
             >Sign In</a
           ></span
         >

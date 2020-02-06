@@ -15,7 +15,11 @@
         </v-row>
         <v-row class="pt-4">
           <v-col cols="12">
-            <v-text-field v-model="email" label="Email Address"></v-text-field>
+            <v-text-field
+              v-model="email"
+              color="success"
+              label="Email Address"
+            ></v-text-field>
           </v-col>
         </v-row>
       </v-container>
@@ -48,7 +52,9 @@
       </v-hover>
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
-        <a class="text-center success--text" @click="$emit('stepper', 3)"
+        <a
+          class="text-center secondarytext--text font-weight-bold"
+          @click="$emit('stepper', 3)"
           >Sign Up</a
         ></span
       >

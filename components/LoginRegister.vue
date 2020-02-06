@@ -62,12 +62,15 @@
                   <v-btn
                     block
                     rounded
-                    class="black--text font-weight-bold text-capitalize"
+                    class="black--text font-weight-bold"
                     :color="!hover ? 'success' : 'successhover'"
                     elevation="1"
                     @click="stepper = 3"
                   >
-                    Sign up for free
+                    <span class="text-capitalize"
+                      >Sign up
+                      <span class="text-lowercase">for</span> Free</span
+                    >
                   </v-btn>
                 </v-hover>
               </div>

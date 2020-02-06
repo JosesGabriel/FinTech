@@ -21,14 +21,14 @@
         <div class="body-2 text-center secondary--text">
           <v-hover v-slot:default="{ hover }">
             <v-btn x-large class="display-1 mr-4" icon>
-              <v-icon x-large :color="!hover ? '' : 'primary'"
+              <v-icon x-large :color="!hover ? '' : 'success'"
                 >mdi-facebook</v-icon
               >
             </v-btn>
           </v-hover>
           <v-hover v-slot:default="{ hover }" x-large>
             <v-btn class="display-1 mr-4" icon>
-              <v-icon x-large :color="!hover ? '' : '#00acee'"
+              <v-icon x-large :color="!hover ? '' : 'success'"
                 >mdi-twitter</v-icon
               >
             </v-btn>
