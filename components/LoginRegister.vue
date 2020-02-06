@@ -52,6 +52,7 @@
                     rounded
                     class="black--text font-weight-bold text-capitalize mb-2"
                     :color="!hover ? 'success' : 'successhover'"
+                    elevation="1"
                     @click="stepper = 2"
                   >
                     Log In
@@ -63,6 +64,7 @@
                     rounded
                     class="black--text font-weight-bold text-capitalize"
                     :color="!hover ? 'success' : 'successhover'"
+                    elevation="1"
                     @click="stepper = 3"
                   >
                     Sign up for free
@@ -80,48 +82,7 @@
           </v-stepper-content>
 
           <v-stepper-content step="4" class="pa-0">
-            <v-card height="584px" :dark="isLightMode == 0 ? false : true">
-              <div
-                class="display-1 font-weight-bold loginCard--intro text-center py-2 pt-6"
-              >
-                Welcome to the community!
-              </div>
-              <div class="body-2 text-center secondary--text">
-                Check your email to verify your account
-              </div>
-              <v-card-text class="pa-0">
-                <v-container class="pa-0">
-                  <v-row class="login__cardtext">
-                    <v-col cols="12" class="pa-0">
-                      <v-img src="castle_register.svg"></v-img>
-                    </v-col>
-                  </v-row>
-                  <div
-                    class="body-2 text-center secondary--text login__cardtext"
-                  >
-                    What's a humble brag between peers? <br />Let them know
-                    you're in
-                  </div>
-                  <div class="body-2 text-center secondary--text">
-                    <v-btn class="loginReg__social" icon>
-                      <v-icon color="#B6B6B6" class="display-1 mr-5" flat
-                        >mdi-facebook</v-icon
-                      >
-                    </v-btn>
-                    <v-btn class="loginReg__social" icon>
-                      <v-icon color="#B6B6B6" class="display-1 ml-5" flat
-                        >mdi-twitter</v-icon
-                      >
-                    </v-btn>
-                  </div>
-                </v-container>
-              </v-card-text>
-              <a
-                class="float-right no-transform success--text skip__btn overline"
-                @click="stepper = 2"
-                >Skip</a
-              >
-            </v-card>
+            <Welcome @alert="showAlert" @stepper="changeStep" />
           </v-stepper-content>
 
           <v-stepper-content step="5" class="pa-0">
@@ -137,12 +98,14 @@
 import { mapActions, mapGetters } from "vuex";
 import Login from "~/components/login/Login";
 import Register from "~/components/login/Register";
+import Welcome from "~/components/login/Welcome";
 import ForgotPassword from "~/components/login/ForgotPassword";
 
 export default {
   components: {
     Login,
     Register,
+    Welcome,
     ForgotPassword
   },
   props: {
@@ -172,13 +135,13 @@ export default {
           title: "Participate with Ease",
           subtitle:
             "Everything you need is only a click away. Lyduz is designed with user experience in mind."
-        },
-        {
-          image: "atom.gif",
-          title: "Learn within budget",
-          subtitle:
-            "High-quality learning modules at a cost that makes sense. Learning has never been this accessible."
         }
+        // {
+        //   image: "atom.gif",
+        //   title: "Learn within budget",
+        //   subtitle:
+        //     "High-quality learning modules at a cost that makes sense. Learning has never been this accessible."
+        // }
       ]
     };
   },

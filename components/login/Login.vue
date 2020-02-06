@@ -34,21 +34,23 @@
             ></v-text-field>
           </v-col>
         </v-row>
+        <small
+          ><a class="success--text" @click="$emit('stepper', 5)"
+            >Forgot your password?</a
+          ></small
+        >
+        <small
+          ><v-checkbox
+            class="remember--checkbox"
+            label="Remember me"
+          ></v-checkbox
+        ></small>
       </v-container>
-      <small class="ml-3"
-        ><a class="success--text" @click="$emit('stepper', 5)"
-          >Forgot your password?</a
-        ></small
-      >
-      <small
-        ><v-checkbox
-          class="ml-3 remember--checkbox"
-          label="Remember me"
-        ></v-checkbox
-      ></small>
+      <v-row align="center" justify="center" class="mb-5">
+        <span class="caption">Sign in with</span>
+      </v-row>
+      <Providers />
     </v-card-text>
-
-    <Providers />
 
     <div class="loginButtons--wrapper">
       <v-hover v-slot:default="{ hover }">
@@ -57,6 +59,7 @@
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
           :color="!hover ? 'success' : 'successhover'"
+          elevation="1"
           @click="login()"
         >
           Sign In
@@ -102,7 +105,7 @@ export default {
      * @return
      */
     async login() {
-      this.isLoading = true;
+      this.isLoading = "success";
       this.$auth
         .loginWith("local", {
           data: {

@@ -9,7 +9,7 @@
       v-model="registerForm"
       @submit.prevent="signUp()"
     >
-      <div class="display-1 font-weight-bold loginCard--intro">
+      <div class="display-1 font-weight-bold loginCard--intro pb-0 mb-0">
         Sign Up
       </div>
       <v-card-text>
@@ -82,6 +82,10 @@
             >
           </v-row>
         </v-container>
+        <v-row align="center" justify="center" class="mb-1">
+          <span class="caption">Sign up with</span>
+        </v-row>
+        <Providers />
       </v-card-text>
       <div class="loginButtons--wrapper">
         <v-hover v-slot:default="{ hover }">
@@ -91,6 +95,7 @@
             class="black--text font-weight-bold text-capitalize mb-2"
             :color="!hover ? 'success' : 'successhover'"
             type="submit"
+            elevation="1"
             :disabled="!registerForm"
           >
             Sign Up
@@ -109,8 +114,12 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Providers from "./Providers";
 
 export default {
+  components: {
+    Providers
+  },
   data() {
     return {
       showPassword: false,
@@ -149,7 +158,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userWatchedStocks: "watchers/getUserWatchedStocks",
       lightSwitch: "global/getLightSwitch",
       loginModalState: "login/getLoginModalState"
     }),

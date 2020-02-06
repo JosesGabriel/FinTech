@@ -1,11 +1,16 @@
 <template>
   <v-content>
     <v-row align="center" justify="center">
-      <v-col cols="12" sm="4">
-        <v-btn text icon color="pink">
-          <v-icon @click="getUrl('facebook')">mdi-facebook</v-icon>
+      <v-hover v-slot:default="{ hover }">
+        <v-btn icon x-large>
+          <v-icon
+            size="50"
+            :color="!hover ? '' : 'primary'"
+            @click="getUrl('facebook')"
+            >mdi-facebook</v-icon
+          >
         </v-btn>
-      </v-col>
+      </v-hover>
     </v-row>
   </v-content>
 </template>
