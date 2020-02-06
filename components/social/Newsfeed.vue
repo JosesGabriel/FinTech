@@ -399,12 +399,15 @@ export default {
         attachments[i]["url"] = this.newPost.attachments[i];
       }
       this.postsObject.unshift({
+        id: this.newPost.id,
+        user_id: this.newPosts.user_id,
         content: this.newPost.content,
         attachments: attachments,
         bears_count: 0,
         bulls_count: 0,
         created_at: new Date(),
         user: {
+          uuid: this.newPost.user.uuid,
           profile_image: this.$auth.user.data.user.profile_image,
           name: this.$auth.user.data.user.name
         },
