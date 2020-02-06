@@ -99,7 +99,7 @@ export default {
      * @return
      */
     async login() {
-      this.isLoading = true;
+      this.isLoading = "success";
       this.$auth
         .loginWith("local", {
           data: {
