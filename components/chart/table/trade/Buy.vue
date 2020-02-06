@@ -60,10 +60,10 @@
                 ></v-text-field>
             </v-col>    
             <v-col cols="4" class="mx-0 mb-0 px-0 pb-0">
-                    <v-btn @click="minusButton" text icon color="success">
+                    <v-btn @click="minusButton" text icon :dark="lightSwitch == true">
                     <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
-                    <v-btn @click="addButton" text icon color="success">
+                    <v-btn @click="addButton" text icon :dark="lightSwitch == true">
                     <v-icon>mdi-chevron-up</v-icon>
                     </v-btn>
             </v-col>
