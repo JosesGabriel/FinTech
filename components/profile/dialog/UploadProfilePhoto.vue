@@ -1,8 +1,8 @@
 
 <template>
   <v-dialog v-model="show" max-width="500px">
-    <v-container class="pa-7" :style="{ background: cardbackground }">
-      <v-item-title class="success--text body-1 py-2">Upload Profile Photo</v-item-title>
+    <v-container class="pa-7 pt-4" :style="{ background: cardbackground }">
+      <span class="success--text body-1 py-2 font-weight-bold">Upload Profile Photo</span>
       <v-card
         :dark="lightSwitch == true"
         height="250px"
@@ -10,17 +10,19 @@
         class="d-flex justify-center align-center mt-2 upload-container"
       >
         <div class="image_preview-container d-flex justify-center align-center">
-          <img :src="imageArray[0]" :height="245" />
-          <v-btn icon class="image_close" v-show="imageDefault != true" @click="imageArray = []">
+          <img :src="imageArray[0]" height="auto" width="100%" />
+          <v-btn icon class="image_close" v-show="imageDefault != true" @click="clearInputs">
             <v-icon class="pa-1">mdi-close</v-icon>
           </v-btn>
         </div>
         <div class="align-center" v-show="imageDefault">
           <span class="darkoutline--text headline align-center">
-            <v-icon class="darkoutline--text display-3 text-center d-block mb-3">mdi-image-filter</v-icon>Drag photo here
+            <v-icon class="darkoutline--text display-3 text-center d-block mb-3">mdi-image-filter</v-icon>
+            <span>Drag photo here</span>
           </span>
         </div>
       </v-card>
+      <v-progress-linear :active="loader" color="success darken-2" indeterminate></v-progress-linear>
       <v-card :dark="lightSwitch == true" flat class="d-flex justify-end mt-3 m-1">
         <!-- File handler -->
         <input
@@ -38,6 +40,7 @@
           text
           color="secondary"
           @click.stop="show = false"
+          @click="clearInputs"
         >Cancel</v-btn>
         <!-- Upload -->
         <v-btn
@@ -45,8 +48,17 @@
           medium
           outlined
           color="success"
+          v-show="showUpload"
           @click="onClickImageUploadBtn"
         >Upload</v-btn>
+        <v-btn
+          class="ma-1 text-capitalize"
+          medium
+          outlined
+          color="success"
+          v-show="showSave"
+          @click="save"
+        >Save</v-btn>
       </v-card>
     </v-container>
   </v-dialog>
@@ -69,6 +81,7 @@ export default {
       set(value) {
         if (!value) {
           this.$emit("close");
+          this.clearInputs();
         }
       }
     }
@@ -76,15 +89,20 @@ export default {
   data() {
     return {
       imageArray: [],
-      imageDefault: true
+      imageDefault: true,
+      showUpload: true,
+      showSave: false,
+      cloudString: null,
+      loader: false
     };
   },
   methods: {
-    onClickImageUploadBtn: function() {
+    onClickImageUploadBtn() {
       this.$refs.postField__inputRef.click();
     },
 
-    onInputFileChange: function(e) {
+    onInputFileChange(e) {
+      this.upload();
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       for (var i = 0; i < files.length; i++) {
@@ -93,13 +111,48 @@ export default {
       }
     },
 
-    generateImagePreviews: function(file, type) {
+    generateImagePreviews(file, type) {
       this.imageArray = [];
       var reader = new FileReader();
       reader.onload = e => {
         this.imageArray.push(e.target.result);
       };
       reader.readAsDataURL(file);
+    },
+
+    upload() {
+      this.loader = true;
+      this.cloudString = "";
+      let formData = new FormData();
+      formData.append("file", this.$refs.postField__inputRef.files[0]);
+      this.$api.social.upload.create(formData).then(
+        function(response) {
+          this.showUpload = false;
+          this.showSave = true;
+          this.loader = false;
+
+          this.cloudString = response.data.file.url;
+        }.bind(this)
+      );
+    },
+
+    save() {
+      const payload = {
+        profile_image: this.cloudString
+      };
+      this.$api.accounts.account.putnoid(payload).then(response => {
+        if (response.success) {
+          this.showUpload = true;
+          this.showSave = false;
+        }
+      });
+    },
+
+    clearInputs() {
+      this.imageArray = [];
+      this.showUpload = true;
+      this.showSave = false;
+      this.loader = false
     }
   },
   watch: {

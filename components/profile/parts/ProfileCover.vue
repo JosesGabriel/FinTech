@@ -200,3 +200,12 @@ export default {
   box-shadow: 0px 0px 7px 0px black;
 }
 </style>
+<style>
+.image_preview-container {
+  overflow: hidden;
+  height: 100%;
+}
+.image_preview-container img {
+  padding: 5px 5px;
+}
+</style>

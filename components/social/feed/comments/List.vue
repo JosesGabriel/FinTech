@@ -4,10 +4,12 @@
       <Comment
         :key="index"
         :keyprop="iteration ? 0 : index"
+        :childkeyprop="keyprop"
         :comment="comment"
         :postindex="postindex"
         :postid="postid"
         :iteration="iteration"
+        :ischild="ischild"
       />
     </template>
   </v-list>
@@ -40,6 +42,17 @@ export default {
       }
     },
     iteration: {
+      default() {
+        return "";
+      }
+    },
+    ischild: {
+      default() {
+        return false;
+      },
+      type: Boolean
+    },
+    keyprop: {
       default() {
         return "";
       }

@@ -1,11 +1,18 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-icon @click="getUrl('facebook')">mdi-facebook</v-icon>
-      </v-col>
+  <v-content>
+    <v-row align="center" justify="center">
+      <v-hover v-slot:default="{ hover }">
+        <v-btn icon x-large>
+          <v-icon
+            size="50"
+            :color="!hover ? '' : 'primary'"
+            @click="getUrl('facebook')"
+            >mdi-facebook</v-icon
+          >
+        </v-btn>
+      </v-hover>
     </v-row>
-  </v-container>
+  </v-content>
 </template>
 <script>
 export default {

@@ -263,6 +263,17 @@ export default {
     },
     notification() {
       this.newNotication();
+    },
+    /**
+     * show first step once logout
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return
+     */
+    registerDialogModel(value) {
+      //console.log("register dialog");
+      //console.log(value);
     }
   },
   mounted() {

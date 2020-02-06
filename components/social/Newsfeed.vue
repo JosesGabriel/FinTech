@@ -1,6 +1,10 @@
 <template>
   <v-col class="pa-0">
-    <span class="newPosts_banner caption black--text" @click="fetchNewPost()" v-show="showBanner">
+    <span
+      v-show="showBanner"
+      class="newPosts_banner caption black--text"
+      @click="fetchNewPost()"
+    >
       <v-icon small color="black">mdi-arrow-up</v-icon>
       <span class="font-weight-bold">New posts</span>
     </span>
@@ -65,25 +69,29 @@
                   >
                     <img src="/icon/bullish.svg" width="6" />
                   </v-btn>
-                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
+                  <v-btn
+                    v-else
+                    icon
+                    outlined
+                    fab
+                    width="14"
+                    height="14"
+                    color="error"
+                  >
                     <img src="/icon/bearish.svg" width="6" />
                   </v-btn>
                 </span>
               </v-list-item-subtitle>
             </v-col>
             <v-col class="text-right">
-              <v-btn
-                icon
-                fab
-                small
-                class="postOptions__btn"
+              <v-icon
                 color="secondary"
+                class="postOptions__btn"
                 @click="
                   (postOptionsMode = !postOptionsMode), (currentPost = n - 1)
                 "
+                >mdi-dots-horizontal</v-icon
               >
-                <v-icon>mdi-dots-horizontal</v-icon>
-              </v-btn>
               <div v-if="postOptionsMode && currentPost == n - 1">
                 <div class="postOptions__dropdown--caret"></div>
                 <div class="postOptions__container">
@@ -97,7 +105,8 @@
                         x-small
                         text
                         v-on="on"
-                      >Delete</v-btn>
+                        >Delete</v-btn
+                      >
                     </template>
 
                     <v-card
@@ -107,7 +116,8 @@
                       <v-card-title
                         class="headline success--text lighten-2"
                         primary-title
-                      >Delete Post?</v-card-title>
+                        >Delete Post?</v-card-title
+                      >
 
                       <v-card-text>
                         Are you sure you want to permanently remove this post
@@ -133,7 +143,8 @@
                             deletePost(postsObject[n - 1].id, n - 1),
                               (deleteDialog = false)
                           "
-                        >Delete</v-btn>
+                          >Delete</v-btn
+                        >
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -147,7 +158,8 @@
                     @click="
                       (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
-                  >Edit</v-btn>
+                    >Edit</v-btn
+                  >
                   <v-btn
                     v-if="
                       postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
@@ -155,7 +167,8 @@
                     x-small
                     text
                     @click="followAccount(postsObject[n - 1].user.uuid)"
-                  >Follow</v-btn>
+                    >Follow</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -192,16 +205,19 @@
                 ),
                   (editPostMode = false)
               "
-            >Done Editing</v-btn>
+              >Done Editing</v-btn
+            >
           </div>
-          <span v-else class="caption px-5 pb-3">{{ postsObject[n - 1].content }}</span>
+          <span v-else class="caption px-5 pb-3">{{
+            postsObject[n - 1].content
+          }}</span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
         </v-list-item-content>
       </v-list-item>
       <!-- End of Post Body -->
       <v-divider></v-divider>
-      <v-card-actions class="pl-5 py-1">
+      <v-card-actions class="pl-4 py-2">
         <v-btn
           icon
           outlined
@@ -241,9 +257,7 @@
         </v-btn>
         <span class="px-2 caption">{{ postsObject[n - 1].bears_count }}</span>
         <v-spacer></v-spacer>
-        <v-btn icon fab x-small color="secondary">
-          <v-icon>mdi-comment-text-outline</v-icon>
-        </v-btn>
+        <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
         <span class="caption">{{
           postsObject[n - 1].comment_descendants_count
         }}</span>
@@ -278,7 +292,7 @@
             "
           ></v-img>
         </v-list-item-avatar>
-        <v-list-item-content class="pt-0 mb-0">
+        <v-list-item-content class="pt-2 mb-0">
           <v-text-field
             dense
             rounded
@@ -302,7 +316,11 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
   </v-col>
 </template>
 
@@ -355,7 +373,9 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
       newPosts: "global/getNewPosts",
-      newComment: "social/getNewComment"
+      newComment: "social/getNewComment",
+      deleteComment: "social/getDeleteComment",
+      updateComment: "social/getUpdateComment"
     })
   },
   watch: {
@@ -373,12 +393,15 @@ export default {
         attachments[i]["url"] = this.newPost.attachments[i];
       }
       this.postsObject.unshift({
+        id: this.newPost.id,
+        user_id: this.newPosts.user_id,
         content: this.newPost.content,
         attachments: attachments,
         bears_count: 0,
         bulls_count: 0,
         created_at: new Date(),
         user: {
+          uuid: this.newPost.user.uuid,
           profile_image: this.$auth.user.data.user.profile_image,
           name: this.$auth.user.data.user.name
         },
@@ -401,6 +424,46 @@ export default {
       this.postsObject[this.newComment.postIndex].comments[
         this.newComment.commentIndex
       ].comments.push(this.newComment.data);
+    },
+    updateComment() {
+      if (this.updateComment.isChild) {
+        let parentComment = this.postsObject[this.updateComment.postIndex]
+          .comments[this.updateComment.commentIndex].comments;
+
+        for (let i = 0; i < parentComment.length; i++) {
+          if (parentComment[i].id == this.updateComment.data.id) {
+            this.postsObject[this.updateComment.postIndex].comments[
+              this.updateComment.commentIndex
+            ].comments[i].content = this.updateComment.data.content;
+          }
+        }
+      } else {
+        this.postsObject[this.updateComment.postIndex].comments[
+          this.updateComment.commentIndex
+        ].content = {};
+        this.postsObject[this.updateComment.postIndex].comments[
+          this.updateComment.commentIndex
+        ].content = this.updateComment.data.content;
+      }
+    },
+    deleteComment() {
+      if (this.deleteComment.isChild) {
+        let parentComment = this.postsObject[this.deleteComment.postIndex]
+          .comments[this.deleteComment.commentIndex].comments;
+
+        for (let i = 0; i < parentComment.length; i++) {
+          if (parentComment[i].id == this.deleteComment.data.id) {
+            this.postsObject[this.deleteComment.postIndex].comments[
+              this.deleteComment.commentIndex
+            ].comments.splice(i, 1);
+          }
+        }
+      } else {
+        this.postsObject[this.deleteComment.postIndex].comments.splice(
+          this.deleteComment.commentIndex,
+          1
+        );
+      }
     }
   },
   mounted() {
@@ -507,7 +570,7 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-            
+            console.log(response);
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
@@ -618,12 +681,17 @@ export default {
         if (response.success) {
           this.triggerAlert(true, response.message);
           this.postsObject[index].comments.push({
+            id: response.data.comment.id,
+            post_id: response.data.comment.post_id,
+            user_id: response.data.comment.user_id,
+            parent_id: response.data.comment.parent_id,
+            comments: [],
             content: content,
             created_at: new Date(),
             user: {
               profile_image: this.$auth.user.data.user.profile_image,
-              first_name: this.$auth.user.data.user.first_name,
-              last_name: this.$auth.user.data.user.last_name
+              name: this.$auth.user.data.user.name,
+              uuid: this.$auth.user.data.user.uuid
             }
           });
           // this.postsObject[index].comments_count++;
@@ -790,5 +858,13 @@ export default {
 }
 .bear__btn--active {
   background-color: #f4433699;
+}
+.postOptions__btn {
+  position: relative;
+  bottom: 8px;
+  left: 4px;
+}
+.postOptions__btn:focus {
+  background-color: transparent;
 }
 </style>
