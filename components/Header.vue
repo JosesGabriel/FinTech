@@ -42,75 +42,59 @@
           @click="toggleMenu"
           >mdi-menu</v-icon
         >
-        <div
-          :class="this.display ? 'display' : 'noDisplay'"
-          class="userSettings__dropdown--caret"
-        >
-          <div
-            class="empty"
-            :class="this.lightSwitch == 0 ? 'caretLight' : 'caretDark'"
-          ></div>
-        </div>
       </div>
 
       <v-card
-        class="mx-auto header__menuIcon--lists"
+        :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+        :dark="lightSwitch == 0 ? false : true"
+        outlined
+        max-width="200px"
+        width="200px"
+        class="menuIcon__dropdown"
         :class="this.display ? 'display' : 'noDisplay'"
-        width="180"
-        tile
       >
-        <v-list-item
-          class="listItem__marketSentiments"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-        >
-          <router-link
-            to
-            class="no-transform"
-            :style="{ color: toggleFontColor }"
-          >
-            <v-list-item-title class="listItem__marketSentiments"
-              >Market Sentiments</v-list-item-title
-            >
-          </router-link>
-        </v-list-item>
-        <!--<v-list-item class="listItem__learn">
-          <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__learn">Learn</v-list-item-title>
-          </router-link>
-        </v-list-item>
-        <v-list-item class="listItem__ideas">
-         <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__ideas">Ideas</v-list-item-title>
-         </router-link>
-        </v-list-item>
-         <v-list-item class="listItem__bulletin">
-          <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__bulletin">Bulletin</v-list-item-title>
-          </router-link>
-        </v-list-item>-->
+        <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
+          <v-list class="py-0 menuIcon__dropdown-body scrollbar">
 
-        <v-list-item
-          class="listItem__powerTools"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-          @click="displayPowerTools = true"
-          @mouseleave="displayPowerTools = false"
-        >
-          <router-link
-            to
-            class="no-transform"
-            :style="{ color: toggleFontColor }"
-          >
-            <v-list-item-title class="listItem__powerTools"
-              >Power Tools</v-list-item-title
-            >
-          </router-link>
-        </v-list-item>
+            <v-list-item
+                class="listItem__marketSentiments"
+                :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+              >
+                <router-link
+                  to
+                  class="no-transform"
+                  :style="{ color: toggleFontColor }"
+                >
+                  <v-list-item-title class="listItem__marketSentiments"
+                    >Market Sentiments</v-list-item-title
+                  >
+                </router-link>
+              </v-list-item>
+              <v-list-item
+                class="listItem__powerTools"
+                :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+                @click="displayPowerTools = true"
+                @mouseleave="displayPowerTools = false"
+              >
+                <router-link
+                  to
+                  class="no-transform"
+                  :style="{ color: toggleFontColor }"
+                >
+                  <v-list-item-title class="listItem__powerTools"
+                    >Power Tools</v-list-item-title
+                  >
+                </router-link>
+              </v-list-item>
+
+          </v-list>
+
+        </v-container>
       </v-card>
-
       <v-card
         class="mx-auto header__menuIcon--powerTools"
         :class="this.displayPowerTools ? 'display' : 'noDisplay'"
-        width="180"
+        width="200"
         tile
         @mouseover="displayPowerTools = true"
         @mouseleave="displayPowerTools = false"
@@ -534,17 +518,21 @@ export default {
 
 .header__menuIcon--powerTools {
   position: absolute;
-  right: 325px;
-  top: 117px;
+  right: 315px;
+  top: 122px;
   border: thin solid rgba(255, 255, 255, 0.12);
   box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2),
     0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
 }
 .listItem__buySellCalc,
 .listItem__varCalc,
-.listItem__avCalc {
+.listItem__avCalc ,
+.listItem__marketSentiments,
+.listItem__powerTools{
   font-size: 14px;
 }
+
+
 
 .darkModeHover:hover {
   background-color: #142530;
@@ -584,5 +572,69 @@ export default {
   > .v-text-field__slot
   > input {
   font-size: 20px;
+}
+
+.menuIcon__dropdown {
+  position: absolute;
+  top: 45px;
+  right: 305px;
+  margin-right: 10px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
+}
+
+.menuIcon__dropdown.theme--dark .menuIcon__dropdown-footer {
+  background: #00121e;
+  border-radius: 10px;
+}
+.menuIcon__dropdown.theme--light .menuIcon__dropdown-footer {
+  background: #fff;
+  border-radius: 10px;
+}
+.menuIcon__dropdown-body {
+  overflow: auto;
+  max-height: 360px;
+  border-bottom-left-radius: unset;
+  border-bottom-right-radius: unset;
+}
+
+.menuIcon__dropdown.theme--dark:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #00121e;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.menuIcon__dropdown.theme--dark:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid #1f2f39;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.menuIcon__dropdown.theme--light:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #fff;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.menuIcon__dropdown.theme--light:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.12);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+
+.menuIcon__dropdown-body > .v-list-item {
+  min-height: 38px;
 }
 </style>

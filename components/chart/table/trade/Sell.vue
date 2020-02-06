@@ -197,6 +197,13 @@ export default {
         ...mapActions({
             setShowBrokers: "chart/setShowBrokers"
         }),
+        /**
+         * Get Board Lot value
+         *
+         * @param   {int}  lastprice  latest price
+         *
+         * @return  {int}  board lot value
+         */
         getBoardLot(lastprice){
             if (lastprice >= 0.0001 && lastprice <= 0.0099) {
             this.dboard = 1000000;
@@ -215,8 +222,13 @@ export default {
             }
             return this.dboard;
         },
+         /**
+         * Get total cost if Up arrow Button is pressed
+         *
+         * @return  {float} Total COst
+         */
         addButton() {
-            //this.quantity = parseInt(this.quantity) + parseInt(this.dboard);
+            
              this.quantity =
                 this.position <= this.quantity
                     ? this.position
@@ -227,6 +239,11 @@ export default {
                 let addfees = this.fees(add);
                 this.totalcost = this.addcomma(addfees);
             },
+        /**
+         * Get total cost if Up down Button is pressed
+         *
+         * @return  {float} Total COst
+         */
         minusButton() {
             this.quantity =
                 this.quantity <= 0 || this.quantity < parseInt(this.dboard)
@@ -237,6 +254,13 @@ export default {
             let minfees = this.fees(min);
             this.totalcost = this.addcomma(minfees);
         },
+        /**
+         * Buy/Sell Fees
+         *
+         * @param   {float}  buyResult  buy result
+         *
+         * @return  {float}   total fees
+         */
         fees(buyResult) {
             let dpartcommission = buyResult * 0.0025;
             let dcommission = dpartcommission > 20 ? dpartcommission : 20;
@@ -272,6 +296,13 @@ export default {
             pressfees = this.fees(press);    
             this.totalcost = this.addcomma(pressfees);   
         },
+        /**
+         * Get Available balance
+         *
+         * @param   {string}  selectObj  Portfolio ID
+         *
+         * @return  {Float}    balance
+         */
         getFunds(selectObj){
             for (let index = 0; index < this.getBalance.length; index++) {
                 if(selectObj == this.getBalance[index].id){
@@ -282,7 +313,11 @@ export default {
                 }        
             }
         },
-
+        /**
+         * Get list of Portfolios
+         *
+         * @return  {array}  list of portfolios
+         */
         getPorfolio(){   
             this.portfolio = [];   
             this.getBalance = [];     
@@ -328,6 +363,10 @@ export default {
             }.bind(this)
             );       
         },
+        /**
+         * Sell Confirmation
+         *
+         */
         confirmSell(){
             const stock_id = this.symbolid;
             let fund_id = this.portvalue;
@@ -354,8 +393,6 @@ export default {
                              this.quantity = 0;
                              this.portvalue = '';
                              this.setShowBrokers(true);
-                        }else{
-                            console.log(response); 
                         }
                     }).catch(error => {
                         this.errmsg = error.response.data.message;
