@@ -10,29 +10,34 @@
         class="d-flex justify-center align-center mt-2 upload-container"
       >
         <div class="image_preview-container d-flex justify-center align-center">
-          <img :src="imageArray[0]" height="auto" width="100%" />
-          <v-btn icon class="image_close" v-show="imageDefault != true" @click="clearInputs">
+          <v-btn icon class="image_close" @click="myCroppa.remove()">
             <v-icon class="pa-1">mdi-close</v-icon>
           </v-btn>
         </div>
-        <div class="align-center" v-show="imageDefault">
+        <div class="align-center placeholderBackdrop__back">
           <span class="darkoutline--text headline align-center">
-            <v-icon class="darkoutline--text display-3 text-center d-block mb-3">mdi-image-filter</v-icon>
-            <span>Drag photo here</span>
+            <v-icon class="tertiary--text display-3 text-center d-block mb-3">mdi-image-filter</v-icon>
+            <span class="body-2 tertiary--text text-center d-block">
+              <strong>Drag photo</strong> or
+              <strong>Click here</strong> to upload photo
+            </span>
           </span>
         </div>
+
+        <croppa
+          v-model="myCroppa"
+          :width="435"
+          :height="246"
+          ref="myCroppa"
+          placeholder
+          initial-size="cover"
+          crossorigin="anonymous"
+          :show-remove-button="false"
+          :prevent-white-space="true"
+        ></croppa>
       </v-card>
       <v-progress-linear :active="loader" color="success darken-2" indeterminate></v-progress-linear>
       <v-card :dark="lightSwitch == true" flat class="d-flex justify-end mt-3 m-1">
-        <!-- File handler -->
-        <input
-          ref="postField__inputRef"
-          type="file"
-          class="d-none"
-          multiple
-          accept=".jpg, .jpeg, .png, .mp4, .webm, .gif"
-          @change="onInputFileChange"
-        />
         <!-- Cancel upload -->
         <v-btn
           class="ma-1 text-capitalize"
@@ -65,13 +70,14 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   props: ["visible"],
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     }),
-    cardbackground: function() {
+    cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     show: {
@@ -93,47 +99,38 @@ export default {
       showUpload: true,
       showSave: false,
       cloudString: null,
-      loader: false
+      loader: false,
+      myCroppa: {},
+      isChosen: null
     };
+  },
+  watch: {
+    isChosen() {
+      this.upload();
+    }
   },
   methods: {
     onClickImageUploadBtn() {
-      this.$refs.postField__inputRef.click();
-    },
-
-    onInputFileChange(e) {
       this.upload();
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-      for (var i = 0; i < files.length; i++) {
-        var filetype = files[i].type.split("/")[0];
-        this.generateImagePreviews(files[i], filetype);
-      }
+      this.isChosen = this.$refs.myCroppa.chosenFile;
+      console.log("text");
     },
-
-    generateImagePreviews(file, type) {
-      this.imageArray = [];
-      var reader = new FileReader();
-      reader.onload = e => {
-        this.imageArray.push(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    },
-
     upload() {
-      this.loader = true;
-      this.cloudString = "";
-      let formData = new FormData();
-      formData.append("file", this.$refs.postField__inputRef.files[0]);
-      this.$api.social.upload.create(formData).then(
-        function(response) {
-          this.showUpload = false;
-          this.showSave = true;
-          this.loader = false;
-
-          this.cloudString = response.data.file.url;
-        }.bind(this)
-      );
+      console.log(this.$refs.myCroppa.chosenFile);
+      this.myCroppa.generateBlob(
+        blob => {
+          console.log("test");
+          let formData = new FormData();
+          formData.append("file", blob, this.$refs.myCroppa.chosenFile.name);
+          this.$api.social.upload.create(formData).then(
+            function(response) {
+              console.log(response);
+            }.bind(this)
+          );
+        },
+        "image/jpeg",
+        0.8
+      ); // 80% compressed jpeg file
     },
 
     save() {
@@ -144,6 +141,7 @@ export default {
         if (response.success) {
           this.showUpload = true;
           this.showSave = false;
+          let update = this.photo;
         }
       });
     },
@@ -152,7 +150,7 @@ export default {
       this.imageArray = [];
       this.showUpload = true;
       this.showSave = false;
-      this.loader = false
+      this.loader = false;
     }
   },
   watch: {
@@ -166,3 +164,8 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.placeholderBackdrop__back {
+}
+</style>

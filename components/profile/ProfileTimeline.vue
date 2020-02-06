@@ -144,6 +144,7 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 2;
 }
 .edit_about-textarea.v-textarea.theme--dark fieldset {
   border-color: #1f2e39;
