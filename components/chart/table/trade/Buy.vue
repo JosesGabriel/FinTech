@@ -153,60 +153,60 @@
 
                <v-container class="px-5" style="font-size: 14px; line-height:.5;">
                 <v-row>
-                  <v-col class="pl-12 mb-6">
+                  <v-col class="pl-6 mb-6">
                     Fill Type
                   </v-col>
-                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                     Day
                   </v-col>  
                 </v-row>
                 <v-spacer></v-spacer>
                 <v-row>
-                  <v-col class="pl-12"> 
+                  <v-col class="pl-6"> 
                    Buy Price
                   </v-col>
-                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                     {{ this.stock_last.toFixed(2) }}
                   </v-col>  
                 </v-row>
                 <v-row >
-                  <v-col class="pl-12">
+                  <v-col class="pl-6">
                    Quantity
                   </v-col>
-                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                     {{ this.quantity.toFixed(2) }}
                   </v-col>  
                 </v-row>
                 <v-row>
-                  <v-col class="pl-12 mb-6">
+                  <v-col class="pl-6 mb-6">
                    Total Cost
                   </v-col>
-                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                     {{ this.totalcost }}
                   </v-col>  
                 </v-row>
                 <v-spacer></v-spacer>
                 <v-row>
-                  <v-col class="pl-12">
+                  <v-col class="pl-6">
                    Strategy
                   </v-col>
-                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                     {{ this.strat }}
                   </v-col>  
                 </v-row>
                 <v-row>
-                  <v-col class="pl-12">
+                  <v-col class="pl-6">
                    Trade Plan
                   </v-col>
-                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                      {{ this.tplan }}
                   </v-col>  
                 </v-row>
                 <v-row>
-                  <v-col class="pl-12 mb-6">
+                  <v-col class="pl-6 mb-6">
                   Emotions
                   </v-col>
-                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                     {{ this.emot }}
                   </v-col>  
                 </v-row>

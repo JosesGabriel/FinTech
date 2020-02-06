@@ -99,37 +99,71 @@
         >
         </v-content>
       </v-col>
-            <v-dialog v-model="showConfirm" max-width="400px">
+            <v-dialog v-model="showConfirm" max-width="330px">
             <v-card :dark="lightSwitch == true">
-            <v-card-title
-                class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
-            >Sell Confirmation</v-card-title>
-            <v-card-title
-                class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
-            >Are you sure you want to sell this stock?</v-card-title>
-            <v-container class="px-5">
-                <v-row no-gutters>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="secondary"
-                    class="text-capitalize mt-2"
-                    depressed
-                    text
-                    :dark="lightSwitch == true"
-                    light
-                    @click.stop="showConfirm = false"
-                >Cancel</v-btn>
-                <v-btn
-                    color="success"
-                    class="ml-1 text-capitalize mt-2 black--text"
-                    depressed
-                    light
-                    @click="confirmSell"
-                    @click.stop="showConfirm = false"
-                >Confirm</v-btn>
+             <v-card-title
+                    class="text-center justify-left pa-4 text-capitalize font-weight-bold"
+                    style="font-size: 16px;"
+                >Review Order</v-card-title>
+            <v-spacer></v-spacer>
+
+               <v-container class="px-5" style="font-size: 14px; line-height:.5;">
+                <v-row>
+                  <v-col class="pl-12 mb-6">
+                    Fill Type
+                  </v-col>
+                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                    Day
+                  </v-col>  
                 </v-row>
-            </v-container>
+                <v-spacer></v-spacer>
+                <v-row>
+                  <v-col class="pl-12"> 
+                   Sell Price
+                  </v-col>
+                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                    {{ this.stock_last.toFixed(2) }}
+                  </v-col>  
+                </v-row>
+                <v-row >
+                  <v-col class="pl-12">
+                   Quantity
+                  </v-col>
+                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                    {{ this.quantity.toFixed(2) }}
+                  </v-col>  
+                </v-row>
+                <v-row>
+                  <v-col class="pl-12 mb-6">
+                   Total Cost
+                  </v-col>
+                  <v-col class="mr-12 font-weight-bold" style="text-align: right;">
+                    {{ this.totalcost }}
+                  </v-col>  
+                </v-row>
+                <v-spacer></v-spacer>
+                
+                    <v-row no-gutters>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        class="text-capitalize mt-2"
+                        text
+                        :dark="lightSwitch == true"
+                        light
+                        @click.stop="showConfirm = false"
+                    >Cancel</v-btn>
+                    <v-btn
+                        color="success"
+                        class="ml-1 mb-6 text-capitalize mt-2 black--text"
+                        light
+                        @click="confirmBuy"
+                        @click.stop="showConfirm = false"
+                    >Confirm</v-btn>
+                    </v-row>
+                </v-container>
             </v-card>
+
+
         </v-dialog>
             <v-dialog v-model="errorMsg" max-width="400px">
                 <v-card :dark="lightSwitch == true">
