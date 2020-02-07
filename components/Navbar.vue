@@ -190,9 +190,7 @@ export default {
 </script>
 <style scoped>
 .navbar__card {
-  position: sticky;
-  top: 65px;
-  height: 300px;
+  position: relative;
 }
 .navbar__links {
   color: white;
