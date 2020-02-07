@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div v-if="emojiToggle" class="overlay" @click="clickOut()"></div>
     <v-card
       class="pa-4 pb-3"
       :dark="lightSwitch == 0 ? false : true"
@@ -29,8 +30,8 @@
           <v-icon color="#B2B7BB">mdi-emoticon-happy-outline</v-icon>
         </v-btn>
 
-        <client-only
-          ><Picker
+        <client-only>
+          <Picker
             v-if="emojiToggle"
             class="emojiPicker"
             :class="
@@ -44,7 +45,8 @@
             set="twitter"
             :show-preview="false"
             @select="addEmoji"
-        /></client-only>
+          />
+        </client-only>
         <v-progress-circular
           class="characterLimit overline"
           :value="characterLimit"
@@ -99,6 +101,7 @@
               background-color="transparent"
               :loading="postFieldLoader"
               @keyup="catcher"
+              @click="emojiToggle = false"
               >{{ postField }}</v-textarea
             >
           </at>
@@ -373,6 +376,9 @@ export default {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
+    clickOut() {
+      this.emojiToggle = false;
+    },
     clickUserSuggestion(selected) {
       this.taggedUsers.push({
         uuid: selected.item.uuid,
@@ -915,5 +921,18 @@ export default {
 .stockSuggestions__wrapper {
   position: relative;
   right: 45px;
+}
+.overlay {
+  border-radius: inherit;
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  -webkit-transition: inherit;
+  transition: inherit;
+  width: 100%;
+  will-change: opacity;
 }
 </style>

@@ -4,6 +4,7 @@
       >Sector Indices</v-card-title
     >
     <v-divider />
+    <v-divider />
     <div class="container caption pa-0">
       <div v-for="n in 7" :key="n" class="row">
         <div class="col-5 py-1">{{ sectoralIndexType[n - 1] }}</div>

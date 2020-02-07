@@ -3,10 +3,9 @@
     <v-dialog v-model="dialog" persistent dark max-width="320px">
       <template v-slot:activator="{ on }">
         <v-btn
-          outlined
           color="success"
           dark
-          class="text-capitalize mr-2"
+          class="text-capitalize mr-2 black--text font-weight-black"
           style="border-width: 2px"
           height="23"
           v-on="on"
