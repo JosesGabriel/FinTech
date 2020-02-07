@@ -23,16 +23,20 @@
               <SectorIndexList @pseiData="getPSEIData" />
             </v-col>
             <v-col cols="4">
-              <MostWatchedStocks @add-watchlist-data="getEmitID" />
+              <MostWatchedStocks
+                :key="addMostWatched"
+                @add-watchlist-data="getEmitID"
+              />
             </v-col>
           </v-row>
         </v-container>
         <v-container class="pt-0" fluid>
           <span
-            class="body-1"
-            :style="lightSwitch == 0 ? 'color: black' : 'color: white'"
+            class="body-1 font-weight-black pl-1"
+            :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
             >Watchlist</span
           >
+          <v-divider class="" :dark="lightSwitch == 0 ? false : true" />
           <v-divider class="mb-2" :dark="lightSwitch == 0 ? false : true" />
           <div v-if="loadingBar" class="text-center">
             <v-progress-circular
@@ -43,7 +47,11 @@
           </div>
           <div class="mb-2 d-flex justify-end">
             <div class="d-flex">
-              <AddWatcherModal v-if="!loadingBar" :addnewstock="emitID" />
+              <AddWatcherModal
+                v-if="!loadingBar"
+                :addnewstock="emitID"
+                @addFromMostWatched="addMostWatched++"
+              />
               <EditDeleteWatcherModal v-if="!loadingBar" />
             </div>
           </div>
@@ -92,13 +100,15 @@ export default {
       navbarMiniVariantSetter: true,
       loadingBar: true,
       pseData: [],
-      emitID: ""
+      emitID: "",
+      addMostWatched: ""
     };
   },
   computed: {
     ...mapGetters({
       userWatchedStocks: "watchers/getUserWatchedStocks",
-      renderChartKey: "watchers/getRenderChartKey"
+      renderChartKey: "watchers/getRenderChartKey",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {
@@ -119,8 +129,7 @@ export default {
   methods: {
     ...mapActions({
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
-      setRenderChartKey: "watchers/setRenderChartKey",
-      lightSwitch: "global/getLightSwitch"
+      setRenderChartKey: "watchers/setRenderChartKey"
     }),
     getEmitID(val) {
       this.emitID = val;
@@ -142,13 +151,20 @@ export default {
      * @return
      */
     getUserWatchList() {
-      this.$api.watchlist.watchlists.index().then(
-        function(response) {
-          this.watchListObject = response.data.watchlist;
-          this.setUserWatchedStocks(response.data.watchlist);
-          this.loadingBar = false;
-        }.bind(this)
-      );
+      this.$api.watchlist.watchlists
+        .index()
+        .then(
+          function(response) {
+            this.watchListObject = response.data.watchlist;
+            this.setUserWatchedStocks(response.data.watchlist);
+            this.loadingBar = false;
+          }.bind(this)
+        )
+        .catch(error => {
+          if (error.response.status == 404) {
+            this.loadingBar = false;
+          }
+        });
     }
   }
 };

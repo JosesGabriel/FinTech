@@ -22,7 +22,7 @@
 
     <v-toolbar-items class="mt-3" dark>
       <!--<div class="searchBar__container hidden-md-only">-->
-      <div class="searchBar__container">
+      <div class="searchBar__container" v-show="$auth.loggedIn ? true : false ">
         <v-text-field
           label="Search"
           class="header__searchbar ml-3 mt-1 headline"
@@ -35,74 +35,83 @@
         ></v-text-field>
       </div>
 
-      <div>
+      <div v-show="$auth.loggedIn ? true : false ">
         <v-icon
-          :style="{color: toggleFontColor }"
+          :style="{ color: toggleFontColor }"
           class="header__menuIcon"
           @click="toggleMenu"
-        >mdi-menu</v-icon>
-        <div :class="this.display ? 'display' : 'noDisplay'" class="userSettings__dropdown--caret">
-          <div class="empty" :class="this.lightSwitch == 0 ? 'caretLight' : 'caretDark'"></div>
-        </div>
+          >mdi-menu</v-icon
+        >
       </div>
 
       <v-card
-        class="mx-auto header__menuIcon--lists"
+        :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+        :dark="lightSwitch == 0 ? false : true"
+        outlined
+        max-width="200px"
+        width="200px"
+        class="menuIcon__dropdown"
         :class="this.display ? 'display' : 'noDisplay'"
-        width="180"
-        tile
       >
-        <v-list-item
-          class="listItem__marketSentiments"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
-        >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__marketSentiments">Market Sentiments</v-list-item-title>
-          </router-link>
-        </v-list-item>
-        <!--<v-list-item class="listItem__learn">
-          <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__learn">Learn</v-list-item-title>
-          </router-link>
-        </v-list-item>
-        <v-list-item class="listItem__ideas">
-         <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__ideas">Ideas</v-list-item-title>
-         </router-link>
-        </v-list-item>
-         <v-list-item class="listItem__bulletin">
-          <router-link to="" class="no-transform"  :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__bulletin">Bulletin</v-list-item-title>
-          </router-link>
-        </v-list-item>-->
+        <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
+          <v-list class="py-0 menuIcon__dropdown-body scrollbar">
 
-        <v-list-item
-          class="listItem__powerTools"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
-          @click="displayPowerTools = true"
-          @mouseleave="displayPowerTools = false"
-        >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__powerTools">Power Tools</v-list-item-title>
-          </router-link>
-        </v-list-item>
+            <v-list-item
+                class="listItem__marketSentiments"
+                :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+              >
+                <router-link
+                  to
+                  class="no-transform"
+                  :style="{ color: toggleFontColor }"
+                >
+                  <v-list-item-title class="listItem__marketSentiments"
+                    >Market Sentiments</v-list-item-title
+                  >
+                </router-link>
+              </v-list-item>
+              <v-list-item
+                class="listItem__powerTools"
+                :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+                @click="displayPowerTools = true"
+                @mouseleave="displayPowerTools = false"
+              >
+                <router-link
+                  to
+                  class="no-transform"
+                  :style="{ color: toggleFontColor }"
+                >
+                  <v-list-item-title class="listItem__powerTools"
+                    >Power Tools</v-list-item-title
+                  >
+                </router-link>
+              </v-list-item>
+
+          </v-list>
+
+        </v-container>
       </v-card>
-
       <v-card
         class="mx-auto header__menuIcon--powerTools"
         :class="this.displayPowerTools ? 'display' : 'noDisplay'"
-        width="180"
+        width="200"
         tile
         @mouseover="displayPowerTools = true"
         @mouseleave="displayPowerTools = false"
       >
         <v-list-item
           class="listItem__buySellCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
           @click.stop="buySellDialog = true"
         >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__buySellCalc">Buy/Sell Calculator</v-list-item-title>
+          <router-link
+            to
+            class="no-transform"
+            :style="{ color: toggleFontColor }"
+          >
+            <v-list-item-title class="listItem__buySellCalc"
+              >Buy/Sell Calculator</v-list-item-title
+            >
           </router-link>
           <v-dialog v-model="buySellDialog" max-width="500">
             <BuySellCalculator />
@@ -111,11 +120,17 @@
 
         <v-list-item
           class="listItem__varCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
           @click.stop="varDialog = true"
         >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__varCalc">VAR Calculator</v-list-item-title>
+          <router-link
+            to
+            class="no-transform"
+            :style="{ color: toggleFontColor }"
+          >
+            <v-list-item-title class="listItem__varCalc"
+              >VAR Calculator</v-list-item-title
+            >
           </router-link>
           <v-dialog v-model="varDialog" max-width="320">
             <VARCalculator :data="varDialog" />
@@ -124,11 +139,17 @@
 
         <v-list-item
           class="listItem__avCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover' "
+          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
           @click.stop="averagePriceDialog = true"
         >
-          <router-link to class="no-transform" :style="{color: toggleFontColor }">
-            <v-list-item-title class="listItem__avCalc">Average Price Calculator</v-list-item-title>
+          <router-link
+            to
+            class="no-transform"
+            :style="{ color: toggleFontColor }"
+          >
+            <v-list-item-title class="listItem__avCalc"
+              >Average Price Calculator</v-list-item-title
+            >
           </router-link>
           <v-dialog v-model="averagePriceDialog" max-width="350">
             <AveragePriceCalculator />
@@ -136,23 +157,28 @@
         </v-list-item>
       </v-card>
 
-      <a class="social__router">
+      <a class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn
           ref="accountBtn"
           class="header__button"
           text
           @click="showNotification = !showNotification"
-        >Notification</v-btn>
+        >
+          <v-badge :value="showBadge" color="success" small dot
+            >Notification</v-badge
+          >
+        </v-btn>
       </a>
       <HeaderNotification
-        :dataNotification="dataNotification"
         v-if="showNotification && $auth.loggedIn"
+        :data-notification="dataNotification"
+        @clicked="closeDropdown"
       />
 
-      <a :href="'https://vyndue.com'" target="_blank" class="social__router">
+      <a :href="'https://vyndue.com'" target="_blank" class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn class="header__button" text>Vyndue</v-btn>
       </a>
-      <a class="social__router">
+      <a class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn
           ref="accountBtn"
           class="header__button"
@@ -162,7 +188,10 @@
               ? (showDropdown = !showDropdown)
               : (registerDialogModel = true)
           "
-        >{{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}</v-btn>
+          >{{
+            $auth.loggedIn ? $auth.user.data.user.username : "Account"
+          }}</v-btn
+        >
       </a>
       <HeaderDropdown v-if="showDropdown && $auth.loggedIn" />
     </v-toolbar-items>
@@ -192,8 +221,11 @@ export default {
     AveragePriceCalculator,
     VARCalculator
   },
-  data: {
-    type: Boolean
+  props: ["ticks"],
+  data: function() {
+    return {
+      type: Boolean
+    };
   },
   data() {
     return {
@@ -208,7 +240,9 @@ export default {
       displayPowerTools: false,
       buySellDialog: false,
       averagePriceDialog: false,
-      varDialog: false
+      varDialog: false,
+      numberPost: 0,
+      showBadge: 0
     };
   },
   computed: {
@@ -221,6 +255,25 @@ export default {
       return this.lightSwitch == 0
         ? "#000000 !important"
         : "#ffffff !important";
+    }
+  },
+  watch: {
+    ticks() {
+      this.initSSE();
+    },
+    notification() {
+      this.newNotication();
+    },
+    /**
+     * show first step once logout
+     *
+     * @param   {Boolean}  value  true/false
+     *
+     * @return
+     */
+    registerDialogModel(value) {
+      //console.log("register dialog");
+      //console.log(value);
     }
   },
   mounted() {
@@ -241,20 +294,15 @@ export default {
     document.addEventListener("click", this.close);
 
     this.getNotification();
-    this.initSSE();
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
   },
-  watch: {
-    notification() {
-      console.log(this.notification);
-    }
-  },
   methods: {
     ...mapActions({
       setStockList: "global/setStockList",
-      setNotification: "global/setNotification"
+      setNotification: "global/setNotification",
+      setNewPosts: "global/setNewPosts"
     }),
     userNotificationEventsList: UserNotificationEventsList,
     allNotificationEventsList: AllNotificationEventsList,
@@ -268,10 +316,40 @@ export default {
         this.showNotification = false;
       }
     },
+    closeDropdown() {
+      this.showNotification = false;
+    },
+    newNotication() {
+      const m = {
+        meta: {}
+      };
+      m.meta = this.notification;
+      const n = {
+        notificable: {}
+      };
+      n.notificable = {
+        ...m,
+        message: this.notification._message,
+        id: this.notification.post.id
+      };
+      this.dataNotification.unshift(n);
+    },
     getNotification() {
       this.$api.social.notification.notifications().then(response => {
         if (response.success) {
           this.dataNotification = response.data.notifications;
+        }
+      });
+      const params = {
+        status: "unread"
+      };
+      this.$api.social.notification.count(params).then(response => {
+        if (response.success) {
+          if (response.data.notifications.length > 0) {
+            this.showBadge = response.data.notifications.length;
+          } else {
+            this.showBadge = 0;
+          }
         }
       });
     },
@@ -279,20 +357,21 @@ export default {
       /**
        * all notifications here
        */
-      const evtSourceAll = new EventSource(
-        `${process.env.STREAM_API_URL}/sse/notifications/all`
-      );
 
-      evtSourceAll.onerror = function(err) {
-        console.log(err);
-      };
+      const sseToken =
+        this.$auth.getToken("local") != false
+          ? this.$auth.getToken("local").replace("Bearer ", "")
+          : null;
+
+      const evtSourceAll = new EventSource(
+        `${process.env.STREAM_API_URL}/sse/notifications/all?token=${sseToken}`
+      );
 
       const allNotificationList = this.allNotificationEventsList();
 
       allNotificationList.forEach(eventName => {
         evtSourceAll.addEventListener(eventName, e => {
-          console.log(eventName, JSON.parse(e.data), "all");
-          this.notificationHandler(eventName, JSON.parse(e.data));
+          this.allNotificationHandler(eventName, JSON.parse(e.data));
         });
       });
 
@@ -303,105 +382,64 @@ export default {
        */
       if (this.$auth.user != null) {
         const evtSource = new EventSource(
-          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}`
+          `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${sseToken}`
         );
-
-        evtSource.onerror = function(err) {
-          console.log(err);
-        };
 
         const userNotificationList = this.userNotificationEventsList();
 
         userNotificationList.forEach(eventName => {
           evtSource.addEventListener(eventName, e => {
-            console.log(eventName, JSON.parse(e.data), "User");
-            this.allNotificationHandler(eventName, JSON.parse(e.data));
+            this.notificationHandler(eventName, JSON.parse(e.data));
           });
         });
       }
     },
     notificationHandler(eventName, data) {
-      switch (eventName) {
-        case "social.comment.comment":
-          this.onSocialReplyComment(data);
-          break;
-        case "social.comment.sentiment":
-          this.onSocialCommentSentiment(data);
-          break;
-        case "social.comment.tag:user":
-          this.onSocialTagUserComment(data);
-          break;
-        case "social.post.comment":
-          this.onSocialUserPostComment(data);
-          break;
-        case "social.post.sentiment":
-          this.onSocialUserPostSentiment(data);
-          break;
-        case "social.post.tag:user":
-          this.onSocialUserTagUser(data);
-          break;
-        case "social.user.follow":
-          this.onSocialUserFollowUser(data);
-          break;
-
-        default:
-          break;
-      }
+      this.setNotification(data);
     },
+    /**
+     * This will trigger if there is a global announcement
+     * announcement are: New Post, New Comment on a Post, New Sentiments on a Post
+     *
+     * @param   {[type]}  eventName  [eventName description]
+     * @param   {[type]}  data       [data description]
+     *
+     * @return  {[type]}             [return description]
+     */
     allNotificationHandler(eventName, data) {
       switch (eventName) {
+        case "social.post":
+          this.numberPost += 1;
+          const posts = {
+            number_posts: this.numberPost,
+            event_name: eventName,
+            message: data.message
+          };
+          this.setNewPosts(posts);
+          break;
+
         case "social.post.comment":
-          this.onSocialAllPostComment(data);
+          const comment = {
+            event_name: eventName,
+            message: data.message,
+            data: data.data
+          };
+          this.setNewPosts(comment);
+          break;
+
+        case "social.post.sentiment":
+          const sentiment = {
+            event_name: eventName,
+            message: data.message,
+            data: data.data
+          };
+          this.setNewPosts(sentiment);
           break;
 
         default:
           break;
       }
-    },
-    // start Specific User Notification
-    onSocialReplyComment(data) {
-      const alert = {
-        model: false,
-        sender_picture:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg/220px-Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg",
-        full_name: data.name,
-        message: "Commented on your post"
-      };
-      this.setNotification(alert);
-    },
-    onSocialCommentSentiment(data) {
-      console.log(data);
-    },
-    onSocialTagUserComment(data) {
-      console.log(data);
-    },
-    onSocialUserPostComment(data) {
-      console.log(data);
-    },
-    onSocialUserPostSentiment(data) {
-      console.log(data);
-    },
-    onSocialUserTagUser(data) {
-      console.log(data);
-    },
-    onSocialUserFollowUser(data) {
-      console.log(data);
-    },
-    // end Specific User Notification
-
-    // start All Notification
-    onSocialAllPostComment(data) {
-      console.log(data);
-      const alert = {
-        model: false,
-        sender_picture:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg/220px-Catriona_Gray_with_iconic_tristar_and_sun_earpiece%2C_in_Mak_Tumang_Swarovski_gem-embellished_%22Mayon%22_evening_number.jpg",
-        full_name: data.name,
-        message: "Commented on your post"
-      };
-      this.setNotification(alert);
     }
-    // end All Notification
   }
 };
 </script>
@@ -491,17 +529,21 @@ export default {
 
 .header__menuIcon--powerTools {
   position: absolute;
-  right: 325px;
-  top: 117px;
+  right: 315px;
+  top: 122px;
   border: thin solid rgba(255, 255, 255, 0.12);
   box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2),
     0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
 }
 .listItem__buySellCalc,
 .listItem__varCalc,
-.listItem__avCalc {
+.listItem__avCalc ,
+.listItem__marketSentiments,
+.listItem__powerTools{
   font-size: 14px;
 }
+
+
 
 .darkModeHover:hover {
   background-color: #142530;
@@ -542,5 +584,68 @@ export default {
   > input {
   font-size: 20px;
 }
-</style>
 
+.menuIcon__dropdown {
+  position: absolute;
+  top: 45px;
+  right: 305px;
+  margin-right: 10px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
+}
+
+.menuIcon__dropdown.theme--dark .menuIcon__dropdown-footer {
+  background: #00121e;
+  border-radius: 10px;
+}
+.menuIcon__dropdown.theme--light .menuIcon__dropdown-footer {
+  background: #fff;
+  border-radius: 10px;
+}
+.menuIcon__dropdown-body {
+  overflow: auto;
+  max-height: 360px;
+  border-bottom-left-radius: unset;
+  border-bottom-right-radius: unset;
+}
+
+.menuIcon__dropdown.theme--dark:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #00121e;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.menuIcon__dropdown.theme--dark:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid #1f2f39;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.menuIcon__dropdown.theme--light:after {
+  content: "";
+  position: absolute;
+  top: -10.5px;
+  right: 11px;
+  border-bottom: 10px solid #fff;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.menuIcon__dropdown.theme--light:before {
+  content: "";
+  position: absolute;
+  top: -11px;
+  right: 11px;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.12);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+
+.menuIcon__dropdown-body > .v-list-item {
+  min-height: 38px;
+}
+</style>

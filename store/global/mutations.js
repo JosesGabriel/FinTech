@@ -13,10 +13,16 @@ export default {
     SET_NOTIFICATION(state, data) {
         state.notification = data;
     },
+    SET_NEWPOSTS(state, data) {
+        state.newPosts = data;
+    },
     SET_ALERT(state, data) {
         state.alert = data;
     },
     SET_ALERTDIALOG(state, data) {
         state.alertDialog = data;
+    },
+    SET_SETTINGS(state, data) {
+        state.settings = data;
     }
 };

@@ -1,8 +1,10 @@
 /* @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700'); */
-@import url('https://fonts.googleapis.com/css?family=Karla&display=swap');
+/* @import url('https://fonts.googleapis.com/css?family=Karla&display=swap'); */
+@import url('https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap');
 html, body, span, p, .selectable, input, textarea {
     /* font-family: 'Roboto', sans-serif !important; */
-    font-family: 'Karla', sans-serif !important;
+    /* font-family: 'Karla', sans-serif !important; */
+    font-family: 'Nunito Sans', sans-serif !important;
 }
 span.pane-legend-line.apply-overflow-tooltip.main {
     background-image: -webkit-gradient( linear, left top, right top, color-stop(0, #c178d8), color-stop(0.15, #f760b7), color-stop(0.3, #e84c3c), color-stop(0.45, #f79541), color-stop(0.6, #ef7143),color-stop(0.75, #f0c514), color-stop(0.9, #81e6a3), color-stop(1, #4cafef) );

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="navbar__card pt-2" max-width="240" flat color="transparent">
+  <v-card class="navbar__card" max-width="240" flat color="transparent">
     <v-navigation-drawer
       disable-resize-watcher
       mobile-break-point
@@ -10,7 +10,7 @@
       color="transparent"
       floating
     >
-      <v-list nav dense rounded>
+      <v-list nav dense rounded class="py-0">
         <v-list-item-group>
           <router-link to="/profile" class="navbar__links">
             <v-list-item>
@@ -25,17 +25,18 @@
                 ></v-img>
               </v-list-item-avatar>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-black">
+                ><v-list-item-title class="navbar__name">
                   {{
-                    $auth.loggedIn
-                      ? $auth.user.data.user.first_name +
-                        " " +
-                        $auth.user.data.user.last_name
-                      : "Guest"
+                    $auth.loggedIn ? $auth.user.data.user.name : "Guest"
                   }}</v-list-item-title
-                ></v-list-item-content
-              >
+                >
+                <span class="overline no-transform"
+                  >@{{ $auth.user.data.user.username }}</span
+                >
+              </v-list-item-content>
             </v-list-item>
+            <v-divider></v-divider>
+            <v-divider class="mb-1"></v-divider>
           </router-link>
           <router-link to="/" class="navbar__links">
             <v-list-item
@@ -189,11 +190,16 @@ export default {
 </script>
 <style scoped>
 .navbar__card {
-  position: fixed;
+  position: sticky;
+  top: 65px;
+  height: 300px;
 }
 .navbar__links {
   color: white;
   text-decoration: none;
+}
+.navbar__name {
+  font-weight: 600 !important;
 }
 .v-list-item:hover::before {
   opacity: 0;

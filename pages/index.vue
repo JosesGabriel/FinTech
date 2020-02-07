@@ -29,9 +29,9 @@ import Navbar from "~/components/Navbar";
 import Newsfeed from "~/components/social/Newsfeed";
 import TrendingStocks from "~/components/TrendingStocks";
 import WhoToMingle from "~/components/WhoToMingle";
+import MiniWatchlist from "~/components/MiniWatchlist";
 import FooterSidebar from "~/components/FooterSidebar";
 import PostField from "~/components/social/PostField";
-import MiniWatchlist from "~/components/MiniWatchlist";
 import Bulletin from "~/components/Bulletin";
 
 import { mapActions, mapGetters } from "vuex";
@@ -47,6 +47,11 @@ export default {
     Bulletin,
     FooterSidebar,
     PostField
+  },
+  computed: {
+    ...mapGetters({
+      sse: "social/sse"
+    })
   },
   data() {
     return {
@@ -75,9 +80,15 @@ export default {
         this.sse.close();
       }
 
+      const sseToken =
+        this.$auth.getToken("local") != false
+          ? this.$auth.getToken("local").replace("Bearer ", "")
+          : null;
+
       this.setSSE(
-        new EventSource(`${process.env.SSE_STREAM}market-data/pse/all`)
-        // new EventSource("http://localhost:8021/sse/market-data/pse/all")
+        new EventSource(
+          `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${sseToken}`
+        )
       );
 
       this.sse.onopen = function() {};

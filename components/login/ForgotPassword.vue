@@ -15,35 +15,46 @@
         </v-row>
         <v-row class="pt-4">
           <v-col cols="12">
-            <v-text-field v-model="email" label="Email Address"></v-text-field>
+            <v-text-field
+              v-model="email"
+              color="success"
+              label="Email Address"
+            ></v-text-field>
           </v-col>
         </v-row>
       </v-container>
     </v-card-text>
     <div class="loginButtons--wrapper">
-      <v-btn
-        class="mb-2 no-transform"
-        block
-        outlined
-        rounded
-        color="success"
-        @click="submitEmail()"
-      >
-        Submit
-      </v-btn>
-      <v-btn
-        class="mb-2 no-transform"
-        block
-        outlined
-        rounded
-        color="success"
-        @click="$emit('stepper', 2)"
-      >
-        Back to Sign In
-      </v-btn>
+      <v-hover v-slot:default="{ hover }">
+        <v-btn
+          block
+          rounded
+          class="black--text font-weight-bold text-capitalize mb-2"
+          :color="!hover ? 'success' : 'successhover'"
+          elevation="1"
+          @click="submitEmail()"
+        >
+          Submit
+        </v-btn>
+      </v-hover>
+
+      <v-hover v-slot:default="{ hover }">
+        <v-btn
+          block
+          class="black--text font-weight-bold text-capitalize mb-2"
+          :color="!hover ? 'success' : 'successhover'"
+          rounded
+          elevation="1"
+          @click="$emit('stepper', 2)"
+        >
+          Back to Sign In
+        </v-btn>
+      </v-hover>
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
-        <a class="text-center success--text" @click="$emit('stepper', 3)"
+        <a
+          class="text-center secondarytext--text font-weight-bold"
+          @click="$emit('stepper', 3)"
           >Sign Up</a
         ></span
       >

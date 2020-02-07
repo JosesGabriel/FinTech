@@ -65,12 +65,15 @@
                 <v-text-field
                   label="Password"
                   color="success"
-                  type="password"
                   required
                   class="login__textfield"
+                  :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                  :type="show ? 'text' : 'password'"
+                  @click:append="show = !show"
                 ></v-text-field>
                 <v-content class="text-right">
                   <span
+                    v-show="false"
                     id="forget_password"
                     class="caption font-weight-bold"
                     @click="showForgotPassword"
@@ -83,25 +86,31 @@
                 Not yet ready
               </v-content>
               <v-col cols="12 pa-0 text-center">
-                <v-btn
-                  class="mt-10"
-                  color="success"
-                  outlined=""
-                  rounded
-                  block
-                  disabled
-                  @click="setTradeLogin(false)"
-                  >CONNECT</v-btn
-                >
-                <v-btn
-                  class="my-2"
-                  outlined
-                  rounded
-                  block
-                  color="success"
-                  @click="setTradeLogin(false)"
-                  >CLOSE</v-btn
-                >
+                <v-hover v-slot:default="{ hover }">
+                  <v-btn
+                    class="mt-10 text-capitalize"
+                    rounded
+                    block
+                    disabled
+                    :color="!hover ? 'success' : 'successhover'"
+                    @click="setTradeLogin(false)"
+                  >
+                    <span class="black--text font-weight-bold"
+                      >Connect</span
+                    ></v-btn
+                  >
+                </v-hover>
+                <v-hover v-slot:default="{ hover }">
+                  <v-btn
+                    class="my-2 text-capitalize"
+                    rounded
+                    block
+                    :color="!hover ? 'success' : 'successhover'"
+                    @click="setTradeLogin(false)"
+                  >
+                    <span class="black--text font-weight-bold">Close</span>
+                  </v-btn>
+                </v-hover>
               </v-col>
             </v-row>
           </v-card-text>
@@ -116,6 +125,11 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Login",
+  data() {
+    return {
+      show: false
+    };
+  },
   computed: {
     ...mapGetters({
       tradeLogin: "chart/tradeLogin",

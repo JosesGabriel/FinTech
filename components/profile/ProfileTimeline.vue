@@ -140,10 +140,15 @@ export default {
   border: 2px dashed #0c1a2b !important;
   border-radius: 1px !important;
 }
+.previewProfile__container {
+  border: 2px dashed #0c1a2b !important;
+  border-radius: 50% !important;
+}
 .image_close {
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 2;
 }
 .edit_about-textarea.v-textarea.theme--dark fieldset {
   border-color: #1f2e39;

@@ -1,54 +1,80 @@
 const baseURL = process.env.API_URL + "/social";
 
 export default $axios => ({
-  get(params) {
-    let query = buildParams(params);
+    get(params) {
+        let query = buildParams(params);
 
-    return $axios.$get(
-      `${baseURL}/posts${query.length > 0 ? "?" + query : ""}`
-    );
-  },
+        return $axios.$get(
+            `${baseURL}/posts${query.length > 0 ? "?" + query : ""}`
+        );
+    },
 
-  postComment(params, payload) {
-    return $axios.$post(`${baseURL}/posts/` + params + `/comments`, payload);
-  },
+    postComment(params, payload) {
+        return $axios.$post(`${baseURL}/posts/` + params + `/comments`, payload);
+    },
 
-  bearish(params) {
-    return $axios.$post(`${baseURL}/posts/` + params + `/bear`);
-  },
+    updateComment(post_id, parent_id, payload) {
+        return $axios.$put(
+            `${baseURL}/posts/` + post_id + `/comments/` + parent_id,
+            payload
+        );
+    },
 
-  bullish(params) {
-    return $axios.$post(`${baseURL}/posts/` + params + `/bull`);
-  },
-  unbearish(params) {
-    return $axios.$post(`${baseURL}/posts/` + params + `/unbear`);
-  },
-  unbullish(params) {
-    return $axios.$post(`${baseURL}/posts/` + params + `/unbull`);
-  },
-  getSentiment(params) {
-    return $axios.$get(`${baseURL}/sentiments/`, { params });
-  },
+    deleteComment(post_id, parent_id) {
+        return $axios.$delete(
+            `${baseURL}/posts/` + post_id + `/comments/` + parent_id
+        );
+    },
 
-  postSentiment(params) {
-    return $axios.$post(`${baseURL}/sentiments/`, params);
-  },
-  followAccount(params) {
-    return $axios.$post(`${baseURL}/users/` + params + `/follow`);
-  },
-  notifications() {
-    return $axios.$get(`${process.env.API_URL}/notifications`);
-  }
+    bearish(params) {
+        return $axios.$post(`${baseURL}/posts/` + params + `/bear`);
+    },
+
+    bullish(params) {
+        return $axios.$post(`${baseURL}/posts/` + params + `/bull`);
+    },
+
+    getSentiment(params) {
+        return $axios.$get(`${baseURL}/sentiments/`, { params });
+    },
+
+    postSentiment(params) {
+        return $axios.$post(`${baseURL}/sentiments/`, params);
+    },
+    followAccount(params) {
+        return $axios.$post(`${baseURL}/users/` + params + `/follow`);
+    },
+    follow(params) {
+        return $axios.$get(`${baseURL}/users/` + params);
+    },
+    notifications() {
+        return $axios.$get(`${process.env.API_URL}/notifications`);
+    },
+    read(params) {
+        return $axios.$put(`${process.env.API_URL}/notifications/` + params);
+    },
+    markall() {
+        return $axios.$put(`${process.env.API_URL}/notifications/`);
+    },
+    count(params) {
+        let query = buildParams(params);
+
+        return $axios.$get(
+            `${process.env.API_URL}/notifications${
+        query.length > 0 ? "?" + query : ""
+      }`
+        );
+    }
 });
 
 function buildParams(args) {
-  let bld = [];
-  let params = "";
-  if (args != undefined) {
-    for (const [key, value] of Object.entries(args)) {
-      bld.push(`${key}=${value}`);
+    let bld = [];
+    let params = "";
+    if (args != undefined) {
+        for (const [key, value] of Object.entries(args)) {
+            bld.push(`${key}=${value}`);
+        }
+        params = bld.join("&");
     }
-    params = bld.join("&");
-  }
-  return params;
+    return params;
 }

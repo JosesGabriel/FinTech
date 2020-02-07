@@ -1,5 +1,7 @@
-export default () => ({  
-    sse: null,
-    sseInfo: null 
-  });
-  
+export default () => ({
+  sse: null,
+  sseInfo: null,
+  newComment: {},
+  deleteComment: {},
+  updateComment: {}
+});

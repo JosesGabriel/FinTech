@@ -1,5 +1,13 @@
 <template>
   <v-col class="pa-0">
+    <span
+      v-show="showBanner"
+      class="newPosts_banner caption black--text"
+      @click="fetchNewPost()"
+    >
+      <v-icon small color="black">mdi-arrow-up</v-icon>
+      <span class="font-weight-bold">New posts</span>
+    </span>
     <!-- Written by Joses | December 2019 -->
     <!-- Docs: Posts object is retrieved on mount, then mag iterate thru the entire
     object as can be seen sa v-card underneath. Then if post has comments, mag loop thru lang gihapon sa length.
@@ -15,7 +23,7 @@
     <v-card
       v-for="n in postsObject.length"
       :key="n"
-      class="centerPanel__card mb-3 transparent__bg"
+      class="centerPanel__card mb-3"
       :dark="lightSwitch == 0 ? false : true"
       outlined
     >
@@ -35,9 +43,7 @@
           <v-row>
             <v-col>
               <v-list-item-title class="subtitle-2">
-                <strong>
-                  {{ postsObject[n - 1].user.name }}
-                </strong>
+                <strong>{{ postsObject[n - 1].user.name }}</strong>
               </v-list-item-title>
               <v-list-item-subtitle class="overline no-transform">
                 {{ localFormat(postsObject[n - 1].created_at, "fn") }}
@@ -78,18 +84,14 @@
               </v-list-item-subtitle>
             </v-col>
             <v-col class="text-right">
-              <v-btn
-                icon
-                fab
-                small
-                class="postOptions__btn"
+              <v-icon
                 color="secondary"
+                class="postOptions__btn"
                 @click="
                   (postOptionsMode = !postOptionsMode), (currentPost = n - 1)
                 "
+                >mdi-dots-horizontal</v-icon
               >
-                <v-icon>mdi-dots-horizontal</v-icon>
-              </v-btn>
               <div v-if="postOptionsMode && currentPost == n - 1">
                 <div class="postOptions__dropdown--caret"></div>
                 <div class="postOptions__container">
@@ -206,16 +208,16 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="caption px-5 pb-3">
-            {{ postsObject[n - 1].content }}
-          </span>
+          <span v-else class="caption px-5 pb-3">{{
+            postsObject[n - 1].content
+          }}</span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
         </v-list-item-content>
       </v-list-item>
       <!-- End of Post Body -->
       <v-divider></v-divider>
-      <v-card-actions class="pl-5 py-1">
+      <v-card-actions class="pl-4 py-2">
         <v-btn
           icon
           outlined
@@ -223,6 +225,7 @@
           width="24"
           height="24"
           color="success"
+          class="bull__btn"
           :class="
             postsObject[n - 1].my_sentiment &&
             postsObject[n - 1].my_sentiment.type == 'bull'
@@ -242,6 +245,7 @@
           width="24"
           height="24"
           color="error"
+          class="bear__btn"
           :class="
             postsObject[n - 1].my_sentiment &&
             postsObject[n - 1].my_sentiment.type == 'bear'
@@ -255,11 +259,12 @@
         </v-btn>
         <span class="px-2 caption">{{ postsObject[n - 1].bears_count }}</span>
         <v-spacer></v-spacer>
-        <v-btn icon fab x-small color="secondary">
-          <v-icon>mdi-comment-text-outline</v-icon>
-        </v-btn>
-        <span class="caption">{{ postsObject[n - 1].comments_count }}</span>
-        <v-btn
+        <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
+        <span class="caption">{{
+          postsObject[n - 1].comment_descendants_count
+        }}</span>
+        <!-- TODO Share counter -->
+        <!-- <v-btn
           icon
           fab
           x-small
@@ -268,10 +273,14 @@
         >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
-        <span class="caption">1000</span>
+        <span class="caption">1000</span>-->
       </v-card-actions>
       <v-divider></v-divider>
-      <List :comments="postsObject[n - 1].comments" />
+      <List
+        :comments="postsObject[n - 1].comments"
+        :postindex="n - 1"
+        :postid="postsObject[n - 1].id"
+      />
       <!-- Start of Comment -->
       <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
@@ -285,7 +294,7 @@
             "
           ></v-img>
         </v-list-item-avatar>
-        <v-list-item-content class="pt-0 mb-0">
+        <v-list-item-content class="pt-2 mb-0">
           <v-text-field
             dense
             rounded
@@ -356,13 +365,19 @@ export default {
       postOptionsMode: false,
       showShare: false,
       sharePostID: "",
+      numberPost: 0,
+      showBanner: false,
       reactButtons: false,
       commentValue: ""
     };
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      newPosts: "global/getNewPosts",
+      newComment: "social/getNewComment",
+      deleteComment: "social/getDeleteComment",
+      updateComment: "social/getUpdateComment"
     })
   },
   watch: {
@@ -380,20 +395,77 @@ export default {
         attachments[i]["url"] = this.newPost.attachments[i];
       }
       this.postsObject.unshift({
+        id: this.newPost.id,
+        user_id: this.newPosts.user_id,
         content: this.newPost.content,
         attachments: attachments,
         bears_count: 0,
         bulls_count: 0,
         created_at: new Date(),
         user: {
+          uuid: this.newPost.user.uuid,
           profile_image: this.$auth.user.data.user.profile_image,
-          first_name: this.$auth.user.data.user.first_name,
-          last_name: this.$auth.user.data.user.last_name
+          name: this.$auth.user.data.user.name
         },
         tagged_stocks: this.newPost.tagged_stocks,
         comments: [],
-        comments_count: 0
+        comment_descendants_count: 0
       });
+    },
+    newPosts() {
+      if (this.newPosts.event_name === "social.post") {
+        this.postCounter();
+      } else if (this.newPosts.event_name === "social.post.comment") {
+        this.putNumberComment();
+      } else if (this.newPosts.event_name === "social.post.sentiment") {
+        this.putNumberSentiments();
+      }
+      this.numberPost = this.newPosts.number_posts;
+    },
+    newComment() {
+      this.postsObject[this.newComment.postIndex].comments[
+        this.newComment.commentIndex
+      ].comments.push(this.newComment.data);
+    },
+    updateComment() {
+      if (this.updateComment.isChild) {
+        let parentComment = this.postsObject[this.updateComment.postIndex]
+          .comments[this.updateComment.commentIndex].comments;
+
+        for (let i = 0; i < parentComment.length; i++) {
+          if (parentComment[i].id == this.updateComment.data.id) {
+            this.postsObject[this.updateComment.postIndex].comments[
+              this.updateComment.commentIndex
+            ].comments[i].content = this.updateComment.data.content;
+          }
+        }
+      } else {
+        this.postsObject[this.updateComment.postIndex].comments[
+          this.updateComment.commentIndex
+        ].content = {};
+        this.postsObject[this.updateComment.postIndex].comments[
+          this.updateComment.commentIndex
+        ].content = this.updateComment.data.content;
+      }
+    },
+    deleteComment() {
+      if (this.deleteComment.isChild) {
+        let parentComment = this.postsObject[this.deleteComment.postIndex]
+          .comments[this.deleteComment.commentIndex].comments;
+
+        for (let i = 0; i < parentComment.length; i++) {
+          if (parentComment[i].id == this.deleteComment.data.id) {
+            this.postsObject[this.deleteComment.postIndex].comments[
+              this.deleteComment.commentIndex
+            ].comments.splice(i, 1);
+          }
+        }
+      } else {
+        this.postsObject[this.deleteComment.postIndex].comments.splice(
+          this.deleteComment.commentIndex,
+          1
+        );
+      }
     }
   },
   mounted() {
@@ -411,6 +483,29 @@ export default {
     addDynamicTime: AddDynamicTime,
     localFormat: LocalFormat,
 
+    postCounter() {
+      if (this.numberPost >= 5) {
+        this.showBanner = true;
+      } else {
+        this.showBanner = false;
+      }
+    },
+    putNumberComment() {
+      for (let i = 0; i < this.postsObject.length; i++) {
+        if (this.postsObject[i].id === this.newPosts.data.post.id) {
+          this.postsObject[i].comment_descendants_count += 1;
+        }
+      }
+    },
+    putNumberSentiments() {
+      for (let i = 0; i < this.postsObject.length; i++) {
+        if (this.postsObject[i].id === this.newPosts.data.post.id) {
+          this.postsObject[i].bulls_count = this.newPosts.data.post.bulls;
+          this.postsObject[i].bears_count = this.newPosts.data.post.bears;
+          this.postsObject[i].my_sentiment = this.newPosts.data.sentiment.type;
+        }
+      }
+    },
     /**
      * fires when user clicks follow button
      *
@@ -477,7 +572,7 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-
+            console.log(response);
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
@@ -487,6 +582,30 @@ export default {
                 x => (x.created_at = this.addDynamicTime(x.created_at))
               );
             }, 10000);
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    /**
+     * triggered if user fetched new posts to latest posts
+     *
+     * @return
+     */
+    fetchNewPost() {
+      const params = {
+        page: 1
+      };
+      this.postsObject = [];
+      this.$api.social.posts
+        .get(params)
+        .then(response => {
+          if (response.success) {
+            this.postsObject = this.postsObject.concat(response.data.posts);
+            this.loader = false;
+            this.showBanner = false;
+            this.numberPost = 0;
           }
         })
         .catch(e => {
@@ -564,15 +683,20 @@ export default {
         if (response.success) {
           this.triggerAlert(true, response.message);
           this.postsObject[index].comments.push({
+            id: response.data.comment.id,
+            post_id: response.data.comment.post_id,
+            user_id: response.data.comment.user_id,
+            parent_id: response.data.comment.parent_id,
+            comments: [],
             content: content,
             created_at: new Date(),
             user: {
               profile_image: this.$auth.user.data.user.profile_image,
-              first_name: this.$auth.user.data.user.first_name,
-              last_name: this.$auth.user.data.user.last_name
+              name: this.$auth.user.data.user.name,
+              uuid: this.$auth.user.data.user.uuid
             }
           });
-          this.postsObject[index].comments_count++;
+          // this.postsObject[index].comments_count++;
         } else {
           this.triggerAlert(false, response.message);
         }
@@ -617,7 +741,7 @@ export default {
           .bullish(params)
           .then(response => {
             if (response.success) {
-              this.postsObject[index].bulls_count += 1;
+              // this.postsObject[index].bulls_count += 1;
               if (
                 this.postsObject[index].my_sentiment &&
                 this.postsObject[index].my_sentiment.type == "bear"
@@ -665,7 +789,7 @@ export default {
           .bearish(params)
           .then(response => {
             if (response.success) {
-              this.postsObject[index].bears_count += 1;
+              // this.postsObject[index].bears_count += 1;
               if (
                 this.postsObject[index].my_sentiment &&
                 this.postsObject[index].my_sentiment.type == "bull"
@@ -731,10 +855,24 @@ export default {
 </script>
 
 <style>
+.bull__btn {
+  border: 2px solid #03DAC5;
+}
+.bear__btn {
+  border: 2px solid #F44336;
+}
 .bull__btn--active {
   background-color: #03dac599;
 }
 .bear__btn--active {
   background-color: #f4433699;
+}
+.postOptions__btn {
+  position: relative;
+  bottom: 8px;
+  left: 4px;
+}
+.postOptions__btn:focus {
+  background-color: transparent;
 }
 </style>

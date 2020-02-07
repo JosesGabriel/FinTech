@@ -6,7 +6,7 @@
           v-if="mediaTypeCheck(images[0]['url'])"
           position="top"
           :src="images[0]['url']"
-          max-height="200"
+          max-height="500"
           @click="showCarousel"
         />
         <video

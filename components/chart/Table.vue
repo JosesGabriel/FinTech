@@ -1,6 +1,6 @@
 <template>
   <v-col class="pa-0">
-    <v-content class="content__vynduebutton pl-2">
+    <v-content v-show="false" class="content__vynduebutton pl-2">
         <img class="img__vyndue" src="/icon/vyndue2.svg" title="Vyndue" @click="showVyndueChat"></img
       >
     </v-content>
@@ -66,7 +66,8 @@
 
     <v-tabs
       height="30"
-      color="success"
+      slider-color="success"
+      :color="lightSwitch == 0 ? '#000000' : '#ffffff'"
       class="table__tabs"
       :background-color="lightSwitch == 0 ? 'lightchart' : 'darkchart'"
       :dark="lightSwitch == true"
@@ -74,13 +75,12 @@
       <v-tab
         v-for="item in tabsContent"
         :key="item.id"
+        active-class="tabSelected"
         :href="`#tab-${item.id}`"
-        class="text-capitalize subtitle-1"
-        style="font-size: .8rem !important;"
         :disabled="item.disabled"
         @click="toggleTabs(item.id)"
       >
-        {{ item.title }}
+        <span class="font-weight-bold body-2 text-capitalize">{{ item.title }}</span>
       </v-tab>
 
       <v-tab-item
@@ -248,9 +248,10 @@ export default {
 </script>
 
 <style>
-.table__tabs .v-slide-group__wrapper {
+/* uncomment if vyndue chart is ready */
+/* .table__tabs .v-slide-group__wrapper {
   padding-left: 55px !important;
-}
+} */
 </style>
 
 <style scoped>
@@ -306,5 +307,8 @@ export default {
   left: 40px;
   width: 500px;
   z-index: 3;
+}
+.tabSelected{
+    /* font-weight: bold !important; */
 }
 </style>

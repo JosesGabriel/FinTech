@@ -5,24 +5,40 @@
     :dark="lightSwitch == 0 ? false : true"
   >
     <v-row class="mb-5" no-gutters>
-      <v-col class="hidden-xs-only px-3" sm="2" md="2" lg="3"> </v-col>
-      <v-col xs="12" sm="10" md="6" lg="6">
-        <v-dialog v-model="newsFeedModal" persistent max-width="520">
-          <Newsfeed :postid="$route.params.id" @postData="parsePost" />
-        </v-dialog>
+      <v-col class="hidden-xs-only px-3" sm="2" md="2" lg="3">
+        <Navbar active="social" />
       </v-col>
-      <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3"> </v-col>
+      <v-col xs="12" sm="10" md="6" lg="6">
+        <Newsfeed :postid="$route.params.id" @postData="parsePost" />
+      </v-col>
+      <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
+        <TrendingStocks />
+        <WhoToMingle />
+        <MiniWatchlist />
+        <FooterSidebar />
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import Navbar from "~/components/Navbar";
+import TrendingStocks from "~/components/TrendingStocks";
+import WhoToMingle from "~/components/WhoToMingle";
+import MiniWatchlist from "~/components/MiniWatchlist";
+import FooterSidebar from "~/components/FooterSidebar";
+
 import { mapGetters } from "vuex";
 import Newsfeed from "~/components/social/Newsfeed";
 
 export default {
   components: {
-    Newsfeed
+    Navbar,
+    Newsfeed,
+    TrendingStocks,
+    WhoToMingle,
+    MiniWatchlist,
+    FooterSidebar
   },
   data() {
     return {
@@ -84,7 +100,6 @@ export default {
   },
   auth: false,
   layout: "main",
-  mounted() {},
   methods: {
     /**
      * Captures data emitted by Newsfeed component

@@ -1,13 +1,13 @@
 <template>
   <v-card
-    class="mb-3"
+    class="mb-3 trendingStocks__card"
     color="transparent"
     :dark="lightSwitch == 0 ? false : true"
     outlined
     :loading="loader"
   >
     <div class="pa-0 pl-2">
-      <div class="body-2 font-weight-black">Trending Stocks</div>
+      <div class="body-2 font-weight-black pb-2 pl-2">Trending Stocks</div>
       <v-divider></v-divider>
       <v-list class="mt-1 transparent">
         <v-list-item class="px-0">
@@ -145,6 +145,10 @@ export default {
 };
 </script>
 <style>
+.tStocks__card {
+  position: relative;
+  bottom: 3px;
+}
 .tStocks--description {
   text-overflow: ellipsis;
   white-space: nowrap;

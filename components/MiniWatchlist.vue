@@ -6,8 +6,8 @@
     outlined
     :loading="watchCardLoading"
   >
-    <v-card-text class="pa-0 pl-2">
-      <div class="body-2 font-weight-black">Watchlist</div>
+    <div class="pa-0 pl-2">
+      <div class="body-2 font-weight-black pb-2 pl-2">Watchlist</div>
       <v-divider></v-divider>
       <v-list class="transparent pt-0">
         <v-container class="pa-0">
@@ -97,7 +97,7 @@
           Show more
         </router-link>
       </v-list>
-    </v-card-text>
+    </div>
   </v-card>
 </template>
 
@@ -292,83 +292,90 @@ export default {
      * @return
      */
     watchCardMount() {
-      this.$api.watchlist.watchlists.index().then(response => {
-        this.watchListObject = response.data.watchlist;
-        //If watchlist is more than 5, pop excess data from array
-        if (this.watchListObject.length == 0) {
-          this.watchCardLoading = false;
-        }
-        if (this.watchListObject.length > 5) {
-          let popAmount = this.watchListObject.length - 5;
-          for (let i = 0; i < popAmount; i++) this.watchListObject.pop();
-        }
-        for (let i = 0; i < this.watchListObject.length; i++) {
-          this.stockData.push({
-            stockSym: "",
-            data: [],
-            currentPrice: "",
-            change: ""
-          });
-          // GET Closing Price from Stock History API
-          const params = {
-            "symbol-id": this.watchListObject[i].stock_id,
-            resolution: "1D",
-            limit: "5"
-          };
-          this.$api.chart.charts.latest(params).then(
-            function(result) {
-              this.dataSeries[i] = result.data.c.reverse();
-              this.$refs.closePriceChart[i].updateSeries([
-                {
-                  data: result.data.c
-                }
-              ]);
-            }.bind(this)
-          );
+      this.$api.watchlist.watchlists
+        .index()
+        .then(response => {
+          this.watchListObject = response.data.watchlist;
+          //If watchlist is more than 5, pop excess data from array
+          if (this.watchListObject.length == 0) {
+            this.watchCardLoading = false;
+          }
+          if (this.watchListObject.length > 5) {
+            let popAmount = this.watchListObject.length - 5;
+            for (let i = 0; i < popAmount; i++) this.watchListObject.pop();
+          }
+          for (let i = 0; i < this.watchListObject.length; i++) {
+            this.stockData.push({
+              stockSym: "",
+              data: [],
+              currentPrice: "",
+              change: ""
+            });
+            // GET Closing Price from Stock History API
+            const params = {
+              "symbol-id": this.watchListObject[i].stock_id,
+              resolution: "1D",
+              limit: "5"
+            };
+            this.$api.chart.charts.latest(params).then(
+              function(result) {
+                this.dataSeries[i] = result.data.c.reverse();
+                this.$refs.closePriceChart[i].updateSeries([
+                  {
+                    data: result.data.c
+                  }
+                ]);
+              }.bind(this)
+            );
 
-          // GET Stock Symbol + Stock Exchange from Stock Info API
-          const params2 = {
-            "symbol-id": this.watchListObject[i].stock_id
-          };
-          this.$api.chart.stocks.list(params2).then(
-            function(result) {
-              this.stockData[i].stockSym = result.data.symbol;
-              this.$refs.closePriceChart[i].updateSeries([
-                {
-                  name: result.data.symbol
-                }
-              ]);
-            }.bind(this)
-          );
+            // GET Stock Symbol + Stock Exchange from Stock Info API
+            const params2 = {
+              "symbol-id": this.watchListObject[i].stock_id
+            };
+            this.$api.chart.stocks.list(params2).then(
+              function(result) {
+                this.stockData[i].stockSym = result.data.symbol;
+                this.$refs.closePriceChart[i].updateSeries([
+                  {
+                    name: result.data.symbol
+                  }
+                ]);
+              }.bind(this)
+            );
 
-          // GET Current Price + Current Change from Stock History API
-          const params3 = {
-            "symbol-id": this.watchListObject[i].stock_id
-          };
-          this.$api.chart.stocks.history(params3).then(
-            function(result) {
-              this.stockData[i].currentPrice = result.data.last;
-              this.stockData[i].change = result.data.changepercentage.toFixed(
-                2
-              );
-              if (this.stockData[i].change > 0) {
-                this.$refs.closePriceChart[i].updateOptions({
-                  colors: ["#00FFC3"]
-                });
-              } else if (this.stockData[i].change < 0) {
-                this.$refs.closePriceChart[i].updateOptions({
-                  colors: ["#f44336"]
-                });
-              } else {
-                this.$refs.closePriceChart[i].updateOptions({
-                  colors: ["#808080"]
-                });
-              }
-            }.bind(this)
-          );
-          this.watchCardLoading = false;
-        }
-      });
+            // GET Current Price + Current Change from Stock History API
+            const params3 = {
+              "symbol-id": this.watchListObject[i].stock_id
+            };
+            this.$api.chart.stocks.history(params3).then(
+              function(result) {
+                this.stockData[i].currentPrice = result.data.last;
+                this.stockData[i].change = result.data.changepercentage.toFixed(
+                  2
+                );
+                if (this.stockData[i].change > 0) {
+                  this.$refs.closePriceChart[i].updateOptions({
+                    colors: ["#00FFC3"]
+                  });
+                } else if (this.stockData[i].change < 0) {
+                  this.$refs.closePriceChart[i].updateOptions({
+                    colors: ["#f44336"]
+                  });
+                } else {
+                  this.$refs.closePriceChart[i].updateOptions({
+                    colors: ["#808080"]
+                  });
+                }
+              }.bind(this)
+            );
+            this.watchCardLoading = false;
+          }
+        })
+        .catch(error => {
+          if (error.response.status == 404) {
+            this.watchCardLoading = false;
+          }
+        });
     },
 
     realTime(data) {

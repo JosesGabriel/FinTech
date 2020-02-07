@@ -105,8 +105,10 @@
 import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Watchlist",
+  props: ["activeTab"],
   data() {
     return {
+      currentTab: false,
       loading: true,
       noItems: false,
       items: []
@@ -129,8 +131,28 @@ export default {
      * @return
      */
     sseInfo(value) {
-      if (this.loading === false) {
-        //this.sseAllInfo(value);
+      if (
+        this.loading === false &&
+        this.currentTab === true &&
+        this.noItems === false
+      ) {
+        this.sseAllInfo(value);
+      }
+    },
+    /**
+     * fetch what is the current active tab
+     *
+     * @param   {String}  value  tab id name
+     *
+     * @return
+     */
+    activeTab(value) {
+      const tab = parseInt(value.substr(4));
+      if (tab == 3) {
+        this.initWatchlist();
+        this.currentTab = true;
+      } else {
+        this.currentTab = false;
       }
     }
   },
@@ -147,8 +169,8 @@ export default {
      * @return
      */
     async initWatchlist() {
+      this.items = [];
       try {
-        this.items = [];
         const response = await this.$api.watchlist.watchlists.index();
         const data = response.data.watchlist;
         data.forEach(data => {
@@ -166,9 +188,10 @@ export default {
           });
         });
         this.loading = false;
+        this.noItems = false;
       } catch (error) {
-        this.noItems = true;
         this.loading = false;
+        this.noItems = true;
       }
     },
     /**

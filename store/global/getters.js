@@ -16,11 +16,19 @@ export default {
         return state.notification;
     },
 
+    getNewPosts(state) {
+        return state.newPosts;
+    },
+
     getAlert(state) {
         return state.alert;
     },
 
     getAlertDialog(state) {
         return state.alertDialog;
+    },
+
+    getSettings(state) {
+        return state.settings;
     }
 };

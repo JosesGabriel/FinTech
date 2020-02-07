@@ -238,6 +238,11 @@ export default {
       default() {
         return "";
       }
+    },
+    Realized: {
+      default() {
+        return "";
+      }
     }
   },
   watch: {
@@ -451,6 +456,7 @@ export default {
     let mvalueprior = 0;
     let d = new Date();
     let localprofit = 0;
+    let tlogsprofit = 0;
     let counter = 0;
     let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
  
@@ -464,8 +470,7 @@ export default {
                   };
                   this.$api.chart.charts.latest(params).then(
                     function(result) {   
-                        console.log('PRIOR DATA', result); 
-                       // console.log('Symbol ID', this.portfolioLogs[index].metas.stock_id);                   
+                                    
                       let prior_date = new Date(result.data.t[1]*1000);
                       let dformat_prior = [prior_date.getMonth() + 1, prior_date.getDate(), prior_date.getFullYear()].join("/");
                       let tcost =
@@ -475,7 +480,7 @@ export default {
                         let priorPrice = result.data.c[1];
                         
                         if(isNaN(priorPrice)){
-                          console.log('NAN');
+                         
                           priorPrice = result.data.c[0];
                         }
 
@@ -490,15 +495,24 @@ export default {
                         this.priorProfitLoss =
                           parseFloat(this.priorProfitLoss) + parseFloat(priorprofit); 
 
+                        //==================================
+                          let currentPrice = result.data.c[0];
+                          let currentbuyResult =
+                            this.portfolioLogs[index].position *
+                            parseFloat(currentPrice).toFixed(2);
+                          let currentmvalue = this.fees(currentbuyResult);
+                          let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
+                          currentProfitLoss =
+                            parseFloat(currentProfitLoss) + parseFloat(currentprofit);
+                        //===============================================
                         let priordata = {
                           'id': this.simulatorPortfolioID,
                           'date': dformat,
-                          'priorprofit': this.priorProfitLoss
-                        };        
-                        console.log('Prior Mvlaue -'+ this.priorProfitLoss); 
-                        //console.log('Prior tcost -'+ tcost); 
-                         //console.log('Prior Data', priordata);    
-                         //console.log('Prior -'+ priorprofit);                   
+                          'priorprofit': this.priorProfitLoss,
+                          'priortlogsprofit': this.Realized,
+                          'currentprofit': currentProfitLoss
+                        };   
+                                           
                         //localStorage.removeItem(this.simulatorPortfolioID);
                         let totalarray = this.portfolioLogs.length - 1;
                         
@@ -506,32 +520,28 @@ export default {
                         getlocal = JSON.parse(getlocal);
                         //console.log('Prior Total Profit Loss -'+ getlocal.priorprofit); 
                         if(getlocal != null){
-                              if(counter == totalarray){
-                                  if(getlocal.date != dformat){
+                              if(getlocal.date != dformat){
+                                  if(counter == totalarray){
+                                  //if(getlocal.date != dformat){
                                     localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
                                   }else{
                                     localprofit = getlocal.priorprofit;
+                                    tlogsprofit = getlocal.priortlogsprofit;
                                   }
                               }else{
                                     localprofit = getlocal.priorprofit;
+                                    tlogsprofit = getlocal.priortlogsprofit;
                                   }
                         }else{                   
                             if(totalarray == counter){
                                 localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
                             }
                             localprofit = this.priorProfitLoss;
+                            tlogsprofit = this.Realized;
                         }
                         counter++;
                     
-                      let currentPrice = result.data.c[0];
-                      let currentbuyResult =
-                        this.portfolioLogs[index].position *
-                        parseFloat(currentPrice).toFixed(2);
-                      let currentmvalue = this.fees(currentbuyResult);
-                      let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
-                      currentProfitLoss =
-                        parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-                        
+                    //=======================================================================
                         let daychange =
                            parseFloat(currentProfitLoss) - parseFloat(localprofit);
                         if(localprofit != 0 ){                          
@@ -540,6 +550,7 @@ export default {
                         }      
                         
                       this.$emit("DayChange", localprofit);
+                      this.$emit("DayChangeTlogs", tlogsprofit);
                        
                     }.bind(this)
                   );
@@ -599,7 +610,7 @@ export default {
 
       this.sse = new EventSource(
         //"http://localhost:8021/sse/market-data/pse/all"
-        process.env.SSE_STREAM + "market-data/pse/all"
+        `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`
       );
       const that = this;
       this.sse.onopen = function() {

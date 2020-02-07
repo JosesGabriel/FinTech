@@ -13,10 +13,16 @@ export default {
     async setNotification({ commit }, data) {
         await commit("SET_NOTIFICATION", data);
     },
+    async setNewPosts({ commit }, data) {
+        await commit("SET_NEWPOSTS", data);
+    },
     async setAlert({ commit }, data) {
         await commit("SET_ALERT", data);
     },
     async setAlertDialog({ commit }, data) {
         await commit("SET_ALERTDIALOG", data);
+    },
+    async setSettings({ commit }, data) {
+        await commit("SET_SETTINGS", data);
     }
 };

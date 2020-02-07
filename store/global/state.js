@@ -19,13 +19,17 @@ export default () => ({
     //end global snackbar
 
     //Global notification
-    notification: {
-        model: false,
-        sender_picture: "",
-        full_name: "",
-        message: ""
-    },
+    notification: null,
     //end global notification
+
+    //Global ALL newposts
+    newPosts: {
+        number_posts: 0,
+        event_name: "",
+        message: "",
+        data: null,
+    },
+    //end global all newposts
 
     //Global dialog alert
     alertDialog: {
@@ -34,6 +38,10 @@ export default () => ({
         state: "",
         body: "",
         subtext: ""
-    }
+    },
     //end global dialog alert
+
+    //Global Updated Settings 
+    settings: null
+        //end global update settings
 });
