@@ -24,6 +24,7 @@
             @click="modalQuickTrade=true" 
             :disabled="this.portvalue != '' ? false : true"
             class="quickSettings"
+            style="float: right; padding-top: 6px;"
             >mdi-settings-outline</v-icon>
           <!--<v-select
               v-model="nmTrade"
@@ -164,12 +165,20 @@
 
                <v-container class="px-5" style="font-size: 14px; line-height:.5;">
                 <v-row>
-                  <v-col class="pl-6 mb-6">
+                  <v-col class="pl-6">
                     Fill Type
                   </v-col>
                   <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                     Day
-                  </v-col>  
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col class="pl-6 mb-6">
+                    Allocation 
+                  </v-col>
+                  <v-col class="mr-6 font-weight-bold" style="text-align: right;">
+                    {{ this.alloc }} %
+                  </v-col>    
                 </v-row>
                 <v-spacer></v-spacer>
                 <v-row>
@@ -302,7 +311,7 @@
                     </v-row>
                     <v-row>
                       <v-col style="font-size: 12px;">
-                      NOTE: Quick Trade automaticaly place buy and sell orders based on best available price.
+                      NOTE: Quick Trade automatically places buy and sell orders based on the <strong>best available price</strong> and your <strong>pre-set allocation</strong> per trade.
                       </v-col>
 
                     </v-row>
@@ -351,6 +360,7 @@ export default {
     capital: 0,
     shares: 0,
     unrealized: 0,
+    alloc: 0,
     realized: 0,
     equity: 0,
     stobuy: 0,
@@ -373,6 +383,11 @@ export default {
         symbolid: "chart/symbolid",
         stock_last: "chart/stock_last",
         }),
+        toggleFontColor() {
+        return this.lightSwitch == 0
+          ? "#000000 !important"
+          : "#ffffff !important";
+      }
     },
     props: {
       /**
@@ -618,6 +633,14 @@ export default {
         }else{
           this.setting_val = parseFloat(this.setting);
         } 
+        this.alloc = this.setting_val;
+        let settingval = {
+          'id': this.portvalue,
+          'perc': this.setting_val
+        };
+
+        localStorage.setItem('QT_'+ this.portvalue, JSON.stringify(settingval));
+
         this.quicksetting = true;
         this.equity =  this.unrealized + this.realized + this.capital;
         let totalperc = (this.equity / 100) * this.setting_val;
@@ -634,28 +657,40 @@ export default {
         this.showConfirm = true;
     },
     quickTrade(){
-        if(this.quantity == 0){
-            this.equity =  this.unrealized + this.realized + this.capital;
-            let totalperc = (this.equity / 100) * 10;
-            let bdlot = this.getBoardLot(this.stock_last);
+        
+        let getlocal = localStorage.getItem('QT_'+ this.portvalue);
+        getlocal = JSON.parse(getlocal);
 
-            this.shares = totalperc / parseFloat(this.stock_last);   
-            let sbuy =  this.shares % bdlot;
-            this.stobuy =  parseFloat(this.shares) - parseFloat(sbuy);
+        if(getlocal != null){
+                this.alloc = getlocal.perc;
+                this.equity =  this.unrealized + this.realized + this.capital;
+                let totalperc = (this.equity / 100) * parseFloat(this.alloc);
+                let bdlot = this.getBoardLot(this.stock_last);
 
-            this.quantity = this.stobuy;
-            this.totalcost = this.stobuy * parseFloat(this.stock_last);
-            this.totalcost = this.fees(this.totalcost);
-            this.showConfirm = true;
+                this.shares = totalperc / parseFloat(this.stock_last);   
+                let sbuy =  this.shares % bdlot;
+                this.stobuy =  parseFloat(this.shares) - parseFloat(sbuy);
+
+                this.quantity = this.stobuy;
+                this.totalcost = this.stobuy * parseFloat(this.stock_last);
+                this.totalcost = this.fees(this.totalcost);
+                this.showConfirm = true;
         }else{
-            this.quantity = this.stobuy;
-            this.totalcost =this.stobuy * parseFloat(this.stock_last);
-            this.totalcost = this.fees(this.totalcost);
-            this.showConfirm = true;
-        }
-       console.log('Total Cost -' + parseFloat(this.totalcost) );
-       console.log('Calance -' + this.balance );
+                this.alloc = 10;
+                this.equity =  this.unrealized + this.realized + this.capital;
+                let totalperc = (this.equity / 100) * 10;
+                let bdlot = this.getBoardLot(this.stock_last);
 
+                this.shares = totalperc / parseFloat(this.stock_last);   
+                let sbuy =  this.shares % bdlot;
+                this.stobuy =  parseFloat(this.shares) - parseFloat(sbuy);
+
+                this.quantity = this.stobuy;
+                this.totalcost = this.stobuy * parseFloat(this.stock_last);
+                this.totalcost = this.fees(this.totalcost);
+                this.showConfirm = true;
+        }
+      
     }
 }
 
@@ -683,5 +718,7 @@ export default {
   width: 62px;
   top: 100px;
 }
+
+
 
 </style>
