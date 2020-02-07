@@ -35,8 +35,10 @@
                 >
               </v-list-item-content>
             </v-list-item>
-            <v-divider></v-divider>
-            <v-divider class="mb-1"></v-divider>
+            <div v-if="!data">
+              <v-divider></v-divider>
+              <v-divider class="mb-1"></v-divider>
+            </div>
           </router-link>
           <router-link to="/" class="navbar__links">
             <v-list-item

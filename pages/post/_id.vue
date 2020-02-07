@@ -65,7 +65,6 @@ export default {
    * @return
    */
   async asyncData({ $axios, params }) {
-    console.log($axios, params)
     $axios
       .get(params.id)
       .then(res => {
@@ -115,9 +114,6 @@ export default {
         this.postImage = object[0].attachments[0].url;
       }
     }
-  },
-  mounted() {
-    console.log("mount")
   }
 };
 </script>

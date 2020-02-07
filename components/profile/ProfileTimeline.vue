@@ -13,7 +13,7 @@
           <v-tab-item class="mt-5" :value="'tab-1'">
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="8" lg="8">
-                <ProfileAbout class="my-2" />
+                <ProfileAbout :about="about" :user="user" class="my-2" />
                 <ProfileExperience class="my-2" />
                 <ProfileEducation class="my-2" />
                 <ProfileSkills class="my-2" />
@@ -95,11 +95,27 @@ export default {
     PostField,
     Newsfeed
   },
+  props: {
+    userData: {
+      default() {
+        return [];
+      }
+    }
+  },
   data() {
     return {
       isOpen: true,
-      newPost: {}
+      newPost: {},
+      about: null,
+      user: null,
     };
+  },
+  watch: {
+    userData() {
+      this.about = this.userData.profile
+      this.user = this.userData
+      console.log(this.userData)
+    }
   },
   methods: {
     toggle() {
