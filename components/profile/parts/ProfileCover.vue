@@ -85,8 +85,8 @@
           </v-card>
         </v-list-item>
 
-        <upload-profile :visible="showUploadPhoto" :photo="update" @close="showUploadPhoto=false" />
-        <upload-cover :visible="showUploadCover" :photo="update" @close="showUploadCover=false" />
+        <upload-profile :visible="showUploadPhoto" @close="showUploadPhoto=false" />
+        <upload-cover :visible="showUploadCover" @close="showUploadCover=false" />
       </v-col>
     </v-row>
   </v-container>
@@ -103,7 +103,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
+      settings: "global/getSettings"
     }),
     cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
@@ -142,8 +143,8 @@ export default {
     };
   },
   watch: {
-    photo() {
-      console.log(this.update);
+    settings() {
+      this.$auth.user.data.user = this.settings.data.user;
     }
   },
   mounted() {
@@ -221,7 +222,7 @@ export default {
   width: 100%;
 }
 .placeholderBackdrop__back {
-    position: absolute;
+  position: absolute;
 }
 .croppa-container {
   background: none;

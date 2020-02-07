@@ -2,7 +2,10 @@
 <template>
   <v-dialog v-model="show" max-width="500px">
     <v-container class="pa-7 pt-4" :style="{ background: cardbackground }">
-      <span class="success--text body-1 py-2 font-weight-bold">Upload Cover Photo</span>
+      <span
+        :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+        class="body-1 py-2 font-weight-bold"
+      >Upload Cover Photo</span>
       <v-card
         :dark="lightSwitch == true"
         height="250px"
@@ -10,7 +13,12 @@
         class="d-flex justify-center align-center mt-2 upload-container"
       >
         <div class="image_preview-container d-flex justify-center align-center">
-          <v-btn icon class="image_close" @click="myCroppa.remove()">
+          <v-btn
+            icon
+            class="image_close"
+            v-show="myCroppa.chosenFile != null ? true : false"
+            @click="myCroppa.remove(), myCroppa.chosenFile = null"
+          >
             <v-icon class="pa-1">mdi-close</v-icon>
           </v-btn>
         </div>
@@ -26,6 +34,7 @@
 
         <croppa
           v-model="myCroppa"
+          @click="onClickImageUploadBtn"
           :width="435"
           :height="246"
           ref="myCroppa"
@@ -49,17 +58,18 @@
         >Cancel</v-btn>
         <!-- Upload -->
         <v-btn
-          class="ma-1 text-capitalize"
+          class="ma-1 font-weight-bold black--text text-capitalize"
           medium
-          outlined
+          filled
           color="success"
           v-show="showUpload"
+          :disabled="myCroppa.chosenFile != null ? false : true"
           @click="onClickImageUploadBtn"
         >Upload</v-btn>
         <v-btn
-          class="ma-1 text-capitalize"
+          class="ma-1 font-weight-bold black--text text-capitalize"
           medium
-          outlined
+          filled
           color="success"
           v-show="showSave"
           @click="save"
@@ -69,7 +79,7 @@
   </v-dialog>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   props: ["visible"],
@@ -94,8 +104,6 @@ export default {
   },
   data() {
     return {
-      imageArray: [],
-      imageDefault: true,
       showUpload: true,
       showSave: false,
       cloudString: null,
@@ -110,27 +118,37 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert",
+      setSettings: "global/setSettings"
+    }),
+
     onClickImageUploadBtn() {
       this.upload();
       this.isChosen = this.$refs.myCroppa.chosenFile;
-      console.log("text");
     },
+
     upload() {
-      console.log(this.$refs.myCroppa.chosenFile);
-      this.myCroppa.generateBlob(
-        blob => {
-          console.log("test");
-          let formData = new FormData();
-          formData.append("file", blob, this.$refs.myCroppa.chosenFile.name);
-          this.$api.social.upload.create(formData).then(
-            function(response) {
-              console.log(response);
-            }.bind(this)
-          );
-        },
-        "image/jpeg",
-        0.8
-      ); // 80% compressed jpeg file
+      if (this.myCroppa.chosenFile != null) {
+        this.loader = true;
+        this.myCroppa.generateBlob(
+          blob => {
+            let formData = new FormData();
+            formData.append("file", blob, this.$refs.myCroppa.chosenFile.name);
+            this.$api.social.upload.create(formData).then(
+              function(response) {
+                this.showUpload = false;
+                this.showSave = true;
+                this.loader = false;
+
+                this.cloudString = response.data.file.url;
+              }.bind(this)
+            );
+          },
+          "image/jpeg",
+          0.8
+        ); // 80% compressed jpeg file
+      }
     },
 
     save() {
@@ -139,27 +157,28 @@ export default {
       };
       this.$api.accounts.account.putnoid(payload).then(response => {
         if (response.success) {
-          this.showUpload = true;
-          this.showSave = false;
-          let update = this.photo;
+
+          let alertM = {
+            model: true,
+            state: true,
+            message: "Successfully update cover photo"
+          };
+          this.setAlert(alertM);
+
+          this.setSettings(response);
+          
+          this.clearInputs();
         }
       });
     },
 
     clearInputs() {
-      this.imageArray = [];
       this.showUpload = true;
       this.showSave = false;
+      this.myCroppa.chosenFile = null;
+      this.myCroppa.remove();
+      this.$emit("close");
       this.loader = false;
-    }
-  },
-  watch: {
-    imageArray() {
-      if (this.imageArray.length != 0) {
-        this.imageDefault = false;
-      } else {
-        this.imageDefault = true;
-      }
     }
   }
 };

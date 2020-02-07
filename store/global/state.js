@@ -38,6 +38,10 @@ export default () => ({
         state: "",
         body: "",
         subtext: ""
-    }
+    },
     //end global dialog alert
+
+    //Global Updated Settings 
+    settings: null
+        //end global update settings
 });
