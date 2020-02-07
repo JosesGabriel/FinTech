@@ -7,7 +7,7 @@
     flat
     max-height="245"
   >
-    <v-card-title class="body-1 font-weight-bold text-left pa-0"
+    <v-card-title class="body-2 font-weight-bold text-left pa-0"
       >PSEI</v-card-title
     >
     <span class="psei__price caption"

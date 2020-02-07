@@ -2,13 +2,6 @@
     <v-row class="ma-0 mt-1 pa-0">
       <v-col class="col-3 pa-0 ma-0">
         <v-content class="pa-0 ma-0 pt-6 px-4">
-          <v-text-field
-            label="Normal Trade"
-            class="normalTrade"
-            :dark="lightSwitch == true"
-            outlined
-            dense
-          ></v-text-field>
           <v-select
             :items="portfolio"
             v-model="portvalue"
@@ -21,6 +14,11 @@
             dense
             solo
           ></v-select>
+            <v-btn small>Normal</v-btn>
+            <v-btn small 
+                @click="quickTrade"
+                :disabled="this.portvalue == '' ? true : false"
+                >Quick Trade</v-btn>
         </v-content>
       </v-col>
     
@@ -130,12 +128,12 @@
                    Quantity
                   </v-col>
                   <v-col class="mr-12 font-weight-bold" style="text-align: right;">
-                    {{ this.quantity.toFixed(2) }}
+                    {{ this.addcomma(this.quantity) }}
                   </v-col>  
                 </v-row>
                 <v-row>
                   <v-col class="pl-12 mb-6">
-                   Total Cost
+                   Peso Value
                   </v-col>
                   <v-col class="mr-12 font-weight-bold" style="text-align: right;">
                     {{ this.totalcost }}
@@ -156,7 +154,7 @@
                         color="success"
                         class="ml-1 mb-6 text-capitalize mt-2 black--text"
                         light
-                        @click="confirmBuy"
+                        @click="confirmSell"
                         @click.stop="showConfirm = false"
                     >Confirm</v-btn>
                     </v-row>
@@ -188,6 +186,66 @@
                 </v-container>
                 </v-card>
             </v-dialog>
+
+            <v-dialog v-model="modalQuickTrade" max-width="400px">
+                <v-card :dark="lightSwitch == true">
+                <v-card-title
+                    class="text-center justify-left pa-4 subtitle-1 font-weight-bold"
+                >Quick Trade Setting</v-card-title>
+                <v-spacer></v-spacer>
+                <v-container class="px-5">
+                    <v-row class="ml-3 pb-3">
+                        Portfolio Allocations (%)
+                    </v-row>
+                    <v-row class="ml-3 pb-0 mb-0">
+                      <v-col cols="9" class="mx-0 px-0 pb-0 mb-0">
+                        <v-radio-group 
+                          :dark="lightSwitch == true"
+                          dense 
+                          v-model="setting" 
+                          class="mt-0 pt-0 px-0 mx-0"
+                          row>
+                          <v-radio :dark="lightSwitch == true" label="10%" value="10"></v-radio>
+                          <v-radio :dark="lightSwitch == true" label="30%" value="30"></v-radio>
+                          <v-radio :dark="lightSwitch == true" class="mr-0 pr-0" label="Custom" value="custom"></v-radio>                
+                        </v-radio-group>
+                      </v-col>
+                      <v-col cols="3" class="mx-0 px-0">
+                         <v-text-field     
+                            type="number"
+                            v-model="customVal"
+                            :disabled="this.setting == 'custom' ? false : true"
+                            flat
+                            class="customNum mx-0 px-0"
+                          ></v-text-field>
+                      </v-col>                      
+                    </v-row>
+                    <v-row>
+                      <v-col style="font-size: 12px;">
+                      NOTE: Quick Trade automaticaly place buy and sell orders based on best available price.
+                      </v-col>
+
+                    </v-row>
+                    <v-row no-gutters>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        class="text-capitalize mt-2"
+                        text
+                        :dark="lightSwitch == true"
+                        @click="modalQuickTrade=false"
+                      >Close</v-btn>
+                    <v-btn
+                        class="text-capitalize mt-2"
+                        :dark="lightSwitch == true"
+                        @click.stop="modalQuickTrade=false"
+                        @click="quickConfirm"
+                    >Save</v-btn>
+                    </v-row>
+                </v-container>
+                </v-card>
+            </v-dialog>
+
+
     </v-row>
 </template>
 <script>
@@ -202,11 +260,20 @@ export default {
         totalcost: 0,
         quantity: 0,
         position: 0,  
+        customVal: 0,
         avprice: 0,
         showConfirm: false,
         errorMsg: false,
         errmsgsell: '',
         errmsg: '',
+        setting: '10',
+        modalQuickTrade: false,
+        quicksetting: false,
+        unrealized: 0,
+        realized: 0,
+        capital: 0,
+        setting_val: 0,
+        equity: 0,
     }),
     computed: {
         ...mapGetters({
@@ -344,6 +411,7 @@ export default {
                     this.position = parseFloat(this.getBalance[index].position);
                     this.quantity = this.position;
                     this.avprice = parseFloat(this.getBalance[index].avprice);
+                    this.capital = parseFloat(this.getBalance[index].capital);
                 }        
             }
         },
@@ -381,7 +449,8 @@ export default {
                                                 id: result.data.logs[i].id,
                                                 balance: result.data.logs[i].balance,
                                                 position: response.data.open[index].position,
-                                                avprice: response.data.open[index].average_price
+                                                avprice: response.data.open[index].average_price,
+                                                capital: result.data.logs[i].capital
                                             };
                                             this.getBalance.push(port);
                                             this.quantity = response.data.open[index].position;
@@ -435,6 +504,13 @@ export default {
                         this.errorMsg = true;
                     });
            
+        },
+       
+        quickTrade(){           
+                this.quantity = this.position;
+                this.totalcost = this.position * parseFloat(this.stock_last);
+                this.totalcost = this.addcomma(this.totalcost);
+                this.showConfirm = true;
         }
     },
     mounted() {

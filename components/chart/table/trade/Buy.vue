@@ -14,15 +14,26 @@
             dense
             solo
           ></v-select>
-          <v-select
+          <v-btn small>Normal</v-btn>
+          <v-btn small 
+            @click="quickTrade"
+            :disabled="this.portvalue == '' ? true : false"
+            >Quick Trade</v-btn>
+          <v-icon 
+            small 
+            @click="modalQuickTrade=true" 
+            :disabled="this.portvalue != '' ? false : true"
+            class="quickSettings"
+            >mdi-settings-outline</v-icon>
+          <!--<v-select
               v-model="nmTrade"
               :items="normalTrade"
-              class="select__trade ma-0 pa-0"
+              class="select__trade mt-2 pa-0"
               append-icon="mdi-chevron-down"
               label="Select Trade"
               dense
               solo
-            ></v-select>
+            ></v-select>-->
          <v-row style="font-size: 14px;">  
             <v-col class="ml-3">
                 <span>Board lot</span>
@@ -71,7 +82,7 @@
           <v-row style="font-size: 14px;" class="mt-0 pt-0">      
             <v-col class="mt-0 pb-1 pt-0">    
                 Total Cost 
-                <span style="float:right;">{{ this.totalcost }}</span>     
+                <span style="float:right;">{{ this.addcomma(this.totalcost) }}</span>     
             </v-col>
          </v-row>
         </v-content>
@@ -174,7 +185,7 @@
                    Quantity
                   </v-col>
                   <v-col class="mr-6 font-weight-bold" style="text-align: right;">
-                    {{ this.quantity.toFixed(2) }}
+                    {{ this.addcomma(this.quantity) }}
                   </v-col>  
                 </v-row>
                 <v-row>
@@ -182,7 +193,7 @@
                    Total Cost
                   </v-col>
                   <v-col class="mr-6 font-weight-bold" style="text-align: right;">
-                    {{ this.totalcost }}
+                    {{ this.addcomma(this.totalcost) }}
                   </v-col>  
                 </v-row>
                 <v-spacer></v-spacer>
@@ -209,9 +220,7 @@
                   <v-col class="mr-6 font-weight-bold" style="text-align: right;">
                     {{ this.emot }}
                   </v-col>  
-                </v-row>
-               
-               
+                </v-row>              
                     <v-row no-gutters>
                     <v-spacer></v-spacer>
                     <v-btn
@@ -227,6 +236,7 @@
                         light
                         @click="confirmBuy"
                         @click.stop="showConfirm = false"
+                        :disabled="parseFloat(this.totalcost) > parseFloat(this.balance) ? true : false"
                     >Confirm</v-btn>
                     </v-row>
                 </v-container>
@@ -256,6 +266,64 @@
                 </v-container>
                 </v-card>
             </v-dialog>
+
+            <v-dialog v-model="modalQuickTrade" max-width="400px">
+                <v-card :dark="lightSwitch == true">
+                <v-card-title
+                    class="text-center justify-left pa-4 subtitle-1 font-weight-bold"
+                >Quick Trade Setting</v-card-title>
+                <v-spacer></v-spacer>
+                <v-container class="px-5">
+                    <v-row class="ml-3 pb-3">
+                        Portfolio Allocations (%)
+                    </v-row>
+                    <v-row class="ml-3 pb-0 mb-0">
+                      <v-col cols="9" class="mx-0 px-0 pb-0 mb-0">
+                        <v-radio-group 
+                          :dark="lightSwitch == true"
+                          dense 
+                          v-model="setting" 
+                          class="mt-0 pt-0 px-0 mx-0"
+                          row>
+                          <v-radio :dark="lightSwitch == true" label="10%" value="10"></v-radio>
+                          <v-radio :dark="lightSwitch == true" label="30%" value="30"></v-radio>
+                          <v-radio :dark="lightSwitch == true" class="mr-0 pr-0" label="Custom" value="custom"></v-radio>                
+                        </v-radio-group>
+                      </v-col>
+                      <v-col cols="3" class="mx-0 px-0">
+                         <v-text-field     
+                            type="number"
+                            v-model="customVal"
+                            :disabled="this.setting == 'custom' ? false : true"
+                            flat
+                            class="customNum mx-0 px-0"
+                          ></v-text-field>
+                      </v-col>                      
+                    </v-row>
+                    <v-row>
+                      <v-col style="font-size: 12px;">
+                      NOTE: Quick Trade automaticaly place buy and sell orders based on best available price.
+                      </v-col>
+
+                    </v-row>
+                    <v-row no-gutters>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        class="text-capitalize mt-2"
+                        text
+                        :dark="lightSwitch == true"
+                        @click="modalQuickTrade=false"
+                      >Close</v-btn>
+                    <v-btn
+                        class="text-capitalize mt-2"
+                        :dark="lightSwitch == true"
+                        @click.stop="modalQuickTrade=false"
+                        @click="quickConfirm"
+                    >Save</v-btn>
+                    </v-row>
+                </v-container>
+                </v-card>
+            </v-dialog>
     </v-row>
 </template>
 <script>
@@ -265,9 +333,14 @@ export default {
     portfolio: [],
     getBalance: [],
     balance: 0,
+    setting_val: 0,
+    customVal: 0,
     portvalue: '',
+    quicksetting: false,
     showConfirm: false,
+    modalQuickTrade: false,
     dboard: 0,
+    setting: '10',
     notes: '',
     strat: '',
     tplan: '',
@@ -275,6 +348,11 @@ export default {
     errorMsg: false,
     errmsgbuy: '',
     errmsg: '',
+    capital: 0,
+    shares: 0,
+    unrealized: 0,
+    realized: 0,
+    equity: 0,
     normalTrade: ["Normal Trade",
         "Quick Trade"],
     strategy: [
@@ -315,6 +393,7 @@ export default {
        */
         stock_last() {
             this.getBoardLot(this.stock_last);
+            this.quantity = 0;
         }
     },
     mounted() {
@@ -341,7 +420,8 @@ export default {
                     let portfolio_params = {
                     name: result.data.logs[i].name,
                     id: result.data.logs[i].id,
-                    balance: result.data.logs[i].balance
+                    balance: result.data.logs[i].balance,
+                    capital: result.data.logs[i].capital
                     };
                     this.portfolio.push(portfolio_params);
                     this.getBalance.push(portfolio_params);
@@ -385,11 +465,15 @@ export default {
      * @return  {Float}    balance
      */
     getFunds(selectObj){
+      this.quantity = 0;
         for (let index = 0; index < this.getBalance.length; index++) {
             if(selectObj == this.getBalance[index].id){
                 this.balance = parseFloat(this.getBalance[index].balance);
+                this.capital = parseFloat(this.getBalance[index].capital);
             }        
         }
+        this.getUnrealized(selectObj);
+        this.getRealized(selectObj);
     },
     /**
      * add comma function
@@ -412,7 +496,7 @@ export default {
       let pressfees = 0;
       press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.stock_last);
       pressfees = this.fees(press);    
-      this.totalcost = this.addcomma(pressfees);   
+      this.totalcost = pressfees;  
     },
     /**
      * Buy/Sell Fees
@@ -432,6 +516,34 @@ export default {
       let dsccp = buyResult * 0.0001;
       let dall = dcommission + dtax + dtransferfee + dsccp;
       return buyResult + dall;
+    },
+    getUnrealized(portID){
+        this.unrealized = 0;
+        const openparams2 = {
+          fund: portID
+        };
+        this.$api.journal.portfolio.open(openparams2).then(
+        function(result) {
+               for (let i = 0; i < result.data.open.length; i++) {
+                 this.unrealized = parseFloat(this.unrealized) + parseFloat(result.data.open[i].profit_loss);
+               }
+          }.bind(this)
+        );
+    },
+    getRealized(portID){
+        this.realized = 0;
+        const tradelogsparams = {
+          fund: portID
+        };
+        this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
+        function(result) {
+                 for (let i = 0; i < result.data.logs.length; i++) {
+                      let buyvalue = parseFloat(result.data.logs[i].amount) * parseFloat(result.data.logs[i].meta.average_price);
+                      let ploss = parseFloat(result.data.logs[i].total_value) - buyvalue;
+                      this.realized = this.realized + ploss;
+                 }  
+          }.bind(this)
+        );
     },
     /**
      * Buy Confirmation
@@ -500,6 +612,41 @@ export default {
       let minfees = this.fees(min);
       this.totalcost = this.addcomma(minfees);
     },
+    quickConfirm(){
+        this.setting_val = 0;
+        if(this.setting == 'custom'){
+          this.setting_val = parseFloat(this.customVal);
+        }else{
+          this.setting_val = parseFloat(this.setting);
+        } 
+        this.quicksetting = true;
+        this.equity =  this.unrealized + this.realized + this.capital;
+        let totalperc = (this.equity / 100) * this.setting_val;
+        this.shares = totalperc / parseFloat(this.getBoardLot(this.stock_last));
+        this.quantity = this.shares;
+        this.totalcost = this.shares * parseFloat(this.stock_last);
+        //this.totalcost = this.addcomma(this.totalcost);
+        this.showConfirm = true;
+    },
+    quickTrade(){
+        if(this.quantity == 0){
+            this.equity =  this.unrealized + this.realized + this.capital;
+            let totalperc = (this.equity / 100) * 10;
+            this.shares = totalperc / parseFloat(this.getBoardLot(this.stock_last));
+            this.quantity = this.shares;
+            this.totalcost = this.shares * parseFloat(this.stock_last);
+            //this.totalcost = this.addcomma(this.totalcost);
+            this.showConfirm = true;
+        }else{
+            this.quantity = this.shares;
+            this.totalcost = this.shares * parseFloat(this.stock_last);
+            //this.totalcost = this.addcomma(this.totalcost);
+            this.showConfirm = true;
+        }
+       console.log('Total Cost -' + parseFloat(this.totalcost) );
+       console.log('Calance -' + this.balance );
+
+    }
 }
 
     
@@ -516,6 +663,15 @@ export default {
 }
 .__tradenotes > .v-input__control > .v-input__slot {
   border-radius: unset !important;
+}
+
+.quickSettings {
+  cursor: pointer;
+}
+.customNum {
+  position: absolute;
+  width: 62px;
+  top: 100px;
 }
 
 </style>

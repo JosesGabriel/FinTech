@@ -16,7 +16,7 @@ import ContactUs from "~/components/ContactUs";
 export default {
   layout: "main",
   components: {
-   ContactUs
+    ContactUs
   },
   data() {
     return {
@@ -31,4 +31,3 @@ export default {
   }
 };
 </script>
-
