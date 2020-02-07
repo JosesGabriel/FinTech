@@ -82,7 +82,7 @@
           <v-row style="font-size: 14px;" class="mt-0 pt-0">      
             <v-col class="mt-0 pb-1 pt-0">    
                 Total Cost 
-                <span style="float:right;">{{ this.totalcost }}</span>     
+                <span style="float:right;">{{ this.addcomma(this.totalcost) }}</span>     
             </v-col>
          </v-row>
         </v-content>
@@ -193,7 +193,7 @@
                    Total Cost
                   </v-col>
                   <v-col class="mr-6 font-weight-bold" style="text-align: right;">
-                    {{ this.totalcost }}
+                    {{ this.addcomma(this.totalcost) }}
                   </v-col>  
                 </v-row>
                 <v-spacer></v-spacer>
@@ -236,7 +236,7 @@
                         light
                         @click="confirmBuy"
                         @click.stop="showConfirm = false"
-                        :disabled="this.totalcost > this.balance ? true : false"
+                        :disabled="parseFloat(this.totalcost) > parseFloat(this.balance) ? true : false"
                     >Confirm</v-btn>
                     </v-row>
                 </v-container>
@@ -496,7 +496,7 @@ export default {
       let pressfees = 0;
       press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.stock_last);
       pressfees = this.fees(press);    
-      this.totalcost = this.addcomma(pressfees);  
+      this.totalcost = pressfees;  
     },
     /**
      * Buy/Sell Fees
@@ -625,7 +625,7 @@ export default {
         this.shares = totalperc / parseFloat(this.getBoardLot(this.stock_last));
         this.quantity = this.shares;
         this.totalcost = this.shares * parseFloat(this.stock_last);
-        this.totalcost = this.addcomma(this.totalcost);
+        //this.totalcost = this.addcomma(this.totalcost);
         this.showConfirm = true;
     },
     quickTrade(){
@@ -635,15 +635,17 @@ export default {
             this.shares = totalperc / parseFloat(this.getBoardLot(this.stock_last));
             this.quantity = this.shares;
             this.totalcost = this.shares * parseFloat(this.stock_last);
-            this.totalcost = this.addcomma(this.totalcost);
+            //this.totalcost = this.addcomma(this.totalcost);
             this.showConfirm = true;
         }else{
             this.quantity = this.shares;
             this.totalcost = this.shares * parseFloat(this.stock_last);
-            this.totalcost = this.addcomma(this.totalcost);
+            //this.totalcost = this.addcomma(this.totalcost);
             this.showConfirm = true;
         }
-       
+       console.log('Total Cost -' + parseFloat(this.totalcost) );
+       console.log('Calance -' + this.balance );
+
     }
 }
 
