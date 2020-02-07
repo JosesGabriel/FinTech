@@ -7,10 +7,15 @@
       <v-col xs="12" sm="10" md="6" lg="6">
         <v-row
           no-gutters
-          class="userMessage__dropdown-header"
+          class="userMessage__dropdown-header pb-2"
           :class="lightSwitch == 0 ? 'black--text' : 'secondary--text'"
         >
           <span class="pa-4 pl-0 pb-2 body-2 font-weight-bold">Notifications</span>
+          <v-spacer></v-spacer>
+          <span
+            @click="markAllRead"
+            class="markAll_btn tertiary--text caption pa-4 pr-1 pb-2"
+          >Mark all as read</span>
         </v-row>
         <v-card
           :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
@@ -163,6 +168,17 @@ export default {
         id: this.notification.post.id
       };
       this.dataNotification.unshift(n);
+    },
+
+    markAllRead() {
+      this.dataNotification.filter(x =>
+        x.status == "unread" ? (x.status = "read") : (x.status = "read")
+      );
+
+      this.$api.social.notification.markall().then(response => {
+        if (response.success) {
+        }
+      });
     }
   }
 };
@@ -170,5 +186,8 @@ export default {
 <style scoped>
 .userMessage_container {
   overflow: hidden;
+}
+.markAll_btn {
+  cursor: pointer;
 }
 </style>

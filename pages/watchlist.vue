@@ -32,15 +32,16 @@
         </v-container>
         <v-container class="pt-0" fluid>
           <span
-            class="body-1"
-            :style="lightSwitch == 0 ? 'color: black' : 'color: white'"
+            class="body-1 font-weight-black pl-1"
+            :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
             >Watchlist</span
           >
+          <v-divider class="" :dark="lightSwitch == 0 ? false : true" />
           <v-divider class="mb-2" :dark="lightSwitch == 0 ? false : true" />
           <div v-if="loadingBar" class="text-center">
             <v-progress-circular
               :size="50"
-              color="primary"
+              color="success"
               indeterminate
             ></v-progress-circular>
           </div>
@@ -106,7 +107,8 @@ export default {
   computed: {
     ...mapGetters({
       userWatchedStocks: "watchers/getUserWatchedStocks",
-      renderChartKey: "watchers/getRenderChartKey"
+      renderChartKey: "watchers/getRenderChartKey",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {
@@ -127,8 +129,7 @@ export default {
   methods: {
     ...mapActions({
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
-      setRenderChartKey: "watchers/setRenderChartKey",
-      lightSwitch: "global/getLightSwitch"
+      setRenderChartKey: "watchers/setRenderChartKey"
     }),
     getEmitID(val) {
       this.emitID = val;

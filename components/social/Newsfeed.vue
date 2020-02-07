@@ -225,6 +225,7 @@
           width="24"
           height="24"
           color="success"
+          class="bull__btn"
           :class="
             postsObject[n - 1].my_sentiment &&
             postsObject[n - 1].my_sentiment.type == 'bull'
@@ -244,6 +245,7 @@
           width="24"
           height="24"
           color="error"
+          class="bear__btn"
           :class="
             postsObject[n - 1].my_sentiment &&
             postsObject[n - 1].my_sentiment.type == 'bear'
@@ -853,6 +855,12 @@ export default {
 </script>
 
 <style>
+.bull__btn {
+  border: 2px solid #03DAC5;
+}
+.bear__btn {
+  border: 2px solid #F44336;
+}
 .bull__btn--active {
   background-color: #03dac599;
 }

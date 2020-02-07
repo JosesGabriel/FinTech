@@ -16,7 +16,7 @@ import TermsOfUse from "~/components/TermsOfUse";
 export default {
   layout: "main",
   components: {
-   TermsOfUse
+    TermsOfUse
   },
   data() {
     return {

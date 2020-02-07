@@ -21,5 +21,8 @@ export default {
     },
     async setAlertDialog({ commit }, data) {
         await commit("SET_ALERTDIALOG", data);
+    },
+    async setSettings({ commit }, data) {
+        await commit("SET_SETTINGS", data);
     }
 };

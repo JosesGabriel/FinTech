@@ -21,5 +21,8 @@ export default {
     },
     SET_ALERTDIALOG(state, data) {
         state.alertDialog = data;
+    },
+    SET_SETTINGS(state, data) {
+        state.settings = data;
     }
 };

@@ -25,7 +25,7 @@
     ></v-text-field>
     <v-list-item-content v-else class="pa-0 ma-0">
       <v-container class="pa-0 body-2">
-        <strong class="text--darken-2 caption">{{ comment.user.name }}</strong>
+        <span class="text--darken-2 caption">{{ comment.user.name }}</span>
 
         <span v-if="comment.user.uuid == $auth.user.data.user.uuid">
           <v-btn
@@ -46,11 +46,27 @@
         <div class="caption py-3">{{ comment.content }}</div>
       </v-container>
       <v-container class="pa-0 ma-0">
-        <v-btn icon outlined fab width="21" height="21" color="secondary">
+        <v-btn
+          class="bull__btn--comment"
+          icon
+          outlined
+          fab
+          width="21"
+          height="21"
+          color="secondary"
+        >
           <img src="/icon/bullish_secondary.svg" height="13" width="10" />
         </v-btn>
         <span class="px-1 caption">0</span>
-        <v-btn icon outlined fab width="21" height="21" color="secondary">
+        <v-btn
+          class="bear__btn--comment"
+          icon
+          outlined
+          fab
+          width="21"
+          height="21"
+          color="secondary"
+        >
           <img src="/icon/bearish_secondary.svg" height="13" width="10" />
         </v-btn>
         <span class="px-1 caption">0</span>
@@ -272,3 +288,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.bull__btn--comment {
+  border: 2px solid #546e7a;
+}
+.bear__btn--comment {
+  border: 2px solid #546e7a;
+}
+</style>

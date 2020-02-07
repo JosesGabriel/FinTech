@@ -5,7 +5,7 @@
         <v-btn icon x-large>
           <v-icon
             size="50"
-            :color="!hover ? '' : 'primary'"
+            :color="!hover ? '' : 'success'"
             @click="getUrl('facebook')"
             >mdi-facebook</v-icon
           >

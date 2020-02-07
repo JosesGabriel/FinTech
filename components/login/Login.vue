@@ -35,7 +35,9 @@
           </v-col>
         </v-row>
         <small
-          ><a class="success--text" @click="$emit('stepper', 5)"
+          ><a
+            class="secondarytext--text font-weight-bold"
+            @click="$emit('stepper', 5)"
             >Forgot your password?</a
           ></small
         >
@@ -67,7 +69,9 @@
       </v-hover>
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
-        <a class="text-center success--text" @click="$emit('stepper', 3)"
+        <a
+          class="text-center secondarytext--text font-weight-bold"
+          @click="$emit('stepper', 3)"
           >Sign Up</a
         ></span
       >
