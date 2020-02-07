@@ -192,7 +192,9 @@ export default {
               darkcard: "#0c1a2b",
               lightcard: "#f2f2f2",
               darkchart: "#00121e",
-              lightchart: "#f2f2f2"
+              lightchart: "#f2f2f2",
+              successhover: "#4ee5d6",
+              secondarytext: "#455A64"
             },
             dark: {
               anchor: colors.blue

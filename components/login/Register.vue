@@ -77,9 +77,15 @@
 
             <span class="mt-3 pl-4 caption"
               >By signing up you agree to
-              <a class="secondarytext--text font-weight-bold">Lyduz Terms</a>
+              <a
+                href="/terms-of-use"
+                class="text__link secondarytext--text font-weight-bold"
+                >Lyduz Terms</a
+              >
               and
-              <a class="secondarytext--text font-weight-bold"
+              <a
+                href="/privacy-policy"
+                class="text__link secondarytext--text font-weight-bold"
                 >Policies.</a
               ></span
             >
@@ -255,3 +261,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.text__link {
+  text-decoration: none;
+}
+</style>
