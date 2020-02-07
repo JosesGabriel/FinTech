@@ -353,6 +353,7 @@ export default {
     unrealized: 0,
     realized: 0,
     equity: 0,
+    stobuy: 0,
     normalTrade: ["Normal Trade",
         "Quick Trade"],
     strategy: [
@@ -494,9 +495,9 @@ export default {
     keypress() {
       let press = 0;
       let pressfees = 0;
-      press = parseFloat(this.quantity).toFixed(2) * parseFloat(this.stock_last);
+      press = parseFloat(this.quantity) * parseFloat(this.stock_last);
       pressfees = this.fees(press);    
-      this.totalcost = pressfees;  
+      this.totalcost = pressfees; 
     },
     /**
      * Buy/Sell Fees
@@ -593,9 +594,9 @@ export default {
     addButton() {
       this.quantity = parseInt(this.quantity) + parseInt(this.dboard);
       let add =
-        parseFloat(this.quantity).toFixed(2) * parseFloat(this.stock_last);
+        parseFloat(this.quantity) * parseFloat(this.stock_last);
       let addfees = this.fees(add);
-      this.totalcost = this.addcomma(addfees);
+      this.totalcost = addfees;
     },
     /**
      * Get total cost if Up down Button is pressed
@@ -608,9 +609,9 @@ export default {
           ? 0
           : (this.quantity = parseInt(this.quantity) - parseInt(this.dboard));
       let min =
-        parseFloat(this.quantity).toFixed(2) * parseFloat(this.stock_last);
+        parseFloat(this.quantity) * parseFloat(this.stock_last);
       let minfees = this.fees(min);
-      this.totalcost = this.addcomma(minfees);
+      this.totalcost = minfees;
     },
     quickConfirm(){
         this.setting_val = 0;
@@ -622,25 +623,36 @@ export default {
         this.quicksetting = true;
         this.equity =  this.unrealized + this.realized + this.capital;
         let totalperc = (this.equity / 100) * this.setting_val;
-        this.shares = totalperc / parseFloat(this.getBoardLot(this.stock_last));
-        this.quantity = this.shares;
-        this.totalcost = this.shares * parseFloat(this.stock_last);
-        //this.totalcost = this.addcomma(this.totalcost);
+
+        let bdlot = this.getBoardLot(this.stock_last);
+
+        this.shares = totalperc / parseFloat(this.stock_last);   
+        let sbuy =  this.shares % bdlot;
+        this.stobuy =  parseFloat(this.shares) - parseFloat(sbuy);
+
+        this.quantity = this.stobuy;
+        this.totalcost = this.stobuy * parseFloat(this.stock_last);
+        this.totalcost = this.fees(this.totalcost);
         this.showConfirm = true;
     },
     quickTrade(){
         if(this.quantity == 0){
             this.equity =  this.unrealized + this.realized + this.capital;
             let totalperc = (this.equity / 100) * 10;
-            this.shares = totalperc / parseFloat(this.getBoardLot(this.stock_last));
-            this.quantity = this.shares;
-            this.totalcost = this.shares * parseFloat(this.stock_last);
-            //this.totalcost = this.addcomma(this.totalcost);
+            let bdlot = this.getBoardLot(this.stock_last);
+
+            this.shares = totalperc / parseFloat(this.stock_last);   
+            let sbuy =  this.shares % bdlot;
+            this.stobuy =  parseFloat(this.shares) - parseFloat(sbuy);
+
+            this.quantity = this.stobuy;
+            this.totalcost = this.stobuy * parseFloat(this.stock_last);
+            this.totalcost = this.fees(this.totalcost);
             this.showConfirm = true;
         }else{
-            this.quantity = this.shares;
-            this.totalcost = this.shares * parseFloat(this.stock_last);
-            //this.totalcost = this.addcomma(this.totalcost);
+            this.quantity = this.stobuy;
+            this.totalcost =this.stobuy * parseFloat(this.stock_last);
+            this.totalcost = this.fees(this.totalcost);
             this.showConfirm = true;
         }
        console.log('Total Cost -' + parseFloat(this.totalcost) );

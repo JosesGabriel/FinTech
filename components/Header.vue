@@ -22,7 +22,7 @@
 
     <v-toolbar-items class="mt-3" dark>
       <!--<div class="searchBar__container hidden-md-only">-->
-      <div class="searchBar__container" v-show="$auth.loggedIn ? true : false ">
+     <!-- <div class="searchBar__container" v-show="$auth.loggedIn ? true : false ">
         <v-text-field
           label="Search"
           class="header__searchbar ml-3 mt-1 headline"
@@ -33,7 +33,7 @@
           dense
           :background-color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
         ></v-text-field>
-      </div>
+      </div> -->
 
       <div v-show="$auth.loggedIn ? true : false ">
         <v-icon
@@ -56,7 +56,64 @@
         <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
           <v-list class="py-0 menuIcon__dropdown-body scrollbar">
 
-            <v-list-item
+                                <v-list-item
+                  class="listItem__buySellCalc"
+                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+                  @click.stop="buySellDialog = true"
+                >
+                  <router-link
+                    to
+                    class="no-transform"
+                    :style="{ color: toggleFontColor }"
+                  >
+                    <v-list-item-title class="listItem__buySellCalc"
+                      >Buy/Sell Calculator</v-list-item-title
+                    >
+                  </router-link>
+                  <v-dialog v-model="buySellDialog" max-width="500">
+                    <BuySellCalculator />
+                  </v-dialog>
+                </v-list-item>
+
+                <v-list-item
+                  class="listItem__varCalc"
+                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+                  @click.stop="varDialog = true"
+                >
+                  <router-link
+                    to
+                    class="no-transform"
+                    :style="{ color: toggleFontColor }"
+                  >
+                    <v-list-item-title class="listItem__varCalc"
+                      >VAR Calculator</v-list-item-title
+                    >
+                  </router-link>
+                  <v-dialog v-model="varDialog" max-width="320">
+                    <VARCalculator :data="varDialog" />
+                  </v-dialog>
+                </v-list-item>
+
+                <v-list-item
+                  class="listItem__avCalc"
+                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+                  @click.stop="averagePriceDialog = true"
+                >
+                  <router-link
+                    to
+                    class="no-transform"
+                    :style="{ color: toggleFontColor }"
+                  >
+                    <v-list-item-title class="listItem__avCalc"
+                      >Average Price Calculator</v-list-item-title
+                    >
+                  </router-link>
+                  <v-dialog v-model="averagePriceDialog" max-width="350">
+                    <AveragePriceCalculator />
+                  </v-dialog>
+                </v-list-item>
+
+            <!--<v-list-item
                 class="listItem__marketSentiments"
                 :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
               >
@@ -85,7 +142,7 @@
                     >Power Tools</v-list-item-title
                   >
                 </router-link>
-              </v-list-item>
+              </v-list-item> -->
 
           </v-list>
 
@@ -99,62 +156,62 @@
         @mouseover="displayPowerTools = true"
         @mouseleave="displayPowerTools = false"
       >
-        <v-list-item
-          class="listItem__buySellCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-          @click.stop="buySellDialog = true"
-        >
-          <router-link
-            to
-            class="no-transform"
-            :style="{ color: toggleFontColor }"
-          >
-            <v-list-item-title class="listItem__buySellCalc"
-              >Buy/Sell Calculator</v-list-item-title
-            >
-          </router-link>
-          <v-dialog v-model="buySellDialog" max-width="500">
-            <BuySellCalculator />
-          </v-dialog>
-        </v-list-item>
+                <v-list-item
+                  class="listItem__buySellCalc"
+                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+                  @click.stop="buySellDialog = true"
+                >
+                  <router-link
+                    to
+                    class="no-transform"
+                    :style="{ color: toggleFontColor }"
+                  >
+                    <v-list-item-title class="listItem__buySellCalc"
+                      >Buy/Sell Calculator</v-list-item-title
+                    >
+                  </router-link>
+                  <v-dialog v-model="buySellDialog" max-width="500">
+                    <BuySellCalculator />
+                  </v-dialog>
+                </v-list-item>
 
-        <v-list-item
-          class="listItem__varCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-          @click.stop="varDialog = true"
-        >
-          <router-link
-            to
-            class="no-transform"
-            :style="{ color: toggleFontColor }"
-          >
-            <v-list-item-title class="listItem__varCalc"
-              >VAR Calculator</v-list-item-title
-            >
-          </router-link>
-          <v-dialog v-model="varDialog" max-width="320">
-            <VARCalculator :data="varDialog" />
-          </v-dialog>
-        </v-list-item>
+                <v-list-item
+                  class="listItem__varCalc"
+                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+                  @click.stop="varDialog = true"
+                >
+                  <router-link
+                    to
+                    class="no-transform"
+                    :style="{ color: toggleFontColor }"
+                  >
+                    <v-list-item-title class="listItem__varCalc"
+                      >VAR Calculator</v-list-item-title
+                    >
+                  </router-link>
+                  <v-dialog v-model="varDialog" max-width="320">
+                    <VARCalculator :data="varDialog" />
+                  </v-dialog>
+                </v-list-item>
 
-        <v-list-item
-          class="listItem__avCalc"
-          :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-          @click.stop="averagePriceDialog = true"
-        >
-          <router-link
-            to
-            class="no-transform"
-            :style="{ color: toggleFontColor }"
-          >
-            <v-list-item-title class="listItem__avCalc"
-              >Average Price Calculator</v-list-item-title
-            >
-          </router-link>
-          <v-dialog v-model="averagePriceDialog" max-width="350">
-            <AveragePriceCalculator />
-          </v-dialog>
-        </v-list-item>
+                <v-list-item
+                  class="listItem__avCalc"
+                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
+                  @click.stop="averagePriceDialog = true"
+                >
+                  <router-link
+                    to
+                    class="no-transform"
+                    :style="{ color: toggleFontColor }"
+                  >
+                    <v-list-item-title class="listItem__avCalc"
+                      >Average Price Calculator</v-list-item-title
+                    >
+                  </router-link>
+                  <v-dialog v-model="averagePriceDialog" max-width="350">
+                    <AveragePriceCalculator />
+                  </v-dialog>
+                </v-list-item>
       </v-card>
 
       <a class="social__router" v-show="$auth.loggedIn ? true : false ">
@@ -162,6 +219,7 @@
           ref="accountBtn"
           class="header__button"
           text
+          @click.stop="hideDropdown"
           @click="showNotification = !showNotification"
         >
           <v-badge :value="showBadge" color="success" small dot
@@ -182,6 +240,7 @@
         <v-btn
           ref="accountBtn"
           class="header__button"
+          @click.stop="toggleDropdown"
           text
           @click="
             $auth.loggedIn
@@ -308,6 +367,16 @@ export default {
     allNotificationEventsList: AllNotificationEventsList,
     toggleMenu() {
       if (this.display ? (this.display = false) : (this.display = true));
+      this.showDropdown = false;
+      this.showNotification = false;
+    },
+    toggleDropdown() {
+      this.display = false;
+      this.showNotification = false;
+    },
+    hideDropdown(){
+      this.display = false;
+      this.showDropdown = false;
     },
     close(e) {
       if (!this.$el.contains(e.target)) {
