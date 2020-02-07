@@ -48,6 +48,11 @@
       <v-container class="pa-0 ma-0">
         <v-btn
           class="bull__btn--comment"
+          :class="
+            comment.my_sentiment && comment.my_sentiment.type == 'bull'
+              ? 'sentiment__btn--active'
+              : ''
+          "
           icon
           outlined
           fab
@@ -61,6 +66,11 @@
         <span class="px-1 caption">{{ comment.bulls_count }}</span>
         <v-btn
           class="bear__btn--comment"
+          :class="
+            comment.my_sentiment && comment.my_sentiment.type == 'bear'
+              ? 'sentiment__btn--active'
+              : ''
+          "
           icon
           outlined
           fab
@@ -410,5 +420,8 @@ export default {
 }
 .bear__btn--comment {
   border: 2px solid #546e7a;
+}
+.sentiment__btn--active {
+  background-color: #9ecae0;
 }
 </style>

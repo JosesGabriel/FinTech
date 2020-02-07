@@ -65,7 +65,7 @@ export default $axios => ({
   },
 
   unbearishComment(params) {
-    return $axios.$post(
+    return $axios.$delete(
       `${baseURL}/posts/` +
         params.postID +
         `/comments/` +
@@ -74,7 +74,7 @@ export default $axios => ({
     );
   },
   unbullishComment(params) {
-    return $axios.$post(
+    return $axios.$delete(
       `${baseURL}/posts/` +
         params.postID +
         `/comments/` +
