@@ -32,7 +32,7 @@
         </v-container>
         <v-container class="pt-0" fluid>
           <span
-            class="body-1 font-weight-black pl-1"
+            class="body-2 font-weight-black pl-1"
             :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
             >Watchlist</span
           >

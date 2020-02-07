@@ -300,14 +300,14 @@ export default {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#00FFC3"]
+                colors: ["#03DAC5"]
               }
             };
           } else if (this.stockCurrentChange < 0) {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#f44336"]
+                colors: ["#F44336"]
               }
             };
           } else {
@@ -344,7 +344,7 @@ export default {
   background-color: #03dac5;
 }
 .watchlistCard__bar--red {
-  background-color: #f44336;
+  background-color: #03dac5;
 }
 .watchlistCard__text--gray {
   color: gray;

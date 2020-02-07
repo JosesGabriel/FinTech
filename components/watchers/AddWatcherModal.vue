@@ -11,7 +11,7 @@
           color="success"
           dark
           small
-          class="text-capitalize mr-2 black--text font-weight-black"
+          class="text-capitalize mr-2 black--text font-weight-medium"
           style="border-width: 2px"
           height="23"
           v-on="on"
