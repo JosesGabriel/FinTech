@@ -84,6 +84,7 @@ export default {
     "@nuxtjs/axios",
     "@nuxtjs/dotenv",
     "@nuxtjs/auth",
+    "@nuxtjs/google-adsense",
     "@nuxtjs/google-gtag"
   ],
   auth: {
