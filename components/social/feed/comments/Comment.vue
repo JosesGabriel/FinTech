@@ -48,32 +48,46 @@
       <v-container class="pa-0 ma-0">
         <v-btn
           class="bull__btn--comment"
+          :class="
+            comment.my_sentiment && comment.my_sentiment.type == 'bull'
+              ? 'sentiment__btn--active'
+              : ''
+          "
           icon
           outlined
           fab
           width="21"
           height="21"
           color="secondary"
+          @click="postReact(comment.id, 'bull')"
         >
           <img src="/icon/bullish_secondary.svg" height="13" width="10" />
         </v-btn>
-        <span class="px-1 caption">0</span>
+        <span class="px-1 caption">{{ comment.bulls_count }}</span>
         <v-btn
           class="bear__btn--comment"
+          :class="
+            comment.my_sentiment && comment.my_sentiment.type == 'bear'
+              ? 'sentiment__btn--active'
+              : ''
+          "
           icon
           outlined
           fab
           width="21"
           height="21"
           color="secondary"
+          :disabled="reactButtons"
+          @click="postReact(comment.id, 'bear')"
         >
           <img src="/icon/bearish_secondary.svg" height="13" width="10" />
         </v-btn>
-        <span class="px-1 caption">0</span>
+        <span class="px-1 caption">{{ comment.bears_count }}</span>
         <v-btn
           icon
           small
           depressed
+          :disabled="reactButtons"
           @click="
             (replyCommentMode = !replyCommentMode),
               (currentCommentIndex = postindex)
@@ -168,7 +182,8 @@ export default {
       currentCommentIndex: "",
       commentValue: "",
       commentSettingsToggle: false,
-      editModeToggle: false
+      editModeToggle: false,
+      reactButtons: false
     };
   },
   computed: {
@@ -185,6 +200,116 @@ export default {
     }),
     localFormat: LocalFormat,
 
+    /**
+     * Fires when user clicks either Bull or Bear button.
+     * Executes requests
+     *
+     * @param   {string}  type
+     * @param   {integer}  index
+     *
+     * @return
+     */
+    postReact(comment_id, type) {
+      this.reactButtons = true;
+      const params = {
+        postID: this.postid,
+        commentID: comment_id
+      };
+      if (
+        type == "bull" &&
+        this.comment.my_sentiment &&
+        this.comment.my_sentiment.type == "bull"
+      ) {
+        this.$api.social.posts
+          .unbullishComment(params)
+          .then(response => {
+            if (response.success) {
+              this.comment.bulls_count--;
+              this.comment.my_sentiment = null;
+              this.reactButtons = false;
+            } else {
+              this.triggerAlert(false, response.message);
+              this.reactButtons = false;
+            }
+          })
+          .catch(e => {
+            this.reactButtons = false;
+            this.triggerAlert(false, e.message);
+          });
+      } else if (type == "bull") {
+        this.$api.social.posts
+          .bullishComment(params)
+          .then(response => {
+            if (response.success) {
+              this.comment.bulls_count += 1;
+              if (
+                this.comment.my_sentiment &&
+                this.comment.my_sentiment.type == "bear"
+              ) {
+                this.comment.bears_count--;
+              }
+
+              this.comment.my_sentiment = {
+                type: "bull"
+              };
+              this.reactButtons = false;
+            } else {
+              this.triggerAlert(false, response.message);
+              this.reactButtons = false;
+            }
+          })
+          .catch(e => {
+            this.reactButtons = false;
+            this.triggerAlert(false, e.message);
+          });
+      }
+
+      if (
+        type == "bear" &&
+        this.comment.my_sentiment &&
+        this.comment.my_sentiment.type == "bear"
+      ) {
+        this.$api.social.posts
+          .unbearishComment(params)
+          .then(response => {
+            if (response.success) {
+              this.comment.bears_count--;
+              this.comment.my_sentiment = null;
+              this.reactButtons = false;
+            } else {
+              this.triggerAlert(false, response.message);
+            }
+          })
+          .catch(e => {
+            this.reactButtons = false;
+            this.triggerAlert(false, e.message);
+          });
+      } else if (type == "bear") {
+        this.$api.social.posts
+          .bearishComment(params)
+          .then(response => {
+            if (response.success) {
+              this.comment.bears_count += 1;
+              if (
+                this.comment.my_sentiment &&
+                this.comment.my_sentiment.type == "bull"
+              ) {
+                this.comment.bulls_count--;
+              }
+              this.comment.my_sentiment = {
+                type: "bear"
+              };
+              this.reactButtons = false;
+            } else {
+              this.triggerAlert(false, response.message);
+            }
+          })
+          .catch(e => {
+            this.reactButtons = false;
+            this.triggerAlert(false, e.message);
+          });
+      }
+    },
     editComment(comment_id, content) {
       this.commentSettingsToggle = false;
       const payload = {
@@ -295,5 +420,8 @@ export default {
 }
 .bear__btn--comment {
   border: 2px solid #546e7a;
+}
+.sentiment__btn--active {
+  background-color: #9ecae0;
 }
 </style>
