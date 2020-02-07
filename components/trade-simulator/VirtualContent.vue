@@ -323,7 +323,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
+      setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
     }),
     /**
      * Get Data in Live Portfolio
@@ -474,7 +474,7 @@ export default {
            yequity = parseFloat(this.daychangetlogs) + parseFloat(yesterdaysProfit) + parseFloat(this.port_capital);
            tequity = ptotal + parseFloat(this.port_capital);
            this.change = parseFloat(tequity) - parseFloat(yequity);
-    
+
            let dperf = parseFloat(this.port_capital) + parseFloat(yesterdaysProfit); 
            this.changep = (this.change / yequity) * 100;
     },
