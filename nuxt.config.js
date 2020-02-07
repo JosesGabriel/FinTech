@@ -131,7 +131,7 @@ export default {
         domains: ["lyduz.com"]
       }
     },
-    debug: true, // enable to track in dev mode
+    debug: false, // enable to track in dev mode
     disableAutoPageTrack: false, // disable if you don't want to track each page route with router.afterEach(...).
     additionalAccounts: [
       // {
