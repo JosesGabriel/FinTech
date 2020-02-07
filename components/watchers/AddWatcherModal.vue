@@ -11,7 +11,7 @@
           color="success"
           dark
           small
-          class="text-capitalize mr-2 black--text font-weight-black"
+          class="text-capitalize mr-2 black--text font-weight-medium"
           style="border-width: 2px"
           height="23"
           v-on="on"
@@ -83,7 +83,7 @@
             >Close</v-btn
           >
           <v-btn
-            class="no-transform px-6"
+            class="no-transform px-6 black--text"
             color="success"
             light
             depressed
@@ -208,6 +208,7 @@ export default {
      * @return
      */
     addWatch() {
+      this.dialog = false;
       this.watchCardModalLoading = "success";
       let stockExists = false;
       for (let i = 0; i < this.userWatchedStocks.length; i++) {
@@ -239,7 +240,6 @@ export default {
                 message: response.message
               };
               this.setAlert(alert);
-              this.dialog = false;
               //This line sets vuex renderchartkey. Watchlist.vue watches this value, if it detects a change, chart is re-rendered
               this.keyCounter = this.renderChartKey;
               this.keyCounter++;

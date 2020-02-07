@@ -24,7 +24,13 @@
           class="body-2 pr-12"
         >
           <!-- Start Content -->
-          <h4 class="mt-4">
+          <h4
+            class="mt-4"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Our Aim
           </h4>
           <p class="mt-10">
@@ -41,7 +47,13 @@
             showed its real power when its website equivalent came into form.
           </p>
 
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             We are getting out of the box.
           </h4>
           <p class="mt-10">
@@ -57,7 +69,13 @@
             done something right.
           </p>
 
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Our vision has finally zoomed out.
           </h4>
           <p class="mt-10">
@@ -72,7 +90,13 @@
             privilege. Something we will forever hold in high regard. We have
             done something right.
           </p>
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             This is merely our humble beginning.
           </h4>
           <p class="mt-10">
@@ -91,7 +115,13 @@
           </p>
           <p class="mt-10 mb-10">
             The road ahead is long, we could use some company.
-            <a href="/login" class="contact__link font-weight-bold">Join us!</a>
+            <router-link
+              tag="span"
+              class="contact__links font-weight-bold"
+              to="/about-us"
+            >
+              Join us!
+            </router-link>
           </p>
           <!-- End Content -->
         </v-content>
@@ -108,12 +138,26 @@ import Banner from "~/components/static/Banner";
 export default {
   auth: false,
   layout: "static",
+  head() {
+    return {
+      title: "About Us",
+      meta: [
+        {
+          hid: "about_us"
+        }
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
+    };
+  },
   components: {
     Banner
   },
   data() {
     return {
-      imageurl: "about_us.svg"
+      imageurl: "about_us.svg",
+      favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
+        Math.random() * 999
+      )}`
     };
   },
   computed: {
@@ -134,8 +178,10 @@ export default {
 .dark_mode {
   color: #eeeeee !important;
 }
-.contact__link {
-  text-decoration: none;
-  color: inherit;
+.contact__links {
+  cursor: pointer;
+}
+.contact__links:hover {
+  color: #03dac5 !important;
 }
 </style>

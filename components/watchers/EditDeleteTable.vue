@@ -14,7 +14,7 @@
               :loading="watchCardModalLoading"
             >
               <v-card-title>
-                <span class="body-1">Edit Watched Stock</span>
+                <span class="body-1 font-weight-black">Edit Watched Stock</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -80,41 +80,38 @@
         <v-btn class="no-transform" small text @click="editItem(item)"
           >Edit</v-btn
         >
-        <v-btn
-          class="no-transform"
-          small
-          text
-          @click.stopz="deleteDialog = true"
+        <v-btn class="no-transform" small text @click.stop="deleteDialog = true"
           >Delete</v-btn
         >
-        <v-dialog v-model="deleteDialog" width="500">
-          <v-card>
-            <v-card-title class="headline lighten-2" primary-title>
-              Delete Confirmation
-            </v-card-title>
-
-            <v-divider></v-divider>
-            <v-card-text>
-              Are you sure you want to delete this watched stock?
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn class="no-transform" text @click="deleteDialog = false">
-                Cancel
-              </v-btn>
-              <v-btn
-                class="black--text no-transform"
-                color="success"
-                @click="deleteItem(item)"
-              >
-                Delete
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </template>
     </v-data-table>
+
+    <v-dialog v-model="deleteDialog" width="500">
+      <v-card :dark="lightSwitch == 0 ? false : true">
+        <v-card-title class="body-2 font-weight-black" primary-title>
+          Delete Confirmation
+        </v-card-title>
+
+        <v-divider class="pb-2"></v-divider>
+        <v-card-text>
+          Are you sure you want to delete this watched stock?
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn class="no-transform px-5" text @click="deleteDialog = false">
+            Cancel
+          </v-btn>
+          <v-btn
+            class="black--text no-transform px-5"
+            color="success"
+            @click="deleteItem(item)"
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -129,24 +126,28 @@ export default {
       {
         text: "Stock",
         class: "body-2",
+        align: "center",
         sortable: false,
         value: "stock_id"
       },
       {
         text: "Entry Price",
         class: "body-2",
+        align: "right",
         value: "entry_price",
         sortable: false
       },
       {
         text: "Take Profit",
         class: "body-2",
+        align: "right",
         value: "take_profit",
         sortable: false
       },
       {
         text: "Stop Loss",
         class: "body-2",
+        align: "right",
         value: "stop_loss",
         sortable: false
       },
@@ -350,10 +351,7 @@ export default {
 header {
   height: 0px !important; /* if present, naay empty header element na 64px */
 }
-</style>
-
-<style scoped>
-th {
-  color: gray;
+.v-data-footer__select {
+  display: none;
 }
 </style>

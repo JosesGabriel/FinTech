@@ -43,7 +43,7 @@
               </v-list-item-title>
               <v-list-item-subtitle class="overline no-transform">
                 {{ localFormat(postsObject[n - 1].created_at, "fn") }}
-                <v-icon class="body-2 mt-0">mdi-earth</v-icon>
+                <!-- <v-icon class="body-2 mt-0">mdi-earth</v-icon> -->
                 <span
                   v-if="
                     postsObject[n - 1].tagged_stocks &&

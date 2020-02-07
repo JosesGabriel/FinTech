@@ -35,8 +35,10 @@
                 >
               </v-list-item-content>
             </v-list-item>
-            <v-divider></v-divider>
-            <v-divider class="mb-1"></v-divider>
+            <div v-if="!data">
+              <v-divider></v-divider>
+              <v-divider class="mb-1"></v-divider>
+            </div>
           </router-link>
           <router-link to="/" class="navbar__links">
             <v-list-item
@@ -190,9 +192,7 @@ export default {
 </script>
 <style scoped>
 .navbar__card {
-  position: sticky;
-  top: 65px;
-  height: 300px;
+  position: relative;
 }
 .navbar__links {
   color: white;
