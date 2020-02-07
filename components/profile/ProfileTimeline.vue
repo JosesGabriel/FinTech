@@ -102,13 +102,13 @@ export default {
     };
   },
   methods: {
-    toggle: function() {
+    toggle() {
       this.isOpen = !this.isOpen;
     },
-    authorNewPost: function(value) {
+    authorNewPost(value) {
       this.newPost = value;
     }
-  }
+  },
 };
 </script>
 <style>

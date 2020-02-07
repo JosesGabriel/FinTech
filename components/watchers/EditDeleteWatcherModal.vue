@@ -11,7 +11,7 @@
           color="success"
           dark
           small
-          class="text-capitalize mr-2 black--text font-weight-black"
+          class="text-capitalize mr-2 black--text font-weight-medium"
           style="border-width: 2px"
           height="23"
           v-on="on"
@@ -20,7 +20,7 @@
       </template>
       <v-card :dark="lightSwitch == 0 ? false : true">
         <v-card-title>
-          <span class="body-1 font-weight-medium"
+          <span class="body-1 font-weight-black"
             >Edit/Delete Watched Stock</span
           >
         </v-card-title>

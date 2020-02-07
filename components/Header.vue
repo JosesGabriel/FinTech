@@ -117,26 +117,26 @@
                 class="listItem__marketSentiments"
                 :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
               >
-                <router-link
-                  to
-                  class="no-transform"
-                  :style="{ color: toggleFontColor }"
+                <v-list-item-title class="listItem__marketSentiments"
+                  >Market Sentiments</v-list-item-title
                 >
-                  <v-list-item-title class="listItem__marketSentiments"
-                    >Market Sentiments</v-list-item-title
-                  >
-                </router-link>
-              </v-list-item>
-              <v-list-item
-                class="listItem__powerTools"
-                :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-                @click="displayPowerTools = true"
-                @mouseleave="displayPowerTools = false"
+              </router-link>
+            </v-list-item>
+            <v-list-item
+              class="listItem__powerTools"
+              :class="
+                this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'
+              "
+              @click="displayPowerTools = true"
+              @mouseleave="displayPowerTools = false"
+            >
+              <router-link
+                to
+                class="no-transform"
+                :style="{ color: toggleFontColor }"
               >
-                <router-link
-                  to
-                  class="no-transform"
-                  :style="{ color: toggleFontColor }"
+                <v-list-item-title class="listItem__powerTools"
+                  >Power Tools</v-list-item-title
                 >
                   <v-list-item-title class="listItem__powerTools"
                     >Power Tools</v-list-item-title
@@ -145,7 +145,6 @@
               </v-list-item> -->
 
           </v-list>
-
         </v-container>
       </v-card>
       <v-card
@@ -318,7 +317,7 @@ export default {
   },
   watch: {
     ticks() {
-      this.initSSE();
+      //this.initSSE();
     },
     notification() {
       this.newNotication();
@@ -606,13 +605,11 @@ export default {
 }
 .listItem__buySellCalc,
 .listItem__varCalc,
-.listItem__avCalc ,
+.listItem__avCalc,
 .listItem__marketSentiments,
-.listItem__powerTools{
+.listItem__powerTools {
   font-size: 14px;
 }
-
-
 
 .darkModeHover:hover {
   background-color: #142530;

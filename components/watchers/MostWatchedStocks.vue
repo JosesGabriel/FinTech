@@ -13,7 +13,7 @@
     <div
       v-for="n in mWatchedStocksObject.length"
       :key="n"
-      class="d-flex justify-space-between pa-0 overline no-transform mt-1 mb-4"
+      class="d-flex justify-space-between pa-0 overline no-transform mt-1 mb-2"
     >
       <div>
         <span class="caption font-weight-bold">{{
@@ -32,7 +32,7 @@
         >
         <br />
         <v-btn
-          v-if="!mWatchedStocksObject[n - 1].user_follows"
+          :class="!mWatchedStocksObject[n - 1].user_follows ? '' : 'v-hidden'"
           x-small
           rounded
           color="success"
@@ -97,9 +97,12 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width: 205px;
+  width: 160px;
 }
 .addToWatchlist__btn {
   white-space: unset;
+}
+.v-hidden {
+  visibility: hidden;
 }
 </style>

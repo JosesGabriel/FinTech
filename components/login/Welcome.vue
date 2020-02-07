@@ -16,7 +16,8 @@
           </v-col>
         </v-row>
         <div class="body-2 text-center login__cardtext">
-          What's a humble brag between peers? <br />Let them know you're in
+          You are one of the lucky few who earliest found us. <br />Let your
+          friends know you are inside.
         </div>
         <div class="body-2 text-center">
           <v-hover v-slot:default="{ hover }">

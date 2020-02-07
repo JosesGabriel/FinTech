@@ -54,7 +54,6 @@ import LoginRegister from "~/components/LoginRegister";
 export default {
   head() {
     return {
-      title: "Lyduz",
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
