@@ -329,10 +329,10 @@ export default {
 <style>
 .watchCard--light {
   background-color: #f2f2f2 !important;
-  border: 1px solid #d3d4d5 !important;
 }
 .watchCard {
   padding: 0 10px;
+  border: 1px solid #d3d4d5 !important;
 }
 .watchlistCard__stockDescription {
   text-overflow: ellipsis;
