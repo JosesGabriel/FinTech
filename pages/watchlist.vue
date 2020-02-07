@@ -37,7 +37,7 @@
             >Watchlist</span
           >
           <v-divider class="" :dark="lightSwitch == 0 ? false : true" />
-          <v-divider class="mb-2" :dark="lightSwitch == 0 ? false : true" />
+          <v-divider class="mb-4" :dark="lightSwitch == 0 ? false : true" />
           <div v-if="loadingBar" class="text-center">
             <v-progress-circular
               :size="50"
@@ -45,7 +45,7 @@
               indeterminate
             ></v-progress-circular>
           </div>
-          <div class="mb-2 d-flex justify-end">
+          <div class="mb-4 d-flex justify-end">
             <div class="d-flex">
               <AddWatcherModal
                 v-if="!loadingBar"

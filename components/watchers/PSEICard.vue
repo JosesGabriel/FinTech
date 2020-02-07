@@ -192,7 +192,7 @@ export default {
     data() {
       if (this.data.change > 0) {
         this.$refs.closePriceChart.updateOptions({
-          colors: ["#00FFC3"]
+          colors: ["#03dac5"]
         });
       } else if (this.data.change < 0) {
         this.$refs.closePriceChart.updateOptions({
