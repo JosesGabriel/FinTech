@@ -1,6 +1,6 @@
 <template>
   <v-card class="transparent__bg" :dark="lightSwitch == 0 ? false : true" flat>
-    <v-card-title class="body-1 font-weight-bold text-left pa-0"
+    <v-card-title class="body-2 font-weight-bold text-left pa-0"
       >Sector Indices</v-card-title
     >
     <v-divider />

@@ -41,7 +41,7 @@
           <div v-if="loadingBar" class="text-center">
             <v-progress-circular
               :size="50"
-              color="primary"
+              color="success"
               indeterminate
             ></v-progress-circular>
           </div>
