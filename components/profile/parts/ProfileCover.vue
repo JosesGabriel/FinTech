@@ -14,6 +14,7 @@
             dark
             small
             class="uploadCover__photo-btn text-capitalize caption ma-2 px-2 white--text"
+            v-show="$auth.user.data.user.username == user.username ? true : false"
             @click.stop="showUploadCover=true"
             :outlined="shoUpdateText"
           >
@@ -21,7 +22,11 @@
             <span v-show="shoUpdateText" class="pl-1">Update Cover Photo</span>
           </v-btn>
         </div>
-        <v-img :src="cover_image" aspect-ratio="3" class="white--text align-end"></v-img>
+        <v-img
+          :src="user.cover_image == null ? '/cover-default.jpg' : user.cover_image "
+          aspect-ratio="3"
+          class="white--text align-end"
+        ></v-img>
       </v-col>
       <v-col cols="12" class="cover_info pa-0">
         <v-list-item>
@@ -31,13 +36,14 @@
               class="profile_photo"
               @mouseenter="overlay = !overlay"
               @mouseleave="overlay = !overlay"
-              :src="profile_image"
-              :lazy-src="profile_image"
+              :src="user.profile_image == null ? '/Icon/user-default.svg' : user.profile_image"
+              :lazy-src="user.profile_image == null ? '/Icon/user-default.svg' : user.profile_image"
             >
               <v-overlay
                 class="overlayProfile__photo"
                 absolute
                 color="darkchart"
+                v-show="$auth.user.data.user.username === user.username ? true : false"
                 :opacity=".9"
                 :value="overlay"
               >
@@ -97,6 +103,13 @@ import uploadProfile from "~/components/profile/dialog/UploadProfilePhoto";
 import uploadCover from "~/components/profile/dialog/UploadProfileCover";
 
 export default {
+  props: {
+    userData: {
+      default() {
+        return [];
+      }
+    }
+  },
   components: {
     uploadProfile,
     uploadCover
@@ -108,23 +121,6 @@ export default {
     }),
     cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-    },
-    user() {
-      return this.$auth.user.data.user;
-    },
-    profile_image() {
-      let profile = "/Icon/user-default.svg";
-      if (this.user.profile_image != null) {
-        profile = this.user.profile_image;
-      }
-      return profile;
-    },
-    cover_image() {
-      let cover = "/cover-default.jpg";
-      if (this.user.cover_image != null) {
-        cover = this.user.cover_image;
-      }
-      return cover;
     }
   },
   data() {
@@ -139,21 +135,39 @@ export default {
       update: {
         image: ""
       },
-      shoUpdateText: false
+      shoUpdateText: false,
+      user: {
+        profile_image: null,
+        cover_image: null,
+        name: "",
+        first_name: "",
+        last_name: "",
+        username: "",
+        uuid: ""
+      }
     };
   },
   watch: {
     settings() {
-      this.$auth.user.data.user = this.settings.data.user;
+      this.user = this.settings.data.user;
+    },
+    userData() {
+      this.assignData();
+      this.getFollow();
     }
   },
-  mounted() {
-    const user_id = this.$auth.user.data.user.uuid;
-    this.$api.social.follow.follow(user_id).then(response => {
-      if (response.success) {
-        this.follow = response.data.user;
-      }
-    });
+  methods: {
+    assignData() {
+      this.user = this.userData;
+    },
+    getFollow() {
+      const user_id = this.userData.uuid;
+      this.$api.social.follow.follow(user_id).then(response => {
+        if (response.success) {
+          this.follow = response.data.user;
+        }
+      });
+    }
   }
 };
 </script>

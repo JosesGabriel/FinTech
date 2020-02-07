@@ -10,63 +10,26 @@
       </v-row>
       <span
         class="px-2 d-block caption"
-      >She is one of the most followed Instagram personalities with more than 1.4+ million followers.</span>
+      >{{ aboutData.about == null ? "Add a short bio to tell people more about yourself." : aboutData.about }}</span>
 
       <v-row no-gutters>
-        <v-col v-for="n in 6" :key="n" class="d-flex child-flex pa-2" cols="2">
-          <v-card flat tile class="d-flex">
-            <v-img
-              :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-              :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
-              aspect-ratio="1"
-              class="grey lighten-2"
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
+        <div>
+          <v-list-item two-line class="pa-2">
+            <v-list-item-content class="py-0">
+              <v-list-item-title class="body-2">Location</v-list-item-title>
+              <v-list-item-subtitle
+                class="caption"
+              >{{ aboutData.location == null ? "Add Location" : aboutData.location }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+        <v-spacer></v-spacer>
+        <div class="qr-code pb-1">
+          <v-card class="d-flex align-end qr-code__element" height="100%" flat>
+            <QRCanvas :options="options" @updated="onUpdated" />
           </v-card>
-        </v-col>
+        </div>
       </v-row>
-    </v-card>
-    <v-card class="transparent__bg" outlined dark>
-      <v-container dark>
-        <v-list-item two-line>
-          <v-list-item-content>
-            <v-list-item-title class="body-2">Location</v-list-item-title>
-            <v-list-item-subtitle class="mb-5 caption">Manila, Philippines</v-list-item-subtitle>
-            <v-list-item-title class="body-2">Reputation</v-list-item-title>
-            <v-list-item-subtitle class="mb-5 caption">10,000</v-list-item-subtitle>
-            <v-list-item-title class="body-2">Ideas Published</v-list-item-title>
-            <v-list-item-subtitle class="mb-5 caption">8</v-list-item-subtitle>
-            <v-row no-gutters>
-              <div>
-                <v-list-item-title class="body-2">Contact</v-list-item-title>
-                <v-list-item-subtitle class="caption">
-                  <v-icon small color="secondary" class="pa-1">mdi-phone</v-icon>(+63) 908 818 4444
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="caption">
-                  <v-icon small color="secondary" class="pa-1">mdi-email-outline</v-icon>mariamalalawi@gg.com
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="caption">
-                  <v-icon small color="secondary" class="pa-1">mdi-facebook</v-icon>https://www.facebook.com/ivanaxalawi/
-                </v-list-item-subtitle>
-                <v-list-item-subtitle class="caption">
-                  <v-icon small color="secondary" class="pa-1">mdi-twitter</v-icon>https://twitter.com/ivanaalawi?lang=en
-                </v-list-item-subtitle>
-              </div>
-              <v-spacer></v-spacer>
-              <div class="qr-code pb-1">
-                <v-card class="d-flex align-end qr-code__element" height="100%" flat>
-                  <QRCanvas :options="options" @updated="onUpdated" />
-                </v-card>
-              </div>
-            </v-row>
-          </v-list-item-content>
-        </v-list-item>
-      </v-container>
     </v-card>
     <edit-about :visible="showUploadPhoto" @close="showUploadPhoto=false" />
   </v-container>
@@ -80,6 +43,18 @@ export default {
     QRCanvas,
     editAbout
   },
+  props: {
+    about: {
+      default() {
+        return [];
+      }
+    },
+    user: {
+      default() {
+        return {};
+      }
+    }
+  },
   data() {
     return {
       showUploadPhoto: false,
@@ -87,13 +62,31 @@ export default {
         data: "hello",
         size: 50,
         background: "transparent",
-        foreground: "#03DAC5",
+        foreground: "#03DAC5"
+      },
+      aboutData: {
+        about: null,
+        location: null
+      },
+      userData: {
+        username: null
       }
     };
   },
+  watch: {
+    about() {
+      this.aboutData = this.about;
+      this.userData = this.user;
+
+      console.log(this.user);
+      this.options = Object.assign({}, this.options, {
+        data: "/profile/" + this.userData.username
+      });
+    }
+  },
   methods: {
     onUpdated() {
-      console.log("updated");
+      // this.options.data = 
     }
   }
 };
