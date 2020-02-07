@@ -1,6 +1,11 @@
 const baseURL = process.env.API_URL + "/social";
 
 export default $axios => ({
+    users(params) {
+        return $axios.$get(
+            `${process.env.API_URL}/users/` + params + `/profile`
+        );
+    },
     get(params) {
         let query = buildParams(params);
 

@@ -20,6 +20,17 @@ export default {
     ProfileCover,
     ProfileTimeline
     // iconfont: "fa"
+  },
+  mounted() {
+    this.user();
+  },
+  methods: {
+    user() {
+      const params = this.$auth.user.data.user.username;
+      this.$api.social.user.users(params).then(response => {
+        console.log(response);
+      });
+    }
   }
 };
 </script>
