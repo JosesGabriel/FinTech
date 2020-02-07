@@ -3,7 +3,7 @@
     <br />
     <Banner :imageurl="imageurl">
       <v-content class="mt-10 font-weight-bold body-2 banner__content" align="justify">
-        By accessing the website at /, you are agreeing to be bound by these
+        By accessing Lyduz at /, you are agreeing to be bound by these
         terms of service, all applicable laws and regulations, and agree that
         you are responsible for compliance with any applicable local laws. If
         you do not agree with any of these terms, you are prohibited from using
@@ -22,7 +22,10 @@
           class="body-2 pr-12"
         >
           <!-- Start Content -->
-          <h4 class="mt-4">
+          <h4 class="mt-4" :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]">
             Use License
           </h4>
           <p class="mt-10">
@@ -48,7 +51,10 @@
             of this license, you must destroy any downloaded materials in your
             possession whether in electronic or printed format.
           </p>
-          <h4 class="mt-10">
+          <h4 class="mt-10" :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]">
             Disclaimer
           </h4>
           <p class="mt-10">
@@ -66,7 +72,10 @@
             offer or a solicitation of an offer to buy or sell any securities.
           </p>
 
-          <h4 class="mt-10">
+          <h4 class="mt-10" :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]">
             Limitations
           </h4>
           <p class="mt-10">
@@ -80,7 +89,10 @@
             limitations of liability for consequential or incidental damages,
             these limitations may not apply to you.
           </p>
-          <h4 class="mt-10">
+          <h4 class="mt-10" :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]">
             Accuracy of Materials
           </h4>
           <p class="mt-10">
@@ -92,7 +104,10 @@
             commitment to update the materials.
           </p>
 
-          <h4 class="mt-10">
+          <h4 class="mt-10" :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]">
             Links
           </h4>
           <p class="mt-10">
@@ -101,7 +116,10 @@
             inclusion of any link does not imply endorsement by Lyduz of the
             site. Use of any such linked website is at the user’s own risk.
           </p>
-          <h4 class="mt-10">
+          <h4 class="mt-10" :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]">
             Modifications
           </h4>
           <p class="mt-10">
@@ -110,7 +128,10 @@
             by the then current version of these terms of service.
           </p>
 
-          <h4 class="mt-10">
+          <h4 class="mt-10" :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]">
             Governing Law
           </h4>
           <p class="mt-10">
@@ -134,12 +155,24 @@ import Banner from "~/components/static/Banner";
 export default {
   auth: false,
   layout: "static",
+  head() {
+    return {
+      title: "Terms of Use",
+      meta: [
+        {
+          hid: "terms_of_use"
+        }
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
+    };
+  },
   components: {
     Banner
   },
   data() {
     return {
       imageurl: "terms_of_use.svg",
+      favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(Math.random() * 999 )}`
     };
   },
   computed: {

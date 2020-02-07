@@ -29,7 +29,13 @@
           class="body-2 pr-12"
         >
           <!-- Start Content -->
-          <h4 class="mt-4">
+          <h4
+            class="mt-4"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Information Collection and Use
           </h4>
           <p class="mt-10">
@@ -38,7 +44,13 @@
             identify you. Your identifiable information may be included but it
             si not limited to your name (“Personal Information”).
           </p>
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Log Data
           </h4>
           <p class="mt-10">
@@ -55,7 +67,13 @@
             Also , we may use third party services such as Google Analytics that
             collect, monitor and analyze this.
           </p>
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Communications
           </h4>
           <p class="mt-10">
@@ -64,7 +82,13 @@
             information that we deemed helpful for your trading & investing
             activities.
           </p>
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Cookies
           </h4>
           <p class="mt-10">
@@ -78,7 +102,13 @@
             cookie is being sent. However, if you do not accept cookies, you may
             not be able to use som portions of our site.
           </p>
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Security
           </h4>
           <p class="mt-10">
@@ -88,7 +118,13 @@
             commercially acceptable means to protect your Personal Information,
             we cannot guarantee its absolute security.
           </p>
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Changes To This Privace Policy
           </h4>
           <p class="mt-10">
@@ -110,14 +146,24 @@
             notify you either through the email address you have provided us or
             by placing a prominent notice on your website.
           </p>
-          <h4 class="mt-10">
+          <h4
+            class="mt-10"
+            :class="[
+              { 'white--text': lightSwitch == 1 },
+              { 'black--text': lightSwitch == 0 }
+            ]"
+          >
             Contact Us
           </h4>
           <p class="mt-10">
             If your have any question about this Privacy Policy, please
-            <a href="/contact-us" class="contact__link font-weight-bold"
-              >contact us</a
+            <router-link
+              tag="span"
+              class="contact__links font-weight-bold"
+              to="/contact-us"
             >
+              contact us
+            </router-link>
           </p>
           <!-- End Content -->
         </v-content>
@@ -134,12 +180,26 @@ import Banner from "~/components/static/Banner";
 export default {
   auth: false,
   layout: "static",
+  head() {
+    return {
+      title: "Privacy Policy",
+      meta: [
+        {
+          hid: "privacy_policy"
+        }
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
+    };
+  },
   components: {
     Banner
   },
   data() {
     return {
-      imageurl: "privacy.svg"
+      imageurl: "privacy.svg",
+      favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
+        Math.random() * 999
+      )}`
     };
   },
   computed: {
@@ -160,8 +220,10 @@ export default {
 .dark_mode {
   color: #eeeeee !important;
 }
-.contact__link {
-  text-decoration: none;
-  color: inherit;
+.contact__links {
+  cursor: pointer;
+}
+.contact__links:hover {
+  color: #03dac5 !important;
 }
 </style>

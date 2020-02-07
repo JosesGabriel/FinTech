@@ -159,4 +159,7 @@ export default {
 .dark_mode {
   color: #eeeeee !important;
 }
+.footer__links:hover {
+  color: #03dac5;
+}
 </style>
