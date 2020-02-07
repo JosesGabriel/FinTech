@@ -157,7 +157,6 @@ export default {
       };
       this.$api.accounts.account.putnoid(payload).then(response => {
         if (response.success) {
-
           let alertM = {
             model: true,
             state: true,
@@ -166,7 +165,7 @@ export default {
           this.setAlert(alertM);
 
           this.setSettings(response);
-          
+
           this.clearInputs();
         }
       });
@@ -183,8 +182,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.placeholderBackdrop__back {
-}
-</style>

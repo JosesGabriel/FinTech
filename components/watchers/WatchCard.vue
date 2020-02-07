@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="mb-1 watchCard"
-    :class="lightSwitch == 0 ? 'watchCard--light' : ''"
+    :class="lightSwitch == 0 ? 'watchCard--light' : 'watchCard--dark'"
     :color="lightSwitch == 0 ? '' : '#00121e'"
     :dark="lightSwitch == 0 ? false : true"
     max-height="295"
@@ -329,10 +329,13 @@ export default {
 <style>
 .watchCard--light {
   background-color: #f2f2f2 !important;
+  border: 1px solid #d3d4d5 !important;
+}
+.watchCard--dark {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 .watchCard {
   padding: 0 10px;
-  border: 1px solid #d3d4d5 !important;
 }
 .watchlistCard__stockDescription {
   text-overflow: ellipsis;

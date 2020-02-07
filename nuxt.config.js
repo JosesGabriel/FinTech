@@ -84,6 +84,7 @@ export default {
     "@nuxtjs/axios",
     "@nuxtjs/dotenv",
     "@nuxtjs/auth",
+    "@nuxtjs/google-adsense",
     "@nuxtjs/google-gtag"
   ],
   auth: {
@@ -118,8 +119,11 @@ export default {
       { src: "~/plugins/auth", mode: "client" }
     ]
   },
+  "google-adsense": {
+    id: process.env.GOOGLE_ADSENSE_ID
+  },
   "google-gtag": {
-    id: "UA-157586166-1",
+    id: process.env.GOOGLE_GTAG_ID,
     config: {
       anonymize_ip: true, // anonymize IP
       send_page_view: false, // might be necessary to avoid duplicated page track on page reload
@@ -127,7 +131,7 @@ export default {
         domains: ["lyduz.com"]
       }
     },
-    debug: true, // enable to track in dev mode
+    debug: false, // enable to track in dev mode
     disableAutoPageTrack: false, // disable if you don't want to track each page route with router.afterEach(...).
     additionalAccounts: [
       // {

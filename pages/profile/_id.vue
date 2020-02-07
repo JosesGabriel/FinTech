@@ -1,10 +1,10 @@
 <template>
   <v-container class="page__wrapper profile-page__wrapper" dark>
-    <ProfileCover />
+    <ProfileCover :userData="user" />
 
     <v-row no-gutters>
       <v-col cols="12">
-        <ProfileTimeline />
+        <ProfileTimeline :userData="user" />
       </v-col>
     </v-row>
   </v-container>
@@ -21,36 +21,21 @@ export default {
   },
   data() {
     return {
-      userId: this.$route.params.id
+      user: null,
+      profile: null
     };
   },
-  watch: {
-    // userId() {
-    //   console.log(this.userId);
-    // }
+  mounted() {
+    this.getUser();
   },
   methods: {
-    // user() {
-    //   this.$api.social.user.users(params.id).then(response => {
-    //     console.log(response);
-    //   });
-    // }
-  },
-  beforeDestroy(){
-      console.log("destroy")
-      console.log(this.userId)
-  },
-  watch: {
-      userId() {
-          console.log("tesasd",this.userId)
-      }
-  },
-  mounted() {
-      console.log("hey")
-    //   const params = this.$auth.user.data.user.username
-    //   this.$api.social.user.users(params).then(response => {
-    //     console.log(response);
-    //   });
+    getUser() {
+      const params = this.$route.params.id;
+      this.$api.social.user.users(params).then(({ data }) => {
+        this.user = data.user;
+        this.profile = data.profile;
+      });
+    }
   }
 };
 </script>

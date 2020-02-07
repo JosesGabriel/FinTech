@@ -495,7 +495,6 @@ export default {
                              console.log('Sell Success');
                              this.quantity = 0;
                              this.portvalue = '';
-                             this.setShowBrokers(true);
                         }
                     }).catch(error => {
                         this.errmsg = error.response.data.message;

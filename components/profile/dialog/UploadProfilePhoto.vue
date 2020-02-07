@@ -185,6 +185,7 @@ export default {
           this.setAlert(alertM);
 
           this.setSettings(response);
+          console.log(response)
 
           this.clearInputs();
         }

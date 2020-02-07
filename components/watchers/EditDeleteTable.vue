@@ -126,24 +126,28 @@ export default {
       {
         text: "Stock",
         class: "body-2",
+        align: "center",
         sortable: false,
         value: "stock_id"
       },
       {
         text: "Entry Price",
         class: "body-2",
+        align: "right",
         value: "entry_price",
         sortable: false
       },
       {
         text: "Take Profit",
         class: "body-2",
+        align: "right",
         value: "take_profit",
         sortable: false
       },
       {
         text: "Stop Loss",
         class: "body-2",
+        align: "right",
         value: "stop_loss",
         sortable: false
       },
