@@ -575,8 +575,6 @@ export default {
                     this.quantity = 0;
                     this.portvalue = '';
                     this.notes = '';
-                    this.setShowBrokers(true);
-
                 }
             }).catch(error => {
                 this.errmsg = error.response.data.message;
