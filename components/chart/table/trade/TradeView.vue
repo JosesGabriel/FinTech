@@ -16,11 +16,13 @@
         class="tab_menu-top text-capitalize"
         :dark="lightSwitch == true"
         :href="`#tab-1`"
+        :style="{ color: toggleFontColor }"
       >Buy</v-tab>
       <v-tab
         class="tab_menu-top text-capitalize"
         :dark="lightSwitch == true"
-        :href="`#tab-2`"  
+        :href="`#tab-2`" 
+        :style="{ color: toggleFontColor }" 
       >Sell</v-tab>
 
       <v-row>
