@@ -8,15 +8,23 @@
             <br />Investors
           </span>
           <span
-            class="bodyLanding_page text-left d-block pt-3" :class="fontColor"
+            class="bodyLanding_page text-left d-block pt-3"
+            :class="fontColor"
           >Leap along with the fastest growing community of self-directed investors and discover how the Stock Market can improve your financial prospects.</span>
           <div class="pa-10">
-            <v-btn text tile medium class="font-weight-bold caption success--text px-8 mr-7">LOG IN</v-btn>
+            <v-btn
+              text
+              tile
+              medium
+              class="font-weight-bold caption success--text px-8 mr-7"
+              @click="registerDialogModel = true, state = 'login'"
+            >LOG IN</v-btn>
             <v-btn
               color="success"
               tile
               medium
               class="font-weight-bold caption px-8 black--text"
+              @click="registerDialogModel = true, state = 'register'"
             >SIGN UP</v-btn>
           </div>
         </div>
@@ -25,17 +33,24 @@
         <img :src="landingImg" alt width="100%" />
       </v-col>
     </v-row>
-    <div class="d-block tertiary--text text-center caption pt-5">
-      Privacy Policy · Terms of Use · About Us · Help Desk · Affliate · Contact Us ·
-      <span
-        class="success--text"
-      >Lyduz © 2019</span>
+    <div class="d-block text-center caption pt-5">
+      <router-link to="/" class="no-transform tertiary--text">Privacy Policy</router-link>·
+      <router-link to="/" class="no-transform tertiary--text">Terms of Use</router-link>·
+      <router-link to="/" class="no-transform tertiary--text">About Us</router-link>·
+      <router-link to="/" class="no-transform tertiary--text">Help Desk</router-link>·
+      <router-link to="/" class="no-transform tertiary--text">Affliate</router-link>·
+      <router-link to="/" class="no-transform tertiary--text">Contact Us</router-link>·
+      <span class="success--text">Lyduz © 2019</span>
     </div>
+
+    <LoginRegister v-model="registerDialogModel" :state="state" />
   </v-card>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import LoginRegister from "~/components/LoginRegister";
+
 export default {
   head() {
     return {
@@ -71,6 +86,9 @@ export default {
       ]
     };
   },
+  components: {
+    LoginRegister
+  },
   layout: "main",
   middleware: ["auth"],
   computed: {
@@ -79,8 +97,8 @@ export default {
     }),
     landingImg() {
       return this.lightSwitch == 1
-        ? "landing-page-dark.svg"
-        : "landing-page-light.svg";
+        ? "/landing-page-dark.svg"
+        : "/landing-page-light.svg";
     },
     fontColor() {
       return this.lightSwitch == 1 ? "white--text" : "headlinedark--text";
@@ -89,7 +107,9 @@ export default {
   data() {
     return {
       isOpen: true,
-      postImage: "https://lyduz.com/png_logo.png"
+      postImage: "https://lyduz.com/png_logo.png",
+      registerDialogModel: false,
+      state: '',
     };
   },
   mounted() {

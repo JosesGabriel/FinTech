@@ -9,6 +9,13 @@
       width="350px"
       class="userMessage__dropdown"
     >
+      <v-row no-gutters>
+        <v-spacer></v-spacer>
+        <span
+          @click="markAllRead"
+          class="markAll_btn tertiary--text caption py-1 px-3"
+        >Mark all as read</span>
+      </v-row>
       <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
           <NotificationCard
@@ -62,6 +69,14 @@ export default {
     }
   },
   methods: {
+    markAllRead() {
+      this.dataNotification.filter(x => x.status == "unread" ? x.status = 'read' : x.status = 'read' );
+
+      this.$api.social.notification.markall().then(response => {
+        if (response.success) {
+        }
+      });
+    },
     closeDropdown(event) {
       this.$emit("clicked");
     }
@@ -137,6 +152,9 @@ export default {
 }
 .userMessage__dropdown-link {
   width: 100%;
+}
+.markAll_btn {
+  cursor: pointer;
 }
 </style>
 
