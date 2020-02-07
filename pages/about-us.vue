@@ -118,7 +118,7 @@
             <router-link
               tag="span"
               class="contact__links font-weight-bold"
-              to="/about-us"
+              to="/login"
             >
               Join us!
             </router-link>
