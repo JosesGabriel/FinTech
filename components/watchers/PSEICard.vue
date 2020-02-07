@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="mb-1 watchCard"
+    class="mb-1"
     :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
     :dark="lightSwitch == 0 ? false : true"
     shaped
@@ -17,7 +17,7 @@
           data.changepercentage ? data.changepercentage.toFixed(2) : ""
         }}%)</span
       ></span
-    >
+    ><v-divider />
     <v-divider />
     <div class="container pa-0">
       <apexcharts
@@ -58,11 +58,7 @@ export default {
             show: false
           },
           dropShadow: {
-            enabled: true,
-            opacity: 0.3,
-            blur: 2,
-            left: 3,
-            top: 4
+            enabled: false
           }
         },
         colors: ["#FFF"],

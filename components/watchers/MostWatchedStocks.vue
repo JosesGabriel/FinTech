@@ -9,6 +9,7 @@
       >Most Watched Stocks</v-card-title
     >
     <v-divider />
+    <v-divider />
     <div
       v-for="n in mWatchedStocksObject.length"
       :key="n"
@@ -33,10 +34,9 @@
         <v-btn
           v-if="!mWatchedStocksObject[n - 1].user_follows"
           x-small
-          outlined
           rounded
           color="success"
-          class="no-transform"
+          class="no-transform black--text"
           @click="addToWatchlist(mWatchedStocksObject[n - 1].stock_id)"
           >+ Watchlist</v-btn
         >
@@ -97,6 +97,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width: 180px;
+  width: 205px;
 }
 </style>

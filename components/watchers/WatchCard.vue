@@ -1,13 +1,17 @@
 <template>
   <v-card
     class="mb-1 watchCard"
-    :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+    :class="lightSwitch == 0 ? 'watchCard--light' : ''"
+    :color="lightSwitch == 0 ? '' : '#00121e'"
     :dark="lightSwitch == 0 ? false : true"
-    max-height="282"
+    max-height="295"
     :loading="watchCardLoading"
+    flat
+    tile
   >
     <div>
-      <strong class="caption">{{ stockExchange }}: {{ stockSymbol }}</strong
+      <span class="caption font-weight-black"
+        >{{ stockExchange }}: {{ stockSymbol }}</span
       ><br />
       <span class="watchlistCard__stockDescription d-block">{{
         stockDescription
@@ -23,7 +27,7 @@
     <v-card-actions class="watchlistCard__items caption">
       <div>
         <span class="float-right">
-          ₱{{ stockCurrentPrice }} |
+          ₱{{ stockCurrentPrice }} <span class="tertiary--text">|</span>
           <span
             :class="
               stockCurrentChange > 0
@@ -96,11 +100,7 @@ export default {
             show: false
           },
           dropShadow: {
-            enabled: true,
-            opacity: 0.3,
-            blur: 2,
-            left: 3,
-            top: 4
+            enabled: false
           }
         },
         colors: ["#FFF"],
@@ -327,6 +327,13 @@ export default {
 </script>
 
 <style>
+.watchCard--light {
+  background-color: #f2f2f2 !important;
+  border: 1px solid #d3d4d5 !important;
+}
+.watchCard {
+  padding: 0 10px;
+}
 .watchlistCard__stockDescription {
   text-overflow: ellipsis;
   white-space: nowrap;
