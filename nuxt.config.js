@@ -119,6 +119,9 @@ export default {
       { src: "~/plugins/auth", mode: "client" }
     ]
   },
+  "google-adsense": {
+    id: process.env.GOOGLE_ADSENSE_ID
+  },
   "google-gtag": {
     id: "UA-157586166-1",
     config: {
