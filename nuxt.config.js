@@ -123,7 +123,7 @@ export default {
     id: process.env.GOOGLE_ADSENSE_ID
   },
   "google-gtag": {
-    id: "UA-157586166-1",
+    id: process.env.GOOGLE_GTAG_ID,
     config: {
       anonymize_ip: true, // anonymize IP
       send_page_view: false, // might be necessary to avoid duplicated page track on page reload
