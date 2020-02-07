@@ -25,7 +25,7 @@
     ></v-text-field>
     <v-list-item-content v-else class="pa-0 ma-0">
       <v-container class="pa-0 body-2">
-        <strong class="text--darken-2 caption">{{ comment.user.name }}</strong>
+        <span class="text--darken-2 caption">{{ comment.user.name }}</span>
 
         <span v-if="comment.user.uuid == $auth.user.data.user.uuid">
           <v-btn

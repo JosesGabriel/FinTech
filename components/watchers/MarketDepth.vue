@@ -8,7 +8,7 @@
             :value="progbar.value"
             background-color="error"
             color="#03dac5"
-            height="5"
+            height="8"
           ></v-progress-linear>
         </v-content>
       </v-col>

@@ -112,7 +112,8 @@ export default {
     ForgotPassword
   },
   props: {
-    value: Boolean
+    value: Boolean,
+    state: String
   },
   data() {
     return {
@@ -160,6 +161,7 @@ export default {
      */
     show: {
       get() {
+        this.state == 'login' ? this.stepper = 2 : this.state == 'register' ? this.stepper = 3 : ''
         return this.value;
       },
       set(value) {

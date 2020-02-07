@@ -26,5 +26,9 @@ export default {
 
     getAlertDialog(state) {
         return state.alertDialog;
+    },
+
+    getSettings(state) {
+        return state.settings;
     }
 };

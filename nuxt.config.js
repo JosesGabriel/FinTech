@@ -64,6 +64,7 @@ export default {
     { src: "~/plugins/vue-numeral-filter.js", mode: "client" },
     { src: "~/plugins/components/chart/vue-apexcharts", mode: "client" },
     { src: "~/plugins/components/alerts/vue-snotify", mode: "client" },
+    { src: "~/plugins/components/profile/vue-croppa", mode: "client" },
     { src: "~/plugins/vue-native-websocket", mode: "client" },
     { src: "~/plugins/vue-html2canvas", mode: "client" },
     { src: "~/plugins/custom-filters", mode: "client" },
@@ -167,13 +168,13 @@ export default {
           error: "#F44336",
           success: "#03DAC5",
           tertiary: "#B6B6B6",
-          tertiarytext: "#546E7A",
           darkcard: "#0c1a2b",
           lightcard: "#f2f2f2",
           darkchart: "#00121e",
           lightchart: "#f2f2f2",
           successhover: "#4ee5d6",
-          secondarytext: "#455A64"
+          secondarytext: "#455A64",
+          headlinedark: "#263238"
         },
         theme: {
           themes: {
@@ -192,9 +193,7 @@ export default {
               darkcard: "#0c1a2b",
               lightcard: "#f2f2f2",
               darkchart: "#00121e",
-              lightchart: "#f2f2f2",
-              successhover: "#4ee5d6",
-              secondarytext: "#455A64"
+              lightchart: "#f2f2f2"
             },
             dark: {
               anchor: colors.blue

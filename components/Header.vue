@@ -22,7 +22,7 @@
 
     <v-toolbar-items class="mt-3" dark>
       <!--<div class="searchBar__container hidden-md-only">-->
-      <div class="searchBar__container">
+      <div class="searchBar__container" v-show="$auth.loggedIn ? true : false ">
         <v-text-field
           label="Search"
           class="header__searchbar ml-3 mt-1 headline"
@@ -35,7 +35,7 @@
         ></v-text-field>
       </div>
 
-      <div>
+      <div v-show="$auth.loggedIn ? true : false ">
         <v-icon
           :style="{ color: toggleFontColor }"
           class="header__menuIcon"
@@ -158,7 +158,7 @@
         </v-list-item>
       </v-card>
 
-      <a class="social__router">
+      <a class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn
           ref="accountBtn"
           class="header__button"
@@ -176,10 +176,10 @@
         @clicked="closeDropdown"
       />
 
-      <a :href="'https://vyndue.com'" target="_blank" class="social__router">
+      <a :href="'https://vyndue.com'" target="_blank" class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn class="header__button" text>Vyndue</v-btn>
       </a>
-      <a class="social__router">
+      <a class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn
           ref="accountBtn"
           class="header__button"
