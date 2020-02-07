@@ -4,15 +4,15 @@
       >Sector Indices</v-card-title
     >
     <v-divider />
-    <v-divider />
+    <v-divider class="pb-1" />
     <div class="container caption pa-0">
       <div v-for="n in 7" :key="n" class="row">
-        <div class="col-5 py-1">{{ sectoralIndexType[n - 1] }}</div>
-        <div class="col-3 pa-1">
+        <div class="col-5 py-0 pt-1">{{ sectoralIndexType[n - 1] }}</div>
+        <div class="col-3 pa-0">
           {{ sectoralIndexLast[n - 1] | numeral("0,0.00") }}
         </div>
         <div
-          class="col-4 pa-1 text-right"
+          class="col-4 pa-0 text-right"
           :class="
             sectoralIndexChangePercent[n - 1] > 0
               ? 'success--text'

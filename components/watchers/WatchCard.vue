@@ -300,14 +300,14 @@ export default {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#00FFC3"]
+                colors: ["#03DAC5"]
               }
             };
           } else if (this.stockCurrentChange < 0) {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#f44336"]
+                colors: ["#F44336"]
               }
             };
           } else {
@@ -329,10 +329,10 @@ export default {
 <style>
 .watchCard--light {
   background-color: #f2f2f2 !important;
-  border: 1px solid #d3d4d5 !important;
 }
 .watchCard {
   padding: 0 10px;
+  border: 1px solid #d3d4d5 !important;
 }
 .watchlistCard__stockDescription {
   text-overflow: ellipsis;
@@ -344,7 +344,7 @@ export default {
   background-color: #03dac5;
 }
 .watchlistCard__bar--red {
-  background-color: #f44336;
+  background-color: #03dac5;
 }
 .watchlistCard__text--gray {
   color: gray;
