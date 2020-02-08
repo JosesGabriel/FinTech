@@ -35,7 +35,6 @@
           :background-color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
         ></v-text-field>
       </div> -->
-
       <div v-show="$auth.loggedIn ? true : false ">
         <v-icon
           :style="{ color: toggleFontColor }"
@@ -148,71 +147,6 @@
 
           </v-list>
         </v-container>
-      </v-card>
-      <v-card
-        class="mx-auto header__menuIcon--powerTools"
-        :class="this.displayPowerTools ? 'display' : 'noDisplay'"
-        width="200"
-        tile
-        @mouseover="displayPowerTools = true"
-        @mouseleave="displayPowerTools = false"
-      >
-                <v-list-item
-                  class="listItem__buySellCalc"
-                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-                  @click.stop="buySellDialog = true"
-                >
-                  <router-link
-                    to
-                    class="no-transform"
-                    :style="{ color: toggleFontColor }"
-                  >
-                    <v-list-item-title class="listItem__buySellCalc"
-                      >Buy/Sell Calculator</v-list-item-title
-                    >
-                  </router-link>
-                  <v-dialog v-model="buySellDialog" max-width="500">
-                    <BuySellCalculator />
-                  </v-dialog>
-                </v-list-item>
-
-                <v-list-item
-                  class="listItem__varCalc"
-                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-                  @click.stop="varDialog = true"
-                >
-                  <router-link
-                    to
-                    class="no-transform"
-                    :style="{ color: toggleFontColor }"
-                  >
-                    <v-list-item-title class="listItem__varCalc"
-                      >VAR Calculator</v-list-item-title
-                    >
-                  </router-link>
-                  <v-dialog v-model="varDialog" max-width="320">
-                    <VARCalculator :data="varDialog" />
-                  </v-dialog>
-                </v-list-item>
-
-                <v-list-item
-                  class="listItem__avCalc"
-                  :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-                  @click.stop="averagePriceDialog = true"
-                >
-                  <router-link
-                    to
-                    class="no-transform"
-                    :style="{ color: toggleFontColor }"
-                  >
-                    <v-list-item-title class="listItem__avCalc"
-                      >Average Price Calculator</v-list-item-title
-                    >
-                  </router-link>
-                  <v-dialog v-model="averagePriceDialog" max-width="350">
-                    <AveragePriceCalculator />
-                  </v-dialog>
-                </v-list-item>
       </v-card>
 
       <a class="social__router" v-show="$auth.loggedIn ? true : false ">
