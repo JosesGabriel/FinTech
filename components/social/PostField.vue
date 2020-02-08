@@ -335,6 +335,7 @@ export default {
       postField: "",
       previewImage: [],
       postFieldLoader: false,
+      selectedImagesArray: [],
       imagesArray: [],
       cloudArray: [],
       stockSuggestionsArray: [],
@@ -672,9 +673,9 @@ export default {
      */
     uploadImage() {
       this.loader = "success";
-      for (let i = 0; i < this.$refs.postField__inputRef.files.length; i++) {
+      for (let i = 0; i < this.selectedImagesArray.length; i++) {
         let formData = new FormData();
-        formData.append("file", this.$refs.postField__inputRef.files[i]);
+        formData.append("file", this.selectedImagesArray[i]);
         this.$api.social.upload
           .create(formData)
           .then(
@@ -698,8 +699,11 @@ export default {
      * @return
      */
     onInputFileChange(e) {
+      for (let i = 0; e.target.files.length > i; i++) {
+        this.selectedImagesArray.push(e.target.files[i]);
+      }
       this.uploadImage();
-      var files = e.target.files || e.dataTransfer.files;
+      var files = this.selectedImagesArray || this.selectedImagesArray;
       if (!files.length) return;
       for (var i = 0; i < files.length; i++) {
         var filetype = files[i].type.split("/")[0];
@@ -732,7 +736,9 @@ export default {
      * @return
      */
     removeImage(closeId) {
-      this.$set(this.imagesArray, closeId - 1, "");
+      this.imagesArray.splice(closeId - 1, 1);
+      this.selectedImagesArray.splice(closeId - 1, 1);
+      this.cloudArray.splice(closeId - 1, 1);
     },
     /**
      * clears post text field
@@ -746,6 +752,8 @@ export default {
       this.postField = "";
       this.postFieldLoader = false;
       this.cloudArray = [];
+      this.imagesArray = [];
+      this.selectedImagesArray = [];
       this.postBtnDisable = true;
 
       this.$refs.postField__inputRef.type = "text";
