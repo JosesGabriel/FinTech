@@ -1,11 +1,12 @@
 <template>
   <v-toolbar
     :dark="lightSwitch == 0 ? false : true"
-    :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+    :color="lightSwitch == 0 ? 'lightMode' : 'darkMode'"
     flat
     height="54"
     class="header__toolbar"
   >
+  
     <v-toolbar-title>
       <router-link to="/">
         <img
@@ -226,15 +227,17 @@
           >
         </v-btn>
       </a>
+
+      <a :href="'https://vyndue.com'" target="_blank" class="social__router" v-show="$auth.loggedIn ? true : false ">
+        <v-btn class="header__button" text>Vyndue</v-btn>
+      </a>
+
       <HeaderNotification
         v-if="showNotification && $auth.loggedIn"
         :data-notification="dataNotification"
         @clicked="closeDropdown"
       />
-
-      <a :href="'https://vyndue.com'" target="_blank" class="social__router" v-show="$auth.loggedIn ? true : false ">
-        <v-btn class="header__button" text>Vyndue</v-btn>
-      </a>
+      
       <a class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn
           ref="accountBtn"
@@ -251,6 +254,7 @@
           }}</v-btn
         >
       </a>
+       
       <HeaderDropdown v-if="showDropdown && $auth.loggedIn" />
     </v-toolbar-items>
 
@@ -713,5 +717,13 @@ export default {
 
 .menuIcon__dropdown-body > .v-list-item {
   min-height: 38px;
+}
+
+.lightMode > .v-toolbar__content {
+  background: #f2f2f2;
+}
+
+.darkMode > .v-toolbar__content {
+  background: #00121e;
 }
 </style>

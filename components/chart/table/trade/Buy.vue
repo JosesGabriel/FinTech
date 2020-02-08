@@ -194,7 +194,7 @@
                    Quantity
                   </v-col>
                   <v-col class="mr-6 font-weight-bold" style="text-align: right;">
-                    {{ this.addcomma(this.quantity) }}
+                    {{ this.quantity }}
                   </v-col>  
                 </v-row>
                 <v-row>
@@ -507,12 +507,12 @@ export default {
      *
      * @return  {int}  total cost
      */
-    keypress() {
+    keypress() {      
       let press = 0;
       let pressfees = 0;
       press = parseFloat(this.quantity) * parseFloat(this.stock_last);
       pressfees = this.fees(press);    
-      this.totalcost = pressfees; 
+      this.totalcost = pressfees;
     },
     /**
      * Buy/Sell Fees
