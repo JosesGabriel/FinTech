@@ -1,10 +1,15 @@
 <template>
   <v-container class="pa-0" dark>
-    <v-card class="transparent__bg pa-3 mb-2" outlined dark>
+    <v-card class="transparent__bg pa-3 mb-2" outlined :dark="lightSwitch == 1 ? true : false">
       <v-row no-gutters>
-        <span class="white--text pa-2 d-block font-weight-bold body-2">About</span>
+        <span :class="fontColor" class="pa-2 d-block font-weight-bold subtitle-1">About</span>
         <v-spacer></v-spacer>
-        <v-btn color="success" icon @click.stop="showUploadPhoto=true">
+        <v-btn
+          color="success"
+          icon
+          v-show="$auth.user.data.user.username === userData.username ? true : false"
+          @click.stop="showUploadPhoto=true"
+        >
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
       </v-row>
@@ -25,16 +30,23 @@
         </div>
         <v-spacer></v-spacer>
         <div class="qr-code pb-1">
-          <v-card class="d-flex align-end qr-code__element" height="100%" flat>
-            <QRCanvas :options="options" @updated="onUpdated" />
+          <v-card :dark="lightSwitch == 1 ? true : false" color="transparent" class="d-flex align-end qr-code__element" height="100%" flat>
+            <QRCanvas :options="options" />
           </v-card>
         </div>
       </v-row>
     </v-card>
-    <edit-about :visible="showUploadPhoto" @close="showUploadPhoto=false" />
+    <edit-about
+      @clicked="onEdit"
+      :visible="showUploadPhoto"
+      @close="showUploadPhoto=false"
+      @updated="onUpdated"
+    />
   </v-container>
 </template>
 <script>
+import { mapGetters, mapActions } from "vuex";
+
 import { QRCanvas } from "qrcanvas-vue";
 import editAbout from "~/components/profile/dialog/EditProfileAbout";
 
@@ -55,11 +67,19 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    }),
+    fontColor() {
+      return this.lightSwitch == 1 ? "white--text" : "black--text";
+    },
+  },
   data() {
     return {
       showUploadPhoto: false,
       options: {
-        data: "hello",
+        data: "",
         size: 50,
         background: "transparent",
         foreground: "#03DAC5"
@@ -77,16 +97,21 @@ export default {
     about() {
       this.aboutData = this.about;
       this.userData = this.user;
-
-      console.log(this.user);
-      this.options = Object.assign({}, this.options, {
-        data: "/profile/" + this.userData.username
-      });
+      console.log("asdasdasd");
+    },
+    user() {
+      this.onUpdated();
     }
   },
   methods: {
+    onEdit(value) {
+      this.aboutData = value.data.profile;
+    },
     onUpdated() {
-      // this.options.data = 
+      console.log(this.user);
+      this.options = Object.assign({}, this.options, {
+        data: "https://lyduz.com/profile/" + this.user.username
+      });
     }
   }
 };

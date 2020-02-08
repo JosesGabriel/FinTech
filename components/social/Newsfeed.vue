@@ -25,22 +25,29 @@
     >
       <!-- Start of Post Header -->
       <v-list-item class="pt-1">
-        <v-list-item-avatar class="mr-2" size="42">
-          <img
-            class="avatar__border"
-            :src="
+        <router-link :to="'/profile/'+ postsObject[n - 1].user.username" class="no-transform">
+          <v-list-item-avatar class="mr-2" size="42">
+            <img
+              class="avatar__border"
+              :src="
               postsObject[n - 1].user.profile_image
                 ? postsObject[n - 1].user.profile_image
                 : 'user_default.png'
             "
-          />
-        </v-list-item-avatar>
+            />
+          </v-list-item-avatar>
+        </router-link>
         <v-list-item-content class="pa-0 ma-0">
           <v-row>
             <v-col>
-              <v-list-item-title class="subtitle-2">
-                <strong>{{ postsObject[n - 1].user.name }}</strong>
-              </v-list-item-title>
+              <router-link :to="'/profile/'+ postsObject[n - 1].user.username" class="no-transform">
+                <v-list-item-title
+                  class="subtitle-2"
+                  :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+                >
+                  <strong>{{ postsObject[n - 1].user.name }}</strong>
+                </v-list-item-title>
+              </router-link>
               <v-list-item-subtitle class="overline no-transform">
                 {{ localFormat(postsObject[n - 1].created_at, "fn") }}
                 <!-- <v-icon class="body-2 mt-0">mdi-earth</v-icon> -->
@@ -269,16 +276,18 @@
       <!-- Start of Comment -->
       <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
-        <v-list-item-avatar size="28" class="mr-2">
-          <v-img
-            class="avatar__border"
-            :src="
+        <router-link :to="'/profile/'+ $auth.user.data.user.username" class="no-transform">
+          <v-list-item-avatar size="28" class="mr-2">
+            <v-img
+              class="avatar__border"
+              :src="
               $auth.user.data.user.profile_image
                 ? $auth.user.data.user.profile_image
                 : 'default.png'
             "
-          ></v-img>
-        </v-list-item-avatar>
+            ></v-img>
+          </v-list-item-avatar>
+        </router-link>
         <v-list-item-content class="pt-2 mb-0">
           <v-text-field
             dense

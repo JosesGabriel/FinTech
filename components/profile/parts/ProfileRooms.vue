@@ -1,10 +1,10 @@
 <template>
-  <v-card class="transparent__bg" dark elevation="0">
-    <v-container dark class="pr-md-0 pr-lg-0">
+  <v-card class="transparent__bg" elevation="0" :dark="lightSwitch == 1 ? true : false" color="transparent">
+    <v-container :dark="lightSwitch == 1 ? true : false" class="pr-md-0 pr-lg-0">
       <v-row no-gutters class="heading-underline">
-        <span class="white--text pa-2 d-block font-weight-bold subtitle-1">Vyndue Rooms</span>
+        <span :class="lightSwitch == 1 ? true : false" class="pa-2 d-block font-weight-bold subtitle-1">Vyndue Rooms</span>
       </v-row>
-      <v-list>
+      <v-list :dark="lightSwitch == 1 ? true : false" color="transparent">
         <v-list-item v-for="item in items" :key="item.title" @click>
           <v-list-item-avatar class="mr-3" size="35">
             <img src="/Icon/user-default.svg" />
@@ -31,7 +31,17 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    }),
+    fontColor() {
+      return this.lightSwitch == 1 ? "white--text" : "black--text";
+    }
+  },
   data() {
     return {
       items: [
