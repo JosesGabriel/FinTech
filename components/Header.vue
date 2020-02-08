@@ -51,11 +51,12 @@
         outlined
         max-width="200px"
         width="200px"
+        height="116px"
         class="menuIcon__dropdown"
         :class="this.display ? 'display' : 'noDisplay'"
       >
         <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
-          <v-list class="py-0 menuIcon__dropdown-body scrollbar">
+          <v-list class="py-0 menuIcon__dropdown-body">
 
                                 <v-list-item
                   class="listItem__buySellCalc"
@@ -223,13 +224,14 @@
           @click="showNotification = !showNotification"
         >
           <v-badge :value="showBadge" color="success" small dot
+            style="font-size:14px;"
             >Notification</v-badge
           >
         </v-btn>
       </a>
 
       <a :href="'https://vyndue.com'" target="_blank" class="social__router" v-show="$auth.loggedIn ? true : false ">
-        <v-btn class="header__button" text>Vyndue</v-btn>
+        <v-btn class="header__button"  style="font-size:14px;" text>Vyndue</v-btn>
       </a>
 
       <HeaderNotification
@@ -237,11 +239,12 @@
         :data-notification="dataNotification"
         @clicked="closeDropdown"
       />
-      
+
       <a class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn
           ref="accountBtn"
           class="header__button"
+          style="font-size:14px;"
           @click.stop="toggleDropdown"
           text
           @click="
@@ -549,6 +552,8 @@ export default {
 }
 .header__menuIcon {
   padding: 5px 15px;
+  position: absolute;
+  right: 342px;
 }
 .header__menuIcon:hover {
   cursor: pointer;
@@ -656,11 +661,11 @@ export default {
 }
 
 .menuIcon__dropdown {
-  position: absolute;
-  top: 45px;
-  right: 305px;
+  position: relative;
+ /* float:left;*/
+  top: 40px;
   margin-right: 10px;
-  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
+ /* box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);*/
 }
 
 .menuIcon__dropdown.theme--dark .menuIcon__dropdown-footer {
@@ -673,9 +678,11 @@ export default {
 }
 .menuIcon__dropdown-body {
   overflow: auto;
-  max-height: 360px;
+  /*max-height: 360px;*/
   border-bottom-left-radius: unset;
   border-bottom-right-radius: unset;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
+  border-radius: 4px;
 }
 
 .menuIcon__dropdown.theme--dark:after {
