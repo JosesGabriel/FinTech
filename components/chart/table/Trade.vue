@@ -123,7 +123,7 @@ export default {
 .select__trade .v-select__selection--comma {
   color: black;
   font-size: 14px;
-  font-weight: 600;
+ /* font-weight: 600;*/
 }
 /*.select__trade .v-select__slot .v-label,
 .select__trade .v-select__slot .v-icon {

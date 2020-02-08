@@ -80,7 +80,11 @@
         <v-btn class="no-transform" small text @click="editItem(item)"
           >Edit</v-btn
         >
-        <v-btn class="no-transform" small text @click.stop="deleteDialog = true"
+        <v-btn
+          class="no-transform"
+          small
+          text
+          @click.stop="(deleteDialog = true), (itemToDelete = item)"
           >Delete</v-btn
         >
       </template>
@@ -105,7 +109,7 @@
           <v-btn
             class="black--text no-transform px-5"
             color="success"
-            @click="deleteItem(item)"
+            @click="deleteItem(itemToDelete)"
           >
             Delete
           </v-btn>
@@ -174,7 +178,8 @@ export default {
       entry_price: "",
       take_profit: "",
       stop_loss: ""
-    }
+    },
+    itemToDelete: ""
   }),
 
   computed: {

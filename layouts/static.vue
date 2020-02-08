@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Header from "~/components/Header";
 import { UserNotificationAlertLayout } from "~/assets/js/helpers/notification";
 
@@ -121,11 +121,18 @@ export default {
     }
   },
   mounted() {
+    if (localStorage.currentMode) {
+      this.setLightSwitch(localStorage.currentMode);
+    }
+
     this.$nextTick(() => {
       this.ticks = 2;
     });
   },
   methods: {
+    ...mapActions({
+      setLightSwitch: "global/setLightSwitch"
+    }),
     userNotificationAlertLayout: UserNotificationAlertLayout
   }
 };

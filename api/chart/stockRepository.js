@@ -3,13 +3,15 @@ const baseURL = process.env.API_URL + "/data/v2/stocks";
 export default $axios => ({
   list(params) {
     let query = buildParams(params);
-    
-    return $axios.$post(`${baseURL}/list${query.length > 0 ? "?" + query : ""}`);
+
+    return $axios.$post(
+      `${baseURL}/list${query.length > 0 ? "?" + query : ""}`
+    );
   },
 
   history(params) {
     let query = buildParams(params);
-    
+
     return $axios.$post(
       `${baseURL}/history/latest${query.length > 0 ? "?" + query : ""}`
     );
@@ -17,7 +19,7 @@ export default $axios => ({
 
   trades(params) {
     let query = buildParams(params);
-    
+
     return $axios.$post(
       `${baseURL}/trades/latest${query.length > 0 ? "?" + query : ""}`
     );
@@ -25,7 +27,7 @@ export default $axios => ({
 
   bidask(params) {
     let query = buildParams(params);
-    
+
     return $axios.$post(
       `${baseURL}/market-depth/latest/bidask${
         query.length > 0 ? "?" + query : ""
@@ -35,7 +37,7 @@ export default $axios => ({
 
   fulldepth(params) {
     let query = buildParams(params);
-    
+
     return $axios.$post(
       `${baseURL}/market-depth/latest/full-depth${
         query.length > 0 ? "?" + query : ""
@@ -45,7 +47,7 @@ export default $axios => ({
 
   topdepth(params) {
     let query = buildParams(params);
-    
+
     return $axios.$post(
       `${baseURL}/market-depth/latest/top-depth${
         query.length > 0 ? "?" + query : ""
@@ -53,9 +55,9 @@ export default $axios => ({
     );
   },
 
-  activedate(params) {
+  activeDate(params) {
     let query = buildParams(params);
-    
+
     return $axios.$post(
       `${baseURL}/history/latest-active-date${
         query.length > 0 ? "?" + query : ""
@@ -65,7 +67,7 @@ export default $axios => ({
 
   brokersActivity(params) {
     let query = buildParams(params);
-    
+
     return $axios.$post(
       `${baseURL}/trades/brokers-activity/latest${
         query.length > 0 ? "?" + query : ""
@@ -75,7 +77,7 @@ export default $axios => ({
 
   transaction(params) {
     let query = buildParams(params);
-    
+
     return $axios.$post(
       `${baseURL}/trades/latest/transaction-bar${
         query.length > 0 ? "?" + query : ""

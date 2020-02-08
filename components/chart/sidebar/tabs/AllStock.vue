@@ -133,7 +133,8 @@ export default {
       ],
       loading: true,
       currentTab: true,
-      allStocks: []
+      allStocks: [],
+      latestDate: ""
     };
   },
   computed: {
@@ -210,9 +211,12 @@ export default {
       this.loading = true;
       this.allStocks = [];
       try {
+        const latestDate = await this.$api.chart.stocks.activeDate();
+        this.latestDate = latestDate.data.date;
         const response = await this.$api.chart.stocks.history({
           exchange: "PSE"
         });
+
         // this filter made to remove all index stocks
         const filtered = response.data.filter(data => parseInt(data.value) > 0);
         filtered.forEach(data => {
@@ -281,7 +285,7 @@ export default {
         items = items.filter(data => {
           return (
             this.$moment(data.lastupdatetime).format("YYYYMMDD") ==
-            this.$moment().format("YYYYMMDD")
+            this.$moment(this.latestDate).format("YYYYMMDD")
           );
         });
       }
