@@ -25,37 +25,39 @@
           <v-content class="contact__container">
             <h2 class="contact__header mt-10 mb-12">It’s About Time</h2>
 
-            <p class="mt-12">
+            <p class="mt-12 pb-12">
               The team is all ears. We’re always here for a good chat.
             </p>
 
-            <v-content class="mt-12">
-              <v-hover v-slot:default="{ hover }">
-                <v-btn
-                  rounded
-                  class="black--text font-weight-bold text-capitalize mb-2"
-                  :color="!hover ? 'success' : 'successhover'"
-                  elevation="1"
-                  @click="emailUs"
-                >
-                  Email Us
-                </v-btn>
-              </v-hover>
-            </v-content>
-
-            <p class="my-12">
-              Or you could also reach us through our messenger account
-            </p>
-
-            <v-content>
-              <v-hover v-slot:default="{ hover }">
-                <v-btn icon x-large @click="openMessenger">
-                  <v-icon size="70" :color="!hover ? textColor : 'success'"
-                    >mdi-facebook-messenger</v-icon
-                  >
-                </v-btn>
-              </v-hover>
-            </v-content>
+            <v-row no-gutters class="ml-12 pl-12 mt-12">
+              <v-col cols="4">
+                <v-content class="mb-4">
+                  <v-hover v-slot:default="{ hover }">
+                    <v-btn icon x-large @click="openEmail">
+                      <v-icon size="70" :color="!hover ? textColor : 'success'"
+                        >mdi-email</v-icon
+                      >
+                    </v-btn>
+                  </v-hover>
+                </v-content>
+                <span class="body-2 font-weight-bold">Email</span>
+              </v-col>
+              <v-col cols="2">
+                <h1 class="mt-6">OR</h1>
+              </v-col>
+              <v-col cols="4">
+                <v-content class="mb-4">
+                  <v-hover v-slot:default="{ hover }">
+                    <v-btn icon x-large @click="openMessenger">
+                      <v-icon size="70" :color="!hover ? textColor : 'success'"
+                        >mdi-facebook-messenger</v-icon
+                      >
+                    </v-btn>
+                  </v-hover>
+                </v-content>
+                <span class="body-2 font-weight-bold">Messenger</span>
+              </v-col>
+            </v-row>
           </v-content>
 
           <v-row v-show="false" no-gutters>
@@ -129,7 +131,7 @@ export default {
     }),
     /**
      * toggle between ligth/dark mode
-     *
+     *n
      * @return  {String}
      */
     textColor() {
@@ -140,7 +142,7 @@ export default {
     openMessenger() {
       window.open("https://www.messenger.com/t/lyduz", "_blank");
     },
-    emailUs() {
+    openEmail() {
       window.location.href = "mailto:info@lyduz.com";
     }
   }
