@@ -68,8 +68,7 @@ export default {
     { src: "~/plugins/vue-native-websocket", mode: "client" },
     { src: "~/plugins/vue-html2canvas", mode: "client" },
     { src: "~/plugins/custom-filters", mode: "client" },
-    { src: "~/plugins/vue-at", mode: "client" },
-    { src: "~/plugins/vue-fb-customer-chat.js", mode: "client" }
+    { src: "~/plugins/vue-at", mode: "client" }
   ],
   /*
    ** Nuxt.js dev-modules

@@ -93,14 +93,21 @@
       </v-col>
       <v-spacer></v-spacer>
     </v-row>
-    <!-- <Messenger /> -->
   </v-content>
 </template>
 
 <script>
+import Vue from "vue";
+import VueFbCustomerChat from "vue-fb-customer-chat";
+
+Vue.use(VueFbCustomerChat, {
+  page_id: 102524821282907, //  change 'null' to your Facebook Page ID,
+  theme_color: "#03DAC5", // theme color in HEX
+  locale: "en_US" // default 'en_US'
+});
+
 import { mapGetters } from "vuex";
 import Banner from "~/components/static/Banner";
-// import Messenger from "~/components/static/Messenger";
 
 export default {
   auth: false,
@@ -117,8 +124,7 @@ export default {
     };
   },
   components: {
-    Banner,
-    Messenger
+    Banner
   },
   data() {
     return {
