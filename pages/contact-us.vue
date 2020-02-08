@@ -93,12 +93,14 @@
       </v-col>
       <v-spacer></v-spacer>
     </v-row>
+    <!-- <Messenger /> -->
   </v-content>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import Banner from "~/components/static/Banner";
+// import Messenger from "~/components/static/Messenger";
 
 export default {
   auth: false,
@@ -115,7 +117,8 @@ export default {
     };
   },
   components: {
-    Banner
+    Banner,
+    Messenger
   },
   data() {
     return {
