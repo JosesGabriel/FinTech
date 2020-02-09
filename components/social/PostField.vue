@@ -878,7 +878,7 @@ export default {
 }
 .postField__divider {
   position: absolute;
-  width: 526px;
+  width: 100%;
   left: 0px;
 }
 .postField__preview img,

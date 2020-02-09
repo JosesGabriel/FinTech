@@ -14,10 +14,12 @@
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="8" lg="8">
                 <ProfileAbout :about="about" :user="user" class="my-2" />
-                <ProfileExperience class="my-2" />
+                <PostField class="mb-3" @authorNewPost="authorNewPost" />
+                <Newsfeed :new-post="newPost" />
+                <!-- <ProfileExperience class="my-2" />
                 <ProfileEducation class="my-2" />
                 <ProfileSkills class="my-2" />
-                <ProfileInterests class="my-2" />
+                <ProfileInterests class="my-2" />-->
               </v-col>
               <v-col cols="12" sm="12" md="4" lg="4">
                 <!-- <ProfileCourse /> // hide for now -->
@@ -25,7 +27,7 @@
 
                 <WhoToMingle class="pl-3" />
                 <ProfileRooms />
-                <ProfileAds />
+                <!-- <ProfileAds /> -->
                 <v-container>
                   <FooterSidebar />
                 </v-container>
@@ -61,14 +63,14 @@
 <script>
 // Profile tab
 import ProfileAbout from "~/components/profile/parts/ProfileAbout";
-import ProfileExperience from "~/components/profile/parts/ProfileExperience";
-import ProfileEducation from "~/components/profile/parts/ProfileEducation";
-import ProfileSkills from "~/components/profile/parts/ProfileSkills";
-import ProfileInterests from "~/components/profile/parts/ProfileInterests";
+// import ProfileExperience from "~/components/profile/parts/ProfileExperience";
+// import ProfileEducation from "~/components/profile/parts/ProfileEducation";
+// import ProfileSkills from "~/components/profile/parts/ProfileSkills";
+// import ProfileInterests from "~/components/profile/parts/ProfileInterests";
 import ProfileRooms from "~/components/profile/parts/ProfileRooms";
 // import ProfileSuggestedUser from "~/components/profile/parts/ProfileSuggestedUser";
 import WhoToMingle from "~/components/WhoToMingle";
-import ProfileAds from "~/components/profile/parts/ProfileAds";
+// import ProfileAds from "~/components/profile/parts/ProfileAds";
 import FooterSidebar from "~/components/FooterSidebar";
 
 // import ProfileCourse from "~/components/profile/parts/ProfileCourse"; // hide for now
@@ -85,19 +87,19 @@ export default {
   layout: "main",
   components: {
     ProfileAbout,
-    ProfileExperience,
-    ProfileEducation,
-    ProfileSkills,
-    ProfileInterests,
     ProfileRooms,
-    // ProfileSuggestedUser,
     WhoToMingle,
-    ProfileAds,
+    // ProfileAds,
     FooterSidebar,
+    // ProfileExperience,
+    // ProfileEducation,
+    // ProfileSkills,
+    // ProfileInterests,
+    // ProfileSuggestedUser,
     // ProfileCourse, // hide for now
     // ProfileIdeas,
-    ProfileFollowing,
-    ProfileFollowers,
+    // ProfileFollowing,
+    // ProfileFollowers,
     PostField,
     Newsfeed
   },
@@ -110,11 +112,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch",
+      lightSwitch: "global/getLightSwitch"
     }),
     fontColor() {
       return this.lightSwitch == 1 ? "white--text" : "black--text";
-    },
+    }
   },
   data() {
     return {
@@ -128,7 +130,6 @@ export default {
     userData() {
       this.about = this.userData.profile;
       this.user = this.userData;
-      console.log(this.userData);
     }
   },
   methods: {

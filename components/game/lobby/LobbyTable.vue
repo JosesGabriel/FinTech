@@ -209,7 +209,7 @@ export default {
         function(state, prevState, data) {
           switch (state) {
             case "PREPARED": {
-              console.log(client.getRooms());
+              console.log(client.getRooms(),'asdasd');
               let vyndueRooms = client.getRooms();
               for (let i = 0; i < vyndueRooms.length; i++) {
                 if (vyndueRooms[i].tags.Options != undefined) {
