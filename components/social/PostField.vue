@@ -287,7 +287,7 @@
               </v-btn>
             </div>
             <v-btn
-              class="no-transform post__button"
+              class="no-transform post__button black--text"
               rounded
               small
               right
