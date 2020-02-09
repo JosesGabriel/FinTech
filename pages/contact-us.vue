@@ -121,13 +121,14 @@ export default {
   },
   mounted() {
     const fbmessenger = document.getElementById("fb-root");
-    if (fbmessenger != undefined) {
+    if (fbmessenger) {
       fbmessenger.style.display = "block";
-    } else {
-      setTimeout(() => {
-        window.location.reload();
-      }, 120000);
     }
+
+    setTimeout(() => {
+      if (document.getElementById("fb-root") == undefined)
+        window.location.reload();
+    }, 2000);
   },
   computed: {
     ...mapGetters({
