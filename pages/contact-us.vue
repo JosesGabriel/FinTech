@@ -136,7 +136,7 @@ export default {
   },
   mounted() {
     const fbmessenger = document.getElementById("fb-root");
-    if (fbmessenger !== undefined) {
+    if (fbmessenger != undefined) {
       fbmessenger.style.display = "block";
     }
   },
@@ -155,7 +155,7 @@ export default {
   },
   beforeDestroy() {
     const fbmessenger = document.getElementById("fb-root");
-    if (fbmessenger !== undefined) {
+    if (fbmessenger != undefined) {
       fbmessenger.style.display = "none";
     }
   },
