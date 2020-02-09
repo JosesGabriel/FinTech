@@ -787,12 +787,12 @@ export default {
   padding: 15px 10px;
 }
 .atwho-view {
-  bottom: unset;
-  top: 15px;
-  overflow-y: unset;
-  max-height: unset;
-  border: 2px solid #142530;
-  box-shadow: unset;
+  bottom: unset !important;
+  top: 15px !important;
+  overflow-y: unset !important;
+  max-height: unset !important;
+  border: 2px solid #142530 !important;
+  box-shadow: unset !important;
 }
 .atwho-cur {
   background-color: #03dac5;
