@@ -61,12 +61,12 @@
                 ? 'postField__tagging--light'
                 : 'postField__tagging--dark'
             "
-            :members="members != [] ? members : ''"
-            :ats="['@', '＠', '$']"
-            :name-key="stockTagMode ? 'symbol' : 'name'"
+            :members="members"
+            :ats="['@', '＠']"
+            name-key="name"
           >
             <template slot="item" slot-scope="s">
-              <v-avatar v-if="userTagMode" size="22">
+              <v-avatar size="22" @click="clickUserSuggestion(s)">
                 <v-img
                   :src="
                     s.item.profile_image
@@ -79,7 +79,7 @@
               <span
                 class="pl-2"
                 @click="clickUserSuggestion(s)"
-                v-text="stockTagMode ? s.item.symbol : s.item.name"
+                v-text="s.item.name"
               ></span>
             </template>
             <v-textarea
@@ -100,12 +100,14 @@
               flat
               background-color="transparent"
               :loading="postFieldLoader"
+              @keyup.@="userTagMode = true"
               @keyup="catcher"
+              @keyup.$="(stockTagMode = true), search('stock')"
               @click="emojiToggle = false"
               >{{ postField }}</v-textarea
             >
           </at>
-          <!-- <div v-if="stockTagMode" class="stockSuggestions__wrapper">
+          <div v-if="stockTagMode" class="stockSuggestions__wrapper">
             <v-btn
               v-for="n in stockSuggestionsArray.length"
               :key="n"
@@ -122,6 +124,7 @@
               {{ stockSuggestionsArray[n - 1].symbol }}
             </v-btn>
           </div>
+          <!--
           <div v-if="userTagMode">
             <div
               v-if="userSuggestionsArrray.length > 1"
@@ -387,6 +390,7 @@ export default {
       });
       // this.members = [];
       this.currentTaggedUser = "";
+      this.userTagMode = false;
     },
     /**
      * Appends selected emoji to post field
@@ -426,13 +430,12 @@ export default {
         const params = {
           exchange: "PSE",
           query: this.currentTaggedStock,
-          limit: "10",
+          limit: "30",
           type: "stock"
         };
         this.$api.chart.charts.search(params).then(
           function(result) {
-            this.members = result.data;
-            console.log(this.members);
+            this.stockSuggestionsArray = result.data;
           }.bind(this)
         );
       } else if (type == "user") {
@@ -444,7 +447,6 @@ export default {
             .index(payload)
             .then(response => {
               this.members = response.data.users;
-              console.log(this.members);
             })
             .catch(e => {})
             .finally(function() {}.bind(this));
@@ -461,10 +463,7 @@ export default {
      */
     catcher(e) {
       let regExp = /^[0-9a-zA-Z]+$/;
-      if (e.key == "$") {
-        this.stockTagMode = true;
-        this.search("stock");
-      } else if (this.stockTagMode && !regExp.test(e.key)) {
+      if (this.stockTagMode && !regExp.test(e.key)) {
         this.stockTagMode = false;
         this.currentTaggedStock = "";
       }
@@ -487,10 +486,8 @@ export default {
       }
 
       ////USER TAGGED
-      if (e.key == "@") {
-        this.userTagMode = true;
-      } else if (this.userTagMode && !regExp.test(e.key)) {
-        this.userTagMode = false;
+      if (this.userTagMode && !regExp.test(e.key)) {
+        // this.userTagMode = false;
         this.currentTaggedUser = "";
       }
       if (regExp.test(e.key) && e.key.length == 1 && this.userTagMode) {
@@ -790,12 +787,12 @@ export default {
   padding: 15px 10px;
 }
 .atwho-view {
-  bottom: unset;
-  top: 15px;
-  overflow-y: unset;
-  max-height: unset;
-  border: 2px solid #142530;
-  box-shadow: unset;
+  bottom: unset !important;
+  top: 15px !important;
+  overflow-y: unset !important;
+  max-height: unset !important;
+  border: 2px solid #142530 !important;
+  box-shadow: unset !important;
 }
 .atwho-cur {
   background-color: #03dac5;
