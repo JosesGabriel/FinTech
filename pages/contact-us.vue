@@ -30,7 +30,7 @@
             </p>
 
             <v-row no-gutters class="ml-12 pl-12 mt-12">
-              <v-col cols="4">
+              <v-col cols="10">
                 <v-content class="mb-4">
                   <v-hover v-slot:default="{ hover }">
                     <v-btn icon x-large @click="openEmail">
@@ -40,22 +40,7 @@
                     </v-btn>
                   </v-hover>
                 </v-content>
-                <span class="body-2 font-weight-bold">Email</span>
-              </v-col>
-              <v-col cols="2">
-                <h1 class="mt-6">OR</h1>
-              </v-col>
-              <v-col cols="4">
-                <v-content class="mb-4">
-                  <v-hover v-slot:default="{ hover }">
-                    <v-btn icon x-large @click="openMessenger">
-                      <v-icon size="70" :color="!hover ? textColor : 'success'"
-                        >mdi-facebook-messenger</v-icon
-                      >
-                    </v-btn>
-                  </v-hover>
-                </v-content>
-                <span class="body-2 font-weight-bold">Messenger</span>
+                <span class="body-2 font-weight-bold">Email Us</span>
               </v-col>
             </v-row>
           </v-content>
@@ -139,7 +124,9 @@ export default {
     if (fbmessenger != undefined) {
       fbmessenger.style.display = "block";
     } else {
-      this.$router.go();
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
     }
   },
   computed: {
