@@ -126,7 +126,7 @@ export default {
     } else {
       setTimeout(() => {
         window.location.reload();
-      }, 5000);
+      }, 120000);
     }
   },
   computed: {
