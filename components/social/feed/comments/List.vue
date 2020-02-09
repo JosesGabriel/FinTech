@@ -1,5 +1,5 @@
 <template>
-  <v-list dense>
+  <v-list dense class="py-0">
     <template v-for="(comment, index) in comments">
       <Comment
         :key="index"

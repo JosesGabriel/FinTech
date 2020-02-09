@@ -18,7 +18,7 @@
           >
             <v-row>
               <v-col cols="1" class="pr-6"
-                ><span class="stockSymbol__span">{{
+                ><span class="stockSymbol__span ">{{
                   stockData[index] ? stockData[index].stockSym : ""
                 }}</span></v-col
               >
@@ -33,13 +33,15 @@
                 />
               </v-col>
               <v-col cols="1" class="pa-0 stockPrices"
-                ><span :id="stockData[index].stockSym" class="stockSymbol__span"
+                ><span
+                  :id="stockData[index].stockSym"
+                  class="caption stockSymbol__span"
                   >₱{{
                     stockData[index] ? stockData[index].currentPrice : ""
                   }}</span
                 >
                 <span
-                  class="stockSymbol__span"
+                  class="stockSymbol__span overline no-transform"
                   :class="
                     stockData[index].change > 0
                       ? 'success--text'
@@ -93,6 +95,7 @@
           v-if="watchListObject.length != 0"
           to="/watchlist"
           class="caption no-transform"
+          style="color: #546E74"
         >
           Show more
         </router-link>
@@ -359,7 +362,7 @@ export default {
                   });
                 } else if (this.stockData[i].change < 0) {
                   this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#f44336"]
+                    colors: ["#03DAC5"]
                   });
                 } else {
                   this.$refs.closePriceChart[i].updateOptions({

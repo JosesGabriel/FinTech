@@ -51,9 +51,9 @@
               color="success"
               right
               x-small
-              outlined
+              filled
               rounded
-              class="no-transform"
+              class="no-transform font-weight-bold black--text"
               @click="followAccount(suggestedUsersObject[n - 1].id)"
             >Follow</v-btn>
           </div>
