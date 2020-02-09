@@ -134,6 +134,12 @@ export default {
       )}`
     };
   },
+  mounted() {
+    const fbmessenger = document.getElementById("fb-root");
+    if (fbmessenger !== undefined) {
+      fbmessenger.style.display = "block";
+    }
+  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
@@ -145,6 +151,12 @@ export default {
      */
     textColor() {
       return this.lightSwitch == 0 ? "#455A64" : "#eeeeee";
+    }
+  },
+  beforeDestroy() {
+    const fbmessenger = document.getElementById("fb-root");
+    if (fbmessenger !== undefined) {
+      fbmessenger.style.display = "none";
     }
   },
   methods: {
