@@ -1,5 +1,5 @@
 <template>
-  <v-container dark class="pa-0 profile_cover-cont">
+  <v-container :class="lightSwitch == 1 ? 'dark' : 'light'" class="pa-0 profile_cover-cont">
     <v-row no-gutters>
       <v-col
         cols="12"
@@ -69,17 +69,17 @@
                 <v-list-item-title class="white--text subtitle-1 text-shadow">@{{ user.username }}</v-list-item-title>
               </div>
             </v-card>
-            <v-card class="px-2 pt-1 profile_suminfo d-block" color="transparent" outlined tile>
+            <v-card :dark="lightSwitch == 1 ? true : false" class="px-2 pt-1 profile_suminfo d-block" color="transparent" outlined tile>
               <v-row no-gutters>
                 <div class="text-center pr-4">
-                  <v-list-item-title class="white--text caption">Followers</v-list-item-title>
+                  <v-list-item-title :class="fontColor" class="caption">Followers</v-list-item-title>
                   <v-list-item-title
                     class="success--text font-weight-medium body-1"
                     v-text="follow.followers"
                   ></v-list-item-title>
                 </div>
                 <div class="text-center pr-4">
-                  <v-list-item-title class="white--text caption">Following</v-list-item-title>
+                  <v-list-item-title :class="fontColor" class="caption">Following</v-list-item-title>
                   <v-list-item-title
                     class="success--text font-weight-medium body-1"
                     v-text="follow.following"
@@ -119,6 +119,9 @@ export default {
       lightSwitch: "global/getLightSwitch",
       settings: "global/getSettings"
     }),
+    fontColor() {
+      return this.lightSwitch == 1 ? "white--text" : "black--text";
+    },
     cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
@@ -179,7 +182,12 @@ export default {
   border: 4px solid #fff;
   background-color: #d2d8dc;
 }
-.profile_cover-cont {
+.profile_cover-cont.light {
+  border: thin solid hsl(0, 0%, 84%);
+  border-radius: 0 0 5px 5px;
+  border-top: 0;
+}
+.profile_cover-cont.dark {
   border: thin solid hsla(0, 0%, 100%, 0.12);
   border-radius: 0 0 5px 5px;
   border-top: 0;

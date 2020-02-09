@@ -12,7 +12,7 @@
     >
       <v-list nav dense rounded class="py-0">
         <v-list-item-group>
-          <router-link to="/profile" class="navbar__links">
+          <router-link :to="'/profile/'+$auth.user.data.user.username" class="navbar__links">
             <v-list-item>
               <v-list-item-avatar class="mr-4" size="24">
                 <v-img

@@ -1,16 +1,18 @@
 <template>
   <v-list-item :key="comment.id" class="ma-0 pt-3">
-    <v-list-item-avatar style="align-self: flex-start" class="mt-0">
-      <v-img
-        :src="
+    <router-link :to="'/profile/'+ comment.user.username" class="no-transform">
+      <v-list-item-avatar style="align-self: flex-start" class="mt-0">
+        <v-img
+          :src="
           comment.user.profile_image
             ? comment.user.profile_image
             : 'user_default.png'
         "
-        :alt="comment.user.name"
-        class="avatar__border"
-      ></v-img>
-    </v-list-item-avatar>
+          :alt="comment.user.name"
+          class="avatar__border"
+        ></v-img>
+      </v-list-item-avatar>
+    </router-link>
     <v-text-field
       v-if="editModeToggle"
       class="py-3"
@@ -28,21 +30,16 @@
         <span class="text--darken-2 caption">{{ comment.user.name }}</span>
 
         <span v-if="comment.user.uuid == $auth.user.data.user.uuid">
-          <v-btn
-            icon
-            x-small
-            @click="commentSettingsToggle = !commentSettingsToggle"
-            ><v-icon>mdi-dots-horizontal</v-icon></v-btn
-          >
+          <v-btn icon x-small @click="commentSettingsToggle = !commentSettingsToggle">
+            <v-icon>mdi-dots-horizontal</v-icon>
+          </v-btn>
         </span>
 
         <span v-if="commentSettingsToggle">
           <v-btn x-small @click="editModeToggle = !editModeToggle">Edit</v-btn>
           <v-btn x-small @click="deleteComment(comment.id)">Delete</v-btn>
         </span>
-        <div class="overline no-transform">
-          {{ localFormat(comment.created_at, "fn") }}
-        </div>
+        <div class="overline no-transform">{{ localFormat(comment.created_at, "fn") }}</div>
         <div class="caption py-3">{{ comment.content }}</div>
       </v-container>
       <v-container class="pa-0 ma-0">

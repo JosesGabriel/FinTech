@@ -46,13 +46,13 @@
         ></croppa>
       </v-card>
       <v-progress-linear :active="loader" color="success darken-2" indeterminate></v-progress-linear>
-      <v-card :dark="lightSwitch == true" flat class="d-flex justify-end mt-3 m-1">
+      <v-card :dark="lightSwitch == 1 ? true : false" color="transparent" flat class="d-flex justify-end mt-3 m-1">
         <!-- Cancel upload -->
         <v-btn
           class="ma-1 text-capitalize"
           medium
           text
-          color="secondary"
+          :color="lightSwitch == 1 ? 'secondary' : 'black'"
           @click.stop="show = false"
           @click="clearInputs"
         >Cancel</v-btn>

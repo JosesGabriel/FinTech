@@ -7,37 +7,42 @@
     :loading="loader"
   >
     <div class="pa-0 pl-2">
-      <div class="body-2 font-weight-black pl-2 pb-2">
-        Suggested Connections
-      </div>
+      <div class="body-2 font-weight-black pl-2 pb-2">Suggested Connections</div>
       <v-divider></v-divider>
       <v-list class="transparent">
-        <v-list-item
-          v-for="n in suggestedUsersObject.length"
-          :key="n"
-          class="px-0 mb-2"
-        >
+        <v-list-item v-for="n in suggestedUsersObject.length" :key="n" class="px-0 mb-2">
           <div>
-            <v-avatar class="mr-2" color="grey" size="35">
-              <v-img
-                :src="
+            <router-link
+              :to="'/profile/'+ suggestedUsersObject[n - 1].username"
+              class="no-transform"
+            >
+              <v-avatar class="mr-2" color="grey" size="35">
+                <v-img
+                  :src="
                   suggestedUsersObject[n - 1].profile_image
                     ? suggestedUsersObject[n - 1].profile_image
                     : 'user_default.png'
                 "
-              ></v-img>
-            </v-avatar>
+                ></v-img>
+              </v-avatar>
+            </router-link>
           </div>
           <div class="no-wrap caption">
-            <span class="font-weight-medium"
-              >{{ suggestedUsersObject[n - 1].first_name }}
-              {{ suggestedUsersObject[n - 1].last_name }}</span
-            ><br />
-            <v-list-item-subtitle
-              ><span class="font-weight-thin" style="font-size: 11px;">
-                <!-- Empty for now, until followers is added to endpoint -->
-              </span></v-list-item-subtitle
+            <router-link
+              :to="'/profile/'+ suggestedUsersObject[n - 1].username"
+              class="no-transform"
             >
+              <span class="font-weight-medium" :class="lightSwitch == 1 ? 'white--text' : 'black--text'">
+                {{ suggestedUsersObject[n - 1].first_name }}
+                {{ suggestedUsersObject[n - 1].last_name }}
+              </span>
+            </router-link>
+            <br />
+            <v-list-item-subtitle>
+              <span class="font-weight-thin" style="font-size: 11px;">
+                <!-- Empty for now, until followers is added to endpoint -->
+              </span>
+            </v-list-item-subtitle>
           </div>
           <v-spacer></v-spacer>
           <div>
@@ -50,8 +55,7 @@
               rounded
               class="no-transform"
               @click="followAccount(suggestedUsersObject[n - 1].id)"
-              >Follow</v-btn
-            >
+            >Follow</v-btn>
           </div>
         </v-list-item>
       </v-list>
