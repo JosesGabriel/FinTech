@@ -1,6 +1,10 @@
 <template>
   <v-col class="pa-0">
-    <span v-show="showBanner" class="newPosts_banner caption black--text" @click="fetchNewPost()">
+    <span
+      v-show="showBanner"
+      class="newPosts_banner caption black--text"
+      @click="fetchNewPost()"
+    >
       <v-icon small color="black">mdi-arrow-up</v-icon>
       <span class="font-weight-bold">New posts</span>
     </span>
@@ -25,22 +29,28 @@
     >
       <!-- Start of Post Header -->
       <v-list-item class="pt-1">
-        <router-link :to="'/profile/'+ postsObject[n - 1].user.username" class="no-transform">
+        <router-link
+          :to="'/profile/' + postsObject[n - 1].user.username"
+          class="no-transform"
+        >
           <v-list-item-avatar class="mr-2" size="42">
             <img
               class="avatar__border"
               :src="
-              postsObject[n - 1].user.profile_image
-                ? postsObject[n - 1].user.profile_image
-                : 'user_default.png'
-            "
+                postsObject[n - 1].user.profile_image
+                  ? postsObject[n - 1].user.profile_image
+                  : 'user_default.png'
+              "
             />
           </v-list-item-avatar>
         </router-link>
         <v-list-item-content class="pa-0 ma-0">
           <v-row>
             <v-col>
-              <router-link :to="'/profile/'+ postsObject[n - 1].user.username" class="no-transform">
+              <router-link
+                :to="'/profile/' + postsObject[n - 1].user.username"
+                class="no-transform"
+              >
                 <v-list-item-title
                   class="subtitle-2"
                   :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
@@ -72,7 +82,15 @@
                   >
                     <img src="/icon/bullish.svg" width="6" />
                   </v-btn>
-                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
+                  <v-btn
+                    v-else
+                    icon
+                    outlined
+                    fab
+                    width="14"
+                    height="14"
+                    color="error"
+                  >
                     <img src="/icon/bearish.svg" width="6" />
                   </v-btn>
                 </span>
@@ -85,7 +103,8 @@
                 @click="
                   (postOptionsMode = !postOptionsMode), (currentPost = n - 1)
                 "
-              >mdi-dots-horizontal</v-icon>
+                >mdi-dots-horizontal</v-icon
+              >
               <div v-if="postOptionsMode && currentPost == n - 1">
                 <div class="postOptions__dropdown--caret"></div>
                 <div class="postOptions__container">
@@ -99,7 +118,8 @@
                         x-small
                         text
                         v-on="on"
-                      >Delete</v-btn>
+                        >Delete</v-btn
+                      >
                     </template>
 
                     <v-card
@@ -109,7 +129,8 @@
                       <v-card-title
                         class="headline success--text lighten-2"
                         primary-title
-                      >Delete Post?</v-card-title>
+                        >Delete Post?</v-card-title
+                      >
 
                       <v-card-text>
                         Are you sure you want to permanently remove this post
@@ -135,7 +156,8 @@
                             deletePost(postsObject[n - 1].id, n - 1),
                               (deleteDialog = false)
                           "
-                        >Delete</v-btn>
+                          >Delete</v-btn
+                        >
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -149,7 +171,8 @@
                     @click="
                       (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
-                  >Edit</v-btn>
+                    >Edit</v-btn
+                  >
                   <v-btn
                     v-if="
                       postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
@@ -157,7 +180,8 @@
                     x-small
                     text
                     @click="followAccount(postsObject[n - 1].user.uuid)"
-                  >Follow</v-btn>
+                    >Follow</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -194,12 +218,11 @@
                 ),
                   (editPostMode = false)
               "
-            >Done Editing</v-btn>
+              >Done Editing</v-btn
+            >
           </div>
-          <span v-else class="caption px-5 pb-3">
-            {{
-            postsObject[n - 1].content
-            }}
+          <span v-else class="body-2 px-5 pb-3">
+            {{ postsObject[n - 1].content }}
           </span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
@@ -251,9 +274,7 @@
         <v-spacer></v-spacer>
         <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
         <span class="caption">
-          {{
-          postsObject[n - 1].comment_descendants_count
-          }}
+          {{ postsObject[n - 1].comment_descendants_count }}
         </span>
         <!-- TODO Share counter -->
         <!-- <v-btn
@@ -269,6 +290,7 @@
       </v-card-actions>
       <v-divider></v-divider>
       <List
+        v-if="postsObject[n - 1].comments != []"
         :comments="postsObject[n - 1].comments"
         :postindex="n - 1"
         :postid="postsObject[n - 1].id"
@@ -276,15 +298,18 @@
       <!-- Start of Comment -->
       <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
-        <router-link :to="'/profile/'+ $auth.user.data.user.username" class="no-transform">
+        <router-link
+          :to="'/profile/' + $auth.user.data.user.username"
+          class="no-transform"
+        >
           <v-list-item-avatar size="28" class="mr-2">
             <v-img
               class="avatar__border"
               :src="
-              $auth.user.data.user.profile_image
-                ? $auth.user.data.user.profile_image
-                : 'default.png'
-            "
+                $auth.user.data.user.profile_image
+                  ? $auth.user.data.user.profile_image
+                  : 'default.png'
+              "
             ></v-img>
           </v-list-item-avatar>
         </router-link>
@@ -312,7 +337,11 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
   </v-col>
 </template>
 
