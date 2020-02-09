@@ -138,6 +138,8 @@ export default {
     const fbmessenger = document.getElementById("fb-root");
     if (fbmessenger != undefined) {
       fbmessenger.style.display = "block";
+    } else {
+      this.$router.go();
     }
   },
   computed: {
