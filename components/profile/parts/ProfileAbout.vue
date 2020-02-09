@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-0" dark>
-    <v-card class="transparent__bg pa-3 mb-2" outlined :dark="lightSwitch == 1 ? true : false">
+    <v-card class="pa-3 mb-2" outlined :dark="lightSwitch == 1 ? true : false">
       <v-row no-gutters>
         <span :class="fontColor" class="pa-2 d-block font-weight-bold subtitle-1">About</span>
         <v-spacer></v-spacer>
@@ -97,7 +97,6 @@ export default {
     about() {
       this.aboutData = this.about;
       this.userData = this.user;
-      console.log("asdasdasd");
     },
     user() {
       this.onUpdated();
@@ -108,7 +107,6 @@ export default {
       this.aboutData = value.data.profile;
     },
     onUpdated() {
-      console.log(this.user);
       this.options = Object.assign({}, this.options, {
         data: "https://lyduz.com/profile/" + this.user.username
       });

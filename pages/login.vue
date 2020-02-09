@@ -96,8 +96,8 @@ export default {
     }),
     landingImg() {
       return this.lightSwitch == 1
-        ? "/landing-page-dark.svg"
-        : "/landing-page-light.svg";
+        ? "/landing-page-dark.gif"
+        : "/landing-page-light.gif";
     },
     fontColor() {
       return this.lightSwitch == 1 ? "white--text" : "headlinedark--text";
