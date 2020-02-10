@@ -92,7 +92,7 @@ export default {
   middleware: ["auth"],
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
     }),
     landingImg() {
       return this.lightSwitch == 1
@@ -108,7 +108,7 @@ export default {
       isOpen: true,
       postImage: "https://lyduz.com/png_logo.png",
       registerDialogModel: false,
-      state: ""
+      state: "",
     };
   },
   mounted() {
