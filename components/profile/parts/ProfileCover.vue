@@ -51,7 +51,7 @@
                   :value="overlay"
                 >
                   <div @click.stop="showUploadPhoto=true" class="uploadProfile_container-btn">
-                    <v-icon medium color="success">mdi-camera</v-icon>
+                    <v-icon medium color="success">mdi-camera-iris</v-icon>
                     <div class="body-2">Update</div>
                   </div>
                 </v-overlay>
