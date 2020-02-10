@@ -116,51 +116,40 @@
       </v-container>
       <span>
         <v-list-item-content class="pt-0 mb-0">
-          <at
-            :class="
-              lightSwitch == 0
-                ? 'postField__tagging--light'
-                : 'postField__tagging--dark'
-            "
-            :members="members"
-            :ats="['@', '＠']"
-            name-key="name"
-          >
-            <template v-if="userTagMode" slot="item" slot-scope="s">
-              <v-avatar size="22" @click="clickUserSuggestion(s)">
-                <v-img
-                  :src="
-                    s.item.profile_image
-                      ? s.item.profile_image
-                      : 'user_default.png'
-                  "
-                >
-                </v-img>
-              </v-avatar>
-              <span
-                class="pl-2"
-                @click="clickUserSuggestion(s)"
-                @keyup.enter="test"
-                v-text="s.item.name"
-              ></span>
-            </template>
+          <template v-if="userTagMode" slot="item" slot-scope="s">
+            <v-avatar size="22" @click="clickUserSuggestion(s)">
+              <v-img
+                :src="
+                  s.item.profile_image
+                    ? s.item.profile_image
+                    : 'user_default.png'
+                "
+              >
+              </v-img>
+            </v-avatar>
+            <span
+              class="pl-2"
+              @click="clickUserSuggestion(s)"
+              @keyup.enter="test"
+              v-text="s.item.name"
+            ></span>
+          </template>
 
-            <v-text-field
-              v-if="replyCommentMode && currentCommentIndex == postindex"
-              dense
-              rounded
-              hide-details
-              placeholder="Write a comment..."
-              class="caption"
-              color="primary"
-              :value="commentValue"
-              :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
-              :dark="lightSwitch == 0 ? false : true"
-              @keyup.@="userTagMode = true"
-              @keyup="catcher"
-              @keyup.enter="replyToComment(comment.id, $event.target.value)"
-            ></v-text-field>
-          </at>
+          <v-text-field
+            v-if="replyCommentMode && currentCommentIndex == postindex"
+            dense
+            rounded
+            hide-details
+            placeholder="Write a comment..."
+            class="caption"
+            color="primary"
+            :value="commentValue"
+            :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
+            :dark="lightSwitch == 0 ? false : true"
+            @keyup.@="userTagMode = true"
+            @keyup="catcher"
+            @keyup.enter="replyToComment(comment.id, $event.target.value)"
+          ></v-text-field>
         </v-list-item-content>
       </span>
     </v-list-item-content>
@@ -489,6 +478,7 @@ export default {
         .postComment(this.postid, payload)
         .then(response => {
           if (response.success) {
+            this.replyCommentMode = false;
             //Important!! do not remove. Used to empty comment textfield on submit
             if (this.commentValue == " ") {
               this.commentValue = "";

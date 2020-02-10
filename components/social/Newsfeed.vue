@@ -223,7 +223,7 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="body-2 px-5 pb-3">
+          <span v-else class="body-2 px-5 pb-3 post__content">
             {{ postsObject[n - 1].content }}
           </span>
 
@@ -895,5 +895,8 @@ export default {
 }
 .postOptions__btn:focus {
   background-color: transparent;
+}
+.post__content {
+  word-break: break-word;
 }
 </style>

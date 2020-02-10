@@ -91,7 +91,7 @@
                   $auth.user.data.user.name +
                   ', penny for your thoughts?'
               "
-              class="pt-0 caption postField__textarea"
+              class="pt-0 body-2 postField__textarea"
               rows="3"
               row-height="25"
               color="primary"
