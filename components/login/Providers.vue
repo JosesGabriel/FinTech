@@ -2,7 +2,7 @@
   <v-content>
     <v-row align="center" justify="center">
       <v-hover v-slot:default="{ hover }">
-        <v-btn icon x-large>
+        <v-btn v-show="false" icon x-large>
           <v-icon
             size="50"
             :color="!hover ? '' : 'success'"
