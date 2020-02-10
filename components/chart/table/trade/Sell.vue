@@ -12,13 +12,30 @@
             v-on:change="getFunds"
             label="Portfolio"
             dense
-            solo
+            outlined
+          color="success"
+          item-color="success"
+          :dark="lightSwitch == 1"
+          :background-color="cardBackground"
           ></v-select>
-            <v-btn small>Normal</v-btn>
-            <v-btn small 
-                @click="quickTrade"
-                :disabled="this.portvalue == '' ? true : false"
-                >Quick Trade</v-btn>
+           
+            <v-hover v-slot:default="{ hover }">
+          <v-btn 
+            :dark="lightSwitch == true"
+            class="black--text font-weight-bold text-capitalize mr-0"
+            :color="!hover ? 'success' : 'successhover'"
+            elevation="1">Normal</v-btn>
+          </v-hover>
+
+          <v-btn  
+            @click="quickTrade"
+            :disabled="portvalue == '' ? true : false"
+            :dark="lightSwitch == true"
+            class="black--text font-weight-bold text-capitalize mr-0"
+            :color="!hover ? 'success' : 'successhover'"
+            elevation="1"
+            >Quick Trade</v-btn>
+          </v-hover>
         </v-content>
       </v-col>
     
@@ -47,12 +64,14 @@
            :value="this.stock_last"
            readonly
             dense
+            color="success"
             label="Sell Price"
           ></v-text-field>
         <v-row class="my-0 py-0">
             <v-col cols="8" class="mb-0 pb-0">
                 <v-text-field
                     dense
+                    color="success"
                     :dark="lightSwitch == true"
                     label="Quantity"
                     v-model="quantity"
@@ -72,9 +91,9 @@
       </v-col>
 
       <v-col class="col-3">
-        <v-content class="pt-3"> 
+        <v-content class="pt-6"> 
           <v-row style="font-size: 14px;" class="mt-0 pt-0">      
-            <v-col class="mb-6">    
+            <v-col class="mb-6 mr-8">    
                 Peso Value 
                 <span style="float:right;">{{ this.totalcost }}</span>     
             </v-col>
@@ -281,6 +300,14 @@ export default {
         symbolid: "chart/symbolid",
         stock_last: "chart/stock_last",
         }),
+        /**
+     * Toggle between dark/light
+     *
+     * @return
+     */
+    cardBackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
     },
     props: {
         SellDate: {
