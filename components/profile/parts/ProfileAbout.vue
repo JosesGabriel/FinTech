@@ -30,7 +30,13 @@
         </div>
         <v-spacer></v-spacer>
         <div class="qr-code pb-1">
-          <v-card :dark="lightSwitch == 1 ? true : false" color="transparent" class="d-flex align-end qr-code__element" height="100%" flat>
+          <v-card
+            :dark="lightSwitch == 1 ? true : false"
+            color="transparent"
+            class="d-flex align-end qr-code__element"
+            height="100%"
+            flat
+          >
             <QRCanvas :options="options" />
           </v-card>
         </div>
@@ -73,7 +79,7 @@ export default {
     }),
     fontColor() {
       return this.lightSwitch == 1 ? "white--text" : "black--text";
-    },
+    }
   },
   data() {
     return {
@@ -96,9 +102,9 @@ export default {
   watch: {
     about() {
       this.aboutData = this.about;
-      this.userData = this.user;
     },
     user() {
+      this.userData = this.user;
       this.onUpdated();
     }
   },

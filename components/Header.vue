@@ -10,7 +10,7 @@
       <router-link to="/">
         <img
           class="pl-2 pt-1"
-          :src="lightSwitch == 0 ? '/logo-light.svg' : '/logo-dark.svg'"
+          :src="lightSwitch == 0 ? '/logo-dark.svg' : '/logo-light.svg'"
           alt
           width="85"
           height="85"
@@ -140,8 +140,7 @@
       </a>
 
       <a
-        :href="'https://vyndue.com'"
-        target="_blank"
+        :href="'/'"
         class="social__router"
         v-show="$auth.loggedIn ? true : false "
       >
@@ -240,7 +239,7 @@ export default {
   },
   watch: {
     ticks() {
-      //this.initSSE();
+      this.initSSE();
     },
     notification() {
       this.newNotication();
@@ -363,6 +362,7 @@ export default {
 
       allNotificationList.forEach(eventName => {
         evtSourceAll.addEventListener(eventName, e => {
+          console.log('test')
           this.allNotificationHandler(eventName, JSON.parse(e.data));
         });
       });

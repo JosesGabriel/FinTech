@@ -7,22 +7,24 @@
         <v-container class="d-flex flex-row pa-0">
 
     <v-tabs
+      v-model="activeTab"
       color="success"
       background-color="transparent"
       :dark="lightSwitch == true"
       class="my-0 ml-4 py-0 paperTab"
-      v-model="activeTab"
     >
       <v-tab           
         class="tab_menu-top text-capitalize"
         :dark="lightSwitch == true"
         :href="`#tab-1`"
+        :value="`tab-1`"
         :style="{ color: toggleFontColor }"
       >Buy</v-tab>
       <v-tab
         class="tab_menu-top text-capitalize"
         :dark="lightSwitch == true"
-        :href="`#tab-2`" 
+        :href="`#tab-2`"
+        :value="`tab-2`" 
         :style="{ color: toggleFontColor }" 
       >Sell</v-tab>
 
@@ -127,12 +129,12 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "TradeView",
   data: () => ({
-      activeTab: "tab-1",
     cardContent: [
       { id: 1, title: "Price", amount: "10,000.00", php: true },
       { id: 2, title: "Quantity", amount: "10,000", php: false },
       { id: 3, title: "Total", amount: "1,000,000.00", php: true }
     ],
+    activeTab: "tab-1",
     items: ["test 1", "test 2"],
     modal: false,
     date: new Date().toISOString().substr(0, 10),

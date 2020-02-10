@@ -42,28 +42,30 @@
       </v-col>
     </v-row>
     <div class="d-block text-center caption pt-10">
-      <router-link to="/privacy-policy" class="no-transform tertiary--text"
-        >Privacy Policy</router-link
-      >
-      •
-      <router-link to="/terms-of-use" class="no-transform tertiary--text"
-        >Terms of Use</router-link
-      >
-      •
-      <router-link to="/about-us" class="no-transform tertiary--text"
-        >About Us</router-link
-      >
-      •
-      <router-link to="/help-desk" class="no-transform tertiary--text"
-        >Help Desk</router-link
-      >
-      •
-      <!-- <router-link to="/affiliate" class="no-transform tertiary--text">Affliate</router-link>· -->
-      <router-link to="/contact-us" class="no-transform tertiary--text"
-        >Contact Us</router-link
-      >
-      •
-      <span class="success--text">Lyduz © 2020</span>
+      <client-only>
+        <router-link to="/privacy-policy" class="no-transform tertiary--text"
+          >Privacy Policy</router-link
+        >
+        •
+        <router-link to="/terms-of-use" class="no-transform tertiary--text"
+          >Terms of Use</router-link
+        >
+        •
+        <router-link to="/about-us" class="no-transform tertiary--text"
+          >About Us</router-link
+        >
+        •
+        <router-link to="/help-desk" class="no-transform tertiary--text"
+          >Help Desk</router-link
+        >
+        •
+        <!-- <router-link to="/affiliate" class="no-transform tertiary--text">Affliate</router-link>· -->
+        <router-link to="/contact-us" class="no-transform tertiary--text"
+          >Contact Us</router-link
+        >
+        •
+        <span class="success--text">Lyduz © 2020</span>
+      </client-only>
     </div>
 
     <LoginRegister v-model="registerDialogModel" :state="state" />

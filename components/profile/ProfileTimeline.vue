@@ -13,7 +13,7 @@
           <v-tab-item class="mt-5" :value="'tab-1'">
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="8" lg="8">
-                <ProfileAbout :about="about" :user="user" class="my-2" />
+                <ProfileAbout v-if="user" :about="about" :user="user" class="my-2" />
                 <PostField class="mb-3" @authorNewPost="authorNewPost" />
                 <Newsfeed v-if="getUserId" :author-id="user.uuid" :new-post="newPost" />
                 <!-- <ProfileExperience class="my-2" />
@@ -135,6 +135,7 @@ export default {
       this.about = this.userData.profile;
       this.user = this.userData;
 
+      // console.log(this.user)
       this.getUserId = true
     }
   },
