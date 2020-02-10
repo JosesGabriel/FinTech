@@ -44,7 +44,7 @@
         > -->
         <v-select
           v-model="portvalue"
-          :items="portfolio"
+          :items="['My Portfolio', 'Virtual Portfolio']"
           item-text="name"
           item-value="id"
           class="select__trade ma-0 pa-0"
@@ -268,13 +268,19 @@
         >
           Cancel
         </v-btn>
-        <v-btn
-          :dark="lightSwitch == 1"
-          class="text-capitalize mr-0"
-          :disabled="this.portvalue != '' && this.quantity > 0 ? false : true"
-          @click="showConfirm = true"
-          >Continue</v-btn
-        >
+
+        <v-hover v-slot:default="{ hover }">
+          <v-btn
+            :dark="lightSwitch == true"
+            class="black--text font-weight-bold text-capitalize mr-0"
+            :color="!hover ? 'success' : 'successhover'"
+            elevation="1"
+            :disabled="portvalue != '' && quantity > 0 ? false : true"
+            @click="showConfirm = true"
+          >
+            Continue
+          </v-btn>
+        </v-hover>
       </v-content>
     </v-col>
     <v-dialog v-model="showConfirm" max-width="330px">
