@@ -466,12 +466,12 @@ export default {
       if (this.iteration) {
         payload = {
           parent_id: this.iteration,
-          content: content
+          content: content.substring(0, 200)
         };
       } else {
         payload = {
           parent_id: id,
-          content: content
+          content: content.substring(0, 200)
         };
       }
       this.$api.social.posts
