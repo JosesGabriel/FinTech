@@ -140,8 +140,7 @@
       </a>
 
       <a
-        :href="'https://vyndue.com'"
-        target="_blank"
+        :href="'/'"
         class="social__router"
         v-show="$auth.loggedIn ? true : false "
       >
