@@ -92,6 +92,9 @@ export default $axios => ({
     followAccount(params) {
         return $axios.$post(`${baseURL}/users/` + params + `/follow`);
     },
+    unfollowAccount(params) {
+        return $axios.$post(`${baseURL}/users/` + params + `/unfollow`);
+    },
     follow(params) {
         return $axios.$get(`${baseURL}/users/` + params);
     },

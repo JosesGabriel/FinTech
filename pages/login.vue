@@ -30,7 +30,7 @@
         </div>
       </v-col>
       <v-col cols="12" sm="8" md="8" lg="8">
-        <img :src="landingImg" alt width="100%" />
+        <img :src="landingImg" class="landingImage" alt width="100%" />
       </v-col>
     </v-row>
     <div class="d-block text-center caption pt-5">
@@ -108,7 +108,7 @@ export default {
       isOpen: true,
       postImage: "https://lyduz.com/png_logo.png",
       registerDialogModel: false,
-      state: '',
+      state: ""
     };
   },
   mounted() {
@@ -165,11 +165,12 @@ export default {
   position: absolute;
   transform: translateY(25%);
 }
-.headlineLanding_page {
+#app .leftPart_container .headlineLanding_page {
   font-style: normal;
-  font-weight: 900;
+  font-weight: 600;
   font-size: 64px;
   line-height: 97.9%;
+  font-family: "Montserrat", sans-serif !important;
 }
 .bodyLanding_page {
   font-size: 18px;
@@ -177,6 +178,14 @@ export default {
   letter-spacing: 0.5px;
 }
 .login__card {
-  margin-top: 100px;
+  margin-top: 50px;
+}
+.lamp__btn {
+  z-index: 99999;
+  position: absolute;
+  width: 8%;
+  right: 337px;
+}
+.landingImage {
 }
 </style>

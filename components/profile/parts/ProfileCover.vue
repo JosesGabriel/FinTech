@@ -99,18 +99,33 @@
                     filled
                     rounded
                     color="success"
-                    v-show="$auth.user.data.user.username == user.username || follow.im_following == 1 ? false : true"
+                    v-show="$auth.user.data.user.username == user.username ? false : follow.im_following == 1 ? false : true"
                     @click="followAccount($auth.user.data.user.uuid)"
                     class="black--text caption font-weight-bold body-2 mt-2"
                   >Follow</v-btn>
                   <v-btn
+                    outlined
+                    rounded
+                    color="success"
+                    v-show="$auth.user.data.user.username == user.username ? false : follow.im_following == 1 ? true : false"
+                    @click="unfollowAccount($auth.user.data.user.uuid)"
+                    class="success--text caption font-weight-bold body-2 mt-2"
+                  >Following</v-btn>
+                  <v-btn
                     filled
                     rounded
                     color="success"
-                    v-show="$auth.user.data.user.username == user.username || follow.my_follower == 1 ? true : false"
-                    @click="follow.my_follower = 1"
+                    v-show="$auth.user.data.user.username == user.username ? false : follow.my_follower == 1 ? true : false"
+                    @click="followAccount($auth.user.data.user.uuid)"
                     class="black--text font-weight-bold body-2 mt-2"
                   >Follow Back</v-btn>
+                  <v-btn
+                    outlined
+                    rounded
+                    color="success"
+                    v-show="$auth.user.data.user.username == user.username ? false : follow.my_follower == 1 && follow.im_following == 1 ? true : false"
+                    class="success--text caption font-weight-bold body-2 mt-2"
+                  >Followed</v-btn>
                 </v-row>
               </v-card>
             </v-card>
@@ -196,7 +211,7 @@ export default {
       this.$api.social.follow.follow(user_id).then(response => {
         if (response.success) {
           this.follow = response.data.user;
-          console.log(this.follow)
+          console.log(this.follow);
         }
       });
     },
@@ -220,7 +235,7 @@ export default {
             };
             this.setAlert(alert);
 
-            this.follow.im_following = 1
+            this.follow.im_following = 1;
           }
         })
         .catch(e => {
@@ -228,6 +243,38 @@ export default {
             model: true,
             state: false,
             message: "You are already following this user."
+          };
+          this.setAlert(alert);
+        });
+    },
+    /**
+     * fires when user clicks follow button
+     *
+     * @param   {string}  user_id
+     *
+     * @return
+     */
+    unfollowAccount(user_id) {
+      const params = user_id;
+      this.$api.social.follow
+        .unfollowAccount(params)
+        .then(response => {
+          if (response.success) {
+            let alert = {
+              model: true,
+              state: true,
+              message: "Successfully unfollowed!"
+            };
+            this.setAlert(alert);
+
+            this.follow.im_following = 1;
+          }
+        })
+        .catch(e => {
+          let alert = {
+            model: true,
+            state: false,
+            message: "You are already unfollowing this user."
           };
           this.setAlert(alert);
         });
