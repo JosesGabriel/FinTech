@@ -12,7 +12,7 @@
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
         <Newsfeed :new-post="newPost" />
       </v-col>
-      <v-col class="px-3 hidden-sm-and-down" cols="3" sm="3" md="3">
+      <v-col class="px-3 hidden-sm-and-down pr-0" cols="3" sm="3" md="3">
         <TrendingStocks />
         <WhoToMingle />
         <MiniWatchlist />
