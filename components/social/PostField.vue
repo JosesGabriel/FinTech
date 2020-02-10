@@ -65,7 +65,7 @@
             :ats="['@', '＠']"
             name-key="name"
           >
-            <template slot="item" slot-scope="s">
+            <template v-if="userTagMode" slot="item" slot-scope="s">
               <v-avatar size="22" @click="clickUserSuggestion(s)">
                 <v-img
                   :src="
@@ -79,6 +79,7 @@
               <span
                 class="pl-2"
                 @click="clickUserSuggestion(s)"
+                @keyup.enter="test"
                 v-text="s.item.name"
               ></span>
             </template>
@@ -118,54 +119,13 @@
               @click="
                 appendToField(stockSuggestionsArray[n - 1].symbol, 'stock'),
                   (hasTaggedStock = true),
-                  (taggedStocks = [stockSuggestionsArray[n - 1].id_str])
+                  (taggedStocks = [stockSuggestionsArray[n - 1].id_str]),
+                  (currentTaggedStock = '')
               "
             >
               {{ stockSuggestionsArray[n - 1].symbol }}
             </v-btn>
           </div>
-          <!--
-          <div v-if="userTagMode">
-            <div
-              v-if="userSuggestionsArrray.length > 1"
-              class="userSuggestions__dropdownCaret"
-            ></div>
-            <v-list dense avatar class="userSuggestions__vlist py-0">
-              <v-list-item-group color="primary">
-                <v-list-item
-                  v-for="n in userSuggestionsArrray.length > 5
-                    ? 5
-                    : userSuggestionsArrray.length"
-                  :key="n"
-                  @click="
-                    appendToField(userSuggestionsArrray[n - 1].name, 'user'),
-                      (hasTaggedUser = true),
-                      (userTagMode = false),
-                      taggedUsers.push(userSuggestionsArrray[n - 1].name)
-                  "
-                >
-                  <v-list-item-avatar size="30">
-                    <v-img
-                      :src="
-                        userSuggestionsArrray[n - 1].profile_image
-                          ? userSuggestionsArrray[n - 1].profile_image
-                          : 'default.png'
-                      "
-                    ></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-text="
-                        userSuggestionsArrray[n - 1].first_name +
-                          ' ' +
-                          userSuggestionsArrray[n - 1].last_name
-                      "
-                    ></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </div> -->
           <v-divider class="postField__divider" />
           <div class="pt-2">
             <input
@@ -177,11 +137,6 @@
               @change="onInputFileChange"
             />
             <div class="postField__preview pt-2">
-              <!-- <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
-                            <v-icon color="white">mdi-close</v-icon>
-                        </v-btn> -->
-              <!-- <img :src="previewImage" class="postField__previewImage" v-if="postIsImage"/>
-                        <video controls :src="previewImage" class="postField__previewImage" v-if="!postIsImage"/> -->
               <div class="postField__imageWrapper">
                 <div
                   v-for="n in imagesArray.length"
@@ -287,7 +242,7 @@
               </v-btn>
             </div>
             <v-btn
-              class="no-transform post__button"
+              class="no-transform post__button black--text"
               rounded
               small
               right
@@ -388,7 +343,6 @@ export default {
         uuid: selected.item.uuid,
         name: selected.item.name
       });
-      // this.members = [];
       this.currentTaggedUser = "";
       this.userTagMode = false;
     },
@@ -418,7 +372,7 @@ export default {
         index = this.postField.lastIndexOf("@");
       }
       this.postField = this.postField.slice(0, index + 1);
-      this.postField += value;
+      this.postField += value + " ";
     },
     /**
      * Searches from stock list based on stock that user is currently typing, fires when stockTagMode is true.
@@ -475,13 +429,10 @@ export default {
         this.currentTaggedStock = this.currentTaggedStock.slice(0, -1);
         this.search("stock");
       }
-      if (
-        this.stockTagMode &&
-        e.key == "Backspace" &&
-        this.currentTaggedStock == ""
-      ) {
+      if (!this.stockTagMode && e.key == "Backspace") {
         this.stockTagMode = false;
-      } else if (this.stockTagMode && e.key == "Backspace") {
+      }
+      if (this.stockTagMode && e.key == "Backspace") {
         this.search("stock");
       }
 
