@@ -54,7 +54,7 @@
               </v-list-item-icon>
               <v-list-item-content
                 ><v-list-item-title
-                  class="font-weight-black navbar__links"
+                  class="font-weight-black navbar__links body-2"
                   :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
                   >Social Wall</v-list-item-title
                 ></v-list-item-content
@@ -71,7 +71,8 @@
                 >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-medium navbar__links"
+                ><v-list-item-title
+                  class="font-weight-medium navbar__links body-2"
                   >Interactive Chart</v-list-item-title
                 ></v-list-item-content
               >
@@ -88,7 +89,8 @@
                 >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-medium navbar__links"
+                ><v-list-item-title
+                  class="font-weight-medium navbar__links body-2"
                   >Trading Journal</v-list-item-title
                 ></v-list-item-content
               >
@@ -105,7 +107,8 @@
                 >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-medium navbar__links"
+                ><v-list-item-title
+                  class="font-weight-medium navbar__links body-2"
                   >Virtual Trading</v-list-item-title
                 ></v-list-item-content
               >
@@ -139,7 +142,8 @@
                 ></v-list-item-icon
               >
               <v-list-item-content
-                ><v-list-item-title class="font-weight-medium navbar__links"
+                ><v-list-item-title
+                  class="font-weight-medium navbar__links body-2"
                   >Watchlist</v-list-item-title
                 ></v-list-item-content
               >

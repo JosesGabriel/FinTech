@@ -66,13 +66,14 @@
                     postsObject[n - 1].tagged_stocks &&
                       postsObject[n - 1].tagged_stocks.length != 0
                   "
-                  class="success--text overline post--sentiment pa-05"
+                  class="success--text overline pa-05"
                 >
                   <v-btn
                     v-if="
                       postsObject[n - 1].tagged_stocks[0].tag_meta.sentiment ==
                         'bull'
                     "
+                    class="bull__btn"
                     icon
                     outlined
                     fab
@@ -84,6 +85,7 @@
                   </v-btn>
                   <v-btn
                     v-else
+                    class="bear__btn"
                     icon
                     outlined
                     fab
@@ -221,7 +223,7 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="body-2 px-5 pb-3">
+          <span v-else class="body-2 px-5 pb-3 post__content">
             {{ postsObject[n - 1].content }}
           </span>
 
@@ -302,7 +304,7 @@
           :to="'/profile/' + $auth.user.data.user.username"
           class="no-transform"
         >
-          <v-list-item-avatar size="28" class="mr-2">
+          <v-list-item-avatar size="32" class="mr-2">
             <v-img
               class="avatar__border"
               :src="
@@ -893,5 +895,8 @@ export default {
 }
 .postOptions__btn:focus {
   background-color: transparent;
+}
+.post__content {
+  word-break: break-word;
 }
 </style>
