@@ -211,4 +211,7 @@ export default {
 }
 .landingImage {
 }
+.footer__links:hover {
+  color: #03dac5;
+}
 </style>

@@ -11,7 +11,6 @@
       background-color="transparent"
       :dark="lightSwitch == true"
       class="my-0 ml-4 py-0 paperTab"
-      v-model="activeTab"
     >
       <v-tab           
         class="tab_menu-top text-capitalize"
@@ -35,9 +34,9 @@
             class="mt-0 pt-0 pr-0 mr-0"
             style="float: right;"
             row>
-            <v-radio color="success" :dark="lightSwitch == true" label="Day" value="radio-2"></v-radio>
-            <v-radio color="success" disabled :dark="lightSwitch == true" label="GTC" value="radio-1"></v-radio>
-            <v-radio color="success" disabled :dark="lightSwitch == true" label="GTD" value="radio-3"></v-radio>
+            <v-radio :dark="lightSwitch == true" label="Day" value="radio-2"></v-radio>
+            <v-radio disabled :dark="lightSwitch == true" label="GTC" value="radio-1"></v-radio>
+            <v-radio disabled :dark="lightSwitch == true" label="GTD" value="radio-3"></v-radio>
           </v-radio-group>
         </v-col>
         <v-col cols="6" class="mt-0 pt-0">
@@ -127,7 +126,6 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "TradeView",
   data: () => ({
-      activeTab: "tab-1",
     cardContent: [
       { id: 1, title: "Price", amount: "10,000.00", php: true },
       { id: 2, title: "Quantity", amount: "10,000", php: false },
@@ -195,7 +193,5 @@ export default {
 .__tradeDate {
 border-radius: 0px !important;
 }
-.custom_menu_popup{
-    padding: 12px 12px; margin: -16px;
-}
+
 </style>

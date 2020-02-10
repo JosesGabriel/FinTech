@@ -42,12 +42,16 @@
             <span class="footer__links caption">Terms of Use</span>
           </router-link>
           •
-          <router-link tag="span" to="/contact-us">
-            <span class="footer__links caption">Contact Us</span>
-          </router-link>
-          •
           <router-link tag="span" to="/about-us">
             <span class="footer__links caption">About Us</span>
+          </router-link>
+          •
+          <router-link tag="span" to="/help-desk">
+            <span class="footer__links caption">Help Desk</span>
+          </router-link>
+          •
+          <router-link tag="span" to="/contact-us">
+            <span class="footer__links caption">Contact Us</span>
           </router-link>
           <br />
           <span class="caption">Copyright © 2020 Lyduz</span>
