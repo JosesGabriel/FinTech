@@ -1,13 +1,11 @@
 <template>
   <v-app>
-    <v-content
-      :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'"
-    >
+    <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <rbHeader :ticks="ticks" class="header__container" />
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
         <div v-show="showLamp">
           <v-img
-            class="lamp__btn"
+            :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'"
             v-show="whiteMode == '/login/' || whiteMode == '/login' ? true : false"
             :src="lampMode"
             @click="lampSwitch"
@@ -88,12 +86,12 @@ export default {
     },
     showLamp() {
       let lampBtn;
-      if (this.$route.path == '/login/' || this.$route.path == '/login') {
+      if (this.$route.path == "/login/" || this.$route.path == "/login") {
         lampBtn = true;
       } else {
         lampBtn = false;
       }
-      return lampBtn
+      return lampBtn;
     }
   },
   mounted() {
@@ -198,12 +196,19 @@ export default {
 .header__container {
   position: relative;
 }
-.lamp__btn {
+.lampDark__btn {
   z-index: 99999;
   position: absolute;
   width: 8%;
   top: 0;
   right: 340px;
+}
+.lampLight__btn {
+  z-index: 99999;
+  position: absolute;
+  width: 44%;
+  top: 0;
+  right: 131px;
 }
 .componentContainer {
   position: relative;
