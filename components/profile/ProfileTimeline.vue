@@ -26,7 +26,7 @@
                 <!-- <ProfileSuggestedUser /> -->
 
                 <WhoToMingle class="pl-3" />
-                <ProfileRooms />
+                <!-- <ProfileRooms /> -->
                 <!-- <ProfileAds /> -->
                 <v-container>
                   <FooterSidebar />
@@ -67,7 +67,7 @@ import ProfileAbout from "~/components/profile/parts/ProfileAbout";
 // import ProfileEducation from "~/components/profile/parts/ProfileEducation";
 // import ProfileSkills from "~/components/profile/parts/ProfileSkills";
 // import ProfileInterests from "~/components/profile/parts/ProfileInterests";
-import ProfileRooms from "~/components/profile/parts/ProfileRooms";
+// import ProfileRooms from "~/components/profile/parts/ProfileRooms";
 // import ProfileSuggestedUser from "~/components/profile/parts/ProfileSuggestedUser";
 import WhoToMingle from "~/components/WhoToMingle";
 // import ProfileAds from "~/components/profile/parts/ProfileAds";
@@ -87,7 +87,7 @@ export default {
   layout: "main",
   components: {
     ProfileAbout,
-    ProfileRooms,
+    // ProfileRooms,
     WhoToMingle,
     // ProfileAds,
     FooterSidebar,

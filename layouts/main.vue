@@ -1,16 +1,16 @@
 <template>
   <v-app>
-    <v-content
-      :class="lightSwitch == 0 ? whiteMode == '/login/' || whiteMode == '/login' ? 'lightWhiteMode': 'lightMode' : 'darkMode'"
-    >
+    <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <rbHeader :ticks="ticks" class="header__container" />
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
-        <v-img
-          class="lamp__btn"
-          v-show="whiteMode == '/login/' || whiteMode == '/login' ? true : false"
-          :src="lampMode"
-          @click="lampSwitch"
-        />
+        <div v-show="showLamp">
+          <img
+            :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'"
+            v-show="whiteMode == '/login/' || whiteMode == '/login' ? true : false"
+            :src="lampMode"
+            @click="lampSwitch"
+          />
+        </div>
         <nuxt />
       </v-container>
       <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
@@ -62,7 +62,8 @@ export default {
       notificationAlert: true,
       notificationTimeout: 100000,
       ticks: 1,
-      whiteMode: null
+      whiteMode: null,
+      lampBtn: false
     };
   },
   head() {
@@ -82,6 +83,15 @@ export default {
       return this.lightSwitch == 1
         ? "/Lamp-Darkmode.svg"
         : "/Lamp-Lightmode.svg";
+    },
+    showLamp() {
+      let lampBtn;
+      if (this.$route.path == "/login/" || this.$route.path == "/login") {
+        lampBtn = true;
+      } else {
+        lampBtn = false;
+      }
+      return lampBtn;
     }
   },
   mounted() {
@@ -135,8 +145,8 @@ export default {
     }),
     userNotificationAlertLayout: UserNotificationAlertLayout,
     lampSwitch() {
-      let lampMode = localStorage.currentMode
-      
+      let lampMode = localStorage.currentMode;
+
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
     }
@@ -186,12 +196,19 @@ export default {
 .header__container {
   position: relative;
 }
-.lamp__btn {
+.lampDark__btn {
   z-index: 99999;
   position: absolute;
   width: 8%;
   top: 0;
   right: 340px;
+}
+.lampLight__btn {
+  z-index: 99999;
+  position: absolute;
+  width: 44%;
+  top: 0;
+  right: 131px;
 }
 .componentContainer {
   position: relative;

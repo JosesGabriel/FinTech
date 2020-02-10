@@ -1,7 +1,7 @@
 <template>
   <v-toolbar
     :dark="lightSwitch == 0 ? false : true"
-    :class="lightSwitch == 0 ? whiteMode == '/login/' || whiteMode == '/login' ? 'lightWhiteMode': 'lightMode' : 'darkMode'"
+    :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'"
     flat
     height="54"
     class="header__toolbar"
