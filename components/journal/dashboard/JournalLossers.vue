@@ -1,18 +1,28 @@
 <template>
   <v-container class="pa-0">
-    <v-col class="pa-0" cols="12" sm="12" md="12">
-      <div id="chart">
-        <client-only>
-          <apexcharts
-            ref="lossersChart"
-            type="bar"
-            height="230"
-            :options="chartOptions"
-            :series="series"
-          />
-        </client-only>
-      </div>
-    </v-col>
+    <v-row no-gutters>
+      <v-col class="pa-0 pt-8" cols="1" sm="1" md="1">
+        <span
+          :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+          class="caption py-1 stockSymbol_text"
+          v-for="(item, index) in lastSymbolArray"
+          :key="index"
+        >{{ item }}</span>
+      </v-col>
+      <v-col class="pa-0" cols="11" sm="11" md="11">
+        <div id="chart">
+          <client-only>
+            <apexcharts
+              ref="lossersChart"
+              type="bar"
+              height="230"
+              :options="chartOptions"
+              :series="series"
+            />
+          </client-only>
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -105,13 +115,13 @@ export default {
         },
         yaxis: {
           show: true,
-          opposite: false,
+          // opposite: false,
           max: 0,
           labels: {
             show: true,
             align: "left",
             minWidth: 0,
-            maxWidth: 100,
+            maxWidth: 160,
             style: {
               color: "#b6b6b6",
               fontSize: "12px",
@@ -161,7 +171,8 @@ export default {
           },
           followCursor: true
         }
-      }
+      },
+      lastSymbolArray: []
     };
   },
   mounted() {
@@ -203,7 +214,7 @@ export default {
   },
   methods: {
     /**
-     * getTopLossers will work on ploting/updating chart series 
+     * getTopLossers will work on ploting/updating chart series
      *
      * @return  {array}  data to update chart
      */
@@ -213,7 +224,7 @@ export default {
         const lossersArray = [];
         const negativeArr = [];
         let lastValueArray = [null, null, null, null, null, null, null];
-        let lastSymbolArray = [" ", " ", " ", " ", " ", " ", " "];
+        this.lastSymbolArray = [];
         let filteredStocks = null;
 
         // map keys, from object make it array
@@ -243,7 +254,7 @@ export default {
         // loop the name and value push to array
         for (let x = 0; x < negativeArr.length; x++) {
           lastValueArray.unshift(negativeArr[x].value);
-          lastSymbolArray.unshift(negativeArr[x].stock_sym);
+          this.lastSymbolArray.unshift(negativeArr[x].stock_sym);
         }
 
         // update chart series
@@ -252,19 +263,6 @@ export default {
             data: lastValueArray.slice(0, 7)
           }
         ]);
-
-        // update chart category symbols
-        this.chartOptions = {
-          ...this.chartOptions,
-          ...{
-            xaxis: {
-              categories: [
-                ...lastSymbolArray,
-                ...this.chartOptions.xaxis.categories
-              ].slice(0, 7)
-            }
-          }
-        };
       }
       this.componentKeys++;
     },
@@ -297,3 +295,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.stockSymbol_text {
+  display: block;
+  padding: 5.4px 0 0px !important;
+}
+</style>
