@@ -11,14 +11,32 @@
             append-icon="mdi-chevron-down"
             label="Portfolio"
             v-on:change="getFunds"
+            outlined
             dense
-            solo
+          color="success"
+          item-color="success"
+          :dark="lightSwitch == 1"
+          :background-color="cardBackground"
           ></v-select>
-          <v-btn small>Normal</v-btn>
-          <v-btn small 
+
+          <v-hover v-slot:default="{ hover }">
+          <v-btn 
+            :dark="lightSwitch == true"
+            class="black--text font-weight-bold text-capitalize mr-0"
+            :color="!hover ? 'success' : 'successhover'"
+            elevation="1">Normal</v-btn>
+          </v-hover>
+
+          <v-hover v-slot:default="{ hover }">
+          <v-btn  
             @click="quickTrade"
-            :disabled="this.portvalue == '' ? true : false"
+            :disabled="portvalue == '' ? true : false"
+            :dark="lightSwitch == true"
+            class="black--text font-weight-bold text-capitalize mr-0"
+            :color="!hover ? 'success' : 'successhover'"
+            elevation="1"
             >Quick Trade</v-btn>
+          </v-hover>
           <v-icon 
             small 
             @click="modalQuickTrade=true" 
@@ -57,6 +75,7 @@
           <v-text-field
             dense
             readonly
+            color="success"
             :value="this.stock_last"
             :dark="lightSwitch == true"
             label="Buy Price"
@@ -65,6 +84,7 @@
             <v-col cols="8" class="mb-0 pb-0">
                 <v-text-field
                     dense
+                    color="success"
                     :dark="lightSwitch == true"
                     label="Quantity"
                     v-model="quantity"
@@ -94,31 +114,41 @@
             :items="strategy"
             v-model="strat"
             class="select__trade ma-0 pa-0"
-            item-color="success"
+            
             append-icon="mdi-chevron-down"
             label="Select Strategy"     
             dense
-            solo
+            outlined
+          color="success"
+          item-color="success"
+          :dark="lightSwitch == 1"
+          :background-color="cardBackground"
           ></v-select>
           <v-select
             :items="tradeplan"
              v-model="tplan"
             class="select__trade ma-0 pa-0"
-            item-color="success"
             append-icon="mdi-chevron-down"
             label="Select Trade Plan"
             dense
-            solo
+            outlined
+          color="success"
+          item-color="success"
+          :dark="lightSwitch == 1"
+          :background-color="cardBackground"
           ></v-select>
           <v-select
             :items="emotion"
             v-model="emot"
             class="select__trade ma-0 pa-0"
-            item-color="success"
             append-icon="mdi-chevron-down"
             label="Select Emotion"
             dense
-            solo
+            outlined
+          color="success"
+          item-color="success"
+          :dark="lightSwitch == 1"
+          :background-color="cardBackground"
           ></v-select>
         </v-content>
       </v-col>
@@ -146,13 +176,25 @@
           >
            Cancel
           </v-btn>
+
+
+        <v-hover v-slot:default="{ hover }">
         <v-btn
           :dark="lightSwitch == 1"
-          class="text-capitalize mr-0"
-          :disabled="this.portvalue != '' && this.quantity > 0 ? false : true"
+
+            class="black--text font-weight-bold text-capitalize mr-0"
+            :color="!hover ? 'success' : 'successhover'"
+            elevation="1"
+
+          :disabled="portvalue != '' && quantity > 0 ? false : true"
           @click="showConfirm = true"
           >Continue</v-btn
         >
+        </v-hover>
+
+        
+
+
         </v-content>
       </v-col>
        <v-dialog v-model="showConfirm" max-width="330px">
@@ -387,7 +429,15 @@ export default {
         return this.lightSwitch == 0
           ? "#000000 !important"
           : "#ffffff !important";
-      }
+      },
+      /**
+     * Toggle between dark/light
+     *
+     * @return
+     */
+    cardBackground: function() {
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    }
     },
     props: {
       /**

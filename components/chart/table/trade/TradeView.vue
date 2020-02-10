@@ -7,6 +7,7 @@
         <v-container class="d-flex flex-row pa-0">
 
     <v-tabs
+      v-model="activeTab"
       color="success"
       background-color="transparent"
       :dark="lightSwitch == true"
@@ -16,12 +17,14 @@
         class="tab_menu-top text-capitalize"
         :dark="lightSwitch == true"
         :href="`#tab-1`"
+        :value="`tab-1`"
         :style="{ color: toggleFontColor }"
       >Buy</v-tab>
       <v-tab
         class="tab_menu-top text-capitalize"
         :dark="lightSwitch == true"
-        :href="`#tab-2`" 
+        :href="`#tab-2`"
+        :value="`tab-2`" 
         :style="{ color: toggleFontColor }" 
       >Sell</v-tab>
 
@@ -34,9 +37,9 @@
             class="mt-0 pt-0 pr-0 mr-0"
             style="float: right;"
             row>
-            <v-radio :dark="lightSwitch == true" label="Day" value="radio-2"></v-radio>
-            <v-radio disabled :dark="lightSwitch == true" label="GTC" value="radio-1"></v-radio>
-            <v-radio disabled :dark="lightSwitch == true" label="GTD" value="radio-3"></v-radio>
+            <v-radio color="success" :dark="lightSwitch == true" label="Day" value="radio-2"></v-radio>
+            <v-radio color="success" disabled :dark="lightSwitch == true" label="GTC" value="radio-1"></v-radio>
+            <v-radio color="success" disabled :dark="lightSwitch == true" label="GTD" value="radio-3"></v-radio>
           </v-radio-group>
         </v-col>
         <v-col cols="6" class="mt-0 pt-0">
@@ -131,6 +134,7 @@ export default {
       { id: 2, title: "Quantity", amount: "10,000", php: false },
       { id: 3, title: "Total", amount: "1,000,000.00", php: true }
     ],
+    activeTab: "tab-1",
     items: ["test 1", "test 2"],
     modal: false,
     date: new Date().toISOString().substr(0, 10),
@@ -193,5 +197,7 @@ export default {
 .__tradeDate {
 border-radius: 0px !important;
 }
-
+.custom_menu_popup{
+    padding: 12px 12px; margin: -16px;
+}
 </style>
