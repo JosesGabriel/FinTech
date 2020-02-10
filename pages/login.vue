@@ -3,29 +3,37 @@
     <v-row no-gutters>
       <v-col class="leftPart_col" cols="12" sm="4" md="4" lg="4">
         <div class="leftPart_container">
-          <span class="headlineLanding_page text-left d-block" :class="fontColor">
+          <span
+            class="headlineLanding_page text-left d-block"
+            :class="fontColor"
+          >
             Looping
             <br />Investors
           </span>
           <span
             class="bodyLanding_page text-left d-block pt-3"
             :class="fontColor"
-          >Leap along with the fastest growing community of self-directed investors and discover how the Stock Market can improve your financial prospects.</span>
+            >Leap along with the fastest growing community of self-directed
+            investors and discover how the Stock Market can improve your
+            financial prospects.</span
+          >
           <div class="pa-10">
             <v-btn
               text
               tile
               medium
               class="font-weight-bold caption success--text px-8 mr-7"
-              @click="registerDialogModel = true, state = 'login'"
-            >LOG IN</v-btn>
+              @click="(registerDialogModel = true), (state = 'login')"
+              >LOG IN</v-btn
+            >
             <v-btn
               color="success"
               tile
               medium
               class="font-weight-bold caption px-8 black--text"
-              @click="registerDialogModel = true, state = 'register'"
-            >SIGN UP</v-btn>
+              @click="(registerDialogModel = true), (state = 'register')"
+              >SIGN UP</v-btn
+            >
           </div>
         </div>
       </v-col>
@@ -34,12 +42,27 @@
       </v-col>
     </v-row>
     <div class="d-block text-center caption pt-10">
-      <router-link to="/" class="no-transform tertiary--text">Privacy Policy</router-link>·
-      <router-link to="/" class="no-transform tertiary--text">Terms of Use</router-link>·
-      <router-link to="/" class="no-transform tertiary--text">About Us</router-link>·
-      <router-link to="/" class="no-transform tertiary--text">Help Desk</router-link>·
-      <router-link to="/" class="no-transform tertiary--text">Affliate</router-link>·
-      <router-link to="/" class="no-transform tertiary--text">Contact Us</router-link>·
+      <router-link to="/privacy-policy" class="no-transform tertiary--text"
+        >Privacy Policy</router-link
+      >
+      •
+      <router-link to="/terms-of-use" class="no-transform tertiary--text"
+        >Terms of Use</router-link
+      >
+      •
+      <router-link to="/about-us" class="no-transform tertiary--text"
+        >About Us</router-link
+      >
+      •
+      <router-link to="/help-desk" class="no-transform tertiary--text"
+        >Help Desk</router-link
+      >
+      •
+      <!-- <router-link to="/affiliate" class="no-transform tertiary--text">Affliate</router-link>· -->
+      <router-link to="/contact-us" class="no-transform tertiary--text"
+        >Contact Us</router-link
+      >
+      •
       <span class="success--text">Lyduz © 2020</span>
     </div>
 
@@ -92,7 +115,7 @@ export default {
   middleware: ["auth"],
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch",
+      lightSwitch: "global/getLightSwitch"
     }),
     landingImg() {
       return this.lightSwitch == 1
@@ -108,7 +131,7 @@ export default {
       isOpen: true,
       postImage: "https://lyduz.com/png_logo.png",
       registerDialogModel: false,
-      state: "",
+      state: ""
     };
   },
   mounted() {
@@ -187,5 +210,8 @@ export default {
   right: 337px;
 }
 .landingImage {
+}
+.footer__links:hover {
+  color: #03dac5;
 }
 </style>

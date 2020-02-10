@@ -3,76 +3,22 @@
       <v-col class="col-3 pa-0 ma-0">
         <v-content class="pa-0 ma-0 pt-6 px-4">
           <v-select
-            :items="['Normal Trade']"
+            :items="portfolio"
             v-model="portvalue"
             class="select__trade ma-0 pa-0"
             append-icon="mdi-chevron-down"
             item-value="id"
             item-text="name"
             v-on:change="getFunds"
-            label="Normal Trade"
+            label="Portfolio"
             dense
-            outlined
-            color="success"
-          item-color="success"
-          :dark="lightSwitch == 1"
-          :background-color="cardBackground"
-          >
-          <template slot="item" slot-scope="data">
-            <v-list-item-content
-              :dark="lightSwitch == true"
-              :style="{ background: cardBackground }"
-              class="custom_menu_popup"
-            >
-              <span
-                class="caption pa-2"
-                :class="[
-                  { 'white--text': lightSwitch == 1 },
-                  { 'black--text': lightSwitch == 0 }
-                ]"
-                >{{ data.item }}</span
-              >
-            </v-list-item-content>
-          </template>
-          </v-select>
-            <!-- <v-btn small>Normal</v-btn>
+            solo
+          ></v-select>
+            <v-btn small>Normal</v-btn>
             <v-btn small 
                 @click="quickTrade"
                 :disabled="this.portvalue == '' ? true : false"
-                >Quick Trade</v-btn> -->
-                <v-select
-          v-model="portvalue"
-          :items="['My Portfolio','Virtual Portfolio']"
-          item-text="name"
-          item-value="id"
-          class="select__trade ma-0 pa-0"
-          append-icon="mdi-chevron-down"
-          label="Portfolio"
-          dense
-          outlined
-          color="success"
-          item-color="success"
-          :dark="lightSwitch == 1"
-          :background-color="cardBackground"
-          @change="getFunds"
-        >
-          <template slot="item" slot-scope="data">
-            <v-list-item-content
-              :dark="lightSwitch == true"
-              :style="{ background: cardBackground }"
-              class="custom_menu_popup"
-            >
-              <span
-                class="caption pa-2"
-                :class="[
-                  { 'white--text': lightSwitch == 1 },
-                  { 'black--text': lightSwitch == 0 }
-                ]"
-                >{{ data.item }}</span
-              >
-            </v-list-item-content>
-          </template>
-        </v-select>
+                >Quick Trade</v-btn>
         </v-content>
       </v-col>
     
@@ -99,30 +45,28 @@
            <v-text-field
            :dark="lightSwitch == true"
            :value="this.stock_last"
-            color="success"
            readonly
             dense
             label="Sell Price"
           ></v-text-field>
         <v-row class="my-0 py-0">
-            <v-col cols="12" class="mb-0 pb-0">
+            <v-col cols="8" class="mb-0 pb-0">
                 <v-text-field
                     dense
-                    color="success"
                     :dark="lightSwitch == true"
                     label="Quantity"
                     v-model="quantity"
                     @keyup="keypress"
                 ></v-text-field>
             </v-col>    
-            <!-- <v-col cols="4" class="mx-0 mb-0 px-0 pb-0">
+            <v-col cols="4" class="mx-0 mb-0 px-0 pb-0">
                     <v-btn @click="minusButton" text icon >
                     <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
                     <v-btn @click="addButton" text icon >
                     <v-icon>mdi-chevron-up</v-icon>
                     </v-btn>
-            </v-col> -->
+            </v-col>
           </v-row>
         </v-content>
       </v-col>
@@ -337,14 +281,6 @@ export default {
         symbolid: "chart/symbolid",
         stock_last: "chart/stock_last",
         }),
-        /**
-     * Toggle between dark/light
-     *
-     * @return
-     */
-    cardBackground: function() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-    }
     },
     props: {
         SellDate: {

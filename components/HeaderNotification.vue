@@ -106,7 +106,7 @@ export default {
 .userMessage__dropdown {
   position: absolute;
   top: 45px;
-  right: 216px;
+  right: 248px;
   margin-right: 10px;
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }

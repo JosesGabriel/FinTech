@@ -28,7 +28,7 @@
                 ></v-img>
               </v-list-item-avatar>
               <v-list-item-content
-                ><v-list-item-title class="navbar__name">
+                ><v-list-item-title class="navbar__name body-2">
                   {{
                     $auth.loggedIn ? $auth.user.data.user.name : "Guest"
                   }}</v-list-item-title
@@ -199,7 +199,6 @@ export default {
   position: relative;
 }
 .navbar__links {
-  color: #546e7a;
   text-decoration: none;
 }
 .navbar__name {

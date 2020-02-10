@@ -240,7 +240,7 @@ export default {
   },
   watch: {
     ticks() {
-      //this.initSSE();
+      this.initSSE();
     },
     notification() {
       this.newNotication();
@@ -363,6 +363,7 @@ export default {
 
       allNotificationList.forEach(eventName => {
         evtSourceAll.addEventListener(eventName, e => {
+          console.log('test')
           this.allNotificationHandler(eventName, JSON.parse(e.data));
         });
       });

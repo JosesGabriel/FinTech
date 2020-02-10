@@ -145,7 +145,12 @@
                   v-for="n in 11"
                   :key="n"
                   class="d-flex justify-space-between beAnalysis__row my-1 px-2"
-                  :style="'background-color: ' + beAnalysisColorPalette[n - 1]"
+                  :style="
+                    lightSwitch == 0
+                      ? 'background-color: ' +
+                        beAnalysisColorPaletteLight[n - 1]
+                      : 'background-color: ' + beAnalysisColorPaletteDark[n - 1]
+                  "
                 >
                   <span
                     >₱ <span v-if="n > 6">-</span
@@ -181,7 +186,7 @@ export default {
         "-10.00",
         "-20.00"
       ],
-      beAnalysisColorPalette: [
+      beAnalysisColorPaletteDark: [
         "#03DAC5",
         "#02B1A2",
         "#02887F",
@@ -192,6 +197,19 @@ export default {
         "#622323",
         "#922E2A",
         "#C33830",
+        "#F44336"
+      ],
+      beAnalysisColorPaletteLight: [
+        "#03DAC5",
+        "#35E1D1",
+        "#68E9DC",
+        "#9AF0E8",
+        "#CDF8F3",
+        "#D3D4D5",
+        "#FDD9D7",
+        "#FBB4AF",
+        "#F88E86",
+        "#F6695E",
         "#F44336"
       ],
       breakEvenValue: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

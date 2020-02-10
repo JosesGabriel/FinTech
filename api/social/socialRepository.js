@@ -93,7 +93,7 @@ export default $axios => ({
         return $axios.$post(`${baseURL}/users/` + params + `/follow`);
     },
     unfollowAccount(params) {
-        return $axios.$post(`${baseURL}/users/` + params + `/unfollow`);
+        return $axios.$delete(`${baseURL}/users/` + params + `/unfollow`);
     },
     follow(params) {
         return $axios.$get(`${baseURL}/users/` + params);
