@@ -33,14 +33,14 @@
         <img :src="landingImg" class="landingImage" alt width="100%" />
       </v-col>
     </v-row>
-    <div class="d-block text-center caption pt-5">
+    <div class="d-block text-center caption pt-10">
       <router-link to="/" class="no-transform tertiary--text">Privacy Policy</router-link>·
       <router-link to="/" class="no-transform tertiary--text">Terms of Use</router-link>·
       <router-link to="/" class="no-transform tertiary--text">About Us</router-link>·
       <router-link to="/" class="no-transform tertiary--text">Help Desk</router-link>·
       <router-link to="/" class="no-transform tertiary--text">Affliate</router-link>·
       <router-link to="/" class="no-transform tertiary--text">Contact Us</router-link>·
-      <span class="success--text">Lyduz © 2019</span>
+      <span class="success--text">Lyduz © 2020</span>
     </div>
 
     <LoginRegister v-model="registerDialogModel" :state="state" />

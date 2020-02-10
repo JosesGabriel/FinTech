@@ -4,7 +4,7 @@
       <rbHeader :ticks="ticks" class="header__container" />
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
         <div v-show="showLamp">
-          <v-img
+          <img
             :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'"
             v-show="whiteMode == '/login/' || whiteMode == '/login' ? true : false"
             :src="lampMode"
