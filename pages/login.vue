@@ -30,17 +30,17 @@
         </div>
       </v-col>
       <v-col cols="12" sm="8" md="8" lg="8">
-        <img :src="landingImg" alt width="100%" />
+        <img :src="landingImg" class="landingImage" alt width="100%" />
       </v-col>
     </v-row>
-    <div class="d-block text-center caption pt-5">
+    <div class="d-block text-center caption pt-10">
       <router-link to="/" class="no-transform tertiary--text">Privacy Policy</router-link>·
       <router-link to="/" class="no-transform tertiary--text">Terms of Use</router-link>·
       <router-link to="/" class="no-transform tertiary--text">About Us</router-link>·
       <router-link to="/" class="no-transform tertiary--text">Help Desk</router-link>·
       <router-link to="/" class="no-transform tertiary--text">Affliate</router-link>·
       <router-link to="/" class="no-transform tertiary--text">Contact Us</router-link>·
-      <span class="success--text">Lyduz © 2019</span>
+      <span class="success--text">Lyduz © 2020</span>
     </div>
 
     <LoginRegister v-model="registerDialogModel" :state="state" />
@@ -54,7 +54,6 @@ import LoginRegister from "~/components/LoginRegister";
 export default {
   head() {
     return {
-      title: "Lyduz",
       meta: [
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -93,12 +92,12 @@ export default {
   middleware: ["auth"],
   computed: {
     ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
+      lightSwitch: "global/getLightSwitch",
     }),
     landingImg() {
       return this.lightSwitch == 1
-        ? "/landing-page-dark.svg"
-        : "/landing-page-light.svg";
+        ? "/landing-page-dark.gif"
+        : "/landing-page-light.gif";
     },
     fontColor() {
       return this.lightSwitch == 1 ? "white--text" : "headlinedark--text";
@@ -109,7 +108,7 @@ export default {
       isOpen: true,
       postImage: "https://lyduz.com/png_logo.png",
       registerDialogModel: false,
-      state: '',
+      state: "",
     };
   },
   mounted() {
@@ -166,11 +165,12 @@ export default {
   position: absolute;
   transform: translateY(25%);
 }
-.headlineLanding_page {
+#app .leftPart_container .headlineLanding_page {
   font-style: normal;
-  font-weight: 900;
+  font-weight: 600;
   font-size: 64px;
   line-height: 97.9%;
+  font-family: "Montserrat", sans-serif !important;
 }
 .bodyLanding_page {
   font-size: 18px;
@@ -178,6 +178,14 @@ export default {
   letter-spacing: 0.5px;
 }
 .login__card {
-  margin-top: 100px;
+  margin-top: 50px;
+}
+.lamp__btn {
+  z-index: 99999;
+  position: absolute;
+  width: 8%;
+  right: 337px;
+}
+.landingImage {
 }
 </style>

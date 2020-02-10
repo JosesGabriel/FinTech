@@ -107,10 +107,14 @@
       <v-tab           
         class="tab_menu-top text-capitalize"
         :href="`#tab-1`"
+        :dark="lightSwitch == true"
+        :style="{ color: toggleFontColor }" 
       >Live Portfolio</v-tab>
       <v-tab
         class="tab_menu-top text-capitalize"
         :href="`#tab-2`"  
+        :dark="lightSwitch == true"
+        :style="{ color: toggleFontColor }" 
       >Tradelogs</v-tab>
 
       <v-row>
@@ -323,7 +327,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID"
+      setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
     }),
     /**
      * Get Data in Live Portfolio
@@ -474,7 +478,7 @@ export default {
            yequity = parseFloat(this.daychangetlogs) + parseFloat(yesterdaysProfit) + parseFloat(this.port_capital);
            tequity = ptotal + parseFloat(this.port_capital);
            this.change = parseFloat(tequity) - parseFloat(yequity);
-    
+
            let dperf = parseFloat(this.port_capital) + parseFloat(yesterdaysProfit); 
            this.changep = (this.change / yequity) * 100;
     },

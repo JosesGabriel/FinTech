@@ -1,69 +1,71 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" persistent dark max-width="320px">
+    <v-dialog
+      v-model="dialog"
+      persistent
+      :dark="lightSwitch == 0 ? false : true"
+      max-width="320px"
+    >
       <template v-slot:activator="{ on }">
         <v-btn
           color="success"
           dark
-          class="text-capitalize mr-2 black--text font-weight-black"
+          small
+          class="text-capitalize mr-2 black--text font-weight-medium"
           style="border-width: 2px"
           height="23"
           v-on="on"
           >Add</v-btn
         >
       </template>
-      <v-card :loading="watchCardModalLoading" color="darkcard">
+      <v-card :dark="lightSwitch == 0 ? false : true">
         <v-card-title>
-          <span class="subtitle-1 font-weight-light" style="color: success"
-            >Add Watchlist</span
-          >
+          <span class="subtitle-1 font-weight-medium">Add Watchlist</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" class="px-0">
                 <v-select
                   v-model="stocksDropdownModel"
-                  label="Stock Code"
+                  label="Select a Stock"
                   :items="stockList"
                   item-text="symbol"
                   item-value="id_str"
                   append-icon="mdi-chevron-down"
-                  dark
+                  :dark="lightSwitch == 0 ? false : true"
+                  outlined
                   standard-
                   color="success"
                   required
                 ></v-select>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="px-1">
                 <v-text-field
                   v-model="entryPriceModel"
                   label="Entry Price"
-                  prefix="₱"
                   dense
-                  dark
+                  :dark="lightSwitch == 0 ? false : true"
                   type="number"
                   color="success"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="px-1">
                 <v-text-field
                   v-model="takeProfitModel"
                   label="Take Profit"
-                  prefix="₱"
                   dense
-                  dark
+                  :dark="lightSwitch == 0 ? false : true"
                   type="number"
                   color="success"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="px-1">
                 <v-text-field
                   v-model="stopLossModel"
                   label="Stop Loss"
-                  prefix="₱"
                   dense
-                  dark
+                  :dark="lightSwitch == 0 ? false : true"
                   type="number"
                   color="success"
                 ></v-text-field>
@@ -81,7 +83,7 @@
             >Close</v-btn
           >
           <v-btn
-            class="no-transform"
+            class="no-transform px-6 black--text"
             color="success"
             light
             depressed
@@ -116,7 +118,8 @@ export default {
   computed: {
     ...mapGetters({
       userWatchedStocks: "watchers/getUserWatchedStocks",
-      renderChartKey: "watchers/getRenderChartKey"
+      renderChartKey: "watchers/getRenderChartKey",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {
@@ -205,6 +208,7 @@ export default {
      * @return
      */
     addWatch() {
+      this.dialog = false;
       this.watchCardModalLoading = "success";
       let stockExists = false;
       for (let i = 0; i < this.userWatchedStocks.length; i++) {
@@ -236,7 +240,6 @@ export default {
                 message: response.message
               };
               this.setAlert(alert);
-              this.dialog = false;
               //This line sets vuex renderchartkey. Watchlist.vue watches this value, if it detects a change, chart is re-rendered
               this.keyCounter = this.renderChartKey;
               this.keyCounter++;

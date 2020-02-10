@@ -3,46 +3,53 @@
     <v-data-table
       :headers="headers"
       :items="userStockData"
-      class="elevation-1"
       style="background-color: transparent"
       :loading="tableLoading"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
-          <v-dialog v-model="dialog" max-width="500px">
-            <v-card :loading="watchCardModalLoading">
+          <v-dialog v-model="dialog" max-width="320px">
+            <v-card
+              :dark="lightSwitch == 0 ? false : true"
+              :loading="watchCardModalLoading"
+            >
+              <v-card-title>
+                <span class="body-1 font-weight-black">Edit Watched Stock</span>
+              </v-card-title>
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" class="px-1">
                       <v-text-field
                         v-model="editedItem.stock_id"
-                        label="Stock"
+                        color="success"
+                        label="Watched Stock"
+                        outlined
                         disabled
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" class="px-2 py-0">
                       <v-text-field
                         v-model="editedItem.entry_price"
+                        color="success"
                         type="number"
-                        label="Entry Price"
-                        prefix="₱"
+                        label="Entry Price (Php)"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" class="px-2 py-0">
                       <v-text-field
                         v-model="editedItem.take_profit"
+                        color="success"
                         type="number"
-                        label="Take Profit"
-                        prefix="₱"
+                        label="Take Profit (Php)"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" class="px-2">
                       <v-text-field
                         v-model="editedItem.stop_loss"
+                        color="success"
                         type="number"
-                        label="Stop Loss"
-                        prefix="₱"
+                        label="Stop Loss (Php)"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -50,22 +57,65 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn
+                  :dark="lightSwitch == 0 ? false : true"
+                  class="no-transform"
+                  text
+                  @click="close"
+                  >Cancel</v-btn
+                >
+                <v-btn
+                  :dark="lightSwitch == 0 ? false : true"
+                  class="no-transform black--text px-6"
+                  color="success"
+                  @click="save"
+                  >Save</v-btn
+                >
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon small @click="deleteItem(item)">
-          mdi-delete
-        </v-icon>
+        <v-btn class="no-transform" small text @click="editItem(item)"
+          >Edit</v-btn
+        >
+        <v-btn
+          class="no-transform"
+          small
+          text
+          @click.stop="(deleteDialog = true), (itemToDelete = item)"
+          >Delete</v-btn
+        >
       </template>
     </v-data-table>
+
+    <v-dialog v-model="deleteDialog" width="500">
+      <v-card :dark="lightSwitch == 0 ? false : true">
+        <v-card-title class="body-2 font-weight-black" primary-title>
+          Delete Confirmation
+        </v-card-title>
+
+        <v-divider class="pb-2"></v-divider>
+        <v-card-text>
+          Are you sure you want to delete this watched stock?
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn class="no-transform px-5" text @click="deleteDialog = false">
+            Cancel
+          </v-btn>
+          <v-btn
+            class="black--text no-transform px-5"
+            color="success"
+            @click="deleteItem(itemToDelete)"
+          >
+            Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -74,21 +124,47 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     dialog: false,
-    tableLoading: true,
+    tableLoading: false,
     watchCardModalLoading: false,
     headers: [
       {
         text: "Stock",
-        align: "left",
+        class: "body-2",
+        align: "center",
         sortable: false,
         value: "stock_id"
       },
-      { text: "Entry Price", value: "entry_price", sortable: false },
-      { text: "Take Profit", value: "take_profit", sortable: false },
-      { text: "Stop Loss", value: "stop_loss", sortable: false },
-      { text: "Actions", value: "action", sortable: false }
+      {
+        text: "Entry Price",
+        class: "body-2",
+        align: "right",
+        value: "entry_price",
+        sortable: false
+      },
+      {
+        text: "Take Profit",
+        class: "body-2",
+        align: "right",
+        value: "take_profit",
+        sortable: false
+      },
+      {
+        text: "Stop Loss",
+        class: "body-2",
+        align: "right",
+        value: "stop_loss",
+        sortable: false
+      },
+      {
+        text: "Actions",
+        class: "body-2",
+        align: "center",
+        value: "action",
+        sortable: false
+      }
     ],
     userStockData: [],
+    deleteDialog: false,
     keyCounter: 1,
     editedIndex: -1,
     editedItem: {
@@ -102,13 +178,15 @@ export default {
       entry_price: "",
       take_profit: "",
       stop_loss: ""
-    }
+    },
+    itemToDelete: ""
   }),
 
   computed: {
     ...mapGetters({
       userWatchedStocks: "watchers/getUserWatchedStocks",
-      renderChartKey: "watchers/getRenderChartKey"
+      renderChartKey: "watchers/getRenderChartKey",
+      lightSwitch: "global/getLightSwitch"
     })
   },
 
@@ -185,37 +263,36 @@ export default {
      * @return
      */
     deleteItem(item) {
-      this.watchCardModalLoading = "primary";
+      this.watchCardModalLoading = "success";
+      this.deleteDialog = false;
       const index = this.userStockData.indexOf(item);
-      if (confirm("Are you sure you want to delete this item?")) {
-        this.$api.watchlist.watchlists
-          .delete(this.userWatchedStocks[index].id)
-          .then(
-            function(response) {
-              if (response.success) {
-                let alert = {
-                  model: true,
-                  state: true,
-                  message: response.message
-                };
-                this.setAlert(alert);
+      this.$api.watchlist.watchlists
+        .delete(this.userWatchedStocks[index].id)
+        .then(
+          function(response) {
+            if (response.success) {
+              let alert = {
+                model: true,
+                state: true,
+                message: response.message
+              };
+              this.setAlert(alert);
 
-                this.watchCardModalLoading = false;
-                this.keyCounter = this.renderChartKey;
-                this.keyCounter++;
-                this.setRenderChartKey(this.keyCounter);
-                this.userStockData.splice(index, 1);
-              } else {
-                let alert = {
-                  model: true,
-                  state: false,
-                  message: response.message
-                };
-                this.setAlert(alert);
-              }
-            }.bind(this)
-          );
-      }
+              this.watchCardModalLoading = false;
+              this.keyCounter = this.renderChartKey;
+              this.keyCounter++;
+              this.setRenderChartKey(this.keyCounter);
+              this.userStockData.splice(index, 1);
+            } else {
+              let alert = {
+                model: true,
+                state: false,
+                message: response.message
+              };
+              this.setAlert(alert);
+            }
+          }.bind(this)
+        );
     },
     /**
      * Closes dialog
@@ -236,7 +313,7 @@ export default {
      * @return
      */
     save() {
-      this.tableLoading = "primary";
+      this.tableLoading = "success";
       if (this.editedIndex > -1) {
         let params = {
           entry_price: this.editedItem.entry_price,
@@ -278,5 +355,8 @@ export default {
 <style>
 header {
   height: 0px !important; /* if present, naay empty header element na 64px */
+}
+.v-data-footer__select {
+  display: none;
 }
 </style>

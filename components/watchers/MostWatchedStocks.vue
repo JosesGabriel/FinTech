@@ -5,7 +5,7 @@
     :loading="loader"
     flat
   >
-    <v-card-title class="body-1 font-weight-bold text-left pa-0"
+    <v-card-title class="body-2 font-weight-bold text-left pa-0"
       >Most Watched Stocks</v-card-title
     >
     <v-divider />
@@ -13,10 +13,10 @@
     <div
       v-for="n in mWatchedStocksObject.length"
       :key="n"
-      class="d-flex justify-space-between pa-0 overline no-transform mt-1 mb-4"
+      class="d-flex justify-space-between pa-0 overline no-transform mt-1 mb-2"
     >
       <div>
-        <span class="body-2 font-weight-bold">{{
+        <span class="caption font-weight-bold">{{
           mWatchedStocksObject[n - 1].stock_symbol
         }}</span
         ><br />
@@ -32,11 +32,11 @@
         >
         <br />
         <v-btn
-          v-if="!mWatchedStocksObject[n - 1].user_follows"
+          :class="!mWatchedStocksObject[n - 1].user_follows ? '' : 'v-hidden'"
           x-small
           rounded
           color="success"
-          class="no-transform black--text"
+          class="no-transform black--text addToWatchlist__btn"
           @click="addToWatchlist(mWatchedStocksObject[n - 1].stock_id)"
           >+ Watchlist</v-btn
         >
@@ -97,6 +97,12 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width: 205px;
+  width: 160px;
+}
+.addToWatchlist__btn {
+  white-space: unset;
+}
+.v-hidden {
+  visibility: hidden;
 }
 </style>

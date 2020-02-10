@@ -1,6 +1,9 @@
 const baseURL = process.env.API_URL + "/social";
 
 export default $axios => ({
+    users(params) {
+        return $axios.$get(`${process.env.API_URL}/users/` + params + `/profile`);
+    },
     get(params) {
         let query = buildParams(params);
 
@@ -34,6 +37,51 @@ export default $axios => ({
         return $axios.$post(`${baseURL}/posts/` + params + `/bull`);
     },
 
+    unbearish(params) {
+        return $axios.$post(`${baseURL}/posts/` + params + `/unbear`);
+    },
+    unbullish(params) {
+        return $axios.$post(`${baseURL}/posts/` + params + `/unbull`);
+    },
+
+    bearishComment(params) {
+        return $axios.$post(
+            `${baseURL}/posts/` +
+            params.postID +
+            `/comments/` +
+            params.commentID +
+            `/bear`
+        );
+    },
+
+    bullishComment(params) {
+        return $axios.$post(
+            `${baseURL}/posts/` +
+            params.postID +
+            `/comments/` +
+            params.commentID +
+            `/bull`
+        );
+    },
+
+    unbearishComment(params) {
+        return $axios.$delete(
+            `${baseURL}/posts/` +
+            params.postID +
+            `/comments/` +
+            params.commentID +
+            `/unbear`
+        );
+    },
+    unbullishComment(params) {
+        return $axios.$delete(
+            `${baseURL}/posts/` +
+            params.postID +
+            `/comments/` +
+            params.commentID +
+            `/unbull`
+        );
+    },
     getSentiment(params) {
         return $axios.$get(`${baseURL}/sentiments/`, { params });
     },
@@ -43,6 +91,9 @@ export default $axios => ({
     },
     followAccount(params) {
         return $axios.$post(`${baseURL}/users/` + params + `/follow`);
+    },
+    unfollowAccount(params) {
+        return $axios.$post(`${baseURL}/users/` + params + `/unfollow`);
     },
     follow(params) {
         return $axios.$get(`${baseURL}/users/` + params);
@@ -55,6 +106,9 @@ export default $axios => ({
     },
     markall() {
         return $axios.$put(`${process.env.API_URL}/notifications/`);
+    },
+    putprofile(payload) {
+        return $axios.$put(`${process.env.API_URL}/users/profile`, payload);
     },
     count(params) {
         let query = buildParams(params);

@@ -1,8 +1,16 @@
 <template>
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
-      <rbHeader :ticks="ticks" />
-      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
+      <rbHeader :ticks="ticks" class="header__container" />
+      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
+        <div v-show="showLamp">
+          <img
+            :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'"
+            v-show="whiteMode == '/login/' || whiteMode == '/login' ? true : false"
+            :src="lampMode"
+            @click="lampSwitch"
+          />
+        </div>
         <nuxt />
       </v-container>
       <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
@@ -53,7 +61,9 @@ export default {
       notificationQueue: [],
       notificationAlert: true,
       notificationTimeout: 100000,
-      ticks: 1
+      ticks: 1,
+      whiteMode: null,
+      lampBtn: false
     };
   },
   head() {
@@ -68,7 +78,21 @@ export default {
       favicon: "global/favicon",
       alertDialog: "global/getAlertDialog",
       notification: "global/getNotification"
-    })
+    }),
+    lampMode() {
+      return this.lightSwitch == 1
+        ? "/Lamp-Darkmode.svg"
+        : "/Lamp-Lightmode.svg";
+    },
+    showLamp() {
+      let lampBtn;
+      if (this.$route.path == "/login/" || this.$route.path == "/login") {
+        lampBtn = true;
+      } else {
+        lampBtn = false;
+      }
+      return lampBtn;
+    }
   },
   mounted() {
     if (localStorage.currentMode) {
@@ -80,6 +104,9 @@ export default {
     this.$nextTick(() => {
       this.ticks = 2;
     });
+    this.whiteMode = window.location.pathname;
+
+    this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
   },
   watch: {
     /**
@@ -116,7 +143,13 @@ export default {
     ...mapActions({
       setLightSwitch: "global/setLightSwitch"
     }),
-    userNotificationAlertLayout: UserNotificationAlertLayout
+    userNotificationAlertLayout: UserNotificationAlertLayout,
+    lampSwitch() {
+      let lampMode = localStorage.currentMode;
+
+      this.setLightSwitch(lampMode == 1 ? 0 : 1);
+      localStorage.currentMode = this.lightSwitch;
+    }
   }
 };
 </script>
@@ -132,6 +165,9 @@ export default {
 }
 .lightMode {
   background-color: #f2f2f2;
+}
+.lightWhiteMode {
+  background-color: #fafafa;
 }
 .transparent__bg {
   background-color: transparent !important;
@@ -156,5 +192,25 @@ export default {
   position: relative;
   top: 40px;
   z-index: 1;
+}
+.header__container {
+  position: relative;
+}
+.lampDark__btn {
+  z-index: 99999;
+  position: absolute;
+  width: 8%;
+  top: 0;
+  right: 340px;
+}
+.lampLight__btn {
+  z-index: 99999;
+  position: absolute;
+  width: 44%;
+  top: 0;
+  right: 131px;
+}
+.componentContainer {
+  position: relative;
 }
 </style>

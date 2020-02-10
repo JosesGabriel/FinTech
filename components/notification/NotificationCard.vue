@@ -10,7 +10,9 @@
 
     <v-list-item-content class="listItem__content py-1">
       <div class="body-2 ma-0 userMessage__dropdown-title">
-        <span class="body-2 ma-0 userMessage__message caption">{{ notification.notificable.message }}</span>
+        <span
+          class="body-2 ma-0 userMessage__message caption"
+        >{{ notification.notificable.message }}</span>
       </div>
       <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>

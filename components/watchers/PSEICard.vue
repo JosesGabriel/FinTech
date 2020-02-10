@@ -7,10 +7,10 @@
     flat
     max-height="245"
   >
-    <v-card-title class="body-1 font-weight-bold text-left pa-0"
+    <v-card-title class="body-2 font-weight-bold text-left pa-0"
       >PSEI</v-card-title
     >
-    <span class="psei__price caption"
+    <span class="pt-1 psei__price caption"
       >{{ data.last }} <br />
       <span :class="data.changepercentage > 0 ? 'success--text' : 'error--text'"
         >{{ data.change ? data.change : "" }} ({{
@@ -25,7 +25,7 @@
         :options="chartOptions"
         :series="series"
         type="line"
-        height="150"
+        height="135"
       />
     </div>
     <v-divider />
@@ -44,7 +44,7 @@ export default {
     return {
       series: [
         {
-          name: "series1",
+          name: "PSEI",
           data: []
         }
       ],
@@ -192,7 +192,7 @@ export default {
     data() {
       if (this.data.change > 0) {
         this.$refs.closePriceChart.updateOptions({
-          colors: ["#00FFC3"]
+          colors: ["#03dac5"]
         });
       } else if (this.data.change < 0) {
         this.$refs.closePriceChart.updateOptions({

@@ -61,12 +61,12 @@
                 ? 'postField__tagging--light'
                 : 'postField__tagging--dark'
             "
-            :members="members != [] ? members : ''"
-            :ats="['@', '＠', '$']"
-            :name-key="stockTagMode ? 'symbol' : 'name'"
+            :members="members"
+            :ats="['@', '＠']"
+            name-key="name"
           >
-            <template slot="item" slot-scope="s">
-              <v-avatar v-if="userTagMode" size="22">
+            <template v-if="userTagMode" slot="item" slot-scope="s">
+              <v-avatar size="22" @click="clickUserSuggestion(s)">
                 <v-img
                   :src="
                     s.item.profile_image
@@ -79,7 +79,8 @@
               <span
                 class="pl-2"
                 @click="clickUserSuggestion(s)"
-                v-text="stockTagMode ? s.item.symbol : s.item.name"
+                @keyup.enter="test"
+                v-text="s.item.name"
               ></span>
             </template>
             <v-textarea
@@ -90,7 +91,7 @@
                   $auth.user.data.user.name +
                   ', penny for your thoughts?'
               "
-              class="pt-0 caption postField__textarea"
+              class="pt-0 body-2 postField__textarea"
               rows="3"
               row-height="25"
               color="primary"
@@ -100,12 +101,14 @@
               flat
               background-color="transparent"
               :loading="postFieldLoader"
+              @keyup.@="userTagMode = true"
               @keyup="catcher"
+              @keyup.$="(stockTagMode = true), search('stock')"
               @click="emojiToggle = false"
               >{{ postField }}</v-textarea
             >
           </at>
-          <!-- <div v-if="stockTagMode" class="stockSuggestions__wrapper">
+          <div v-if="stockTagMode" class="stockSuggestions__wrapper">
             <v-btn
               v-for="n in stockSuggestionsArray.length"
               :key="n"
@@ -116,53 +119,13 @@
               @click="
                 appendToField(stockSuggestionsArray[n - 1].symbol, 'stock'),
                   (hasTaggedStock = true),
-                  (taggedStocks = [stockSuggestionsArray[n - 1].id_str])
+                  (taggedStocks = [stockSuggestionsArray[n - 1].id_str]),
+                  (currentTaggedStock = '')
               "
             >
               {{ stockSuggestionsArray[n - 1].symbol }}
             </v-btn>
           </div>
-          <div v-if="userTagMode">
-            <div
-              v-if="userSuggestionsArrray.length > 1"
-              class="userSuggestions__dropdownCaret"
-            ></div>
-            <v-list dense avatar class="userSuggestions__vlist py-0">
-              <v-list-item-group color="primary">
-                <v-list-item
-                  v-for="n in userSuggestionsArrray.length > 5
-                    ? 5
-                    : userSuggestionsArrray.length"
-                  :key="n"
-                  @click="
-                    appendToField(userSuggestionsArrray[n - 1].name, 'user'),
-                      (hasTaggedUser = true),
-                      (userTagMode = false),
-                      taggedUsers.push(userSuggestionsArrray[n - 1].name)
-                  "
-                >
-                  <v-list-item-avatar size="30">
-                    <v-img
-                      :src="
-                        userSuggestionsArrray[n - 1].profile_image
-                          ? userSuggestionsArrray[n - 1].profile_image
-                          : 'default.png'
-                      "
-                    ></v-img>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title
-                      v-text="
-                        userSuggestionsArrray[n - 1].first_name +
-                          ' ' +
-                          userSuggestionsArrray[n - 1].last_name
-                      "
-                    ></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
-          </div> -->
           <v-divider class="postField__divider" />
           <div class="pt-2">
             <input
@@ -174,11 +137,6 @@
               @change="onInputFileChange"
             />
             <div class="postField__preview pt-2">
-              <!-- <v-btn @click="removeImage" color="rgba(000,000,000,0.70)" fab x-small dark absolute>
-                            <v-icon color="white">mdi-close</v-icon>
-                        </v-btn> -->
-              <!-- <img :src="previewImage" class="postField__previewImage" v-if="postIsImage"/>
-                        <video controls :src="previewImage" class="postField__previewImage" v-if="!postIsImage"/> -->
               <div class="postField__imageWrapper">
                 <div
                   v-for="n in imagesArray.length"
@@ -284,7 +242,7 @@
               </v-btn>
             </div>
             <v-btn
-              class="no-transform post__button"
+              class="no-transform post__button black--text"
               rounded
               small
               right
@@ -335,6 +293,7 @@ export default {
       postField: "",
       previewImage: [],
       postFieldLoader: false,
+      selectedImagesArray: [],
       imagesArray: [],
       cloudArray: [],
       stockSuggestionsArray: [],
@@ -384,8 +343,8 @@ export default {
         uuid: selected.item.uuid,
         name: selected.item.name
       });
-      // this.members = [];
       this.currentTaggedUser = "";
+      this.userTagMode = false;
     },
     /**
      * Appends selected emoji to post field
@@ -413,7 +372,7 @@ export default {
         index = this.postField.lastIndexOf("@");
       }
       this.postField = this.postField.slice(0, index + 1);
-      this.postField += value;
+      this.postField += value + " ";
     },
     /**
      * Searches from stock list based on stock that user is currently typing, fires when stockTagMode is true.
@@ -425,13 +384,12 @@ export default {
         const params = {
           exchange: "PSE",
           query: this.currentTaggedStock,
-          limit: "10",
+          limit: "30",
           type: "stock"
         };
         this.$api.chart.charts.search(params).then(
           function(result) {
-            this.members = result.data;
-            console.log(this.members);
+            this.stockSuggestionsArray = result.data;
           }.bind(this)
         );
       } else if (type == "user") {
@@ -443,7 +401,6 @@ export default {
             .index(payload)
             .then(response => {
               this.members = response.data.users;
-              console.log(this.members);
             })
             .catch(e => {})
             .finally(function() {}.bind(this));
@@ -460,10 +417,7 @@ export default {
      */
     catcher(e) {
       let regExp = /^[0-9a-zA-Z]+$/;
-      if (e.key == "$") {
-        this.stockTagMode = true;
-        this.search("stock");
-      } else if (this.stockTagMode && !regExp.test(e.key)) {
+      if (this.stockTagMode && !regExp.test(e.key)) {
         this.stockTagMode = false;
         this.currentTaggedStock = "";
       }
@@ -475,21 +429,16 @@ export default {
         this.currentTaggedStock = this.currentTaggedStock.slice(0, -1);
         this.search("stock");
       }
-      if (
-        this.stockTagMode &&
-        e.key == "Backspace" &&
-        this.currentTaggedStock == ""
-      ) {
+      if (!this.stockTagMode && e.key == "Backspace") {
         this.stockTagMode = false;
-      } else if (this.stockTagMode && e.key == "Backspace") {
+      }
+      if (this.stockTagMode && e.key == "Backspace") {
         this.search("stock");
       }
 
       ////USER TAGGED
-      if (e.key == "@") {
-        this.userTagMode = true;
-      } else if (this.userTagMode && !regExp.test(e.key)) {
-        this.userTagMode = false;
+      if (this.userTagMode && !regExp.test(e.key)) {
+        // this.userTagMode = false;
         this.currentTaggedUser = "";
       }
       if (regExp.test(e.key) && e.key.length == 1 && this.userTagMode) {
@@ -672,9 +621,9 @@ export default {
      */
     uploadImage() {
       this.loader = "success";
-      for (let i = 0; i < this.$refs.postField__inputRef.files.length; i++) {
+      for (let i = 0; i < this.selectedImagesArray.length; i++) {
         let formData = new FormData();
-        formData.append("file", this.$refs.postField__inputRef.files[i]);
+        formData.append("file", this.selectedImagesArray[i]);
         this.$api.social.upload
           .create(formData)
           .then(
@@ -698,8 +647,11 @@ export default {
      * @return
      */
     onInputFileChange(e) {
+      for (let i = 0; e.target.files.length > i; i++) {
+        this.selectedImagesArray.push(e.target.files[i]);
+      }
       this.uploadImage();
-      var files = e.target.files || e.dataTransfer.files;
+      var files = this.selectedImagesArray || this.selectedImagesArray;
       if (!files.length) return;
       for (var i = 0; i < files.length; i++) {
         var filetype = files[i].type.split("/")[0];
@@ -732,7 +684,9 @@ export default {
      * @return
      */
     removeImage(closeId) {
-      this.$set(this.imagesArray, closeId - 1, "");
+      this.imagesArray.splice(closeId - 1, 1);
+      this.selectedImagesArray.splice(closeId - 1, 1);
+      this.cloudArray.splice(closeId - 1, 1);
     },
     /**
      * clears post text field
@@ -746,6 +700,8 @@ export default {
       this.postField = "";
       this.postFieldLoader = false;
       this.cloudArray = [];
+      this.imagesArray = [];
+      this.selectedImagesArray = [];
       this.postBtnDisable = true;
 
       this.$refs.postField__inputRef.type = "text";
@@ -782,12 +738,12 @@ export default {
   padding: 15px 10px;
 }
 .atwho-view {
-  bottom: unset;
-  top: 15px;
-  overflow-y: unset;
-  max-height: unset;
-  border: 2px solid #142530;
-  box-shadow: unset;
+  bottom: unset !important;
+  top: 15px !important;
+  overflow-y: unset !important;
+  max-height: unset !important;
+  border: 2px solid #142530 !important;
+  box-shadow: unset !important;
 }
 .atwho-cur {
   background-color: #03dac5;
@@ -870,7 +826,7 @@ export default {
 }
 .postField__divider {
   position: absolute;
-  width: 526px;
+  width: 100%;
   left: 0px;
 }
 .postField__preview img,

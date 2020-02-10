@@ -1,10 +1,10 @@
 <template>
   <v-container class="page__wrapper profile-page__wrapper" dark>
-    <ProfileCover />
+    <ProfileCover :userData="user" />
 
     <v-row no-gutters>
       <v-col cols="12">
-        <ProfileTimeline />
+        <ProfileTimeline :userData="user" />
       </v-col>
     </v-row>
   </v-container>
@@ -18,6 +18,24 @@ export default {
   components: {
     ProfileCover,
     ProfileTimeline
+  },
+  data() {
+    return {
+      user: null,
+      profile: null
+    };
+  },
+  mounted() {
+    this.getUser();
+  },
+  methods: {
+    getUser() {
+      const params = this.$route.params.id;
+      this.$api.social.user.users(params).then(({ data }) => {
+        this.user = data.user;
+        this.profile = data.profile;
+      });
+    }
   }
 };
 </script>

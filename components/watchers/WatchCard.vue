@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="mb-1 watchCard"
-    :class="lightSwitch == 0 ? 'watchCard--light' : ''"
+    :class="lightSwitch == 0 ? 'watchCard--light' : 'watchCard--dark'"
     :color="lightSwitch == 0 ? '' : '#00121e'"
     :dark="lightSwitch == 0 ? false : true"
     max-height="295"
@@ -300,14 +300,14 @@ export default {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#00FFC3"]
+                colors: ["#03DAC5"]
               }
             };
           } else if (this.stockCurrentChange < 0) {
             this.chartOptions = {
               ...this.chartOptions,
               ...{
-                colors: ["#f44336"]
+                colors: ["#F44336"]
               }
             };
           } else {
@@ -331,6 +331,9 @@ export default {
   background-color: #f2f2f2 !important;
   border: 1px solid #d3d4d5 !important;
 }
+.watchCard--dark {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
 .watchCard {
   padding: 0 10px;
 }
@@ -344,7 +347,7 @@ export default {
   background-color: #03dac5;
 }
 .watchlistCard__bar--red {
-  background-color: #f44336;
+  background-color: #03dac5;
 }
 .watchlistCard__text--gray {
   color: gray;

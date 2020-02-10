@@ -1,10 +1,6 @@
 <template>
   <v-col class="pa-0">
-    <span
-      v-show="showBanner"
-      class="newPosts_banner caption black--text"
-      @click="fetchNewPost()"
-    >
+    <span v-show="showBanner" class="newPosts_banner caption black--text" @click="fetchNewPost()">
       <v-icon small color="black">mdi-arrow-up</v-icon>
       <span class="font-weight-bold">New posts</span>
     </span>
@@ -29,25 +25,32 @@
     >
       <!-- Start of Post Header -->
       <v-list-item class="pt-1">
-        <v-list-item-avatar class="mr-2" size="42">
-          <img
-            class="avatar__border"
-            :src="
+        <router-link :to="'/profile/'+ postsObject[n - 1].user.username" class="no-transform">
+          <v-list-item-avatar class="mr-2" size="42">
+            <img
+              class="avatar__border"
+              :src="
               postsObject[n - 1].user.profile_image
                 ? postsObject[n - 1].user.profile_image
                 : 'user_default.png'
             "
-          />
-        </v-list-item-avatar>
+            />
+          </v-list-item-avatar>
+        </router-link>
         <v-list-item-content class="pa-0 ma-0">
           <v-row>
             <v-col>
-              <v-list-item-title class="subtitle-2">
-                <strong>{{ postsObject[n - 1].user.name }}</strong>
-              </v-list-item-title>
+              <router-link :to="'/profile/'+ postsObject[n - 1].user.username" class="no-transform">
+                <v-list-item-title
+                  class="subtitle-2"
+                  :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+                >
+                  <strong>{{ postsObject[n - 1].user.name }}</strong>
+                </v-list-item-title>
+              </router-link>
               <v-list-item-subtitle class="overline no-transform">
                 {{ localFormat(postsObject[n - 1].created_at, "fn") }}
-                <v-icon class="body-2 mt-0">mdi-earth</v-icon>
+                <!-- <v-icon class="body-2 mt-0">mdi-earth</v-icon> -->
                 <span
                   v-if="
                     postsObject[n - 1].tagged_stocks &&
@@ -69,15 +72,7 @@
                   >
                     <img src="/icon/bullish.svg" width="6" />
                   </v-btn>
-                  <v-btn
-                    v-else
-                    icon
-                    outlined
-                    fab
-                    width="14"
-                    height="14"
-                    color="error"
-                  >
+                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
                     <img src="/icon/bearish.svg" width="6" />
                   </v-btn>
                 </span>
@@ -90,8 +85,7 @@
                 @click="
                   (postOptionsMode = !postOptionsMode), (currentPost = n - 1)
                 "
-                >mdi-dots-horizontal</v-icon
-              >
+              >mdi-dots-horizontal</v-icon>
               <div v-if="postOptionsMode && currentPost == n - 1">
                 <div class="postOptions__dropdown--caret"></div>
                 <div class="postOptions__container">
@@ -105,8 +99,7 @@
                         x-small
                         text
                         v-on="on"
-                        >Delete</v-btn
-                      >
+                      >Delete</v-btn>
                     </template>
 
                     <v-card
@@ -116,8 +109,7 @@
                       <v-card-title
                         class="headline success--text lighten-2"
                         primary-title
-                        >Delete Post?</v-card-title
-                      >
+                      >Delete Post?</v-card-title>
 
                       <v-card-text>
                         Are you sure you want to permanently remove this post
@@ -143,8 +135,7 @@
                             deletePost(postsObject[n - 1].id, n - 1),
                               (deleteDialog = false)
                           "
-                          >Delete</v-btn
-                        >
+                        >Delete</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
@@ -158,8 +149,7 @@
                     @click="
                       (editPostMode = !editPostMode), (currentPost = n - 1)
                     "
-                    >Edit</v-btn
-                  >
+                  >Edit</v-btn>
                   <v-btn
                     v-if="
                       postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
@@ -167,8 +157,7 @@
                     x-small
                     text
                     @click="followAccount(postsObject[n - 1].user.uuid)"
-                    >Follow</v-btn
-                  >
+                  >Follow</v-btn>
                 </div>
               </div>
             </v-col>
@@ -205,12 +194,13 @@
                 ),
                   (editPostMode = false)
               "
-              >Done Editing</v-btn
-            >
+            >Done Editing</v-btn>
           </div>
-          <span v-else class="caption px-5 pb-3">{{
+          <span v-else class="caption px-5 pb-3">
+            {{
             postsObject[n - 1].content
-          }}</span>
+            }}
+          </span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
         </v-list-item-content>
@@ -260,9 +250,11 @@
         <span class="px-2 caption">{{ postsObject[n - 1].bears_count }}</span>
         <v-spacer></v-spacer>
         <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
-        <span class="caption">{{
+        <span class="caption">
+          {{
           postsObject[n - 1].comment_descendants_count
-        }}</span>
+          }}
+        </span>
         <!-- TODO Share counter -->
         <!-- <v-btn
           icon
@@ -284,16 +276,18 @@
       <!-- Start of Comment -->
       <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
-        <v-list-item-avatar size="28" class="mr-2">
-          <v-img
-            class="avatar__border"
-            :src="
+        <router-link :to="'/profile/'+ $auth.user.data.user.username" class="no-transform">
+          <v-list-item-avatar size="28" class="mr-2">
+            <v-img
+              class="avatar__border"
+              :src="
               $auth.user.data.user.profile_image
                 ? $auth.user.data.user.profile_image
                 : 'default.png'
             "
-          ></v-img>
-        </v-list-item-avatar>
+            ></v-img>
+          </v-list-item-avatar>
+        </router-link>
         <v-list-item-content class="pt-2 mb-0">
           <v-text-field
             dense
@@ -318,11 +312,7 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share
-      v-if="showShare"
-      :postid="sharePostID"
-      @closeModal="showShare = false"
-    />
+    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
   </v-col>
 </template>
 
@@ -413,14 +403,15 @@ export default {
       });
     },
     newPosts() {
+      this.numberPost = this.newPosts.number_posts;
       if (this.newPosts.event_name === "social.post") {
         this.postCounter();
       } else if (this.newPosts.event_name === "social.post.comment") {
         this.putNumberComment();
-      } else if (this.newPosts.event_name === "social.post.sentiment") {
-        this.putNumberSentiments();
       }
-      this.numberPost = this.newPosts.number_posts;
+      //  else if (this.newPosts.event_name === "social.post.sentiment") {
+      //     this.putNumberSentiments();
+      //   }
     },
     newComment() {
       this.postsObject[this.newComment.postIndex].comments[
@@ -493,19 +484,19 @@ export default {
     putNumberComment() {
       for (let i = 0; i < this.postsObject.length; i++) {
         if (this.postsObject[i].id === this.newPosts.data.post.id) {
-          this.postsObject[i].comment_descendants_count += 1;
+          this.postsObject[i].comment_descendants_count++;
         }
       }
     },
-    putNumberSentiments() {
-      for (let i = 0; i < this.postsObject.length; i++) {
-        if (this.postsObject[i].id === this.newPosts.data.post.id) {
-          this.postsObject[i].bulls_count = this.newPosts.data.post.bulls;
-          this.postsObject[i].bears_count = this.newPosts.data.post.bears;
-          this.postsObject[i].my_sentiment = this.newPosts.data.sentiment.type;
-        }
-      }
-    },
+    // putNumberSentiments() {
+    //   for (let i = 0; i < this.postsObject.length; i++) {
+    //     if (this.postsObject[i].id === this.newPosts.data.post.id) {
+    //       this.postsObject[i].bulls_count = this.newPosts.data.post.bulls;
+    //       this.postsObject[i].bears_count = this.newPosts.data.post.bears;
+    //       this.postsObject[i].my_sentiment = this.newPosts.data.sentiment.type;
+    //     }
+    //   }
+    // },
     /**
      * fires when user clicks follow button
      *
@@ -572,7 +563,6 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-            console.log(response);
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
@@ -644,7 +634,7 @@ export default {
      */
     editPost(id, content, index) {
       let payload = {
-        content: content
+        content: content.substring(0, 200)
       };
       this.$api.social.actions
         .put(id, payload)
@@ -669,7 +659,7 @@ export default {
       let payload = {
         parent_id: 0,
         user_id: this.$auth.user.data.user.uuid,
-        content: content
+        content: content.substring(0, 200)
       };
 
       //Important!! do not remove. Used to empty comment textfield on submit
@@ -741,7 +731,7 @@ export default {
           .bullish(params)
           .then(response => {
             if (response.success) {
-              // this.postsObject[index].bulls_count += 1;
+              this.postsObject[index].bulls_count += 1;
               if (
                 this.postsObject[index].my_sentiment &&
                 this.postsObject[index].my_sentiment.type == "bear"
@@ -789,7 +779,7 @@ export default {
           .bearish(params)
           .then(response => {
             if (response.success) {
-              // this.postsObject[index].bears_count += 1;
+              this.postsObject[index].bears_count += 1;
               if (
                 this.postsObject[index].my_sentiment &&
                 this.postsObject[index].my_sentiment.type == "bull"
@@ -856,10 +846,10 @@ export default {
 
 <style>
 .bull__btn {
-  border: 2px solid #03DAC5;
+  border: 2px solid #03dac5;
 }
 .bear__btn {
-  border: 2px solid #F44336;
+  border: 2px solid #f44336;
 }
 .bull__btn--active {
   background-color: #03dac599;

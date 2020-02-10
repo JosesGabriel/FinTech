@@ -12,7 +12,10 @@
     >
       <v-list nav dense rounded class="py-0">
         <v-list-item-group>
-          <router-link to="/profile" class="navbar__links">
+          <router-link
+            :to="'/profile/' + $auth.user.data.user.username"
+            class="navbar__links"
+          >
             <v-list-item>
               <v-list-item-avatar class="mr-4" size="24">
                 <v-img
@@ -35,13 +38,14 @@
                 >
               </v-list-item-content>
             </v-list-item>
-            <v-divider></v-divider>
-            <v-divider class="mb-1"></v-divider>
+            <div v-if="!data">
+              <v-divider></v-divider>
+              <v-divider class="mb-1"></v-divider>
+            </div>
           </router-link>
           <router-link to="/" class="navbar__links">
             <v-list-item
               :class="active == 'social' ? 'v-list-item--active' : ''"
-              :color="active == 'social' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
                 <v-icon :color="active == 'social' ? 'success' : ''"
@@ -49,7 +53,9 @@
                 >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-black"
+                ><v-list-item-title
+                  class="font-weight-black navbar__links body-2"
+                  :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
                   >Social Wall</v-list-item-title
                 ></v-list-item-content
               >
@@ -58,7 +64,6 @@
           <router-link to="/chart" class="navbar__links">
             <v-list-item
               :class="active == 'chart' ? 'v-list-item--active' : ''"
-              :color="active == 'chart' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
                 <v-icon :color="active == 'chart' ? 'success' : ''"
@@ -66,7 +71,8 @@
                 >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-medium"
+                ><v-list-item-title
+                  class="font-weight-medium navbar__links body-2"
                   >Interactive Chart</v-list-item-title
                 ></v-list-item-content
               >
@@ -76,7 +82,6 @@
           <router-link to="/journal" class="navbar__links">
             <v-list-item
               :class="active == 'journal' ? 'v-list-item--active' : ''"
-              :color="active == 'journal' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
                 <v-icon :color="active == 'journal' ? 'success' : ''"
@@ -84,7 +89,8 @@
                 >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-medium"
+                ><v-list-item-title
+                  class="font-weight-medium navbar__links body-2"
                   >Trading Journal</v-list-item-title
                 ></v-list-item-content
               >
@@ -94,7 +100,6 @@
           <router-link to="/trade-simulator" class="navbar__links">
             <v-list-item
               :class="active == 'virtualtrade' ? 'v-list-item--active' : ''"
-              :color="active == 'virtualtrade' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4">
                 <v-icon :color="active == 'virtualtrade' ? 'success' : ''"
@@ -102,7 +107,8 @@
                 >
               </v-list-item-icon>
               <v-list-item-content
-                ><v-list-item-title class="font-weight-medium"
+                ><v-list-item-title
+                  class="font-weight-medium navbar__links body-2"
                   >Virtual Trading</v-list-item-title
                 ></v-list-item-content
               >
@@ -129,7 +135,6 @@
           <router-link to="/watchlist" class="navbar__links">
             <v-list-item
               :class="active == 'watchlist' ? 'v-list-item--active' : ''"
-              :color="active == 'watchlist' ? 'success' : ''"
             >
               <v-list-item-icon class="mr-4"
                 ><v-icon :color="active == 'watchlist' ? 'success' : ''"
@@ -137,7 +142,8 @@
                 ></v-list-item-icon
               >
               <v-list-item-content
-                ><v-list-item-title class="font-weight-medium"
+                ><v-list-item-title
+                  class="font-weight-medium navbar__links body-2"
                   >Watchlist</v-list-item-title
                 ></v-list-item-content
               >
@@ -190,12 +196,10 @@ export default {
 </script>
 <style scoped>
 .navbar__card {
-  position: sticky;
-  top: 65px;
-  height: 300px;
+  position: relative;
 }
 .navbar__links {
-  color: white;
+  color: #546e7a;
   text-decoration: none;
 }
 .navbar__name {
