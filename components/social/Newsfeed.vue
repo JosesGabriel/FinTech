@@ -634,7 +634,7 @@ export default {
      */
     editPost(id, content, index) {
       let payload = {
-        content: content
+        content: content.substring(0, 200)
       };
       this.$api.social.actions
         .put(id, payload)
@@ -659,7 +659,7 @@ export default {
       let payload = {
         parent_id: 0,
         user_id: this.$auth.user.data.user.uuid,
-        content: content
+        content: content.substring(0, 200)
       };
 
       //Important!! do not remove. Used to empty comment textfield on submit
