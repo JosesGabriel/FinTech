@@ -6,12 +6,14 @@
     class="px-2"
   >
     <v-card-title class="pl-2">
-      <span class="subtitle-1 font-weight-black py-0 pl-2" style="color: #03dac5">VAR CALCULATOR</span>
+      <span class="subtitle-1 font-weight-medium py-0 pl-2"
+        >VAR Calculator</span
+      >
     </v-card-title>
-    <v-card-text class="pa-1">
+    <div class="pa-1">
       <v-container class="py-0">
         <v-row v-if="!resultPage">
-          <v-col cols="12" class="d-flex justify-space-between py-0">
+          <v-col cols="12" class="d-flex justify-space-between py-0 font-weigh">
             <span>Total Equity:</span>
             <span>100,000.00</span>
           </v-col>
@@ -19,21 +21,21 @@
             <span>Available Funds:</span>
             <span>60,000.00</span>
           </v-col>
-          <v-col cols="12 pt-4">
+          <v-col cols="12 pt-4 px-2">
+            <v-divider class="mb-5" />
             <v-select
-              :dark="lightSwitch == true"
-              :menu-props="{offsetY: true, dark: lightSwitch == true}"
-              :items="stockList"
               v-model="stocksDropdownModel"
+              :dark="lightSwitch == true"
+              :menu-props="{ offsetY: true, dark: lightSwitch == true }"
+              :items="stockList"
               label="Select a Stock"
+              outlined
               item-text="symbol"
               item-value="id_str"
               item-color="success"
               append-icon="mdi-chevron-down"
               class="pl-0"
               light
-              dense
-              hide-details
               color="success"
               required
             >
@@ -43,7 +45,10 @@
                   :style="{ background: cardbackground }"
                   style="padding: 12px 12px; margin: -16px;"
                 >
-                  <v-list-item-title v-html="data.item.symbol" class="text-uppercase"></v-list-item-title>
+                  <v-list-item-title
+                    class="text-uppercase"
+                    v-html="data.item.symbol"
+                  ></v-list-item-title>
                 </v-list-item-content>
               </template>
             </v-select>
@@ -53,7 +58,48 @@
               v-model="identifiedEntryPrice"
               type="number"
               label="Buy Price"
-              prefix="₱"
+              dense
+              hide-details
+              color="success"
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-1" cols="12">
+            <span class="body-2">Portfolio Allocation</span>
+            <v-btn
+              v-if="!customPortfolioAllocationToggle"
+              class="my-1"
+              small
+              block
+              outlined
+              color="success"
+              >10%</v-btn
+            >
+            <v-btn
+              v-if="!customPortfolioAllocationToggle"
+              class="my-1"
+              small
+              block
+              outlined
+              color="success"
+              >20%</v-btn
+            >
+            <v-btn
+              v-if="!customPortfolioAllocationToggle"
+              class="my-1 no-transform"
+              small
+              block
+              outlined
+              color="success"
+              @click="customPortfolioAllocationToggle = true"
+              >Custom</v-btn
+            >
+            <v-text-field
+              v-if="customPortfolioAllocationToggle"
+              class="py-4"
+              type="number"
+              label="Custom Portfolio Allocation (%)"
+              min="1"
+              max="100"
               dense
               hide-details
               color="success"
@@ -81,55 +127,60 @@
           </v-col>
         </v-row>
         <v-row v-if="resultPage">
-          <v-col cols="12">
-            <span class="body-2 font-weight-light" style="color: #03dac5">Your results</span>
+          <v-col class="pb-5" cols="12">
+            <span class="body-1 font-weight-light">Your results</span>
           </v-col>
-          <v-col cols="12" class="d-flex justify-space-between">
-            <span>No. of Shares to buy</span>
+          <v-col cols="12" class="d-flex py-1 justify-space-between">
+            <span>No. Of Shares to buy</span>
             <span>{{ sharesToBuy }}</span>
           </v-col>
-          <v-col cols="12" class="d-flex justify-space-between">
+          <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Total cost:</span>
             <span>{{ totalCost }}</span>
           </v-col>
-          <v-col cols="12" class="d-flex justify-space-between">
+          <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Entry Price:</span>
             <span>{{ identifiedEntryPrice }}</span>
           </v-col>
-          <v-col cols="12" class="d-flex justify-space-between">
+          <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Take Profit:</span>
             <span>{{ takeProfitPrice }}</span>
           </v-col>
-          <v-col cols="12" class="d-flex justify-space-between">
+          <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Stoploss:</span>
             <span>{{ stoplossPrice }}</span>
           </v-col>
-          <v-col cols="12" class="d-flex justify-space-between">
+          <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Risk to reward ratio:</span>
             <span>{{ riskRewardRatio }}</span>
           </v-col>
+          <v-col class="pt-5 mt-5">
+            <v-divider />
+          </v-col>
         </v-row>
       </v-container>
-    </v-card-text>
+    </div>
     <v-card-actions class="pt-6 mt-6">
       <v-spacer></v-spacer>
       <v-btn
         v-if="!resultPage"
-        class="addWatch__button"
+        class="addWatch__button no-transform black--text px-5"
         color="success"
         light
         depressed
         :disabled="nextButtonDisable"
         @click="calculate()"
-      >Continue</v-btn>
+        >Continue</v-btn
+      >
       <v-btn
         v-else
-        class="addWatch__button"
+        class="addWatch__button no-transform black--text"
         color="success"
         light
         depressed
         @click="addToWatchlist()"
-      >Add to Watchlist</v-btn>
+        >Add to Watchlist</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
@@ -160,7 +211,8 @@ export default {
       portfolioSize: 0,
       currentPrice: 0,
       totalCost: 0,
-      resultPage: false
+      resultPage: false,
+      customPortfolioAllocationToggle: false
     };
   },
   computed: {
@@ -434,8 +486,7 @@ export default {
 };
 </script>
 
-<style
->
+<style>
 .v-menu__content
   .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
   /* color: #03dac5 !important; */
