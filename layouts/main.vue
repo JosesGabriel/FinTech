@@ -126,7 +126,7 @@ export default {
             this.notification.post.id
           ),
           {
-            timeout: 1000000,
+            timeout: 10000,
             showProgressBar: false,
             pauseOnHover: true,
             position: SnotifyPosition.leftBottom,
