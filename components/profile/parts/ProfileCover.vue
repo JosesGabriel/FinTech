@@ -110,7 +110,7 @@
                     v-show="$auth.user.data.user.username == user.username ? false : follow.im_following == 1 ? true : false"
                     @click="unfollowAccount($auth.user.data.user.uuid)"
                     class="success--text caption font-weight-bold body-2 mt-2"
-                  >Following</v-btn>
+                  >Unfollow</v-btn>
                   <v-btn
                     filled
                     rounded
@@ -211,7 +211,6 @@ export default {
       this.$api.social.follow.follow(user_id).then(response => {
         if (response.success) {
           this.follow = response.data.user;
-          console.log(this.follow);
         }
       });
     },

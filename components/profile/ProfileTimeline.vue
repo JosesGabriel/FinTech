@@ -15,7 +15,7 @@
               <v-col cols="12" sm="12" md="8" lg="8">
                 <ProfileAbout :about="about" :user="user" class="my-2" />
                 <PostField class="mb-3" @authorNewPost="authorNewPost" />
-                <Newsfeed :new-post="newPost" />
+                <Newsfeed v-if="getUserId" :author-id="user.uuid" :new-post="newPost" />
                 <!-- <ProfileExperience class="my-2" />
                 <ProfileEducation class="my-2" />
                 <ProfileSkills class="my-2" />
@@ -49,8 +49,8 @@
               </v-col>
               <v-col cols="12" sm="12" md="7" lg="7">
                 <v-container class="px-md-0 pr-lg-0">
-                  <PostField class="mb-3" @authorNewPost="authorNewPost" />
-                  <Newsfeed :new-post="newPost" />
+                  <!-- <PostField class="mb-3" @authorNewPost="authorNewPost" />
+                  <Newsfeed :new-post="newPost" /> -->
                 </v-container>
               </v-col>
             </v-row>
@@ -123,13 +123,19 @@ export default {
       isOpen: true,
       newPost: {},
       about: null,
-      user: null
+      user: {
+        uuid: null
+      },
+      authorId: null,
+      getUserId: false
     };
   },
   watch: {
     userData() {
       this.about = this.userData.profile;
       this.user = this.userData;
+
+      this.getUserId = true
     }
   },
   methods: {

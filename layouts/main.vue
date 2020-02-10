@@ -197,14 +197,14 @@ export default {
   position: relative;
 }
 .lampDark__btn {
-  z-index: 99999;
+  z-index: 100;
   position: absolute;
   width: 8%;
   top: 0;
   right: 340px;
 }
 .lampLight__btn {
-  z-index: 99999;
+  z-index: 100;
   position: absolute;
   width: 44%;
   top: 0;

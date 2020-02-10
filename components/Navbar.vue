@@ -199,7 +199,6 @@ export default {
   position: relative;
 }
 .navbar__links {
-  color: #546e7a;
   text-decoration: none;
 }
 .navbar__name {

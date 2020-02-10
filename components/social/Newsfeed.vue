@@ -341,6 +341,12 @@ export default {
         return "";
       },
       type: String
+    },
+    authorId: {
+      default() {
+        return "";
+      },
+      type: String
     }
   },
   data() {
@@ -462,6 +468,8 @@ export default {
   mounted() {
     if (this.postid) {
       this.searchPost();
+    } else if (this.authorId) {
+      this.getAuthorPost(this.authorId);
     } else {
       this.loadPosts();
     }
@@ -556,6 +564,37 @@ export default {
     loadPosts() {
       const params = {
         page: this.pageCount
+      };
+      this.$api.social.posts
+        .get(params)
+        .then(response => {
+          if (response.success) {
+            this.postsObject = this.postsObject.concat(response.data.posts);
+            this.loader = false;
+            /**
+             * set interval dinamic time changing on posts
+             * 10000ms interval
+             */
+            setInterval(() => {
+              this.postsObject.map(
+                x => (x.created_at = this.addDynamicTime(x.created_at))
+              );
+            }, 10000);
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    /**
+     * triggers when component loads or user hits bottom of page on profile page.
+     * Concatenates to postsObject
+     *
+     * @return
+     */
+    getAuthorPost(id) {
+      const params = {
+        author_id: id
       };
       this.$api.social.posts
         .get(params)
@@ -821,6 +860,7 @@ export default {
         if (bottomOfWindow) {
           this.pageCount++;
           this.loadPosts();
+          this.getAuthorPost();
         }
       };
     },
