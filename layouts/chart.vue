@@ -93,6 +93,7 @@ export default {
       ticks: 1
     };
   },
+  middleware: "isMobileOrTablet",
   watch: {
     /**
      * This function it'll only show if user received notifications
