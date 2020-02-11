@@ -83,7 +83,14 @@
                 </v-content>
               </v-col>
               <v-content class="text-center caption font-weight-bold">
-                Not yet ready
+                <span v-if="[5, 6].includes(tradeBroker.id)"
+                  >We are working to connect this broker with Lyduz. We will let
+                  you know once the connection works are complete and ready for
+                  your trading pleasure.</span
+                >
+                <span v-else>
+                  Help us connect your broker to Lyduz.
+                </span>
               </v-content>
               <v-col cols="12 pa-0 text-center">
                 <v-hover v-slot:default="{ hover }">

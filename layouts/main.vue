@@ -47,6 +47,8 @@
           </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- dont remove -->
+      <div v-show="false" id="tv_chart_container"></div>
     </v-content>
   </v-app>
 </template>
