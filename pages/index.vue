@@ -12,12 +12,10 @@
         <TrendingStocks />
         <WhoToMingle />
 
-        <div class="activity_sticky-sidebar">
-          <MiniWatchlist />
-          <!-- TODO put back when implementing -->
-          <!-- <Bulletin /> -->
-          <FooterSidebar />
-        </div>
+        <MiniWatchlist />
+        <!-- TODO put back when implementing -->
+        <!-- <Bulletin /> -->
+        <FooterSidebar />
       </v-col>
     </v-row>
   </v-container>
@@ -116,13 +114,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.activity_sticky-sidebar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 60px;
-}
-.leftSidebar__container {
-  position: relative;
-}
-</style>

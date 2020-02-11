@@ -18,7 +18,7 @@
         :href="`#tab-3`"
       >Ledger</v-tab>
       <v-spacer></v-spacer>
-      <v-col sm="3" md="2" class="pa-0">
+      <v-col sm="3" md="3" class="pa-0">
         <v-select
           :dark="lightSwitch == true"
           :items="portfolioListPush"
@@ -102,9 +102,8 @@
           </template>
         </v-select>
       </v-col>
-      <v-tab-item color="success" background-color="black" :value="'tab-' + 1">
+      <v-tab-item :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')" color="success" background-color="black" :value="'tab-' + 1">
         <v-container class="pa-0">
-          <div class="separator"></div>
           <JournalLivePortfolio />
           <div class="component_spacer"></div>
           <v-row no-gutters>
@@ -156,15 +155,13 @@
         </v-container>
       </v-tab-item>
 
-      <v-tab-item dark color="success" background-color="#0c1f33" :value="'tab-' + 2">
+      <v-tab-item :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')" dark color="success" background-color="#0c1f33" :value="'tab-' + 2">
         <v-container class="pa-0">
-          <div class="separator"></div>
           <TradelogsContent />
         </v-container>
       </v-tab-item>
-      <v-tab-item dark color="success" background-color="#0c1f33" :value="'tab-' + 3">
+      <v-tab-item :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')" dark color="success" background-color="#0c1f33" :value="'tab-' + 3">
         <v-container class="pa-0">
-          <div class="separator"></div>
           <LedgerContent />
         </v-container>
       </v-tab-item>
