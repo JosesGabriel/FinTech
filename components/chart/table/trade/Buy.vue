@@ -306,6 +306,7 @@
                   mandatory
                   dense
                   borderless
+                  :background-color="cardBackground"
                 >
                   <v-hover
                     v-for="item in items"
@@ -323,11 +324,7 @@
                   </v-hover>
                 </v-btn-toggle>
               </v-col>
-              <v-col
-                v-show="selectedButton == 2"
-                cols="4"
-                offset="3"
-              >
+              <v-col v-show="selectedButton == 2" cols="4" offset="3">
                 <v-text-field
                   v-model="customPercentage"
                   color="success"
@@ -340,16 +337,16 @@
                   :disabled="selectedButton !== 2"
                 ></v-text-field>
               </v-col>
-              <v-col
-                v-show="selectedButton == 2"
-                cols="3"
-              >
+              <v-col v-show="selectedButton == 2" cols="3">
                 <v-hover v-slot:default="{ hover }">
                   <v-btn
                     :dark="lightSwitch == true"
                     class="black--text font-weight-bold text-capitalize mx-2"
                     :color="!hover ? 'success' : 'successhover'"
                     elevation="1"
+                    :disabled="
+                      parseInt(customPercentage) < 1 || customPercentage == ''
+                    "
                     @click="quickConfirmV2"
                     >Save</v-btn
                   >
