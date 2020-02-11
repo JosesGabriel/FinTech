@@ -1,9 +1,5 @@
 <template>
-  <v-container
-    class="page__wrapper"
-    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-    dark
-  >
+  <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
     <v-row class="mb-5" no-gutters>
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar active="social" />
@@ -12,13 +8,16 @@
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
         <Newsfeed :new-post="newPost" />
       </v-col>
-      <v-col class="px-3 hidden-sm-and-down pr-0" cols="3" sm="3" md="3">
+      <v-col class="px-3 hidden-sm-and-down pr-0 leftSidebar__container" cols="3" sm="3" md="3">
         <TrendingStocks />
         <WhoToMingle />
-        <MiniWatchlist />
-        <!-- TODO put back when implementing -->
-        <!-- <Bulletin /> -->
-        <FooterSidebar />
+
+        <div class="activity_sticky-sidebar">
+          <MiniWatchlist />
+          <!-- TODO put back when implementing -->
+          <!-- <Bulletin /> -->
+          <FooterSidebar />
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -117,3 +116,13 @@ export default {
   }
 };
 </script>
+<style scoped>
+.activity_sticky-sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 60px;
+}
+.leftSidebar__container {
+  position: relative;
+}
+</style>
