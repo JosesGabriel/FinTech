@@ -6,25 +6,6 @@
       >
         <span>TRADE</span>
         <v-spacer></v-spacer>
-        <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
-          <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text class="px-1" :color="lightSwitch == 0 ? '#000000' : '#FFFFFF' ">
-              <span class="text-capitalize">Date:</span>
-              <v-card-text class="pa-0" v-html="date"></v-card-text>
-              <v-icon>mdi-chevron-down</v-icon>
-            </v-btn>
-          </template>
-          <v-date-picker
-            v-model="date"
-            :dark="lightSwitch == true"
-            :class="fontColorDate"
-            scrollable
-          >
-            <v-spacer></v-spacer>
-            <v-btn text color="success" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="success" @click="$refs.dialog.save(date)">OK</v-btn>
-          </v-date-picker>
-        </v-dialog>
       </v-card-title>
       <v-stepper id="stepper_container" v-model="e1" dark>
         <v-stepper-items>

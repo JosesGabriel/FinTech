@@ -32,6 +32,7 @@ export default {
   },
   computed: {
     user() {
+      console.log(this.notification)
       return this.notification.notificable.meta.user;
     },
     profileImage() {

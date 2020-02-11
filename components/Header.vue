@@ -139,11 +139,7 @@
         </v-btn>
       </a>
 
-      <a
-        :href="'/'"
-        class="social__router"
-        v-show="$auth.loggedIn ? true : false "
-      >
+      <a :href="'/'" class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn class="header__button" style="font-size:14px;" text>Vyndue</v-btn>
       </a>
 
@@ -270,7 +266,7 @@ export default {
         }.bind(this)
       );
     }
-    this.whiteMode = window.location.pathname
+    this.whiteMode = window.location.pathname;
 
     document.addEventListener("click", this.close);
 
@@ -362,7 +358,7 @@ export default {
 
       allNotificationList.forEach(eventName => {
         evtSourceAll.addEventListener(eventName, e => {
-          console.log('test')
+          console.log("test");
           this.allNotificationHandler(eventName, JSON.parse(e.data));
         });
       });
@@ -381,6 +377,7 @@ export default {
 
         userNotificationList.forEach(eventName => {
           evtSource.addEventListener(eventName, e => {
+            console.log("test");
             this.notificationHandler(eventName, JSON.parse(e.data));
           });
         });

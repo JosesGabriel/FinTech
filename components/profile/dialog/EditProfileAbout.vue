@@ -2,21 +2,21 @@
 <template>
   <v-dialog v-model="show" max-width="500px">
     <v-container class="px-4 py-2 pb-4" :style="{ background: cardbackground }">
-      <v-card :dark="lightSwitch == true" flat>
+      <v-card :dark="lightSwitch == 1 ? true : false" color="transparent" flat>
         <v-row no-gutters>
-          <span class="success--text body-1 py-2">Edit About</span>
+          <span :class="lightSwitch == 1 ? 'white--text' : 'black--text'" class="body-1 py-2">Edit About</span>
           <v-spacer></v-spacer>
           <v-btn icon @click.stop="show = false">
             <v-icon small color="secondary">mdi-close</v-icon>
           </v-btn>
         </v-row>
       </v-card>
-      <v-row no-gutters>
-        <span class="caption secondary--text">Info</span>
+      <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+        <span class="caption">Info</span>
         <v-spacer></v-spacer>
-        <span class="caption secondary--text">{{ counter }}/300</span>
+        <span class="caption">{{ counter }}/300</span>
       </v-row>
-      <v-card :dark="lightSwitch == true" flat>
+      <v-card :dark="lightSwitch == 1 ? true : false" color="transparent" flat>
         <v-textarea
           outlined
           color="success"
@@ -26,7 +26,7 @@
           class="secondary--text caption edit_about-textarea"
           name="input-7-4"
         ></v-textarea>
-        <span class="caption secondary--text">Location</span>
+        <span :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'" class="caption">Location</span>
         <v-text-field
           outlined
           color="success"
@@ -38,7 +38,7 @@
       </v-card>
       <v-row no-gutters>
         <div class="pa-0">
-          <span class="caption tertiary--text">
+          <span class="caption" :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
             <v-icon color="success" small class="py-1 pr-1">mdi-help-circle-outline</v-icon>Supported Formats
           </span>
         </div>
