@@ -252,7 +252,7 @@ export default {
      * @return  {string}  returns string
      */
     fontColor() {
-      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+      return this.lightSwitch == 0 ? "#000000 !important" : "#ffffff !important";
     },
     /**
      * returns background color

@@ -10,10 +10,11 @@
         class="text-left justify-left pa-5 pb-3 px-5 success--text"
         style="font-size:16px; font-weight: 700;"
       >
-      <v-col class="pa-0"><span>TRADE</span></v-col>  
-      
+        <v-col class="pa-0">
+          <span>TRADE</span>
+        </v-col>
       </v-card-title>
-      
+
       <v-stepper
         v-model="e1"
         :dark="lightSwitch == true"
@@ -35,7 +36,7 @@
                       tile
                       style="font-size: 1rem;"
                       width="100%"
-                      @click="btnBuy"                   
+                      @click="btnBuy"
                     >Buy</v-btn>
                   </div>
                 </v-col>
@@ -59,7 +60,7 @@
                 <v-col cols="12" sm="12" md="12">
                   <v-card-title class="pa-0 text-right justify-end">
                     <v-col sm="12" md="12" class="pa-0">
-                      <v-select
+                      <v-autocomplete
                         :menu-props="{offsetY: true, dark: lightSwitch == true}"
                         item-color="success"
                         :dark="lightSwitch == true"
@@ -67,6 +68,7 @@
                         class="pa-0 ma-0 select_stock"
                         append-icon="mdi-chevron-down"
                         :items="stock"
+                        :filter="customFilter"
                         item-text="symbol"
                         :item-value="(this.sellSelected ? 'stockidstr' : 'id_str')"
                         v-model="GetSelectStock"
@@ -82,7 +84,7 @@
                             <v-list-item-title v-html="data.item.symbol"></v-list-item-title>
                           </v-list-item-content>
                         </template>
-                      </v-select>
+                      </v-autocomplete>
                     </v-col>
                   </v-card-title>
 
@@ -122,11 +124,9 @@
                         id="liveportfolio-table"
                       >
                         <template v-slot:default>
-                          <tbody :style="{color: toggleFontColor}" >
-                            <tr id="table_tr_snap-cont" >
-                              <td class="item_position-prop py-1 px-1 stock_details"
-                              
-                              >Previous</td>
+                          <tbody :style="{color: toggleFontColor}">
+                            <tr id="table_tr_snap-cont">
+                              <td class="item_position-prop py-1 px-1 stock_details">Previous</td>
                               <td
                                 class="item_position-prop text-right pa-0 px-1 stock_details"
                               >{{ prev }}</td>
@@ -204,10 +204,7 @@
                   </v-row>
                   <div class="px-3">
                     <v-card-title class="pa-0 justify-center mt-3">
-                      <h1
-                        style="font-size: 12px;"
-                        :style="{ color: toggleFontColor }"
-                      >Bid/ Ask Bar</h1>
+                      <h1 style="font-size: 12px;" :style="{ color: toggleFontColor }">Bid/ Ask Bar</h1>
                     </v-card-title>
 
                     <v-progress-linear
@@ -219,7 +216,7 @@
                     ></v-progress-linear>
                     <v-card-title class="pa-0 justify-center mt-3">
                       <h1
-                         style="font-size: 12px;"
+                        style="font-size: 12px;"
                         :style="{ color: toggleFontColor }"
                       >Members Sentiments</h1>
                     </v-card-title>
@@ -246,7 +243,6 @@
                 :disabled="(GetSelectStock != '' ? false : true)"
               >Continue</v-btn>
             </v-row>
-           
           </v-stepper-content>
           <v-stepper-content step="2" class="pt-2 pa-2">
             <!-- -----Second View of Trade Modal----- -->
@@ -349,9 +345,7 @@
                     </v-select>
                   </div>
                 </v-col>
-                <v-col style="color: #03dac5; font-size: 12px;">
-                  Enter Notes
-                </v-col>
+                <v-col style="color: #03dac5; font-size: 12px;">Enter Notes</v-col>
                 <v-col
                   cols="12"
                   sm="12"
@@ -360,14 +354,13 @@
                 >
                   <v-textarea
                     dense
-                    filled   
+                    filled
                     class="white--text trading_notes-textarea"
                     v-model="notes"
                     :dark="lightSwitch == true"
                     :style="{ background: cardBackground }"
                     :background-color="lightSwitch == 0 ? '#e3e9ed' : '#172431'"
-                  >
-                  </v-textarea>
+                  ></v-textarea>
                 </v-col>
               </v-row>
             </v-container>
@@ -385,32 +378,31 @@
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
-              <v-dialog v-model="errorMsg" max-width="400px">
-                <v-card :dark="lightSwitch == true">
-                <v-card-title
-                    class="text-center justify-left pa-4 success--text subtitle-1 font-weight-bold"
-                >{{ this.errmsgbuysell }}</v-card-title>
-                <v-card-title
-                    class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
-                >{{ this.errmsg }}</v-card-title>
-                <v-container class="px-5">
-                    <v-row no-gutters>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        color="secondary"
-                        class="text-capitalize mt-2"
-                        text
-                        :dark="lightSwitch == true"
-                        light
-                        @click.stop="errorMsg = false"
-                    >Close</v-btn>
-                    </v-row>
-                </v-container>
-                </v-card>
-            </v-dialog>
+      <v-dialog v-model="errorMsg" max-width="400px">
+        <v-card :dark="lightSwitch == true">
+          <v-card-title
+            class="text-center justify-left pa-4 success--text subtitle-1 font-weight-bold"
+          >{{ this.errmsgbuysell }}</v-card-title>
+          <v-card-title
+            class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+          >{{ this.errmsg }}</v-card-title>
+          <v-container class="px-5">
+            <v-row no-gutters>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="secondary"
+                class="text-capitalize mt-2"
+                text
+                :dark="lightSwitch == true"
+                light
+                @click.stop="errorMsg = false"
+              >Close</v-btn>
+            </v-row>
+          </v-container>
+        </v-card>
+      </v-dialog>
     </v-card>
   </v-dialog>
-
 </template>
 <script>
 import BuyTrade from "~/components/trade-simulator/buy";
@@ -447,8 +439,8 @@ export default {
       GetSelectStock: "",
       selectedTab: null,
       avprice: 0,
-      errmsg: '',
-      errmsgbuysell: '',
+      errmsg: "",
+      errmsgbuysell: "",
 
       selectedstrategy: "",
       selectedtradeplan: "",
@@ -476,7 +468,7 @@ export default {
       buyprice: 0,
       boardlot: 0,
       totalposition: 0,
-      mstatus: '',
+      mstatus: ""
     };
   },
   props: ["visible", "OpenPosition", "Trade_Modal"],
@@ -503,7 +495,7 @@ export default {
      * @return  {String}  hex code
      */
     toggleFontColor() {
-      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6"; 
+      return this.lightSwitch == 0 ? "#535358" : "#b6b6b6";
     },
 
     show: {
@@ -542,11 +534,11 @@ export default {
         this.setSimulatorConfirmedBuySell("buy");
       }
     },
-    marketStatus(){
-      if(this.marketStatus){
-        this.mstatus = 'Open'
-      }else{
-        this.mstatus = 'Closed'
+    marketStatus() {
+      if (this.marketStatus) {
+        this.mstatus = "Open";
+      } else {
+        this.mstatus = "Closed";
       }
     }
   },
@@ -570,6 +562,21 @@ export default {
         "tradesimulator/setSimulatorConfirmedBuySell"
     }),
     /**
+     * Fires when users typed anything, and it only shows the index of what the users typed
+     *
+     * @param   {Array}  item       Item of all stocks
+     * @param   {String}  queryText  query all the item of what users typed
+     * @param   {String}  itemText   text of user typed
+     *
+     * @return  {Object}             returns query object
+     */
+    customFilter(item, queryText, itemText) {
+      const textOne = item.symbol.toLowerCase();
+      const searchText = queryText.toLowerCase();
+
+      return textOne.indexOf(searchText) > -1;
+    },
+    /**
      * No Trade Details appear if Sell is Selected in Stepper
      *
      */
@@ -591,12 +598,12 @@ export default {
     totalPosition(value) {
       this.totalposition = value;
     },
-    
+
     /**
      * initialize data when you click Buy Button
      *
      */
-    btnBuy() {     
+    btnBuy() {
       this.setSimulatorConfirmedBuySell("buy");
       this.totalposition = 0;
       this.buySelected = true;
@@ -629,14 +636,14 @@ export default {
         );
       }
     },
-  /**
- * Add comma separator
- *
- * @param   {float}  n        number
- * @param   {char}  sep       separator character
- * @param   {int}  decimals   number of decimal points
- * @return  {string}          number with comma separator
- */
+    /**
+     * Add comma separator
+     *
+     * @param   {float}  n        number
+     * @param   {char}  sep       separator character
+     * @param   {int}  decimals   number of decimal points
+     * @return  {string}          number with comma separator
+     */
     addcomma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
@@ -650,17 +657,15 @@ export default {
      *
      */
     confirm() {
-      
       const stock_id = this.stock_id;
       let fund_id = this.simulatorPortfolioID;
       let d = new Date(),
         dformat =
           [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/") +
           " " +
-          [d.getHours(), d.getMinutes(), d.getSeconds()].join(":"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format      
+          [d.getHours(), d.getMinutes(), d.getSeconds()].join(":"); ///"mm/dd/yyyy hh:mm:ss" // 24 hour format
       // if Sell is selected
       if (this.sellSelected) {
-        
         if (this.avprice != 0) {
           // if selected stock exist in Live Portfolio
           const sellparams = {
@@ -675,11 +680,11 @@ export default {
               date: dformat
             }
           };
-     
-        this.$api.journal.portfolio
-        .tradesell(fund_id, stock_id, sellparams)
-        .then(response => {
-              if (response.success) {         
+
+          this.$api.journal.portfolio
+            .tradesell(fund_id, stock_id, sellparams)
+            .then(response => {
+              if (response.success) {
                 this.setSimulatorOpenPosition(this.OpenPosition);
                 this.e1 = 1;
                 this.onreset = false;
@@ -687,12 +692,13 @@ export default {
                 this.sellSelected = false;
                 this.GetSelectStock = "";
               }
-            }).catch(error => {
-                this.errmsg = error.response.data.message;
-                //this.errmsg = 'Stock is currently closed';
-                this.errmsgbuysell = 'Unable to sell';
-                this.errorMsg = true;
-              });
+            })
+            .catch(error => {
+              this.errmsg = error.response.data.message;
+              //this.errmsg = 'Stock is currently closed';
+              this.errmsgbuysell = "Unable to sell";
+              this.errorMsg = true;
+            });
         }
       } else {
         // if Buy is selected
@@ -707,39 +713,38 @@ export default {
             notes: this.notes,
             date: dformat
           }
-        };   
+        };
 
-           this.$api.journal.portfolio
-            .tradebuy(fund_id, stock_id, buyparams)
-            .then(response => {
-                if (response.success) {          
-                  this.setSimulatorOpenPosition(this.OpenPosition);
-                  this.e1 = 1;
-                  this.onreset = false;
-                  this.buySelected = true;
-                  this.sellSelected = false;
-                  this.GetSelectStock = "";
-                }
-              }).catch(error => {
-                this.errmsg = error.response.data.message;
-                //this.errmsg = 'Stock is currently closed';
-                this.errmsgbuysell = 'Unable to buy';
-                this.errorMsg = true;
-              });
-       
+        this.$api.journal.portfolio
+          .tradebuy(fund_id, stock_id, buyparams)
+          .then(response => {
+            if (response.success) {
+              this.setSimulatorOpenPosition(this.OpenPosition);
+              this.e1 = 1;
+              this.onreset = false;
+              this.buySelected = true;
+              this.sellSelected = false;
+              this.GetSelectStock = "";
+            }
+          })
+          .catch(error => {
+            this.errmsg = error.response.data.message;
+            //this.errmsg = 'Stock is currently closed';
+            this.errmsgbuysell = "Unable to buy";
+            this.errorMsg = true;
+          });
       }
-     
     },
 
     /**
-     * Get Stock Details 
+     * Get Stock Details
      *
      * @param   {string}  selectObj  Stock ID
      *
      */
     getDetails(selectObj) {
-     //let zone = this.$moment('Asia/Manila');
-    //console.log('Symid-', selectObj);
+      //let zone = this.$moment('Asia/Manila');
+      //console.log('Symid-', selectObj);
 
       const params = {
         "symbol-id": selectObj
@@ -762,7 +767,7 @@ export default {
           } else if (result.data.last >= 1000) {
             this.dboard = 5;
           }
-        
+
           if (this.sellSelected) {
             const sellparams = {
               fund: this.simulatorPortfolioID
@@ -797,21 +802,26 @@ export default {
           this.trades = result.data.trades;
           this.ave = result.data.average.toFixed(2);
 
-            let market_code =  result.data.market_code;
-            let stock_id = selectObj;
+          let market_code = result.data.market_code;
+          let stock_id = selectObj;
 
-            this.$api.social.posts.getSentiment({
+          this.$api.social.posts
+            .getSentiment({
               stock_id,
               market_code
-            }).then(
-              function(response){
-                  this.sentiment = parseFloat((response.data.sentiment.bull / response.data.sentiment.total_sentiment) * 100);
-                  if(isNaN(this.sentiment)) {
-                    this.sentiment = 50;
-                  }
+            })
+            .then(
+              function(response) {
+                this.sentiment = parseFloat(
+                  (response.data.sentiment.bull /
+                    response.data.sentiment.total_sentiment) *
+                    100
+                );
+                if (isNaN(this.sentiment)) {
+                  this.sentiment = 50;
+                }
               }.bind(this)
             );
-                       
         }.bind(this)
       );
 
@@ -820,7 +830,6 @@ export default {
           this.bidask = parseFloat(result.data.bid_total_percent).toFixed(2);
         }.bind(this)
       );
-
     },
 
     /**
@@ -897,16 +906,15 @@ export default {
 .stock_details {
   font-size: 12px !important;
 }
-.display{
+.display {
   display: block;
   color: #fe4949;
 }
-.nodisplay{
+.nodisplay {
   display: none;
 }
 </style>
 <style>
-
 .v-menu__content
   > .v-select-list
   > .v-list.v-sheet
