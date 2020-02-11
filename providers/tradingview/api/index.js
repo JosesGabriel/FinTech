@@ -27,12 +27,14 @@ const TIMESCALE_MARKS_TIME_URL = `${BASE_URL}/tradingview/timescale-marks`;
 let symbolInfoObj = {
   exchange: ""
 };
-
 // holds the last bar of any subscribed chart
 let lastBarData = {};
+// axios connection variable
+let http;
 
 if (process.client){
-  axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
+  http = axios.create()
+  http.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
 }
 /**
  * Listens to SSE INFO native bus event.
@@ -146,7 +148,7 @@ export default {
   onReady: cb => {
     setTimeout(() => {
       // get tradingview config
-      axios.post(CONFIG_URL).then(({ data }) => {
+      http.post(CONFIG_URL).then(({ data }) => {
         // write to callback
         cb(data.data);
       });
@@ -175,7 +177,7 @@ export default {
 
     // get tradingview search
     let query = BuildQueryParams(params);
-    axios
+    http
       .post(`${SEARCH_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(({ data }) => {
         onResultReadyCallback(data.data);
@@ -226,7 +228,7 @@ export default {
     setTimeout(function() {
       const query = BuildQueryParams(params)
       // get tradingview resolve
-      axios
+      http
         .post(`${RESOLVE_URL}${query.length > 0 ? "?" + query : ""}`)
         .then(({ data }) => {
           onSymbolResolvedCallback(data.data);
@@ -274,7 +276,7 @@ export default {
     // get tradingview history
     const query = BuildQueryParams(params);
 
-    axios
+    http
       .post(`${HISTORY_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(response => {
         const data = response.data.data;
@@ -408,7 +410,7 @@ export default {
     // get tradingview history
     const query = BuildQueryParams(params)
 
-    axios
+    http
       .post(`${TIMESCALE_MARKS_TIME_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(({ data }) => {
         onDataCallback(data.data);
@@ -424,7 +426,7 @@ export default {
    */
   getServerTime: cb => {
     // get tradingview config
-    axios.post(SERVER_TIME_URL).then(({ data }) => {
+    http.post(SERVER_TIME_URL).then(({ data }) => {
       // write to callback
       cb(data.data.time);
     });
