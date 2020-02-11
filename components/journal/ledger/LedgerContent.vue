@@ -235,6 +235,20 @@ export default {
               ...this.ledgerContent[i]
             };
             this.ledgerContent[i].action = "Deposit Income";
+          } else if (this.ledgerContent[i].action == "inital_balance") {
+            let Depositdebit = {
+              debit: "-",
+              credit: parseFloat(this.ledgerContent[i].total_value)
+                .toFixed(2)
+                .replace(".", ".")
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            };
+            this.ledgerContent[i] = {
+              ...Depositdebit,
+              ...this.ledgerContent[i]
+            };
+            this.ledgerContent[i].action = "Initial Capital";
           } else if (this.ledgerContent[i].action == "dividend_income") {
             let Dividenddebit = {
               debit: "-",
