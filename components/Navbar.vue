@@ -5,15 +5,17 @@
       mobile-break-point
       :mini-variant="data ? true : $vuetify.breakpoint.mdAndDown"
       class="navbarDrawer__card"
-      :class="lightSwitch == 0 ? 'lightcard' : '#00121e'"
+      :class="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
-      color="transparent"
       floating
     >
       <v-list nav dense rounded class="py-0">
         <v-list-item-group>
-          <router-link :to="'/profile/' + $auth.user.data.user.username" class="navbar__links">
-            <v-list-item>
+          <router-link
+            :to="'/profile/' + $auth.user.data.user.username"
+            class="no-transform"
+          >
+            <v-list-item class="tertiary--text">
               <v-list-item-avatar class="mr-4" size="24">
                 <v-img
                   class="avatar__border"
@@ -84,7 +86,7 @@
             </v-list-item>
           </router-link>
           <!-- TODO put back after launch -->
-          <!-- <router-link to="/game" class="navbar__links">
+          <!-- <router-link to="/game" class="no-transform">
             <v-list-item
               :class="active == 'game' ? 'v-list-item--active' : ''"
               :color="active == 'game' ? 'success' : ''"
@@ -161,9 +163,6 @@ export default {
   position: -webkit-sticky;
   position: sticky;
   top: 57px;
-}
-.navbar__links {
-  text-decoration: none;
 }
 .navbar__name {
   font-weight: 600 !important;
