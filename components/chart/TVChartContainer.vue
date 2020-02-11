@@ -372,7 +372,7 @@ export default {
 <style scoped>
 .chartViewClass_1 {
   /* both open */
-  height: calc(100vh - 132px);
+  height: calc(100vh - 82px);
 }
 .chartViewClass_2 {
   /* table only */
