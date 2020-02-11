@@ -1,14 +1,18 @@
 <template>
   <v-content>
     <v-content>
-      <tv-chart-container
-        :data-feed="dataFeed"
-        :charts-storage-url="`https://dev-api.arbitrage.ph/api/chart_template`"
-        charts-storage-api-version="v1"
-        client-id="lyduz.com"
-        :user-id="userId"
-        :symbol="'PSE:PSEI'"
-      ></tv-chart-container>
+      <client-only>
+        <tv-chart-container
+          :data-feed="dataFeed"
+          :charts-storage-url="
+            `https://dev-api.arbitrage.ph/api/chart_template`
+          "
+          charts-storage-api-version="v1"
+          client-id="lyduz.com"
+          :user-id="userId"
+          :symbol="'PSE:PSEI'"
+        ></tv-chart-container>
+      </client-only>
     </v-content>
   </v-content>
 </template>
