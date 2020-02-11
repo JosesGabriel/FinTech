@@ -1,19 +1,19 @@
 <template>
   <v-col class="pt-3" cols="12" sm="12" md="12">
-    <v-tabs color="success" background-color="transparent" dark>
+    <v-tabs color="success" class="font-weight-bold" background-color="transparent" dark>
       <v-tab
-        class="tab_menu-top text-capitalize subtitle-1"
+        class="tab_menu-top font-weight-bold text-capitalize subtitle-1"
         :style="{ color: fontColor }"
         :href="`#tab-1`"
         @click="dashboardClicked()"
       >Dashboard</v-tab>
       <v-tab
-        class="tab_menu-top text-capitalize subtitle-1"
+        class="tab_menu-top font-weight-bold text-capitalize subtitle-1"
         :style="{ color: fontColor }"
         :href="`#tab-2`"
       >Tradelogs</v-tab>
       <v-tab
-        class="tab_menu-top text-capitalize subtitle-1"
+        class="tab_menu-top font-weight-bold text-capitalize subtitle-1"
         :style="{ color: fontColor }"
         :href="`#tab-3`"
       >Ledger</v-tab>
@@ -80,7 +80,10 @@
               <v-list-item-content>
                 <v-list-item-title class="text-uppercase caption">Manage Portfolio</v-list-item-title>
               </v-list-item-content>
-              <v-icon :color="lightSwitch == true ? 'white' : 'black'" class="body-2">mdi-settings-outline</v-icon>
+              <v-icon
+                :color="lightSwitch == true ? 'white' : 'black'"
+                class="body-2"
+              >mdi-settings-outline</v-icon>
             </v-list-item>
             <v-list-item
               ripple
@@ -91,7 +94,10 @@
               <v-list-item-content>
                 <v-list-item-title class="text-uppercase caption">Create Portfolio</v-list-item-title>
               </v-list-item-content>
-              <v-icon :color="lightSwitch == true ? 'white' : 'black'" class="body-2">mdi-plus-circle-outline</v-icon>
+              <v-icon
+                :color="lightSwitch == true ? 'white' : 'black'"
+                class="body-2"
+              >mdi-plus-circle-outline</v-icon>
             </v-list-item>
           </template>
         </v-select>
@@ -252,7 +258,9 @@ export default {
      * @return  {string}  returns string
      */
     fontColor() {
-      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+      return this.lightSwitch == 0
+        ? "#000000 !important"
+        : "#ffffff !important";
     },
     /**
      * returns background color
@@ -316,7 +324,8 @@ export default {
      * @param   {object}  obj  object of changed item
      *
      * @return  {object}       object data onchange
-     */ 
+     */
+
     changePortfolio(obj) {
       this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
       const openparams = {
@@ -366,7 +375,7 @@ export default {
      * @return  {array}  array of item, all portfolios
      */
     getUserPortfolioList() {
-      this.portfolioListPush = []
+      this.portfolioListPush = [];
       this.$api.journal.portfolio.portfolio().then(
         function(result) {
           this.portfolioList = result.data.logs;
@@ -466,9 +475,6 @@ export default {
 .sumportfolio_real.theme--dark {
   border-top: 1px solid;
   border-color: #172431;
-}
-.tab_menu-top.v-tab--active {
-  color: #03dac5 !important;
 }
 </style>
 <style>

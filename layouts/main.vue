@@ -2,10 +2,7 @@
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <rbHeader :ticks="ticks" class="header__container" />
-      <v-container
-        :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-        class="componentContainer"
-      >
+      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
         <div v-show="showLamp">
           <img
             v-show="
@@ -18,10 +15,7 @@
         </div>
         <nuxt />
       </v-container>
-      <v-snackbar
-        v-model="alert.model"
-        :color="alert.state ? 'success' : 'error'"
-      >
+      <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
         {{ alert.message }}
         <v-btn color="white" text @click="alert.model = false">Close</v-btn>
       </v-snackbar>
@@ -34,25 +28,23 @@
         :dark="lightSwitch == 0 ? false : true"
       >
         <div class="d-grid alertDialog__icon--wrapper">
-          <v-icon class="alertDialog__icon" x-large color="success"
-            >mdi-check</v-icon
-          >
+          <v-icon class="alertDialog__icon" x-large color="success">mdi-check</v-icon>
         </div>
         <v-card class="alertDialog__card">
           <v-card-title
             class="headline text-center d-block success--text alertDialog__title"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-            >{{ alertDialog.header }}</v-card-title
-          >
+          >{{ alertDialog.header }}</v-card-title>
 
           <v-card-text
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-            >{{ alertDialog.body }}</v-card-text
-          >
-          <v-card-text class="text-center">{{
+          >{{ alertDialog.body }}</v-card-text>
+          <v-card-text class="text-center">
+            {{
             alertDialog.subtext
-          }}</v-card-text>
+            }}
+          </v-card-text>
         </v-card>
       </v-dialog>
       <!-- dont remove -->
@@ -64,7 +56,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import rbHeader from "~/components/Header";
-import { UserNotificationAlertLayout } from "~/assets/js/helpers/notification";
+import {
+  UserNotificationAlertLayout,
+  AllNotificationAlertLayout
+} from "~/assets/js/helpers/notification";
 import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
 export default {
@@ -155,18 +150,32 @@ export default {
     this.whiteMode = window.location.pathname;
 
     this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
+    // this.showAnnouncements();
   },
   methods: {
     ...mapActions({
       setLightSwitch: "global/setLightSwitch"
     }),
     userNotificationAlertLayout: UserNotificationAlertLayout,
+    allNotificationAlertLayout: AllNotificationAlertLayout,
     lampSwitch() {
       let lampMode = localStorage.currentMode;
 
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
-    }
+    },
+    // showAnnouncements() {
+    //   this.$snotify.html(this.allNotificationAlertLayout(), {
+    //     timeout: 100000000,
+    //     showProgressBar: false,
+    //     pauseOnHover: true,
+    //     position: SnotifyPosition.leftBottom,
+    //     newItemsOnTop: false,
+    //     config: {
+    //       closeOnClick: true
+    //     }
+    //   });
+    // }
   }
 };
 </script>

@@ -117,8 +117,8 @@ export default {
     },
     redirect: {
       login: "/login",
-      home: "/",
-      logout: "/login"
+      logout: "/login",
+      home: false
     },
     plugins: [
       { src: "~/plugins/axios", mode: "client" },

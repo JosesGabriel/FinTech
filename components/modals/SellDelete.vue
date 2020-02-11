@@ -64,7 +64,8 @@ export default {
   methods: {
     ...mapActions({
       setRenderEditKey: "journal/setRenderEditKey",
-      setRenderPortfolioKey: "journal/setRenderPortfolioKey"
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+      lightSwitch: "global/getLightSwitch"
     }),
     /**
      * deleteNow function, trigger delete once user confirmed only tradelog

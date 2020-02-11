@@ -118,7 +118,7 @@
     </v-data-table>
     <v-row>
       <v-col class="text-right font-weight-bold caption" width="100%">
-        <span class="font-weight-bold" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">Total Profit/Loss as of {{date}}:</span>
+        <span class="font-weight-bold" :style="{ color: lightSwitch == 0 ? '#000000' : '#FFFFFF' }">Total Profit/Loss as of {{date}}:</span>
         <span
           class="ml-3"
           :class="(totalProfitLoss < 0 ? 'negative' : 'positive')"

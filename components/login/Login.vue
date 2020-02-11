@@ -122,6 +122,11 @@ export default {
             state: "success",
             message: "Successfully Logged In"
           });
+
+          // reload for proper component mounting
+          setTimeout(() => {
+            window.open("/","_self")
+          }, 800);
         })
         .catch(() => {
           this.$emit("alert", {
