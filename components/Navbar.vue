@@ -4,8 +4,8 @@
       disable-resize-watcher
       mobile-break-point
       :mini-variant="data ? true : $vuetify.breakpoint.mdAndDown"
-      class="navbarDrawer__card"
-      :class="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+      class="navbarDrawer__card transparent"
+      :class="lightSwitch == 0 ? 'lightcard' : ''"
       :dark="lightSwitch == 0 ? false : true"
       floating
     >
