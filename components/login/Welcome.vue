@@ -22,14 +22,20 @@
         <div class="body-2 text-center">
           <v-hover v-slot:default="{ hover }">
             <v-btn x-large class="display-1 mr-4" icon>
-              <v-icon x-large :color="!hover ? '' : 'success'"
+              <v-icon
+                x-large
+                :color="!hover ? '' : 'success'"
+                @click="shareToFB()"
                 >mdi-facebook</v-icon
               >
             </v-btn>
           </v-hover>
           <v-hover v-slot:default="{ hover }" x-large>
             <v-btn class="display-1 mr-4" icon>
-              <v-icon x-large :color="!hover ? '' : 'success'"
+              <v-icon
+                x-large
+                :color="!hover ? '' : 'success'"
+                @click="shareToTwitter()"
                 >mdi-twitter</v-icon
               >
             </v-btn>
@@ -45,6 +51,7 @@
   </v-card>
 </template>
 
+<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
 import { mapGetters } from "vuex";
 export default {
@@ -55,6 +62,58 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     })
+  },
+  created() {
+    this.fbInitialization();
+  },
+  methods: {
+    /**
+     * Initializes facebook SDK
+     *
+     * @return
+     */
+    fbInitialization() {
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: process.env.FB_APP_ID,
+          autoLogAppEvents: true,
+          xfbml: true,
+          version: "v5.0"
+        });
+      };
+
+      (function(d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+          return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    },
+    shareToFB() {
+      FB.ui(
+        {
+          method: "share",
+          href: process.env.LYDUZ_CUSTOM_SHARE_LINK
+        },
+        function(response) {}
+      );
+    },
+    shareToTwitter() {
+      let twitterURL =
+        process.env.TWITTER_LINK +
+        process.env.LYDUZ_CUSTOM_SHARE_LINK +
+        process.env.TWITTER_LINK_EXTENSION;
+      window.open(
+        twitterURL,
+        "mywindow",
+        "menubar=1,resizable=1,width=350,height=250"
+      );
+    }
   }
 };
 </script>
