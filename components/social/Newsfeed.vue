@@ -39,7 +39,7 @@
               :src="
                 postsObject[n - 1].user.profile_image
                   ? postsObject[n - 1].user.profile_image
-                  : 'user_default.png'
+                  : 'default.png'
               "
             />
           </v-list-item-avatar>
@@ -106,22 +106,8 @@
                 >mdi-dots-horizontal</v-icon
               >
               <div v-if="postOptionsMode && currentPost == n - 1">
-                <div class="postOptions__dropdown--caret"></div>
                 <div class="postOptions__container">
-                  <v-dialog width="500">
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        v-if="
-                          postsObject[n - 1].user.uuid ==
-                            $auth.user.data.user.uuid
-                        "
-                        x-small
-                        text
-                        v-on="on"
-                        >Delete</v-btn
-                      >
-                    </template>
-
+                  <v-dialog v-model="deleteDialog" width="500">
                     <v-card
                       :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
                       :dark="lightSwitch == 0 ? false : true"
@@ -161,27 +147,60 @@
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
-
-                  <v-btn
-                    v-if="
-                      postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
-                    "
-                    x-small
-                    text
-                    @click="
-                      (editPostMode = !editPostMode), (currentPost = n - 1)
-                    "
-                    >Edit</v-btn
-                  >
-                  <v-btn
-                    v-if="
-                      postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
-                    "
-                    x-small
-                    text
-                    @click="followAccount(postsObject[n - 1].user.uuid)"
-                    >Follow</v-btn
-                  >
+                  <v-list dense class="postOptions__list" elevation="8">
+                    <v-list-item-group class="postOptions__itemgroup">
+                      <v-list-item
+                        v-if="
+                          postsObject[n - 1].user.uuid ==
+                            $auth.user.data.user.uuid
+                        "
+                        class="postOptions__listitem"
+                        x-small
+                        text
+                        @click="
+                          (editPostMode = !editPostMode), (currentPost = n - 1)
+                        "
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title class="text-center caption"
+                            >Edit</v-list-item-title
+                          >
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider></v-divider>
+                      <v-list-item
+                        v-if="
+                          postsObject[n - 1].user.uuid ==
+                            $auth.user.data.user.uuid
+                        "
+                        class="postOptions__listitem"
+                        x-small
+                        text
+                        @click.stop="deleteDialog = true"
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title class="text-center caption">
+                            Delete
+                          </v-list-item-title>
+                        </v-list-item-content></v-list-item
+                      >
+                      <v-list-item
+                        v-if="
+                          postsObject[n - 1].user.uuid !=
+                            $auth.user.data.user.uuid
+                        "
+                        x-small
+                        text
+                        @click="followAccount(postsObject[n - 1].user.uuid)"
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title class="text-center caption">
+                            Follow
+                          </v-list-item-title>
+                        </v-list-item-content></v-list-item
+                      >
+                    </v-list-item-group>
+                  </v-list>
                 </div>
               </div>
             </v-col>
@@ -684,6 +703,7 @@ export default {
         .then(response => {
           this.triggerAlert(true, response.message);
           this.postsObject.splice(index, 1);
+          this.postOptionsMode = false;
         })
         .catch(e => {
           this.triggerAlert(true, e.message);
@@ -708,6 +728,7 @@ export default {
         .then(response => {
           this.triggerAlert(true, response.message);
           this.postsObject[index].content = content;
+          this.postOptionsMode = false;
         })
         .catch(e => {
           this.triggerAlert(true, e.message);
@@ -932,5 +953,21 @@ export default {
 }
 .postOptions__btn:focus {
   background-color: transparent;
+}
+.postOptions__list {
+  position: absolute;
+  top: 28px;
+  right: 10px;
+  z-index: 1;
+  padding: 0;
+}
+.postOptions__listitem {
+  height: 20px;
+}
+.postOptions__list .v-list-item {
+  min-height: 0px;
+}
+.postOptions__itemgroup {
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 </style>

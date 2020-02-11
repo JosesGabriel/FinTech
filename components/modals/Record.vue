@@ -94,18 +94,17 @@
                     v-model="buyQuantity"
                     class="body-2 buy_selector quantity-input py-3"
                   ></v-text-field>
-                  <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Total Cost:</v-card-title>
+                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+                    <v-card-title class="caption pa-0">Total Cost:</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ buyResult }}</v-card-title>
+                    <v-card-title class="caption pa-0">{{ buyResult }}</v-card-title>
                   </v-row>
                   <v-row class="mt-4" no-gutters>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="secondary"
+                      :color="lightSwitch == 1 ? 'secondary' : 'gray'"
                       class="text-capitalize black--text ml-1"
-                      :dark="lightSwitch == true"
-                      light
+                      :dark="lightSwitch == 1 ? true : false"
                       text
                       @click.stop="show = false"
                     >Cancel</v-btn>
@@ -177,15 +176,15 @@
                     readonly
                     class="body-2 buy_selector quantity-input py-3"
                   ></v-text-field>
-                  <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Total Cost:</v-card-title>
+                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+                    <v-card-title class="caption pa-0 secondary--text">Total Cost:</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ sellResult }}</v-card-title>
+                    <v-card-title class="caption pa-0 secondary--text">{{ sellResult }}</v-card-title>
                   </v-row>
-                  <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Profit/Loss:</v-card-title>
+                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+                    <v-card-title class="caption pa-0 secondary--text">Profit/Loss:</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">
+                    <v-card-title class="caption pa-0 secondary--text">
                       <span
                         :class=" profitlossNumber > 0 ? 'positive' : profitlossNumber < 0 ? 'negative' : 'neutral' "
                       >₱{{ profitloss }}</span>

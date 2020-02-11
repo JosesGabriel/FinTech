@@ -10,7 +10,7 @@
         :src="
           comment.user.profile_image
             ? comment.user.profile_image
-            : 'user_default.png'
+            : 'default.png'
         "
         :alt="comment.user.name"
         class="avatar__border"
@@ -120,9 +120,7 @@
             <v-avatar size="22" @click="clickUserSuggestion(s)">
               <v-img
                 :src="
-                  s.item.profile_image
-                    ? s.item.profile_image
-                    : 'user_default.png'
+                  s.item.profile_image ? s.item.profile_image : 'default.png'
                 "
               >
               </v-img>

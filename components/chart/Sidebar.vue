@@ -11,7 +11,7 @@
         v-show="headlineLoading"
         src="lyduz_loader.gif"
         height="215px"
-        width="270px"
+        width="286px"
         contain
       ></v-img>
 

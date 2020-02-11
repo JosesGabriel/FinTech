@@ -102,7 +102,12 @@
           </template>
         </v-select>
       </v-col>
-      <v-tab-item :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')" color="success" background-color="black" :value="'tab-' + 1">
+      <v-tab-item
+        :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')"
+        color="success"
+        background-color="black"
+        :value="'tab-' + 1"
+      >
         <v-container class="pa-0">
           <JournalLivePortfolio />
           <div class="component_spacer"></div>
@@ -155,12 +160,24 @@
         </v-container>
       </v-tab-item>
 
-      <v-tab-item :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')" dark color="success" background-color="#0c1f33" :value="'tab-' + 2">
+      <v-tab-item
+        :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')"
+        dark
+        color="success"
+        background-color="#0c1f33"
+        :value="'tab-' + 2"
+      >
         <v-container class="pa-0">
           <TradelogsContent />
         </v-container>
       </v-tab-item>
-      <v-tab-item :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')" dark color="success" background-color="#0c1f33" :value="'tab-' + 3">
+      <v-tab-item
+        :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')"
+        dark
+        color="success"
+        background-color="#0c1f33"
+        :value="'tab-' + 3"
+      >
         <v-container class="pa-0">
           <LedgerContent />
         </v-container>
@@ -311,9 +328,9 @@ export default {
      * @return
      */
     dashboardClicked() {
-      this.keyCreateCounter = this.renderPortfolioKey;
-      this.keyCreateCounter++;
-      this.setRenderPortfolioKey(this.keyCreateCounter);
+      // this.keyCreateCounter = this.renderPortfolioKey;
+      // this.keyCreateCounter++;
+      // this.setRenderPortfolioKey(this.keyCreateCounter);
     },
     /**
      * on changed select funtion, assigning portfolio ID/portfolio info to state
@@ -559,12 +576,14 @@ span.apexcharts-tooltip-text-label {
 .apexcharts-canvas.light svg .apexcharts-yaxis-label,
 .apexcharts-canvas.light svg .apexcharts-xaxis-label {
   fill: #494949;
+  font-weight: 300;
 }
 .apexcharts-canvas.dark svg .apexcharts-datalabel-label,
 .apexcharts-canvas.dark svg .apexcharts-datalabel-value,
 .apexcharts-canvas.dark svg .apexcharts-yaxis-label,
 .apexcharts-canvas.dark svg .apexcharts-xaxis-label {
   fill: #e5e5e5;
+  font-weight: 300;
 }
 .v-menu__content > .v-select-list > .v-list.theme--light {
   padding: unset;

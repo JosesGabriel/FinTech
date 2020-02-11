@@ -10,7 +10,7 @@
       </h1>
       <v-spacer></v-spacer>
       <v-btn
-        outlined
+        text
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
@@ -20,7 +20,7 @@
         <span class="v-btn__content">Reset</span>
       </v-btn>
       <v-btn
-        outlined
+        text
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
@@ -31,7 +31,7 @@
         <span class="v-btn__content">Trade</span>
       </v-btn>
       <v-btn
-        outlined
+        text
         color="success"
         dark
         class="rtf_top-btn text-capitalize"
