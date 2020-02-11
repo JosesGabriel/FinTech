@@ -6,25 +6,6 @@
       >
         <span>TRADE</span>
         <v-spacer></v-spacer>
-        <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent width="290px">
-          <template v-slot:activator="{ on }">
-            <v-btn v-on="on" text class="px-1" :color="lightSwitch == 0 ? '#000000' : '#FFFFFF' ">
-              <span class="text-capitalize">Date:</span>
-              <v-card-text class="pa-0" v-html="date"></v-card-text>
-              <v-icon>mdi-chevron-down</v-icon>
-            </v-btn>
-          </template>
-          <v-date-picker
-            v-model="date"
-            :dark="lightSwitch == true"
-            :class="fontColorDate"
-            scrollable
-          >
-            <v-spacer></v-spacer>
-            <v-btn text color="success" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="success" @click="$refs.dialog.save(date)">OK</v-btn>
-          </v-date-picker>
-        </v-dialog>
       </v-card-title>
       <v-stepper id="stepper_container" v-model="e1" dark>
         <v-stepper-items>
@@ -50,9 +31,10 @@
                   >Sell</v-tab>
                 </v-tabs>
                 <v-col cols="12" sm="12" md="12" class="pt-3 mt-2">
-                  <v-select
+                  <v-autocomplete
                     @change="getStockDetails"
                     :items="stocklist"
+                    :filter="customFilter"
                     :menu-props="{offsetY: true, dark: lightSwitch == true}"
                     :dark="lightSwitch == true"
                     light
@@ -60,7 +42,7 @@
                     item-value="id_str"
                     item-color="success"
                     v-model="GetSelectStock"
-                    class="pa-0 ma-0 body-2"
+                    class="pa-0 ma-0 body-2 selectStock_v-select"
                     append-icon="mdi-chevron-down"
                     label="Select a Stock"
                     color="success"
@@ -75,7 +57,7 @@
                         <v-list-item-title v-html="data.item.symbol" class="text-uppercase caption"></v-list-item-title>
                       </v-list-item-content>
                     </template>
-                  </v-select>
+                  </v-autocomplete>
 
                   <v-col cols="12" class="pa-0">
                     <v-row no-gutters>
@@ -741,6 +723,9 @@ export default {
     }
   },
   watch: {
+    GetSelectStock() {
+      console.log(this.GetSelectStock);
+    },
     /**
      * get all user trade
      *
@@ -838,6 +823,21 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
+    /**
+     * Fires when users typed anything, and it only shows the index of what the users typed
+     *
+     * @param   {Array}  item       Item of all stocks
+     * @param   {String}  queryText  query all the item of what users typed
+     * @param   {String}  itemText   text of user typed
+     *
+     * @return  {Object}             returns query object
+     */
+    customFilter(item, queryText, itemText) {
+      const textOne = item.symbol.toLowerCase();
+      const searchText = queryText.toLowerCase();
+
+      return textOne.indexOf(searchText) > -1;
+    },
     /**
      * function initPortfolio on mount: date
      *
