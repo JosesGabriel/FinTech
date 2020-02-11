@@ -31,6 +31,9 @@ let symbolInfoObj = {
 // holds the last bar of any subscribed chart
 let lastBarData = {};
 
+if (process.client){
+  axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
+}
 /**
  * Listens to SSE INFO native bus event.
  *
@@ -143,7 +146,6 @@ export default {
   onReady: cb => {
     setTimeout(() => {
       // get tradingview config
-      axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
       axios.post(CONFIG_URL).then(({ data }) => {
         // write to callback
         cb(data.data);
@@ -173,8 +175,6 @@ export default {
 
     // get tradingview search
     let query = BuildQueryParams(params);
-
-    axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
     axios
       .post(`${SEARCH_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(({ data }) => {
@@ -226,7 +226,6 @@ export default {
     setTimeout(function() {
       const query = BuildQueryParams(params)
       // get tradingview resolve
-      axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
       axios
         .post(`${RESOLVE_URL}${query.length > 0 ? "?" + query : ""}`)
         .then(({ data }) => {
@@ -275,7 +274,6 @@ export default {
     // get tradingview history
     const query = BuildQueryParams(params);
 
-    axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
     axios
       .post(`${HISTORY_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(response => {
@@ -410,7 +408,6 @@ export default {
     // get tradingview history
     const query = BuildQueryParams(params)
 
-    axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
     axios
       .post(`${TIMESCALE_MARKS_TIME_URL}${query.length > 0 ? "?" + query : ""}`)
       .then(({ data }) => {
@@ -427,7 +424,6 @@ export default {
    */
   getServerTime: cb => {
     // get tradingview config
-    axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
     axios.post(SERVER_TIME_URL).then(({ data }) => {
       // write to callback
       cb(data.data.time);
