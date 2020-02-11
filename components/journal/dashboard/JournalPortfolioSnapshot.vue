@@ -2,7 +2,10 @@
   <v-col ref="componentWrapper" class="pa-0" cols="4" sm="4" md="4">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 pb-2 pt-5">
-      <h6 class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">PORTFOLIO SNAPSHOT</h6>
+      <h6
+        class="font-weight-bold subtitle-2"
+        :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+      >PORTFOLIO SNAPSHOT</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon small color="tertiary">mdi-share-variant</v-icon>
@@ -16,8 +19,8 @@
         class="pb-2"
         :style="{ border: borderColor }"
       >
-        <v-card-title class="text-left justify-left py-2 px-3">
-          <h6 class="font-weight-regular caption text-capitalize">Trading Result (PHP)</h6>
+        <v-card-title class="py-2 px-3">
+          <h6 class="font-weight-bold caption">Trading Result (PHP)</h6>
         </v-card-title>
         <v-simple-table
           id="liveportfolio-table"
@@ -27,22 +30,31 @@
         >
           <template v-slot:default>
             <tbody>
-              <tr id="table_tr_snap-cont tertiary--text">
-                <td class="item_position-prop tertiary--text px-3 py-1 caption">Starting Capital</td>
+              <tr
+                id="table_tr_snap-cont"
+                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+              >
+                <td class="item_position-prop px-3 py-1 caption">Starting Capital</td>
                 <td
-                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
+                  class="item_position-prop text-right px-3 py-1 caption"
                 >{{ startingCapital | numeral("0,0.00") }}</td>
               </tr>
-              <tr id="table_tr_snap-cont tertiary--text">
-                <td class="item_position-prop tertiary--text px-3 py-1 caption">Year to Date P/L</td>
+              <tr
+                id="table_tr_snap-cont"
+                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+              >
+                <td class="item_position-prop px-3 py-1 caption">Year to Date P/L</td>
                 <td
-                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
+                  class="item_position-prop text-right px-3 py-1 caption"
                 >{{ yearTDPL | numeral("0,0.00") }}</td>
               </tr>
-              <tr id="table_tr_snap-cont tertiary--text">
-                <td class="item_position-prop tertiary--text px-3 py-1 caption">Portfolio YTD %</td>
+              <tr
+                id="table_tr_snap-cont"
+                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+              >
+                <td class="item_position-prop px-3 py-1 caption">Portfolio YTD %</td>
                 <td
-                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
+                  class="item_position-prop text-right px-3 py-1 caption"
                 >{{ portfolioTDPL | numeral("0,0.00") }}</td>
               </tr>
             </tbody>
@@ -56,8 +68,8 @@
         class="mt-3 pb-2"
         :style="{ border: borderColor }"
       >
-        <v-card-title class="text-left justify-left py-2 px-3">
-          <h6 class="font-weight-regular caption text-capitalize">Funds Transfers (PHP)</h6>
+        <v-card-title class="py-2 px-3">
+          <h6 class="font-weight-bold caption">Funds Transfers (PHP)</h6>
         </v-card-title>
         <v-simple-table
           id="liveportfolio-table"
@@ -67,22 +79,31 @@
         >
           <template v-slot:default>
             <tbody>
-              <tr id="table_tr_snap-cont">
-                <td class="item_position-prop tertiary--text px-3 py-1 caption">Deposits</td>
+              <tr
+                id="table_tr_snap-cont"
+                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+              >
+                <td class="item_position-prop px-3 py-1 caption">Deposits</td>
                 <td
-                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
+                  class="item_position-prop text-right px-3 py-1 caption"
                 >{{ Deposits | numeral("0,0.00") }}</td>
               </tr>
-              <tr id="table_tr_snap-cont">
-                <td class="item_position-prop tertiary--text px-3 py-1 caption">Withdrawals</td>
+              <tr
+                id="table_tr_snap-cont"
+                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+              >
+                <td class="item_position-prop px-3 py-1 caption">Withdrawals</td>
                 <td
-                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
+                  class="item_position-prop text-right px-3 py-1 caption"
                 >{{ Withdrawals | numeral("0,0.00") }}</td>
               </tr>
-              <tr id="table_tr_snap-cont">
-                <td class="item_position-prop tertiary--text px-3 py-1 caption">Equity</td>
+              <tr
+                id="table_tr_snap-cont"
+                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+              >
+                <td class="item_position-prop px-3 py-1 caption">Equity</td>
                 <td
-                  class="item_position-prop tertiary--text text-right px-3 py-1 caption"
+                  class="item_position-prop text-right px-3 py-1 caption"
                 >{{ Equity | numeral("0,0.00") }}</td>
               </tr>
             </tbody>
@@ -130,7 +151,7 @@ export default {
      * @return  {string}  returns string
      */
     borderColor() {
-      return this.lightSwitch == 0 ? "1px solid #535358" : "1px solid #172431";
+      return this.lightSwitch == 0 ? "1px solid #dadada" : "1px solid #172431";
     }
   },
   data() {

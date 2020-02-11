@@ -160,9 +160,7 @@ export default {
 </script>
 <style scoped>
 .navbar__card {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 57px;
+  position: relative;
 }
 .navbar__name {
   font-weight: 600 !important;
