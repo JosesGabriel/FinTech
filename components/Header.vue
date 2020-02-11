@@ -305,6 +305,7 @@ export default {
     },
     closeDropdown() {
       this.showNotification = false;
+      this.showBadge = 0
     },
     newNotication() {
       const m = {

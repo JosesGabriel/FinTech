@@ -100,6 +100,7 @@ export default {
   },
   auth: false,
   layout: "main",
+  mounted() {},
   methods: {
     /**
      * Captures data emitted by Newsfeed component
