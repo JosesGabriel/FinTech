@@ -4,7 +4,7 @@
     :to="notification.notificable.meta.post.id ? '/post/' + notification.notificable.meta.post.id : '/profile/' + notification.notificable.meta.user.username"
     @click="linkTo(notification.id)"
   >
-    <v-list-item class="notification__item py-1" :class="notification.status">
+    <v-list-item @click class="notification__item py-1" :class="notification.status">
       <v-list-item-avatar class="mr-3" size="35">
         <img :src="profileImage" />
       </v-list-item-avatar>

@@ -85,7 +85,7 @@ export default {
      */
     borderColor() {
       return this.lightSwitch == 0
-        ? "border-bottom: 1px solid #535358"
+        ? "border-bottom: 1px solid #dadada"
         : "border-bottom: 1px solid #172431";
     }
   },

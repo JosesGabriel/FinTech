@@ -14,12 +14,12 @@
     <v-simple-table :dense="true" :dark="lightSwitch == true" id="liveportfolio-table">
       <template v-slot:default>
         <thead>
-          <tr>
-            <th class="caption text-left px-1">Strategy</th>
-            <th class="caption text-right px-1">Trades</th>
-            <th class="caption text-right px-1">Wins</th>
-            <th class="caption text-right px-1">Losses</th>
-            <th class="caption text-right px-1">Win Rate</th>
+          <tr class="caption font-weight-bold">
+            <th class="text-left px-1">Strategy</th>
+            <th class="text-right px-1">Trades</th>
+            <th class="text-right px-1">Wins</th>
+            <th class="text-right px-1">Losses</th>
+            <th class="text-right px-1">Win Rate</th>
           </tr>
         </thead>
         <tbody>
