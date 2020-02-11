@@ -182,7 +182,11 @@
     <v-dialog v-model="errorMsg" max-width="400px">
       <v-card :dark="lightSwitch == true">
         <v-card-title
-          class="text-center justify-left pa-4 success--text subtitle-1 font-weight-bold"
+          class="text-center justify-left pa-4 subtitle-1 font-weight-bold"
+          :class="[
+            { 'white--text': lightSwitch == 1 },
+            { 'black--text': lightSwitch == 0 }
+          ]"
           >{{ this.errmsgbuy }}</v-card-title
         >
         <v-card-title
@@ -193,11 +197,10 @@
           <v-row no-gutters>
             <v-spacer></v-spacer>
             <v-btn
-              color="secondary"
-              class="text-capitalize mt-2"
               text
+              depressed
+              class="font-weight-bold text-capitalize"
               :dark="lightSwitch == true"
-              light
               @click.stop="errorMsg = false"
               >Close</v-btn
             >
@@ -291,11 +294,11 @@
 
         <v-card-text>
           <v-content class="mb-6">
-            <v-row v-show="quickTradeSelected" no-gutters class="mb-6">
+            <v-row v-show="quickTradeSelected" no-gutters class="mb-6 mt-2">
               <v-col>
                 NOTE: Quick Trade automatically places buy and sell orders based
-                on the <strong>best available price</strong> and your
-                <strong>pre-set allocation</strong> per trade.
+                on the <b>best available</b> price and your
+                <b>selected allocation</b>.
               </v-col>
             </v-row>
 
@@ -305,26 +308,24 @@
                   v-model="selectedButton"
                   mandatory
                   dense
-                  borderless
+                  active-class="activeClassButton"
                   :background-color="cardBackground"
                 >
-                  <v-hover
+                  <v-btn
                     v-for="item in items"
                     :key="item.id"
-                    v-slot:default="{ hover }"
+                    :value="item.id"
+                    :dark="lightSwitch == true"
+                    :color="selectedButton != item.id ? 'success' : ''"
+                    class="black--text font-weight-bold text-capitalize mx-2"
+                    elevation="1"
+                    width="80"
+                    @click="getSelectedButton(item.id)"
+                    >{{ item.text }}</v-btn
                   >
-                    <v-btn
-                      :dark="lightSwitch == true"
-                      class="black--text font-weight-bold text-capitalize mx-2"
-                      :color="!hover ? 'success' : 'successhover'"
-                      elevation="1"
-                      @click="getSelectedButton(item.id)"
-                      >{{ item.text }}</v-btn
-                    >
-                  </v-hover>
                 </v-btn-toggle>
               </v-col>
-              <v-col v-show="selectedButton == 2" cols="4" offset="3">
+              <v-col v-show="selectedButton == 3" cols="4" offset="3">
                 <v-text-field
                   v-model="customPercentage"
                   color="success"
@@ -333,11 +334,11 @@
                   type="number"
                   class="text-end"
                   append-icon="mdi-percent"
-                  :required="selectedButton !== 2"
-                  :disabled="selectedButton !== 2"
+                  :required="selectedButton !== 3"
+                  :disabled="selectedButton !== 3"
                 ></v-text-field>
               </v-col>
-              <v-col v-show="selectedButton == 2" cols="3">
+              <v-col v-show="selectedButton == 3" cols="3">
                 <v-hover v-slot:default="{ hover }">
                   <v-btn
                     :dark="lightSwitch == true"
@@ -355,7 +356,7 @@
               <v-spacer></v-spacer>
             </v-row>
 
-            <v-content class="mx-10 mt-4">
+            <v-content class="mx-6 mt-4">
               <v-row>
                 <v-col class="pa-0" cols="6">
                   <span>Fill Type:</span>
@@ -367,7 +368,7 @@
                   <span>Allocation:</span>
                 </v-col>
                 <v-col cols="6" class="pa-0 text-right font-weight-bold">
-                  <span>{{ this.alloc }} %</span>
+                  <span>{{ alloc }} %</span>
                 </v-col>
               </v-row>
 
@@ -392,7 +393,7 @@
                 </v-col>
               </v-row>
 
-              <v-row>
+              <v-row v-show="!quickTradeSelected">
                 <v-col class="pa-0" cols="6">
                   <span>Strategy:</span>
                 </v-col>
@@ -513,7 +514,7 @@ export default {
      * @return
      */
     cardBackground: function() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#0c1a2b";
     }
   },
   props: {
@@ -766,7 +767,7 @@ export default {
     },
     quickConfirmV2() {
       if (this.selectedButton == null) return;
-      this.setting = this.selectedButton == 2 ? "custom" : "";
+      this.setting = this.selectedButton == 3 ? "custom" : "";
       this.setting_val = 0;
       if (this.setting == "custom") {
         this.setting_val = parseFloat(this.customPercentage);
@@ -774,10 +775,10 @@ export default {
         // selected specific value
         let selected = 10;
         switch (this.selectedButton) {
-          case 0:
+          case 1:
             selected = 10;
             break;
-          case 1:
+          case 2:
             selected = 30;
             break;
         }
@@ -896,5 +897,10 @@ export default {
   position: absolute;
   width: 62px;
   top: 100px;
+}
+</style>
+<style scoped>
+.activeClassButton {
+  background: #029889 !important;
 }
 </style>
