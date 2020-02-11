@@ -10,7 +10,7 @@
       </h1>
       <v-spacer></v-spacer>
       <v-btn
-        outlined
+        text
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
@@ -20,7 +20,7 @@
         <span class="v-btn__content">Reset</span>
       </v-btn>
       <v-btn
-        outlined
+        text
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
@@ -31,7 +31,7 @@
         <span class="v-btn__content">Trade</span>
       </v-btn>
       <v-btn
-        outlined
+        text
         color="success"
         dark
         class="rtf_top-btn text-capitalize"
@@ -56,7 +56,7 @@
       :items="portfolioLogs"
       :page.sync="page"
       :items-per-page="itemsPerPage"
-      :dark="lightSwitch == true"
+      :dark="lightSwitch == 1 ? true : false"
       hide-default-footer
       :loading="livePortfolioLoading"
       loading-text="Loading..."
@@ -148,8 +148,9 @@
           >
         </div>
         <v-icon
+          :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
           small
-          class="mr-2 secondary--text"
+          class="mr-2"
           @mouseover="menuLogsShow(item)"
           >mdi-dots-horizontal</v-icon
         >
@@ -688,5 +689,8 @@ export default {
 }
 .v-data-table.data_table-container th:first-child {
   padding-left: 8px !important;
+}
+.data_table-container.v-data-table td {
+    font-weight: normal;
 }
 </style>

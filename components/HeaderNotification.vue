@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="closeDropdown()">
     <v-card
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
@@ -16,14 +16,10 @@
             v-for="(item, index) in dataNotification"
             :key="index"
             :notification="item"
-            @click="closeDropdown()"
           />
         </v-list>
         <v-row no-gutters class="userMessage__dropdown-footer">
-          <router-link
-            to="/notification"
-            class="no-transform"
-          >
+          <router-link to="/notification" class="no-transform">
             <span
               @click="closeDropdown()"
               :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"

@@ -69,7 +69,10 @@
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.buy_value | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.sell_price="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.sell_price | numeral("0,0.00") }}</span>
+        <span
+          class="pl-2"
+          :style="{ color: fontcolor2 }"
+        >{{ item.meta.sell_price | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.total_value="{ item }">
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.total_value | numeral("0,0.00") }}</span>
@@ -118,7 +121,10 @@
     </v-data-table>
     <v-row>
       <v-col class="text-right font-weight-bold caption" width="100%">
-        <span class="font-weight-bold" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">Total Profit/Loss as of {{date}}:</span>
+        <span
+          class="font-weight-bold"
+          :style="{ color: lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+        >Total Profit/Loss as of {{date}}:</span>
         <span
           class="ml-3"
           :class="(totalProfitLoss < 0 ? 'negative' : 'positive')"

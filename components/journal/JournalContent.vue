@@ -1,24 +1,24 @@
 <template>
   <v-col class="pt-3" cols="12" sm="12" md="12">
-    <v-tabs color="success" background-color="transparent" dark>
+    <v-tabs color="success" class="font-weight-bold" background-color="transparent" dark>
       <v-tab
-        class="tab_menu-top text-capitalize subtitle-1"
+        class="tab_menu-top font-weight-bold text-capitalize subtitle-1"
         :style="{ color: fontColor }"
         :href="`#tab-1`"
         @click="dashboardClicked()"
       >Dashboard</v-tab>
       <v-tab
-        class="tab_menu-top text-capitalize subtitle-1"
+        class="tab_menu-top font-weight-bold text-capitalize subtitle-1"
         :style="{ color: fontColor }"
         :href="`#tab-2`"
       >Tradelogs</v-tab>
       <v-tab
-        class="tab_menu-top text-capitalize subtitle-1"
+        class="tab_menu-top font-weight-bold text-capitalize subtitle-1"
         :style="{ color: fontColor }"
         :href="`#tab-3`"
       >Ledger</v-tab>
       <v-spacer></v-spacer>
-      <v-col sm="3" md="2" class="pa-0">
+      <v-col sm="3" md="3" class="pa-0">
         <v-select
           :dark="lightSwitch == true"
           :items="portfolioListPush"
@@ -80,7 +80,10 @@
               <v-list-item-content>
                 <v-list-item-title class="text-uppercase caption">Manage Portfolio</v-list-item-title>
               </v-list-item-content>
-              <v-icon :color="lightSwitch == true ? 'white' : 'black'" class="body-2">mdi-settings-outline</v-icon>
+              <v-icon
+                :color="lightSwitch == true ? 'white' : 'black'"
+                class="body-2"
+              >mdi-settings-outline</v-icon>
             </v-list-item>
             <v-list-item
               ripple
@@ -91,14 +94,21 @@
               <v-list-item-content>
                 <v-list-item-title class="text-uppercase caption">Create Portfolio</v-list-item-title>
               </v-list-item-content>
-              <v-icon :color="lightSwitch == true ? 'white' : 'black'" class="body-2">mdi-plus-circle-outline</v-icon>
+              <v-icon
+                :color="lightSwitch == true ? 'white' : 'black'"
+                class="body-2"
+              >mdi-plus-circle-outline</v-icon>
             </v-list-item>
           </template>
         </v-select>
       </v-col>
-      <v-tab-item color="success" background-color="black" :value="'tab-' + 1">
+      <v-tab-item
+        :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')"
+        color="success"
+        background-color="black"
+        :value="'tab-' + 1"
+      >
         <v-container class="pa-0">
-          <div class="separator"></div>
           <JournalLivePortfolio />
           <div class="component_spacer"></div>
           <v-row no-gutters>
@@ -150,15 +160,25 @@
         </v-container>
       </v-tab-item>
 
-      <v-tab-item dark color="success" background-color="#0c1f33" :value="'tab-' + 2">
+      <v-tab-item
+        :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')"
+        dark
+        color="success"
+        background-color="#0c1f33"
+        :value="'tab-' + 2"
+      >
         <v-container class="pa-0">
-          <div class="separator"></div>
           <TradelogsContent />
         </v-container>
       </v-tab-item>
-      <v-tab-item dark color="success" background-color="#0c1f33" :value="'tab-' + 3">
+      <v-tab-item
+        :style="(this.lightSwitch == 0 ? 'border-top: 1px solid #dadada' : 'border-top: 1px solid #172431')"
+        dark
+        color="success"
+        background-color="#0c1f33"
+        :value="'tab-' + 3"
+      >
         <v-container class="pa-0">
-          <div class="separator"></div>
           <LedgerContent />
         </v-container>
       </v-tab-item>
@@ -252,7 +272,9 @@ export default {
      * @return  {string}  returns string
      */
     fontColor() {
-      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+      return this.lightSwitch == 0
+        ? "#000000 !important"
+        : "#ffffff !important";
     },
     /**
      * returns background color
@@ -306,9 +328,9 @@ export default {
      * @return
      */
     dashboardClicked() {
-      this.keyCreateCounter = this.renderPortfolioKey;
-      this.keyCreateCounter++;
-      this.setRenderPortfolioKey(this.keyCreateCounter);
+      // this.keyCreateCounter = this.renderPortfolioKey;
+      // this.keyCreateCounter++;
+      // this.setRenderPortfolioKey(this.keyCreateCounter);
     },
     /**
      * on changed select funtion, assigning portfolio ID/portfolio info to state
@@ -316,7 +338,8 @@ export default {
      * @param   {object}  obj  object of changed item
      *
      * @return  {object}       object data onchange
-     */ 
+     */
+
     changePortfolio(obj) {
       this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
       const openparams = {
@@ -366,7 +389,7 @@ export default {
      * @return  {array}  array of item, all portfolios
      */
     getUserPortfolioList() {
-      this.portfolioListPush = []
+      this.portfolioListPush = [];
       this.$api.journal.portfolio.portfolio().then(
         function(result) {
           this.portfolioList = result.data.logs;
@@ -467,9 +490,6 @@ export default {
   border-top: 1px solid;
   border-color: #172431;
 }
-.tab_menu-top.v-tab--active {
-  color: #03dac5 !important;
-}
 </style>
 <style>
 .select_portfolio.selectjournal_portfolio .v-input__control {
@@ -556,12 +576,14 @@ span.apexcharts-tooltip-text-label {
 .apexcharts-canvas.light svg .apexcharts-yaxis-label,
 .apexcharts-canvas.light svg .apexcharts-xaxis-label {
   fill: #494949;
+  font-weight: 300;
 }
 .apexcharts-canvas.dark svg .apexcharts-datalabel-label,
 .apexcharts-canvas.dark svg .apexcharts-datalabel-value,
 .apexcharts-canvas.dark svg .apexcharts-yaxis-label,
 .apexcharts-canvas.dark svg .apexcharts-xaxis-label {
   fill: #e5e5e5;
+  font-weight: 300;
 }
 .v-menu__content > .v-select-list > .v-list.theme--light {
   padding: unset;
