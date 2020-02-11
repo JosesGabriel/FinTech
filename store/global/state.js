@@ -42,6 +42,7 @@ export default () => ({
     //end global dialog alert
 
     //Global Updated Settings 
-    settings: null
-        //end global update settings
+    settings: null,
+    //end global update settings
+    markAll: 0
 });

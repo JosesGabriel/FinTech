@@ -64,6 +64,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setMarkAll: "global/setMarkAll"
+    }),
     markAllRead() {
       this.dataNotification.filter(x =>
         x.status == "unread" ? (x.status = "read") : (x.status = "read")
@@ -71,6 +74,9 @@ export default {
 
       this.$api.social.notification.markall().then(response => {
         if (response.success) {
+          this.$emit("clicked");
+          let counter = 0
+          this.setMarkAll(counter += 1)
         }
       });
     },
@@ -171,6 +177,7 @@ export default {
 .userMessage__message {
   line-height: 15px !important;
   display: block;
+  width: 80%;
 }
 .userMessage__dropdown.theme--dark:after {
   content: "";

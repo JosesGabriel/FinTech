@@ -1,24 +1,22 @@
 <template>
-  <router-link
-    class="no-transform"
-    :to="notification.notificable.meta.post.id ? '/post/' + notification.notificable.meta.post.id : '/profile/' + notification.notificable.meta.user.username"
+  <v-list-item
     @click="linkTo(notification.id)"
+    class="notification__item py-1"
+    :class="notification.status"
   >
-    <v-list-item @click class="notification__item py-1" :class="notification.status">
-      <v-list-item-avatar class="mr-3" size="35">
-        <img :src="profileImage" />
-      </v-list-item-avatar>
+    <v-list-item-avatar class="mr-3" size="35">
+      <img :src="profileImage" />
+    </v-list-item-avatar>
 
-      <v-list-item-content class="listItem__content py-1">
-        <div class="body-2 ma-0 userMessage__dropdown-title">
-          <span
-            class="body-2 ma-0 userMessage__message caption"
-          >{{ notification.notificable.message }}</span>
-        </div>
-        <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
-      </v-list-item-content>
-    </v-list-item>
-  </router-link>
+    <v-list-item-content class="listItem__content py-1">
+      <div class="body-2 ma-0 userMessage__dropdown-title">
+        <span
+          class="body-2 ma-0 userMessage__message caption"
+        >{{ notification.notificable.message }}</span>
+      </div>
+      <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
+    </v-list-item-content>
+  </v-list-item>
 </template>
 <script>
 import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
@@ -60,6 +58,10 @@ export default {
        */
       this.$api.social.notification.read(notification_id).then(response => {
         if (response.success) {
+          this.notification.status = "read";
+          window.location = this.notification.notificable.meta.post
+            ? "/post/" + this.notification.notificable.meta.post.id
+            : "/profile/" + this.notification.notificable.meta.user.username;
         }
       });
     }
