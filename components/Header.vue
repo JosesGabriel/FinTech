@@ -13,7 +13,7 @@
           :src="lightSwitch == 0 ? '/logo-dark.svg' : '/logo-light.svg'"
           alt
           width="125"
-          height="125"
+          height="auto"
         />
       </router-link>
     </v-toolbar-title>
@@ -135,7 +135,7 @@
           @click.stop="hideDropdown"
           @click="showNotification = !showNotification"
         >
-          <v-badge :value="showBadge" color="success" small dot style="font-size:14px;">Notification</v-badge>
+          <v-badge :value="showBadge" color="error" small dot style="font-size:14px;">Notification</v-badge>
         </v-btn>
       </a>
 
