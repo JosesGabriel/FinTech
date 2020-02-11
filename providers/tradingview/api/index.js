@@ -31,8 +31,10 @@ let symbolInfoObj = {
 // holds the last bar of any subscribed chart
 let lastBarData = {};
 
-if (process.client){
-  axios.defaults.headers.common["Authorization"] = localStorage.getItem('auth._token.local');
+if (process.client) {
+  axios.defaults.headers.common["Authorization"] = localStorage.getItem(
+    "auth._token.local"
+  );
 }
 /**
  * Listens to SSE INFO native bus event.
@@ -145,11 +147,13 @@ export default {
    */
   onReady: cb => {
     setTimeout(() => {
-      // get tradingview config
-      axios.post(CONFIG_URL).then(({ data }) => {
-        // write to callback
-        cb(data.data);
-      });
+      if (process.client) {
+        // get tradingview config
+        axios.post(CONFIG_URL).then(({ data }) => {
+          // write to callback
+          cb(data.data);
+        });
+      }
     }, 0);
   },
   /**
@@ -224,7 +228,7 @@ export default {
     };
 
     setTimeout(function() {
-      const query = BuildQueryParams(params)
+      const query = BuildQueryParams(params);
       // get tradingview resolve
       axios
         .post(`${RESOLVE_URL}${query.length > 0 ? "?" + query : ""}`)
@@ -406,7 +410,7 @@ export default {
     }
 
     // get tradingview history
-    const query = BuildQueryParams(params)
+    const query = BuildQueryParams(params);
 
     axios
       .post(`${TIMESCALE_MARKS_TIME_URL}${query.length > 0 ? "?" + query : ""}`)
