@@ -102,20 +102,20 @@
           <JournalLivePortfolio />
           <div class="component_spacer"></div>
           <v-row no-gutters>
-            <!-- <JournalPortfolioSnapshot />
-            <JournalCurrentAllocation /> -->
+            <JournalPortfolioSnapshot />
+            <JournalCurrentAllocation />
           </v-row>
           <div class="component_spacer"></div>
           <v-row no-gutters>
-            <!-- <JournalEquityCurve /> -->
+            <JournalEquityCurve />
           </v-row>
           <div class="component_spacer"></div>
           <v-row no-gutters>
-            <!-- <JournalMonthlyPerfomance />
-            <JournalTradeStats /> -->
+            <JournalMonthlyPerfomance />
+            <JournalTradeStats />
           </v-row>
           <div class="component_spacer"></div>
-          <!-- <JournalStrategyStats /> -->
+          <JournalStrategyStats />
           <div class="component_spacer"></div>
           <v-row no-gutters>
             <JournalTopStocks />
@@ -252,7 +252,7 @@ export default {
      * @return  {string}  returns string
      */
     fontColor() {
-      return this.lightSwitch == 0 ? "#000000" : "#ffffff";
+      return this.lightSwitch == 0 ? "#000000 !important" : "#ffffff !important";
     },
     /**
      * returns background color

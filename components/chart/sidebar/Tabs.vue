@@ -95,7 +95,7 @@ export default {
      * @return
      */
     symbolid() {
-      this.activeTab = "tab-1";
+      //this.activeTab = "tab-1";
       this.firstLoad = false;
     },
     /**

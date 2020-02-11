@@ -27,6 +27,12 @@ export default {
       userId: this.$auth.$state.user.data.user.uuid,
       dataFeed: Datafeed
     };
+  },
+  mounted() {
+    setTimeout(() => {
+      if (document.getElementById("tv_chart_container") == undefined)
+        window.location.reload();
+    }, 2000);
   }
 };
 </script>

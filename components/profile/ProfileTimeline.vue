@@ -22,15 +22,17 @@
                 <ProfileInterests class="my-2" />-->
               </v-col>
               <v-col cols="12" sm="12" md="4" lg="4">
+                <div class="activity_sticky-sidebar">
+                  <WhoToMingle class="pl-3" />
+                  <v-container>
+                    <FooterSidebar />
+                  </v-container>
+                </div>
+
                 <!-- <ProfileCourse /> // hide for now -->
                 <!-- <ProfileSuggestedUser /> -->
-
-                <WhoToMingle class="pl-3" />
                 <!-- <ProfileRooms /> -->
                 <!-- <ProfileAds /> -->
-                <v-container>
-                  <FooterSidebar />
-                </v-container>
               </v-col>
             </v-row>
           </v-tab-item>
@@ -50,7 +52,7 @@
               <v-col cols="12" sm="12" md="7" lg="7">
                 <v-container class="px-md-0 pr-lg-0">
                   <!-- <PostField class="mb-3" @authorNewPost="authorNewPost" />
-                  <Newsfeed :new-post="newPost" /> -->
+                  <Newsfeed :new-post="newPost" />-->
                 </v-container>
               </v-col>
             </v-row>
@@ -136,7 +138,7 @@ export default {
       this.user = this.userData;
 
       // console.log(this.user)
-      this.getUserId = true
+      this.getUserId = true;
     }
   },
   methods: {

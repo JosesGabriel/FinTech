@@ -5,8 +5,10 @@
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
         <div v-show="showLamp">
           <img
+            v-show="
+              whiteMode == '/login/' || whiteMode == '/login' ? true : false
+            "
             :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'"
-            v-show="whiteMode == '/login/' || whiteMode == '/login' ? true : false"
             :src="lampMode"
             @click="lampSwitch"
           />
@@ -38,9 +40,15 @@
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
           >{{ alertDialog.body }}</v-card-text>
-          <v-card-text class="text-center">{{ alertDialog.subtext }}</v-card-text>
+          <v-card-text class="text-center">
+            {{
+            alertDialog.subtext
+            }}
+          </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- dont remove -->
+      <div v-show="false" id="tv_chart_container"></div>
     </v-content>
   </v-app>
 </template>
@@ -48,7 +56,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import rbHeader from "~/components/Header";
-import { UserNotificationAlertLayout } from "~/assets/js/helpers/notification";
+import {
+  UserNotificationAlertLayout,
+  AllNotificationAlertLayout
+} from "~/assets/js/helpers/notification";
 import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
 export default {
@@ -66,6 +77,7 @@ export default {
       lampBtn: false
     };
   },
+  middleware: "isMobileOrTablet",
   head() {
     return {
       link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
@@ -93,20 +105,6 @@ export default {
       }
       return lampBtn;
     }
-  },
-  mounted() {
-    if (localStorage.currentMode) {
-      this.setLightSwitch(localStorage.currentMode);
-    }
-    /**
-     * For avoid duplicating mount need to refactor
-     */
-    this.$nextTick(() => {
-      this.ticks = 2;
-    });
-    this.whiteMode = window.location.pathname;
-
-    this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
   },
   watch: {
     /**
@@ -139,17 +137,45 @@ export default {
       }
     }
   },
+  mounted() {
+    if (localStorage.currentMode) {
+      this.setLightSwitch(localStorage.currentMode);
+    }
+    /**
+     * For avoid duplicating mount need to refactor
+     */
+    this.$nextTick(() => {
+      this.ticks = 2;
+    });
+    this.whiteMode = window.location.pathname;
+
+    this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
+    // this.showAnnouncements();
+  },
   methods: {
     ...mapActions({
       setLightSwitch: "global/setLightSwitch"
     }),
     userNotificationAlertLayout: UserNotificationAlertLayout,
+    allNotificationAlertLayout: AllNotificationAlertLayout,
     lampSwitch() {
       let lampMode = localStorage.currentMode;
 
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
-    }
+    },
+    // showAnnouncements() {
+    //   this.$snotify.html(this.allNotificationAlertLayout(), {
+    //     timeout: 100000000,
+    //     showProgressBar: false,
+    //     pauseOnHover: true,
+    //     position: SnotifyPosition.leftBottom,
+    //     newItemsOnTop: false,
+    //     config: {
+    //       closeOnClick: true
+    //     }
+    //   });
+    // }
   }
 };
 </script>

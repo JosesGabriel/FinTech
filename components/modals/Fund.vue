@@ -259,17 +259,13 @@ export default {
         .then(response => {
           if (response.success) {
             this.fund = parseFloat(response.data.fund.balance);
+            this.availableFunds = this.fund
 
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
 
-            (this.enterAmount = "0.00"),
-              (this.fundSourceModel = null),
-              (this.disableButtonSave = true),
-              (this.disableWithdrawButtonSave = true),
-              (this.hideWithdrawButton = false),
-              (this.hideDepositButton = true);
+            this.clearInputs();
           }
         });
     },
@@ -288,19 +284,29 @@ export default {
         .then(response => {
           if (response.success) {
             this.fund = parseFloat(response.data.fund.balance);
+            this.availableFunds = this.fund
 
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
             this.setRenderPortfolioKey(this.keyCreateCounter);
 
-            (this.withrawAmount = 0),
-              (this.fundSourceModel = null),
-              (this.disableButtonSave = true),
-              (this.disableWithdrawButtonSave = true),
-              (this.hideWithdrawButton = false),
-              (this.hideDepositButton = true);
+            this.clearInputs();
           }
         });
+    },
+    /**
+     * Fires when transaction widraw or deposit succeed
+     *
+     * @return
+     */
+    clearInputs() {
+      this.enterAmount = 0;
+      this.withrawAmount = 0;
+      this.fundSourceModel = null;
+      this.disableButtonSave = true;
+      this.disableWithdrawButtonSave = true;
+      this.hideWithdrawButton = false;
+      this.hideDepositButton = true;
     },
     /**
      * function that will hold the disable/enable of save button
