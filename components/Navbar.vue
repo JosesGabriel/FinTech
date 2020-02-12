@@ -12,7 +12,7 @@
       <v-list nav dense rounded class="py-0">
         <v-list-item-group>
           <router-link
-            :to="'/profile/' + $auth.loggedIn ? $auth.user.data.user.username : ''"
+            :to="$auth.loggedIn ? '/profile/' + $auth.user.data.user.username : ''"
             class="no-transform"
           >
             <v-list-item class="tertiary--text">
