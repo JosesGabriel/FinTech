@@ -32,12 +32,59 @@ export default {
      },
      created() {
         //this.fbInitialization();
-        this.showPopUp();
+        //this.showPopUp();
      },
      methods: {
         showPopUp(){
             setTimeout(() => { this.display = true; }, 10000);
-        },       
+        }, 
+            /**
+     * Initializes facebook SDK
+     *
+     * @return
+     */
+    fbInitialization() {
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: process.env.FB_APP_ID,
+          autoLogAppEvents: true,
+          xfbml: true,
+          version: "v5.0"
+        });
+      };
+
+      (function(d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+          return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    },
+    shareToFB() {
+      FB.ui(
+        {
+          method: "share",
+          href: process.env.LYDUZ_CUSTOM_SHARE_LINK
+        },
+        function(response) {}
+      );
+    },
+    shareToTwitter() {
+      let twitterURL =
+        process.env.TWITTER_LINK +
+        process.env.LYDUZ_CUSTOM_SHARE_LINK +
+        process.env.TWITTER_LINK_EXTENSION;
+      window.open(
+        twitterURL,
+        "mywindow",
+        "menubar=1,resizable=1,width=350,height=250"
+      );
+    }      
      },
      
 };
