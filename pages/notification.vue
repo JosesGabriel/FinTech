@@ -28,7 +28,7 @@
               <v-list-item
                 v-for="(item, index) in dataNotification"
                 :key="index"
-                @click="linkTo(item.notificable.meta.post.id ? item.notificable.meta.post.id : '#', item.id)"
+                @click="linkTo(item.notificable.meta.post ? 'post,' +item.notificable.meta.post.id : 'user,' + item.notificable.meta.user.username, item.id)"
                 two-line
                 class="notification__item"
                 :class="item.status"
@@ -86,7 +86,8 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      notification: "global/getNotification"
+      notification: "global/getNotification",
+      markAll: "global/getMarkAll"
     }),
     toggleFontColor() {
       return this.lightSwitch == 0
@@ -97,6 +98,9 @@ export default {
   watch: {
     notification() {
       this.newNotification();
+    },
+    markAll() {
+      this.dataNotification.filter(x => x.status = "read");
     }
   },
   mounted() {
@@ -127,24 +131,20 @@ export default {
      *
      * @return  {string}                   returns the build link
      */
-    linkTo(post_id, notification_id) {
-      /**
-       * get post_id of a post, if post_id is null will get # params this is for now
-       * until emman provide the activity name
-       *
-       * @return  {string}  returns string link
-       */
-      if (post_id != "#") {
-        window.location.href = "/post/" + post_id;
-      } else {
-        window.location.href = post_id;
-      }
-
+    linkTo(id, notification_id) {
       /**
        * Read flag notification
        */
       this.$api.social.notification.read(notification_id).then(response => {
         if (response.success) {
+          this.dataNotification.status = "read";
+
+          const statusId = id.split(",");
+          if (statusId[0] == "user") {
+            window.location = "/profile/" + statusId[1];
+          } else if (statusId[0] == "post") {
+            window.location = "/post/" + statusId[1];
+          }
         }
       });
     },

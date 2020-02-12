@@ -30,5 +30,9 @@ export default {
 
     getSettings(state) {
         return state.settings;
+    },
+
+    getMarkAll(state) {
+        return state.markAll;
     }
 };

@@ -1,11 +1,16 @@
 <template>
   <v-list-item :key="comment.id" class="ma-0 pt-3">
-    <v-list-item-avatar style="align-self: flex-start" class="mt-0">
+    <v-list-item-avatar
+      style="align-self: flex-start"
+      class="mt-0"
+      size="32"
+      @click="$router.push('/profile/' + comment.user.username)"
+    >
       <v-img
         :src="
           comment.user.profile_image
             ? comment.user.profile_image
-            : 'user_default.png'
+            : 'default.png'
         "
         :alt="comment.user.name"
         class="avatar__border"
@@ -25,15 +30,18 @@
     ></v-text-field>
     <v-list-item-content v-else class="pa-0 ma-0">
       <v-container class="pa-0 body-2">
-        <span class="text--darken-2 caption">{{ comment.user.name }}</span>
+        <span class="text--darken-2 caption font-weight-black">{{
+          comment.user.name
+        }}</span>
 
         <span v-if="comment.user.uuid == $auth.user.data.user.uuid">
           <v-btn
             icon
             x-small
             @click="commentSettingsToggle = !commentSettingsToggle"
-            ><v-icon>mdi-dots-horizontal</v-icon></v-btn
           >
+            <v-icon>mdi-dots-horizontal</v-icon>
+          </v-btn>
         </span>
 
         <span v-if="commentSettingsToggle">
@@ -43,7 +51,7 @@
         <div class="overline no-transform">
           {{ localFormat(comment.created_at, "fn") }}
         </div>
-        <div class="caption py-3">{{ comment.content }}</div>
+        <div class="caption py-2 comment__content">{{ comment.content }}</div>
       </v-container>
       <v-container class="pa-0 ma-0">
         <v-btn
@@ -108,6 +116,23 @@
       </v-container>
       <span>
         <v-list-item-content class="pt-0 mb-0">
+          <template v-if="userTagMode" slot="item" slot-scope="s">
+            <v-avatar size="22" @click="clickUserSuggestion(s)">
+              <v-img
+                :src="
+                  s.item.profile_image ? s.item.profile_image : 'default.png'
+                "
+              >
+              </v-img>
+            </v-avatar>
+            <span
+              class="pl-2"
+              @click="clickUserSuggestion(s)"
+              @keyup.enter="test"
+              v-text="s.item.name"
+            ></span>
+          </template>
+
           <v-text-field
             v-if="replyCommentMode && currentCommentIndex == postindex"
             dense
@@ -119,6 +144,8 @@
             :value="commentValue"
             :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
             :dark="lightSwitch == 0 ? false : true"
+            @keyup.@="userTagMode = true"
+            @keyup="catcher"
             @keyup.enter="replyToComment(comment.id, $event.target.value)"
           ></v-text-field>
         </v-list-item-content>
@@ -183,7 +210,12 @@ export default {
       commentValue: "",
       commentSettingsToggle: false,
       editModeToggle: false,
-      reactButtons: false
+      reactButtons: false,
+      currentTaggedUser: "",
+      taggedUsers: [],
+      hasTaggedUser: true,
+      userTagMode: false,
+      members: []
     };
   },
   computed: {
@@ -200,6 +232,65 @@ export default {
     }),
     localFormat: LocalFormat,
 
+    catcher(e) {
+      let regExp = /^[0-9a-zA-Z]+$/;
+      if (this.userTagMode && !regExp.test(e.key)) {
+        this.currentTaggedUser = "";
+      }
+      if (regExp.test(e.key) && e.key.length == 1 && this.userTagMode) {
+        this.hasTaggedUser = true;
+        this.currentTaggedUser += e.key;
+        this.search("user");
+      } else if (e.key == "Backspace" && this.userTagMode) {
+        this.currentTaggedUser = this.currentTaggedUser.slice(0, -1);
+        this.search("user");
+      }
+      if (
+        this.userTagMode &&
+        e.key == "Backspace" &&
+        this.currentTaggedUser == ""
+      ) {
+        this.userTagMode = false;
+      } else if (this.userTagMode && e.key == "Backspace") {
+        this.search("user");
+      }
+
+      if (this.commentValue == "") {
+        this.userTagMode = false;
+        this.currentTaggedUser = "";
+        this.hasTaggedUser = false;
+        this.taggedUsers = [];
+      }
+    },
+    /**
+     * Searches from stock list based on stock that user is currently typing, fires when stockTagMode is true.
+     *
+     * @return
+     */
+    search(type) {
+      if (type == "user") {
+        if (this.currentTaggedUser != "") {
+          let payload = {
+            name: this.currentTaggedUser
+          };
+          this.$api.accounts.account
+            .index(payload)
+            .then(response => {
+              this.members = response.data.users;
+            })
+            .catch(e => {})
+            .finally(function() {}.bind(this));
+        }
+      }
+    },
+    clickUserSuggestion(selected) {
+      this.taggedUsers.push({
+        uuid: selected.item.uuid,
+        name: selected.item.name
+      });
+      this.currentTaggedUser = "";
+      this.userTagMode = false;
+    },
     /**
      * Fires when user clicks either Bull or Bear button.
      * Executes requests
@@ -373,18 +464,19 @@ export default {
       if (this.iteration) {
         payload = {
           parent_id: this.iteration,
-          content: content
+          content: content.substring(0, 200)
         };
       } else {
         payload = {
           parent_id: id,
-          content: content
+          content: content.substring(0, 200)
         };
       }
       this.$api.social.posts
         .postComment(this.postid, payload)
         .then(response => {
           if (response.success) {
+            this.replyCommentMode = false;
             //Important!! do not remove. Used to empty comment textfield on submit
             if (this.commentValue == " ") {
               this.commentValue = "";
@@ -423,5 +515,8 @@ export default {
 }
 .sentiment__btn--active {
   background-color: #9ecae0;
+}
+.comment__content {
+  line-height: 1.15rem;
 }
 </style>

@@ -2,7 +2,10 @@
   <v-col ref="componentWrapper" class="pa-0 pl-10" cols="5" sm="5" md="5">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-      <h6 class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">TRADE STATISTICS</h6>
+      <h6
+        class="font-weight-bold subtitle-2"
+        :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+      >TRADE STATISTICS</h6>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon small color="tertiary">mdi-share-variant</v-icon>
@@ -20,23 +23,23 @@
         <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
           <template v-slot:default>
             <tbody>
-              <tr>
-                <td class="caption px-1 py-1">
+              <tr class="caption">
+                <td class="px-1 py-1">
                   <v-icon class="pr-1 caption" color="success">mdi-circle</v-icon>Win
                 </td>
-                <td class="caption text-right px-1 py-1 pr-8">{{ win }}</td>
+                <td class="px-1 py-1 pr-8">{{ win }}</td>
 
-                <td class="caption px-1 py-1 pl-8">
+                <td class="px-1 py-1 pl-8">
                   <v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Loss
                 </td>
-                <td class="caption text-right px-1 py-1">{{ loss }}</td>
+                <td class="px-1 py-1">{{ loss }}</td>
               </tr>
-              <tr>
-                <td class="caption px-1 py-1">Total Trades</td>
-                <td class="caption text-right px-1 py-1 pr-8">{{ winlossresult }}</td>
+              <tr class="caption">
+                <td class="pa-1 font-weight-bold">Total Trades</td>
+                <td class="pa-1 pr-8">{{ winlossresult }}</td>
 
-                <td class="caption px-1 py-1 pl-8">Win Rate</td>
-                <td class="caption text-right px-1 py-1">{{ winrateresult }}%</td>
+                <td class="pa-1 font-weight-bold pl-8">Win Rate</td>
+                <td class="pa-1">{{ winrateresult }}%</td>
               </tr>
             </tbody>
           </template>
@@ -78,7 +81,7 @@ export default {
      */
     borderColor() {
       return this.lightSwitch == 0
-        ? "border-bottom: 1px solid #535358"
+        ? "border-bottom: 1px solid #dadada"
         : "border-bottom: 1px solid #172431";
     },
     /**
@@ -90,7 +93,7 @@ export default {
       return (this.result = parseInt(this.win) + parseInt(this.loss));
     },
     /**
-     * returns computed value once win or loss changes value 
+     * returns computed value once win or loss changes value
      *
      * @return  {number}  returns percentage number
      */
@@ -245,7 +248,7 @@ export default {
       this.showShareForm = true;
     },
     /**
-     * getTradeStats will work on ploting/updating chart series 
+     * getTradeStats will work on ploting/updating chart series
      *
      * @return  {array}  data to update chart
      */

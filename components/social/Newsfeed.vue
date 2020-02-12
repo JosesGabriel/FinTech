@@ -1,6 +1,10 @@
 <template>
   <v-col class="pa-0">
-    <span v-show="showBanner" class="newPosts_banner caption black--text" @click="fetchNewPost()">
+    <span
+      v-show="showBanner"
+      class="newPosts_banner caption black--text"
+      @click="fetchNewPost()"
+    >
       <v-icon small color="black">mdi-arrow-up</v-icon>
       <span class="font-weight-bold">New posts</span>
     </span>
@@ -25,22 +29,35 @@
     >
       <!-- Start of Post Header -->
       <v-list-item class="pt-1">
-        <v-list-item-avatar class="mr-2" size="42">
-          <img
-            class="avatar__border"
-            :src="
-              postsObject[n - 1].user.profile_image
-                ? postsObject[n - 1].user.profile_image
-                : 'user_default.png'
-            "
-          />
-        </v-list-item-avatar>
+        <router-link
+          :to="'/profile/' + postsObject[n - 1].user.username"
+          class="no-transform"
+        >
+          <v-list-item-avatar class="mr-2" size="42">
+            <img
+              class="avatar__border"
+              :src="
+                postsObject[n - 1].user.profile_image
+                  ? postsObject[n - 1].user.profile_image
+                  : 'default.png'
+              "
+            />
+          </v-list-item-avatar>
+        </router-link>
         <v-list-item-content class="pa-0 ma-0">
           <v-row>
             <v-col>
-              <v-list-item-title class="subtitle-2">
-                <strong>{{ postsObject[n - 1].user.name }}</strong>
-              </v-list-item-title>
+              <router-link
+                :to="'/profile/' + postsObject[n - 1].user.username"
+                class="no-transform"
+              >
+                <v-list-item-title
+                  class="subtitle-2"
+                  :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+                >
+                  <strong>{{ postsObject[n - 1].user.name }}</strong>
+                </v-list-item-title>
+              </router-link>
               <v-list-item-subtitle class="overline no-transform">
                 {{ localFormat(postsObject[n - 1].created_at, "fn") }}
                 <!-- <v-icon class="body-2 mt-0">mdi-earth</v-icon> -->
@@ -65,7 +82,15 @@
                   >
                     <img src="/icon/bullish.svg" width="6" />
                   </v-btn>
-                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
+                  <v-btn
+                    v-else
+                    icon
+                    outlined
+                    fab
+                    width="14"
+                    height="14"
+                    color="error"
+                  >
                     <img src="/icon/bearish.svg" width="6" />
                   </v-btn>
                 </span>
@@ -78,23 +103,11 @@
                 @click="
                   (postOptionsMode = !postOptionsMode), (currentPost = n - 1)
                 "
-              >mdi-dots-horizontal</v-icon>
+                >mdi-dots-horizontal</v-icon
+              >
               <div v-if="postOptionsMode && currentPost == n - 1">
-                <div class="postOptions__dropdown--caret"></div>
                 <div class="postOptions__container">
-                  <v-dialog width="500">
-                    <template v-slot:activator="{ on }">
-                      <v-btn
-                        v-if="
-                          postsObject[n - 1].user.uuid ==
-                            $auth.user.data.user.uuid
-                        "
-                        x-small
-                        text
-                        v-on="on"
-                      >Delete</v-btn>
-                    </template>
-
+                  <v-dialog v-model="deleteDialog" width="500">
                     <v-card
                       :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
                       :dark="lightSwitch == 0 ? false : true"
@@ -102,7 +115,8 @@
                       <v-card-title
                         class="headline success--text lighten-2"
                         primary-title
-                      >Delete Post?</v-card-title>
+                        >Delete Post?</v-card-title
+                      >
 
                       <v-card-text>
                         Are you sure you want to permanently remove this post
@@ -128,29 +142,65 @@
                             deletePost(postsObject[n - 1].id, n - 1),
                               (deleteDialog = false)
                           "
-                        >Delete</v-btn>
+                          >Delete</v-btn
+                        >
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
-
-                  <v-btn
-                    v-if="
-                      postsObject[n - 1].user.uuid == $auth.user.data.user.uuid
-                    "
-                    x-small
-                    text
-                    @click="
-                      (editPostMode = !editPostMode), (currentPost = n - 1)
-                    "
-                  >Edit</v-btn>
-                  <v-btn
-                    v-if="
-                      postsObject[n - 1].user.uuid != $auth.user.data.user.uuid
-                    "
-                    x-small
-                    text
-                    @click="followAccount(postsObject[n - 1].user.uuid)"
-                  >Follow</v-btn>
+                  <v-list dense class="postOptions__list" elevation="8">
+                    <v-list-item-group class="postOptions__itemgroup">
+                      <v-list-item
+                        v-if="
+                          postsObject[n - 1].user.uuid ==
+                            $auth.user.data.user.uuid
+                        "
+                        class="postOptions__listitem"
+                        x-small
+                        text
+                        @click="
+                          (editPostMode = !editPostMode), (currentPost = n - 1)
+                        "
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title class="text-center caption"
+                            >Edit</v-list-item-title
+                          >
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-divider></v-divider>
+                      <v-list-item
+                        v-if="
+                          postsObject[n - 1].user.uuid ==
+                            $auth.user.data.user.uuid
+                        "
+                        class="postOptions__listitem"
+                        x-small
+                        text
+                        @click.stop="deleteDialog = true"
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title class="text-center caption">
+                            Delete
+                          </v-list-item-title>
+                        </v-list-item-content></v-list-item
+                      >
+                      <v-list-item
+                        v-if="
+                          postsObject[n - 1].user.uuid !=
+                            $auth.user.data.user.uuid
+                        "
+                        x-small
+                        text
+                        @click="followAccount(postsObject[n - 1].user.uuid)"
+                      >
+                        <v-list-item-content>
+                          <v-list-item-title class="text-center caption">
+                            Follow
+                          </v-list-item-title>
+                        </v-list-item-content></v-list-item
+                      >
+                    </v-list-item-group>
+                  </v-list>
                 </div>
               </div>
             </v-col>
@@ -187,12 +237,11 @@
                 ),
                   (editPostMode = false)
               "
-            >Done Editing</v-btn>
+              >Done Editing</v-btn
+            >
           </div>
-          <span v-else class="caption px-5 pb-3">
-            {{
-            postsObject[n - 1].content
-            }}
+          <span v-else class="body-2 px-5 pb-3">
+            {{ postsObject[n - 1].content }}
           </span>
 
           <PhotoCarousel :images="postsObject[n - 1].attachments" />
@@ -244,9 +293,7 @@
         <v-spacer></v-spacer>
         <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
         <span class="caption">
-          {{
-          postsObject[n - 1].comment_descendants_count
-          }}
+          {{ postsObject[n - 1].comment_descendants_count }}
         </span>
         <!-- TODO Share counter -->
         <!-- <v-btn
@@ -269,16 +316,21 @@
       <!-- Start of Comment -->
       <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
-        <v-list-item-avatar size="28" class="mr-2">
-          <v-img
-            class="avatar__border"
-            :src="
-              $auth.user.data.user.profile_image
-                ? $auth.user.data.user.profile_image
-                : 'default.png'
-            "
-          ></v-img>
-        </v-list-item-avatar>
+        <router-link
+          :to="'/profile/' + $auth.user.data.user.username"
+          class="no-transform"
+        >
+          <v-list-item-avatar size="28" class="mr-2">
+            <v-img
+              class="avatar__border"
+              :src="
+                $auth.user.data.user.profile_image
+                  ? $auth.user.data.user.profile_image
+                  : 'default.png'
+              "
+            ></v-img>
+          </v-list-item-avatar>
+        </router-link>
         <v-list-item-content class="pt-2 mb-0">
           <v-text-field
             dense
@@ -303,7 +355,11 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
   </v-col>
 </template>
 
@@ -328,6 +384,12 @@ export default {
       }
     },
     postid: {
+      default() {
+        return "";
+      },
+      type: String
+    },
+    authorId: {
       default() {
         return "";
       },
@@ -453,6 +515,8 @@ export default {
   mounted() {
     if (this.postid) {
       this.searchPost();
+    } else if (this.authorId) {
+      this.getAuthorPost(this.authorId);
     } else {
       this.loadPosts();
     }
@@ -554,7 +618,37 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
-            console.log(response);
+            /**
+             * set interval dinamic time changing on posts
+             * 10000ms interval
+             */
+            setInterval(() => {
+              this.postsObject.map(
+                x => (x.created_at = this.addDynamicTime(x.created_at))
+              );
+            }, 10000);
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    /**
+     * triggers when component loads or user hits bottom of page on profile page.
+     * Concatenates to postsObject
+     *
+     * @return
+     */
+    getAuthorPost(id) {
+      const params = {
+        author_id: id
+      };
+      this.$api.social.posts
+        .get(params)
+        .then(response => {
+          if (response.success) {
+            this.postsObject = this.postsObject.concat(response.data.posts);
+            this.loader = false;
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
@@ -609,6 +703,7 @@ export default {
         .then(response => {
           this.triggerAlert(true, response.message);
           this.postsObject.splice(index, 1);
+          this.postOptionsMode = false;
         })
         .catch(e => {
           this.triggerAlert(true, e.message);
@@ -626,13 +721,14 @@ export default {
      */
     editPost(id, content, index) {
       let payload = {
-        content: content
+        content: content.substring(0, 200)
       };
       this.$api.social.actions
         .put(id, payload)
         .then(response => {
           this.triggerAlert(true, response.message);
           this.postsObject[index].content = content;
+          this.postOptionsMode = false;
         })
         .catch(e => {
           this.triggerAlert(true, e.message);
@@ -651,7 +747,7 @@ export default {
       let payload = {
         parent_id: 0,
         user_id: this.$auth.user.data.user.uuid,
-        content: content
+        content: content.substring(0, 200)
       };
 
       //Important!! do not remove. Used to empty comment textfield on submit
@@ -813,6 +909,7 @@ export default {
         if (bottomOfWindow) {
           this.pageCount++;
           this.loadPosts();
+          this.getAuthorPost();
         }
       };
     },
@@ -856,5 +953,21 @@ export default {
 }
 .postOptions__btn:focus {
   background-color: transparent;
+}
+.postOptions__list {
+  position: absolute;
+  top: 28px;
+  right: 10px;
+  z-index: 1;
+  padding: 0;
+}
+.postOptions__listitem {
+  height: 20px;
+}
+.postOptions__list .v-list-item {
+  min-height: 0px;
+}
+.postOptions__itemgroup {
+  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 </style>

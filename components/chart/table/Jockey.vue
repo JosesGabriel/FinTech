@@ -1,6 +1,15 @@
 <template>
   <v-col class="pa-0 mt-3">
+    <v-progress-linear
+      color="success"
+      indeterminate
+      buffer-value="100"
+      height="5"
+      class="mt-3"
+      v-show="loading"
+    ></v-progress-linear>
     <v-simple-table
+      v-show="!loading"
       class="data_table-container jockey_table mt-2 ml-3 mr-2"
       dense
       :dark="lightSwitch == true"
@@ -21,29 +30,41 @@
             <th
               colspan="4"
               class="text-left j_header"
-              :style="(sortName == 'buy_volume' ? 'border-bottom: 1px solid #03dac5 !important' : 'border-bottom: 1px solid #414f58 !important')"
+              :style="
+                sortName == 'buy_volume'
+                  ? 'border-bottom: 1px solid #03dac5 !important'
+                  : 'border-bottom: 1px solid #414f58 !important'
+              "
               style="padding-bottom: 6px !important; font-size: 12px;font-weight: bold;"
               @click="sortArray('buy_volume')"
             >
               Buying
             </th>
-           
+
             <th class="text-left"></th>
             <th
               colspan="4"
               class="text-left j_header"
-              :style="(sortName == 'sell_volume' ? 'border-bottom: 1px solid #03dac5 !important' : 'border-bottom: 1px solid #414f58 !important')"
+              :style="
+                sortName == 'sell_volume'
+                  ? 'border-bottom: 1px solid #03dac5 !important'
+                  : 'border-bottom: 1px solid #414f58 !important'
+              "
               style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;"
               @click="sortArray('sell_volume')"
             >
               Selling
             </th>
-            
+
             <th class="text-left"></th>
             <th
               colspan="2"
               class="text-left j_header"
-              :style="(sortName == 'net_volume' ? 'border-bottom: 1px solid #03dac5 !important' : 'border-bottom: 1px solid #414f58 !important')"
+              :style="
+                sortName == 'net_volume'
+                  ? 'border-bottom: 1px solid #03dac5 !important'
+                  : 'border-bottom: 1px solid #414f58 !important'
+              "
               style="padding-bottom: 6px !important; border-bottom: 1px solid #414f58 !important; font-size: 12px;font-weight: bold;"
               @click="sortArray('net_volume')"
             >
@@ -91,18 +112,23 @@
             <th class="text-right secondary_color pt-2">Value</th>
             <th class="text-right secondary_color pt-2">Weight</th>
             <th class="text-right pt-2"></th>
-            <th class="text-right secondary_color pt-2"
-            >Net Volume</th>
+            <th class="text-right secondary_color pt-2">Net Volume</th>
             <th class="text-right pr-2 secondary_color pt-2">Net Value</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in jockey" :key="item.broker_code" :id="item.broker_code">
+          <tr
+            v-for="item in jockey"
+            :id="item.broker_code"
+            :key="item.broker_code"
+          >
             <td style="width:200px;">
               <div style="font-weight: bold; padding-top: 3px;">
                 {{ item.broker_code }}
               </div>
-              <div class="broker_desc text-uppercase">{{ item.broker_description }}</div>
+              <div class="broker_desc text-uppercase">
+                {{ item.broker_description }}
+              </div>
             </td>
              
             <td class="text-right">{{ addcomma(item.buy_volume) }}</td>
@@ -169,8 +195,9 @@ export default {
       desc: true,
       current: 0,
       hover: false,
-      symbol_id: '',
-      sortName: '',
+      symbol_id: "",
+      sortName: "",
+      loading: true
     };
   },
   computed: {
@@ -203,12 +230,12 @@ export default {
         this.max = "calc(100vh - 250px)";
       }
     },
-    sseTrade: function(data){
+    sseTrade: function(data) {
       this.jockeyRealTime(data);
     }
   },
   mounted() {
-     this.initJockey(this.symbolid);
+    this.initJockey(this.symbolid);
   },
   methods: {
     addcomma(n, sep, decimals) {
@@ -237,6 +264,7 @@ export default {
      *
      */
     initJockey(id) {
+      this.loading = true;
       this.symbol_id = id;
       this.$api.chart.stocks
         .brokersActivity({
@@ -266,7 +294,8 @@ export default {
           }
           this.desc = true;
           this.sortArray("buy_volume");
-          this.sortName = 'buy_volume';
+          this.sortName = "buy_volume";
+          this.loading = false;
         });
     },
 
@@ -276,33 +305,52 @@ export default {
      * @param   {object}  data  Jockey Data
      *
      */
-    jockeyRealTime(data){
-      if(this.symbol_id == data.sym_id){   
-          for (let index = 0; index < this.jockey.length; index++) {
-                  if(this.jockey[index].broker_code == data.b){
-                      this.jockey[index].buy_volume = parseFloat(this.jockey[index].buy_volume) + parseFloat(data.exvol);
-                      this.jockey[index].buy_value = parseFloat(this.jockey[index].buy_value) + (parseFloat(data.exvol) * parseFloat(data.exp));
-                      this.jockey[index].buy_avprice = this.jockey[index].buy_value / this.jockey[index].buy_volume;
-                      this.jockey[index].buy_mweight = (this.jockey[index].buy_volume / this.totalBuyVolume()) * 100;
-                      this.jockey[index].net_volume = this.jockey[index].buy_volume - parseFloat(this.jockey[index].sell_volume);
-                      this.jockey[index].net_value = this.jockey[index].buy_value - parseFloat(this.jockey[index].sell_value);
-                      let updatedItem = {...this.jockey[index]};
-                      this.jockey.splice(index, 1, updatedItem);
-                      this.updateEffect(this.jockey[index].broker_code);
-                  }
-                  if(this.jockey[index].broker_code == data.s){
-                      this.jockey[index].sell_volume = parseFloat(this.jockey[index].sell_volume) + parseFloat(data.exvol);
-                      this.jockey[index].sell_value = parseFloat(this.jockey[index].sell_value) + (parseFloat(data.exvol) * parseFloat(data.exp));
-                      this.jockey[index].sell_avprice = this.jockey[index].sell_value / this.jockey[index].sell_volume;
-                      this.jockey[index].sell_mweight = (this.jockey[index].sell_volume / this.totalSellVolume()) * 100;
-                      this.jockey[index].net_volume = this.jockey[index].buy_volume - parseFloat(this.jockey[index].sell_volume);
-                      this.jockey[index].net_value = this.jockey[index].buy_value - parseFloat(this.jockey[index].sell_value);
-                      let updatedItem = {...this.jockey[index]};
-                      this.jockey.splice(index, 1, updatedItem);
-                      this.updateEffect(this.jockey[index].broker_code);
-                  }   
-                        
+    jockeyRealTime(data) {
+      if (this.symbol_id == data.sym_id) {
+        for (let index = 0; index < this.jockey.length; index++) {
+          if (this.jockey[index].broker_code == data.b) {
+            this.jockey[index].buy_volume =
+              parseFloat(this.jockey[index].buy_volume) +
+              parseFloat(data.exvol);
+            this.jockey[index].buy_value =
+              parseFloat(this.jockey[index].buy_value) +
+              parseFloat(data.exvol) * parseFloat(data.exp);
+            this.jockey[index].buy_avprice =
+              this.jockey[index].buy_value / this.jockey[index].buy_volume;
+            this.jockey[index].buy_mweight =
+              (this.jockey[index].buy_volume / this.totalBuyVolume()) * 100;
+            this.jockey[index].net_volume =
+              this.jockey[index].buy_volume -
+              parseFloat(this.jockey[index].sell_volume);
+            this.jockey[index].net_value =
+              this.jockey[index].buy_value -
+              parseFloat(this.jockey[index].sell_value);
+            let updatedItem = { ...this.jockey[index] };
+            this.jockey.splice(index, 1, updatedItem);
+            this.updateEffect(this.jockey[index].broker_code);
           }
+          if (this.jockey[index].broker_code == data.s) {
+            this.jockey[index].sell_volume =
+              parseFloat(this.jockey[index].sell_volume) +
+              parseFloat(data.exvol);
+            this.jockey[index].sell_value =
+              parseFloat(this.jockey[index].sell_value) +
+              parseFloat(data.exvol) * parseFloat(data.exp);
+            this.jockey[index].sell_avprice =
+              this.jockey[index].sell_value / this.jockey[index].sell_volume;
+            this.jockey[index].sell_mweight =
+              (this.jockey[index].sell_volume / this.totalSellVolume()) * 100;
+            this.jockey[index].net_volume =
+              this.jockey[index].buy_volume -
+              parseFloat(this.jockey[index].sell_volume);
+            this.jockey[index].net_value =
+              this.jockey[index].buy_value -
+              parseFloat(this.jockey[index].sell_value);
+            let updatedItem = { ...this.jockey[index] };
+            this.jockey.splice(index, 1, updatedItem);
+            this.updateEffect(this.jockey[index].broker_code);
+          }
+        }
       }
     },
     /**
@@ -310,10 +358,10 @@ export default {
      *
      * @return  {Float} total buy volume
      */
-    totalBuyVolume(){
+    totalBuyVolume() {
       let total = 0;
       for (let i = 0; i < this.jockey.length; i++) {
-            total = total + parseFloat(this.jockey[i].buy_volume);
+        total = total + parseFloat(this.jockey[i].buy_volume);
       }
       return total;
     },
@@ -322,10 +370,10 @@ export default {
      *
      * @return  {Float} total sell volume
      */
-    totalSellVolume(){
+    totalSellVolume() {
       let total = 0;
       for (let i = 0; i < this.jockey.length; i++) {
-            total = total + parseFloat(this.jockey[i].sell_volume);
+        total = total + parseFloat(this.jockey[i].sell_volume);
       }
       return total;
     },
@@ -365,7 +413,7 @@ export default {
       const item = document.getElementById(dom);
       if (item == null) return;
       item.style.background = "rgb(182,182,182,.2)";
-       //item.style.background = "rgb(3,218,197,0.27)";
+      //item.style.background = "rgb(3,218,197,0.27)";
       setTimeout(function() {
         item.style.background = "";
       }, 800);
@@ -425,7 +473,7 @@ export default {
   cursor: pointer;
 }
 
-.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {  
+.theme--dark.v-data-table tbody tr:hover:not(.v-data-table__expand-row) {
   background-color: rgb(182, 182, 182, 0.2) !important;
 }
 .theme--dark.v-data-table tbody tr:hover {

@@ -47,7 +47,7 @@ export default {
   components: {
     Login,
     TradeView,
-    BrokersList,
+    BrokersList
   },
   data() {
     return {
@@ -96,7 +96,7 @@ export default {
           show: true
         },
         { id: 8, title: "", img: "", show: false }
-      ],
+      ]
     };
   },
   computed: {
@@ -104,8 +104,7 @@ export default {
       lightSwitch: "global/getLightSwitch",
       showBrokers: "chart/showBrokers"
     })
-  },
-  
+  }
 };
 </script>
 <style>
@@ -118,12 +117,12 @@ export default {
 }
 .select__trade .v-label {
   font-size: 14px;
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 .select__trade .v-select__selection--comma {
-  color: black;
+  /* color: black; */
   font-size: 14px;
- /* font-weight: 600;*/
+  /* font-weight: 600;*/
 }
 /*.select__trade .v-select__slot .v-label,
 .select__trade .v-select__slot .v-icon {

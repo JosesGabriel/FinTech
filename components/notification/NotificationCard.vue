@@ -1,6 +1,6 @@
 <template>
   <v-list-item
-    @click="linkTo(notification.notificable.meta.post.id ? notification.notificable.meta.post.id : '#', notification.id)"
+    @click="linkTo(notification.id)"
     class="notification__item py-1"
     :class="notification.status"
   >
@@ -10,7 +10,9 @@
 
     <v-list-item-content class="listItem__content py-1">
       <div class="body-2 ma-0 userMessage__dropdown-title">
-        <span class="body-2 ma-0 userMessage__message caption">{{ notification.notificable.message }}</span>
+        <span
+          class="body-2 ma-0 userMessage__message caption"
+        >{{ notification.notificable.message }}</span>
       </div>
       <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>
@@ -50,24 +52,16 @@ export default {
      *
      * @return  {string}                   returns the build link
      */
-    linkTo(post_id, notification_id) {
-      /**
-       * get post_id of a post, if post_id is null will get # params this is for now
-       * until emman provide the activity name
-       *
-       * @return  {string}  returns string link
-       */
-      if (post_id != "#") {
-        window.location.href = "/post/" + post_id;
-      } else {
-        window.location.href = post_id;
-      }
-
+    linkTo(notification_id) {
       /**
        * Read flag notification
        */
       this.$api.social.notification.read(notification_id).then(response => {
         if (response.success) {
+          this.notification.status = "read";
+          window.location = this.notification.notificable.meta.post
+            ? "/post/" + this.notification.notificable.meta.post.id
+            : "/profile/" + this.notification.notificable.meta.user.username;
         }
       });
     }

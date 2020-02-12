@@ -49,7 +49,7 @@
         ></small>
       </v-container>
       <v-row align="center" justify="center" class="mb-5">
-        <span class="caption">Sign in with</span>
+        <span v-show="false" class="caption">Sign in with</span>
       </v-row>
       <Providers />
     </v-card-text>
@@ -122,6 +122,11 @@ export default {
             state: "success",
             message: "Successfully Logged In"
           });
+
+          // reload for proper component mounting
+          setTimeout(() => {
+            window.open("/","_self")
+          }, 800);
         })
         .catch(() => {
           this.$emit("alert", {

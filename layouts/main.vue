@@ -1,8 +1,18 @@
 <template>
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
-      <rbHeader :ticks="ticks" />
-      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
+      <rbHeader :ticks="ticks" class="header__container" />
+      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
+        <div v-show="showLamp">
+          <img
+            v-show="
+              whiteMode == '/login/' || whiteMode == '/login' ? true : false
+            "
+            :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'"
+            :src="lampMode"
+            @click="lampSwitch"
+          />
+        </div>
         <nuxt />
       </v-container>
       <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
@@ -30,9 +40,15 @@
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
           >{{ alertDialog.body }}</v-card-text>
-          <v-card-text class="text-center">{{ alertDialog.subtext }}</v-card-text>
+          <v-card-text class="text-center">
+            {{
+            alertDialog.subtext
+            }}
+          </v-card-text>
         </v-card>
       </v-dialog>
+      <!-- dont remove -->
+      <div v-show="false" id="tv_chart_container"></div>
     </v-content>
   </v-app>
 </template>
@@ -40,7 +56,10 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import rbHeader from "~/components/Header";
-import { UserNotificationAlertLayout } from "~/assets/js/helpers/notification";
+import {
+  UserNotificationAlertLayout,
+  AllNotificationAlertLayout
+} from "~/assets/js/helpers/notification";
 import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
 export default {
@@ -53,9 +72,12 @@ export default {
       notificationQueue: [],
       notificationAlert: true,
       notificationTimeout: 100000,
-      ticks: 1
+      ticks: 1,
+      whiteMode: null,
+      lampBtn: false
     };
   },
+  middleware: "isMobileOrTablet",
   head() {
     return {
       link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
@@ -68,18 +90,21 @@ export default {
       favicon: "global/favicon",
       alertDialog: "global/getAlertDialog",
       notification: "global/getNotification"
-    })
-  },
-  mounted() {
-    if (localStorage.currentMode) {
-      this.setLightSwitch(localStorage.currentMode);
+    }),
+    lampMode() {
+      return this.lightSwitch == 1
+        ? "/Lamp-Darkmode.svg"
+        : "/Lamp-Lightmode.svg";
+    },
+    showLamp() {
+      let lampBtn;
+      if (this.$route.path == "/login/" || this.$route.path == "/login") {
+        lampBtn = true;
+      } else {
+        lampBtn = false;
+      }
+      return lampBtn;
     }
-    /**
-     * For avoid duplicating mount need to refactor
-     */
-    this.$nextTick(() => {
-      this.ticks = 2;
-    });
   },
   watch: {
     /**
@@ -99,7 +124,7 @@ export default {
             this.notification.post.id
           ),
           {
-            timeout: 1000000,
+            timeout: 5000,
             showProgressBar: false,
             pauseOnHover: true,
             position: SnotifyPosition.leftBottom,
@@ -112,11 +137,45 @@ export default {
       }
     }
   },
+  mounted() {
+    if (localStorage.currentMode) {
+      this.setLightSwitch(localStorage.currentMode);
+    }
+    /**
+     * For avoid duplicating mount need to refactor
+     */
+    this.$nextTick(() => {
+      this.ticks = 2;
+    });
+    this.whiteMode = window.location.pathname;
+
+    this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
+    // this.showAnnouncements();
+  },
   methods: {
     ...mapActions({
       setLightSwitch: "global/setLightSwitch"
     }),
-    userNotificationAlertLayout: UserNotificationAlertLayout
+    userNotificationAlertLayout: UserNotificationAlertLayout,
+    allNotificationAlertLayout: AllNotificationAlertLayout,
+    lampSwitch() {
+      let lampMode = localStorage.currentMode;
+
+      this.setLightSwitch(lampMode == 1 ? 0 : 1);
+      localStorage.currentMode = this.lightSwitch;
+    },
+    // showAnnouncements() {
+    //   this.$snotify.html(this.allNotificationAlertLayout(), {
+    //     timeout: 100000000,
+    //     showProgressBar: false,
+    //     pauseOnHover: true,
+    //     position: SnotifyPosition.leftBottom,
+    //     newItemsOnTop: false,
+    //     config: {
+    //       closeOnClick: true
+    //     }
+    //   });
+    // }
   }
 };
 </script>
@@ -132,6 +191,9 @@ export default {
 }
 .lightMode {
   background-color: #f2f2f2;
+}
+.lightWhiteMode {
+  background-color: #fafafa;
 }
 .transparent__bg {
   background-color: transparent !important;
@@ -156,5 +218,25 @@ export default {
   position: relative;
   top: 40px;
   z-index: 1;
+}
+.header__container {
+  position: relative;
+}
+.lampDark__btn {
+  z-index: 100;
+  position: absolute;
+  width: 8%;
+  top: 0;
+  right: 340px;
+}
+.lampLight__btn {
+  z-index: 100;
+  position: absolute;
+  width: 44%;
+  top: 0;
+  right: 131px;
+}
+.componentContainer {
+  position: relative;
 }
 </style>

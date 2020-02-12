@@ -1,53 +1,57 @@
 
 <template>
   <v-dialog v-model="show" max-width="500px">
-    <v-container class="px-4 py-2" :style="{ background: cardbackground }">
-      <v-card :dark="lightSwitch == true" flat>
+    <v-container class="px-4 py-2 pb-4" :style="{ background: cardbackground }">
+      <v-card :dark="lightSwitch == 1 ? true : false" color="transparent" flat>
         <v-row no-gutters>
-          <span class="success--text body-1 py-2">Edit About</span>
+          <span :class="lightSwitch == 1 ? 'white--text' : 'black--text'" class="body-1 py-2">Edit About</span>
           <v-spacer></v-spacer>
           <v-btn icon @click.stop="show = false">
             <v-icon small color="secondary">mdi-close</v-icon>
           </v-btn>
         </v-row>
       </v-card>
-      <v-row no-gutters>
-        <span class="caption secondary--text">Introduction</span>
+      <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+        <span class="caption">Info</span>
         <v-spacer></v-spacer>
-        <span class="caption secondary--text">{{ counter }}/300</span>
+        <span class="caption">{{ counter }}/300</span>
       </v-row>
-      <v-card :dark="lightSwitch == true" flat>
+      <v-card :dark="lightSwitch == 1 ? true : false" color="transparent" flat>
         <v-textarea
           outlined
           color="success"
           maxlength="300"
-          v-model="message"
+          v-model="info"
           :dark="lightSwitch == true"
-          class="secondary--text edit_about-textarea"
+          class="secondary--text caption edit_about-textarea"
           name="input-7-4"
         ></v-textarea>
+        <span :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'" class="caption">Location</span>
+        <v-text-field
+          outlined
+          color="success"
+          v-model="location"
+          :dark="lightSwitch == true"
+          class="secondary--text caption edit_about-textfield"
+          name="input-7-4"
+        ></v-text-field>
       </v-card>
       <v-row no-gutters>
         <div class="pa-0">
-          <span class="caption tertiary--text">
+          <span class="caption" :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
             <v-icon color="success" small class="py-1 pr-1">mdi-help-circle-outline</v-icon>Supported Formats
           </span>
         </div>
         <v-spacer></v-spacer>
-        <div class="pa-0">
-          <v-btn class="ma-1 text-capitalize" medium outlined color="success">
-            <v-icon color="success">mdi-plus</v-icon>Add Media
-          </v-btn>
-          <!-- Upload -->
-          <v-btn class="ma-1 text-capitalize" medium outlined color="success">Link</v-btn>
-        </div>
-      </v-row>
-      <v-row no-gutters>
-        <v-spacer></v-spacer>
-        <div class="pa-0">
-          <!-- Upload -->
-          <v-btn class="ma-1 mt-10 text-capitalize" medium outlined small color="success">Save</v-btn>
-        </div>
+        <v-btn
+          class="text-capitalize black--text font-weight-bold"
+          medium
+          filled
+          small
+          color="success"
+          @click="saveNow"
+          @click.stop="show = false"
+        >Save</v-btn>
       </v-row>
     </v-container>
   </v-dialog>
@@ -55,7 +59,14 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  props: ["visible"],
+  props: {
+    visible: Boolean,
+    edit: {
+      default() {
+        return [];
+      }
+    }
+  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
@@ -65,6 +76,7 @@ export default {
     },
     show: {
       get() {
+        this.data = this.edit;
         return this.visible;
       },
       set(value) {
@@ -76,13 +88,30 @@ export default {
   },
   data() {
     return {
-      message: null,
+      data: {},
+      info: null,
+      location: null,
       counter: 0
     };
   },
   watch: {
-    message(e) {
+    info(e) {
       this.counter = e.length;
+    }
+  },
+  methods: {
+    saveNow() {
+      const payload = {
+        about: this.info,
+        location: this.location
+      };
+      this.$api.social.user.putprofile(payload).then(response => {
+        if (response.success) {
+          const data = response;
+
+          this.$emit("clicked", data);
+        }
+      });
     }
   }
 };

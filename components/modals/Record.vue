@@ -46,13 +46,14 @@
                       <v-btn text color="success" @click="$refs.buyMenu.save(buyDate)">OK</v-btn>
                     </v-date-picker>
                   </v-menu>
-                  <v-select
+                  <v-autocomplete
                     v-model="selectStockModel"
                     offset-y="true"
-                    class="body-2"
+                    class="body-2 selectStock_v-select mt-4"
                     item-color="success"
                     append-icon="mdi-chevron-down"
                     :items="listDataArr"
+                    :filter="customFilter"
                     item-text="symbol"
                     item-value="id_str"
                     label="Select a Stock"
@@ -72,7 +73,7 @@
                         <v-list-item-title v-html="data.item.symbol" class="text-uppercase caption"></v-list-item-title>
                       </v-list-item-content>
                     </template>
-                  </v-select>
+                  </v-autocomplete>
                   <v-text-field
                     label="Buy Price"
                     placeholder="Enter Buy Price"
@@ -93,18 +94,17 @@
                     v-model="buyQuantity"
                     class="body-2 buy_selector quantity-input py-3"
                   ></v-text-field>
-                  <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Total Cost:</v-card-title>
+                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+                    <v-card-title class="caption pa-0">Total Cost:</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ buyResult }}</v-card-title>
+                    <v-card-title class="caption pa-0">{{ buyResult }}</v-card-title>
                   </v-row>
                   <v-row class="mt-4" no-gutters>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="secondary"
+                      :color="lightSwitch == 1 ? 'secondary' : 'gray'"
                       class="text-capitalize black--text ml-1"
-                      :dark="lightSwitch == true"
-                      light
+                      :dark="lightSwitch == 1 ? true : false"
                       text
                       @click.stop="show = false"
                     >Cancel</v-btn>
@@ -176,15 +176,15 @@
                     readonly
                     class="body-2 buy_selector quantity-input py-3"
                   ></v-text-field>
-                  <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Total Cost:</v-card-title>
+                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+                    <v-card-title class="caption pa-0 secondary--text">Total Cost:</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">{{ sellResult }}</v-card-title>
+                    <v-card-title class="caption pa-0 secondary--text">{{ sellResult }}</v-card-title>
                   </v-row>
-                  <v-row no-gutters>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">Profit/Loss:</v-card-title>
+                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+                    <v-card-title class="caption pa-0 secondary--text">Profit/Loss:</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="subtitle-1 pa-0 secondary--text">
+                    <v-card-title class="caption pa-0 secondary--text">
                       <span
                         :class=" profitlossNumber > 0 ? 'positive' : profitlossNumber < 0 ? 'negative' : 'neutral' "
                       >₱{{ profitloss }}</span>
@@ -514,6 +514,21 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
     /**
+     * Fires when users typed anything, and it only shows the index of what the users typed
+     *
+     * @param   {Array}  item       Item of all stocks
+     * @param   {String}  queryText  query all the item of what users typed
+     * @param   {String}  itemText   text of user typed
+     *
+     * @return  {Object}             returns query object
+     */
+    customFilter(item, queryText, itemText) {
+      const textOne = item.symbol.toUpperCase();
+      const searchText = queryText.toUpperCase();
+
+      return textOne.indexOf(searchText) > -1;
+    },
+    /**
      * onchange function, once ID change it filter the stock list
      * get only the stock information
      *
@@ -675,5 +690,8 @@ export default {
 }
 .v-date-picker-header.theme--dark {
   background: #00121e;
+}
+.selectStock_v-select input {
+  text-transform: uppercase
 }
 </style>

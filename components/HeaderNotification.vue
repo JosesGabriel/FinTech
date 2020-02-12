@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="closeDropdown()">
     <v-card
       :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
       :dark="lightSwitch == 0 ? false : true"
@@ -9,13 +9,6 @@
       width="350px"
       class="userMessage__dropdown"
     >
-      <v-row no-gutters>
-        <v-spacer></v-spacer>
-        <span
-          @click="markAllRead"
-          class="markAll_btn tertiary--text caption py-1 px-3"
-        >Mark all as read</span>
-      </v-row>
       <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
           <NotificationCard
@@ -23,20 +16,22 @@
             v-for="(item, index) in dataNotification"
             :key="index"
             :notification="item"
-            @click="closeDropdown()"
           />
         </v-list>
         <v-row no-gutters class="userMessage__dropdown-footer">
-          <router-link
-            to="/notification"
-            class="no-transform userMessage__dropdown-link text-center"
-          >
+          <router-link to="/notification" class="no-transform">
             <span
               @click="closeDropdown()"
-              :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
-              class="pa-2 caption d-block seeall_dropdown-footer"
+              :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+              class="pa-2 caption seeall_dropdown-footer"
             >See All</span>
           </router-link>
+          <v-spacer></v-spacer>
+          <span
+            @click="markAllRead"
+            class="markAll_btn caption py-1 px-3"
+            :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+          >Mark all as read</span>
         </v-row>
       </v-container>
     </v-card>
@@ -69,11 +64,19 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setMarkAll: "global/setMarkAll"
+    }),
     markAllRead() {
-      this.dataNotification.filter(x => x.status == "unread" ? x.status = 'read' : x.status = 'read' );
+      this.dataNotification.filter(x =>
+        x.status == "unread" ? (x.status = "read") : (x.status = "read")
+      );
 
       this.$api.social.notification.markall().then(response => {
         if (response.success) {
+          this.$emit("clicked");
+          let counter = 0
+          this.setMarkAll(counter += 1)
         }
       });
     },
@@ -105,7 +108,7 @@ export default {
 .userMessage__dropdown {
   position: absolute;
   top: 45px;
-  right: 216px;
+  right: 248px;
   margin-right: 10px;
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }
@@ -174,6 +177,7 @@ export default {
 .userMessage__message {
   line-height: 15px !important;
   display: block;
+  width: 80%;
 }
 .userMessage__dropdown.theme--dark:after {
   content: "";

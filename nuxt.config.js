@@ -32,6 +32,11 @@ export default {
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css?family=Nunito+Sans&display=swap"
+      },
+      {
+        rel: "stylesheet",
+        href:
+          "https://fonts.googleapis.com/css?family=Montserrat:400,700,800,900&display=swap"
       }
     ],
     script: [
@@ -85,7 +90,8 @@ export default {
     "@nuxtjs/dotenv",
     "@nuxtjs/auth",
     "@nuxtjs/google-adsense",
-    "@nuxtjs/google-gtag"
+    "@nuxtjs/google-gtag",
+    "@nuxtjs/device"
   ],
   auth: {
     strategies: {
@@ -111,8 +117,8 @@ export default {
     },
     redirect: {
       login: "/login",
-      home: "/",
-      logout: "/login"
+      logout: "/login",
+      home: false
     },
     plugins: [
       { src: "~/plugins/axios", mode: "client" },

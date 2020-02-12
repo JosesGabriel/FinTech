@@ -24,5 +24,8 @@ export default {
     },
     async setSettings({ commit }, data) {
         await commit("SET_SETTINGS", data);
+    },
+    async setMarkAll({ commit }, data) {
+        await commit("SET_MARKALL", data);
     }
 };

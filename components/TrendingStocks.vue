@@ -9,7 +9,7 @@
     <div class="pa-0 pl-2">
       <div class="body-2 font-weight-black pb-2 pl-2">Trending Stocks</div>
       <v-divider></v-divider>
-      <v-list class="mt-1 transparent">
+      <v-list v-if="hasValues" class="mt-1 transparent">
         <v-list-item class="px-0">
           <v-list-item-content class="pt-0">
             <div v-for="n in 5" :key="n" class="pb-3">
@@ -57,9 +57,9 @@ export default {
         { last: "", change: "", stock_id: "" },
         { last: "", change: "", stock_id: "" }
       ],
-      //stockCode: ["", "", "", "", ""],
       stockCode: [],
-      loader: false
+      hasValues: false,
+      loader: true
     };
   },
   computed: {
@@ -91,6 +91,7 @@ export default {
         function(result) {
           if (result.success) {
             this.tStocksObject = result;
+            this.hasValues = true;
             this.getTrendingStocksValues();
           }
         }.bind(this)

@@ -92,7 +92,7 @@
           </v-row>
         </v-container>
         <v-row align="center" justify="center" class="mb-1">
-          <span class="caption">Sign up with</span>
+          <span v-show="false" class="caption">Sign up with</span>
         </v-row>
         <Providers />
       </v-card-text>

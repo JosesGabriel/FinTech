@@ -134,7 +134,8 @@ export default {
       loading: true,
       currentTab: true,
       allStocks: [],
-      latestDate: ""
+      latestDate: "",
+      symbolDesc: null
     };
   },
   computed: {
@@ -281,6 +282,11 @@ export default {
      * @return  {Array}        new list of item
      */
     customSort: function(items, index, isDesc) {
+      if (index[0] == "symbol") {
+        // symbol was clicked
+        this.symbolDesc = isDesc;
+      }
+
       if (index[0] != "symbol" && index.length > 0) {
         items = items.filter(data => {
           return (
@@ -292,7 +298,14 @@ export default {
 
       items.sort((a, b) => {
         const desc = isDesc[0];
-        if (index[0] == "symbol") {
+        if (isDesc.length == 0 && this.symbolDesc != null) {
+          // check if desc
+          if (this.symbolDesc[0] == true) {
+            return b["symbol"]
+              .toLowerCase()
+              .localeCompare(a["symbol"].toLowerCase());
+          }
+        } else if (index[0] == "symbol") {
           if (!desc) {
             return a[index].toLowerCase().localeCompare(b[index].toLowerCase());
           } else {

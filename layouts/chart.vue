@@ -93,6 +93,7 @@ export default {
       ticks: 1
     };
   },
+  middleware: "isMobileOrTablet",
   watch: {
     /**
      * This function it'll only show if user received notifications
@@ -209,6 +210,7 @@ export default {
 }
 .table__container {
   height: 30px;
+  background: red !important;
 }
 .spacer__content {
   height: 52px;
