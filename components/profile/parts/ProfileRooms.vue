@@ -16,7 +16,7 @@
       <v-list :dark="lightSwitch == 1 ? true : false" color="transparent">
         <v-list-item v-for="item in items" :key="item.title" class="px-1">
           <v-list-item-avatar class="mr-3" size="35">
-            <img src="/Icon/user-default.svg" />
+            <img src="default.png" />
           </v-list-item-avatar>
 
           <v-list-item-content class="py-2">

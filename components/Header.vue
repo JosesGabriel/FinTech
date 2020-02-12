@@ -271,7 +271,6 @@ export default {
     document.addEventListener("click", this.close);
 
     this.getNotification();
-    console.log(this.$auth)
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
@@ -378,7 +377,6 @@ export default {
 
         userNotificationList.forEach(eventName => {
           evtSource.addEventListener(eventName, e => {
-            console.log("test");
             this.notificationHandler(eventName, JSON.parse(e.data));
           });
         });

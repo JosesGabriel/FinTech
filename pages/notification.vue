@@ -35,7 +35,7 @@
               >
                 <v-list-item-avatar class="mr-3" size="35">
                   <img
-                    :src="item.notificable.meta.user.profile_image ? item.notificable.meta.user.profile_image : '/Icon/user-default.svg'"
+                    :src="item.notificable.meta.user.profile_image ? item.notificable.meta.user.profile_image : 'default.png'"
                   />
                 </v-list-item-avatar>
 
