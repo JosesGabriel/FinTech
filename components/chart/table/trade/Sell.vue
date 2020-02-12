@@ -171,7 +171,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col class="pl-12 mb-6">
+            <v-col class="pl-12 mb-12">
               Peso Value
             </v-col>
             <v-col class="mr-12 font-weight-bold" style="text-align: right;">
@@ -183,21 +183,24 @@
           <v-row no-gutters>
             <v-spacer></v-spacer>
             <v-btn
-              class="text-capitalize mt-2"
+              class="text-capitalize"
               text
               :dark="lightSwitch == true"
               depressed
               @click.stop="showConfirm = false"
               >Cancel</v-btn
             >
-            <v-btn
-              color="success"
-              class="ml-1 mb-6 text-capitalize mt-2 black--text"
-              light
-              @click="confirmSell"
-              @click.stop="showConfirm = false"
-              >Confirm</v-btn
-            >
+
+            <v-hover v-slot:default="{ hover }">
+              <v-btn
+                :dark="lightSwitch == 1"
+                class="black--text font-weight-bold text-capitalize mr-0"
+                :color="!hover ? 'success' : 'successhover'"
+                elevation="1"
+                @click="confirmSell"
+                >Confirm</v-btn
+              >
+            </v-hover>
           </v-row>
         </v-container>
       </v-card>
@@ -558,6 +561,7 @@ export default {
      *
      */
     confirmSell() {
+      this.showConfirm = false;
       const stock_id = this.symbolid;
       let fund_id = this.portvalue;
       let d = new Date();
