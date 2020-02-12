@@ -23,12 +23,12 @@
 
           <v-col cols="10" offset="1" class="text-left mt-12">
             <span
-              class="font-weight-bold body-1"
+              class="font-weight-bold body-2"
               :class="[
                 { 'white--text': lightSwitch == 1 },
                 { 'black--text': lightSwitch == 0 }
               ]"
-              >Didn't received an email? <br />
+              >Didn't receive an email? <br />
               Click resend</span
             >
           </v-col>

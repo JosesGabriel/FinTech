@@ -243,11 +243,11 @@ export default {
           this.registerLoading = false;
           if (response.success) {
             this.setEmail(this.emailAddress);
-            this.$emit("alert", {
-              message: response.message,
-              state: "success",
-              show: true
-            });
+            // this.$emit("alert", {
+            //   message: response.message,
+            //   state: "success",
+            //   show: true
+            // });
             this.$emit("stepper", 4);
           } else {
             this.$emit("alert", { message: response.message, state: "error" });
