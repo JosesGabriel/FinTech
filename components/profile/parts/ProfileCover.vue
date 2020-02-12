@@ -39,8 +39,8 @@
                 class="profile_photo"
                 @mouseenter="overlay = !overlay"
                 @mouseleave="overlay = !overlay"
-                :src="user.profile_image == null ? '/Icon/user-default.svg' : user.profile_image"
-                :lazy-src="user.profile_image == null ? '/Icon/user-default.svg' : user.profile_image"
+                :src="user.profile_image == null ? 'default.png' : user.profile_image"
+                :lazy-src="user.profile_image == null ? 'default.png' : user.profile_image"
               >
                 <v-overlay
                   class="overlayProfile__photo"

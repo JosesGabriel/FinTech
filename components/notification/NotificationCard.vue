@@ -37,7 +37,7 @@ export default {
     profileImage() {
       return this.user.profile_image
         ? this.user.profile_image
-        : "/Icon/user-default.svg";
+        : "default.png";
     }
   },
   methods: {
