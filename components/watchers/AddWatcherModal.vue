@@ -113,7 +113,7 @@ export default {
     stopLossModel: "",
     post__responseMsg: null,
     watchCardModalLoading: false,
-    saveButtonDisable: true
+    saveButtonDisable: false
   }),
   computed: {
     ...mapGetters({
@@ -123,30 +123,6 @@ export default {
     })
   },
   watch: {
-    /**
-     * Detects changes on entry price field and controls whether Save button on watchlist is clickable or not
-     *
-     * @return
-     */
-    entryPriceModel() {
-      this.fieldsWatch();
-    },
-    /**
-     * Detects changes on stop loss field and controls whether Save button on watchlist is clickable or not
-     *
-     * @return
-     */
-    stopLossModel() {
-      this.fieldsWatch();
-    },
-    /**
-     * Detects changes on take profit field and controls whether Save button on watchlist is clickable or not
-     *
-     * @return
-     */
-    takeProfitModel() {
-      this.fieldsWatch();
-    },
     addnewstock() {
       this.dialog = true;
       for (let i = 0; this.stockList.length > i; i++) {
@@ -181,24 +157,6 @@ export default {
           this.stockList = result.data;
         }.bind(this)
       );
-    },
-    /**
-     * controls save button disabled property based on whether user has completely
-     * input on all fields
-     *
-     * @return
-     */
-    fieldsWatch() {
-      if (
-        this.stocksDropdownModel &&
-        (this.entryPriceModel != "" ||
-          this.stopLossModel != "" ||
-          this.takeProfitModel != "")
-      ) {
-        this.saveButtonDisable = false;
-      } else {
-        this.saveButtonDisable = true;
-      }
     },
     /**
      * Fires when user clicks add watch button.
