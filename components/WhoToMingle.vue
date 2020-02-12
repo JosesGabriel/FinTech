@@ -27,7 +27,7 @@
                   :src="
                     suggestedUsersObject[n - 1].profile_image
                       ? suggestedUsersObject[n - 1].profile_image
-                      : 'user_default.png'
+                      : 'default.png'
                   "
                 ></v-img>
               </v-avatar>
