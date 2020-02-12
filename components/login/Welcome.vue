@@ -45,7 +45,7 @@
     </v-card-text>
     <a
       class="float-right secondarytext--text skip__btn font-weight-bold overline"
-      @click="$emit('stepper', 2)"
+      @click="$emit('stepper', 6)"
       >Skip</a
     >
   </v-card>
