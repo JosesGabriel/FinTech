@@ -125,7 +125,7 @@ export default {
 
           // reload for proper component mounting
           setTimeout(() => {
-            window.open("/","_self")
+            window.open("/", "_self");
           }, 800);
         })
         .catch(() => {

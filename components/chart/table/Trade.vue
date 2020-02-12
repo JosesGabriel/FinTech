@@ -60,26 +60,20 @@ export default {
           modal: false
         },
         {
+          id: 6,
+          title: "My Trade",
+          img: "mytrade.svg",
+          show: true,
+          modal: true
+        },
+        {
           id: 3,
           title: "Col Financial",
           img: "col_financial.svg",
           show: true,
           modal: true
         },
-        {
-          id: 4,
-          title: "AAA Equities",
-          img: "aaa_equities.svg",
-          show: true,
-          modal: true
-        },
-        {
-          id: 6,
-          title: "My Trade",
-          img: "mytrade.svg",
-          show: true,
-          modal: true
-        }
+        { id: 2, title: "AB Capital", img: "ab_capital.svg", show: true }
       ],
       itemsBottom: [
         {
@@ -88,14 +82,21 @@ export default {
           img: "papa_securities.svg",
           show: true
         },
-        { id: 2, title: "AB Capital", img: "ab_capital.svg", show: true },
         {
           id: 5,
           title: "HDI Securities",
           img: "hdi_securities.svg",
           show: true
         },
-        { id: 8, title: "", img: "", show: false }
+        { id: 8, title: "", img: "", show: false },
+        { id: 4, title: "", img: "", show: false }
+        /*{
+          id: 4,
+          title: "AAA Equities",
+          img: "aaa_equities.svg",
+          show: true,
+          modal: true
+        }*/
       ]
     };
   },

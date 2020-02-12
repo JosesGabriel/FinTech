@@ -39,8 +39,8 @@
                 class="profile_photo"
                 @mouseenter="overlay = !overlay"
                 @mouseleave="overlay = !overlay"
-                :src="user.profile_image == null ? '/Icon/user-default.svg' : user.profile_image"
-                :lazy-src="user.profile_image == null ? '/Icon/user-default.svg' : user.profile_image"
+                :src="user.profile_image == null ? 'default.png' : user.profile_image"
+                :lazy-src="user.profile_image == null ? 'default.png' : user.profile_image"
               >
                 <v-overlay
                   class="overlayProfile__photo"
@@ -99,32 +99,32 @@
                     filled
                     rounded
                     color="success"
-                    v-show="$auth.user.data.user.username == user.username ? false : follow.im_following == 1 ? false : true"
-                    @click="followAccount($auth.user.data.user.uuid)"
+                    v-show="$auth.user.data.user.username == user.username ? false : follow.im_following == 1 ? false : follow.my_follower == 1 ? false : true"
+                    @click="followAccount(user.uuid, 'follow')"
                     class="black--text caption font-weight-bold body-2 mt-2"
                   >Follow</v-btn>
                   <v-btn
-                    outlined
+                    filled
                     rounded
                     color="success"
-                    v-show="$auth.user.data.user.username == user.username ? false : follow.im_following == 1 ? true : false"
-                    @click="unfollowAccount($auth.user.data.user.uuid)"
-                    class="success--text caption font-weight-bold body-2 mt-2"
+                    v-show="$auth.user.data.user.username == user.username && follow.im_following == 1 && follow.my_follower == 1 ? false : follow.im_following == 1 ? follow.my_follower == 1 ? false : true : false"
+                    @click="unfollowAccount(user.uuid)"
+                    class="black--text caption font-weight-bold body-2 mt-2"
                   >Unfollow</v-btn>
                   <v-btn
                     filled
                     rounded
                     color="success"
-                    v-show="$auth.user.data.user.username == user.username ? false : follow.my_follower == 1 ? true : false"
-                    @click="followAccount($auth.user.data.user.uuid)"
-                    class="black--text font-weight-bold body-2 mt-2"
+                    v-show="$auth.user.data.user.username == user.username && follow.im_following == 1 && follow.my_follower == 1 ? false : follow.my_follower == 1 ? follow.im_following == 1 ? false : true : false"
+                    @click="followAccount(user.uuid, 'followback')"
+                    class="black--text caption font-weight-bold body-2 mt-2"
                   >Follow Back</v-btn>
                   <v-btn
-                    outlined
+                    filled
                     rounded
                     color="success"
                     v-show="$auth.user.data.user.username == user.username ? false : follow.my_follower == 1 && follow.im_following == 1 ? true : false"
-                    class="success--text caption font-weight-bold body-2 mt-2"
+                    class="black--text caption font-weight-bold body-2 mt-2"
                   >Followed</v-btn>
                 </v-row>
               </v-card>
@@ -164,7 +164,19 @@ export default {
     },
     cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
-    }
+    },
+    // showFollow() {
+    //   return this.$auth.user.data.user.username == this.user.username ? false : this.follow.im_following == 1 ? false : this.follow.my_follower == 1 ? false : true
+    // },
+    // shoUnfollowAccount() {
+    //   return this.$auth.user.data.user.username == this.user.username || this.follow.im_following == 1 || this.follow.my_follower == 1 ? false : this.follow.im_following == 1 ? true : false; 
+    // },
+    // showFollowBack() {
+    //   return this.$auth.user.data.user.username == this.user.username || this.follow.im_following == 1 || this.follow.my_follower == 1 ? false : this.follow.my_follower == 1 ? true : false 
+    // },
+    // showFollowed() {
+    //   return this.$auth.user.data.user.username == this.user.username ? false : this.follow.my_follower == 1 && this.follow.im_following == 1 ? true : false
+    // }
   },
   data() {
     return {
@@ -195,22 +207,24 @@ export default {
       this.user = this.settings.data.user;
     },
     userData() {
-      this.assignData();
+      this.user = this.userData;
+      console.log(this.user)
       this.getFollow();
     }
+  },
+  mounted() {
+    console.log(false && true && true)
   },
   methods: {
     ...mapActions({
       setAlert: "global/setAlert"
     }),
-    assignData() {
-      this.user = this.userData;
-    },
     getFollow() {
-      const user_id = this.userData.uuid;
+      const user_id = this.user.uuid;
       this.$api.social.follow.follow(user_id).then(response => {
         if (response.success) {
           this.follow = response.data.user;
+          console.log(this.follow)
         }
       });
     },
@@ -221,7 +235,7 @@ export default {
      *
      * @return
      */
-    followAccount(user_id) {
+    followAccount(user_id, state) {
       const params = user_id;
       this.$api.social.follow
         .followAccount(params)
@@ -235,6 +249,7 @@ export default {
             this.setAlert(alert);
 
             this.follow.im_following = 1;
+            this.follow.im_follower = 1;
           }
         })
         .catch(e => {
@@ -266,7 +281,7 @@ export default {
             };
             this.setAlert(alert);
 
-            this.follow.im_following = 1;
+            this.follow.im_following = 0;
           }
         })
         .catch(e => {

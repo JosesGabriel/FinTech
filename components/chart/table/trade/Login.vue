@@ -25,9 +25,10 @@
             <span class="caption font-weight-bold">{{
               tradeBroker.title
             }}</span>
+            <v-divider class="mt-6" />
           </v-content>
           <v-card-text>
-            <v-row class="ma-0 mt-4">
+            <v-row v-show="false" class="ma-0 mt-4">
               <v-col cols="12 pa-0">
                 <v-text-field
                   v-show="tradeBroker.id != 3"
@@ -82,19 +83,30 @@
                   </span>
                 </v-content>
               </v-col>
-              <v-content class="text-center caption font-weight-bold">
-                <span v-if="[5, 6].includes(tradeBroker.id)"
-                  >We are working to connect this broker with Lyduz. We will let
-                  you know once the connection works are complete and ready for
-                  your trading pleasure.</span
-                >
-                <span v-else>
-                  Help us connect your broker to Lyduz.
-                </span>
-              </v-content>
-              <v-col cols="12 pa-0 text-center">
+            </v-row>
+            <v-row class="ma-0 mt-6">
+              <v-col cols="12" class="pa-0 text-center mb-8">
+                <v-content class="red--text caption font-weight-bold">
+                  <span v-if="[5, 6].includes(tradeBroker.id)"
+                    >We are working to connect this broker with Lyduz.
+                    Preliminary discussions are already done and details of the
+                    connection route are being discussed at the moment to ensure
+                    reliability and security. We will notify you as soon as this
+                    feature is ready.</span
+                  >
+                  <span v-else>
+                    We don’t have a connection yet with your broker. This is
+                    just a preview of how the integration modal will look like
+                    once we are connected.
+                    <br /><br />
+                    Help us connect your broker to Lyduz.
+                  </span>
+                </v-content>
+              </v-col>
+              <v-col cols="12" class="pa-0 text-center">
                 <v-hover v-slot:default="{ hover }">
                   <v-btn
+                    v-show="false"
                     class="mt-10 text-capitalize"
                     rounded
                     block

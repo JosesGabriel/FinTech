@@ -8,7 +8,7 @@
 export function UserNotificationAlertLayout(image, message, post_id) {
 
     if (image == null) {
-        image = '/Icon/user-default.svg'
+        image = 'default.png'
     } else {
         image = image
     }

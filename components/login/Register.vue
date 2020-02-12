@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Providers from "./Providers";
 
 export default {
@@ -204,6 +204,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      setEmail: "login/setEmail"
+    }),
     /**
      * clears all input fields in this component
      *
@@ -239,11 +242,12 @@ export default {
         .then(response => {
           this.registerLoading = false;
           if (response.success) {
-            this.$emit("alert", {
-              message: response.message,
-              state: "success",
-              show: true
-            });
+            this.setEmail(this.emailAddress);
+            // this.$emit("alert", {
+            //   message: response.message,
+            //   state: "success",
+            //   show: true
+            // });
             this.$emit("stepper", 4);
           } else {
             this.$emit("alert", { message: response.message, state: "error" });

@@ -91,6 +91,10 @@
           <v-stepper-content step="5" class="pa-0">
             <ForgotPassword @alert="showAlert" @stepper="changeStep" />
           </v-stepper-content>
+
+          <v-stepper-content step="6" class="pa-0">
+            <ConfirmEmail @alert="showAlert" @stepper="changeStep" />
+          </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
     </v-card>
@@ -103,13 +107,15 @@ import Login from "~/components/login/Login";
 import Register from "~/components/login/Register";
 import Welcome from "~/components/login/Welcome";
 import ForgotPassword from "~/components/login/ForgotPassword";
+import ConfirmEmail from "~/components/login/ConfirmEmail";
 
 export default {
   components: {
     Login,
     Register,
     Welcome,
-    ForgotPassword
+    ForgotPassword,
+    ConfirmEmail
   },
   props: {
     value: Boolean,
@@ -161,7 +167,11 @@ export default {
      */
     show: {
       get() {
-        this.state == 'login' ? this.stepper = 2 : this.state == 'register' ? this.stepper = 3 : ''
+        this.state == "login"
+          ? (this.stepper = 2)
+          : this.state == "register"
+          ? (this.stepper = 3)
+          : "";
         return this.value;
       },
       set(value) {

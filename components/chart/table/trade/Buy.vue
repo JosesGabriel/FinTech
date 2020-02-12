@@ -16,8 +16,26 @@
           item-color="success"
           :dark="lightSwitch == 1"
           :background-color="cardBackground"
+          @mousedown="getPorfolio"
           @change="getFunds"
-        ></v-select>
+        >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardBackground }"
+              class="custom_menu_popup"
+            >
+              <span
+                class="caption pa-2"
+                :class="[
+                  { 'white--text': lightSwitch == 1 },
+                  { 'black--text': lightSwitch == 0 }
+                ]"
+                >{{ data.item.name }}</span
+              >
+            </v-list-item-content>
+          </template>
+        </v-select>
 
         <v-hover v-slot:default="{ hover }">
           <v-btn
@@ -64,7 +82,7 @@
           dense
           readonly
           color="success"
-          :value="this.stock_last"
+          :value="stock_last"
           :dark="lightSwitch == true"
           label="Buy Price"
         ></v-text-field>
@@ -112,7 +130,24 @@
           item-color="success"
           :dark="lightSwitch == 1"
           :background-color="cardBackground"
-        ></v-select>
+        >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardBackground }"
+              class="custom_menu_popup"
+            >
+              <span
+                class="caption pa-2"
+                :class="[
+                  { 'white--text': lightSwitch == 1 },
+                  { 'black--text': lightSwitch == 0 }
+                ]"
+                >{{ data.item }}</span
+              >
+            </v-list-item-content>
+          </template>
+        </v-select>
         <v-select
           v-model="tplan"
           :items="tradeplan"
@@ -125,7 +160,24 @@
           item-color="success"
           :dark="lightSwitch == 1"
           :background-color="cardBackground"
-        ></v-select>
+        >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardBackground }"
+              class="custom_menu_popup"
+            >
+              <span
+                class="caption pa-2"
+                :class="[
+                  { 'white--text': lightSwitch == 1 },
+                  { 'black--text': lightSwitch == 0 }
+                ]"
+                >{{ data.item }}</span
+              >
+            </v-list-item-content>
+          </template>
+        </v-select>
         <v-select
           v-model="emot"
           :items="emotion"
@@ -138,7 +190,24 @@
           item-color="success"
           :dark="lightSwitch == 1"
           :background-color="cardBackground"
-        ></v-select>
+        >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardBackground }"
+              class="custom_menu_popup"
+            >
+              <span
+                class="caption pa-2"
+                :class="[
+                  { 'white--text': lightSwitch == 1 },
+                  { 'black--text': lightSwitch == 0 }
+                ]"
+                >{{ data.item }}</span
+              >
+            </v-list-item-content>
+          </template>
+        </v-select>
       </v-content>
     </v-col>
 
@@ -158,6 +227,7 @@
         <v-btn
           class="ml-11 text-capitalize"
           text
+          depressed
           :dark="lightSwitch == true"
           dense
           @click="setShowBrokers(true)"
@@ -383,7 +453,7 @@
                   <span>Quantity:</span>
                 </v-col>
                 <v-col cols="6" class="pa-0 text-right font-weight-bold">
-                  <span>{{ quantity }}</span>
+                  <span>{{ quantity.toFixed(2) }}</span>
                 </v-col>
                 <v-col cols="6" class="pa-0">
                   <span>Total Cost:</span>
@@ -514,7 +584,7 @@ export default {
      * @return
      */
     cardBackground: function() {
-      return this.lightSwitch == 0 ? "#f2f2f2" : "#0c1a2b";
+      return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
   props: {
@@ -540,8 +610,6 @@ export default {
       this.quantity = 0;
     },
     selectedButton(value) {
-      console.log("selected value");
-      console.log(value);
       this.quickConfirmV2();
     }
   },
@@ -551,8 +619,25 @@ export default {
   },
   methods: {
     ...mapActions({
-      setShowBrokers: "chart/setShowBrokers"
+      setShowBrokers: "chart/setShowBrokers",
+      setAlert: "global/setAlert"
     }),
+    /**
+     * Fires global snackbar alert
+     *
+     * @param   {String}  message
+     * @param   {Boolean}  true or false
+     *
+     * @return
+     */
+    showAlert({ message, state }) {
+      let alert = {
+        model: true,
+        state: state,
+        message: message
+      };
+      this.setAlert(alert);
+    },
     getSelectedButton(id) {
       if (id == 3) {
         //this.saveCustom = !this.saveCustom;
@@ -564,6 +649,8 @@ export default {
      * @return  {array}  list of portfolios
      */
     getPorfolio() {
+      this.portfolio = [];
+      this.getBalance = [];
       this.$api.journal.portfolio.portfolio().then(
         function(result) {
           let defaultPort = false;
@@ -727,7 +814,10 @@ export default {
         .tradebuy(fund_id, stock_id, buyparams)
         .then(response => {
           if (response.success) {
-            console.log("Buy Success");
+            this.showAlert({
+              message: "Trade was successfully made!",
+              state: true
+            });
             this.quantity = 0;
             this.portvalue = "";
             this.notes = "";

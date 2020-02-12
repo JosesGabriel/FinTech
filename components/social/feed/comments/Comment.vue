@@ -6,7 +6,7 @@
       size="32"
       @click="$router.push('/profile/' + comment.user.username)"
     >
-      <v-img
+      <img
         :src="
           comment.user.profile_image
             ? comment.user.profile_image
@@ -14,7 +14,7 @@
         "
         :alt="comment.user.name"
         class="avatar__border"
-      ></v-img>
+      />
     </v-list-item-avatar>
     <v-text-field
       v-if="editModeToggle"
@@ -118,12 +118,11 @@
         <v-list-item-content class="pt-0 mb-0">
           <template v-if="userTagMode" slot="item" slot-scope="s">
             <v-avatar size="22" @click="clickUserSuggestion(s)">
-              <v-img
+              <img
                 :src="
                   s.item.profile_image ? s.item.profile_image : 'default.png'
                 "
-              >
-              </v-img>
+              />
             </v-avatar>
             <span
               class="pl-2"
