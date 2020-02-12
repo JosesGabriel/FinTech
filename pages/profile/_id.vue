@@ -34,6 +34,9 @@ export default {
       this.$api.social.user.users(params).then(({ data }) => {
         this.user = data.user;
         this.profile = data.profile;
+        
+        // console.log(this.$route.params.id)
+        // console.log(data)
       });
     }
   }

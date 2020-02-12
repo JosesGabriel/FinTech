@@ -140,9 +140,9 @@ export default {
           dropShadow: {
             enabled: true,
             opacity: 0.3,
-            blur: 2,
-            left: 3,
-            top: 4
+            blur: 1,
+            left: 0,
+            top: 2
           }
         },
         colors: ["#F44336"],

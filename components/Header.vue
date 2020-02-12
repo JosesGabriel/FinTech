@@ -271,6 +271,7 @@ export default {
     document.addEventListener("click", this.close);
 
     this.getNotification();
+    console.log(this.$auth)
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
@@ -368,7 +369,7 @@ export default {
        *
        * @return  {object}  returns objects
        */
-      if (this.$auth.user != null) {
+      if (typeof this.$auth != 'undefined' && this.$auth.user != null) {
         const evtSource = new EventSource(
           `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${sseToken}`
         );
