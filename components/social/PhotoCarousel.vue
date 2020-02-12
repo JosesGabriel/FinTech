@@ -2,13 +2,18 @@
   <v-container class="pa-0">
     <v-row v-if="images.length == 1">
       <v-col cols="12" class="pa-0 pr-1">
-        <v-img
+        <!--  :style="'background-image: url(' + '' + images[0]['url'] + ')'" -->
+        <div
           v-if="mediaTypeCheck(images[0]['url'])"
-          position="top"
-          :src="images[0]['url']"
-          max-height="500"
-          @click="showCarousel"
-        />
+          class="newsfeed__imageWrapper"
+        >
+          <img
+            class="newsfeed__image"
+            position="top"
+            :src="images[0]['url']"
+            @click="showCarousel"
+          />
+        </div>
         <video
           v-else
           class="fullWidth"
@@ -123,6 +128,13 @@
 }
 .fullWidth {
   width: 100%;
+}
+.newsfeed__image {
+  width: 100%;
+  height: auto;
+}
+.newsfeed__imageWrapper {
+  max-height: 500px;
 }
 </style>
 <script>
