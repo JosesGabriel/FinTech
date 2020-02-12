@@ -130,7 +130,8 @@
   width: 100%;
 }
 .newsfeed__image {
-  width: 100%;
+  width: 101%;
+  padding: 13px;
   height: auto;
 }
 .newsfeed__imageWrapper {
