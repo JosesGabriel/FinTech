@@ -583,11 +583,7 @@ export default {
         this.buyPrice != 0 &&
         this.buyQuantity != 0 &&
         this.sellPrice != 0 &&
-        this.sellQuantity != 0 &&
-        this.strategyModel != null &&
-        this.tradeplanModel != null &&
-        this.emotionsModel != null &&
-        this.notesModel != ""
+        this.sellQuantity != 0
       ) {
         this.confirmFinalBtn = false;
       } else {

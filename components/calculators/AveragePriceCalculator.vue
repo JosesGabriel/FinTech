@@ -96,6 +96,7 @@
           <v-icon
             :style="{ color: toggleFontColor }"
             class="addButton"
+            :disabled="price == '' || pos == '' ? true : false"
             @click="
               positionKey++;
               position.push(pos);

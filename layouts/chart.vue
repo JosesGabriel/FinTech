@@ -5,6 +5,14 @@
     <div class="spacer__content"></div>
 
     <vue-snotify></vue-snotify>
+    <v-snackbar
+      v-model="alert.model"
+      :color="alert.state ? 'success' : 'error'"
+    >
+      {{ alert.message }}
+      <v-btn color="white" text @click="alert.model = false">Close</v-btn>
+    </v-snackbar>
+
     <div class="content__main">
       <div class="content__left">
         <!-- ticker -->
@@ -77,7 +85,9 @@ export default {
       lightSwitch: "global/getLightSwitch",
       sse: "chart/sse",
       symbolid: "chart/symbolid",
-      notification: "global/getNotification"
+      notification: "global/getNotification",
+      alert: "global/getAlert"
+      //   alertDialog: "global/getAlertDialog"
     }),
     /**
      * toggle between ligth/dark mode
@@ -235,4 +245,24 @@ export default {
 .right_dark_mode {
   border-left: 1px solid #172431 !important;
 }
+
+/* alert dialog */
+/* .alertDialog {
+  box-shadow: none;
+}
+.alertDialog__title {
+  padding-top: 50px !important;
+}
+.alertDialog__icon--wrapper {
+  padding: 0 125px;
+}
+.alertDialog__icon {
+  background-color: #142530;
+  font-size: 50px !important;
+  padding: 10px;
+  border-radius: 50px;
+  position: relative;
+  top: 40px;
+  z-index: 1;
+} */
 </style>
