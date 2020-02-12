@@ -368,7 +368,7 @@ export default {
        *
        * @return  {object}  returns objects
        */
-      if (this.$auth.user != null) {
+      if (typeof this.$auth != 'undefined' && this.$auth.user != null) {
         const evtSource = new EventSource(
           `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${sseToken}`
         );
@@ -377,7 +377,6 @@ export default {
 
         userNotificationList.forEach(eventName => {
           evtSource.addEventListener(eventName, e => {
-            console.log("test");
             this.notificationHandler(eventName, JSON.parse(e.data));
           });
         });

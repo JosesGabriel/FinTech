@@ -3,14 +3,13 @@
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <rbHeader :ticks="ticks" class="header__container" />
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
-        <div v-show="showLamp">
+        <div v-show="showLamp" class="lampBtn">
+          <!-- :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'" -->
+          <img :src="lampMode" @click="lampSwitch" />
           <img
-            v-show="
-              whiteMode == '/login/' || whiteMode == '/login' ? true : false
-            "
-            :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'"
-            :src="lampMode"
-            @click="lampSwitch"
+            :class="lightSwitch == 1 ? 'd-none' : ''"
+            class="lightRays_img"
+            src="/Lamp-LightRays.svg"
           />
         </div>
         <nuxt />
@@ -147,7 +146,6 @@ export default {
     this.$nextTick(() => {
       this.ticks = 2;
     });
-    this.whiteMode = window.location.pathname;
 
     this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
     // this.showAnnouncements();
@@ -163,7 +161,7 @@ export default {
 
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
-    },
+    }
     // showAnnouncements() {
     //   this.$snotify.html(this.allNotificationAlertLayout(), {
     //     timeout: 100000000,
@@ -222,19 +220,19 @@ export default {
 .header__container {
   position: relative;
 }
-.lampDark__btn {
+.lampBtn {
   z-index: 100;
   position: absolute;
   width: 8%;
   top: 0;
   right: 340px;
 }
-.lampLight__btn {
-  z-index: 100;
-  position: absolute;
-  width: 44%;
-  top: 0;
-  right: 131px;
+.lightRays_img {
+  position: relative;
+  z-index: 9999;
+  width: 350px;
+  right: 129px;
+  top: -18px;
 }
 .componentContainer {
   position: relative;

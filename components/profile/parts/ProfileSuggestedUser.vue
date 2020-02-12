@@ -7,7 +7,7 @@
       <v-list>
         <v-list-item v-for="item in items" :key="item.title" @click>
           <v-list-item-avatar class="mr-3" size="35">
-            <img src="/Icon/user-default.svg" />
+            <img src="default.png" />
           </v-list-item-avatar>
 
           <v-list-item-content class="py-2">
