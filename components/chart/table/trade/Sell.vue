@@ -17,7 +17,24 @@
           :dark="lightSwitch == 1"
           :background-color="cardBackground"
           @change="getFunds"
-        ></v-select>
+        >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardBackground }"
+              class="custom_menu_popup"
+            >
+              <span
+                class="caption pa-2"
+                :class="[
+                  { 'white--text': lightSwitch == 1 },
+                  { 'black--text': lightSwitch == 0 }
+                ]"
+                >{{ data.item.name }}</span
+              >
+            </v-list-item-content>
+          </template>
+        </v-select>
 
         <v-hover v-slot:default="{ hover }">
           <v-btn
@@ -76,10 +93,10 @@
             ></v-text-field>
           </v-col>
           <v-col cols="4" class="mx-0 mb-0 px-0 pb-0">
-            <v-btn text icon @click="minusButton">
+            <v-btn text icon :dark="lightSwitch == true" @click="minusButton">
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
-            <v-btn text icon @click="addButton">
+            <v-btn text icon :dark="lightSwitch == true" @click="addButton">
               <v-icon>mdi-chevron-up</v-icon>
             </v-btn>
           </v-col>
@@ -98,25 +115,24 @@
         <v-btn
           class="ml-11 text-capitalize"
           text
+          depressed
           :dark="lightSwitch == true"
           dense
           @click="setShowBrokers(true)"
         >
           Cancel
         </v-btn>
-        <v-btn
-          :dark="lightSwitch == 1"
-          class="text-capitalize mr-0"
-          :disabled="
-            this.portfolio.length != 0 &&
-            this.portvalue != '' &&
-            this.quantity > 0
-              ? false
-              : true
-          "
-          @click="showConfirm = true"
-          >Continue</v-btn
-        >
+        <v-hover v-slot:default="{ hover }">
+          <v-btn
+            :dark="lightSwitch == 1"
+            class="black--text font-weight-bold text-capitalize mr-0"
+            :color="!hover ? 'success' : 'successhover'"
+            elevation="1"
+            :disabled="portvalue && quantity > 0 ? false : true"
+            @click="(showConfirm = true), (quickTradeSelected = false)"
+            >Continue</v-btn
+          >
+        </v-hover>
       </v-content>
     </v-col>
     <v-dialog v-model="showConfirm" max-width="330px">
@@ -170,7 +186,7 @@
               class="text-capitalize mt-2"
               text
               :dark="lightSwitch == true"
-              light
+              depressed
               @click.stop="showConfirm = false"
               >Cancel</v-btn
             >
@@ -314,7 +330,14 @@ export default {
     realized: 0,
     capital: 0,
     setting_val: 0,
-    equity: 0
+    equity: 0,
+    selectedButton: null,
+    items: [
+      { id: 1, text: "10%" },
+      { id: 2, text: "30%" },
+      { id: 3, text: "Custom" }
+    ],
+    customPercentage: 0
   }),
   computed: {
     ...mapGetters({
@@ -345,8 +368,25 @@ export default {
   },
   methods: {
     ...mapActions({
-      setShowBrokers: "chart/setShowBrokers"
+      setShowBrokers: "chart/setShowBrokers",
+      setAlert: "global/setAlert"
     }),
+    /**
+     * Fires global snackbar alert
+     *
+     * @param   {String}  message
+     * @param   {Boolean}  true or false
+     *
+     * @return
+     */
+    showAlert({ message, state }) {
+      let alert = {
+        model: true,
+        state: state,
+        message: message
+      };
+      this.setAlert(alert);
+    },
     /**
      * Get Board Lot value
      *
@@ -542,7 +582,10 @@ export default {
         .tradesell(fund_id, stock_id, sellparams)
         .then(response => {
           if (response.success) {
-            console.log("Sell Success");
+            this.showAlert({
+              message: "Trade was successfully made!",
+              state: true
+            });
             this.quantity = 0;
             this.portvalue = "";
           }
