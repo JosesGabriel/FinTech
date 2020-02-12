@@ -16,6 +16,7 @@
           item-color="success"
           :dark="lightSwitch == 1"
           :background-color="cardBackground"
+          @mousedown="getPorfolio"
           @change="getFunds"
         >
           <template slot="item" slot-scope="data">
@@ -648,6 +649,8 @@ export default {
      * @return  {array}  list of portfolios
      */
     getPorfolio() {
+      this.portfolio = [];
+      this.getBalance = [];
       this.$api.journal.portfolio.portfolio().then(
         function(result) {
           let defaultPort = false;

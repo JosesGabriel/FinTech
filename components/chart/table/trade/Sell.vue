@@ -16,6 +16,7 @@
           item-color="success"
           :dark="lightSwitch == 1"
           :background-color="cardBackground"
+          @mousedown="getPorfolio"
           @change="getFunds"
         >
           <template slot="item" slot-scope="data">
@@ -298,8 +299,7 @@
             <v-btn
               class="text-capitalize mt-2"
               :dark="lightSwitch == true"
-              @click.stop="modalQuickTrade = false"
-              @click="quickConfirm"
+              @click="modalQuickTrade = false"
               >Save</v-btn
             >
           </v-row>
