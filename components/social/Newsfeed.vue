@@ -321,14 +321,14 @@
           class="no-transform"
         >
           <v-list-item-avatar size="28" class="mr-2">
-            <v-img
+            <img
               class="avatar__border"
               :src="
                 $auth.user.data.user.profile_image
                   ? $auth.user.data.user.profile_image
                   : 'default.png'
               "
-            ></v-img>
+            />
           </v-list-item-avatar>
         </router-link>
         <v-list-item-content class="pt-2 mb-0">
@@ -618,6 +618,7 @@ export default {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
+            console.log(response);
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval

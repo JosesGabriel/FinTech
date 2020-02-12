@@ -22,7 +22,11 @@
       <template v-slot:default>
         <thead>
           <tr class="ma-0 pb-1">
-            <th class="text-left" style="padding-bottom: 6px !important;"></th>
+            <th 
+            class="text-left j_header" @click="sortArray('broker_code')" 
+            style="padding-bottom: 6px !important;font-size: 12px;font-weight: bold;"
+            >
+              Broker</th>
             <th
               colspan="4"
               class="text-left j_header"
@@ -76,7 +80,7 @@
               class="text-left j_header secondary_color pt-2"
               @click="sortArray('broker_code')"
             >
-              Broker
+              
             </th>
             <th
               class="text-center j_header secondary_color pt-2"
@@ -126,6 +130,7 @@
                 {{ item.broker_description }}
               </div>
             </td>
+             
             <td class="text-right">{{ addcomma(item.buy_volume) }}</td>
             <td
               :class="

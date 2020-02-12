@@ -7,32 +7,41 @@
     :loading="loader"
   >
     <div class="pa-0 pl-2">
-      <div class="body-2 font-weight-black pl-2 pb-2">Suggested Connections</div>
+      <div class="body-2 font-weight-black pl-2 pb-2">
+        Suggested Connections
+      </div>
       <v-divider></v-divider>
       <v-list class="transparent">
-        <v-list-item v-for="n in suggestedUsersObject.length" :key="n" class="px-0 mb-2">
+        <v-list-item
+          v-for="n in suggestedUsersObject.length"
+          :key="n"
+          class="px-0 mb-2"
+        >
           <div>
             <router-link
-              :to="'/profile/'+ suggestedUsersObject[n - 1].username"
+              :to="'/profile/' + suggestedUsersObject[n - 1].username"
               class="no-transform"
             >
               <v-avatar class="mr-2" color="grey" size="35">
                 <v-img
                   :src="
-                  suggestedUsersObject[n - 1].profile_image
-                    ? suggestedUsersObject[n - 1].profile_image
-                    : 'user_default.png'
-                "
+                    suggestedUsersObject[n - 1].profile_image
+                      ? suggestedUsersObject[n - 1].profile_image
+                      : 'default.png'
+                  "
                 ></v-img>
               </v-avatar>
             </router-link>
           </div>
           <div class="no-wrap caption">
             <router-link
-              :to="'/profile/'+ suggestedUsersObject[n - 1].username"
+              :to="'/profile/' + suggestedUsersObject[n - 1].username"
               class="no-transform"
             >
-              <span class="font-weight-medium" :class="lightSwitch == 1 ? 'white--text' : 'black--text'">
+              <span
+                class="font-weight-medium"
+                :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+              >
                 {{ suggestedUsersObject[n - 1].first_name }}
                 {{ suggestedUsersObject[n - 1].last_name }}
               </span>
@@ -55,7 +64,8 @@
               rounded
               class="no-transform font-weight-bold black--text"
               @click="followAccount(suggestedUsersObject[n - 1].id)"
-            >Follow</v-btn>
+              >Follow</v-btn
+            >
           </div>
         </v-list-item>
       </v-list>
@@ -115,6 +125,7 @@ export default {
         .followAccount(params)
         .then(response => {
           if (response.success) {
+            this.getSuggestedUsers();
             let alert = {
               model: true,
               state: true,
