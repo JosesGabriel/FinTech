@@ -16,8 +16,24 @@
         ></v-text-field>
       </v-col>
       <v-spacer></v-spacer>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Week</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('day')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Day</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('week')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Week</v-btn>
       <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
       <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
       <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
@@ -197,6 +213,7 @@ export default {
         { text: "", value: "action", sortable: false, align: "right" }
       ],
       tradeLogs: [],
+      filter: [],
       page: 1,
       pageCount: 0,
       menuShow: false,
@@ -285,6 +302,39 @@ export default {
       };
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
+    },
+    filterDate(str) {
+      const now = new Date();
+      //day filter
+      const d = new Date().getDate();
+      //week filter
+      const fweek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const dayWeek = fweek.getDate();
+      const monthWeek = fweek.getMonth() + 1;
+
+      this.filter = this.tradeLogs;
+      this.tradeLogs = [];
+      let num = 0;
+
+      for (let i = 0; i < this.filter.length; i++) {
+        let fil_date = this.filter[i].meta.date.split(" ")[0];
+        let month = fil_date.split("-")[1];
+        let year = fil_date.split("-")[0];
+        let today = fil_date.split("-")[2];
+
+        if (str == "day" && d == today) {
+          this.tradeLogs.push(this.filter[i]);
+        } else if (str == "week" && today >= dayWeek && month == monthWeek) {
+          this.tradeLogs.push(this.filter[i]);
+          console.log(this.tradeLogs);
+        }
+        // console.log(fil_date, 'fil_date')
+        // console.log(today, 'today')
+        // console.log(month, 'month')
+        // console.log(year, 'year')
+      }
+      // console.log(d);
+      // console.log(filter);
     },
     /**
      * passing credentials of each item to be deleted to this.itemDetails (to props)

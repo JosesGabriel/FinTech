@@ -24,5 +24,8 @@ export default {
     },
     SET_SETTINGS(state, data) {
         state.settings = data;
+    },
+    SET_MARKALL(state, data) {
+        state.markAll = data;
     }
 };
