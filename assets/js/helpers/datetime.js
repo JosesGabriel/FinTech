@@ -26,7 +26,7 @@ export function AddTime(inputDateTime, added, unit, format = 'YYYY-MM-DD HH:mm:s
         default:
             return null // cannot parse
     }
-    
+
     return time.format(format)
 }
 
@@ -84,6 +84,12 @@ function formatter(datetime, format) {
     switch (format) {
         case 'fn':
             datetime = datetime.fromNow() // result will be '31 minutes ago'
+            break;
+        case 'fs':
+            datetime = datetime.format('MMMM DD, YYYY') // result will be 'February 12, 2020'
+            break;
+        case 'unix':
+            datetime = datetime.unix() // result will be 'February 12, 2020'
             break;
         default:
             datetime = datetime.format(format) // result will be desired format

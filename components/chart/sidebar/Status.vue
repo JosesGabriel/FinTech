@@ -13,7 +13,7 @@
             <td class="tleft__label">Previous</td>
             <td class="tleft__column">
               <span id="stock__close">
-                {{ stock.close | numeralDecimal }}
+                {{ stock.close | stockDecimalPriceScale(stock.pricescale) }}
               </span>
             </td>
           </tr>
@@ -27,7 +27,7 @@
               }"
             >
               <span id="stock__low">
-                {{ stock.low | numeralDecimal }}
+                {{ stock.low | stockDecimalPriceScale(stock.pricescale) }}
               </span>
             </td>
           </tr>
@@ -41,7 +41,9 @@
               }"
             >
               <span id="stock__weekyearlow">
-                {{ stock.weekyearlow | numeralDecimal }}
+                {{
+                  stock.weekyearlow | stockDecimalPriceScale(stock.pricescale)
+                }}
               </span>
             </td>
           </tr>
@@ -81,7 +83,7 @@
               }"
             >
               <span id="stock__open">
-                {{ stock.open | numeralDecimal }}
+                {{ stock.open | stockDecimalPriceScale(stock.pricescale) }}
               </span>
             </td>
           </tr>
@@ -95,7 +97,7 @@
               }"
             >
               <span id="stock__high">
-                {{ stock.high | numeralDecimal }}
+                {{ stock.high | stockDecimalPriceScale(stock.pricescale) }}
               </span>
             </td>
           </tr>
@@ -109,7 +111,9 @@
               }"
             >
               <span id="stock__weekyearhigh">
-                {{ stock.weekyearhigh | numeralDecimal }}
+                {{
+                  stock.weekyearhigh | stockDecimalPriceScale(stock.pricescale)
+                }}
               </span>
             </td>
           </tr>
@@ -131,7 +135,7 @@
               }"
             >
               <span id="stock__average">
-                {{ stock.average | numeralDecimal }}
+                {{ stock.average | stockDecimalPriceScale(stock.pricescale) }}
               </span>
             </td>
           </tr>
