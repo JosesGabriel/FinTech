@@ -2,7 +2,11 @@
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <rbHeader :ticks="ticks" class="header__container" />
-      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
+      <v-container
+        v-show="$device.isMobileOrTablet"
+        :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+        class="componentContainer"
+      >
         <div v-show="showLamp" class="lampBtn">
           <!-- :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'" -->
           <img :src="lampMode" @click="lampSwitch" />
@@ -14,7 +18,10 @@
         </div>
         <nuxt />
       </v-container>
-      <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
+      <v-snackbar
+        v-model="alert.model"
+        :color="alert.state ? 'success' : 'error'"
+      >
         {{ alert.message }}
         <v-btn color="white" text @click="alert.model = false">Close</v-btn>
       </v-snackbar>
@@ -27,22 +34,24 @@
         :dark="lightSwitch == 0 ? false : true"
       >
         <div class="d-grid alertDialog__icon--wrapper">
-          <v-icon class="alertDialog__icon" x-large color="success">mdi-check</v-icon>
+          <v-icon class="alertDialog__icon" x-large color="success"
+            >mdi-check</v-icon
+          >
         </div>
         <v-card class="alertDialog__card">
           <v-card-title
             class="headline text-center d-block success--text alertDialog__title"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-          >{{ alertDialog.header }}</v-card-title>
+            >{{ alertDialog.header }}</v-card-title
+          >
 
           <v-card-text
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-          >{{ alertDialog.body }}</v-card-text>
+            >{{ alertDialog.body }}</v-card-text
+          >
           <v-card-text class="text-center">
-            {{
-            alertDialog.subtext
-            }}
+            {{ alertDialog.subtext }}
           </v-card-text>
         </v-card>
       </v-dialog>
