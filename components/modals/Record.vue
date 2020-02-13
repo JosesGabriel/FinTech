@@ -1,13 +1,13 @@
 <template>
   <v-dialog v-model="show" max-width="320px">
-    <v-card :dark="lightSwitch == true">
+    <v-card :dark="lightSwitch == 1 ? true : false">
       <v-card-title
         class="text-left justify-left pa-3 px-5 success--text text-uppercase subtitle-1 font-weight-bold"
       >Record a Trade</v-card-title>
       <v-container class="px-5">
         <v-row no-gutters>
           <v-col cols="12" xs="12" md="12">
-            <v-stepper id="stepper_container" v-model="e1" dark>
+            <v-stepper id="stepper_container" v-model="e1" :dark="lightSwitch == 1 ? true : false">
               <v-stepper-items>
                 <!-- Buy Record -->
                 <v-stepper-content step="1" class="pt-2 pa-1">
@@ -15,36 +15,30 @@
                     ref="buyMenu"
                     v-model="buyMenu"
                     :close-on-content-click="false"
-                    :return-value.sync="buyDate"
                     transition="scale-transition"
+                    offset-y
                     min-width="290px"
-                    :dark="lightSwitch == true"
-                    light
+                    :dark="lightSwitch == 1 ? true : false"
+                    :menu-props="{ dark: lightSwitch == 0 ? true : false }"
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="buyDate"
+                        :value="dateBuyFormatted"
                         label="Date"
+                        color="success"
+                        class="body-2"
                         readonly
                         v-on="on"
-                        :dark="lightSwitch == true"
-                        light
-                        color="success"
+                        :dark="lightSwitch == 1 ? true : false"
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      color="success"
-                      :style="{ background: cardbackground }"
                       v-model="buyDate"
+                      :dark="lightSwitch == 1 ? true : false"
+                      @input="buyMenu = false"
                       no-title
-                      scrollable
-                      :dark="lightSwitch == true"
-                      light
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="secondary" @click="buyMenu = false">Cancel</v-btn>
-                      <v-btn text color="success" @click="$refs.buyMenu.save(buyDate)">OK</v-btn>
-                    </v-date-picker>
+                      color="success darken-1"
+                    ></v-date-picker>
                   </v-menu>
                   <v-autocomplete
                     v-model="selectStockModel"
@@ -59,14 +53,14 @@
                     label="Select a Stock"
                     color="success"
                     dense
-                    :dark="lightSwitch == true"
+                    :dark="lightSwitch == 1 ? true : false"
                     light
                     flat
-                    :menu-props="{offsetY: true, dark: lightSwitch == true}"
+                    :menu-props="{offsetY: true, dark: lightSwitch == 1 ? true : false}"
                   >
                     <template slot="item" slot-scope="data">
                       <v-list-item-content
-                        :dark="lightSwitch == true"
+                        :dark="lightSwitch == 1 ? true : false"
                         :style="{ background: cardbackground }"
                         style="padding: 12px 12px; margin: -16px;"
                       >
@@ -78,7 +72,7 @@
                     label="Buy Price"
                     placeholder="Enter Buy Price"
                     color="success"
-                    :dark="lightSwitch == true"
+                    :dark="lightSwitch == 1 ? true : false"
                     light
                     v-model="buyPrice"
                     type="number"
@@ -88,13 +82,16 @@
                     label="Quantity"
                     placeholder="Enter Quantity"
                     color="success"
-                    :dark="lightSwitch == true"
+                    :dark="lightSwitch == 1 ? true : false"
                     light
                     type="number"
                     v-model="buyQuantity"
                     class="body-2 buy_selector quantity-input py-3"
                   ></v-text-field>
-                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
+                  <v-row
+                    no-gutters
+                    :class="lightSwitch == 1 ? 'secondary--text' : 'tertiary--text'"
+                  >
                     <v-card-title class="caption pa-0">Total Cost:</v-card-title>
                     <v-spacer></v-spacer>
                     <v-card-title class="caption pa-0">{{ buyResult }}</v-card-title>
@@ -103,7 +100,7 @@
                     <v-spacer></v-spacer>
                     <v-btn
                       :color="lightSwitch == 1 ? 'secondary' : 'gray'"
-                      class="text-capitalize black--text ml-1"
+                      class="text-capitalize ml-1"
                       :dark="lightSwitch == 1 ? true : false"
                       text
                       @click.stop="show = false"
@@ -111,7 +108,6 @@
                     <v-btn
                       color="success"
                       class="text-capitalize black--text ml-1"
-                      light
                       :disabled="buyContinueBtn"
                       @click="e1 = 2"
                     >Continue</v-btn>
@@ -123,43 +119,37 @@
                     ref="sellMenu"
                     v-model="sellMenu"
                     :close-on-content-click="false"
-                    :return-value.sync="sellDate"
                     transition="scale-transition"
-                    :dark="lightSwitch == true"
-                    light
+                    offset-y
                     min-width="290px"
+                    :dark="lightSwitch == 1 ? true : false"
+                    :menu-props="{ dark: lightSwitch == 0 ? true : false }"
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="sellDate"
+                        :value="dateSellFormatted"
                         label="Date"
+                        color="success"
+                        class="body-2"
                         readonly
                         v-on="on"
-                        :dark="lightSwitch == true"
-                        light
-                        color="success"
+                        :dark="lightSwitch == 1 ? true : false"
                       ></v-text-field>
                     </template>
                     <v-date-picker
                       v-model="sellDate"
+                      :dark="lightSwitch == 1 ? true : false"
+                      @input="sellMenu = false"
                       no-title
-                      scrollable
-                      :style="{ background: cardbackground }"
-                      color="success"
-                      :dark="lightSwitch == true"
-                      light
-                    >
-                      <v-spacer></v-spacer>
-                      <v-btn text color="secondary" @click="sellMenu = false">Cancel</v-btn>
-                      <v-btn text color="success" @click="$refs.sellMenu.save(sellDate)">OK</v-btn>
-                    </v-date-picker>
+                      :min="buyDate"
+                      color="success darken-1"
+                    ></v-date-picker>
                   </v-menu>
                   <v-text-field
                     label="Sell Price"
                     placeholder="Enter Sell Price"
                     color="success"
-                    :dark="lightSwitch == true"
-                    light
+                    :dark="lightSwitch == 1 ? true : false"
                     min="0"
                     type="number"
                     v-model="sellPrice"
@@ -169,22 +159,27 @@
                     label="Quantity"
                     placeholder="Enter Quantity"
                     color="success"
-                    :dark="lightSwitch == true"
-                    light
+                    :dark="lightSwitch == 1 ? true : false"
                     type="number"
                     v-model="sellQuantity"
                     readonly
                     class="body-2 buy_selector quantity-input py-3"
                   ></v-text-field>
-                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
-                    <v-card-title class="caption pa-0 secondary--text">Total Cost:</v-card-title>
+                  <v-row
+                    no-gutters
+                    :class="lightSwitch == 1 ? 'secondary--text' : 'tertiary--text'"
+                  >
+                    <v-card-title class="caption pa-0">Total Cost:</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="caption pa-0 secondary--text">{{ sellResult }}</v-card-title>
+                    <v-card-title class="caption pa-0">{{ sellResult }}</v-card-title>
                   </v-row>
-                  <v-row no-gutters :class="lightSwitch == 1 ? 'secondary--text' : 'black--text'">
-                    <v-card-title class="caption pa-0 secondary--text">Profit/Loss:</v-card-title>
+                  <v-row
+                    no-gutters
+                    :class="lightSwitch == 1 ? 'secondary--text' : 'tertiary--text'"
+                  >
+                    <v-card-title class="caption pa-0">Profit/Loss:</v-card-title>
                     <v-spacer></v-spacer>
-                    <v-card-title class="caption pa-0 secondary--text">
+                    <v-card-title class="caption pa-0">
                       <span
                         :class=" profitlossNumber > 0 ? 'positive' : profitlossNumber < 0 ? 'negative' : 'neutral' "
                       >₱{{ profitloss }}</span>
@@ -193,17 +188,15 @@
                   <v-row class="mt-4" no-gutters>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="secondary"
-                      class="text-capitalize black--text ml-1"
-                      :dark="lightSwitch == true"
-                      light
+                      :color="lightSwitch == 1 ? 'secondary' : 'gray'"
+                      class="text-capitalize ml-1"
+                      :dark="lightSwitch == 1 ? true : false"
                       text
                       @click="e1 = 1"
                     >Back</v-btn>
                     <v-btn
                       color="success"
                       class="text-capitalize black--text ml-1"
-                      light
                       :disabled="sellContinueBtn"
                       @click="e1 = 3"
                     >Continue</v-btn>
@@ -216,18 +209,18 @@
                       <v-select
                         v-model="strategyModel"
                         item-color="success"
+                        color="success"
+                        dense
                         append-icon="mdi-chevron-down"
                         class="py-2 body-2"
-                        :items="strategy"
                         label="Select Strategy"
-                        :dark="lightSwitch == true"
-                        :menu-props="{offsetY: true, dark: lightSwitch == true}"
-                        light
-                        dense
+                        :items="strategy"
+                        :dark="lightSwitch == 1 ? true : false"
+                        :menu-props="{offsetY: true, dark: lightSwitch == 1 ? true : false}"
                       >
                         <template slot="item" slot-scope="data">
                           <v-list-item-content
-                            :dark="lightSwitch == true"
+                            :dark="lightSwitch == 1 ? true : false"
                             :style="{ background: cardbackground }"
                             style="padding: 12px 12px; margin: -16px;"
                           >
@@ -240,18 +233,18 @@
                       <v-select
                         v-model="tradeplanModel"
                         item-color="success"
+                        color="success"
+                        dense
                         append-icon="mdi-chevron-down"
                         class="py-2 body-2"
-                        :items="tradeplan"
                         label="Select Trade Plan"
-                        :dark="lightSwitch == true"
-                        :menu-props="{offsetY: true, dark: lightSwitch == true}"
-                        light
-                        dense
+                        :items="tradeplan"
+                        :dark="lightSwitch == 1 ? true : false"
+                        :menu-props="{offsetY: true, dark: lightSwitch == 1 ? true : false}"
                       >
                         <template slot="item" slot-scope="data">
                           <v-list-item-content
-                            :dark="lightSwitch == true"
+                            :dark="lightSwitch == 1 ? true : false"
                             :style="{ background: cardbackground }"
                             style="padding: 12px 12px; margin: -16px;"
                           >
@@ -264,18 +257,18 @@
                       <v-select
                         v-model="emotionsModel"
                         item-color="success"
+                        color="success"
+                        dense
                         append-icon="mdi-chevron-down"
                         class="py-2 body-2"
-                        :items="emotions"
                         label="Select Emotions"
-                        :dark="lightSwitch == true"
-                        :menu-props="{offsetY: true, dark: lightSwitch == true}"
-                        light
-                        dense
+                        :items="emotions"
+                        :dark="lightSwitch == 1 ? true : false"
+                        :menu-props="{offsetY: true, dark: lightSwitch == 1 ? true : false}"
                       >
                         <template slot="item" slot-scope="data">
                           <v-list-item-content
-                            :dark="lightSwitch == true"
+                            :dark="lightSwitch == 1 ? true : false"
                             :style="{ background: cardbackground }"
                             style="padding: 12px 12px; margin: -16px;"
                           >
@@ -291,29 +284,26 @@
                       class="pa-0 mt-3 justify-right d-flex align-center text-right"
                     >
                       <v-textarea
-                        color="white"
-                        class="white--text trading_notes-textarea body-2"
                         v-model="notesModel"
-                        placeholder="Enter Notes"
-                        :dark="lightSwitch == true"
-                        light
                         filled
+                        color="success"
+                        class="trading_notes-textarea body-2"
+                        placeholder="Enter Notes"
+                        :dark="lightSwitch == 1 ? true : false"
                       ></v-textarea>
                     </v-col>
                     <v-row class="mt-4" no-gutters>
                       <v-spacer></v-spacer>
                       <v-btn
-                        color="secondary"
+                        :color="lightSwitch == 1 ? 'secondary' : 'gray'"
                         class="text-capitalize ml-1"
-                        :dark="lightSwitch == true"
-                        light
+                        :dark="lightSwitch == 1 ? true : false"
                         text
                         @click="e1 = 2"
                       >Back</v-btn>
                       <v-btn
                         color="success"
                         class="text-capitalize black--text ml-1"
-                        light
                         :disabled="confirmFinalBtn"
                         @click.stop="show = false"
                         @click="recordNow()"
@@ -332,6 +322,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { BuyFees, SellFees } from "~/assets/js/helpers/taxation";
+import { LocalFormat } from "~/assets/js/helpers/datetime";
 
 export default {
   props: ["visible"],
@@ -384,6 +375,12 @@ export default {
       stockList: "global/getStockList",
       lightSwitch: "global/getLightSwitch"
     }),
+    dateBuyFormatted() {
+      return this.buyDate ? this.localFormat(this.buyDate, "fs") : "";
+    },
+    dateSellFormatted() {
+      return this.sellDate ? this.localFormat(this.sellDate, "fs") : "";
+    },
     show: {
       get() {
         return this.visible;
@@ -506,6 +503,14 @@ export default {
       this.profitloss = profitloss
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    /**
+     * assign buyDate to sellDate for minimum date of dateTo datepicker
+     *
+     * @return  {string}  pass buyDate str to dateTo
+     */
+    buyDate() {
+      this.sellDate = this.buyDate;
     }
   },
   methods: {
@@ -513,6 +518,7 @@ export default {
       setRenderEditKey: "journal/setRenderEditKey",
       setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
+    localFormat: LocalFormat,
     /**
      * Fires when users typed anything, and it only shows the index of what the users typed
      *
@@ -641,6 +647,7 @@ export default {
       this.$api.journal.portfolio
         .record(portfolio_id, payload)
         .then(response => {
+          this.el = 1
           this.buyDate = new Date().toISOString().substr(0, 10);
           this.buyMenu = false;
           this.buyPrice = 0.0;
@@ -688,6 +695,6 @@ export default {
   background: #00121e;
 }
 .selectStock_v-select input {
-  text-transform: uppercase
+  text-transform: uppercase;
 }
 </style>

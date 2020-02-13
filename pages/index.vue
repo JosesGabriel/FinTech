@@ -1,6 +1,7 @@
 <template>
   <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
     <v-row class="mb-5" no-gutters>
+     
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar active="social" />
       </v-col>
@@ -15,10 +16,15 @@
         <MiniWatchlist />
         <!-- TODO put back when implementing -->
         <!-- <Bulletin /> -->
+        
         <FooterSidebar />
+         <PopUp />
       </v-col>
+       
     </v-row>
+      
   </v-container>
+   
 </template>
 
 <script>
@@ -30,6 +36,7 @@ import MiniWatchlist from "~/components/MiniWatchlist";
 import FooterSidebar from "~/components/FooterSidebar";
 import PostField from "~/components/social/PostField";
 import Bulletin from "~/components/Bulletin";
+import PopUp from "~/components/modals/PopUp";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -43,7 +50,8 @@ export default {
     MiniWatchlist,
     Bulletin,
     FooterSidebar,
-    PostField
+    PostField,
+    PopUp
   },
   computed: {
     ...mapGetters({

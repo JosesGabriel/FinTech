@@ -1,0 +1,130 @@
+<template>
+  <span
+   class="popupImg"
+   :class="display ? 'display' : 'nodisplay'"
+  >
+   <v-icon 
+    small color="black"
+    class="popUpClose" 
+    @click="display = false"
+   >mdi-close</v-icon>
+       <img 
+        width="364"
+        src="/popup.png"
+       />
+    <v-icon 
+        class="fb_logo"
+        >mdi-facebook
+    </v-icon>
+    <v-icon 
+        class="twitter_logo"
+        >mdi-twitter
+    </v-icon>
+  </span>
+</template>
+<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+<script>
+export default {
+     data() {
+          return {
+              display: false,
+          };
+     },
+     created() {
+        //this.fbInitialization();
+        //this.showPopUp();
+     },
+     methods: {
+        showPopUp(){
+            setTimeout(() => { this.display = true; }, 10000);
+        }, 
+            /**
+     * Initializes facebook SDK
+     *
+     * @return
+     */
+    fbInitialization() {
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: process.env.FB_APP_ID,
+          autoLogAppEvents: true,
+          xfbml: true,
+          version: "v5.0"
+        });
+      };
+
+      (function(d, s, id) {
+        var js,
+          fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+          return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      })(document, "script", "facebook-jssdk");
+    },
+    shareToFB() {
+      FB.ui(
+        {
+          method: "share",
+          href: process.env.LYDUZ_CUSTOM_SHARE_LINK
+        },
+        function(response) {}
+      );
+    },
+    shareToTwitter() {
+      let twitterURL =
+        process.env.TWITTER_LINK +
+        process.env.LYDUZ_CUSTOM_SHARE_LINK +
+        process.env.TWITTER_LINK_EXTENSION;
+      window.open(
+        twitterURL,
+        "mywindow",
+        "menubar=1,resizable=1,width=350,height=250"
+      );
+    }      
+     },
+     
+};
+</script>
+<style scoped>
+.popupImg {
+    position:fixed;
+    right: 10px;
+    bottom: 0;
+    z-index: 999;
+}
+.popUpClose{
+    position: fixed;
+    right: 12px;
+}
+.popUpClose:hover{
+    cursor: pointer;
+}
+.display{
+    display: block;
+}
+.nodisplay{
+    display:none;
+}
+.fb_logo{
+    color: #3b5998;
+    font-size: 35px;
+    position: fixed;
+    bottom: 58px;
+    right: 115px;
+}
+.twitter_logo {
+    color: #00acee;
+    font-size: 35px;
+    position: fixed;
+    bottom: 58px;
+    right: 70px;
+}
+.fb_logo:hover,
+.twitter_logo:hover {
+    cursor: pointer;
+}
+</style>

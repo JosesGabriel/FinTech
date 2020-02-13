@@ -139,7 +139,7 @@
         </v-btn>
       </a>
 
-      <a :href="'/'" class="social__router" v-show="$auth.loggedIn ? true : false ">
+      <a :href="'https://vyndue.lyduz.com'" class="social__router" v-show="$auth.loggedIn ? true : false ">
         <v-btn class="header__button" style="font-size:14px;" text>Vyndue</v-btn>
       </a>
 
