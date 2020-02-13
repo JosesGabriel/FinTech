@@ -17,7 +17,7 @@
         height="23"
         @click.stop="showResetForm = true"
       >
-        <span class="v-btn__content">Reset</span>
+        <span class="body-2">Reset</span>
       </v-btn>
       <v-btn
         text
@@ -28,7 +28,7 @@
         height="23"
         @click.stop="showTradeViewForm = true"
       >
-        <span class="v-btn__content">Trade</span>
+        <span class="body-2">Trade</span>
       </v-btn>
       <v-btn
         text
@@ -39,7 +39,7 @@
         height="23"
         @click.stop="showFundsForm = true"
       >
-        <span class="v-btn__content">Fund</span>
+        <span class="body-2">Fund</span>
       </v-btn>
 
       <v-btn
@@ -182,7 +182,7 @@
           v-model="page"
           class="d-flex flex-end lp_data_table-pagination"
           color="transparent"
-          dark
+          :dark="lightSwitch == 1 ? true : false"
           :length="pageCount"
         ></v-pagination>
       </v-card>
@@ -628,9 +628,6 @@ export default {
   margin-top: -6.5px;
   border: 1px solid rgb(0, 255, 195);
   border-radius: 4px;
-}
-.rtf_top-btn .v-btn__content {
-  font-size: 12px !important;
 }
 .btn_sidemenu:hover {
   color: #03dac5;

@@ -91,48 +91,6 @@
           <v-row>
             <v-col cols="4">
               <span :class="lightSwitch == 0 ? '' : 'white--text'"
-                >User Name</span
-              >
-            </v-col>
-            <v-col cols="5">
-              <span v-if="!usernameToggle">{{ userName }}</span>
-              <v-row v-else>
-                <v-col cols="12"
-                  ><v-text-field
-                    v-model="userName"
-                    class="name__field"
-                    color="#b6b6b6"
-                    hide-details
-                    outlined
-                    dense
-                    @input="usernameChanged = true"
-                  ></v-text-field
-                ></v-col>
-              </v-row>
-            </v-col>
-            <v-col cols="2" class="pa-0">
-              <v-btn
-                v-if="!usernameToggle"
-                text
-                class="no-transform"
-                @click="
-                  usernameToggle = !usernameToggle;
-                  checkFieldsToggle('username');
-                "
-                >Change</v-btn
-              >
-              <v-btn
-                v-else
-                text
-                class="no-transform"
-                @click="updateAccount('username')"
-                >Save</v-btn
-              >
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="4">
-              <span :class="lightSwitch == 0 ? '' : 'white--text'"
                 >Contact</span
               >
             </v-col>
@@ -225,48 +183,6 @@
           <v-row>
             <v-col cols="4">
               <span :class="lightSwitch == 0 ? '' : 'white--text'"
-                >Email Address</span
-              >
-            </v-col>
-            <v-col cols="5">
-              <span v-if="!emailToggle">{{ email }}</span>
-              <v-row v-else>
-                <v-col cols="12"
-                  ><v-text-field
-                    v-model="email"
-                    class="name__field"
-                    color="#b6b6b6"
-                    hide-details
-                    outlined
-                    dense
-                    @input="emailChanged = true"
-                  ></v-text-field
-                ></v-col>
-              </v-row>
-            </v-col>
-            <v-col cols="2" class="pa-0">
-              <v-btn
-                v-if="!emailToggle"
-                text
-                class="no-transform"
-                @click="
-                  emailToggle = !emailToggle;
-                  checkFieldsToggle('email');
-                "
-                >Change</v-btn
-              >
-              <v-btn
-                v-else
-                text
-                class="no-transform"
-                @click="updateAccount('email')"
-                >Save</v-btn
-              >
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="4">
-              <span :class="lightSwitch == 0 ? '' : 'white--text'"
                 >Password</span
               >
             </v-col>
@@ -307,9 +223,6 @@
                     @input="passwordChanged = true"
                   ></v-text-field
                 ></v-col>
-                <v-col cols="12" class="py-0">
-                  <a class="success--text caption">Forgot your password?</a>
-                </v-col>
               </v-row>
             </v-col>
             <v-col cols="2" class="pa-0">
@@ -342,7 +255,7 @@
             </v-col>
           </v-row>
         </v-container>
-        <DeleteAccount v-else @cancel="deleteAccountToggle = false"/>
+        <DeleteAccount v-else @cancel="deleteAccountToggle = false" />
       </v-card-text>
     </v-card>
     <v-dialog
@@ -392,32 +305,20 @@ export default {
   },
   data() {
     return {
-      settingsLabelList: [
-        "Name",
-        "User Account",
-        "Contact",
-        "Email Address",
-        "Password"
-      ],
+      settingsLabelList: ["Name", "User Account", "Contact", "Password"],
       nameToggle: false,
-      usernameToggle: false,
       contactToggle: false,
-      emailToggle: false,
       passwordToggle: false,
       deleteAccountToggle: false,
       mobileDialog: false,
       firstNameChanged: false,
       lastNameChanged: false,
-      usernameChanged: false,
-      emailChanged: false,
       passwordChanged: false,
       currentToggle: "",
       unsavedChangesDialog: false,
       firstName: this.$auth.user.data.user.first_name,
       lastName: this.$auth.user.data.user.last_name,
-      userName: this.$auth.user.data.user.username,
       mobile: this.$auth.user.data.user.mobile,
-      email: this.$auth.user.data.user.email,
       currentPassword: "",
       newPassword: "",
       confirmNewPassword: "",
@@ -454,9 +355,7 @@ export default {
         first_name: this.firstName,
         last_name: this.lastName,
         name: this.fullName,
-        username: this.userName,
         mobile: this.mobile,
-        email: this.email,
         password: this.password
       };
       this.cardLoader = "success";
@@ -498,24 +397,10 @@ export default {
             };
           }
           break;
-        case "username":
-          {
-            payload = {
-              username: this.userName
-            };
-          }
-          break;
         case "contact":
           {
             payload = {
               mobile: this.mobile
-            };
-          }
-          break;
-        case "email":
-          {
-            payload = {
-              email: this.email
             };
           }
           break;
@@ -565,13 +450,8 @@ export default {
         case "name":
           {
             if (
-              (this.usernameToggle ||
-                this.contactToggle ||
-                this.emailToggle ||
-                this.passwordToggle) &&
-              (this.usernameChanged ||
-                this.emailChanged ||
-                this.passwordChanged)
+              (this.contactToggle || this.passwordToggle) &&
+              this.passwordChanged
             ) {
               this.revertChangedFlags();
               this.currentToggle = "name";
@@ -581,70 +461,19 @@ export default {
             }
           }
           break;
-        case "username":
-          {
-            if (
-              (this.nameToggle ||
-                this.contactToggle ||
-                this.emailToggle ||
-                this.passwordToggle) &&
-              (this.firstNameChanged ||
-                this.lastNameChanged ||
-                this.passwordChanged ||
-                this.emailChanged)
-            ) {
-              this.revertChangedFlags();
-              this.currentToggle = "username";
-              this.unsavedChangesDialog = true;
-            } else {
-              this.closeAllToggles("username");
-            }
-          }
-          break;
         case "contact":
           {
-            if (
-              this.usernameToggle ||
-              this.nameToggle ||
-              this.emailToggle ||
-              this.passwordToggle
-            ) {
+            if (this.nameToggle || this.passwordToggle) {
               // this.currentToggle = "contact";
               // this.unsavedChangesDialog = true;
-            }
-          }
-          break;
-        case "email":
-          {
-            if (
-              (this.usernameToggle ||
-                this.contactToggle ||
-                this.nameToggle ||
-                this.passwordToggle) &&
-              (this.firstNameChanged ||
-                this.lastNameChanged ||
-                this.usernameChanged ||
-                this.passwordChanged)
-            ) {
-              this.revertChangedFlags();
-              this.currentToggle = "email";
-              this.unsavedChangesDialog = true;
-            } else {
-              this.closeAllToggles("email");
             }
           }
           break;
         case "password":
           {
             if (
-              (this.usernameToggle ||
-                this.contactToggle ||
-                this.emailToggle ||
-                this.nameToggle) &&
-              (this.firstNameChanged ||
-                this.lastNameChanged ||
-                this.usernameChanged ||
-                this.emailChanged)
+              (this.contactToggle || this.nameToggle) &&
+              (this.firstNameChanged || this.lastNameChanged)
             ) {
               this.revertChangedFlags();
               this.currentToggle = "password";
@@ -671,19 +500,9 @@ export default {
               this.nameToggle = false;
             }
             break;
-          case "username":
-            {
-              this.usernameToggle = false;
-            }
-            break;
           case "contact":
             {
               this.contactToggle = false;
-            }
-            break;
-          case "email":
-            {
-              this.emailToggle = false;
             }
             break;
           case "password":
@@ -695,35 +514,17 @@ export default {
       }
       if (open != "cancel") {
         this.nameToggle = false;
-        this.usernameToggle = false;
         this.contactToggle = false;
-        this.emailToggle = false;
         this.passwordToggle = false;
-
-        // this.firstName = this.$auth.user.data.user.first_name;
-        // this.lastName = this.$auth.user.data.user.last_name;
-        // this.userName = this.$auth.user.data.user.username;
-        // this.mobile = this.$auth.user.data.user.mobile;
-        // this.email = this.$auth.user.data.user.email;
         switch (open) {
           case "name":
             {
               this.nameToggle = true;
             }
             break;
-          case "username":
-            {
-              this.usernameToggle = true;
-            }
-            break;
           case "contact":
             {
               this.contactToggle = true;
-            }
-            break;
-          case "email":
-            {
-              this.emailToggle = true;
             }
             break;
           case "password":
@@ -744,8 +545,6 @@ export default {
     revertChangedFlags() {
       this.firstNameChanged = false;
       this.lastNameChanged = false;
-      this.usernameChanged = false;
-      this.emailChanged = false;
       this.passwordChanged = false;
     }
   }

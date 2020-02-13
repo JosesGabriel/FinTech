@@ -3,12 +3,12 @@
   <v-dialog v-model="show" max-width="320px">
     <v-card :dark="lightSwitch == true">
       <v-card-title
-        class="text-left justify-left pa-3 px-5 success--text subtitle-1 font-weight-bold"
+        class="text-left justify-left pa-3 px-5 subtitle-1 font-weight-bold"
       >FUND</v-card-title>
       <v-tabs
         color="success"
         background-color="transparent"
-        class="px-7"
+        class="px-7 fundContainer__tab"
         :dark="lightSwitch == true"
         grow
       >
@@ -30,16 +30,18 @@
           color="success"
           background-color="#0c1f33"
           class="active-class"
+          :class="lightSwitch == 1 ? 'dark fundContainer__tab': 'light fundContainer__tab'"
           :value="'funds-' + 1"
         >
           <v-container class="pa-0">
-            <div class="separator"></div>
-            <v-row no-gutters class="my-2">
-              <v-card-title class="caption px-0 py-2 secondary--text">Available Funds</v-card-title>
+            <v-row
+              no-gutters
+              class="my-2"
+              :class="lightSwitch == 1 ? 'secondary--text' : 'tertiary--text'"
+            >
+              <v-card-title class="caption px-0 py-2">Available Funds</v-card-title>
               <v-spacer></v-spacer>
-              <v-card-title
-                class="caption px-0 py-2 secondary--text"
-              >{{ availableFunds | numeral("0.00a") }}</v-card-title>
+              <v-card-title class="caption px-0 py-2">{{ availableFunds | numeral("0.00a") }}</v-card-title>
             </v-row>
             <v-text-field
               label="Enter Amount"
@@ -83,12 +85,15 @@
         </v-tab-item>
         <v-tab-item dark color="success" background-color="#0c1f33" :value="'funds-' + 2">
           <v-container class="pa-0">
-            <div class="separator"></div>
-            <v-row no-gutters class="my-2">
-              <v-card-title class="caption px-0 py-2 secondary--text">Available Funds</v-card-title>
+            <v-row
+              no-gutters
+              class="my-2"
+              :class="lightSwitch == 1 ? 'secondary--text' : 'tertiary--text'"
+            >
+              <v-card-title class="caption px-0 py-2">Available Funds</v-card-title>
               <v-spacer></v-spacer>
               <v-card-title
-                class="caption px-0 py-2 secondary--text"
+                class="caption px-0 py-2"
               >{{ availableFunds | numeral("0.00a") }}</v-card-title>
             </v-row>
             <v-text-field
@@ -259,7 +264,7 @@ export default {
         .then(response => {
           if (response.success) {
             this.fund = parseFloat(response.data.fund.balance);
-            this.availableFunds = this.fund
+            this.availableFunds = this.fund;
 
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
@@ -284,7 +289,7 @@ export default {
         .then(response => {
           if (response.success) {
             this.fund = parseFloat(response.data.fund.balance);
-            this.availableFunds = this.fund
+            this.availableFunds = this.fund;
 
             this.keyCreateCounter = this.renderPortfolioKey;
             this.keyCreateCounter++;
@@ -376,5 +381,11 @@ export default {
 }
 .enter_amount-deposit.stock_selector input {
   text-align: right;
+}
+.fundContainer__tab .v-item-group.theme--dark.v-tabs-bar {
+  border-bottom: 1px solid rgb(23, 36, 49) !important;
+}
+.fundContainer__tab .v-item-group.theme--light.v-tabs-bar {
+  border-bottom: 1px solid rgb(218, 218, 218) !important;
 }
 </style>

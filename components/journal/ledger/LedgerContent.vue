@@ -16,14 +16,63 @@
         ></v-text-field>
       </v-col>
       <v-spacer></v-spacer>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Week</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('all')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >All</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('day')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Day</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('week')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Week</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('month')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Month</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('year')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Year</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click.stop="showCustomDate=true"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Custom</v-btn>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon>mdi-share-variant</v-icon>
+        <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
     <v-data-table
@@ -43,7 +92,7 @@
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.count }}</span>
       </template>
       <template v-slot:item.created_at="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.created_at }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ localFormat(item.created_at, "fs") }}</span>
       </template>
       <template v-slot:item.action="{ item }">
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.action }}</span>
@@ -91,20 +140,26 @@
       </v-card>
     </v-card>
     <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
+    <custom-date :visible="showCustomDate" @clicked="filterDate" @close="showCustomDate=false" />
   </v-col>
 </template>
 <script>
 import shareModal from "~/components/modals/Share";
+import customDate from "~/components/modals/CustomDate";
+
+import { LocalFormat } from "~/assets/js/helpers/datetime";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
-    shareModal
+    shareModal,
+    customDate
   },
   data() {
     return {
       shareLink: "",
       showShareForm: false,
+      showCustomDate: false,
       liveLedgerLoading: "success",
       showScheduleForm: false,
       itemsPerPage: 10,
@@ -118,6 +173,8 @@ export default {
         { text: "Balance", value: "balance", align: "right", width: "190px" }
       ],
       ledgerContent: [],
+      ledgerContentBackup: [],
+      filter: [],
       page: 1,
       pageCount: 0,
       totalCredit: 0,
@@ -179,6 +236,7 @@ export default {
     }
   },
   methods: {
+    localFormat: LocalFormat,
     /**
      * Capture components then draw to canvas and share
      *
@@ -191,6 +249,68 @@ export default {
       };
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
+    },
+    /**
+     * pushes object when user click the filter date buttons
+     * Filters: All, Day, Week, Month, Year, Custom
+     *
+     * @param   {string}  str  watch the str which date filter should be used
+     *
+     * @return  {object}       returns objects
+     */
+    filterDate(str) {
+      const now = new Date();
+      //day date filter
+      const d = new Date().getDate();
+      //week date filter
+      const fweek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const dayWeek = fweek.getDate();
+      const monthWeek = fweek.getMonth() + 1;
+      // month date filter
+      const fmonth = now.getMonth() + 1;
+      // year date filter
+      const fyear = now.getFullYear();
+
+      this.ledgerContent = [];
+
+      // Show all trades
+      if (str == "all") {
+        this.ledgerContent = this.ledgerContentBackup;
+      }
+
+      this.filter = this.ledgerContentBackup;
+      let num = 0;
+
+      for (let i = 0; i < this.filter.length; i++) {
+        let fil_date = this.filter[i].created_at.split(" ")[0];
+        const month = fil_date.split("-")[1];
+        const year = fil_date.split("-")[0];
+        const today = fil_date.split("-")[2];
+
+        const dateFrom = this.localFormat(str.dateFrom, "unix");
+        const dateTo = this.localFormat(str.dateTo, "unix");
+
+        if (str == "day" && d == today && month == monthWeek) {
+          this.ledgerContent.push(this.filter[i]);
+        } else if (
+          str == "week" &&
+          today >= dayWeek &&
+          month == monthWeek &&
+          year == fyear
+        ) {
+          this.ledgerContent.push(this.filter[i]);
+        } else if (str == "month" && month == fmonth && year == fyear) {
+          this.ledgerContent.push(this.filter[i]);
+        } else if (str == "year" && year == fyear) {
+          this.ledgerContent.push(this.filter[i]);
+        } else if (
+          str.state == "custom" &&
+          this.localFormat(this.filter[i].created_at, "unix") >= dateFrom &&
+          this.localFormat(this.filter[i].created_at, "unix") <= dateTo
+        ) {
+          this.ledgerContent.push(this.filter[i]);
+        }
+      }
     },
     /**
      * Ledger gets update when getLedgerLogs triggered
@@ -298,6 +418,8 @@ export default {
               parseFloat(this.ledgerContent[i].credit.replace(/,/g, ""));
           }
         }
+
+        this.ledgerContentBackup = this.ledgerContent;
         this.liveLedgerLoading = false;
       });
     },

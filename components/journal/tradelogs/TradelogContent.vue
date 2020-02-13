@@ -21,6 +21,15 @@
         dark
         text
         color="success"
+        @click="filterDate('all')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >All</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
         @click="filterDate('day')"
         class="body-2 text-capitalize"
         elevation="0"
@@ -34,9 +43,33 @@
         class="body-2 text-capitalize"
         elevation="0"
       >Week</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('month')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Month</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click="filterDate('year')"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Year</v-btn>
+      <v-btn
+        small
+        dark
+        text
+        color="success"
+        @click.stop="showCustomDate=true"
+        class="body-2 text-capitalize"
+        elevation="0"
+      >Custom</v-btn>
       <v-spacer></v-spacer>
       <v-btn
         outlined
@@ -70,7 +103,7 @@
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.stock_id }}</span>
       </template>
       <template v-slot:item.date="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.date.substr(0, 10) }}</span>
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ localFormat(item.meta.date, 'fs') }}</span>
       </template>
       <template v-slot:item.amount="{ item }">
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.amount }}</span>
@@ -152,7 +185,7 @@
         <v-pagination
           class="d-flex flex-end lp_data_table-pagination"
           color="transparent"
-          dark
+          :dark="lightSwitch == 1 ? true : false"
           v-model="page"
           :length="pageCount"
         ></v-pagination>
@@ -170,6 +203,7 @@
       @close="showSellDetails=false"
     />
     <record-trade :visible="showRecordTrade" @close="showRecordTrade=false" />
+    <custom-date :visible="showCustomDate" @clicked="filterDate" @close="showCustomDate=false" />
   </v-col>
 </template>
 <script>
@@ -177,7 +211,9 @@ import shareModal from "~/components/modals/Share";
 import sellDelete from "~/components/modals/SellDelete";
 import sellDetails from "~/components/modals/SellDetails";
 import recordTrade from "~/components/modals/Record";
+import customDate from "~/components/modals/CustomDate";
 
+import { LocalFormat } from "~/assets/js/helpers/datetime";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -185,7 +221,8 @@ export default {
     shareModal,
     sellDelete,
     sellDetails,
-    recordTrade
+    recordTrade,
+    customDate
   },
   data() {
     return {
@@ -196,6 +233,7 @@ export default {
       showSellDelete: false,
       showSellDetails: false,
       showRecordTrade: false,
+      showCustomDate: false,
       itemDetails: null,
 
       itemsPerPage: 10,
@@ -213,6 +251,7 @@ export default {
         { text: "", value: "action", sortable: false, align: "right" }
       ],
       tradeLogs: [],
+      tradeLogsBackup: [],
       filter: [],
       page: 1,
       pageCount: 0,
@@ -290,6 +329,7 @@ export default {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
+    localFormat: LocalFormat,
     /**
      * Capture components then draw to canvas and share
      *
@@ -303,38 +343,67 @@ export default {
       this.shareLink = await this.$html2canvas(el, options);
       this.showShareForm = true;
     },
+    /**
+     * pushes object when user click the filter date buttons
+     * Filters: All, Day, Week, Month, Year, Custom
+     *
+     * @param   {string}  str  watch the str which date filter should be used
+     *
+     * @return  {object}       returns objects
+     */
     filterDate(str) {
       const now = new Date();
-      //day filter
+      //day date filter
       const d = new Date().getDate();
-      //week filter
+      //week date filter
       const fweek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       const dayWeek = fweek.getDate();
       const monthWeek = fweek.getMonth() + 1;
+      // month date filter
+      const fmonth = now.getMonth() + 1;
+      // year date filter
+      const fyear = now.getFullYear();
 
-      this.filter = this.tradeLogs;
       this.tradeLogs = [];
+
+      // Show all trades
+      if (str == "all") {
+        this.tradeLogs = this.tradeLogsBackup;
+      }
+
+      this.filter = this.tradeLogsBackup;
       let num = 0;
 
       for (let i = 0; i < this.filter.length; i++) {
         let fil_date = this.filter[i].meta.date.split(" ")[0];
-        let month = fil_date.split("-")[1];
-        let year = fil_date.split("-")[0];
-        let today = fil_date.split("-")[2];
+        const month = fil_date.split("-")[1];
+        const year = fil_date.split("-")[0];
+        const today = fil_date.split("-")[2];
 
-        if (str == "day" && d == today) {
+        const dateFrom = this.localFormat(str.dateFrom, "unix");
+        const dateTo = this.localFormat(str.dateTo, "unix");
+
+        if (str == "day" && d == today && month == monthWeek) {
           this.tradeLogs.push(this.filter[i]);
-        } else if (str == "week" && today >= dayWeek && month == monthWeek) {
+        } else if (
+          str == "week" &&
+          today >= dayWeek &&
+          month == monthWeek &&
+          year == fyear
+        ) {
           this.tradeLogs.push(this.filter[i]);
-          console.log(this.tradeLogs);
+        } else if (str == "month" && month == fmonth && year == fyear) {
+          this.tradeLogs.push(this.filter[i]);
+        } else if (str == "year" && year == fyear) {
+          this.tradeLogs.push(this.filter[i]);
+        } else if (
+          str.state == "custom" &&
+          this.localFormat(this.filter[i].meta.date, "unix") >= dateFrom &&
+          this.localFormat(this.filter[i].meta.date, "unix") <= dateTo
+        ) {
+          this.tradeLogs.push(this.filter[i]);
         }
-        // console.log(fil_date, 'fil_date')
-        // console.log(today, 'today')
-        // console.log(month, 'month')
-        // console.log(year, 'year')
       }
-      // console.log(d);
-      // console.log(filter);
     },
     /**
      * passing credentials of each item to be deleted to this.itemDetails (to props)
@@ -403,6 +472,9 @@ export default {
               this.totalProfitLossPerf +
               parseFloat(this.tradeLogs[i].profit_loss_percentage);
           }
+
+          this.tradeLogsBackup = this.tradeLogs;
+
           this.liveTradelogsLoading = false;
         }.bind(this)
       );
