@@ -117,15 +117,15 @@ export default {
     color: #03dac5;
     /*font-size: 35px;*/
     position: fixed;
-    bottom:20px;
-    right: 100px;
+    bottom:25px;
+    right: 115px;
 }
 .twitter_logo_btn {
     color: #00acee;
     /*font-size: 35px;*/
     position: fixed;
-    bottom: 20px;
-    right: 55px;
+    bottom: 25px;
+    right: 70px;
 }
 .fb_logo:hover,
 .twitter_logo:hover {
