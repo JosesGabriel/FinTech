@@ -95,6 +95,10 @@
           <v-stepper-content step="6" class="pa-0">
             <ConfirmEmail @alert="showAlert" @stepper="changeStep" />
           </v-stepper-content>
+
+          <v-stepper-content step="7" class="pa-0">
+            <ResendVerification @alert="showAlert" @stepper="changeStep" />
+          </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
     </v-card>
@@ -108,6 +112,7 @@ import Register from "~/components/login/Register";
 import Welcome from "~/components/login/Welcome";
 import ForgotPassword from "~/components/login/ForgotPassword";
 import ConfirmEmail from "~/components/login/ConfirmEmail";
+import ResendVerification from "~/components/login/ResendVerification";
 
 export default {
   components: {
@@ -115,7 +120,8 @@ export default {
     Register,
     Welcome,
     ForgotPassword,
-    ConfirmEmail
+    ConfirmEmail,
+    ResendVerification
   },
   props: {
     value: Boolean,

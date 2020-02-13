@@ -1,15 +1,15 @@
 <template>
   <v-card height="584px">
     <div class="headline font-weight-bold loginCard--intro">
-      Forgot Password
+      Resend Verification
     </div>
     <v-card-text>
       <v-container>
         <v-row>
           <v-col cols="10">
             <span
-              >Enter the email address you use to sign in to Lyduz and we’ll
-              send you a link to reset your password</span
+              >Enter the email address you use to sign up to Lyduz and we’ll
+              send you a link to verify your account</span
             >
           </v-col>
         </v-row>
@@ -75,34 +75,35 @@ export default {
     ...mapActions({
       setAlertDialog: "global/setAlertDialog"
     }),
-    submitEmail() {
-      const payload = {
-        email: this.email
-      };
-      this.$api.authentication.forgotPassword.create(payload).then(
-        function(result) {
-          if (result.success) {
-            const alert = {
-              model: true,
-              state: true,
-              header: "Awesome!",
-              body: "Your request has been successfully sent to your email.",
-              subtext: this.email
-            };
-            this.setAlertDialog(alert);
-            const hideAlert = {
-              modal: false
-            };
-            setTimeout(
-              function() {
-                this.setAlertDialog(hideAlert);
-                this.$emit("stepper", 2);
-              }.bind(this),
-              3000
-            );
-          }
-        }.bind(this)
-      );
+    async submitEmail() {
+      try {
+        const payload = {
+          email: this.email
+        };
+        const response = await this.$api.authentication.resendVerification.create(
+          payload
+        );
+        if (response.status == 200) {
+          const alert = {
+            model: true,
+            state: true,
+            header: "Awesome!",
+            body: "Your request has been successfully sent to your email.",
+            subtext: this.email
+          };
+          this.setAlertDialog(alert);
+          this.disabled = true;
+        }
+      } catch (error) {
+        const alert = {
+          model: true,
+          state: false,
+          header: "Ooopps!",
+          body: error.response.data.message,
+          subtext: this.email
+        };
+        this.setAlertDialog(alert);
+      }
     }
   }
 };
