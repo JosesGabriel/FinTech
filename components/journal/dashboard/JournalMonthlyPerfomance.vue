@@ -30,6 +30,7 @@
 import shareModal from "~/components/modals/Share";
 
 import { mapActions, mapGetters } from "vuex";
+let numeral = require("numeral");
 
 export default {
   components: {
@@ -191,8 +192,8 @@ export default {
               cssClass: "apexcharts-yaxis-label"
             },
             formatter: function(value) {
-              let val = (value / 1).toFixed(2).replace(".", ".");
-              return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              let val = numeral(value).format("0.00a")
+              return val;
             }
           },
           lines: {
