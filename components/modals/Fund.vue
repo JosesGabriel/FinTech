@@ -2,9 +2,7 @@
 <template>
   <v-dialog v-model="show" max-width="320px">
     <v-card :dark="lightSwitch == true">
-      <v-card-title
-        class="text-left justify-left pa-3 px-5 subtitle-1 font-weight-bold"
-      >FUND</v-card-title>
+      <v-card-title class="text-left justify-left pa-3 px-5 subtitle-1 font-weight-bold">FUND</v-card-title>
       <v-tabs
         color="success"
         background-color="transparent"
@@ -57,6 +55,7 @@
               <span class="custom-dropdown big">
                 <v-select
                   :items="items"
+                  @change="fundSourceChange"
                   v-model="fundSourceModel"
                   class="enter_amount-deposit-select ma-0 body-2"
                   item-text="name"
@@ -92,9 +91,7 @@
             >
               <v-card-title class="caption px-0 py-2">Available Funds</v-card-title>
               <v-spacer></v-spacer>
-              <v-card-title
-                class="caption px-0 py-2"
-              >{{ availableFunds | numeral("0.00a") }}</v-card-title>
+              <v-card-title class="caption px-0 py-2">{{ availableFunds | numeral("0.00a") }}</v-card-title>
             </v-row>
             <v-text-field
               label="Enter Amount"
@@ -222,9 +219,9 @@ export default {
      *
      * @return
      */
-    fundSourceModel() {
-      this.fundSourceWatch();
-    }
+    // fundSourceModel() {
+    //   this.fundSourceWatch();
+    // }
   },
   methods: {
     ...mapActions({
@@ -321,10 +318,14 @@ export default {
      * @return  {number}          returns property
      */
     enterAmountWatch(newValue) {
-      if (
-        parseFloat(this.enterAmount) > 0 &&
-        this.fundSourceModel != null
-      ) {
+      if (parseFloat(this.enterAmount) > 0 && this.fundSourceModel != null) {
+        this.disableButtonSave = false;
+      } else {
+        this.disableButtonSave = true;
+      }
+    },
+    fundSourceChange() {
+      if (parseFloat(this.enterAmount) > 0 && this.fundSourceModel != null) {
         this.disableButtonSave = false;
       } else {
         this.disableButtonSave = true;
@@ -335,17 +336,17 @@ export default {
      *
      * @return  {number}          returns property
      */
-    fundSourceWatch() {
-      if (
-        parseFloat(this.enterAmount) > 0 &&
-        this.fundSourceModel != null &&
-        parseInt(this.availableFunds) > 0
-      ) {
-        this.disableButtonSave = false;
-      } else {
-        this.disableButtonSave = true;
-      }
-    },
+    // fundSourceWatch() {
+    //   if (
+    //     parseFloat(this.enterAmount) > 0 &&
+    //     this.fundSourceModel != null &&
+    //     parseInt(this.availableFunds) > 0
+    //   ) {
+    //     this.disableButtonSave = false;
+    //   } else {
+    //     this.disableButtonSave = true;
+    //   }
+    // },
     /**
      * function that will hold the disable/enable of save button
      *
