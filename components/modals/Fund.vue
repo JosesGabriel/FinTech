@@ -323,8 +323,7 @@ export default {
     enterAmountWatch(newValue) {
       if (
         parseFloat(this.enterAmount) > 0 &&
-        this.fundSourceModel != null &&
-        parseInt(this.availableFunds) > 0
+        this.fundSourceModel != null
       ) {
         this.disableButtonSave = false;
       } else {
