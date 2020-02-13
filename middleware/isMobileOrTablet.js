@@ -1,5 +1,10 @@
 export default function(context) {
   if (context.isMobileOrTablet === true) {
-    return context.redirect("/mobile");
+    // add here pages that will not block from mobile users
+    // set page limit for mobile users
+    const allowedPages = ["login", "verify"];
+    if (allowedPages.includes(context.route.name) === false) {
+      return context.redirect("/mobile");
+    }
   }
 }
