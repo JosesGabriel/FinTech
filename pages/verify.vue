@@ -1,14 +1,20 @@
 <template>
-  <v-container dark>
-    <v-row class="mb-5" no-gutters> </v-row>
+  <v-container>
+    <br />
+    <br />
+    <v-row>
+      <v-col cols="12" class="text-center mt-12">
+        <h1>Redirecting...</h1>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
-  layout: "main",
+  layout: "static",
   auth: false,
-  mounted() {
+  created() {
     this.retrieveParams();
   },
   methods: {
@@ -17,15 +23,18 @@ export default {
      *
      * @return  {[type]}  [return description]
      */
-    retrieveParams() {
-      let param = this.$route.fullPath.indexOf("?");
-      this.$axios
-        .$get(process.env.API_URL + this.$route.fullPath.substr(param))
-        .then(response => {
-          if (response.success) {
-            this.$router.push("login?redirected=true");
-          }
-        });
+    async retrieveParams() {
+      try {
+        let param = this.$route.fullPath.indexOf("?");
+        const response = await this.$axios.$get(
+          process.env.API_URL + this.$route.fullPath.substr(param)
+        );
+        if (response.success) {
+          this.$router.push("login?redirected=true");
+        }
+      } catch (error) {
+        this.$router.push("login");
+      }
     }
   }
 };

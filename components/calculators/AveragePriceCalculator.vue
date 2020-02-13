@@ -27,12 +27,13 @@
         </v-col>
         <v-col cols="3" class="input__textfield">
           <v-text-field
-            v-model="position[n]"
+            v-model="position[n].data"
             filled
             dense
             hide-details
-            :value="position[n]"
-            :disabled="toedit[n] == 0 ? true : false"
+            type="number"
+            :value="position[n].data"
+            :disabled="position[n].edit ? true : false"
             color="success"
             background-color="transparent"
             style="font-size: 12px;"
@@ -42,10 +43,12 @@
         </v-col>
         <v-col cols="3" class="input__textfield">
           <v-text-field
-            v-model="positionPrice[n]"
+            v-model="positionPrice[n].data"
             filled
             dense
-            :value="positionPrice[n]"
+            type="number"
+            :value="positionPrice[n].data"
+            :disabled="positionPrice[n].edit ? true : false"
             hide-details
             color="success"
             background-color="transparent"
@@ -54,7 +57,12 @@
           ></v-text-field>
         </v-col>
         <v-col cols="3" style="padding-top: 4px;">
-            <span class="edit" @click="toEdit(n)">Edit</span>
+            <span 
+              class="edit" 
+              v-on:click="
+                position[n].edit=false;
+                positionPrice[n].edit=false;
+                ">Edit</span>
         </v-col>
       </v-row>
 
@@ -98,11 +106,20 @@
             class="addButton"
             :disabled="price == '' || pos == '' ? true : false"
             @click="
+              pos_edit = {
+                'data': pos,
+                'edit': true
+              };
+              price_edit = {
+                'data': price,
+                'edit': true
+              };
               positionKey++;
-              position.push(pos);
-              positionPrice.push(price);
+              position.push(pos_edit);
+              positionPrice.push(price_edit);
               pos='';
               price='';
+              toedit=true;
             "
             >mdi-plus-circle-outline</v-icon
           >
@@ -184,41 +201,6 @@
       </v-row>
  
   </div>
-      <!--------------------------------------------->
-    <!--  <v-row>
-        <v-col cols="12"
-          ><v-text-field
-            v-model="totalCost"
-            label="Total Cost"
-            prefix="₱"
-            hide-details
-            readonly
-            filled
-            background-color="transparent"
-          ></v-text-field
-        ></v-col>
-        <v-col cols="12"
-          ><v-text-field
-            v-model="totalPosition"
-            label="Total Position"
-            hide-details
-            readonly
-            filled
-            background-color="transparent"
-          ></v-text-field
-        ></v-col>
-        <v-col cols="12"
-          ><v-text-field
-            v-model="averagePrice"
-            label="Average Price"
-            prefix="₱"
-            hide-details
-            readonly
-            filled
-            background-color="transparent"
-          ></v-text-field
-        ></v-col>
-      </v-row> -->
     </v-container>
   </v-card>
 </template>
@@ -238,8 +220,10 @@ export default {
       position: [0],
       positionPrice: [0],
       positionKey: 0,
-      toedit: [0],
-      show: false
+      toedit: true,
+      show: false,
+      pos_edit: [],
+      price_edit: [],
     };
   },
   computed: {
@@ -320,8 +304,8 @@ export default {
       let totalVolume = 0;
       let costFee = 0;
       for (let i = 1; i <= this.positionKey; i++) {
-        let dposition = this.parseNumber(this.position[i]);
-        let dprice = this.parseNumber(this.positionPrice[i]);
+        let dposition = this.parseNumber(this.position[i].data);
+        let dprice = this.parseNumber(this.positionPrice[i].data);
         if (dposition > 0 && dprice > 0) {
           totalVolume += parseFloat(dposition);
           totalPrice += parseFloat(dprice);

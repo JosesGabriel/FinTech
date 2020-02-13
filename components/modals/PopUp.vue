@@ -9,17 +9,21 @@
     @click="display = false"
    >mdi-close</v-icon>
        <img 
-        width="364"
-        src="/popup.png"
+        width="300"
+        src="/popup.jpg"
        />
-    <v-icon 
+    <v-btn  @click="shareToFB()" class="fb_logo_btn" fab x-small>
+        <v-icon 
         class="fb_logo"
-        >mdi-facebook
-    </v-icon>
-    <v-icon 
-        class="twitter_logo"
-        >mdi-twitter
-    </v-icon>
+            >mdi-facebook
+        </v-icon>
+    </v-btn>
+    <v-btn @click="shareToTwitter()" color="success" class="twitter_logo_btn" fab x-small>
+        <v-icon       
+         class="twitter_logo"
+            >mdi-twitter
+        </v-icon>
+    </v-btn>
   </span>
 </template>
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
@@ -31,8 +35,8 @@ export default {
           };
      },
      created() {
-        //this.fbInitialization();
-        //this.showPopUp();
+        this.fbInitialization();
+        this.showPopUp();
      },
      methods: {
         showPopUp(){
@@ -109,22 +113,33 @@ export default {
 .nodisplay{
     display:none;
 }
-.fb_logo{
-    color: #3b5998;
-    font-size: 35px;
+.fb_logo_btn{
+    color: #03dac5;
+    /*font-size: 35px;*/
     position: fixed;
-    bottom: 58px;
+    bottom:25px;
     right: 115px;
 }
-.twitter_logo {
+.twitter_logo_btn {
     color: #00acee;
-    font-size: 35px;
+    /*font-size: 35px;*/
     position: fixed;
-    bottom: 58px;
+    bottom: 25px;
     right: 70px;
 }
 .fb_logo:hover,
 .twitter_logo:hover {
     cursor: pointer;
+}
+.fb_logo{
+    font-size: 40px;
+}
+</style>
+<style>
+.fb_logo_btn > .v-btn__content > .fb_logo {
+    font-size: 38px;
+}
+.twitter_logo_btn > .v-btn__content > .twitter_logo {
+    font-size: 25px;
 }
 </style>
