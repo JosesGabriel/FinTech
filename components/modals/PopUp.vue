@@ -27,10 +27,10 @@ export default {
     };
   },
   created() {
-    this.showPopUp();
+    //this.showPopUp();
   },
   mounted() {
-    this.fbInitialization();
+    //this.fbInitialization();
   },
   methods: {
     showPopUp() {
