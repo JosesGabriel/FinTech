@@ -1,7 +1,7 @@
 <template>
   <v-toolbar
     :dark="lightSwitch == 0 ? false : true"
-    :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'"
+    :class="lightSwitch == 0 ? 'lightcard' : 'darkchart'"
     flat
     height="54"
     class="header__toolbar"
@@ -21,140 +21,55 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mt-3" dark>
-      <!--<div class="searchBar__container hidden-md-only">-->
-      <!-- <div class="searchBar__container" v-show="$auth.loggedIn ? true : false ">
-        <v-text-field
-          label="Search"
-          class="header__searchbar ml-3 mt-1 headline"
-          placeholder="Search"
-          full-width
-          solo
-          flat
-          dense
-          :background-color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
-        ></v-text-field>
-      </div>-->
-      <div v-show="$auth.loggedIn ? true : false ">
-        <v-icon
-          :style="{ color: toggleFontColor }"
-          class="header__menuIcon"
-          @click="toggleMenu"
-        >mdi-menu</v-icon>
-      </div>
-
-      <v-card
-        :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
-        :dark="lightSwitch == 0 ? false : true"
-        outlined
-        max-width="200px"
-        width="200px"
-        height="116px"
-        class="menuIcon__dropdown"
-        :class="this.display ? 'display' : 'noDisplay'"
-      >
-        <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
-          <v-list class="py-0 menuIcon__dropdown-body">
-            <v-list-item
-              class="listItem__buySellCalc"
-              :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-              @click.stop="buySellDialog = true"
-            >
-              <router-link to class="no-transform" :style="{ color: toggleFontColor }">
-                <v-list-item-title class="listItem__buySellCalc">Buy/Sell Calculator</v-list-item-title>
-              </router-link>
-              <v-dialog v-model="buySellDialog" max-width="500">
-                <BuySellCalculator />
-              </v-dialog>
-            </v-list-item>
-
-            <v-list-item
-              class="listItem__varCalc"
-              :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-              @click.stop="varDialog = true"
-            >
-              <router-link to class="no-transform" :style="{ color: toggleFontColor }">
-                <v-list-item-title class="listItem__varCalc">VAR Calculator</v-list-item-title>
-              </router-link>
-              <v-dialog v-model="varDialog" max-width="320">
-                <VARCalculator :data="varDialog" />
-              </v-dialog>
-            </v-list-item>
-
-            <v-list-item
-              class="listItem__avCalc"
-              :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-              @click.stop="averagePriceDialog = true"
-            >
-              <router-link to class="no-transform" :style="{ color: toggleFontColor }">
-                <v-list-item-title class="listItem__avCalc">Average Price Calculator</v-list-item-title>
-              </router-link>
-              <v-dialog v-model="averagePriceDialog" max-width="350">
-                <AveragePriceCalculator />
-              </v-dialog>
-            </v-list-item>
-
-            <!--<v-list-item
-                class="listItem__marketSentiments"
-                :class="this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
-              >
-                <v-list-item-title class="listItem__marketSentiments"
-                  >Market Sentiments</v-list-item-title
-                >
-              </router-link>
-            </v-list-item>
-            <v-list-item
-              class="listItem__powerTools"
-              :class="
-                this.lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'
-              "
-              @click="displayPowerTools = true"
-              @mouseleave="displayPowerTools = false"
-            >
-              <router-link
-                to
-                class="no-transform"
-                :style="{ color: toggleFontColor }"
-              >
-                <v-list-item-title class="listItem__powerTools"
-                  >Power Tools</v-list-item-title
-                >
-                  <v-list-item-title class="listItem__powerTools"
-                    >Power Tools</v-list-item-title
-                  >
-                </router-link>
-            </v-list-item>-->
-          </v-list>
-        </v-container>
-      </v-card>
-
-      <a class="social__router" v-show="$auth.loggedIn ? true : false ">
-        <v-btn
-          ref="accountBtn"
-          class="header__button"
-          text
-          @click.stop="hideDropdown"
-          @click="showNotification = !showNotification"
-        >
-          <v-badge :value="showBadge" color="error" small dot style="font-size:14px;">Notification</v-badge>
-        </v-btn>
-      </a>
-
-      <a :href="'https://vyndue.lyduz.com'" class="social__router" v-show="$auth.loggedIn ? true : false ">
-        <v-btn class="header__button" style="font-size:14px;" text>Vyndue</v-btn>
-      </a>
-
+      <HeaderMenu v-if="showHeaderMenu" class="headerMenu" />
       <HeaderNotification
         v-if="showNotification && $auth.loggedIn"
         :data-notification="dataNotification"
         @clicked="closeDropdown"
       />
-
-      <a class="social__router" v-show="$auth.loggedIn ? true : false ">
+      <a
+        v-if="$auth.loggedIn ? true : false"
+        small
+        :dark="lightSwitch == 0 ? false : true"
+        icon
+        class="social__router pt-4"
+        @click="(showHeaderMenu = !showHeaderMenu), (showNotification = false)"
+      >
+        <v-icon>mdi-menu</v-icon>
+      </a>
+      <a v-show="$auth.loggedIn ? true : false" class="social__router">
         <v-btn
           ref="accountBtn"
           class="header__button"
-          style="font-size:14px;"
-          @click.stop="toggleDropdown"
+          text
+          @click="
+            (showNotification = !showNotification), (showHeaderMenu = false)
+          "
+        >
+          <v-badge
+            :value="showBadge"
+            class="header__button font-weight-black no-transform body-2"
+            color="error"
+            small
+            dot
+            >Notification</v-badge
+          >
+        </v-btn>
+      </a>
+
+      <a
+        v-show="$auth.loggedIn ? true : false"
+        href="https://vyndue.lyduz.com"
+        class="social__router"
+      >
+        <v-btn class="header__button no-transform font-weight-black body-2" text
+          >Vyndue</v-btn
+        >
+      </a>
+      <a v-show="$auth.loggedIn ? true : false" class="social__router">
+        <v-btn
+          ref="accountBtn"
+          class="header__button no-transform font-weight-black body-2"
           text
           @click="
             $auth.loggedIn
@@ -162,15 +77,12 @@
               : (registerDialogModel = true)
           "
         >
-          {{
-          $auth.loggedIn ? $auth.user.data.user.username : "Account"
-          }}
+          {{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}
         </v-btn>
       </a>
-
-      <HeaderDropdown v-if="showDropdown && $auth.loggedIn" />
     </v-toolbar-items>
 
+    <HeaderDropdown v-if="showDropdown && $auth.loggedIn" />
     <LoginRegister v-model="registerDialogModel" />
   </v-toolbar>
 </template>
@@ -181,41 +93,28 @@ import {
 } from "~/assets/js/config/notification";
 import { mapActions, mapGetters } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
-import HeaderDropdown from "~/components/HeaderDropdown";
-import HeaderNotification from "~/components/HeaderNotification";
-import BuySellCalculator from "~/components/calculators/BuySellCalculator";
-import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
-import VARCalculator from "~/components/calculators/VARCalculator";
+import HeaderDropdown from "~/components/header/HeaderDropdown";
+import HeaderMenu from "~/components/header/HeaderMenu";
+import HeaderNotification from "~/components/header/HeaderNotification";
 
 export default {
   components: {
     LoginRegister,
     HeaderDropdown,
     HeaderNotification,
-    BuySellCalculator,
-    AveragePriceCalculator,
-    VARCalculator
+    HeaderMenu
   },
   props: ["ticks"],
-  data: function() {
-    return {
-      type: Boolean
-    };
-  },
   data() {
     return {
       searchButtonIsVisible: true,
       isLightMode: 0,
       registerDialogModel: false,
-      tab: null,
       showDropdown: false,
       showNotification: false,
+      showHeaderMenu: false,
       dataNotification: [],
       display: false,
-      displayPowerTools: false,
-      buySellDialog: false,
-      averagePriceDialog: false,
-      varDialog: false,
       numberPost: 0,
       showBadge: 0,
       whiteMode: null
@@ -226,12 +125,7 @@ export default {
       lightSwitch: "global/getLightSwitch",
       notification: "global/getNotification",
       stockList: "global/getStockList"
-    }),
-    toggleFontColor() {
-      return this.lightSwitch == 0
-        ? "#000000 !important"
-        : "#ffffff !important";
-    }
+    })
   },
   watch: {
     ticks() {
@@ -239,17 +133,6 @@ export default {
     },
     notification() {
       this.newNotication();
-    },
-    /**
-     * show first step once logout
-     *
-     * @param   {Boolean}  value  true/false
-     *
-     * @return
-     */
-    registerDialogModel(value) {
-      //console.log("register dialog");
-      //console.log(value);
     }
   },
   mounted() {
@@ -267,9 +150,7 @@ export default {
       );
     }
     this.whiteMode = window.location.pathname;
-
     document.addEventListener("click", this.close);
-
     this.getNotification();
   },
   beforeDestroy() {
@@ -283,29 +164,17 @@ export default {
     }),
     userNotificationEventsList: UserNotificationEventsList,
     allNotificationEventsList: AllNotificationEventsList,
-    toggleMenu() {
-      if (this.display ? (this.display = false) : (this.display = true));
-      this.showDropdown = false;
-      this.showNotification = false;
-    },
-    toggleDropdown() {
-      this.display = false;
-      this.showNotification = false;
-    },
-    hideDropdown() {
-      this.display = false;
-      this.showDropdown = false;
-    },
     close(e) {
       if (!this.$el.contains(e.target)) {
         this.display = false;
         this.showDropdown = false;
         this.showNotification = false;
+        this.showHeaderMenu = false;
       }
     },
     closeDropdown() {
       this.showNotification = false;
-      this.showBadge = 0
+      this.showBadge = 0;
     },
     newNotication() {
       const m = {
@@ -368,7 +237,7 @@ export default {
        *
        * @return  {object}  returns objects
        */
-      if (typeof this.$auth != 'undefined' && this.$auth.user != null) {
+      if (typeof this.$auth != "undefined" && this.$auth.user != null) {
         const evtSource = new EventSource(
           `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${sseToken}`
         );
@@ -433,221 +302,22 @@ export default {
 </script>
 <style>
 @import "~/assets/css/scrollbar/style.css";
-</style>
-<style scoped>
-.header__searchbar {
-  transform: scale(0.6);
-  transform-origin: top center;
-  border-bottom: 1px solid;
-}
 .social__router {
   text-decoration: none;
   display: inline-flex;
   height: 0;
 }
 .header__toolbar {
-  position: fixed;
+  position: fixed !important;
   width: 100%;
   z-index: 100;
   background-color: #00121e;
   border-bottom: 1px white;
 }
-.lightMode {
-  background-color: #f2f2f2;
-}
-.darkMode {
-  background-color: #00121e;
-}
-.header__button {
-  text-transform: none;
-  font-weight: 600;
-  font-size: 0.75em;
-}
-.header__menuIcon {
-  padding: 5px 15px;
-  position: absolute;
-  right: 342px;
-}
-.header__menuIcon:hover {
-  cursor: pointer;
-}
-.noDisplay {
-  display: none;
-}
-.display {
-  display: block;
-}
-.header__menuIcon--lists {
-  position: absolute;
-  right: 325px;
-  top: 40px;
-  border: thin solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2),
-    0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
-}
-.header__menuIcon--lists > .v-list-item {
-  min-height: 38px !important;
-  border-bottom: thin solid rgba(255, 255, 255, 0.02);
-}
-.header__menuIcon--lists > .v-list-item a > .v-list-item__title {
-  font-size: 14px !important;
-}
-
-.searchBar__container {
-  width: 630px;
-}
-.userSettings__dropdown--caret {
-  width: 0;
-  height: 0;
-  border-left: 13px solid transparent;
-  border-right: 13px solid transparent;
-  border-bottom: 17px solid rgb(182, 182, 182, 0.2);
+.headerMenu {
   position: relative;
-  right: -12px;
-  top: -8px;
-  z-index: -1;
-}
-.userSettings__dropdown--caret .empty {
-  position: absolute;
-  top: 3px;
-  left: -21px;
-  width: 0;
-  /*border-bottom: solid 13px white; */
-  border-right: solid 10px transparent;
-  border-left: solid 21px transparent;
-}
-
-.header__menuIcon--powerTools {
-  position: absolute;
-  right: 315px;
-  top: 122px;
-  border: thin solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2),
-    0px 4px 7px 4px rgba(0, 0, 0, 0.14), 0px 5px 5px 0px rgba(0, 0, 0, 0.12);
-}
-.listItem__buySellCalc,
-.listItem__varCalc,
-.listItem__avCalc,
-.listItem__marketSentiments,
-.listItem__powerTools {
-  font-size: 14px;
-}
-
-.darkModeHover:hover {
-  background-color: #142530;
-}
-.lightModeHover:hover {
-  background-color: #e5e5e5;
-}
-
-.header__menuIcon--powerTools > .v-list-item {
-  min-height: 38px !important;
-  border-bottom: thin solid rgba(255, 255, 255, 0.02);
-}
-
-.caretLight {
-  position: absolute;
-  top: 3px;
-  left: -21px;
-  width: 0;
-  border-bottom: solid 13px white;
-  border-right: solid 10px transparent;
-  border-left: solid 21px transparent;
-}
-.caretDark {
-  position: absolute;
-  top: 3px;
-  left: -21px;
-  width: 0;
-  border-bottom: solid 13px #222f39;
-  border-right: solid 10px transparent;
-  border-left: solid 21px transparent;
-}
-</style>
-<style>
-.header__searchbar
-  > .v-input__control
-  > .v-input__slot
-  > .v-text-field__slot
-  > input {
-  font-size: 20px;
-}
-
-.menuIcon__dropdown {
-  position: relative;
-  /* float:left;*/
   top: 40px;
-  margin-right: 10px;
-  /* box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);*/
-}
-
-.menuIcon__dropdown.theme--dark .menuIcon__dropdown-footer {
-  background: #00121e;
-  border-radius: 10px;
-}
-.menuIcon__dropdown.theme--light .menuIcon__dropdown-footer {
-  background: #fff;
-  border-radius: 10px;
-}
-.menuIcon__dropdown-body {
-  overflow: auto;
-  /*max-height: 360px;*/
-  border-bottom-left-radius: unset;
-  border-bottom-right-radius: unset;
-  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
-  border-radius: 4px;
-}
-
-.menuIcon__dropdown.theme--dark:after {
-  content: "";
-  position: absolute;
-  top: -10.5px;
-  right: 11px;
-  border-bottom: 10px solid #00121e;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-}
-.menuIcon__dropdown.theme--dark:before {
-  content: "";
-  position: absolute;
-  top: -11px;
-  right: 11px;
-  border-bottom: 10px solid #1f2f39;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-}
-.menuIcon__dropdown.theme--light:after {
-  content: "";
-  position: absolute;
-  top: -10.5px;
-  right: 11px;
-  border-bottom: 10px solid #fff;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-}
-.menuIcon__dropdown.theme--light:before {
-  content: "";
-  position: absolute;
-  top: -11px;
-  right: 11px;
-  border-bottom: 10px solid rgba(0, 0, 0, 0.12);
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-}
-
-.menuIcon__dropdown-body > .v-list-item {
-  min-height: 38px;
-}
-
-.lightMode > .v-toolbar__content {
-  background: #f2f2f2;
-}
-
-.darkMode > .v-toolbar__content {
-  background: #00121e;
-}
-
-.lightWhiteMode > .v-toolbar__content {
-  background-color: #fafafa;
+  left: 35px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 </style>

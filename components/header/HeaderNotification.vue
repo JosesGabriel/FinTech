@@ -12,8 +12,8 @@
       <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
           <NotificationCard
-            v-if="index <= 2"
             v-for="(item, index) in dataNotification"
+            v-if="index <= 2"
             :key="index"
             :notification="item"
           />
@@ -21,17 +21,19 @@
         <v-row no-gutters class="userMessage__dropdown-footer">
           <router-link to="/notification" class="no-transform">
             <span
-              @click="closeDropdown()"
               :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
               class="pa-2 caption seeall_dropdown-footer"
-            >See All</span>
+              @click="closeDropdown()"
+              >See All</span
+            >
           </router-link>
           <v-spacer></v-spacer>
           <span
-            @click="markAllRead"
             class="markAll_btn caption py-1 px-3"
             :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
-          >Mark all as read</span>
+            @click="markAllRead"
+            >Mark all as read</span
+          >
         </v-row>
       </v-container>
     </v-card>
@@ -39,7 +41,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import NotificationCard from "./notification/NotificationCard";
+import NotificationCard from "~/components/notification/NotificationCard";
 
 export default {
   components: {
@@ -75,8 +77,8 @@ export default {
       this.$api.social.notification.markall().then(response => {
         if (response.success) {
           this.$emit("clicked");
-          let counter = 0
-          this.setMarkAll(counter += 1)
+          let counter = 0;
+          this.setMarkAll((counter += 1));
         }
       });
     },
@@ -106,9 +108,9 @@ export default {
 }
 /* Notification dropdown */
 .userMessage__dropdown {
-  position: absolute;
+  position: relative;
   top: 45px;
-  right: 248px;
+  left: 140px;
   margin-right: 10px;
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }
