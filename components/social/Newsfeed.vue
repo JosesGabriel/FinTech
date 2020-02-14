@@ -530,7 +530,7 @@ export default {
     localFormat: LocalFormat,
 
     postCounter() {
-      if (this.numberPost >= 5) {
+      if (this.numberPost >= 5 && this.$route.path === "/") {
         this.showBanner = true;
       } else {
         this.showBanner = false;
