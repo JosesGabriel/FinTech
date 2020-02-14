@@ -23,8 +23,11 @@
         <MiniWatchlist class="miniWatchlist" />
         <!-- TODO put back when implementing -->
         <!-- <Bulletin /> -->
-        <FooterSidebar class="footerSidebar" />
-        <PopUp />
+        
+        <FooterSidebar />
+        <client-only>
+         <PopUp />
+        </client-only>
       </v-col>
     </v-row>
   </v-container>
