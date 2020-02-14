@@ -18,7 +18,9 @@
         <!-- <Bulletin /> -->
         
         <FooterSidebar />
+        <client-only>
          <PopUp />
+        </client-only>
       </v-col>
        
     </v-row>
