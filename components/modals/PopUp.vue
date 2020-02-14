@@ -1,20 +1,11 @@
 <template>
   <span class="popupImg" :class="display ? 'display' : 'nodisplay'">
-    <v-icon small color="black" class="popUpClose" @click="display = false"
+    <v-icon small color="black" class="popUpClose" @click="closePopUp"
       >mdi-close</v-icon
     >
     <img width="300" src="/popup.jpg" />
-    <v-btn class="fb_logo_btn" fab x-small @click="shareToFB()">
-      <v-icon class="fb_logo">mdi-facebook </v-icon>
-    </v-btn>
-    <v-btn
-      color="success"
-      class="twitter_logo_btn"
-      fab
-      x-small
-      @click="shareToTwitter()"
-    >
-      <v-icon class="twitter_logo">mdi-twitter </v-icon>
+       <img class="fb_logo_btn" @click="shareToFB()" width="85" src="/Asset 1.png" />
+       <img class="twitter_logo_btn" @click="shareToTwitter()" width="85" src="/Asset 2.png" />
     </v-btn>
   </span>
 </template>
@@ -34,9 +25,17 @@ export default {
   },
   methods: {
     showPopUp() {
-      setTimeout(() => {
-        this.display = true;
-      }, 10000);
+           let gettlocal = localStorage.getItem('showpopup');
+                gettlocal = JSON.parse(gettlocal);
+          if(gettlocal == null){      
+          setTimeout(() => {
+             this.display = true;     
+          }, 10000);
+        }  
+    },
+    closePopUp(){
+      this.display = false;
+      localStorage.setItem('showpopup', true);
     },
     /**
      * Initializes facebook SDK
@@ -92,8 +91,9 @@ export default {
 .popupImg {
   position: fixed;
   right: 10px;
-  bottom: 0;
+  bottom: 10px;
   z-index: 999;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }
 .popUpClose {
   position: fixed;
@@ -109,21 +109,21 @@ export default {
   display: none;
 }
 .fb_logo_btn {
-  color: #03dac5;
-  /*font-size: 35px;*/
   position: fixed;
-  bottom: 25px;
-  right: 115px;
+  bottom: 52px;
+  right: 60px;
+  border-radius: 20px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }
 .twitter_logo_btn {
-  color: #00acee;
-  /*font-size: 35px;*/
   position: fixed;
   bottom: 25px;
-  right: 70px;
+  right: 60px;
+  border-radius: 20px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }
-.fb_logo:hover,
-.twitter_logo:hover {
+.fb_logo_btn:hover,
+.twitter_logo_btn:hover {
   cursor: pointer;
 }
 .fb_logo {

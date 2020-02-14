@@ -63,8 +63,10 @@
               color="success"
             ></v-text-field>
           </v-col>
-          <v-col class="py-1" cols="12">
+          <v-col cols="12" class="pb-0">
             <span class="body-2">Portfolio Allocation</span>
+          </v-col>
+          <v-col v-if="!customPortfolioAllocationToggle" class="pt-0" cols="4">
             <v-btn
               v-if="!customPortfolioAllocationToggle"
               class="my-1"
@@ -74,6 +76,8 @@
               color="success"
               >10%</v-btn
             >
+          </v-col>
+          <v-col v-if="!customPortfolioAllocationToggle" class="pt-0" cols="4">
             <v-btn
               v-if="!customPortfolioAllocationToggle"
               class="my-1"
@@ -83,6 +87,8 @@
               color="success"
               >20%</v-btn
             >
+          </v-col>
+          <v-col v-if="!customPortfolioAllocationToggle" class="pt-0" cols="4">
             <v-btn
               v-if="!customPortfolioAllocationToggle"
               class="my-1 no-transform"
@@ -93,13 +99,12 @@
               @click="customPortfolioAllocationToggle = true"
               >Custom</v-btn
             >
+          </v-col>
+          <v-col v-if="customPortfolioAllocationToggle" cols="12">
             <v-text-field
-              v-if="customPortfolioAllocationToggle"
-              class="py-4"
+              v-model="portfolioAllocation"
               type="number"
               label="Custom Portfolio Allocation (%)"
-              min="1"
-              max="100"
               dense
               hide-details
               color="success"

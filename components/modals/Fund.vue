@@ -315,7 +315,7 @@ export default {
      *
      * @param   {number}  newValue  current value of number field
      *
-     * @return  {number}          returns property
+     * @return  {number}          returns boolean
      */
     enterAmountWatch(newValue) {
       if (parseFloat(this.enterAmount) > 0 && this.fundSourceModel != null) {
@@ -324,6 +324,14 @@ export default {
         this.disableButtonSave = true;
       }
     },
+    
+    /**
+     * function that will hold the disable/enable of save button
+     *
+     * @param   {number}  newValue  current value of number field
+     *
+     * @return  {number}          returns boolean
+     */
     fundSourceChange() {
       if (parseFloat(this.enterAmount) > 0 && this.fundSourceModel != null) {
         this.disableButtonSave = false;
@@ -331,22 +339,6 @@ export default {
         this.disableButtonSave = true;
       }
     },
-    /**
-     * function that will hold the disable/enable of save button
-     *
-     * @return  {number}          returns property
-     */
-    // fundSourceWatch() {
-    //   if (
-    //     parseFloat(this.enterAmount) > 0 &&
-    //     this.fundSourceModel != null &&
-    //     parseInt(this.availableFunds) > 0
-    //   ) {
-    //     this.disableButtonSave = false;
-    //   } else {
-    //     this.disableButtonSave = true;
-    //   }
-    // },
     /**
      * function that will hold the disable/enable of save button
      *

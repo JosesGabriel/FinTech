@@ -723,9 +723,6 @@ export default {
     }
   },
   watch: {
-    GetSelectStock() {
-      console.log(this.GetSelectStock);
-    },
     /**
      * get all user trade
      *
