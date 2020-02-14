@@ -191,17 +191,6 @@
               <v-row v-else>
                 <v-col cols="12" class="py-0"
                   ><v-text-field
-                    v-model="currentPassword"
-                    class="name__field"
-                    label="Current Password"
-                    color="#b6b6b6"
-                    hide-details
-                    outlined
-                    dense
-                  ></v-text-field
-                ></v-col>
-                <v-col cols="12" class="py-0"
-                  ><v-text-field
                     v-model="newPassword"
                     class="name__field"
                     label="New Password"
@@ -240,6 +229,7 @@
                 v-else
                 text
                 class="no-transform"
+                :disabled="disabledSavePassword"
                 @click="updateAccount('password')"
                 >Save</v-btn
               >
@@ -316,10 +306,10 @@ export default {
       passwordChanged: false,
       currentToggle: "",
       unsavedChangesDialog: false,
+      disabledSavePassword: true,
       firstName: this.$auth.user.data.user.first_name,
       lastName: this.$auth.user.data.user.last_name,
       mobile: this.$auth.user.data.user.mobile,
-      currentPassword: "",
       newPassword: "",
       confirmNewPassword: "",
       alert: [],
@@ -337,6 +327,13 @@ export default {
      */
     fullName() {
       return `${this.firstName} ${this.lastName}`;
+    }
+  },
+  watch: {
+    confirmNewPassword() {
+      if (this.newPassword == this.confirmNewPassword) {
+        this.disabledSavePassword = false;
+      }
     }
   },
   methods: {
@@ -407,7 +404,7 @@ export default {
         case "password":
           {
             payload = {
-              password: this.password
+              password: this.confirmNewPassword
             };
           }
           break;
