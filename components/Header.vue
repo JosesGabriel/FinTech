@@ -52,7 +52,8 @@
             color="error"
             small
             dot
-          >Notification</v-badge>
+            >Notification</v-badge
+          >
         </v-btn>
       </a>
 
@@ -62,7 +63,9 @@
         target="_blank"
         class="social__router"
       >
-        <v-btn class="header__button no-transform font-weight-black body-2" text>Vyndue</v-btn>
+        <v-btn class="header__button no-transform font-weight-black body-2" text
+          >Vyndue</v-btn
+        >
       </a>
       <a v-show="$auth.loggedIn ? true : false" class="social__router">
         <v-btn
@@ -74,7 +77,10 @@
               ? (showDropdown = !showDropdown)
               : (registerDialogModel = true)
           "
-        >{{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}</v-btn>
+          >{{
+            $auth.loggedIn ? $auth.user.data.user.username : "Account"
+          }}</v-btn
+        >
       </a>
     </v-toolbar-items>
 
