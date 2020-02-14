@@ -1,21 +1,8 @@
 <template>
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
-      <Header :ticks="ticks" class="header__container" />
-      <v-container
-        v-show="!$device.isMobileOrTablet"
-        :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-        class="componentContainer"
-      >
-        <div v-show="showLamp" class="lampBtn">
-          <!-- :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'" -->
-          <img :src="lampMode" @click="lampSwitch" />
-          <img
-            :class="lightSwitch == 1 ? 'd-none' : ''"
-            class="lightRays_img"
-            src="/Lamp-LightRays.svg"
-          />
-        </div>
+      <Header class="header__container" />
+      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
         <client-only>
           <nuxt />
         </client-only>
@@ -49,7 +36,7 @@
         </v-card>
       </v-dialog>
       <!-- dont remove -->
-      <div v-show="false" id="tv_chart_container"></div>
+      <!-- <div v-show="false" id="tv_chart_container"></div> -->
     </v-content>
   </v-app>
 </template>
@@ -71,15 +58,9 @@ export default {
   data() {
     return {
       isLightMode: 0,
-      notificationQueue: [],
-      notificationAlert: true,
-      notificationTimeout: 100000,
-      ticks: 1,
-      whiteMode: null,
       lampBtn: false
     };
   },
-  middleware: "isMobileOrTablet",
   head() {
     return {
       link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
@@ -92,91 +73,14 @@ export default {
       favicon: "global/favicon",
       alertDialog: "global/getAlertDialog",
       notification: "global/getNotification"
-    }),
-    lampMode() {
-      return this.lightSwitch == 1
-        ? "/Lamp-Darkmode.svg"
-        : "/Lamp-Lightmode.svg";
-    },
-    showLamp() {
-      let lampBtn;
-      if (this.$route.path == "/login/" || this.$route.path == "/login") {
-        lampBtn = true;
-      } else {
-        lampBtn = false;
-      }
-      return lampBtn;
-    }
-  },
-  watch: {
-    /**
-     * This function it'll only show if user received notifications
-     * Also used helpers this.userNotificationAlertLayout it'll return html code
-     * based on the user notification
-     *
-     * @return  returns alert
-     */
-    notification() {
-      if (this.notification) {
-        const user = this.notification.user;
-        this.$snotify.html(
-          this.userNotificationAlertLayout(
-            user.profile_image,
-            this.notification._message,
-            this.notification.post.id
-          ),
-          {
-            timeout: 5000,
-            showProgressBar: false,
-            pauseOnHover: true,
-            position: SnotifyPosition.leftBottom,
-            newItemsOnTop: false,
-            config: {
-              closeOnClick: true
-            }
-          }
-        );
-      }
-    }
-  },
-  mounted() {
-    if (localStorage.currentMode) {
-      this.setLightSwitch(localStorage.currentMode);
-    }
-    /**
-     * For avoid duplicating mount need to refactor
-     */
-    this.$nextTick(() => {
-      this.ticks = 2;
-    });
-
-    this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
-    // this.showAnnouncements();
+    })
   },
   methods: {
     ...mapActions({
       setLightSwitch: "global/setLightSwitch"
     }),
     userNotificationAlertLayout: UserNotificationAlertLayout,
-    allNotificationAlertLayout: AllNotificationAlertLayout,
-    lampSwitch() {
-      let lampMode = localStorage.currentMode;
-
-      this.setLightSwitch(lampMode == 1 ? 0 : 1);
-      localStorage.currentMode = this.lightSwitch;
-    }
-    // showAnnouncements() {
-    //   this.$snotify.html(this.allNotificationAlertLayout(), {
-    //     timeout: 100000000,
-    //     showProgressBar: false,
-    //     pauseOnHover: true,
-    //     position: SnotifyPosition.leftBottom,
-    //     newItemsOnTop: false,
-    //     config: {
-    //       closeOnClick: true
-    //     }
-    //   });
-    // }
+    allNotificationAlertLayout: AllNotificationAlertLayout
   }
 };
 </script>

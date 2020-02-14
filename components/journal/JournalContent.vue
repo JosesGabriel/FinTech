@@ -109,7 +109,9 @@
         :value="'tab-' + 1"
       >
         <v-container class="pa-0">
+          <no-ssr>
           <JournalLivePortfolio />
+          </no-ssr>
           <div class="component_spacer"></div>
           <v-row no-gutters>
             <JournalPortfolioSnapshot />
