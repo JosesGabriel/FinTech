@@ -144,7 +144,7 @@ export default {
       this.$route.query.redirect == undefined &&
       this.$device.isMobileOrTablet == true
     ) {
-      this.$router.push("mobile");
+      this.$router.push("/mobile");
     }
   },
   methods: {
