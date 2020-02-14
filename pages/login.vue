@@ -140,11 +140,12 @@ export default {
     this.retrieveParams();
   },
   created() {
+    // since this page is allowed in middleware, temporarily, catch user if mobile
     if (
       this.$route.query.redirect == undefined &&
       this.$device.isMobileOrTablet == true
     ) {
-      this.$router.push("/mobile");
+      //this.$router.push("/mobile");
     }
   },
   methods: {
