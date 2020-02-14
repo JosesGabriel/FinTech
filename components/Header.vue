@@ -33,7 +33,11 @@
         :dark="lightSwitch == 0 ? false : true"
         icon
         class="social__router pt-4"
-        @click="(showHeaderMenu = !showHeaderMenu), (showNotification = false)"
+        @click="
+          (showHeaderMenu = !showHeaderMenu),
+            (showNotification = false),
+            (showDropdown = false)
+        "
       >
         <v-icon>mdi-menu</v-icon>
       </a>
@@ -43,7 +47,9 @@
           class="header__button"
           text
           @click="
-            (showNotification = !showNotification), (showHeaderMenu = false)
+            (showNotification = !showNotification),
+              (showHeaderMenu = false),
+              (showDropdown = false)
           "
         >
           <v-badge
@@ -52,7 +58,8 @@
             color="error"
             small
             dot
-          >Notification</v-badge>
+            >Notification</v-badge
+          >
         </v-btn>
       </a>
 
@@ -62,7 +69,17 @@
         target="_blank"
         class="social__router"
       >
-        <v-btn class="header__button no-transform font-weight-black body-2" text>Vyndue</v-btn>
+        <v-btn class="header__button no-transform font-weight-black body-2" text
+          ><v-badge
+            content="TRY"
+            dark
+            left
+            class="header__button font-weight-black no-transform vyndue__badge"
+            color="transparent"
+            small
+          ></v-badge>
+          Vyndue</v-btn
+        >
       </a>
       <a v-show="$auth.loggedIn ? true : false" class="social__router">
         <v-btn
@@ -72,9 +89,12 @@
           @click="
             $auth.loggedIn
               ? (showDropdown = !showDropdown)
-              : (registerDialogModel = true)
+              : (registerDialogModel = true),
+              (showHeaderMenu = false),
+              (showNotification = false)
           "
-        >{{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}</v-btn>
+          >{{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}
+        </v-btn>
       </a>
     </v-toolbar-items>
 
@@ -319,5 +339,9 @@ export default {
   top: 40px;
   left: 35px;
   border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.vyndue__badge .v-badge__wrapper .v-badge__badge {
+  color: #f44336;
+  font-size: 9px;
 }
 </style>
