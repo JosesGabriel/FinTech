@@ -25,6 +25,11 @@ export default {
     this.fbInitialization();
   },
   methods: {
+    /**
+     * show PopUp after 10 seconds
+     *
+     * 
+     */
     showPopUp() {
            let gettlocal = localStorage.getItem('showpopup1');
                 gettlocal = JSON.parse(gettlocal);
@@ -34,6 +39,10 @@ export default {
           }, 10000);
         }  
     },
+    /**
+     * close Popup when u click "x" button
+     *
+     */
     closePopUp(){
       this.display = false;
       localStorage.setItem('showpopup1', true);
@@ -65,6 +74,10 @@ export default {
         fjs.parentNode.insertBefore(js, fjs);
       })(document, "script", "facebook-jssdk");
     },
+    /**
+     * Share to Facebook button
+     *
+     */
     shareToFB() {
       FB.ui(
         {
@@ -74,6 +87,10 @@ export default {
         function(response) {}
       );
     },
+    /**
+     * Share to Twitter button
+     *
+     */
     shareToTwitter() {
       let twitterURL =
         process.env.TWITTER_LINK +
