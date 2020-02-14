@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
-      <Header :ticks="ticks" class="header__container" />
+      <Header class="header__container" />
       <v-container
         v-show="!$device.isMobileOrTablet"
         :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
@@ -74,7 +74,6 @@ export default {
       notificationQueue: [],
       notificationAlert: true,
       notificationTimeout: 100000,
-      ticks: 1,
       whiteMode: null,
       lampBtn: false
     };
@@ -143,12 +142,6 @@ export default {
     if (localStorage.currentMode) {
       this.setLightSwitch(localStorage.currentMode);
     }
-    /**
-     * For avoid duplicating mount need to refactor
-     */
-    this.$nextTick(() => {
-      this.ticks = 2;
-    });
 
     this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
     // this.showAnnouncements();
@@ -165,18 +158,6 @@ export default {
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
     }
-    // showAnnouncements() {
-    //   this.$snotify.html(this.allNotificationAlertLayout(), {
-    //     timeout: 100000000,
-    //     showProgressBar: false,
-    //     pauseOnHover: true,
-    //     position: SnotifyPosition.leftBottom,
-    //     newItemsOnTop: false,
-    //     config: {
-    //       closeOnClick: true
-    //     }
-    //   });
-    // }
   }
 };
 </script>
