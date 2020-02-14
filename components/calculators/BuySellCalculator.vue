@@ -3,8 +3,8 @@
     :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
     :dark="lightSwitch == 0 ? false : true"
   >
-    <v-card-title class="subtitle-1 success--text"
-      >BUY/SELL CALCULATOR</v-card-title
+    <v-card-title class="subtitle-1 font-weight-black"
+      >Buy/Sell Calculator</v-card-title
     >
     <v-container class="py-0">
       <v-row>
