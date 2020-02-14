@@ -140,10 +140,10 @@ export default {
             window.open("/", "_self");
           }, 800);
         })
-        .catch(() => {
+        .catch(e => {
           this.$emit("alert", {
             state: "error",
-            message: "Invalid Credentials"
+            message: e.response.data.message
           });
         })
         .finally(() => {
