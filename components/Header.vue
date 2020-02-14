@@ -52,8 +52,7 @@
             color="error"
             small
             dot
-            >Notification</v-badge
-          >
+          >Notification</v-badge>
         </v-btn>
       </a>
 
@@ -62,9 +61,7 @@
         href="https://vyndue.lyduz.com"
         class="social__router"
       >
-        <v-btn class="header__button no-transform font-weight-black body-2" text
-          >Vyndue</v-btn
-        >
+        <v-btn class="header__button no-transform font-weight-black body-2" text>Vyndue</v-btn>
       </a>
       <a v-show="$auth.loggedIn ? true : false" class="social__router">
         <v-btn
@@ -76,9 +73,7 @@
               ? (showDropdown = !showDropdown)
               : (registerDialogModel = true)
           "
-        >
-          {{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}
-        </v-btn>
+        >{{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}</v-btn>
       </a>
     </v-toolbar-items>
 
@@ -104,7 +99,6 @@ export default {
     HeaderNotification,
     HeaderMenu
   },
-  props: ["ticks"],
   data() {
     return {
       searchButtonIsVisible: true,
@@ -117,7 +111,9 @@ export default {
       display: false,
       numberPost: 0,
       showBadge: 0,
-      whiteMode: null
+      whiteMode: null,
+      evtSourceAll: null,
+      evtSource: null
     };
   },
   computed: {
@@ -128,9 +124,6 @@ export default {
     })
   },
   watch: {
-    ticks() {
-      this.initSSE();
-    },
     notification() {
       this.newNotication();
     }
@@ -152,9 +145,12 @@ export default {
     this.whiteMode = window.location.pathname;
     document.addEventListener("click", this.close);
     this.getNotification();
+    this.initSSE();
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
+    this.evtSource.close();
+    this.evtSourceAll.close();
   },
   methods: {
     ...mapActions({
@@ -211,23 +207,26 @@ export default {
       });
     },
     initSSE() {
+      if (this.evtSourceAll !== null && this.evtSource !== null) {
+        this.evtSourceAll.close();
+        this.evtSource.close();
+      }
       /**
        * all notifications here
        */
-
       const sseToken =
         this.$auth.getToken("local") != false
           ? this.$auth.getToken("local").replace("Bearer ", "")
           : null;
 
-      const evtSourceAll = new EventSource(
+      this.evtSourceAll = new EventSource(
         `${process.env.STREAM_API_URL}/sse/notifications/all?token=${sseToken}`
       );
 
       const allNotificationList = this.allNotificationEventsList();
 
       allNotificationList.forEach(eventName => {
-        evtSourceAll.addEventListener(eventName, e => {
+        this.evtSourceAll.addEventListener(eventName, e => {
           this.allNotificationHandler(eventName, JSON.parse(e.data));
         });
       });
@@ -238,14 +237,14 @@ export default {
        * @return  {object}  returns objects
        */
       if (typeof this.$auth != "undefined" && this.$auth.user != null) {
-        const evtSource = new EventSource(
+        this.evtSource = new EventSource(
           `${process.env.STREAM_API_URL}/sse/notifications/${this.$auth.user.data.user.uuid}?token=${sseToken}`
         );
 
         const userNotificationList = this.userNotificationEventsList();
 
         userNotificationList.forEach(eventName => {
-          evtSource.addEventListener(eventName, e => {
+          this.evtSource.addEventListener(eventName, e => {
             this.notificationHandler(eventName, JSON.parse(e.data));
           });
         });

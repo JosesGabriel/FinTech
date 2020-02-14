@@ -1,15 +1,7 @@
 <template>
-  <v-container
-    class="index__container pt-0"
-    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-  >
+  <v-container class="index__container pt-0" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
     <v-row class="mb-6" no-gutters>
-      <v-col
-        class="navbar__container hidden-xs-only px-3"
-        cols="1"
-        sm="1"
-        md="1"
-      >
+      <v-col class="navbar__container hidden-xs-only px-3" cols="1" sm="1" md="1">
         <NavbarJournal :data="navbarMiniVariantSetter" active="journal" />
       </v-col>
       <v-col cols="11" class="pl-8">
