@@ -1,8 +1,12 @@
 <template>
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
-      <rbHeader :ticks="ticks" class="header__container" />
-      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
+      <Header class="header__container" />
+      <v-container
+        v-show="!$device.isMobileOrTablet"
+        :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+        class="componentContainer"
+      >
         <div v-show="showLamp" class="lampBtn">
           <!-- :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'" -->
           <img :src="lampMode" @click="lampSwitch" />
@@ -12,7 +16,9 @@
             src="/Lamp-LightRays.svg"
           />
         </div>
-        <nuxt />
+        <client-only>
+          <nuxt />
+        </client-only>
       </v-container>
       <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
         {{ alert.message }}
@@ -39,11 +45,7 @@
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
           >{{ alertDialog.body }}</v-card-text>
-          <v-card-text class="text-center">
-            {{
-            alertDialog.subtext
-            }}
-          </v-card-text>
+          <v-card-text class="text-center">{{ alertDialog.subtext }}</v-card-text>
         </v-card>
       </v-dialog>
       <!-- dont remove -->
@@ -54,16 +56,17 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import rbHeader from "~/components/Header";
 import {
   UserNotificationAlertLayout,
   AllNotificationAlertLayout
 } from "~/assets/js/helpers/notification";
 import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
+import Header from "~/components/Header";
+
 export default {
   components: {
-    rbHeader
+    Header
   },
   data() {
     return {
@@ -71,7 +74,6 @@ export default {
       notificationQueue: [],
       notificationAlert: true,
       notificationTimeout: 100000,
-      ticks: 1,
       whiteMode: null,
       lampBtn: false
     };
@@ -140,12 +142,6 @@ export default {
     if (localStorage.currentMode) {
       this.setLightSwitch(localStorage.currentMode);
     }
-    /**
-     * For avoid duplicating mount need to refactor
-     */
-    this.$nextTick(() => {
-      this.ticks = 2;
-    });
 
     this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
     // this.showAnnouncements();
@@ -162,18 +158,6 @@ export default {
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
     }
-    // showAnnouncements() {
-    //   this.$snotify.html(this.allNotificationAlertLayout(), {
-    //     timeout: 100000000,
-    //     showProgressBar: false,
-    //     pauseOnHover: true,
-    //     position: SnotifyPosition.leftBottom,
-    //     newItemsOnTop: false,
-    //     config: {
-    //       closeOnClick: true
-    //     }
-    //   });
-    // }
   }
 };
 </script>

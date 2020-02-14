@@ -162,8 +162,9 @@
           >Delete</v-btn>
         </div>
         <v-icon
+          :class="lightSwitch == 1 ? 'white--text' : 'tertiary--text'"
           small
-          class="mr-2 tertiary--text"
+          class="mr-2"
           @mouseover="tradelogsmenuLogsShow(item)"
         >mdi-dots-horizontal</v-icon>
       </template>

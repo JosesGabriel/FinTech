@@ -17,7 +17,7 @@
         height="23"
         @click.stop="showResetForm = true"
       >
-        <span class="body-2">Reset</span>
+        <span class="body-2 font-weight-bold">Reset</span>
       </v-btn>
       <v-btn
         text
@@ -28,7 +28,7 @@
         height="23"
         @click.stop="showTradeViewForm = true"
       >
-        <span class="body-2">Trade</span>
+        <span class="body-2 font-weight-bold">Trade</span>
       </v-btn>
       <v-btn
         text
@@ -39,7 +39,7 @@
         height="23"
         @click.stop="showFundsForm = true"
       >
-        <span class="body-2">Fund</span>
+        <span class="body-2 font-weight-bold">Fund</span>
       </v-btn>
 
       <v-btn
@@ -148,7 +148,7 @@
           >
         </div>
         <v-icon
-          :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+          :class="lightSwitch == 1 ? 'white--text' : 'tertiary--text'"
           small
           class="mr-2"
           @mouseover="menuLogsShow(item)"

@@ -33,20 +33,32 @@
               @click:append="showPassword = !showPassword"
             ></v-text-field>
           </v-col>
+          <v-col cols="6" class="mt-0 py-0">
+            <small
+              ><a
+                class="secondarytext--text font-weight-bold"
+                @click="$emit('stepper', 5)"
+                >Forgot your password?</a
+              ></small
+            >
+            <small
+              ><v-checkbox
+                class="remember--checkbox"
+                label="Remember me"
+              ></v-checkbox
+            ></small>
+          </v-col>
+
+          <v-col cols="6" class="text-right mt-0 py-0">
+            <small
+              ><a
+                class="secondarytext--text font-weight-bold"
+                @click="$emit('stepper', 7)"
+                >Resend Verification?</a
+              ></small
+            >
+          </v-col>
         </v-row>
-        <small
-          ><a
-            class="secondarytext--text font-weight-bold"
-            @click="$emit('stepper', 5)"
-            >Forgot your password?</a
-          ></small
-        >
-        <small
-          ><v-checkbox
-            class="remember--checkbox"
-            label="Remember me"
-          ></v-checkbox
-        ></small>
       </v-container>
       <v-row align="center" justify="center" class="mb-5">
         <span v-show="false" class="caption">Sign in with</span>
@@ -128,10 +140,10 @@ export default {
             window.open("/", "_self");
           }, 800);
         })
-        .catch(() => {
+        .catch(e => {
           this.$emit("alert", {
             state: "error",
-            message: "Invalid Credentials"
+            message: e.response.data.message
           });
         })
         .finally(() => {
