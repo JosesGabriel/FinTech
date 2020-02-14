@@ -12,20 +12,21 @@
           <v-tab class="no-transform caption settings__tabs">
             Account
           </v-tab>
-          <v-tab class="no-transform caption settings__tabs">
+          <!-- TODO put back when endpoints are functional -->
+          <!-- <v-tab class="no-transform caption settings__tabs">
             Privacy Settings
           </v-tab>
           <v-tab class="no-transform caption settings__tabs">
             Notifications
-          </v-tab>
+          </v-tab> -->
           <v-tab-item>
             <AccountCard @alert="showAlert" />
           </v-tab-item>
           <v-tab-item>
-            <PrivacyCard />
+            <!-- <PrivacyCard /> -->
           </v-tab-item>
           <v-tab-item>
-            <NotificationsCard />
+            <!-- <NotificationsCard /> -->
           </v-tab-item>
         </v-tabs>
       </v-col>
