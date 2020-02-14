@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
-      <rbHeader :ticks="ticks" class="header__container" />
+      <Header :ticks="ticks" class="header__container" />
       <v-container
         v-show="!$device.isMobileOrTablet"
         :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
