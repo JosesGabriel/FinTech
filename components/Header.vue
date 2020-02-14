@@ -59,6 +59,7 @@
       <a
         v-show="$auth.loggedIn ? true : false"
         href="https://vyndue.lyduz.com"
+        target="_blank"
         class="social__router"
       >
         <v-btn class="header__button no-transform font-weight-black body-2" text>Vyndue</v-btn>
