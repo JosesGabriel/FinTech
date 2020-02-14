@@ -208,12 +208,8 @@ export default {
     },
     userData() {
       this.user = this.userData;
-      console.log(this.user)
       this.getFollow();
     }
-  },
-  mounted() {
-    console.log(false && true && true)
   },
   methods: {
     ...mapActions({
@@ -224,7 +220,6 @@ export default {
       this.$api.social.follow.follow(user_id).then(response => {
         if (response.success) {
           this.follow = response.data.user;
-          console.log(this.follow)
         }
       });
     },
