@@ -602,7 +602,7 @@ export default {
      * @return  {object}    success object return
      */
     recordNow() {
-      this.el = 1;
+      this.e1 = 1;
       let tim = new Date();
       let time =
         tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();

@@ -91,18 +91,6 @@ export default {
         }
       ]
     };
-  },
-  mounted() {
-    // client.on(
-    //   "sync",
-    //   function(state, prevState, data) {
-    //     switch (state) {
-    //       case "PREPARED": {
-    //         console.log(client.getRooms(), "asdasd");
-    //       }
-    //     }
-    //   }.bind(this)
-    // );
   }
 };
 </script>

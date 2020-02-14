@@ -35,8 +35,6 @@ export default {
         this.user = data.user;
         this.profile = data.profile;
         
-        // console.log(this.$route.params.id)
-        // console.log(data)
       });
     }
   }

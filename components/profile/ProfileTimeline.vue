@@ -137,7 +137,6 @@ export default {
       this.about = this.userData.profile;
       this.user = this.userData;
 
-      // console.log(this.user)
       this.getUserId = true;
     }
   },

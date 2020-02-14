@@ -139,6 +139,15 @@ export default {
   mounted() {
     this.retrieveParams();
   },
+  created() {
+    // since this page is allowed in middleware, temporarily, catch user if mobile
+    if (
+      this.$route.query.redirect == undefined &&
+      this.$device.isMobileOrTablet == true
+    ) {
+      //this.$router.push("/mobile");
+    }
+  },
   methods: {
     ...mapActions({
       setAlert: "global/setAlert",
@@ -149,33 +158,38 @@ export default {
      *
      * @return
      */
-    retrieveParams() {
+    async retrieveParams() {
       let param = this.$route.fullPath;
       const { query } = this.$route;
       if (Object.prototype.hasOwnProperty.call(query, "auth_provider")) {
-        return this.$api.authentication.providers
-          .getRedirectCallback(query["auth_provider"], query)
-          .then(({ data }) => {
-            if (data.success) {
-              this.$auth.setUserToken(data.data.token.access_token).then(() =>
-                this.setAlert({
-                  model: true,
-                  state: "success",
-                  message: data.message
-                })
-              );
-            }
-          })
-          .catch(e => {
-            this.setAlert({
-              model: true,
-              state: "error",
-              message: "An error has occurred."
-            });
+        try {
+          const response = await this.$api.authentication.providers.getRedirectCallback(
+            query["auth_provider"],
+            query
+          );
+          this.$auth
+            .setUserToken(response.data.data.token.access_token)
+            .then(() =>
+              this.setAlert({
+                model: true,
+                state: "success",
+                message: response.data.message
+              })
+            );
+        } catch (error) {
+          this.setAlert({
+            model: true,
+            state: "error",
+            message: "An error has occurred."
           });
+        }
       }
       if (param.includes("redirected=true")) {
-        this.setLoginModalState(true);
+        if (window.localStorage.getItem("_verifiedFromMobile") === false) {
+          this.$router.push("mobile");
+        } else {
+          this.setLoginModalState(true);
+        }
       }
     }
   }
