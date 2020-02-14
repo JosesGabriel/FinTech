@@ -201,41 +201,6 @@
       </v-row>
  
   </div>
-      <!--------------------------------------------->
-    <!--  <v-row>
-        <v-col cols="12"
-          ><v-text-field
-            v-model="totalCost"
-            label="Total Cost"
-            prefix="₱"
-            hide-details
-            readonly
-            filled
-            background-color="transparent"
-          ></v-text-field
-        ></v-col>
-        <v-col cols="12"
-          ><v-text-field
-            v-model="totalPosition"
-            label="Total Position"
-            hide-details
-            readonly
-            filled
-            background-color="transparent"
-          ></v-text-field
-        ></v-col>
-        <v-col cols="12"
-          ><v-text-field
-            v-model="averagePrice"
-            label="Average Price"
-            prefix="₱"
-            hide-details
-            readonly
-            filled
-            background-color="transparent"
-          ></v-text-field
-        ></v-col>
-      </v-row> -->
     </v-container>
   </v-card>
 </template>

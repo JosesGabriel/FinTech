@@ -28,6 +28,28 @@ Vue.filter("limitString", limitString);
 /**
  * Automated format how many decimals to display
  * @param {Float} value float amount with decimal points
+ * @param {Number} pricescale 100 to 10000
+ */
+const stockDecimalPriceScale = (value, pricescale) => {
+  if (
+    value == undefined ||
+    value <= 0 ||
+    pricescale == undefined ||
+    pricescale <= 0
+  ) {
+    return;
+  }
+
+  // count how many decimal places should display
+  const count = String(pricescale).match(/0/g).length;
+  const format = `0,0.${"0".repeat(count)}`;
+  return numeral(value).format(format);
+};
+Vue.filter("stockDecimalPriceScale", stockDecimalPriceScale);
+
+/**
+ * Automated format how many decimals to display
+ * @param {Float} value float amount with decimal points
  * @param {Boolean} value if false = 1000.00 converts to 1k and all > 999 amount
  */
 const numeralDecimal = (value, strict = true) => {
@@ -56,7 +78,8 @@ Vue.filter("numeralDecimal", numeralDecimal);
 
 const globalFilters = {
   limitString,
-  numeralDecimal
+  numeralDecimal,
+  stockDecimalPriceScale
 };
 
 const globalFilter = {};

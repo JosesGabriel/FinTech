@@ -36,7 +36,7 @@
         </div>
         <div class="hcontainer_mid">
           <span id="stock__last" class="hlast">{{
-            stock.last | numeralDecimal
+            stock.last | stockDecimalPriceScale(stock.pricescale)
           }}</span>
           <span
             class="hchange"

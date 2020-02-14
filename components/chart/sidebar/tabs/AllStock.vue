@@ -69,7 +69,10 @@
                   { decrease: props.item.change < 0 }
                 ]"
               >
-                {{ props.item.last | numeralDecimal(false) }}
+                {{
+                  props.item.last
+                    | stockDecimalPriceScale(props.item.pricescale)
+                }}
               </span>
             </td>
             <td class="text-right" style="width:55px">
@@ -217,7 +220,6 @@ export default {
         const response = await this.$api.chart.stocks.history({
           exchange: "PSE"
         });
-
         // this filter made to remove all index stocks
         const filtered = response.data.filter(data => parseInt(data.value) > 0);
         filtered.forEach(data => {
@@ -230,7 +232,8 @@ export default {
             value,
             trades,
             description,
-            lastupdatetime
+            lastupdatetime,
+            pricescale
           } = data;
           this.allStocks.push({
             stockidstr,
@@ -241,7 +244,8 @@ export default {
             value,
             trades,
             description,
-            lastupdatetime
+            lastupdatetime,
+            pricescale
           });
         });
         this.loading = false;
@@ -260,6 +264,7 @@ export default {
           resp => resp.stockidstr == data.sym_id
         );
         const key = this.allStocks.indexOf(stock);
+
         this.allStocks.splice(key, 1, {
           stockidstr: stock.stockidstr,
           symbol: stock.symbol,
@@ -267,7 +272,8 @@ export default {
           last: data.l,
           changepercentage: data.chgpc,
           value: data.val,
-          trades: data.tr
+          trades: data.tr,
+          pricescale: stock.pricescale
         });
         this.updateEffect(stock.stockidstr);
       } catch (error) {}

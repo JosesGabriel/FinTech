@@ -1,7 +1,10 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="12" sm="12" md="12">
     <v-card-title class="text-left justify-left px-0 pb-2 pt-5" :style="borderColor">
-      <h6 class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }">EQUITY CURVE</h6>
+      <h6
+        class="font-weight-bold subtitle-2"
+        :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+      >EQUITY CURVE</h6>
       <v-spacer></v-spacer>
       <!-- hide for now -->
       <!-- <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>
@@ -9,7 +12,7 @@
       <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
       <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
       <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
-      <v-spacer></v-spacer> -->
+      <v-spacer></v-spacer>-->
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
@@ -34,6 +37,7 @@
 <script>
 import shareModal from "~/components/modals/Share";
 import { mapGetters } from "vuex";
+let numeral = require("numeral");
 
 export default {
   components: {
@@ -182,8 +186,8 @@ export default {
               cssClass: "apexcharts-yaxis-label"
             },
             formatter: function(value) {
-              let val = (value / 1).toFixed(2).replace(".", ".");
-              return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              let val = numeral(value).format("0.00a");
+              return val;
             }
           },
           axisTicks: {

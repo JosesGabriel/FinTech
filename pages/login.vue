@@ -37,7 +37,7 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="12" sm="8" md="8" lg="8">
+      <v-col acols="12" sm="8" md="8" lg="8">
         <img :src="landingImg" class="landingImage" alt width="100%" />
       </v-col>
     </v-row>
