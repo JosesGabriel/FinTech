@@ -12,7 +12,9 @@
       <v-list nav dense rounded class="py-0">
         <v-list-item-group>
           <router-link
-            :to="$auth.loggedIn ? '/profile/' + $auth.user.data.user.username : ''"
+            :to="
+              $auth.loggedIn ? '/profile/' + $auth.user.data.user.username : ''
+            "
             class="no-transform"
           >
             <v-list-item class="tertiary--text">
@@ -20,18 +22,21 @@
                 <v-img
                   class="avatar__border"
                   :src="
-                  $auth.loggedIn ?
-                    $auth.user.data.user.profile_image
+                    $auth.loggedIn
                       ? $auth.user.data.user.profile_image
-                      : 'default.png' : ''
+                        ? $auth.user.data.user.profile_image
+                        : 'default.png'
+                      : ''
                   "
                 ></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title
-                  class="navbar__name body-2"
-                >{{ $auth.loggedIn ? $auth.user.data.user.name : "Guest" }}</v-list-item-title>
-                <span class="overline no-transform">@{{ $auth.user.data.user.username }}</span>
+                <v-list-item-title class="navbar__name body-2">{{
+                  $auth.loggedIn ? $auth.user.data.user.name : "Guest"
+                }}</v-list-item-title>
+                <span class="overline no-transform"
+                  >@{{ $auth.user.data.user.username }}</span
+                >
               </v-list-item-content>
             </v-list-item>
             <div v-if="!data">
@@ -45,13 +50,16 @@
               class="tertiary--text"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'social' ? 'success' : ''">mdi-account-supervisor-circle</v-icon>
+                <v-icon :color="active == 'social' ? 'success' : ''"
+                  >mdi-account-supervisor-circle</v-icon
+                >
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title
                   class="font-weight-black no-transform body-2"
                   :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
-                >Social Wall</v-list-item-title>
+                  >Social Wall</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
           </router-link>
@@ -61,10 +69,15 @@
               class="tertiary--text"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'chart' ? 'success' : ''">mdi-chart-bar</v-icon>
+                <v-icon :color="active == 'chart' ? 'success' : ''"
+                  >mdi-chart-bar</v-icon
+                >
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title class="font-weight-medium no-transform body-2">Interactive Chart</v-list-item-title>
+                <v-list-item-title
+                  class="font-weight-medium no-transform body-2"
+                  >Interactive Chart</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
           </router-link>
@@ -75,10 +88,15 @@
               class="tertiary--text"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'journal' ? 'success' : ''">mdi-library-books</v-icon>
+                <v-icon :color="active == 'journal' ? 'success' : ''"
+                  >mdi-library-books</v-icon
+                >
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title class="font-weight-medium no-transform body-2">Trading Journal</v-list-item-title>
+                <v-list-item-title
+                  class="font-weight-medium no-transform body-2"
+                  >Trading Journal</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
           </router-link>
@@ -89,10 +107,15 @@
               class="tertiary--text"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'virtualtrade' ? 'success' : ''">mdi-cloud-print-outline</v-icon>
+                <v-icon :color="active == 'virtualtrade' ? 'success' : ''"
+                  >mdi-cloud-print-outline</v-icon
+                >
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title class="font-weight-medium no-transform body-2">Virtual Trading</v-list-item-title>
+                <v-list-item-title
+                  class="font-weight-medium no-transform body-2"
+                  >Virtual Trading</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
           </router-link>
@@ -120,10 +143,15 @@
               class="tertiary--text"
             >
               <v-list-item-icon class="mr-4">
-                <v-icon :color="active == 'watchlist' ? 'success' : ''">mdi-eye-plus-outline</v-icon>
+                <v-icon :color="active == 'watchlist' ? 'success' : ''"
+                  >mdi-eye-plus-outline</v-icon
+                >
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title class="font-weight-medium no-transform body-2">Watchlist</v-list-item-title>
+                <v-list-item-title
+                  class="font-weight-medium no-transform body-2"
+                  >Watchlist</v-list-item-title
+                >
               </v-list-item-content>
             </v-list-item>
           </router-link>
@@ -174,7 +202,8 @@ export default {
 </script>
 <style scoped>
 .navbar__card {
-  position: relative;
+  position: fixed;
+  top: 60px;
 }
 .navbar__name {
   font-weight: 600 !important;
