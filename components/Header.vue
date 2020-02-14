@@ -93,7 +93,7 @@
               (showHeaderMenu = false),
               (showNotification = false)
           "
-          >{{ $auth.loggedIn ? $auth.user.data.user.username : "Account" }}
+          >{{ $auth.loggedIn ? $auth.user.data.user.first_name : "Account" }}
         </v-btn>
       </a>
     </v-toolbar-items>
