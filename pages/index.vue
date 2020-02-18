@@ -23,10 +23,10 @@
         <MiniWatchlist class="miniWatchlist" />
         <!-- TODO put back when implementing -->
         <!-- <Bulletin /> -->
-        
-        <FooterSidebar />
+
+        <FooterSidebar class="footerSidebar" />
         <client-only>
-         <PopUp />
+          <PopUp />
         </client-only>
       </v-col>
     </v-row>
@@ -69,6 +69,12 @@ export default {
       isOpen: true,
       newPost: {}
     };
+  },
+  mounted() {
+    this.initSSE();
+  },
+  beforeDestroy() {
+    this.sse.close();
   },
   methods: {
     ...mapActions({
@@ -114,17 +120,6 @@ export default {
       // set sse info to state
       this.setSSEInfo(data);
     }
-  },
-  mounted() {
-    this.initSSE();
-  },
-  beforeDestroy() {
-    this.sse.close();
-  },
-  computed: {
-    ...mapGetters({
-      sse: "social/sse"
-    })
   }
 };
 </script>
@@ -135,6 +130,6 @@ export default {
 }
 .footerSidebar {
   position: sticky;
-  top: 480px;
+  top: 210px;
 }
 </style>
