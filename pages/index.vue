@@ -20,11 +20,12 @@
       >
         <TrendingStocks />
         <WhoToMingle />
-        <MiniWatchlist class="miniWatchlist" />
+        <div class="stickySidebar">
+          <MiniWatchlist />
+          <FooterSidebar />
+        </div>
         <!-- TODO put back when implementing -->
         <!-- <Bulletin /> -->
-
-        <FooterSidebar class="footerSidebar" />
         <client-only>
           <PopUp />
         </client-only>
@@ -124,12 +125,8 @@ export default {
 };
 </script>
 <style>
-.miniWatchlist {
+.stickySidebar {
   position: sticky;
   top: 55px;
-}
-.footerSidebar {
-  position: sticky;
-  top: 210px;
 }
 </style>
