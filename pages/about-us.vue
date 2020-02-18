@@ -42,7 +42,7 @@
             improve and develop tools that we thought will give us our
             competitive advantage as a Stock Trader. For one, the Bid/Ask
             comparison which used to automatically extract online data and feed
-            it in a form of a report via googel sheets now has web-based
+            it in a form of a report via google sheets now has web-based
             equivalent we call the Bid/Ask Bar. The tailor-made trading journal
             showed its real power when its website equivalent came into form.
           </p>
