@@ -14,7 +14,12 @@
 export default {
   layout: "static",
   auth: false,
-  created() {
+  mounted() {
+    // if from mobile or not
+    window.localStorage.setItem(
+      "_verifiedFromMobile",
+      this.$device.isMobileOrTablet
+    );
     this.retrieveParams();
   },
   methods: {
