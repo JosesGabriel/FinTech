@@ -20,6 +20,16 @@ export default {
     NavbarJournal,
     JournalContent
   },
+  head() {
+    return {
+      title: "Journal",
+      meta: [
+        {
+          hid: "journal"
+        }
+      ]
+    };
+  },
   data() {
     return {
       isOpen: true,

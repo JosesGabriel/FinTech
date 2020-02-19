@@ -5,8 +5,8 @@
     >
       <img class="imgPop" width="361" src="/popup2.jpg" />
     
-       <img class="fb_logo_btn" @click="shareToFB()" width="85" src="/Frame 296.svg" />
-       <img class="twitter_logo_btn" @click="shareToTwitter()" width="85" src="/Frame 295.svg" />
+       <img class="fb_logo_btn" width="85" src="/Frame 296.svg" @click="shareToFB()" />
+       <img class="twitter_logo_btn" width="85" src="/Frame 295.svg" @click="shareToTwitter()" />
     </v-btn>
   </span>
 </template>
@@ -82,7 +82,8 @@ export default {
       FB.ui(
         {
           method: "share",
-          href: process.env.LYDUZ_CUSTOM_SHARE_LINK
+          href: process.env.LYDUZ_CUSTOM_SHARE_LINK,
+          quote: "Sharing this newfound free trading platform. Try it now!"
         },
         function(response) {}
       );
