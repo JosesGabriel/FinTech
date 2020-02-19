@@ -20,13 +20,14 @@
       >
         <TrendingStocks />
         <WhoToMingle />
-        <MiniWatchlist class="miniWatchlist" />
+        <div class="stickySidebar">
+          <MiniWatchlist />
+          <FooterSidebar />
+        </div>
         <!-- TODO put back when implementing -->
         <!-- <Bulletin /> -->
-        
-        <FooterSidebar />
         <client-only>
-         <PopUp />
+          <PopUp />
         </client-only>
       </v-col>
     </v-row>
@@ -59,6 +60,16 @@ export default {
     PostField,
     PopUp
   },
+  head() {
+    return {
+      title: "Social",
+      meta: [
+        {
+          hid: "social"
+        }
+      ]
+    };
+  },
   computed: {
     ...mapGetters({
       sse: "social/sse"
@@ -69,6 +80,12 @@ export default {
       isOpen: true,
       newPost: {}
     };
+  },
+  mounted() {
+    this.initSSE();
+  },
+  beforeDestroy() {
+    this.sse.close();
   },
   methods: {
     ...mapActions({
@@ -114,27 +131,12 @@ export default {
       // set sse info to state
       this.setSSEInfo(data);
     }
-  },
-  mounted() {
-    this.initSSE();
-  },
-  beforeDestroy() {
-    this.sse.close();
-  },
-  computed: {
-    ...mapGetters({
-      sse: "social/sse"
-    })
   }
 };
 </script>
 <style>
-.miniWatchlist {
+.stickySidebar {
   position: sticky;
   top: 55px;
-}
-.footerSidebar {
-  position: sticky;
-  top: 480px;
 }
 </style>

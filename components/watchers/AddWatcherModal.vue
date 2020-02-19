@@ -1,11 +1,6 @@
 <template>
   <div>
-    <v-dialog
-      v-model="dialog"
-      persistent
-      :dark="lightSwitch == 0 ? false : true"
-      max-width="320px"
-    >
+    <v-dialog v-model="dialog" persistent :dark="lightSwitch == 0 ? false : true" max-width="320px">
       <template v-slot:activator="{ on }">
         <v-btn
           color="success"
@@ -15,8 +10,7 @@
           style="border-width: 2px"
           height="23"
           v-on="on"
-          >Add</v-btn
-        >
+        >Add</v-btn>
       </template>
       <v-card :dark="lightSwitch == 0 ? false : true">
         <v-card-title>
@@ -26,19 +20,20 @@
           <v-container>
             <v-row>
               <v-col cols="12" class="px-0">
-                <v-select
+                <v-autocomplete
                   v-model="stocksDropdownModel"
-                  label="Select a Stock"
                   :items="stockList"
+                  :menu-props="{offsetY: true, dark: lightSwitch == true}"
+                  :dark="lightSwitch == 0 ? false : true"
+                  label="Select a Stock"
+                  item-color="success"
                   item-text="symbol"
                   item-value="id_str"
                   append-icon="mdi-chevron-down"
-                  :dark="lightSwitch == 0 ? false : true"
                   outlined
-                  standard-
-                  color="success"
+                  color="success caption"
                   required
-                ></v-select>
+                ></v-autocomplete>
               </v-col>
               <v-col cols="12" class="px-1">
                 <v-text-field
@@ -75,13 +70,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            class="no-transform"
-            depressed
-            color="transparent"
-            @click="dialog = false"
-            >Close</v-btn
-          >
+          <v-btn class="no-transform" depressed color="transparent" @click="dialog = false">Close</v-btn>
           <v-btn
             class="no-transform px-6 black--text"
             color="success"
@@ -89,8 +78,7 @@
             depressed
             :disabled="saveButtonDisable"
             @click="addWatch()"
-            >Save</v-btn
-          >
+          >Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
