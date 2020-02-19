@@ -62,7 +62,10 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   data: () => ({
-    email: ""
+    email: "",
+    favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
+      Math.random() * 999
+    )}`
   }),
   auth: false,
   layout: "mobile",
