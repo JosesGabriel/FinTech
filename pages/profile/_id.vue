@@ -19,6 +19,16 @@ export default {
     ProfileCover,
     ProfileTimeline
   },
+  head() {
+    return {
+      title: "Profile",
+      meta: [
+        {
+          hid: "profile"
+        }
+      ]
+    };
+  },
   data() {
     return {
       user: null,
