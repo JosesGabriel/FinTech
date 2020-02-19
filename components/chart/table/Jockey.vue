@@ -222,7 +222,13 @@ export default {
       this.getCurrent(symid);
       this.initJockey(symid);
     },
-    fullscreen(value) {},
+    fullscreen(value) {
+      if(value){
+        this.max = "calc(100vh - 110px)";
+      }else{
+        this.max = "calc(100vh - 300px)";
+      }
+    },
     ticker(value) {
       if (value) {
         this.max = "calc(100vh - 300px)";

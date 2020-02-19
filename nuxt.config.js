@@ -12,8 +12,10 @@ export default {
      ** Headers of the page
      */
     head: {
-        titleTemplate: "%s - " + process.env.APP_TITLE,
-        // title: process.env.APP_TITLE || "",
+        titleTemplate: (titleChunk) => {
+            // If undefined or blank then we don't need the hyphen
+            return titleChunk ? `${titleChunk} - ${process.env.APP_TITLE}` : process.env.APP_TITLE;
+        },
         meta: [
             { charset: "utf-8" },
             { name: "viewport", content: "width=device-width, initial-scale=1" },
