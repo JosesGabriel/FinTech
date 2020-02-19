@@ -72,6 +72,8 @@
         <v-btn class="header__button no-transform font-weight-black body-2" text
           ><v-badge
             content="TRY"
+            offset-x="23"
+            offset-y="-1"
             dark
             left
             class="header__button font-weight-black no-transform vyndue__badge"
@@ -342,6 +344,6 @@ export default {
 }
 .vyndue__badge .v-badge__wrapper .v-badge__badge {
   color: #f44336;
-  font-size: 9px;
+  font-size: 10px;
 }
 </style>
