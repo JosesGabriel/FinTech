@@ -13,16 +13,17 @@
     <div class="pa-1">
       <v-container class="py-0">
         <v-row v-if="!resultPage">
-          <v-col cols="12" class="d-flex justify-space-between py-0 font-weigh">
-            <span>Total Equity:</span>
-            <span>100,000.00</span>
-          </v-col>
-          <v-col cols="12" class="d-flex justify-space-between py-1">
-            <span>Available Funds:</span>
-            <span>60,000.00</span>
-          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              v-model="availableFunds"
+              type="number"
+              label="Available Funds"
+              dense
+              hide-details
+              color="success"
+            ></v-text-field>
+           </v-col>
           <v-col cols="12 pt-4 px-2">
-            <v-divider class="mb-5" />
             <v-select
               v-model="stocksDropdownModel"
               :dark="lightSwitch == true"
@@ -66,37 +67,36 @@
           <v-col cols="12" class="pb-0">
             <span class="body-2">Portfolio Allocation</span>
           </v-col>
-          <v-col v-if="!customPortfolioAllocationToggle" class="pt-0" cols="4">
+          <v-col  class="pt-0" cols="4">
             <v-btn
-              v-if="!customPortfolioAllocationToggle"
               class="my-1"
               small
               block
-              outlined
+              :outlined="(portfolioAllocationPercent === 10) ? false : true"
               color="success"
+               @click="percentageToggle(10)"
               >10%</v-btn
             >
           </v-col>
-          <v-col v-if="!customPortfolioAllocationToggle" class="pt-0" cols="4">
+          <v-col  class="pt-0" cols="4">
             <v-btn
-              v-if="!customPortfolioAllocationToggle"
               class="my-1"
               small
               block
-              outlined
+              :outlined="(portfolioAllocationPercent === 20) ? false : true"
               color="success"
+              @click="percentageToggle(20)"
               >20%</v-btn
             >
           </v-col>
-          <v-col v-if="!customPortfolioAllocationToggle" class="pt-0" cols="4">
-            <v-btn
-              v-if="!customPortfolioAllocationToggle"
+          <v-col  class="pt-0" cols="4">
+            <v-btn  
               class="my-1 no-transform"
               small
               block
-              outlined
+              :outlined="(portfolioAllocationPercent === -1) ? false: true"
               color="success"
-              @click="customPortfolioAllocationToggle = true"
+              @click="percentageToggle(-1, true)"
               >Custom</v-btn
             >
           </v-col>
@@ -177,15 +177,24 @@
         @click="calculate()"
         >Continue</v-btn
       >
-      <v-btn
-        v-else
-        class="addWatch__button no-transform black--text"
-        color="success"
-        light
-        depressed
-        @click="addToWatchlist()"
-        >Add to Watchlist</v-btn
-      >
+      <div v-else> 
+        <v-btn
+          class="addWatch__button no-transform black--text"
+          color="success"
+          light
+          depressed
+          @click="addToWatchlist()"
+          >Back</v-btn
+        >
+        <v-btn
+          class="addWatch__button no-transform black--text"
+          color="success"
+          light
+          depressed
+          @click="addToWatchlist()"
+          >Add to Watchlist</v-btn
+        >
+      </div>
     </v-card-actions>
   </v-card>
 </template>
@@ -217,7 +226,9 @@ export default {
       currentPrice: 0,
       totalCost: 0,
       resultPage: false,
-      customPortfolioAllocationToggle: false
+      availableFunds: 50000,
+      customPortfolioAllocationToggle: false,
+      portfolioAllocationPercent: 10, //default value
     };
   },
   computed: {
@@ -251,6 +262,7 @@ export default {
       this.$api.chart.stocks.history(params).then(
         function(result) {
           this.currentPrice = result.data.last;
+          this.identifiedEntryPrice = this.currentPrice;
         }.bind(this)
       );
       this.fieldsCheck();
@@ -486,6 +498,10 @@ export default {
       this.identifiedEntryPrice = "";
       this.riskTolerance = "";
       this.targetProfit = "";
+    },
+    percentageToggle(percent, customPercentageFlag=false){
+      this.customPortfolioAllocationToggle = customPercentageFlag;
+      this.portfolioAllocationPercent = percent;
     }
   }
 };
