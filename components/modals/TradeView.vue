@@ -34,7 +34,6 @@
                   <v-autocomplete
                     @change="getStockDetails"
                     :items="stocklist"
-                    :filter="customFilter"
                     :menu-props="{offsetY: true, dark: lightSwitch == true}"
                     :dark="lightSwitch == true"
                     light
@@ -47,17 +46,7 @@
                     label="Select a Stock"
                     color="success"
                     dense
-                  >
-                    <template slot="item" slot-scope="data">
-                      <v-list-item-content
-                        :dark="lightSwitch == true"
-                        :style="{ background: cardbackground }"
-                        style="padding: 12px 12px; margin: -16px;"
-                      >
-                        <v-list-item-title v-html="data.item.symbol" class="text-uppercase caption"></v-list-item-title>
-                      </v-list-item-content>
-                    </template>
-                  </v-autocomplete>
+                  ></v-autocomplete>
 
                   <v-col cols="12" class="pa-0">
                     <v-row no-gutters>
@@ -820,21 +809,6 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
-    /**
-     * Fires when users typed anything, and it only shows the index of what the users typed
-     *
-     * @param   {Array}  item       Item of all stocks
-     * @param   {String}  queryText  query all the item of what users typed
-     * @param   {String}  itemText   text of user typed
-     *
-     * @return  {Object}             returns query object
-     */
-    customFilter(item, queryText, itemText) {
-      const textOne = item.symbol.toLowerCase();
-      const searchText = queryText.toLowerCase();
-
-      return textOne.indexOf(searchText) > -1;
-    },
     /**
      * function initPortfolio on mount: date
      *

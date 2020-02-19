@@ -127,7 +127,7 @@
                         ? 'success--text'
                         : parseInt(netProfitPercentage) < 0
                         ? 'error--text'
-                        : 'text--secondary'
+                        : ''
                     "
                     >₱{{ netProfit }} ({{ netProfitPercentage }})</span
                   >
