@@ -565,7 +565,6 @@ export default {
         let num = 0;
         this.$api.journal.portfolio.portfolio().then(
           function(result) {
-            console.log('PORT', result);
             let defaultPort = false;
             this.portfolio = [];
             for (let i = 0; i < result.data.logs.length; i++) {
@@ -647,8 +646,6 @@ export default {
                    }.bind(this)
                   );
 
-              }else{
-                console.log('Exist');
               }
            }.bind(this)
         );
