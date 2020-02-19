@@ -92,6 +92,16 @@ export default {
     SectorIndexList,
     MostWatchedStocks
   },
+  head() {
+    return {
+      title: "Watchlist",
+      meta: [
+        {
+          hid: "watchlist"
+        }
+      ]
+    };
+  },
   data() {
     return {
       isOpen: true,
