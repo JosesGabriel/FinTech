@@ -77,6 +77,16 @@ export default {
     WhoToMingle,
     FooterSidebar
   },
+  head() {
+    return {
+      title: "Notification",
+      meta: [
+        {
+          hid: "notification"
+        }
+      ]
+    };
+  },
   data() {
     return {
       isOpen: true,
