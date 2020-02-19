@@ -1,7 +1,10 @@
 <template>
-  <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
+  <v-container
+    class="page__wrapper"
+    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+    dark
+  >
     <v-row class="mb-5" no-gutters>
-     
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar active="social" />
       </v-col>
@@ -9,22 +12,26 @@
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
         <Newsfeed :new-post="newPost" />
       </v-col>
-      <v-col class="px-3 hidden-sm-and-down pr-0 leftSidebar__container" cols="3" sm="3" md="3">
+      <v-col
+        class="px-3 hidden-sm-and-down pr-0 leftSidebar__container"
+        cols="3"
+        sm="3"
+        md="3"
+      >
         <TrendingStocks />
         <WhoToMingle />
-
-        <MiniWatchlist />
+        <div class="stickySidebar">
+          <MiniWatchlist />
+          <FooterSidebar />
+        </div>
         <!-- TODO put back when implementing -->
         <!-- <Bulletin /> -->
-        
-        <FooterSidebar />
-         <PopUp />
+        <client-only>
+          <PopUp />
+        </client-only>
       </v-col>
-       
     </v-row>
-      
   </v-container>
-   
 </template>
 
 <script>
@@ -53,6 +60,16 @@ export default {
     PostField,
     PopUp
   },
+  head() {
+    return {
+      title: "Social",
+      meta: [
+        {
+          hid: "social"
+        }
+      ]
+    };
+  },
   computed: {
     ...mapGetters({
       sse: "social/sse"
@@ -63,6 +80,12 @@ export default {
       isOpen: true,
       newPost: {}
     };
+  },
+  mounted() {
+    this.initSSE();
+  },
+  beforeDestroy() {
+    this.sse.close();
   },
   methods: {
     ...mapActions({
@@ -108,17 +131,12 @@ export default {
       // set sse info to state
       this.setSSEInfo(data);
     }
-  },
-  mounted() {
-    this.initSSE();
-  },
-  beforeDestroy() {
-    this.sse.close();
-  },
-  computed: {
-    ...mapGetters({
-      sse: "social/sse"
-    })
   }
 };
 </script>
+<style>
+.stickySidebar {
+  position: sticky;
+  top: 55px;
+}
+</style>

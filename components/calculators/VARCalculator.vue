@@ -6,9 +6,7 @@
     class="px-2"
   >
     <v-card-title class="pl-2">
-      <span class="subtitle-1 font-weight-medium py-0 pl-2"
-        >VAR Calculator</span
-      >
+      <span class="subtitle-1 font-weight-black py-0 pl-2">VAR Calculator</span>
     </v-card-title>
     <div class="pa-1">
       <v-container class="py-0">

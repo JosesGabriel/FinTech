@@ -28,6 +28,16 @@ export default {
     NavBar,
     VirtualContent
   },
+  head() {
+    return {
+      title: "Trade Simulator",
+      meta: [
+        {
+          hid: "trade_simulator"
+        }
+      ]
+    };
+  },
   data() {
     return {
       isOpen: true,

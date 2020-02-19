@@ -3,9 +3,10 @@
     <v-icon small color="black" class="popUpClose" @click="closePopUp"
       >mdi-close</v-icon
     >
-    <img width="300" src="/popup.jpg" />
-       <img class="fb_logo_btn" @click="shareToFB()" width="85" src="/Asset 1.png" />
-       <img class="twitter_logo_btn" @click="shareToTwitter()" width="85" src="/Asset 2.png" />
+      <img class="imgPop" width="361" src="/popup2.jpg" />
+    
+       <img class="fb_logo_btn" width="85" src="/Frame 296.svg" @click="shareToFB()" />
+       <img class="twitter_logo_btn" width="85" src="/Frame 295.svg" @click="shareToTwitter()" />
     </v-btn>
   </span>
 </template>
@@ -24,8 +25,13 @@ export default {
     this.fbInitialization();
   },
   methods: {
+    /**
+     * show PopUp after 10 seconds
+     *
+     * 
+     */
     showPopUp() {
-           let gettlocal = localStorage.getItem('showpopup');
+           let gettlocal = localStorage.getItem('showpopup1');
                 gettlocal = JSON.parse(gettlocal);
           if(gettlocal == null){      
           setTimeout(() => {
@@ -33,9 +39,13 @@ export default {
           }, 10000);
         }  
     },
+    /**
+     * close Popup when u click "x" button
+     *
+     */
     closePopUp(){
       this.display = false;
-      localStorage.setItem('showpopup', true);
+      localStorage.setItem('showpopup1', true);
     },
     /**
      * Initializes facebook SDK
@@ -64,15 +74,24 @@ export default {
         fjs.parentNode.insertBefore(js, fjs);
       })(document, "script", "facebook-jssdk");
     },
+    /**
+     * Share to Facebook button
+     *
+     */
     shareToFB() {
       FB.ui(
         {
           method: "share",
-          href: process.env.LYDUZ_CUSTOM_SHARE_LINK
+          href: process.env.LYDUZ_CUSTOM_SHARE_LINK,
+          quote: "Sharing this newfound free trading platform. Try it now!"
         },
         function(response) {}
       );
     },
+    /**
+     * Share to Twitter button
+     *
+     */
     shareToTwitter() {
       let twitterURL =
         process.env.TWITTER_LINK +
@@ -82,7 +101,7 @@ export default {
         twitterURL,
         "mywindow",
         "menubar=1,resizable=1,width=350,height=250"
-      );
+      );   
     }
   }
 };
@@ -93,11 +112,12 @@ export default {
   right: 10px;
   bottom: 10px;
   z-index: 999;
-  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
+ /* box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.47); */
 }
 .popUpClose {
   position: fixed;
-  right: 12px;
+  right: 18px;
+  bottom: 272px;
 }
 .popUpClose:hover {
   cursor: pointer;
@@ -110,14 +130,14 @@ export default {
 }
 .fb_logo_btn {
   position: fixed;
-  bottom: 52px;
+  bottom: 85px;
   right: 60px;
   border-radius: 20px;
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
 }
 .twitter_logo_btn {
   position: fixed;
-  bottom: 25px;
+  bottom: 45px;
   right: 60px;
   border-radius: 20px;
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
@@ -126,8 +146,9 @@ export default {
 .twitter_logo_btn:hover {
   cursor: pointer;
 }
-.fb_logo {
-  font-size: 40px;
+.imgPop {
+  border-radius: 5px;
+  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.47);
 }
 </style>
 <style>
