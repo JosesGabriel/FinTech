@@ -99,8 +99,9 @@
       loading-text="Loading..."
       class="data_table-container pl-10 secondary--text"
     >
-      <template v-slot:item.stock_id="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.meta.stock_id }}</span>
+    
+      <template v-slot:item.stock_name="{ item }">
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.stock_name }}</span>
       </template>
       <template v-slot:item.date="{ item }">
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ localFormat(item.meta.date, 'fs') }}</span>
@@ -240,7 +241,7 @@ export default {
       itemsPerPage: 10,
       search: "",
       headers: [
-        { text: "Stocks", value: "stock_id", align: "left" },
+        { text: "Stocks", value: "stock_name", sortable: true, align: "left" },
         { text: "Date", value: "date", align: "right" },
         { text: "Volume", value: "amount", align: "right" },
         { text: "Ave. Price", value: "average_price", align: "right" },
@@ -442,24 +443,17 @@ export default {
           this.totalProfitLoss = 0;
           this.totalProfitLossPerf = 0;
           for (let i = 0; i < this.tradeLogs.length; i++) {
-            const params = {
-              "symbol-id": this.tradeLogs[i].meta.stock_id
-            };
-            this.$api.chart.stocks.list(params).then(
-              function(result) {
-                this.tradeLogs[i].meta.stock_id = result.data.symbol;
-              }.bind(this)
-            );
-
             let buyvalueResult =
               this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
             let average_price = {
               ...this.tradeLogs[i],
               buy_value: buyvalueResult,
               profit_loss: 0,
-              profit_loss_percentage: 0
+              profit_loss_percentage: 0,
+              stock_name: ''
             };
             this.tradeLogs[i] = { ...average_price };
+            this.tradeLogs[i].stock_name = this.tradeLogs[i].meta.stock_nane;
 
             this.tradeLogs[i].profit_loss =
               this.tradeLogs[i].total_value - this.tradeLogs[i].buy_value;

@@ -664,6 +664,13 @@ export default {
               };
               this.portfolio.push(portfolio_params);
               this.getBalance.push(portfolio_params);
+              if(result.data.logs[i].name == 'My Virtual Portfolio'){
+                this.portvalue = result.data.logs[i].id;
+                this.balance = parseFloat(result.data.logs[i].balance);
+                this.capital = parseFloat(result.data.logs[i].capital);
+                this.getUnrealized(result.data.logs[i].id);
+                this.getRealized(result.data.logs[i].id);
+              }
             }
           }
         }.bind(this)
@@ -809,7 +816,6 @@ export default {
           date: bdate
         }
       };
-
       this.$api.journal.portfolio
         .tradebuy(fund_id, stock_id, buyparams)
         .then(response => {
@@ -819,7 +825,6 @@ export default {
               state: true
             });
             this.quantity = 0;
-            this.portvalue = "";
             this.notes = "";
           }
         })
@@ -828,7 +833,7 @@ export default {
           //this.errmsg = 'Stock is currently closed';
           this.errmsgbuy = "Unable to buy";
           this.errorMsg = true;
-        });
+        }); 
     },
     /**
      * Get total cost if Up arrow Button is pressed
