@@ -31,7 +31,6 @@
             <v-btn
               block
               rounded
-              disabled
               class="black--text font-weight-bold text-capitalize"
               :color="!hover ? 'success' : 'successhover'"
               elevation="1"
@@ -99,7 +98,8 @@ export default {
         const payload = {
           email: this.email
         };
-        const response = await this.$api.authentication.resendVerification.create(
+        const response = await this.$axios.post(
+          process.env.APP_URL + "/api/mailing/mobile",
           payload
         );
         if (response.status == 200) {

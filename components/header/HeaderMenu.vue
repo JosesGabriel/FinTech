@@ -39,6 +39,7 @@
     /></v-dialog>
     <v-dialog v-model="showAveragePriceCalculator" width="320">
       <AveragePriceCalculator
+        v-on:showDialog="showDialog"
     /></v-dialog>
     <v-dialog v-model="showVARCalculator" width="320">
       <VARCalculator
@@ -62,7 +63,11 @@ export default {
       showVARCalculator: false
     };
   },
-  methods: {}
+  methods: {
+    showDialog(value){
+      this.showAveragePriceCalculator = value;
+    }
+  }
 };
 </script>
 <style>
