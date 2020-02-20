@@ -370,8 +370,8 @@ export default {
       this.takeProfitPrice = Number(this.identifiedEntryPrice) + ((Number(this.targetProfit)/100) * this.identifiedEntryPrice);
 
       // calculate Risk to Reward Ratio (RRR)
-      const stoplossRRR = Math.round(5 - ((Number(this.riskTolerance)/5) * this.identifiedEntryPrice));
-      const takeProfitRRR =  Math.round(5 + ((Number(this.targetProfit)/5) * this.identifiedEntryPrice))
+      const stoplossRRR = Math.round(5 - ((Number(this.riskTolerance)/100) * this.identifiedEntryPrice));
+      const takeProfitRRR =  Math.round(5 + ((Number(this.targetProfit)/100) * this.identifiedEntryPrice))
       const gcd = this.calculateGCD( stoplossRRR, takeProfitRRR)
       this.riskRewardRatio = stoplossRRR/gcd + ":" + takeProfitRRR/gcd
 
