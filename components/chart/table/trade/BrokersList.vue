@@ -28,7 +28,7 @@
                 :alt="item.title"
                 :class="[{ fix_image: item.modal == false }]"
                 class="img__trades"
-                :src="`/icon/chart/trades/${item.img}`"
+                :src="item.img ? `/icon/chart/trades/${item.img}` : ''"
                 v-on="on"
               ></v-img>
             </template>

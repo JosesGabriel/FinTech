@@ -26,8 +26,19 @@ export default {
         loading: true,
         value: 100
       },
-      fulldepth: []
+      fulldepth: [],
+      disabled: true
     };
+  },
+  computed: {
+    /**
+     * toogle color if component is disabled
+     *
+     * @return  {String}
+     */
+    color() {
+      return this.disabled ? "secondary" : "success";
+    }
   },
   mounted() {
     this.initDepthbar();
@@ -39,18 +50,25 @@ export default {
      *
      * @return
      */
-    initDepthbar() {
+    async initDepthbar() {
       this.progbar.loading = true;
       this.progbar.value = 100;
-      const params = {
-        "symbol-id": this.stocksym,
-        entry: 5
-      };
-      this.$api.chart.stocks.fulldepth(params).then(response => {
+      this.disabled = true;
+      try {
+        const params = {
+          "symbol-id": this.stocksym,
+          entry: 5
+        };
+        const response = await this.$api.chart.stocks.fulldepth(params);
         this.fulldepth = parseFloat(response.data.bid_total_percent).toFixed(2);
         this.progbar.value = this.fulldepth;
         this.progbar.loading = false;
-      });
+        this.disabled = false;
+      } catch (error) {
+        this.progbar.value = 100;
+        this.progbar.loading = false;
+        this.disabled = true;
+      }
     }
   }
 };
