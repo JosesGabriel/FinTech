@@ -8,6 +8,7 @@ export default {
     port: process.env.SERVER_PORT, // default: 3000
     host: process.env.SERVER_HOST // default: localhost
   },
+  serverMiddleware: ["~/api/server"],
   /*
    ** Headers of the page
    */
