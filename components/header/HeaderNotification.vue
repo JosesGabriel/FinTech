@@ -179,7 +179,7 @@ export default {
 .userMessage__message {
   line-height: 15px !important;
   display: block;
-  width: 80%;
+  width: 100%;
 }
 .userMessage__dropdown.theme--dark:after {
   content: "";

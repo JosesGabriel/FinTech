@@ -169,6 +169,7 @@ export default {
      * @return
      */
     async initWatchlist() {
+      this.loading = true;
       this.items = [];
       try {
         const response = await this.$api.watchlist.watchlists.index();

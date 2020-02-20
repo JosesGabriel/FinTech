@@ -26,7 +26,11 @@
       flat
       tile
     >
+      <h4 v-show="noItems === true" class="text-center">
+        No Available Data
+      </h4>
       <v-simple-table
+        v-show="noItems === false"
         dense
         :dark="lightSwitch == 1"
         fixed-header
@@ -94,7 +98,8 @@ export default {
       loading: true,
       currentTab: false,
       tempTrades: [],
-      ctrTrades: 0
+      ctrTrades: 0,
+      noItems: false
     };
   },
   computed: {
@@ -168,20 +173,23 @@ export default {
      *
      * @return
      */
-    initTimetrade(symid) {
+    async initTimetrade(symid) {
       this.loading = true;
-      this.$api.chart.stocks
-        .trades({
+      this.noItems = false;
+      try {
+        const response = await this.$api.chart.stocks.trades({
           "symbol-id": symid,
           sort: "DESC",
           broker: true,
           limit: 100
-        })
-        .then(response => {
-          this.setTrades(response.data);
-          this.loading = false;
-        })
-        .catch(() => {});
+        });
+        this.setTrades(response.data);
+        this.loading = false;
+        this.noItems = false;
+      } catch (error) {
+        this.loading = false;
+        this.noItems = true;
+      }
     },
     /**
      * initialise sse, listen to time trade
