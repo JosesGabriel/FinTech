@@ -10,7 +10,7 @@
     <v-container :class="positionKey >=1 ? 'display':'nodisplay'" class="ma-0 pa-0">
       <v-row style="font-size: 12px;padding-left: 12px;">
         <v-col cols="3">
-          <span style="padding-left: 12px;">Tranch</span>
+          <span style="padding-left: 3px;">Tranche</span>
         </v-col>
         <v-col cols="3">
           <span>Position</span>
@@ -71,7 +71,7 @@
       <v-row>
         <v-col class="pb-1 mb-2">
           <span :class="calcu ? 'calc_nodisplay': 'calc_display'" style="font-size: 16px;padding-left: 12px;">
-            {{ stringifyNumber(positionKey + 1) }} Tranch
+            {{ stringifyNumber(positionKey + 1) }} Tranche
           </span>
           <span :class="calcu ? 'calc_display': 'calc_nodisplay'" style="font-size: 16px;padding-left: 12px;">Your results</span>
         </v-col>
@@ -315,9 +315,9 @@ export default {
         }
       }
       let finalCost = costFee / totalVolume;
-      this.totalCost = numeral(costFee).format("0,0.00");
+      this.totalCost = numeral(costFee).format("0,0.000");
       this.totalPosition = numeral(totalVolume).format("0,0");
-      this.averagePrice = numeral(finalCost).format("0,0.00");
+      this.averagePrice = numeral(finalCost).format("0,0.000");
 
       if(this.calcu){
         this.calcu = false;
