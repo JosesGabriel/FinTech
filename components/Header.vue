@@ -250,7 +250,8 @@ export default {
        * all notifications here
        */
       const sseToken =
-        this.$auth.getToken("local") != false
+        this.$auth.getToken("local") != null
+          && this.$auth.getToken("local") != false
           ? this.$auth.getToken("local").replace("Bearer ", "")
           : null;
 

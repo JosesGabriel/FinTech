@@ -11,6 +11,9 @@
       <div id="bull__container">
         <v-img
           class="bull-circle"
+          :style="[
+            canAdd === false ? { cursor: 'default' } : { cursor: 'pointer' }
+          ]"
           src="/icon/chart/bull-circle.svg"
           @click="bullCircle"
         >
@@ -40,6 +43,9 @@
       <div id="bear__container">
         <v-img
           class="bear-circle"
+          :style="[
+            canAdd === false ? { cursor: 'default' } : { cursor: 'pointer' }
+          ]"
           src="/icon/chart/bear-circle.svg"
           @click="bearCircle"
         ></v-img>
@@ -183,13 +189,11 @@ export default {
   font-size: 10px;
 }
 .bull-circle {
-  cursor: pointer;
   height: 30px;
   width: 30px;
   margin-left: 20px;
 }
 .bear-circle {
-  cursor: pointer;
   height: 30px;
   width: 30px;
 }

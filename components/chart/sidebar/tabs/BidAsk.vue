@@ -37,7 +37,11 @@
       flat
       tile
     >
+      <h4 v-show="noItems === true" class="text-center">
+        No Available Data
+      </h4>
       <v-simple-table
+        v-show="noItems === false"
         dense
         :dark="lightSwitch == 1"
         fixed-header
@@ -136,7 +140,8 @@ export default {
   data() {
     return {
       currentTab: false,
-      loading: true
+      loading: true,
+      noItems: false
     };
   },
   computed: {
@@ -218,7 +223,8 @@ export default {
      *
      * @return
      */
-    initBidask: async function(symid) {
+    async initBidask(symid) {
+      this.noItems = false;
       this.loading = true;
       try {
         const response = await this.$api.chart.stocks.bidask({
@@ -239,8 +245,10 @@ export default {
         };
         this.setBidask(bidask);
         this.loading = false;
+        this.noItems = false;
       } catch (error) {
         this.loading = false;
+        this.noItems = true;
       }
     },
     /**

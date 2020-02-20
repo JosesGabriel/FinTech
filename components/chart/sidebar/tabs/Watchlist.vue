@@ -56,7 +56,7 @@
       >
         <div class="watchlist__top">
           <div class="top__left pl-2">
-            <span class="span__symbolid" @click="setSymbolID(item.id)">{{
+            <span class="span__symbolid" @click="setSymbolID(item.sym_id)">{{
               item.market_code
             }}</span>
           </div>
@@ -169,11 +169,13 @@ export default {
      * @return
      */
     async initWatchlist() {
+      this.loading = true;
       this.items = [];
       try {
         const response = await this.$api.watchlist.watchlists.index();
         const data = response.data.watchlist;
         data.forEach(data => {
+          //console.table(data);
           const symbol = data.market_code.split(":");
           this.items.push({
             id: data.id,
