@@ -76,13 +76,13 @@ export default {
     { src: "~/plugins/bus", mode: "client" },
     { src: "~/plugins/repository", mode: "client" },
     { src: "~/plugins/tradingview", mode: "client" },
-    { src: "~/plugins/vue-numeral-filter.js", mode: "client" },
+    { src: "~/plugins/vue-numeral-filter", mode: "client" },
     { src: "~/plugins/components/chart/vue-apexcharts", mode: "client" },
     { src: "~/plugins/components/alerts/vue-snotify", mode: "client" },
     { src: "~/plugins/components/profile/vue-croppa", mode: "client" },
     { src: "~/plugins/vue-native-websocket", mode: "client" },
     { src: "~/plugins/vue-html2canvas", mode: "client" },
-    { src: "~/plugins/custom-filters", mode: "client" },
+    { src: "~/plugins/custom-filters.client.js" },
     { src: "~/plugins/vue-at", mode: "client" }
   ],
   /*
@@ -101,8 +101,16 @@ export default {
     "@nuxtjs/auth",
     "@nuxtjs/google-adsense",
     "@nuxtjs/google-gtag",
-    "@nuxtjs/device"
+    "@nuxtjs/device",
+    "@nuxtjs/recaptcha"
   ],
+
+  recaptcha: {
+    siteKey: "6LdqntoUAAAAALeybpc0UomTwklnJvS8d6q86dkO", // Site key for requests
+    version: 2, // Version
+    size: "compact" // Size: 'compact', 'normal', 'invisible' (v2)
+  },
+
   auth: {
     strategies: {
       local: {

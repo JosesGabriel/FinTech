@@ -27,6 +27,17 @@
             color="success"
             label="Enter Email Address"
           ></v-text-field>
+
+          <v-content style="height: 100px;">
+            <v-div id="recaptcha__container">
+              <recaptcha
+                @error="onError"
+                @success="onSuccess"
+                @expired="onExpired"
+              />
+            </v-div>
+          </v-content>
+
           <v-hover v-slot:default="{ hover }">
             <v-btn
               block
@@ -123,9 +134,32 @@ export default {
         };
         this.setAlertDialog(alert);
       }
+    },
+    onError(error) {
+      console.log("Error happened:", error);
+    },
+    // async onSubmit() {
+    //   try {
+    //     const token = await this.$recaptcha.getResponse();
+    //     console.log("ReCaptcha token:", token);
+    //     await this.$recaptcha.reset();
+    //   } catch (error) {
+    //     console.log("Login error:", error);
+    //   }
+    // },
+    onSuccess(token) {
+      console.log("Succeeded:", token);
+    },
+    onExpired() {
+      console.log("Expired");
     }
   }
 };
 </script>
 
-<style></style>
+<style>
+#recaptcha__container {
+  display: inline-block;
+  text-align: center;
+}
+</style>
