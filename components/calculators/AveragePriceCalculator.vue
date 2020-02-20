@@ -6,7 +6,7 @@
   >
     <v-card-title class="title--avprice">Average Price Calculator</v-card-title>
     <v-container class="pt-0 ma-0">
-      <!--------------------------------------------->
+
     <v-container :class="positionKey >=1 ? 'display':'nodisplay'" class="ma-0 pa-0">
       <v-row style="font-size: 12px;padding-left: 12px;">
         <v-col cols="3">
@@ -92,49 +92,54 @@
         <v-col class="mx-3 py-0 my-0">
           <v-text-field 
           label="Price"
+          class="pb-0 mb-0 avprice" 
           type="number"
           flat
           v-model="price"
           ></v-text-field>
         </v-col>
-      </v-row>
 
-      <v-row>
-        <v-col cols="2" style="padding-left: 25px;" >
-          <v-icon
-            :style="{ color: toggleFontColor }"
-            class="addButton"
-            :disabled="price == '' || pos == '' ? true : false"
-            @click="
-              pos_edit = {
-                'data': pos,
-                'edit': true
-              };
-              price_edit = {
-                'data': price,
-                'edit': true
-              };
-              positionKey++;
-              position.push(pos_edit);
-              positionPrice.push(price_edit);
-              pos='';
-              price='';
-              toedit=true;
-            "
-            >mdi-plus-circle-outline</v-icon
-          >
-        </v-col>
-        <v-col cols="6" style="text-align:right;">
-          <v-btn
+      </v-row>
+          <v-row class="my-0 py-0">
+            <v-col cols="12" class="my-0 pt-1 pb-3" style="padding-left: 25px;" >
+              <v-btn
+                x-small
+                :style="{ color: toggleFontColor }"
+                class="addButton"
+                color="success"
+                :disabled="price == '' || pos == '' ? true : false"
+                @click="
+                  pos_edit = {
+                    'data': pos,
+                    'edit': true
+                  };
+                  price_edit = {
+                    'data': price,
+                    'edit': true
+                  };
+                  positionKey++;
+                  position.push(pos_edit);
+                  positionPrice.push(price_edit);
+                  pos='';
+                  price='';
+                  toedit=true;
+                "
+                >
+                  <span style="color:black;">Enter</span>
+                </v-btn
+              >
+            </v-col>
+          </v-row>
+    <v-divider class="mx-5"></v-divider>
+    <v-row>
+        <v-col cols="12" style="text-align: end;">
+           <v-btn
             text
             class="text-capitalize"
             dense
             :style="{ color: toggleFontColor }"
             @click="clear()"
-            >Clear</v-btn
-          >
-        </v-col>
-        <v-col cols="4" style="padding-left: 0px;">
+            >Clear</v-btn>
           <v-btn
             class="text-capitalize"
             dense
@@ -401,6 +406,10 @@ export default {
   display: block;
 }
 .nodisplay, .calc_nodisplay{
+  display: none;
+}
+
+.avprice > .v-input__control > .v-text-field__details{
   display: none;
 }
 </style>
