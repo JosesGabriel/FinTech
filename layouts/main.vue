@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
-      <Header class="header__container" />
+        <Header class="header__container" />
       <v-container
         v-show="!$device.isMobileOrTablet"
         :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
@@ -117,13 +117,8 @@ export default {
      */
     notification() {
       if (this.notification) {
-        const user = this.notification.user;
         this.$snotify.html(
-          this.userNotificationAlertLayout(
-            user.profile_image,
-            this.notification._message,
-            this.notification.post.id
-          ),
+          this.userNotificationAlertLayout(this.notification),
           {
             timeout: 5000,
             showProgressBar: false,

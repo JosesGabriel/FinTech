@@ -58,8 +58,7 @@
             color="error"
             small
             dot
-            >Notification</v-badge
-          >
+          >Notification</v-badge>
         </v-btn>
       </a>
 
@@ -69,8 +68,8 @@
         target="_blank"
         class="social__router"
       >
-        <v-btn class="header__button no-transform font-weight-black body-2" text
-          ><v-badge
+        <v-btn class="header__button no-transform font-weight-black body-2" text>
+          <v-badge
             content="TRY"
             offset-x="23"
             offset-y="-1"
@@ -79,9 +78,8 @@
             class="header__button font-weight-black no-transform vyndue__badge"
             color="transparent"
             small
-          ></v-badge>
-          Vyndue</v-btn
-        >
+          ></v-badge>Vyndue
+        </v-btn>
       </a>
       <a v-show="$auth.loggedIn ? true : false" class="social__router">
         <v-btn
@@ -95,8 +93,7 @@
               (showHeaderMenu = false),
               (showNotification = false)
           "
-          >{{ $auth.loggedIn ? $auth.user.data.user.first_name : "Account" }}
-        </v-btn>
+        >{{ $auth.loggedIn ? $auth.user.data.user.first_name : "Account" }}</v-btn>
       </a>
     </v-toolbar-items>
 
@@ -200,14 +197,29 @@ export default {
         meta: {}
       };
       m.meta = this.notification;
-      const n = {
-        notificable: {}
+      let n = {
+        notificable: {},
+        id: null
       };
-      n.notificable = {
-        ...m,
-        message: this.notification._message,
-        id: this.notification.post.id
-      };
+      if (typeof this.notification.post !== "undefined") {
+        n.notificable = {
+          ...m,
+          message: this.notification._message,
+          id: this.notification.post.id
+        };
+        n.id = this.notification.notification.id;
+      } else if (
+        typeof this.notification.user !== "undefined" &&
+        typeof this.notification.post === "undefined"
+      ) {
+        n.notificable = {
+          ...m,
+          message: this.notification._message
+        };
+        n.id = this.notification.notification.id;
+      } else if (typeof this.notification.stock !== "undefined") {
+        n = this.notification;
+      }
       this.dataNotification.unshift(n);
     },
     getNotification() {
@@ -251,6 +263,7 @@ export default {
       allNotificationList.forEach(eventName => {
         this.evtSourceAll.addEventListener(eventName, e => {
           this.allNotificationHandler(eventName, JSON.parse(e.data));
+          console.log(eventName, JSON.parse(e.data))
         });
       });
 
@@ -274,6 +287,12 @@ export default {
       }
     },
     notificationHandler(eventName, data) {
+      if (typeof data.stock !== "undefined") {
+        const filteredStocksEntry = this.stockList.data.filter(stock => {
+          return stock.id_str == data.stock.id;
+        });
+        data.stock.id = filteredStocksEntry[0].symbol;
+      }
       this.setNotification(data);
     },
     /**

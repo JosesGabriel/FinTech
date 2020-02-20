@@ -13,7 +13,11 @@ export function UserNotificationEventsList() {
         'social.post.comment',
         'social.post.sentiment',
         'social.post.tag:user',
-        'social.user.follow'
+        'social.user.follow',
+
+        'market.watchlist.entry',
+        'market.watchlist.take',
+        'market.watchlist.stop'
     ]
 }
 
