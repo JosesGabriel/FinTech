@@ -5,14 +5,35 @@
     :class="notification.status"
   >
     <v-list-item-avatar class="mr-3" size="35">
-      <img :src="profileImage" />
+      <!-- if notification is specific user notification -->
+      <img
+        v-if="notification.notificable"
+        :src="typeof data !== 'undefined'
+      ? data.meta.user.profile_image
+      : 'default.png'"
+      />
+      <!-- if notification is watchlist notification -->
+      <span v-if="notification.stock">{{ data.id }}</span>
     </v-list-item-avatar>
 
     <v-list-item-content class="listItem__content py-1">
       <div class="body-2 ma-0 userMessage__dropdown-title">
         <span
+          v-if="notification.notificable"
           class="body-2 ma-0 userMessage__message caption"
         >{{ notification.notificable.message }}</span>
+        <span
+          v-if="notification.stock ? data.trigger === 'Entry Price' : ''"
+          class="body-2 ma-0 userMessage__message caption"
+        >{{ entry.first_message + data.id +' '+ entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
+        <span
+          v-else-if="notification.stock ? data.trigger === 'Take Profit' : ''"
+          class="body-2 ma-0 userMessage__message caption"
+        >{{ take.first_message + data.id +' '+ entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
+        <span
+          v-else-if="notification.stock ? data.trigger === 'Stop Lost' : ''"
+          class="body-2 ma-0 userMessage__message caption"
+        >{{ stop.first_message + data.id +' '+ entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
       </div>
       <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>
@@ -31,14 +52,29 @@ export default {
     }
   },
   computed: {
-    user() {
-      return this.notification.notificable.meta.user;
-    },
-    profileImage() {
-      return this.user.profile_image
-        ? this.user.profile_image
-        : "default.png";
+    data() {
+      return typeof this.notification.notificable !== "undefined"
+        ? this.notification.notificable
+        : typeof this.notification.stock !== "undefined"
+        ? this.notification.stock
+        : "";
     }
+  },
+  data() {
+    return {
+      entry: {
+        first_message: "Your entry price for ",
+        second_message: "is hit. Buy now."
+      },
+      take: {
+        first_message: "Your take profit price for ",
+        second_message: "is hit. Sell now."
+      },
+      stop: {
+        first_message: "Your cut loss price for ",
+        second_message: "is hit. Sell now."
+      }
+    };
   },
   methods: {
     localFormat: LocalFormat,
@@ -59,23 +95,16 @@ export default {
       this.$api.social.notification.read(notification_id).then(response => {
         if (response.success) {
           this.notification.status = "read";
-          window.location = this.notification.notificable.meta.post
-            ? "/post/" + this.notification.notificable.meta.post.id
-            : "/profile/" + this.notification.notificable.meta.user.username;
+          if (typeof this.notification.notificable !== "undefined") {
+            window.location = this.notification.notificable.meta.post
+              ? "/post/" + this.data.meta.post.id
+              : "/profile/" + this.data.meta.user.username;
+          } else {
+            window.location = "/watchlist"
+          }
         }
       });
     }
-  },
-  created() {
-    /**
-     * set interval dinamic time changing on posts
-     * 10000ms interval
-     */
-    // setInterval(() => {
-    //   this.notification.map(
-    //     x => (x.created_at = this.addDynamicTime(x.created_at))
-    //   );
-    // }, 10000);
   }
 };
 </script>
