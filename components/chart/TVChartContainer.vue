@@ -84,8 +84,9 @@ export default {
     enabledFeatures: {
       default: () => [
         "narrow_chart_enabled",
+        "keep_left_toolbar_visible_on_small_screens",
+        "side_toolbar_in_fullscreen_mode",
         "study_templates",
-        "keep_left_toolbar_visible_on_small_screens"
       ],
       type: Array
     },
@@ -254,7 +255,7 @@ export default {
         enabled_features: this.enabledFeatures,
         toolbar_bg: this.lightSwitch == 0 ? "#F2F2F2" : "#00121e", // FIXME configs for hex color
         time_frames: this.timeFrames,
-        symbol_search_request_delay: 300, // strict delay to avoid API request overload
+        symbol_search_request_delay: 10, // strict delay to avoid API request overload
         debug: false,
         datafeed: this.dataFeed,
         locale: this.getLanguageFromURL() || "en",
