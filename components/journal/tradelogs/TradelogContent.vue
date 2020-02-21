@@ -100,8 +100,8 @@
       class="data_table-container pl-10 secondary--text"
     >
     
-      <template v-slot:item.stock_name="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.stock_name }}</span>
+      <template v-slot:item.stock_symbol="{ item }">
+        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.stock_symbol }}</span>
       </template>
       <template v-slot:item.date="{ item }">
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ localFormat(item.meta.date, 'fs') }}</span>
@@ -241,7 +241,7 @@ export default {
       itemsPerPage: 10,
       search: "",
       headers: [
-        { text: "Stocks", value: "stock_name", sortable: true, align: "left" },
+        { text: "Stocks", value: "stock_symbol", sortable: true, align: "left" },
         { text: "Date", value: "date", align: "right" },
         { text: "Volume", value: "amount", align: "right" },
         { text: "Ave. Price", value: "average_price", align: "right" },
@@ -450,10 +450,10 @@ export default {
               buy_value: buyvalueResult,
               profit_loss: 0,
               profit_loss_percentage: 0,
-              stock_name: ''
+              stock_symbol: ''
             };
             this.tradeLogs[i] = { ...average_price };
-            this.tradeLogs[i].stock_name = this.tradeLogs[i].meta.stock_nane;
+            this.tradeLogs[i].stock_symbol = this.tradeLogs[i].meta.stock_nane
 
             this.tradeLogs[i].profit_loss =
               this.tradeLogs[i].total_value - this.tradeLogs[i].buy_value;

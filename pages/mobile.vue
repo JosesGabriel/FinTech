@@ -6,65 +6,80 @@
       { 'black--text': lightSwitch == 0 }
     ]"
   >
-    <v-row>
-      <v-col cols="12" class="text-center">
-        <v-content class="mb-4">
-          <span class="display-1 font-weight-bold">Lyduz's mobile</span><br />
-          <span class="display-1 font-weight-bold">coming soon</span>
-        </v-content>
-        <v-content class="pb-0">
-          <span class="body-2">Join the waitlist and get notified</span><br />
-          <span class="body-2">once our apps are available</span>
-        </v-content>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="8" offset="2" class="text-center">
-        <v-content class="pb-0">
-          <v-text-field
-            v-model="email"
-            required
-            color="success"
-            label="Enter Email Address"
-          ></v-text-field>
+    <v-form ref="form">
+      <v-row>
+        <v-col cols="12" class="text-center">
+          <v-content class="mb-4">
+            <span class="display-1 font-weight-bold">Lyduz's mobile</span><br />
+            <span class="display-1 font-weight-bold">coming soon</span>
+          </v-content>
+          <v-content class="pb-0">
+            <span class="body-2">Join the waitlist and get notified</span><br />
+            <span class="body-2">once our apps are available</span>
+          </v-content>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="8" offset="2" class="text-center">
+          <v-content class="pb-0">
+            <v-text-field
+              v-model="email"
+              required
+              color="success"
+              :rules="emailRules"
+              label="Enter Email Address"
+            ></v-text-field>
+          </v-content>
+        </v-col>
+      </v-row>
 
-          <v-content v-show="!notRobot" style="height: 36px;">
-            <v-div id="recaptcha__container">
+      <v-row no-gutters="">
+        <v-col cols="12" class="text-center">
+          <v-content v-show="!notRobot">
+            <v-content id="recaptcha__container">
               <recaptcha
                 @error="onError"
                 @success="onSuccess"
                 @expired="onExpired"
               />
-            </v-div>
+            </v-content>
           </v-content>
+        </v-col>
 
-          <v-hover v-slot:default="{ hover }">
-            <v-btn
-              v-show="notRobot"
-              block
-              rounded
-              class="black--text font-weight-bold text-capitalize"
-              :color="!hover ? 'success' : 'successhover'"
-              elevation="1"
-              @click="submitEmail"
-            >
-              Join Waitlist
-            </v-btn>
-          </v-hover>
-        </v-content>
-      </v-col>
-      <v-spacer></v-spacer>
-    </v-row>
-    <v-row no-gutters>
-      <v-col cols="12" class="mx-0 px-0 text-center">
-        <v-img
-          src="mobile_landing.png"
-          class="mx-auto"
-          height="300"
-          width="400"
-        />
-      </v-col>
-    </v-row>
+        <v-col
+          cols="8"
+          offset="2"
+          class="text-center"
+          :class="[{ 'mb-12': notRobot }]"
+        >
+          <v-content v-show="notRobot">
+            <v-hover v-slot:default="{ hover }">
+              <v-btn
+                block
+                rounded
+                class="black--text font-weight-bold text-capitalize"
+                :color="!hover ? 'success' : 'successhover'"
+                elevation="1"
+                @click.prevent="submitEmail"
+              >
+                Join Waitlist
+              </v-btn>
+            </v-hover>
+          </v-content>
+        </v-col>
+        <v-spacer></v-spacer>
+      </v-row>
+      <v-row no-gutters>
+        <v-col cols="12" class="mx-0 px-0 text-center">
+          <v-img
+            src="mobile_landing.gif"
+            class="mx-auto"
+            height="300"
+            width="400"
+          />
+        </v-col>
+      </v-row>
+    </v-form>
   </v-content>
 </template>
 
@@ -74,6 +89,10 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     email: "",
+    emailRules: [
+      v => !!v || "Email is required",
+      v => /.+@.+/.test(v) || "Email must be valid"
+    ],
     notRobot: false,
     favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
       Math.random() * 999
@@ -105,13 +124,19 @@ export default {
       this.notRobot = true;
     },
     onError() {},
-    onExpired() {},
+    onExpired() {
+      window.location.reload();
+    },
     /**
      * validate and send email
      *
      * @return
      */
     async submitEmail() {
+      const validate = await this.$refs.form.validate();
+      if (validate === false) {
+        return;
+      }
       try {
         await this.$recaptcha.getResponse();
 
@@ -127,14 +152,13 @@ export default {
             model: true,
             state: true,
             header: "Awesome!",
-            body: "Your request has been successfully sent to your email.",
+            body: "Your email has been successfully added to our waitlist.",
             subtext: this.email
           };
           await this.$recaptcha.reset();
           this.setAlertDialog(alert);
           this.notRobot = false;
-          this.email = "";
-          this.disabled = true;
+          this.$refs.form.reset();
         }
       } catch (error) {
         const alert = {

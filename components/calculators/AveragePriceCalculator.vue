@@ -83,6 +83,8 @@
           <v-text-field 
             label="Position"
             type="number"
+            color="success"
+            item-color="success"
             flat
             v-model="pos"
             ></v-text-field>
@@ -93,6 +95,8 @@
           <v-text-field 
           label="Price"
           class="pb-0 mb-0 avprice" 
+          color="success"
+          item-color="success"
           type="number"
           flat
           v-model="price"
@@ -320,9 +324,9 @@ export default {
         }
       }
       let finalCost = costFee / totalVolume;
-      this.totalCost = numeral(costFee).format("0,0.000");
+      this.totalCost = numeral(costFee).format("0,0.00");
       this.totalPosition = numeral(totalVolume).format("0,0");
-      this.averagePrice = numeral(finalCost).format("0,0.000");
+      this.averagePrice = numeral(finalCost).format("0,0.00");
 
       if(this.calcu){
         this.calcu = false;

@@ -358,11 +358,11 @@ export default {
                 );
                 if (this.stockData[i].change > 0) {
                   this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#00FFC3"]
+                    colors: ["#03DAC5"]
                   });
                 } else if (this.stockData[i].change < 0) {
                   this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#03DAC5"]
+                    colors: ["#F44336"]
                   });
                 } else {
                   this.$refs.closePriceChart[i].updateOptions({
@@ -390,9 +390,7 @@ export default {
           if (oldprice != this.stockData[index].currentPrice) {
             this.updateEffect(this.stockData[index].stockSym);
           }
-          //for (let i = 0; i < 5; i++) {
-          //this.dataSeries[index][i] = this.dataSeries[index][i+1];
-          //}
+          
           this.dataSeries[index][4] = this.stockData[index].currentPrice;
           this.$refs.closePriceChart[index].updateSeries([
             {

@@ -725,6 +725,10 @@ export default {
               this.buySelected = true;
               this.sellSelected = false;
               this.GetSelectStock = "";
+              this.selectedstrategy = "";
+              this.selectedtradeplan = "";
+              this.selectedemotions = "";
+              this.notes = "";
             }
           })
           .catch(error => {

@@ -264,7 +264,6 @@ export default {
       allNotificationList.forEach(eventName => {
         this.evtSourceAll.addEventListener(eventName, e => {
           this.allNotificationHandler(eventName, JSON.parse(e.data));
-          console.log(eventName, JSON.parse(e.data))
         });
       });
 
@@ -283,6 +282,7 @@ export default {
         userNotificationList.forEach(eventName => {
           this.evtSource.addEventListener(eventName, e => {
             this.notificationHandler(eventName, JSON.parse(e.data));
+            console.log(eventName, JSON.parse(e.data))
           });
         });
       }

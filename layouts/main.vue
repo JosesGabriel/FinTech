@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
-        <Header class="header__container" />
+      <Header class="header__container" />
       <v-container
         v-show="!$device.isMobileOrTablet"
         :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
@@ -215,5 +215,6 @@ export default {
 }
 .componentContainer {
   position: relative;
+  margin-bottom: 38px;
 }
 </style>
