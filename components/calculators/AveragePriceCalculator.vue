@@ -83,6 +83,8 @@
           <v-text-field 
             label="Position"
             type="number"
+            color="success"
+            item-color="success"
             flat
             v-model="pos"
             ></v-text-field>
@@ -93,6 +95,8 @@
           <v-text-field 
           label="Price"
           class="pb-0 mb-0 avprice" 
+          color="success"
+          item-color="success"
           type="number"
           flat
           v-model="price"
