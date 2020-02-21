@@ -367,8 +367,8 @@
             <v-row v-show="quickTradeSelected" no-gutters class="mb-6 mt-2">
               <v-col>
                 NOTE: Quick Trade automatically places buy and sell orders based
-                on the <b>best available</b> price and your
-                <b>selected allocation</b>.
+                on the <b>Best Available Price</b> and your
+                <b>Pre-set Allocation</b> per trade.
               </v-col>
             </v-row>
 
@@ -560,6 +560,7 @@ export default {
     totalcost: 0,
     quantity: 0,
     selectedButton: null,
+    btnTriggered: false,
     items: [
       { id: 1, text: "10%" },
       { id: 2, text: "30%" },
@@ -639,6 +640,7 @@ export default {
       this.setAlert(alert);
     },
     getSelectedButton(id) {
+      this.btnTriggered = true;
       if (id == 3) {
         //this.saveCustom = !this.saveCustom;
       }
@@ -860,25 +862,34 @@ export default {
       let minfees = this.fees(min);
       this.totalcost = minfees;
     },
+
     quickConfirmV2() {
-      if (this.selectedButton == null) return;
+      if (this.selectedButton == null) return
       this.setting = this.selectedButton == 3 ? "custom" : "";
       this.setting_val = 0;
       if (this.setting == "custom") {
         this.setting_val = parseFloat(this.customPercentage);
       } else {
-        // selected specific value
-        let selected = 10;
-        switch (this.selectedButton) {
-          case 1:
-            selected = 10;
-            break;
-          case 2:
-            selected = 30;
-            break;
-        }
+        // selected specific value   
+        let getlocal = localStorage.getItem("QT_" + this.portvalue);
+        getlocal = JSON.parse(getlocal);
+        let selected = 0;
+          if(getlocal != null && !this.btnTriggered){
+              selected = getlocal.perc;
+          }else{
+              selected = 10;
+              switch (this.selectedButton) {
+                case 1:
+                  selected = 10;
+                  break;
+                case 2:
+                  selected = 30;
+                  break;
+              }
+          }
         this.setting_val = parseFloat(selected);
       }
+      
       this.alloc = this.setting_val;
       let settingval = {
         id: this.portvalue,
@@ -886,7 +897,6 @@ export default {
       };
 
       localStorage.setItem("QT_" + this.portvalue, JSON.stringify(settingval));
-
       this.quicksetting = true;
       this.equity = this.unrealized + this.realized + this.capital;
       let totalperc = (this.equity / 100) * this.setting_val;
