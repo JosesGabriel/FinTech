@@ -13,7 +13,9 @@ app.post("/mailing/mobile", (req, res) => {
 
   fs.appendFile("logger/mobile-email-wait-list.txt", email + ",\n", err => {
     if (err) {
-      return res.status(500).json({ message: "An error has occurred." });
+      return res
+        .status(500)
+        .json({ message: "An error has occurred.", meta: { errors: err } });
     }
     return res
       .status(200)
