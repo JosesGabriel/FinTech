@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="show" max-width="400px">
-    <v-card :dark="lightSwitch == true">
+    <v-card :dark="lightSwitch == 1 ? true : false">
       <v-card-title
         class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
       >Delete Confirmation</v-card-title>
