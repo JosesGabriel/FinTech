@@ -25,15 +25,15 @@
         <span
           v-if="notification.stock ? data.trigger === 'Entry Price' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ entry.first_message + data.id +' '+ entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
+        >{{ entry.first_message + data.id + entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
         <span
           v-else-if="notification.stock ? data.trigger === 'Take Profit' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ take.first_message + data.id +' '+ entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
+        >{{ take.first_message + data.id + entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
         <span
           v-else-if="notification.stock ? data.trigger === 'Stop Lost' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ stop.first_message + data.id +' '+ entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
+        >{{ stop.first_message + data.id + entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
       </div>
       <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>
@@ -64,15 +64,15 @@ export default {
     return {
       entry: {
         first_message: "Your entry price for ",
-        second_message: "is hit. Buy now."
+        second_message: " is hit. Buy now."
       },
       take: {
         first_message: "Your take profit price for ",
-        second_message: "is hit. Sell now."
+        second_message: " is hit. Sell now."
       },
       stop: {
         first_message: "Your cut loss price for ",
-        second_message: "is hit. Sell now."
+        second_message: " is hit. Sell now."
       }
     };
   },
