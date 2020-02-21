@@ -72,7 +72,7 @@
       <v-row no-gutters>
         <v-col cols="12" class="mx-0 px-0 text-center">
           <v-img
-            src="mobile_landing.png"
+            src="mobile_landing.gif"
             class="mx-auto"
             height="300"
             width="400"
