@@ -324,9 +324,9 @@ export default {
         }
       }
       let finalCost = costFee / totalVolume;
-      this.totalCost = numeral(costFee).format("0,0.000");
+      this.totalCost = numeral(costFee).format("0,0.00");
       this.totalPosition = numeral(totalVolume).format("0,0");
-      this.averagePrice = numeral(finalCost).format("0,0.000");
+      this.averagePrice = numeral(finalCost).format("0,0.00");
 
       if(this.calcu){
         this.calcu = false;
