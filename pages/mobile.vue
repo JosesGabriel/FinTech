@@ -28,7 +28,7 @@
             label="Enter Email Address"
           ></v-text-field>
 
-          <v-content style="height: 100px;">
+          <v-content v-show="!notRobot" style="height: 36px;">
             <v-div id="recaptcha__container">
               <recaptcha
                 @error="onError"
@@ -40,6 +40,7 @@
 
           <v-hover v-slot:default="{ hover }">
             <v-btn
+              v-show="notRobot"
               block
               rounded
               class="black--text font-weight-bold text-capitalize"
@@ -73,6 +74,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     email: "",
+    notRobot: false,
     favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
       Math.random() * 999
     )}`
@@ -99,6 +101,11 @@ export default {
     ...mapActions({
       setAlertDialog: "global/setAlertDialog"
     }),
+    onSuccess() {
+      this.notRobot = true;
+    },
+    onError() {},
+    onExpired() {},
     /**
      * validate and send email
      *
@@ -106,6 +113,8 @@ export default {
      */
     async submitEmail() {
       try {
+        await this.$recaptcha.getResponse();
+
         const payload = {
           email: this.email
         };
@@ -121,7 +130,10 @@ export default {
             body: "Your request has been successfully sent to your email.",
             subtext: this.email
           };
+          await this.$recaptcha.reset();
           this.setAlertDialog(alert);
+          this.notRobot = false;
+          this.email = "";
           this.disabled = true;
         }
       } catch (error) {
@@ -134,24 +146,6 @@ export default {
         };
         this.setAlertDialog(alert);
       }
-    },
-    onError(error) {
-      console.log("Error happened:", error);
-    },
-    // async onSubmit() {
-    //   try {
-    //     const token = await this.$recaptcha.getResponse();
-    //     console.log("ReCaptcha token:", token);
-    //     await this.$recaptcha.reset();
-    //   } catch (error) {
-    //     console.log("Login error:", error);
-    //   }
-    // },
-    onSuccess(token) {
-      console.log("Succeeded:", token);
-    },
-    onExpired() {
-      console.log("Expired");
     }
   }
 };
