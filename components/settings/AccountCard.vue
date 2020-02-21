@@ -6,31 +6,24 @@
       color="transparent"
       :dark="lightSwitch == 0 ? false : true"
     >
-      <v-toolbar-title
-        ><strong>{{
+      <v-toolbar-title>
+        <strong>
+          {{
           deleteAccountToggle
-            ? "Deleting Your Account and Information"
-            : "Account Settings"
-        }}</strong></v-toolbar-title
-      >
+          ? "Deleting Your Account and Information"
+          : "Account Settings"
+          }}
+        </strong>
+      </v-toolbar-title>
     </v-toolbar>
-    <v-divider
-      class="settings__divider"
-      :dark="lightSwitch == 0 ? false : true"
-      vertical
-    ></v-divider>
+    <v-divider class="settings__divider" :dark="lightSwitch == 0 ? false : true" vertical></v-divider>
 
-    <v-card
-      color="transparent"
-      :loading="cardLoader"
-      :dark="lightSwitch == 0 ? false : true"
-      flat
-    >
+    <v-card color="transparent" :loading="cardLoader" :dark="lightSwitch == 0 ? false : true" flat>
       <v-card-text class="py-0">
-        <v-container v-if="!deleteAccountToggle" class="pa-0">
+        <v-container v-if="!deleteAccountToggle" class="pa-0 caption">
           <v-row>
             <v-col cols="4">
-              <span :class="lightSwitch == 0 ? '' : 'white--text'">Name</span>
+              <span :class="lightSwitch == 0 ? 'black--text' : 'white--text'">Name</span>
             </v-col>
             <v-col cols="5">
               <span v-if="!nameToggle">{{ firstName }} {{ lastName }}</span>
@@ -39,7 +32,7 @@
                   <v-col cols="4" class="py-1">
                     <span class="caption">First Name</span>
                   </v-col>
-                  <v-col cols="6" class="py-1">
+                  <v-col cols="6" class="py-0">
                     <v-text-field
                       v-model="firstName"
                       class="name__field"
@@ -48,15 +41,15 @@
                       outlined
                       dense
                       @input="firstNameChanged = true"
-                    ></v-text-field
-                  ></v-col>
+                    ></v-text-field>
+                  </v-col>
                 </v-row>
-                <v-row
-                  ><v-col cols="4" class="py-1">
+                <v-row>
+                  <v-col cols="4" class="py-1">
                     <span class="caption">Last Name</span>
                   </v-col>
-                  <v-col cols="6" class="py-1"
-                    ><v-text-field
+                  <v-col cols="6" class="py-0">
+                    <v-text-field
                       v-model="lastName"
                       class="name__field"
                       color="#b6b6b6"
@@ -64,43 +57,46 @@
                       outlined
                       dense
                       @input="lastNameChanged = true"
-                    ></v-text-field></v-col
-                ></v-row>
+                    ></v-text-field>
+                  </v-col>
+                  <span class="pl-3 mt-3">
+                    Kindly note: If you want to change your name, you are only allowed to change it again after 30 days.
+                    Your full name is always visible to your connections.
+                  </span>
+                </v-row>
               </div>
             </v-col>
-            <v-col cols="2" class="pa-0">
+            <v-col cols="2" class="pa-0 py-2 caption">
               <v-btn
                 v-if="!nameToggle"
                 text
-                class="no-transform"
+                small
+                class="no-transform caption"
                 @click="
                   nameToggle = !nameToggle;
                   checkFieldsToggle('name');
                 "
-                >Change</v-btn
-              >
+              >Change</v-btn>
               <v-btn
                 v-else
                 text
-                class="no-transform"
+                small
+                class="no-transform caption"
                 @click="updateAccount('name')"
-                >Save</v-btn
-              >
+              >Save</v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span :class="lightSwitch == 0 ? '' : 'white--text'"
-                >Contact</span
-              >
+              <span :class="lightSwitch == 0 ? 'black--text' : 'white--text'">Contact</span>
             </v-col>
             <v-col cols="5">
-              <span v-if="!contactToggle"
-                ><i>{{ mobile ? mobile : "No number added yet." }}</i></span
-              >
+              <span v-if="!contactToggle">
+                <span>Primary: {{ mobile ? mobile : "No number added yet." }}</span>
+              </span>
               <v-row v-else class="py-0">
                 <v-col cols="12" class="py-0">
-                  <span>Primary: </span>
+                  <span class="contact__label">Primary:</span>
                   <v-dialog
                     v-model="mobileDialog"
                     :dark="lightSwitch == 0 ? false : true"
@@ -114,33 +110,23 @@
                         color="success"
                         text
                         v-on="on"
-                        >Add</v-btn
-                      >
+                      >Add</v-btn>
                     </template>
                     <v-card>
-                      <v-card-title class="body-1 success--text"
-                        >ADD CONTACT</v-card-title
-                      >
-                      <v-card-text class="addContact__field--wrapper"
-                        ><span>Phone number: </span>
-                        <v-text-field
-                          v-model="mobile"
-                          color="#b6b6b6"
-                          hide-details
-                          outlined
-                          dense
-                        ></v-text-field
-                      ></v-card-text>
+                      <v-card-title class="body-1 success--text">ADD CONTACT</v-card-title>
+                      <v-card-text class="addContact__field--wrapper">
+                        <span>Phone number:</span>
+                        <v-text-field v-model="mobile" color="#b6b6b6" hide-details outlined dense></v-text-field>
+                      </v-card-text>
 
                       <v-card-actions class="mt-2">
                         <v-spacer></v-spacer>
                         <v-btn text @click="mobileDialog = false">Cancel</v-btn>
-                        <v-btn color="success" @click="updateAccount('contact')"
-                          >Confirm</v-btn
-                        >
+                        <v-btn color="success" @click="updateAccount('contact')">Confirm</v-btn>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
+
                   <v-radio-group
                     v-if="mobile"
                     v-model="mobile"
@@ -151,46 +137,45 @@
                       :label="mobile ? mobile : 'No number added yet.'"
                       :value="mobile ? mobile : 'No number added yet.'"
                       color="success"
+                      class="ma-0"
                     ></v-radio>
                   </v-radio-group>
                 </v-col>
-                <span class="pl-3"
-                  >Only you can see your contact information. Stay connected
-                  with the community as we provide you with sms alerts.</span
-                >
+                <span class="pl-3">
+                  Only you can see your contact information. Stay connected with the community as we provide you with sms alerts.
+                  With the mobile number you provided, you will receive SMS notifications informing you about the latest stock picks and market updates.
+                </span>
               </v-row>
             </v-col>
-            <v-col cols="2" class="pa-0">
+            <v-col cols="2" class="pa-0 py-2 caption">
               <v-btn
                 v-if="!contactToggle"
                 text
-                class="no-transform"
+                small
+                class="no-transform caption"
                 @click="
                   contactToggle = !contactToggle;
                   checkFieldsToggle('contact');
                 "
-                >Change</v-btn
-              >
+              >Change</v-btn>
               <v-btn
                 v-else
                 text
-                class="no-transform"
+                small
+                class="no-transform caption"
                 @click="updateAccount('contact')"
-                >Save</v-btn
-              >
+              >Save</v-btn>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="4">
-              <span :class="lightSwitch == 0 ? '' : 'white--text'"
-                >Password</span
-              >
+              <span :class="lightSwitch == 0 ? 'black--text' : 'white--text'">Password</span>
             </v-col>
             <v-col cols="5">
               <span v-if="!passwordToggle">*******</span>
               <v-row v-else>
-                <v-col cols="12" class="py-0"
-                  ><v-text-field
+                <v-col cols="12" class="py-0">
+                  <v-text-field
                     v-model="newPassword"
                     class="name__field"
                     label="New Password"
@@ -198,10 +183,10 @@
                     hide-details
                     outlined
                     dense
-                  ></v-text-field
-                ></v-col>
-                <v-col cols="12" class="py-0"
-                  ><v-text-field
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" class="py-0">
+                  <v-text-field
                     v-model="confirmNewPassword"
                     class="name__field"
                     label="Re-type new Password"
@@ -210,38 +195,41 @@
                     outlined
                     dense
                     @input="passwordChanged = true"
-                  ></v-text-field
-                ></v-col>
+                  ></v-text-field>
+                </v-col>
+                <span class="pl-3 mt-3">
+                  It’s a good idea that you use a strong password that you’re not using elsewhere.
+                  Stick with passwords that are at least 8 characters in length.
+                </span>
               </v-row>
             </v-col>
-            <v-col cols="2" class="pa-0">
+            <v-col cols="2" class="pa-0 py-2 caption">
               <v-btn
                 v-if="!passwordToggle"
                 text
-                class="no-transform"
+                small
+                class="no-transform caption"
                 @click="
                   passwordToggle = !passwordToggle;
                   checkFieldsToggle('password');
                 "
-                >Change</v-btn
-              >
+              >Change</v-btn>
               <v-btn
                 v-else
                 text
-                class="no-transform"
+                small
+                class="no-transform caption"
                 :disabled="disabledSavePassword"
                 @click="updateAccount('password')"
-                >Save</v-btn
-              >
+              >Save</v-btn>
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="12">
+            <v-col cols="12" class="font-weight-normal">
               <a
-                :class="lightSwitch == 0 ? '' : 'white--text'"
+                :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
                 @click="deleteAccountToggle = true"
-                >Delete Your Account and Information</a
-              >
+              >Delete Your Account and Information</a>
             </v-col>
           </v-row>
         </v-container>
@@ -256,7 +244,9 @@
     >
       <v-card persistent>
         <v-card-text class="pt-4">
-          <span>You have unsaved changes</span><br /><br />
+          <span>You have unsaved changes</span>
+          <br />
+          <br />
           <span>Save changes before leaving?</span>
         </v-card-text>
 
@@ -269,8 +259,7 @@
               unsavedChangesDialog = false;
               closeAllToggles('cancel');
             "
-            >Cancel</v-btn
-          >
+          >Cancel</v-btn>
           <v-btn
             class="no-transform black--text"
             color="success"
@@ -278,8 +267,7 @@
               unsavedChangesDialog = false;
               updateAccountAll();
             "
-            >Confirm</v-btn
-          >
+          >Confirm</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -309,7 +297,7 @@ export default {
       disabledSavePassword: true,
       firstName: this.$auth.user.data.user.first_name,
       lastName: this.$auth.user.data.user.last_name,
-      mobile: this.$auth.user.data.user.mobile,
+      mobile: "(+063) " + this.$auth.user.data.user.mobile,
       newPassword: "",
       confirmNewPassword: "",
       alert: [],
@@ -559,5 +547,9 @@ export default {
 }
 .addContact__field--wrapper {
   padding: 0 60px !important;
+}
+.contact__label {
+  position: relative;
+  top: -4px;
 }
 </style>
