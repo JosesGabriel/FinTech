@@ -22,7 +22,8 @@
                 <v-switch
                   v-model="toggleButton"
                   class="toggleButton"
-                  color="success"
+                  :color="color"
+                  :disabled="disabled"
                 ></v-switch>
               </v-content>
             </v-col>
@@ -40,7 +41,7 @@
             :indeterminate="progbar.loading"
             :value="progbar.value"
             background-color="error"
-            color="success"
+            :color="color"
             height="5"
           ></v-progress-linear>
         </v-content>
@@ -56,6 +57,7 @@ export default {
   name: "DepthBar",
   data() {
     return {
+      disabled: true,
       toggleButton: false,
       progbar: {
         loading: true,
@@ -70,7 +72,15 @@ export default {
       symbolid: "chart/symbolid",
       index: "chart/index",
       lightSwitch: "global/getLightSwitch"
-    })
+    }),
+    /**
+     * toogle color if component is disabled
+     *
+     * @return  {String}
+     */
+    color() {
+      return this.disabled ? "secondary" : "success";
+    }
   },
   watch: {
     /**
@@ -109,39 +119,41 @@ export default {
      *
      * @return  {[type]}         [return description]
      */
-    initDepthbar(symid) {
+    async initDepthbar(symid) {
       this.progbar.loading = true;
       this.progbar.value = 100;
+      this.disabled = true;
       const params = {
         "symbol-id": symid,
         entry: 5
       };
-      // Top Depth
-      this.$api.chart.stocks
-        .topdepth(params)
-        .then(response => {
-          this.topdepth = parseFloat(response.data.bid_total_percent).toFixed(
+
+      try {
+        // Top Depth
+        const topdepth = await this.$api.chart.stocks.topdepth(params);
+        // Full Depth
+        const fulldepth = await this.$api.chart.stocks.fulldepth(params);
+
+        if (this.toggleButton === false) {
+          this.topdepth = parseFloat(topdepth.data.bid_total_percent).toFixed(
             2
           );
-          if (this.toggleButton === false) {
-            this.progbar.value = this.topdepth;
-            this.progbar.loading = false;
-          }
-        })
-        .catch(() => {});
-      // Full Depth
-      this.$api.chart.stocks
-        .fulldepth(params)
-        .then(response => {
-          this.fulldepth = parseFloat(response.data.bid_total_percent).toFixed(
+          this.progbar.value = this.topdepth;
+          this.progbar.loading = false;
+        } else {
+          this.fulldepth = parseFloat(fulldepth.data.bid_total_percent).toFixed(
             2
           );
-          if (this.toggleButton === true) {
-            this.progbar.value = this.fulldepth;
-            this.progbar.loading = false;
-          }
-        })
-        .catch(() => {});
+          this.progbar.value = this.fulldepth;
+          this.progbar.loading = false;
+        }
+
+        this.disabled = false;
+      } catch (error) {
+        this.progbar.value = 100;
+        this.progbar.loading = false;
+        this.disabled = true;
+      }
     }
   }
 };

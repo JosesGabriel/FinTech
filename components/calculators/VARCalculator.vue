@@ -59,6 +59,7 @@
               label="Buy Price"
               dense
               hide-details
+              step=".1"
               color="success"
             ></v-text-field>
           </v-col>
@@ -70,7 +71,7 @@
               class="my-1"
               small
               block
-              :outlined="(portfolioAllocationPercent === 10) ? false : true"
+              :outlined="!(portfolioAllocationPercent === 10)"
               color="success"
                @click="percentageToggle(10)"
               >10%</v-btn
@@ -81,7 +82,7 @@
               class="my-1"
               small
               block
-              :outlined="(portfolioAllocationPercent === 20) ? false : true"
+              :outlined="!(portfolioAllocationPercent === 20)"
               color="success"
               @click="percentageToggle(20)"
               >20%</v-btn
@@ -92,7 +93,7 @@
               class="my-1 no-transform"
               small
               block
-              :outlined="(portfolioAllocationPercent === -1) ? false: true"
+              :outlined="!(portfolioAllocationPercent === -1)"
               color="success"
               @click="percentageToggle(-1, true)"
               >Custom</v-btn
@@ -100,9 +101,11 @@
           </v-col>
           <v-col v-if="customPortfolioAllocationToggle" cols="12">
             <v-text-field
-              v-model="portfolioAllocation"
+              v-model="customPortfolioAllocationPercent"
               type="number"
               label="Custom Portfolio Allocation (%)"
+              min="0"
+              max="100"
               dense
               hide-details
               color="success"
@@ -113,6 +116,8 @@
               v-model="riskTolerance"
               type="number"
               label="Risk Tolerance (%)"
+              min="0"
+              max="100"
               dense
               hide-details
               color="success"
@@ -123,6 +128,8 @@
               v-model="targetProfit"
               type="number"
               label="Target Profit (%)"
+              min="0"
+              max="100"
               dense
               hide-details
               color="success"
@@ -154,7 +161,7 @@
             <span>{{ stoplossPrice }}</span>
           </v-col>
           <v-col cols="12" class="d-flex py-1 justify-space-between">
-            <span>Risk to reward ratio:</span>
+            <span>Risk to Reward ratio:</span>
             <span>{{ riskRewardRatio }}</span>
           </v-col>
           <v-col class="pt-5 mt-5">
@@ -172,7 +179,7 @@
         light
         depressed
         :disabled="nextButtonDisable"
-        @click="calculate()"
+        @click="calculateResult()"
         >Continue</v-btn
       >
       <div v-else> 
@@ -181,7 +188,7 @@
           color="success"
           light
           depressed
-          @click="addToWatchlist()"
+          @click="resultPage = false"
           >Back</v-btn
         >
         <v-btn
@@ -198,8 +205,12 @@
 </template>
 
 <script>
-let numeral = require("numeral");
 import { mapGetters, mapActions } from "vuex";
+import { CalculateGCD } from "~/assets/js/helpers/math/ratio";
+import { CalculateBoardLot } from "~/assets/js/helpers/orderbook";
+import { BuyFees } from "~/assets/js/helpers/taxation";
+let numeral = require("numeral");
+
 export default {
   props: ["data"],
   data() {
@@ -208,8 +219,6 @@ export default {
       nextButtonDisable: true,
       stocksDropdownModel: null,
       stockList: [],
-      upside: 0,
-      valueAtRisk: 0,
       stoplossPrice: 0,
       takeProfitPrice: 0,
       targetProfit: 0,
@@ -218,13 +227,12 @@ export default {
       riskRewardRatio: 0,
       sharesToBuy: 0,
       boardLot: 0,
-      positionSize: 0,
       portfolioAllocation: 0,
-      portfolioSize: 0,
       currentPrice: 0,
       totalCost: 0,
       resultPage: false,
       availableFunds: 50000,
+      customPortfolioAllocationPercent: 100,
       customPortfolioAllocationToggle: false,
       portfolioAllocationPercent: 10, //default value
     };
@@ -313,8 +321,15 @@ export default {
   },
   methods: {
     ...mapActions({
+      setAlert: "global/setAlert",
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
+    /**
+     * Helpers
+     */
+    buyFees: BuyFees,
+    calculateBoardLot: CalculateBoardLot,
+    calculateGCD: CalculateGCD,
     /**
      * Disables 'next' button if user has incomplete inputs
      *
@@ -333,126 +348,35 @@ export default {
       }
     },
     /**
-     * Fires when user clicks Calculate button
+     * Calculate result from given inputs
      *
      * @return
      */
-    calculate() {
-      let portfolioAllocationDec = Number(this.portfolioAllocation) / 100;
-
-      let positionSizeMin = Math.round(
-        Number(portfolioAllocationDec) * Number(this.portfolioSize)
-      );
-      this.positionSize = positionSizeMin;
-
-      let takeProfitPriceTotal0 = Number(this.targetProfit) / 100;
-
-      let takeProfitPriceTotal1 =
-        Number(this.identifiedEntryPrice) * Number(takeProfitPriceTotal0);
-
-      let takeProfitPriceTotal2 =
-        Number(this.identifiedEntryPrice) + Number(takeProfitPriceTotal1);
-
-      let takeProfitPrice = takeProfitPriceTotal2;
-      this.takeProfitPrice = numeral(takeProfitPriceTotal2).format("0,0.00");
-
-      let stoplossPriceTotal1 = Number(this.riskTolerance) / 100;
-
-      let stoplossPricepricetot2 =
-        Number(this.identifiedEntryPrice) - Number(stoplossPriceTotal1);
-
-      this.stoplossPrice = numeral(stoplossPricepricetot2).format("0,0.00");
-
-      let valueAtRisk1 = Number(this.riskTolerance) / 100;
-
-      let valueAtRisk2 = Number(positionSizeMin) * Number(valueAtRisk1);
-
-      this.valueAtRisk = valueAtRisk2;
-
-      let upsideTotal = Number(positionSizeMin) * Number(takeProfitPriceTotal0);
-
-      this.upside = upsideTotal;
-
-      /* POSITION SIZING & RRR */
-      let identifiedEntryPrice = parseFloat(this.identifiedEntryPrice);
-      this.identifiedEntryPrice = numeral(identifiedEntryPrice).format(
-        "0,0.00"
-      );
-
-      let boardLotGetVal;
-
-      if (identifiedEntryPrice >= 0.0001 && identifiedEntryPrice <= 0.0099) {
-        boardLotGetVal = 1000000;
-      } else if (
-        identifiedEntryPrice >= 0.01 &&
-        identifiedEntryPrice <= 0.049
-      ) {
-        boardLotGetVal = 100000;
-      } else if (
-        identifiedEntryPrice >= 0.05 &&
-        identifiedEntryPrice <= 0.495
-      ) {
-        boardLotGetVal = 10000;
-      } else if (identifiedEntryPrice >= 0.5 && identifiedEntryPrice <= 4.99) {
-        boardLotGetVal = 1000;
-      } else if (identifiedEntryPrice >= 5 && identifiedEntryPrice <= 49.95) {
-        boardLotGetVal = 100;
-      } else if (identifiedEntryPrice >= 50 && identifiedEntryPrice <= 999.5) {
-        boardLotGetVal = 10;
-      } else if (identifiedEntryPrice >= 1000) {
-        boardLotGetVal = 5;
+    calculateResult(){
+      // calculate trade fund
+      if (this.customPortfolioAllocationToggle){
+        this.portfolioAllocationPercent = this.customPortfolioAllocationPercent
       }
+      const tradeFund = Number(this.availableFunds) * (Number(this.portfolioAllocationPercent)/100);
 
-      this.boardLot = boardLotGetVal;
+      // calculate no. of shares to buy
+      this.sharesToBuy = Math.ceil(tradeFund / Number(this.calculateBoardLot(this.identifiedEntryPrice)))
 
-      let sharesTotal1 = Number(positionSizeMin) / Number(boardLotGetVal);
+      // calculate total cost (w/ extra charges)
+      this.totalCost = this.buyFees(this.sharesToBuy * Number(this.identifiedEntryPrice))
 
-      let sharesTotal2 = Math.round(
-        Number(sharesTotal1) / Number(identifiedEntryPrice)
-      );
+      // calculate risk tolerance price and take profit price
+      this.stoplossPrice = Number(this.identifiedEntryPrice) - ((Number(this.riskTolerance)/100) * this.identifiedEntryPrice);
+      this.takeProfitPrice = Number(this.identifiedEntryPrice) + ((Number(this.targetProfit)/100) * this.identifiedEntryPrice);
 
-      sharesTotal2 = Number.isNaN(sharesTotal2) ? 0 : sharesTotal2;
+      // calculate Risk to Reward Ratio (RRR)
+      const stoplossRRR = Math.round(5 - ((Number(this.riskTolerance)/100) * this.identifiedEntryPrice));
+      const takeProfitRRR =  Math.round(5 + ((Number(this.targetProfit)/100) * this.identifiedEntryPrice))
+      const gcd = this.calculateGCD( stoplossRRR, takeProfitRRR)
+      this.riskRewardRatio = stoplossRRR/gcd + ":" + takeProfitRRR/gcd
 
-      var blots = parseFloat(boardLotGetVal);
-      var sharestobuy = Math.floor(positionSizeMin / identifiedEntryPrice);
-
-      var slotmultiplier = Math.floor(sharestobuy / blots);
-      var finalstocks = blots * slotmultiplier;
-
-      this.sharesToBuy = finalstocks;
-
-      var riskToRewardTotal1 = Number(valueAtRisk2) / Number(valueAtRisk2);
-
-      var riskToRewardTotal2 = Number(upsideTotal) / Number(valueAtRisk2);
-
-      var riskToRewardFormat = riskToRewardTotal1 + ":" + riskToRewardTotal2;
-
-      riskToRewardFormat =
-        Number.isNaN(riskToRewardTotal1) || Number.isNaN(riskToRewardTotal2)
-          ? 0
-          : riskToRewardFormat;
-      this.riskRewardRatio = riskToRewardFormat;
-
+      // go to result page
       this.resultPage = true;
-
-      ///////JOSES
-      let buyValue = Math.round(this.sharesToBuy * identifiedEntryPrice);
-      let buyCommission, buyVAT, buyTransferFee, buySCCP, buyFeesTotal;
-      /* Buy Fees */
-      let buyCommissionCheck = buyValue * 0.0025;
-      if (buyCommissionCheck <= 20) {
-        buyCommission = 20;
-      } else {
-        buyCommission = buyValue * 0.0025;
-      }
-      buyVAT = buyCommission * 0.12;
-      buyTransferFee = buyValue * 0.00005;
-      buySCCP = buyValue * 0.0001;
-
-      /* Buy Totals */
-      buyFeesTotal = buyCommission + buyVAT + buyTransferFee + buySCCP;
-
-      this.totalCost = identifiedEntryPrice * this.sharesToBuy + buyFeesTotal;
     },
     /**
      * Executes POST request, adds to Watchlist
@@ -472,7 +396,11 @@ export default {
         .then(response => {
           this.watchCardModalLoading = false;
           if (response.success) {
-            this.showAlert(true, response.message);
+            this.setAlert({
+              model: true, 
+              state: true,
+              message: "Successfully added to watchlist." 
+            });
             let keyCounter = this.renderChartKey;
             keyCounter++;
             this.setRenderChartKey(keyCounter);
@@ -481,7 +409,12 @@ export default {
           this.loader = false;
         })
         .catch(err => {
-          this.showAlert(false, "Watchlist already exists.");
+          this.setAlert({
+            model: true, 
+            state: false,
+            message: "Stock already exist in watchlist." 
+          });
+
           this.loader = false;
           this.clearFields();
         });
