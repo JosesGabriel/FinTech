@@ -108,7 +108,7 @@ export default {
   recaptcha: {
     siteKey: "6LdqntoUAAAAALeybpc0UomTwklnJvS8d6q86dkO", // Site key for requests
     version: 2, // Version
-    size: "compact" // Size: 'compact', 'normal', 'invisible' (v2)
+    size: "normal" // Size: 'compact', 'normal', 'invisible' (v2)
   },
 
   auth: {
