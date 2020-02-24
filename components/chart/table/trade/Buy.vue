@@ -358,7 +358,7 @@
     <!-- Quick Trade -->
     <v-dialog v-model="showConfirm" max-width="350px">
       <v-card :dark="lightSwitch == true">
-        <v-card-title class="font-weight-bold">{{
+        <v-card-title class="font-weight-bold body-1">{{
           quickTradeSelected ? "Quick Trade" : "Review Order"
         }}</v-card-title>
 
@@ -554,7 +554,7 @@ export default {
     emotion: ["Neutral", "Greedy", "Fearful"],
     totalcost: 0,
     quantity: 0,
-    selectedButton: null,
+    selectedButton: 1,
     btnTriggered: false,
     items: [
       { id: 1, text: "10%" },
@@ -873,7 +873,7 @@ export default {
         if (getlocal != null && !this.btnTriggered) {
           selected = getlocal.perc;
         } else {
-          selected = 10;
+          selected = 0;
           switch (this.selectedButton) {
             case 1:
               selected = 10;
