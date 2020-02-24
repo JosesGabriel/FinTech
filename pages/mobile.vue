@@ -115,13 +115,13 @@ export default {
         try {
           await this.$recaptcha.getResponse();
 
-          const payload = {
-            email: this.email
-          };
           const response = await this.$axios.post(
             process.env.APP_URL + "/api/mailing/mobile",
-            payload
+            {
+              email: this.email
+            }
           );
+
           if (response.status == 200) {
             const alert = {
               model: true,
@@ -153,9 +153,11 @@ export default {
       setAlertDialog: "global/setAlertDialog"
     }),
     onSuccess() {
-      this.showCaptcha = true;
+      this.successCaptcha = true;
     },
-    onError() {},
+    onError(error) {
+      console.log("Error happened:", error);
+    },
     onExpired() {
       window.location.reload();
     },
