@@ -33,10 +33,10 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters="">
+      <v-row no-gutters="" class="recaptcha__container">
         <v-col cols="12" class="text-center">
           <v-content v-show="!notRobot">
-            <v-content id="recaptcha__container">
+            <v-content id="recaptcha">
               <recaptcha
                 @error="onError"
                 @success="onSuccess"
@@ -46,12 +46,7 @@
           </v-content>
         </v-col>
 
-        <v-col
-          cols="8"
-          offset="2"
-          class="text-center"
-          :class="[{ 'mb-12': notRobot }]"
-        >
+        <v-col cols="8" offset="2" class="text-center">
           <v-content v-show="notRobot">
             <v-hover v-slot:default="{ hover }">
               <v-btn
@@ -71,12 +66,7 @@
       </v-row>
       <v-row no-gutters>
         <v-col cols="12" class="mx-0 px-0 text-center">
-          <v-img
-            src="mobile_landing.gif"
-            class="mx-auto"
-            height="300"
-            contain
-          />
+          <div id="mobile__banner"></div>
         </v-col>
       </v-row>
     </v-form>
@@ -176,8 +166,19 @@ export default {
 </script>
 
 <style>
-#recaptcha__container {
+.recaptcha__container {
+  height: 40px;
+}
+#recaptcha {
   display: inline-block;
   text-align: center;
+}
+#mobile__banner {
+  height: 400px;
+  width: 100%;
+  background-image: url("/mobile_landing.gif");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 730px 500px;
 }
 </style>
