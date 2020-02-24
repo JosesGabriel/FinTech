@@ -70,6 +70,9 @@ export default {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
   },
+  mounted() {
+    this.setLightSwitch(0);
+  },
   methods: {
     ...mapActions({
       setLightSwitch: "global/setLightSwitch"

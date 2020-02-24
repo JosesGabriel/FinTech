@@ -76,6 +76,7 @@
             class="mx-auto"
             height="300"
             width="400"
+            contain
           />
         </v-col>
       </v-row>
