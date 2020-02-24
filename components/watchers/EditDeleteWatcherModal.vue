@@ -40,7 +40,7 @@
             :dark="lightSwitch == 0 ? false : true"
             text
             @click="dialog = false"
-            >Cancel</v-btn
+            >Close</v-btn
           >
         </v-card-actions>
       </v-card>
