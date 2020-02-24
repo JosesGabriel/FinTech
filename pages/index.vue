@@ -60,16 +60,6 @@ export default {
     PostField,
     PopUp
   },
-  head() {
-    return {
-      title: "Social",
-      meta: [
-        {
-          hid: "social"
-        }
-      ]
-    };
-  },
   computed: {
     ...mapGetters({
       sse: "social/sse"

@@ -49,7 +49,8 @@
           @click="
             (showNotification = !showNotification),
               (showHeaderMenu = false),
-              (showDropdown = false)
+              (showDropdown = false),
+              showBadge = 0
           "
         >
           <v-badge
@@ -146,6 +147,9 @@ export default {
   watch: {
     notification() {
       this.newNotication();
+    },
+    showNotification() {
+      this.showBadge = 0
     }
   },
   mounted() {
@@ -221,23 +225,12 @@ export default {
         n = this.notification;
       }
       this.dataNotification.unshift(n);
+      this.showBadge = 1;
     },
     getNotification() {
       this.$api.social.notification.notifications().then(response => {
         if (response.success) {
           this.dataNotification = response.data.notifications;
-        }
-      });
-      const params = {
-        status: "unread"
-      };
-      this.$api.social.notification.count(params).then(response => {
-        if (response.success) {
-          if (response.data.notifications.length > 0) {
-            this.showBadge = response.data.notifications.length;
-          } else {
-            this.showBadge = 0;
-          }
         }
       });
     },
@@ -250,8 +243,8 @@ export default {
        * all notifications here
        */
       const sseToken =
-        this.$auth.getToken("local") != null
-          && this.$auth.getToken("local") != false
+        this.$auth.getToken("local") != null &&
+        this.$auth.getToken("local") != false
           ? this.$auth.getToken("local").replace("Bearer ", "")
           : null;
 
@@ -282,7 +275,6 @@ export default {
         userNotificationList.forEach(eventName => {
           this.evtSource.addEventListener(eventName, e => {
             this.notificationHandler(eventName, JSON.parse(e.data));
-            console.log(eventName, JSON.parse(e.data))
           });
         });
       }

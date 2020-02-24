@@ -8,9 +8,9 @@
       <!-- if notification is specific user notification -->
       <img
         v-if="notification.notificable"
-        :src="typeof data !== 'undefined'
+        :src="data.meta.user.profile_image != null
       ? data.meta.user.profile_image
-      : 'default.png'"
+      : '/default.png'"
       />
       <!-- if notification is watchlist notification -->
       <span v-if="notification.stock">{{ data.id }}</span>
