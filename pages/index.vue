@@ -18,7 +18,7 @@
         sm="3"
         md="3"
       >
-        <!-- <TrendingStocks /> -->
+        <TrendingStocks />
         <WhoToMingle />
         <div class="stickySidebar">
           <MiniWatchlist />
@@ -59,16 +59,6 @@ export default {
     FooterSidebar,
     PostField,
     PopUp
-  },
-  head() {
-    return {
-      title: "Social",
-      meta: [
-        {
-          hid: "social"
-        }
-      ]
-    };
   },
   computed: {
     ...mapGetters({

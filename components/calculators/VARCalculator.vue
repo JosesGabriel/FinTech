@@ -146,19 +146,19 @@
           </v-col>
           <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Total cost:</span>
-            <span>{{ totalCost }}</span>
+            <span>{{ totalCost | stockDecimalPriceScale(100) }}</span>
           </v-col>
           <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Entry Price:</span>
-            <span>{{ identifiedEntryPrice }}</span>
+            <span>{{ identifiedEntryPrice | stockDecimalPriceScale(pricescale) }}</span>
           </v-col>
           <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Take Profit:</span>
-            <span>{{ takeProfitPrice }}</span>
+            <span>{{ takeProfitPrice | stockDecimalPriceScale(pricescale) }}</span>
           </v-col>
           <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Stoploss:</span>
-            <span>{{ stoplossPrice }}</span>
+            <span>{{ stoplossPrice | stockDecimalPriceScale(pricescale) }}</span>
           </v-col>
           <v-col cols="12" class="d-flex py-1 justify-space-between">
             <span>Risk to Reward ratio:</span>
@@ -228,13 +228,13 @@ export default {
       sharesToBuy: 0,
       boardLot: 0,
       portfolioAllocation: 0,
-      currentPrice: 0,
       totalCost: 0,
       resultPage: false,
       availableFunds: 50000,
       customPortfolioAllocationPercent: 100,
       customPortfolioAllocationToggle: false,
-      portfolioAllocationPercent: 10, //default value
+      portfolioAllocationPercent: 10, // default value
+      pricescale: 100, // default value
     };
   },
   computed: {
@@ -267,8 +267,8 @@ export default {
       };
       this.$api.chart.stocks.history(params).then(
         function(result) {
-          this.currentPrice = result.data.last;
-          this.identifiedEntryPrice = this.currentPrice;
+          this.identifiedEntryPrice = result.data.last;
+          this.pricescale = result.data.pricescale;
         }.bind(this)
       );
       this.fieldsCheck();
@@ -360,7 +360,8 @@ export default {
       const tradeFund = Number(this.availableFunds) * (Number(this.portfolioAllocationPercent)/100);
 
       // calculate no. of shares to buy
-      this.sharesToBuy = Math.ceil(tradeFund / Number(this.calculateBoardLot(this.identifiedEntryPrice)))
+      const shares = Math.ceil(tradeFund / this.identifiedEntryPrice)
+      this.sharesToBuy = shares - (shares % Number(this.calculateBoardLot(this.identifiedEntryPrice))) // for boardlot changes
 
       // calculate total cost (w/ extra charges)
       this.totalCost = this.buyFees(this.sharesToBuy * Number(this.identifiedEntryPrice))
@@ -370,10 +371,8 @@ export default {
       this.takeProfitPrice = Number(this.identifiedEntryPrice) + ((Number(this.targetProfit)/100) * this.identifiedEntryPrice);
 
       // calculate Risk to Reward Ratio (RRR)
-      const stoplossRRR = Math.round(5 - ((Number(this.riskTolerance)/100) * this.identifiedEntryPrice));
-      const takeProfitRRR =  Math.round(5 + ((Number(this.targetProfit)/100) * this.identifiedEntryPrice))
-      const gcd = this.calculateGCD( stoplossRRR, takeProfitRRR)
-      this.riskRewardRatio = stoplossRRR/gcd + ":" + takeProfitRRR/gcd
+      const gcd = this.calculateGCD(Number(this.riskTolerance), Number(this.targetProfit))
+      this.riskRewardRatio = Number(this.riskTolerance)/gcd + ":" + Number(this.targetProfit)/gcd
 
       // go to result page
       this.resultPage = true;
