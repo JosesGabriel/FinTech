@@ -35,7 +35,7 @@
 
       <v-row no-gutters="" class="recaptcha__container">
         <v-col cols="12" class="text-center">
-          <v-content v-show="!notRobot">
+          <v-content v-show="showCaptcha">
             <v-content id="recaptcha">
               <recaptcha
                 @error="onError"
@@ -47,7 +47,7 @@
         </v-col>
 
         <v-col cols="8" offset="2" class="text-center">
-          <v-content v-show="notRobot">
+          <v-content v-show="!showCaptcha">
             <v-hover v-slot:default="{ hover }">
               <v-btn
                 block
@@ -83,7 +83,7 @@ export default {
       v => !!v || "Email is required",
       v => /.+@.+/.test(v) || "Email must be valid"
     ],
-    notRobot: false,
+    showCaptcha: false,
     favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
       Math.random() * 999
     )}`
@@ -110,23 +110,7 @@ export default {
     ...mapActions({
       setAlertDialog: "global/setAlertDialog"
     }),
-    onSuccess() {
-      this.notRobot = true;
-    },
-    onError() {},
-    onExpired() {
-      window.location.reload();
-    },
-    /**
-     * validate and send email
-     *
-     * @return
-     */
-    async submitEmail() {
-      const validate = await this.$refs.form.validate();
-      if (validate === false) {
-        return;
-      }
+    async onSuccess() {
       try {
         await this.$recaptcha.getResponse();
 
@@ -147,7 +131,7 @@ export default {
           };
           await this.$recaptcha.reset();
           this.setAlertDialog(alert);
-          this.notRobot = false;
+          this.showCaptcha = false;
           this.$refs.form.reset();
         }
       } catch (error) {
@@ -160,6 +144,22 @@ export default {
         };
         this.setAlertDialog(alert);
       }
+    },
+    onError() {},
+    onExpired() {
+      window.location.reload();
+    },
+    /**
+     * validate and send email
+     *
+     * @return
+     */
+    async submitEmail() {
+      const validate = await this.$refs.form.validate();
+      if (validate === false) {
+        return;
+      }
+      this.showCaptcha = true;
     }
   }
 };
@@ -174,11 +174,11 @@ export default {
   text-align: center;
 }
 #mobile__banner {
-  height: 400px;
+  height: 350px;
   width: 100%;
   background-image: url("/mobile_landing.gif");
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 730px 500px;
+  background-size: 670px 400px;
 }
 </style>
