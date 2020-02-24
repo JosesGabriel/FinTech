@@ -374,33 +374,28 @@
 
             <v-row v-show="quickTradeSelected">
               <v-col cols="12" class="text-center">
-                <v-btn-toggle
-                  v-model="selectedButton"
-                  mandatory
+                <v-btn
+                  v-for="item in items"
+                  :key="item.id"
+                  :value="item.id"
+                  small
+                  :dark="lightSwitch == false"
+                  :outlined="selectedButton != item.id"
+                  :elevation="selectedButton != item.id ? 'false' : '1'"
+                  class="font-weight-bold text-capitalize mx-2"
+                  width="80"
                   dense
-                  active-class="activeClassButton"
-                  :background-color="cardBackground"
+                  color="success"
+                  @click="getSelectedButton(item.id)"
+                  >{{ item.text }}</v-btn
                 >
-                  <v-btn
-                    v-for="item in items"
-                    :key="item.id"
-                    :value="item.id"
-                    :dark="lightSwitch == true"
-                    :color="selectedButton != item.id ? 'success' : ''"
-                    class="black--text font-weight-bold text-capitalize mx-2"
-                    elevation="1"
-                    width="80"
-                    @click="getSelectedButton(item.id)"
-                    >{{ item.text }}</v-btn
-                  >
-                </v-btn-toggle>
               </v-col>
               <v-col v-show="selectedButton == 3" cols="4" offset="3">
                 <v-text-field
                   v-model="customPercentage"
                   color="success"
                   label="Percentage"
-                  dense
+                  small
                   type="number"
                   class="text-end"
                   append-icon="mdi-percent"
@@ -408,7 +403,7 @@
                   :disabled="selectedButton !== 3"
                 ></v-text-field>
               </v-col>
-              <v-col v-show="selectedButton == 3" cols="3">
+              <v-col v-show="selectedButton == 3" class="mt-3" cols="3">
                 <v-hover v-slot:default="{ hover }">
                   <v-btn
                     :dark="lightSwitch == true"
@@ -640,6 +635,7 @@ export default {
       this.setAlert(alert);
     },
     getSelectedButton(id) {
+      this.selectedButton = id;
       this.btnTriggered = true;
       if (id == 3) {
         //this.saveCustom = !this.saveCustom;
@@ -666,7 +662,7 @@ export default {
               };
               this.portfolio.push(portfolio_params);
               this.getBalance.push(portfolio_params);
-              if(result.data.logs[i].name == 'My Virtual Portfolio'){
+              if (result.data.logs[i].name == "My Virtual Portfolio") {
                 this.portvalue = result.data.logs[i].id;
                 this.balance = parseFloat(result.data.logs[i].balance);
                 this.capital = parseFloat(result.data.logs[i].capital);
@@ -835,7 +831,7 @@ export default {
           //this.errmsg = 'Stock is currently closed';
           this.errmsgbuy = "Unable to buy";
           this.errorMsg = true;
-        }); 
+        });
     },
     /**
      * Get total cost if Up arrow Button is pressed
@@ -864,32 +860,32 @@ export default {
     },
 
     quickConfirmV2() {
-      if (this.selectedButton == null) return
+      if (this.selectedButton == null) return;
       this.setting = this.selectedButton == 3 ? "custom" : "";
       this.setting_val = 0;
       if (this.setting == "custom") {
         this.setting_val = parseFloat(this.customPercentage);
       } else {
-        // selected specific value   
+        // selected specific value
         let getlocal = localStorage.getItem("QT_" + this.portvalue);
         getlocal = JSON.parse(getlocal);
         let selected = 0;
-          if(getlocal != null && !this.btnTriggered){
-              selected = getlocal.perc;
-          }else{
+        if (getlocal != null && !this.btnTriggered) {
+          selected = getlocal.perc;
+        } else {
+          selected = 10;
+          switch (this.selectedButton) {
+            case 1:
               selected = 10;
-              switch (this.selectedButton) {
-                case 1:
-                  selected = 10;
-                  break;
-                case 2:
-                  selected = 30;
-                  break;
-              }
+              break;
+            case 2:
+              selected = 30;
+              break;
           }
+        }
         this.setting_val = parseFloat(selected);
       }
-      
+
       this.alloc = this.setting_val;
       let settingval = {
         id: this.portvalue,
