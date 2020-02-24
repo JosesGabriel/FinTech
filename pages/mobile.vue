@@ -114,7 +114,11 @@ export default {
       if (value === true) {
         try {
           await this.$recaptcha.getResponse();
+        } catch (error) {
+          console.log("eror", error);
+        }
 
+        try {
           const response = await this.$axios.post(
             process.env.APP_URL + "/api/mailing/mobile",
             {
