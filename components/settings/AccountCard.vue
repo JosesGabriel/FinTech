@@ -92,7 +92,7 @@
             </v-col>
             <v-col cols="5">
               <span v-if="!contactToggle">
-                <span>Primary: {{ mobile ? mobile : "No number added yet." }}</span>
+                <span>Primary: {{ mobile != null ? mobile : "No number added yet." }}</span>
               </span>
               <v-row v-else class="py-0">
                 <v-col cols="12" class="py-0">
@@ -215,7 +215,15 @@
                 "
               >Change</v-btn>
               <v-btn
-                v-else
+                v-show="passwordToggle"
+                text
+                small
+                class="no-transform caption"
+                @click="passwordToggle = !passwordToggle"
+              >Close</v-btn>
+              <br>
+              <v-btn
+                v-show="passwordToggle"
                 text
                 small
                 class="no-transform caption"
@@ -297,7 +305,7 @@ export default {
       disabledSavePassword: true,
       firstName: this.$auth.user.data.user.first_name,
       lastName: this.$auth.user.data.user.last_name,
-      mobile: "(+063) " + this.$auth.user.data.user.mobile,
+      mobile: this.$auth.user.data.user.mobile,
       newPassword: "",
       confirmNewPassword: "",
       alert: [],

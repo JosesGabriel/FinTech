@@ -1,9 +1,13 @@
 <template>
     <v-dialog v-model="show" max-width="350px">
-        <v-card color="#00121E">
+        <v-card :dark="lightSwitch == true">
             <v-card-title class="text-left justify-left pa-3 px-5 success--text subtitle-1">DELETE PORTFOLIO</v-card-title>
+            <v-divider></v-divider>
             <v-container class="px-8">
-                <v-card-title class="text-left justify-left pa-0 secondary--text body-2">Select Portfolio</v-card-title>
+                <v-card-title 
+                    class="text-left justify-left pa-0 secondary--text body-2"
+                    :style="{color: toggleFontColor }" 
+                >Select Portfolio</v-card-title>
                 <v-select
                         offset-y="true"
                         class="select_portfolio black--text text-uppercase"
@@ -13,17 +17,32 @@
                         item-value="id"
                         :items="portfolio"
                         v-model="GetSelectStock"
-                        dark     
+                        :dark="lightSwitch == true"    
                         background-color="success"
                         dense
                         solo
                     >
+                        <template slot="item" slot-scope="data">
+                        <v-list-item-content
+                            :dark="lightSwitch == true"
+                            :style="{ background: primaryBackground }"
+                            style="padding: 12px 12px; margin: -16px;"
+                        >
+                            <v-list-item-title 
+                            :dark="lightSwitch == true"
+                            v-html="data.item.name" 
+                            :style="{ color: toggleFontColor }"
+                            class="text-uppercase"></v-list-item-title>
+                        </v-list-item-content>
+                        </template>
+
+
                 </v-select>
             </v-container>
             <v-card-actions class="pa-3">
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="white"
+                   :dark="lightSwitch == true"
                     class="text-capitalize"
                     text
                     light
@@ -37,7 +56,9 @@
                     light
                     :disabled="(GetSelectStock != '' ? false : true )"
                     @click="confirmDelete=true"
-                    >Delete</v-btn
+                    >
+                        <span style="color: black;"> Delete</span>
+                    </v-btn
                 >
             </v-card-actions>
         </v-card>
@@ -88,6 +109,14 @@ export default {
             renderPortfolioKey: "journal/getRenderPortfolioKey",
             lightSwitch: "global/getLightSwitch"
         }),
+        toggleFontColor() {
+            return this.lightSwitch == 0
+                ? "#000000 !important"
+                : "#ffffff !important";
+            },
+        primaryBackground() {
+            return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+            },
         show: {
             get () {
                 return this.visible

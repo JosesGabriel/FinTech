@@ -33,10 +33,10 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters="">
+      <v-row no-gutters="" class="recaptcha__container">
         <v-col cols="12" class="text-center">
-          <v-content v-show="!notRobot">
-            <v-content id="recaptcha__container">
+          <v-content v-show="showCaptcha">
+            <v-content id="recaptcha">
               <recaptcha
                 @error="onError"
                 @success="onSuccess"
@@ -46,13 +46,8 @@
           </v-content>
         </v-col>
 
-        <v-col
-          cols="8"
-          offset="2"
-          class="text-center"
-          :class="[{ 'mb-12': notRobot }]"
-        >
-          <v-content v-show="notRobot">
+        <v-col cols="8" offset="2" class="text-center">
+          <v-content v-show="!showCaptcha">
             <v-hover v-slot:default="{ hover }">
               <v-btn
                 block
@@ -71,12 +66,7 @@
       </v-row>
       <v-row no-gutters>
         <v-col cols="12" class="mx-0 px-0 text-center">
-          <v-img
-            src="mobile_landing.gif"
-            class="mx-auto"
-            height="300"
-            width="400"
-          />
+          <div id="mobile__banner"></div>
         </v-col>
       </v-row>
     </v-form>
@@ -89,11 +79,12 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     email: "",
+    successCaptcha: false,
     emailRules: [
       v => !!v || "Email is required",
       v => /.+@.+/.test(v) || "Email must be valid"
     ],
-    notRobot: false,
+    showCaptcha: false,
     favicon: `${process.env.APP_URL}/favicon/favicon.ico?v=${Math.round(
       Math.random() * 999
     )}`
@@ -116,14 +107,61 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
+  watch: {
+    async successCaptcha(value) {
+      console.log("successCaptcha");
+      console.log(value);
+      if (value === true) {
+        try {
+          await this.$recaptcha.getResponse();
+        } catch (error) {
+          console.log("eror", error);
+        }
+
+        try {
+          const response = await this.$axios.post(
+            process.env.APP_URL + "/api/mailing/mobile",
+            {
+              email: this.email
+            }
+          );
+
+          if (response.status == 200) {
+            const alert = {
+              model: true,
+              state: true,
+              header: "Awesome!",
+              body: "Your email has been successfully added to our waitlist.",
+              subtext: this.email
+            };
+            await this.$recaptcha.reset();
+            this.setAlertDialog(alert);
+            this.showCaptcha = false;
+            this.$refs.form.reset();
+          }
+        } catch (error) {
+          const alert = {
+            model: true,
+            state: false,
+            header: "Ooopps!",
+            body: error.response.data.message,
+            subtext: this.email
+          };
+          this.setAlertDialog(alert);
+        }
+      }
+    }
+  },
   methods: {
     ...mapActions({
       setAlertDialog: "global/setAlertDialog"
     }),
     onSuccess() {
-      this.notRobot = true;
+      this.successCaptcha = true;
     },
-    onError() {},
+    onError(error) {
+      console.log("Error happened:", error);
+    },
     onExpired() {
       window.location.reload();
     },
@@ -137,47 +175,26 @@ export default {
       if (validate === false) {
         return;
       }
-      try {
-        await this.$recaptcha.getResponse();
-
-        const payload = {
-          email: this.email
-        };
-        const response = await this.$axios.post(
-          process.env.APP_URL + "/api/mailing/mobile",
-          payload
-        );
-        if (response.status == 200) {
-          const alert = {
-            model: true,
-            state: true,
-            header: "Awesome!",
-            body: "Your email has been successfully added to our waitlist.",
-            subtext: this.email
-          };
-          await this.$recaptcha.reset();
-          this.setAlertDialog(alert);
-          this.notRobot = false;
-          this.$refs.form.reset();
-        }
-      } catch (error) {
-        const alert = {
-          model: true,
-          state: false,
-          header: "Ooopps!",
-          body: error.response.data.message,
-          subtext: this.email
-        };
-        this.setAlertDialog(alert);
-      }
+      this.showCaptcha = true;
     }
   }
 };
 </script>
 
 <style>
-#recaptcha__container {
+.recaptcha__container {
+  height: 40px;
+}
+#recaptcha {
   display: inline-block;
   text-align: center;
+}
+#mobile__banner {
+  height: 350px;
+  width: 100%;
+  background-image: url("/mobile_landing.gif");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 670px 400px;
 }
 </style>

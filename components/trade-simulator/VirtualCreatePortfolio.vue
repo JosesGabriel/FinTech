@@ -1,27 +1,30 @@
 <template>
     <v-dialog v-model="show" max-width="350px">
-        <v-card color="#00121E">
+        <v-card :dark="lightSwitch == true" >
             <v-card-title class="text-left justify-left pa-3 px-5 success--text subtitle-1">CREATE PORTFOLIO</v-card-title>
-            <v-container class="px-8">
-                <v-card-title class="text-left justify-left px-0 secondary--text body-2">Enter Portfolio Name</v-card-title>
+            <v-divider></v-divider>
+            <v-container class="px-8 py-6">
+
                 <v-text-field
                     v-model="namePortfolioModel"
                     color="success"
-                    dark
+                    :dark="lightSwitch == true"
                     class="stock_selector pa-0 pb-5 font-weight-bold body-2 white--text"
+                    label="Enter Portfolio Name"
                 ></v-text-field>
-                <v-card-title class="text-left justify-left px-0 secondary--text body-2">Initial Capital</v-card-title>
+
                 <v-text-field
                     v-model="initialCapitalModel"
                     color="success"
-                    dark
+                    :dark="lightSwitch == true"
                     class="stock_selector pa-0 pb-5 font-weight-bold body-2 white--text"
+                    label="Initial Capital"
                 ></v-text-field>
             </v-container>
             <v-card-actions class="pa-3">
                 <v-spacer></v-spacer>
                 <v-btn
-                    color="white"
+                    :dark="lightSwitch == true"
                     class="text-capitalize"
                     text
                     light
@@ -33,7 +36,8 @@
                     class="text-capitalize"
                     depressed
                     light
-                    :disabled="saveButtonDisable"
+                    :dark="lightSwitch == true"
+                    :disabled="(!saveButtonDisable && namePortfolioModel != '' ? false : true)"
                     @click.stop="show=false"
                     @click="createPortfolio()"
                     >Save</v-btn
@@ -50,8 +54,14 @@ export default {
     props: ['visible'],
     computed: {
         ...mapGetters({
-            renderPortfolioKey: "journal/getRenderPortfolioKey"
+            renderPortfolioKey: "journal/getRenderPortfolioKey",
+            lightSwitch: "global/getLightSwitch"
         }),
+        toggleFontColor() {
+            return this.lightSwitch == 0
+                ? "#000000 !important"
+                : "#ffffff !important";
+            },
         show: {
             get () {
                 return this.visible
@@ -99,7 +109,13 @@ export default {
             if ( this.typePortfolioModel != "" || this.initialCapital != "" || this.namePortfolioModel != "" ) {
                 this.saveButtonDisable = false;
                 } else {
+               // this.saveButtonDisable = true;
+            }
+            let n = parseFloat(this.initialCapitalModel);
+            if(isNaN(n)){
                 this.saveButtonDisable = true;
+            }else{
+                this.saveButtonDisable = false;
             }
         },
         /**
