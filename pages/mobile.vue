@@ -79,6 +79,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     email: "",
+    successCaptcha: false,
     emailRules: [
       v => !!v || "Email is required",
       v => /.+@.+/.test(v) || "Email must be valid"
@@ -106,44 +107,53 @@ export default {
       lightSwitch: "global/getLightSwitch"
     })
   },
+  watch: {
+    async successCaptcha(value) {
+      console.log("successCaptcha");
+      console.log(value);
+      if (value === true) {
+        try {
+          await this.$recaptcha.getResponse();
+
+          const payload = {
+            email: this.email
+          };
+          const response = await this.$axios.post(
+            process.env.APP_URL + "/api/mailing/mobile",
+            payload
+          );
+          if (response.status == 200) {
+            const alert = {
+              model: true,
+              state: true,
+              header: "Awesome!",
+              body: "Your email has been successfully added to our waitlist.",
+              subtext: this.email
+            };
+            await this.$recaptcha.reset();
+            this.setAlertDialog(alert);
+            this.showCaptcha = false;
+            this.$refs.form.reset();
+          }
+        } catch (error) {
+          const alert = {
+            model: true,
+            state: false,
+            header: "Ooopps!",
+            body: error.response.data.message,
+            subtext: this.email
+          };
+          this.setAlertDialog(alert);
+        }
+      }
+    }
+  },
   methods: {
     ...mapActions({
       setAlertDialog: "global/setAlertDialog"
     }),
-    async onSuccess() {
-      try {
-        await this.$recaptcha.getResponse();
-
-        const payload = {
-          email: this.email
-        };
-        const response = await this.$axios.post(
-          process.env.APP_URL + "/api/mailing/mobile",
-          payload
-        );
-        if (response.status == 200) {
-          const alert = {
-            model: true,
-            state: true,
-            header: "Awesome!",
-            body: "Your email has been successfully added to our waitlist.",
-            subtext: this.email
-          };
-          await this.$recaptcha.reset();
-          this.setAlertDialog(alert);
-          this.showCaptcha = false;
-          this.$refs.form.reset();
-        }
-      } catch (error) {
-        const alert = {
-          model: true,
-          state: false,
-          header: "Ooopps!",
-          body: error.response.data.message,
-          subtext: this.email
-        };
-        this.setAlertDialog(alert);
-      }
+    onSuccess() {
+      this.showCaptcha = true;
     },
     onError() {},
     onExpired() {

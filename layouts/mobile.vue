@@ -54,7 +54,6 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  auth: false,
   computed: {
     ...mapGetters({
       alert: "global/getAlert",
