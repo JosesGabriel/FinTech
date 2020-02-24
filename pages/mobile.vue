@@ -75,7 +75,6 @@
             src="mobile_landing.gif"
             class="mx-auto"
             height="300"
-            width="400"
             contain
           />
         </v-col>
