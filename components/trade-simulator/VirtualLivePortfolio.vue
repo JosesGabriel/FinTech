@@ -4,24 +4,24 @@
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
       <v-spacer></v-spacer>
       <v-btn
-        outlined
+        text
         color="success"
         dark
         class="text-capitalize mr-2 resetbtn"
         @click.stop="showResetForm=true"
         height="23"
       >
-        <span class="resetBtn">Reset</span>
+        <span class="resetBtn body-2 font-weight-bold">Reset</span>
       </v-btn>
       <v-btn
-        outlined
+        text
         color="success"
         @click.stop="EnterTradeModal=true"
         dark
         class="text-capitalize mr-2 resetbtn"
         height="23"
       >
-      <span class="trdeBtn">Trade</span>
+      <span class="trdeBtn body-2 font-weight-bold">Trade</span>
       </v-btn>
 
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
@@ -304,7 +304,7 @@ export default {
       this.totalmvalue = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
-        
+         // console.log('Live pOrt ', result);
           this.portfolioLogs = result.data.open;
           for (let i = 0; i < result.data.open.length; i++) {
               this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
@@ -460,7 +460,7 @@ export default {
     let counter = 0;
     let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
  
-    //===============================================================
+  
     for (let index = 0; index < this.portfolioLogs.length; index++) {       
            let pdate = this.portfolioLogs[index].metas.date.split(" ")[0];     
                   const params = {
@@ -495,7 +495,7 @@ export default {
                         this.priorProfitLoss =
                           parseFloat(this.priorProfitLoss) + parseFloat(priorprofit); 
 
-                        //==================================
+                      
                           let currentPrice = result.data.c[0];
                           let currentbuyResult =
                             this.portfolioLogs[index].position *
@@ -504,7 +504,7 @@ export default {
                           let currentprofit = parseFloat(currentmvalue) - parseFloat(tcost);
                           currentProfitLoss =
                             parseFloat(currentProfitLoss) + parseFloat(currentprofit);
-                        //===============================================
+                        
                         let priordata = {
                           'id': this.simulatorPortfolioID,
                           'date': dformat,
@@ -513,16 +513,16 @@ export default {
                           'currentprofit': currentProfitLoss
                         };   
                                            
-                        //localStorage.removeItem(this.simulatorPortfolioID);
+                      
                         let totalarray = this.portfolioLogs.length - 1;
                         
                         let getlocal = localStorage.getItem(this.simulatorPortfolioID);
                         getlocal = JSON.parse(getlocal);
-                        //console.log('Prior Total Profit Loss -'+ getlocal.priorprofit); 
+                      
                         if(getlocal != null){
                               if(getlocal.date != dformat){
                                   if(counter == totalarray){
-                                  //if(getlocal.date != dformat){
+                                
                                     localStorage.setItem(this.simulatorPortfolioID, JSON.stringify(priordata));
                                   }else{
                                     localprofit = getlocal.priorprofit;
@@ -541,7 +541,6 @@ export default {
                         }
                         counter++;
                     
-                    //=======================================================================
                         let daychange =
                            parseFloat(currentProfitLoss) - parseFloat(localprofit);
                         if(localprofit != 0 ){                          
@@ -648,7 +647,7 @@ export default {
         let perf = 0;
        for (let i = 0; i < this.portfolioLogs.length; i++) {
          if(this.portfolioLogs[i].metas.stock_id == symbol){
-           this.marketStatus();
+          // this.marketStatus();
            let oldvalue = this.portfolioLogs[i].MarketValue;
            let convertedNumbers = this.portfolioLogs[i].Profit.replace(/,/g, "");
            let oldprofit = parseFloat(convertedNumbers);
@@ -869,7 +868,7 @@ export default {
 
 .resetbtn > .v-btn__content {
   padding-top: 2px !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
 }
 
 .resetbtn:hover {

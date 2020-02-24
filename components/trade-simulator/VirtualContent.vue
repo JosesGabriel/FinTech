@@ -102,7 +102,6 @@
       background-color="transparent"
       :dark="lightSwitch == true"
       :style="{ background: primaryBackground }"
-      dark
     >
       <v-tab           
         class="tab_menu-top text-capitalize"
@@ -121,18 +120,18 @@
         <v-col
           md="3"
           class="text-right caption px-2 ma-0"
-          style="position:absolute; right:0; top: -26px; width: 180px;"
+          style="position:absolute; right:0; top: -26px;"
         >
           <v-select
-            offset-y="true"
-            class="select_portfolio mt-2 black--text text-uppercase"
+            :menu-props="{offsetY: false, dark: lightSwitch == true}"
+            class="select_portfolio mt-2 black--text success--text text-uppercase"
             item-color="success"
             append-icon="mdi-chevron-down"
             :value="this.default_port"
             item-text="name"
             item-value="id"
             :items="portfolio"
-            dark
+            :dark="lightSwitch == true"
             v-on:change="getOpenPosition"
             background-color="success"
             label="Select Portfolio"
@@ -145,7 +144,10 @@
                 :style="{ background: primaryBackground }"
                 style="padding: 12px 12px; margin: -16px;"
               >
-                <v-list-item-title v-html="data.item.name" class="text-uppercase"></v-list-item-title>
+                <v-list-item-title 
+                  :dark="lightSwitch == true"
+                  v-html="data.item.name" 
+                  class="text-uppercase"></v-list-item-title>
               </v-list-item-content>
             </template>
             <template
@@ -162,7 +164,7 @@
                 <v-list-item-content>
                   <v-list-item-title class="text-uppercase">
                     Create Portfolio
-                    <v-icon color="success" class="body-2">mdi-plus-circle-outline</v-icon>
+                    <v-icon class="body-2 pl-7">mdi-plus-circle-outline</v-icon>
                   </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
@@ -176,7 +178,7 @@
                   <v-list-item-content>
                     <v-list-item-title class="text-uppercase">
                       Delete Portfolio
-                      <v-icon color="success" class="body-2">mdi-minus-circle-outline</v-icon>
+                      <v-icon class="body-2 pl-7">mdi-minus-circle-outline</v-icon>
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>           
@@ -435,32 +437,9 @@ export default {
 
     getDayChange(){
      
-      //--------------------------------------------------------------------
-      let prior_realized = 0;
-      let d = new Date();
       let yequity = 0;
       let tequity = 0;
-      let dformat = [d.getMonth() + 1, d.getDate(), d.getFullYear()].join("/"); ///"mm/dd/yyyy"
-      let priorrealized = {
-                          'id': this.simulatorPortfolioID,
-                          'date': dformat,
-                          'priorrealized': this.realized,
-                        };   
-      let tlogslocal = this.simulatorPortfolioID + '_priortlogs';
-      let gettlocal = localStorage.getItem(tlogslocal);
-          gettlocal = JSON.parse(gettlocal);
-      if(gettlocal != null){
-          if(gettlocal.date != dformat){
-              localStorage.setItem(tlogslocal, JSON.stringify(priorrealized));
-              prior_realized = gettlocal.priorrealized;
-          }else{
-              prior_realized = gettlocal.priorrealized;
-          }
-      }else{
-         localStorage.setItem(tlogslocal, JSON.stringify(priorrealized));
-      }
 
-     
       if(this.daychange == 0){
         let getlocal = localStorage.getItem(this.simulatorPortfolioID);
         getlocal = JSON.parse(getlocal);
@@ -565,6 +544,7 @@ export default {
         let num = 0;
         this.$api.journal.portfolio.portfolio().then(
           function(result) {
+            //console.log('Open pOrt ', result);
             let defaultPort = false;
             this.portfolio = [];
             for (let i = 0; i < result.data.logs.length; i++) {
@@ -686,7 +666,7 @@ export default {
 
 .v-menu__content
   .v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
-   color: #03dac5 !important; 
+  /* color: #03dac5 !important; */
 }
 .select_portfolio .v-select__slot .v-label,
 .select_portfolio .v-select__slot .v-icon {
