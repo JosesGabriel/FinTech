@@ -184,6 +184,13 @@ export default {
     }),
     userNotificationEventsList: UserNotificationEventsList,
     allNotificationEventsList: AllNotificationEventsList,
+    /**
+     * trigger when user clicked outside the notification dropdown
+     *
+     * @param   {Event}  e  event
+     *
+     * @return  {Boolean}     returns boolean to all showed dropdown
+     */
     close(e) {
       if (!this.$el.contains(e.target)) {
         this.display = false;
@@ -192,10 +199,21 @@ export default {
         this.showHeaderMenu = false;
       }
     },
+    /**
+     * trigger when user click again the notification navbar
+     *
+     * @return  {Boolean}  returns boolean to notification dropdown
+     */
     closeDropdown() {
       this.showNotification = false;
       this.showBadge = 0;
     },
+    /**
+     * Trigger when user has new notification user notification and watchlist
+     * Manipulation of data when new notification come
+     *
+     * @return  {Object}  returns object
+     */
     newNotication() {
       const m = {
         meta: {}
@@ -228,6 +246,11 @@ export default {
       this.dataNotification.unshift(n);
       this.showBadge = 1;
     },
+    /**
+     * get fetched notification on load
+     *
+     * @return  {Array}  returns user specific notification
+     */
     getNotification() {
       this.$api.social.notification.notifications().then(response => {
         if (response.success) {
@@ -235,6 +258,11 @@ export default {
         }
       });
     },
+    /**
+     * Stream of All, User specific, and Watchlist notification
+     *
+     * @return  {Object}  returns object
+     */
     initSSE() {
       if (this.evtSourceAll !== null && this.evtSource !== null) {
         this.evtSourceAll.close();
@@ -280,6 +308,14 @@ export default {
         });
       }
     },
+    /**
+     * catch notification that from social activity and watchlist
+     *
+     * @param   {String}  eventName  returns string event name
+     * @param   {Object}  data       returns object from stream and filtered notification
+     *
+     * @return  {Object}             return object with customized props pass it to notification state to make it global
+     */
     notificationHandler(eventName, data) {
       if (typeof data.stock !== "undefined") {
         const filteredStocksEntry = this.stockList.data.filter(stock => {
@@ -293,10 +329,10 @@ export default {
      * This will trigger if there is a global announcement
      * announcement are: New Post, New Comment on a Post, New Sentiments on a Post
      *
-     * @param   {[type]}  eventName  [eventName description]
-     * @param   {[type]}  data       [data description]
+     * @param   {String}  eventName  returns string event name
+     * @param   {Object}  data       returns object data
      *
-     * @return  {[type]}             [return description]
+     * @return  {Object}             returns object data and pass it to notification vuex state
      */
     allNotificationHandler(eventName, data) {
       switch (eventName) {
