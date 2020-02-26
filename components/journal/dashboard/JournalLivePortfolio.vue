@@ -2,12 +2,12 @@
   <v-col ref="componentWrapper" class="pa-0">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
-      <h1
+      <span
         class="font-weight-bold subtitle-2"
         :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
       >
         OPEN POSITION/S (PHP)
-      </h1>
+      </span>
       <v-spacer></v-spacer>
       <v-btn
         text
