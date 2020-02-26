@@ -592,6 +592,7 @@ export default {
       totalCostSellModel: 0,
       AvailableBoardLot: 0,
 
+      stockSymbolGet: '',
       strategySellModel: null,
       tradeplanSellModel: null,
       emotionsSellModel: null,
@@ -845,6 +846,7 @@ export default {
         position: parseFloat(this.quantityModel),
         stock_price: parseFloat(this.priceModel),
         transaction_meta: {
+          stock_name: this.stockSymbolGet.symbol,
           strategy: this.strategyModel,
           plan: this.tradeplanModel,
           emotion: this.emotionsModel,
@@ -904,6 +906,7 @@ export default {
         position: parseFloat(this.quantitySellModel),
         stock_price: parseFloat(this.priceSellModel),
         transaction_meta: {
+          stock_name: this.stockSymbolGet.symbol,
           strategy: this.strategySellModel,
           average_price: this.avepriceSell,
           plan: this.tradeplanSellModel,

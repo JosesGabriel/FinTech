@@ -449,11 +449,9 @@ export default {
               ...this.tradeLogs[i],
               buy_value: buyvalueResult,
               profit_loss: 0,
-              profit_loss_percentage: 0,
-              stock_symbol: ''
+              profit_loss_percentage: 0
             };
             this.tradeLogs[i] = { ...average_price };
-            this.tradeLogs[i].stock_symbol = this.tradeLogs[i].meta.stock_nane
 
             this.tradeLogs[i].profit_loss =
               this.tradeLogs[i].total_value - this.tradeLogs[i].buy_value;
