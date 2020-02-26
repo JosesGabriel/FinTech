@@ -13,7 +13,7 @@
       : '/default.png'"
       />
       <!-- if notification is watchlist notification -->
-      <span v-else-if="meta.user && meta.stock">{{ meta.stock.id }}</span>
+      <span v-else-if="meta.user && meta.stock">{{ meta.stock.symbol }}</span>
     </v-list-item-avatar>
 
     <v-list-item-content class="listItem__content py-1">
@@ -25,15 +25,15 @@
         <span
           v-else-if="meta.user && meta.stock ? meta.stock.trigger === 'Entry Price' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ entry.first_message + meta.stock.id + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
+        >{{ entry.first_message + meta.stock.symbol + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
         <span
           v-else-if="meta.user && meta.stock ? meta.stock.trigger === 'Take Profit' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ take.first_message + meta.stock.id + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
+        >{{ take.first_message + meta.stock.symbol + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
         <span
           v-else-if="meta.user && meta.stock ? meta.stock.trigger === 'Stop Lost' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ stop.first_message + meta.stock.id + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
+        >{{ stop.first_message + meta.stock.symbol + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
       </div>
       <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>
@@ -99,7 +99,7 @@ export default {
         typeof this.meta.stock != "undefined" &&
         typeof this.meta.stock.symbol != "undefined"
       ) {
-        const sym = this.meta.stock.symbol;
+        const sym = this.meta.stock.id;
         const filteredStocks = this.stockList.data.filter(stock => {
           return stock.id_str == sym;
         });
