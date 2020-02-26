@@ -203,7 +203,8 @@ export default {
       m.meta = this.notification;
       let n = {
         notificable: {},
-        id: null
+        id: null,
+        status: 'unread'
       };
       if (typeof this.notification.post !== "undefined") {
         n.notificable = {

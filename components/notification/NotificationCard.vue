@@ -7,40 +7,42 @@
     <v-list-item-avatar class="mr-3" size="35">
       <!-- if notification is specific user notification -->
       <img
-        v-if="notification.notificable"
-        :src="data.meta.user.profile_image != null
-      ? data.meta.user.profile_image
+        v-if="meta.user && meta.post || typeof meta.post == 'undefined' && typeof meta.stock == 'undefined' && meta.user"
+        :src="meta.user.profile_image != null
+      ? meta.user.profile_image
       : '/default.png'"
       />
       <!-- if notification is watchlist notification -->
-      <span v-if="notification.stock">{{ data.id }}</span>
+      <span v-else-if="meta.user && meta.stock">{{ meta.stock.id }}</span>
     </v-list-item-avatar>
 
     <v-list-item-content class="listItem__content py-1">
       <div class="body-2 ma-0 userMessage__dropdown-title">
         <span
-          v-if="notification.notificable"
+          v-if="meta.user && meta.post || typeof meta.post == 'undefined' && typeof meta.stock == 'undefined' && meta.user"
           class="body-2 ma-0 userMessage__message caption"
         >{{ notification.notificable.message }}</span>
         <span
-          v-if="notification.stock ? data.trigger === 'Entry Price' : ''"
+          v-else-if="meta.user && meta.stock ? meta.stock.trigger === 'Entry Price' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ entry.first_message + data.id + entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
+        >{{ entry.first_message + meta.stock.id + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
         <span
-          v-else-if="notification.stock ? data.trigger === 'Take Profit' : ''"
+          v-else-if="meta.user && meta.stock ? meta.stock.trigger === 'Take Profit' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ take.first_message + data.id + entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
+        >{{ take.first_message + meta.stock.id + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
         <span
-          v-else-if="notification.stock ? data.trigger === 'Stop Lost' : ''"
+          v-else-if="meta.user && meta.stock ? meta.stock.trigger === 'Stop Lost' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ stop.first_message + data.id + entry.second_message + ' Current price is now ₱' + data.executed_price }}</span>
+        >{{ stop.first_message + meta.stock.id + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
       </div>
       <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>
   </v-list-item>
 </template>
+
 <script>
 import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
+import { mapGetters } from "vuex";
 
 export default {
   props: {
@@ -52,12 +54,16 @@ export default {
     }
   },
   computed: {
-    data() {
-      return typeof this.notification.notificable !== "undefined"
-        ? this.notification.notificable
-        : typeof this.notification.stock !== "undefined"
-        ? this.notification.stock
-        : "";
+    ...mapGetters({
+      stockList: "global/getStockList"
+    }),
+    /**
+     * transfer data to meta to make code shorter.
+     *
+     * @return  {Object}  returns object
+     */
+    meta() {
+      return this.notification.notificable.meta;
     }
   },
   data() {
@@ -76,10 +82,31 @@ export default {
       }
     };
   },
+  mounted() {
+    this.getSymbol();
+  },
   methods: {
     localFormat: LocalFormat,
     addDynamicTime: AddDynamicTime,
 
+    /**
+     * get the equivalent symbol of a symbol id from filtered stocklist
+     *
+     * @return  {Object}  returns object
+     */
+    getSymbol() {
+      if (
+        typeof this.meta.stock != "undefined" &&
+        typeof this.meta.stock.symbol != "undefined"
+      ) {
+        const sym = this.meta.stock.symbol;
+        const filteredStocks = this.stockList.data.filter(stock => {
+          return stock.id_str == sym;
+        });
+
+        this.meta.stock.symbol = filteredStocks[0].symbol;
+      }
+    },
     /**
      * building link for each item
      *
@@ -95,12 +122,15 @@ export default {
       this.$api.social.notification.read(notification_id).then(response => {
         if (response.success) {
           this.notification.status = "read";
-          if (typeof this.notification.notificable !== "undefined") {
-            window.location = this.notification.notificable.meta.post
-              ? "/post/" + this.data.meta.post.id
-              : "/profile/" + this.data.meta.user.username;
-          } else {
-            window.location = "/watchlist"
+
+          if (this.meta.user && this.meta.post) {
+            window.location = "/post/" + this.meta.post.id;
+
+          } else if(typeof this.meta.post == "undefined" && typeof this.meta.stock == "undefined" && this.meta.user){
+            window.location = "/profile/" + this.meta.user.username;
+
+          } else if(this.meta.user && this.meta.stock){
+            window.location = "/watchlist";
           }
         }
       });
