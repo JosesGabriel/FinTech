@@ -133,13 +133,6 @@
              
             <td class="text-right">{{ addcomma(item.buy_volume) }}</td>
             <td
-              :class="
-                item.buy_avprice < current
-                  ? 'positive'
-                  : item.buy_avprice > current
-                  ? 'negative'
-                  : ''
-              "
               class="text-right"
             >
               {{ addcomma(item.buy_avprice) }}
@@ -149,13 +142,6 @@
             <td class="text-center" style="width:20px;"></td>
             <td class="text-right">{{ addcomma(item.sell_volume) }}</td>
             <td
-              :class="
-                item.sell_avprice > current
-                  ? 'positive'
-                  : item.sell_avprice < current
-                  ? 'negative'
-                  : ''
-              "
               class="text-right"
             >
               {{ addcomma(item.sell_avprice) }}
