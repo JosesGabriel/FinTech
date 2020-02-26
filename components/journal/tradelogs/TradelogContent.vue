@@ -385,7 +385,7 @@ export default {
         const dateFrom = this.localFormat(str.dateFrom, "unix");
         const dateTo = this.localFormat(str.dateTo, "unix");
 
-        if (str == "day" && d == today && month == monthWeek) {
+        if (str == "day" && d.toString() == today && month == monthWeek) {
           this.tradeLogs.push(this.filter[i]);
         } else if (
           str == "week" &&
