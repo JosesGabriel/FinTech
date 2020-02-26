@@ -6,12 +6,12 @@
         class="text-left justify-left px-0 pb-2 pt-5"
         :style="borderColor"
       >
-        <h6
+        <span
           class="font-weight-bold subtitle-2"
-          :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
         >
           STRATEGY STATISTICS
-        </h6>
+        </span>
         <v-spacer></v-spacer>
         <v-btn
           icon
