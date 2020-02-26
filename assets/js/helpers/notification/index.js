@@ -25,7 +25,7 @@ export function UserNotificationAlertLayout(data) {
                 <div class="row">
                     <div class="col-sm-3 py-1">
                         <div class="alertLeft__container">
-                            <span class="alertStock__id px-0 py-3 d-block font-weight-bold text-center">${data.stock.id}</spam>
+                            <span class="alertStock__id px-0 py-3 d-block font-weight-bold text-center">${data.stock.symbol}</spam>
                         </div>
                     </div>
                     <div class="col-sm-9 py-1 pl-0">

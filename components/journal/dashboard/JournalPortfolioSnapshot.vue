@@ -2,10 +2,10 @@
   <v-col ref="componentWrapper" class="pa-0" cols="4" sm="4" md="4">
     <!-- Don't remove ref value. Used for sharing -->
     <v-card-title class="text-left justify-left px-0 pb-2 pt-5">
-      <h6
+      <span
         class="font-weight-bold subtitle-2"
-        :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
-      >PORTFOLIO SNAPSHOT</h6>
+        :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+      >PORTFOLIO SNAPSHOT</span>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon small color="tertiary">mdi-share-variant</v-icon>
@@ -20,7 +20,7 @@
         :style="{ border: borderColor }"
       >
         <v-card-title class="py-2 px-3">
-          <h6 class="font-weight-bold caption">Trading Result (PHP)</h6>
+          <span class="font-weight-bold caption">Trading Result (PHP)</span>
         </v-card-title>
         <v-simple-table
           id="liveportfolio-table"
@@ -69,7 +69,7 @@
         :style="{ border: borderColor }"
       >
         <v-card-title class="py-2 px-3">
-          <h6 class="font-weight-bold caption">Funds Transfers (PHP)</h6>
+          <span class="font-weight-bold caption">Funds Transfers (PHP)</span>
         </v-card-title>
         <v-simple-table
           id="liveportfolio-table"

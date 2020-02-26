@@ -92,7 +92,7 @@
             </v-col>
             <v-col cols="5">
               <span v-if="!contactToggle">
-                <span>Primary: {{ mobile != null ? mobile : "No number added yet." }}</span>
+                <span>Primary: {{ mobile != null ? '(+063) ' + mobile : "No number added yet." }}</span>
               </span>
               <v-row v-else class="py-0">
                 <v-col cols="12" class="py-0">
@@ -134,12 +134,13 @@
                     :mandatory="false"
                   >
                     <v-radio
-                      :label="mobile ? mobile : 'No number added yet.'"
+                      :label="mobile != null ? '(+063) ' + mobile : 'No number added yet.'"
                       :value="mobile ? mobile : 'No number added yet.'"
                       color="success"
                       class="ma-0"
                     ></v-radio>
                   </v-radio-group>
+                  <v-btn small text :color="lightSwitch == 0 ? 'black' : 'tertiary'" class="text-capitalize contact__label">Remove</v-btn>
                 </v-col>
                 <span class="pl-3">
                   Only you can see your contact information. Stay connected with the community as we provide you with sms alerts.

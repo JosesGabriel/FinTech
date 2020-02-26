@@ -385,7 +385,7 @@ export default {
         const dateFrom = this.localFormat(str.dateFrom, "unix");
         const dateTo = this.localFormat(str.dateTo, "unix");
 
-        if (str == "day" && d == today && month == monthWeek) {
+        if (str == "day" && d.toString() == today && month == monthWeek) {
           this.tradeLogs.push(this.filter[i]);
         } else if (
           str == "week" &&
@@ -449,11 +449,9 @@ export default {
               ...this.tradeLogs[i],
               buy_value: buyvalueResult,
               profit_loss: 0,
-              profit_loss_percentage: 0,
-              stock_symbol: ''
+              profit_loss_percentage: 0
             };
             this.tradeLogs[i] = { ...average_price };
-            this.tradeLogs[i].stock_symbol = this.tradeLogs[i].meta.stock_nane
 
             this.tradeLogs[i].profit_loss =
               this.tradeLogs[i].total_value - this.tradeLogs[i].buy_value;

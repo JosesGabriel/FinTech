@@ -3,10 +3,10 @@
     <!-- Don't remove ref value. Used for sharing -->
     <v-col cols="12">
       <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-        <h6
+        <span
           class="font-weight-bold subtitle-2"
-          :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
-        >EXPENSE REPORT</h6>
+          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+        >EXPENSE REPORT</span>
         <v-spacer></v-spacer>
         <v-btn icon small @click="showShareModal()">
           <v-icon small color="tertiary">mdi-share-variant</v-icon>
@@ -15,10 +15,10 @@
     </v-col>
     <v-col class="pa-0 pt-3" cols="3" sm="3" md="3">
       <v-card-title class="text-left justify-left pa-0">
-        <h6
+        <span
           class="font-weight-regular caption text-capitalize"
           :style="{ color: fontColor }"
-        >Trading Result (PHP)</h6>
+        >Trading Result (PHP)</span>
       </v-card-title>
       <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
         <template v-slot:default>

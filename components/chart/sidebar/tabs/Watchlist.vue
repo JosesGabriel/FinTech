@@ -9,9 +9,16 @@
     >
       <div class="title__left">Watchlist</div>
       <div class="title__right">
-        <v-icon size="15" class="icon__add-watchlist" @click="addWatchlist"
-          >mdi-plus-circle-outline</v-icon
+        <v-btn
+          x-small
+          :disabled="loading"
+          class="ma-0 pa-0"
+          text
+          icon
+          @click="addWatchlist"
         >
+          <v-icon size="15">mdi-plus-circle-outline</v-icon>
+        </v-btn>
       </div>
     </div>
 
@@ -291,7 +298,7 @@ export default {
 
 .top__left {
   flex: 0 0 136px;
-  font-size: 16px;
+  font-size: 14px;
 }
 .top__right {
   flex: 0 0 136px;
@@ -314,9 +321,6 @@ export default {
   flex: 0 0 136px;
   text-align: right;
   margin-top: -4px;
-}
-.icon__add-watchlist {
-  cursor: pointer;
 }
 .content__card-watchlist {
   height: calc(100vh - 335px);

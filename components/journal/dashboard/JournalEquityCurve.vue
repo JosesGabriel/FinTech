@@ -1,10 +1,10 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="12" sm="12" md="12">
     <v-card-title class="text-left justify-left px-0 pb-2 pt-5" :style="borderColor">
-      <h6
+      <span
         class="font-weight-bold subtitle-2"
-        :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
-      >EQUITY CURVE</h6>
+        :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+      >EQUITY CURVE</span>
       <v-spacer></v-spacer>
       <!-- hide for now -->
       <!-- <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>

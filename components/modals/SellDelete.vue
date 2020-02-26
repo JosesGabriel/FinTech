@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="show" max-width="400px">
-    <v-card :dark="lightSwitch == 1 ? true : false">
+    <v-card :dark="lightSwitch == 1">
       <v-card-title
         class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
       >Delete Confirmation</v-card-title>
@@ -15,7 +15,7 @@
             class="text-capitalize mt-2"
             depressed
             text
-            :dark="lightSwitch == true"
+            :dark="lightSwitch == 1"
             light
             @click.stop="show = false"
           >Cancel</v-btn>
@@ -44,7 +44,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      renderEditKey: "journal/getRenderEditKey"
+      renderEditKey: "journal/getRenderEditKey",
+      lightSwitch: "global/getLightSwitch"
     }),
     show: {
       get() {
@@ -64,8 +65,7 @@ export default {
   methods: {
     ...mapActions({
       setRenderEditKey: "journal/setRenderEditKey",
-      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
-      lightSwitch: "global/getLightSwitch"
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey"
     }),
     /**
      * deleteNow function, trigger delete once user confirmed only tradelog
