@@ -1,10 +1,10 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="8" sm="8" md="8">
     <v-card-title class="text-left justify-left mx-3 px-0 pb-2 pt-5" :style="borderColor">
-      <h6
+      <span
         class="font-weight-bold subtitle-2"
-        :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
-      >CURRENT ALLOCATION</h6>
+        :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+      >CURRENT ALLOCATION</span>
       <v-spacer></v-spacer>
       <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
         <v-icon small color="tertiary">mdi-share-variant</v-icon>

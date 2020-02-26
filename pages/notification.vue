@@ -25,30 +25,11 @@
         >
           <v-container :dark="lightSwitch == 0 ? false : true" class="pa-0">
             <v-list class="py-0 userMessage__dropdown-body scrollbar">
-              <v-list-item
+              <PageNotificationCard
                 v-for="(item, index) in dataNotification"
                 :key="index"
-                @click="linkTo(item.notificable.meta.post ? 'post,' +item.notificable.meta.post.id : 'user,' + item.notificable.meta.user.username, item.id)"
-                two-line
-                class="notification__item"
-                :class="item.status"
-              >
-                <v-list-item-avatar class="mr-3" size="35">
-                  <img
-                    :src="item.notificable.meta.user.profile_image ? item.notificable.meta.user.profile_image : 'default.png'"
-                  />
-                </v-list-item-avatar>
-
-                <v-list-item-content class="py-2">
-                  <v-list-item-subtitle class="body-2 ma-0 userMessage__dropdown-title">
-                    <span
-                      class="body-2 ma-0 userMessage__message caption font-weight-bold"
-                    >{{ item.notificable.message }}</span>
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-
-                <span class="caption tertiary--text">{{ localFormat(item.created_at, "fn") }}</span>
-              </v-list-item>
+                :notification="item"
+              />
             </v-list>
           </v-container>
         </v-card>
@@ -65,6 +46,7 @@
 import Navbar from "~/components/Navbar";
 import WhoToMingle from "~/components/WhoToMingle";
 import FooterSidebar from "~/components/FooterSidebar";
+import PageNotificationCard from "~/components/notification/PageNotificationCard";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -75,7 +57,8 @@ export default {
   components: {
     Navbar,
     WhoToMingle,
-    FooterSidebar
+    FooterSidebar,
+    PageNotificationCard
   },
   head() {
     return {
@@ -103,20 +86,26 @@ export default {
       return this.lightSwitch == 0
         ? "#000000 !important"
         : "#ffffff !important";
+    },
+    /**
+     * transfer data to meta to make code shorter.
+     *
+     * @return  {Object}  returns object
+     */
+    meta() {
+      return this.notification.notificable.meta;
     }
   },
   watch: {
     notification() {
-      this.newNotification();
+      this.newNotication();
     },
     markAll() {
-      this.dataNotification.filter(x => x.status = "read");
+      this.dataNotification.filter(x => (x.status = "read"));
     }
   },
   mounted() {
-    if (process) {
-      this.getNotification();
-    }
+    this.getNotification();
   },
   methods: {
     localFormat: LocalFormat,
@@ -159,24 +148,40 @@ export default {
       });
     },
     /**
-     * will trigger if user has notification real-time then then unshift
-     * to notification array
+     * Trigger when user has new notification user notification and watchlist
+     * Manipulation of data when new notification come
      *
-     * @return  {object}  returns object data notification
+     * @return  {Object}  returns object
      */
-    newNotification() {
+    newNotication() {
       const m = {
         meta: {}
       };
       m.meta = this.notification;
-      const n = {
-        notificable: {}
+      let n = {
+        notificable: {},
+        id: null,
+        status: "unread"
       };
-      n.notificable = {
-        ...m,
-        message: this.notification._message,
-        id: this.notification.post.id
-      };
+      if (typeof this.notification.post !== "undefined") {
+        n.notificable = {
+          ...m,
+          message: this.notification._message,
+          id: this.notification.post.id
+        };
+        n.id = this.notification.notification.id;
+      } else if (
+        typeof this.notification.user !== "undefined" &&
+        typeof this.notification.post === "undefined"
+      ) {
+        n.notificable = {
+          ...m,
+          message: this.notification._message
+        };
+        n.id = this.notification.notification.id;
+      } else if (typeof this.notification.stock !== "undefined") {
+        n = this.notification;
+      }
       this.dataNotification.unshift(n);
     },
 

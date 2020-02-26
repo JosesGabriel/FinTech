@@ -3,10 +3,10 @@
     <!-- Don't remove ref value. Used for sharing -->
     <v-col cols="12">
       <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-        <h6
+        <span
           class="font-weight-bold subtitle-2"
-          :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
-        >EMOTIONAL STATISTICS</h6>
+          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+        >EMOTIONAL STATISTICS</span>
         <v-spacer></v-spacer>
         <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
           <v-icon small color="tertiary">mdi-share-variant</v-icon>

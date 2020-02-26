@@ -7,7 +7,19 @@
         { 'white--text': lightSwitch == 1 }
       ]"
     >
-      All Stock
+      <div class="title__left">All Stock</div>
+      <div class="title__right">
+        <v-btn
+          x-small
+          :disabled="loading"
+          class="ma-0 pa-0"
+          text
+          icon
+          @click="initAllStock"
+        >
+          <v-icon size="15">mdi-refresh</v-icon>
+        </v-btn>
+      </div>
     </div>
 
     <v-card
@@ -167,7 +179,7 @@ export default {
      */
     sseInfo(value) {
       if (this.loading === false && this.currentTab === true) {
-        this.sseAllInfo(value);
+        // this.sseAllInfo(value);
       }
     },
     /**
@@ -287,7 +299,7 @@ export default {
      *
      * @return  {Array}        new list of item
      */
-    customSort: function(items, index, isDesc) {
+    customSort(items, index, isDesc) {
       if (index[0] == "symbol") {
         // symbol was clicked
         this.symbolDesc = isDesc;
@@ -346,5 +358,16 @@ export default {
 .tr_custom {
   line-height: 0.1rem !important;
   cursor: pointer;
+}
+.sub__title {
+  display: flex;
+}
+.title__left {
+  flex: 0 0 130px;
+}
+.title__right {
+  flex: 0 0 125px;
+  text-align: right;
+  font-size: 11px;
 }
 </style>
