@@ -1,4 +1,4 @@
-<template>
+-<template>
   <v-content>
     <v-row>
       <!-- toggle bid and ask -->
@@ -131,23 +131,19 @@ export default {
       try {
         // Top Depth
         const topdepth = await this.$api.chart.stocks.topdepth(params);
+        this.topdepth = parseFloat(topdepth.data.bid_total_percent).toFixed(2);
         // Full Depth
         const fulldepth = await this.$api.chart.stocks.fulldepth(params);
-
+        this.fulldepth = parseFloat(fulldepth.data.bid_total_percent).toFixed(
+          2
+        );
         if (this.toggleButton === false) {
-          this.topdepth = parseFloat(topdepth.data.bid_total_percent).toFixed(
-            2
-          );
           this.progbar.value = this.topdepth;
           this.progbar.loading = false;
         } else {
-          this.fulldepth = parseFloat(fulldepth.data.bid_total_percent).toFixed(
-            2
-          );
           this.progbar.value = this.fulldepth;
           this.progbar.loading = false;
         }
-
         this.disabled = false;
       } catch (error) {
         this.progbar.value = 100;

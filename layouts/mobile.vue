@@ -54,7 +54,6 @@
 import { mapActions, mapGetters } from "vuex";
 
 export default {
-  auth: false,
   computed: {
     ...mapGetters({
       alert: "global/getAlert",
@@ -69,6 +68,9 @@ export default {
     cardBackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     }
+  },
+  mounted() {
+    this.setLightSwitch(0);
   },
   methods: {
     ...mapActions({

@@ -62,7 +62,7 @@
                   class="no-transform"
                   text
                   @click="close"
-                  >Cancel</v-btn
+                  >Close</v-btn
                 >
                 <v-btn
                   :dark="lightSwitch == 0 ? false : true"

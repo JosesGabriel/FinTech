@@ -73,7 +73,11 @@
           <span :class="calcu ? 'calc_nodisplay': 'calc_display'" style="font-size: 16px;padding-left: 12px;">
             {{ stringifyNumber(positionKey + 1) }} Tranche
           </span>
-          <span :class="calcu ? 'calc_display': 'calc_nodisplay'" style="font-size: 16px;padding-left: 12px;">Your results</span>
+          <span 
+            :class="calcu ? 'calc_display': 'calc_nodisplay'" 
+            style="font-size: 16px;padding-left: 12px;"
+            class="pb-3"
+            >Your results</span>
         </v-col>
       </v-row>
 
@@ -159,32 +163,32 @@
   </div>    
   <div :class="calcu ? 'calc_display': 'calc_nodisplay'">  
   
-      <v-row class="pl-6 pr-12">
+      <v-row class="pl-3 pr-6" style="font-size: 14px;">
             <v-col cols="6" class="mb-2 py-0">
               <span>Total Cost</span>
             </v-col>
-            <v-col cols="6" class="mb-2 py-0" style="text-align: right;">
+            <v-col cols="6" class="mb-2 py-0 pr-0" style="text-align: right;">
               <span >{{ totalCost }}</span>
             </v-col>
       </v-row>
-      <v-row class="pl-6 pr-12">
+      <v-row class="pl-3 pr-6" style="font-size: 14px;">
             <v-col cols="6" class="mb-2 py-0">
               <span>Total Position</span>
             </v-col>
-            <v-col cols="6" class="mb-2 py-0" style="text-align: right;">
+            <v-col cols="6" class="mb-2 py-0 pr-0" style="text-align: right;">
               <span>{{ totalPosition }}</span>
             </v-col>
         </v-row>
-      <v-row class="pl-6 pr-12">
+      <v-row class="pl-3 pr-6" style="font-size: 14px;">
             <v-col cols="6" class="mb-2 py-0">
               <span>Average Price</span>
             </v-col>
-            <v-col cols="6" class="mb-2 py-0" style="text-align: right;">
+            <v-col cols="6" class="mb-2 py-0 pr-0" style="text-align: right;">
               <span>{{ averagePrice }}</span>
             </v-col>
         </v-row>
 
-      <v-row>
+      <v-row class="pt-3">
         <v-col cols="2" style="padding-left: 25px;" >
         </v-col>
         <v-col cols="6" style="text-align:right;">
@@ -197,7 +201,7 @@
             >Back</v-btn
           >
         </v-col>
-        <v-col cols="4" style="padding-left: 0px;">
+        <v-col cols="4" style="padding-left: 10px;">
           <v-btn
             class="text-capitalize"
             dense
