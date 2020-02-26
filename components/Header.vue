@@ -149,7 +149,7 @@ export default {
       this.newNotication();
     },
     showNotification() {
-      this.showBadge = 0
+      this.showBadge = 0;
     }
   },
   mounted() {
@@ -222,7 +222,7 @@ export default {
       let n = {
         notificable: {},
         id: null,
-        status: 'unread'
+        status: "unread"
       };
       if (typeof this.notification.post !== "undefined") {
         n.notificable = {
@@ -318,10 +318,11 @@ export default {
      */
     notificationHandler(eventName, data) {
       if (typeof data.stock !== "undefined") {
+        data.stock = { ...data.stock, symbol: "" };
         const filteredStocksEntry = this.stockList.data.filter(stock => {
           return stock.id_str == data.stock.id;
         });
-        data.stock.id = filteredStocksEntry[0].symbol;
+        data.stock.symbol = filteredStocksEntry[0].symbol;
       }
       this.setNotification(data);
     },
