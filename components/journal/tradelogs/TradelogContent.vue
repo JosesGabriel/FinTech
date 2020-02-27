@@ -465,8 +465,11 @@ export default {
               this.totalProfitLossPerf +
               parseFloat(this.tradeLogs[i].profit_loss_percentage);
           }
+          
+          const arr = this.tradeLogs.sort((a, b) => new Date(b.meta.date) - new Date(a.meta.date))
 
-          this.tradeLogsBackup = this.tradeLogs;
+          this.tradeLogs = arr;
+          this.tradeLogsBackup = arr;
 
           this.liveTradelogsLoading = false;
         }.bind(this)
