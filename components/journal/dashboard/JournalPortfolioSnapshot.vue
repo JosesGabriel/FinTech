@@ -43,7 +43,7 @@
                 id="table_tr_snap-cont"
                 :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
               >
-                <td class="item_position-prop px-3 py-1 caption">Year to Date P/L</td>
+                <td class="item_position-prop px-3 py-1 caption">Running Profit & Loss</td>
                 <td
                   class="item_position-prop text-right px-3 py-1 caption"
                 >{{ yearTDPL | numeral("0,0.00") }}</td>
@@ -52,7 +52,7 @@
                 id="table_tr_snap-cont"
                 :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
               >
-                <td class="item_position-prop px-3 py-1 caption">Portfolio YTD %</td>
+                <td class="item_position-prop px-3 py-1 caption">Portfolio Performance</td>
                 <td
                   class="item_position-prop text-right px-3 py-1 caption"
                 >{{ portfolioTDPL | numeral("0,0.00") }}</td>
@@ -96,15 +96,6 @@
                 <td
                   class="item_position-prop text-right px-3 py-1 caption"
                 >{{ Withdrawals | numeral("0,0.00") }}</td>
-              </tr>
-              <tr
-                id="table_tr_snap-cont"
-                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
-              >
-                <td class="item_position-prop px-3 py-1 caption">Equity</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ Equity | numeral("0,0.00") }}</td>
               </tr>
             </tbody>
           </template>
