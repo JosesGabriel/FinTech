@@ -29,11 +29,11 @@
         <span
           v-else-if="meta.user && meta.stock ? meta.stock.trigger === 'Take Profit' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ take.first_message + meta.stock.symbol + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
+        >{{ take.first_message + meta.stock.symbol + take.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
         <span
           v-else-if="meta.user && meta.stock ? meta.stock.trigger === 'Stop Lost' : ''"
           class="body-2 ma-0 userMessage__message caption"
-        >{{ stop.first_message + meta.stock.symbol + entry.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
+        >{{ stop.first_message + meta.stock.symbol + stop.second_message + ' Current price is now ₱' + meta.stock.executed_price }}</span>
       </div>
       <span class="caption tertiary--text">{{ localFormat(notification.created_at, "fn") }}</span>
     </v-list-item-content>

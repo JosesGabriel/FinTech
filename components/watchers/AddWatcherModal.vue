@@ -14,7 +14,7 @@
       </template>
       <v-card :dark="lightSwitch == 0 ? false : true">
         <v-card-title>
-          <span class="subtitle-1 font-weight-medium">Add Watchlist</span>
+          <span class="subtitle-1 font-weight-bold">Add Watchlist</span>
         </v-card-title>
         <v-card-text>
           <v-container>
