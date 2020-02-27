@@ -148,7 +148,8 @@ export default {
       ],
       usernameRules: [
         v => !!v || "Username is required.",
-        v => (v && v.length >= 5) || "Username must be atleast 5 characters"
+        v => (v && v.length >= 5) || "Username must be atleast 5 characters",
+        v => (v.split(' ').length <= 1) || 'No space allowed'
       ],
       passwordRules: [
         v => !!v || "Password is required.",

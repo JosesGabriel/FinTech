@@ -2,14 +2,14 @@
   <v-row class="ma-0 mt-1 pa-0">
     <v-col class="col-3 pa-0 ma-0">
       <v-content class="pa-0 ma-0 pt-3 px-4">
-        <v-select
+        <!--<v-select
           v-model="portvalue"
           :items="portfolio"
           item-text="name"
           item-value="id"
           class="select__trade ma-0 pa-0"
           append-icon="mdi-chevron-down"
-          label="Portfolio"
+          label="Select Portfolio"
           outlined
           dense
           color="success"
@@ -17,7 +17,7 @@
           :dark="lightSwitch == 1"
           :background-color="cardBackground"
           @mousedown="getPorfolio"
-          @change="getFunds"
+          @change="getFunds"  
         >
           <template slot="item" slot-scope="data">
             <v-list-item-content
@@ -35,7 +35,7 @@
               >
             </v-list-item-content>
           </template>
-        </v-select>
+        </v-select>-->
 
         <v-hover v-slot:default="{ hover }">
           <v-btn
@@ -118,6 +118,44 @@
     </v-col>
     <v-col class="col-3 pa-0 ma-0">
       <v-content class="pa-0 ma-0 pt-3 px-4">
+
+        <v-select
+          v-model="portvalue"
+          :items="portfolio"
+          item-text="name"
+          item-value="id"
+          class="select__trade ma-0 pa-0"
+          append-icon="mdi-chevron-down"
+          label="Select Portfolio"
+          outlined
+          dense
+          color="success"
+          item-color="success"
+          :dark="lightSwitch == 1"
+          :background-color="cardBackground"
+          @mousedown="getPorfolio"
+          @change="getFunds"  
+        >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardBackground }"
+              class="custom_menu_popup"
+            >
+              <span
+                class="caption pa-2"
+                :class="[
+                  { 'white--text': lightSwitch == 1 },
+                  { 'black--text': lightSwitch == 0 }
+                ]"
+                >{{ data.item.name }}</span
+              >
+            </v-list-item-content>
+          </template>
+        </v-select>
+
+
+
         <v-select
           v-model="strat"
           :items="strategy"
@@ -433,7 +471,7 @@
                   <span>Allocation:</span>
                 </v-col>
                 <v-col cols="6" class="pa-0 text-right font-weight-bold">
-                  <span>{{ alloc }} %</span>
+                  <span>{{ quickTradeSelected ? alloc : normalalloc.toFixed(2) }} %</span>
                 </v-col>
               </v-row>
 
@@ -442,13 +480,13 @@
                   <span>Buy Price:</span>
                 </v-col>
                 <v-col cols="6" class="pa-0 text-right font-weight-bold">
-                  <span>{{ stock_last.toFixed(2) }}</span>
+                  <span>{{ stock_last }}</span>
                 </v-col>
                 <v-col cols="6" class="pa-0">
                   <span>Quantity:</span>
                 </v-col>
                 <v-col cols="6" class="pa-0 text-right font-weight-bold">
-                  <span>{{ quantity.toFixed(2) }}</span>
+                  <span>{{ quantity }}</span>
                 </v-col>
                 <v-col cols="6" class="pa-0">
                   <span>Total Cost:</span>
@@ -511,6 +549,35 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="errorShow" max-width="400px">
+    <v-card :dark="lightSwitch == true">
+      <v-card-title
+        class="text-center justify-left pa-4 success--text text-capitalize subtitle-1 font-weight-bold"
+      >Error</v-card-title>
+      <v-card-title
+        class="text-center justify-left pa-0 px-5 subtitle-2 font-weight-thin"
+      >Not Enough Funds</v-card-title>
+      <v-container class="px-5">
+        <v-row no-gutters>
+          <v-spacer></v-spacer>
+          <v-btn
+            :style="{ color: toggleFontColor }"
+            class="text-capitalize mt-2"
+            depressed
+            text
+            :dark="lightSwitch == true"
+            light
+            @click.stop="errorShow = false"
+          >Close</v-btn>
+
+        </v-row>
+      </v-container>
+    </v-card>
+  </v-dialog>
+
+
+
   </v-row>
 </template>
 <script>
@@ -540,6 +607,7 @@ export default {
     shares: 0,
     unrealized: 0,
     alloc: 0,
+    normalalloc: 0,
     realized: 0,
     equity: 0,
     stobuy: 0,
@@ -556,6 +624,7 @@ export default {
     quantity: 0,
     selectedButton: 1,
     btnTriggered: false,
+    errorShow: false,
     items: [
       { id: 1, text: "10%" },
       { id: 2, text: "30%" },
@@ -738,7 +807,13 @@ export default {
       let pressfees = 0;
       press = parseFloat(this.quantity) * parseFloat(this.stock_last);
       pressfees = this.fees(press);
+        if(parseFloat(pressfees) > parseFloat(this.balance)){
+          this.errorShow = true;
+          this.quantity = 0;
+          this.totalCost = 0;
+        }
       this.totalcost = pressfees;
+      this.normalalloc = (this.totalcost / this.getEquity()) * 100;
     },
     /**
      * Buy/Sell Fees
@@ -824,6 +899,11 @@ export default {
             });
             this.quantity = 0;
             this.notes = "";
+            this.totalcost = 0;
+            this.strat ='';
+            this.tplan = '';
+            this.emot = '';
+
           }
         })
         .catch(error => {
@@ -842,7 +922,13 @@ export default {
       this.quantity = parseInt(this.quantity) + parseInt(this.dboard);
       let add = parseFloat(this.quantity) * parseFloat(this.stock_last);
       let addfees = this.fees(add);
+        if(parseFloat(addfees) > parseFloat(this.balance)){
+          this.errorShow = true;
+          this.quantity = 0;
+          this.totalCost = 0;
+        }
       this.totalcost = addfees;
+      this.normalalloc = (this.totalcost / this.getEquity()) * 100;
     },
     /**
      * Get total cost if Up down Button is pressed
@@ -857,6 +943,10 @@ export default {
       let min = parseFloat(this.quantity) * parseFloat(this.stock_last);
       let minfees = this.fees(min);
       this.totalcost = minfees;
+      this.normalalloc = (this.totalcost / this.getEquity()) * 100;
+    },
+    getEquity(){
+      return  this.unrealized + this.realized + this.capital;
     },
 
     quickConfirmV2() {
@@ -941,7 +1031,6 @@ export default {
     },
     quickTrade() {
       this.quickTradeSelected = true;
-
       let getlocal = localStorage.getItem("QT_" + this.portvalue);
       getlocal = JSON.parse(getlocal);
 
@@ -959,6 +1048,7 @@ export default {
         this.totalcost = this.stobuy * parseFloat(this.stock_last);
         this.totalcost = this.fees(this.totalcost);
         this.showConfirm = true;
+        
       } else {
         this.alloc = 10;
         this.equity = this.unrealized + this.realized + this.capital;
@@ -974,6 +1064,7 @@ export default {
         this.totalcost = this.fees(this.totalcost);
         this.showConfirm = true;
       }
+
     }
   }
 };
@@ -986,6 +1077,7 @@ export default {
 .select__trade > .v-input__control > .v-input__slot {
   border: 1px solid;
   box-shadow: unset !important;
+  margin-bottom: 0px;
 }
 .__tradenotes > .v-input__control > .v-input__slot {
   border-radius: unset !important;
@@ -999,6 +1091,7 @@ export default {
   width: 62px;
   top: 100px;
 }
+
 </style>
 <style scoped>
 .activeClassButton {

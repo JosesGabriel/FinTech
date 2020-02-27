@@ -160,7 +160,7 @@
               Sell Price
             </v-col>
             <v-col class="mr-12 font-weight-bold" style="text-align: right;">
-              {{ this.stock_last.toFixed(2) }}
+              {{ this.stock_last }}
             </v-col>
           </v-row>
           <v-row>
@@ -592,6 +592,7 @@ export default {
             });
             this.quantity = 0;
             this.portvalue = "";
+            this.totalcost = 0;
           }
         })
         .catch(error => {
