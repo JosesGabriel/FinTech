@@ -72,6 +72,7 @@ export default {
     };
   },
   mounted() {
+    this.$fb.enable();
     this.initSSE();
   },
   beforeDestroy() {

@@ -145,7 +145,6 @@ export default {
     }
   },
   mounted() {
-    this.$fb.enable();
     if (localStorage.currentMode) {
       this.setLightSwitch(localStorage.currentMode);
     }

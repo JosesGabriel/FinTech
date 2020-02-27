@@ -70,7 +70,6 @@ export default {
     }
   },
   mounted() {
-    this.$fb.enable();
     this.setLightSwitch(0);
   },
   methods: {
