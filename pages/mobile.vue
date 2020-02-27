@@ -148,7 +148,7 @@ export default {
             state: false,
             header: "Ooopps!",
             //body: error.response.data.message,
-            body: "something went wrong, please try again later.",
+            body: "Something went wrong. Please try again later.",
             subtext: this.email
           };
           this.setAlertDialog(alert);
