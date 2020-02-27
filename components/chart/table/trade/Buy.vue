@@ -2,14 +2,14 @@
   <v-row class="ma-0 mt-1 pa-0">
     <v-col class="col-3 pa-0 ma-0">
       <v-content class="pa-0 ma-0 pt-3 px-4">
-        <v-select
+        <!--<v-select
           v-model="portvalue"
           :items="portfolio"
           item-text="name"
           item-value="id"
           class="select__trade ma-0 pa-0"
           append-icon="mdi-chevron-down"
-          label="Portfolio"
+          label="Select Portfolio"
           outlined
           dense
           color="success"
@@ -35,7 +35,7 @@
               >
             </v-list-item-content>
           </template>
-        </v-select>
+        </v-select>-->
 
         <v-hover v-slot:default="{ hover }">
           <v-btn
@@ -118,6 +118,44 @@
     </v-col>
     <v-col class="col-3 pa-0 ma-0">
       <v-content class="pa-0 ma-0 pt-3 px-4">
+
+        <v-select
+          v-model="portvalue"
+          :items="portfolio"
+          item-text="name"
+          item-value="id"
+          class="select__trade ma-0 pa-0"
+          append-icon="mdi-chevron-down"
+          label="Select Portfolio"
+          outlined
+          dense
+          color="success"
+          item-color="success"
+          :dark="lightSwitch == 1"
+          :background-color="cardBackground"
+          @mousedown="getPorfolio"
+          @change="getFunds"  
+        >
+          <template slot="item" slot-scope="data">
+            <v-list-item-content
+              :dark="lightSwitch == true"
+              :style="{ background: cardBackground }"
+              class="custom_menu_popup"
+            >
+              <span
+                class="caption pa-2"
+                :class="[
+                  { 'white--text': lightSwitch == 1 },
+                  { 'black--text': lightSwitch == 0 }
+                ]"
+                >{{ data.item.name }}</span
+              >
+            </v-list-item-content>
+          </template>
+        </v-select>
+
+
+
         <v-select
           v-model="strat"
           :items="strategy"
@@ -442,7 +480,7 @@
                   <span>Buy Price:</span>
                 </v-col>
                 <v-col cols="6" class="pa-0 text-right font-weight-bold">
-                  <span>{{ stock_last.toFixed(2) }}</span>
+                  <span>{{ stock_last }}</span>
                 </v-col>
                 <v-col cols="6" class="pa-0">
                   <span>Quantity:</span>
@@ -861,6 +899,11 @@ export default {
             });
             this.quantity = 0;
             this.notes = "";
+            this.totalcost = 0;
+            this.strat ='';
+            this.tplan = '';
+            this.emot = '';
+
           }
         })
         .catch(error => {
@@ -1034,6 +1077,7 @@ export default {
 .select__trade > .v-input__control > .v-input__slot {
   border: 1px solid;
   box-shadow: unset !important;
+  margin-bottom: 0px;
 }
 .__tradenotes > .v-input__control > .v-input__slot {
   border-radius: unset !important;
@@ -1047,6 +1091,7 @@ export default {
   width: 62px;
   top: 100px;
 }
+
 </style>
 <style scoped>
 .activeClassButton {
