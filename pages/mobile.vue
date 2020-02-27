@@ -138,6 +138,9 @@ export default {
             this.setAlertDialog(alert);
             this.showCaptcha = false;
             this.$refs.form.reset();
+            setTimeout(() => {
+              window.location.pathname = "/mobile";
+            }, 5000);
           }
         } catch (error) {
           const alert = {
