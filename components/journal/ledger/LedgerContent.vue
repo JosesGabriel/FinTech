@@ -111,17 +111,17 @@
           <v-spacer></v-spacer>
           <span
             style="width: 190px"
-            class="text-right subtitle-2"
+            class="text-right caption"
             :style="{ color: fontcolor2 }"
           >Total Funds:</span>
           <span
             style="width: 190px"
-            class="text-right subtitle-2"
+            class="text-right caption"
             :class="(totalDebit < 0 ? 'negative' : 'positive')"
           >{{ totalDebit | numeral("0,0.00") }}</span>
           <span
             style="width: 190px"
-            class="text-right subtitle-2"
+            class="text-right caption"
             :class="(totalCredit < 0 ? 'negative' : 'positive')"
           >{{ totalCredit | numeral("0,0.00") }}</span>
           <span style="width: 190px;" class="text-right subtitle-2"></span>
@@ -328,7 +328,9 @@ export default {
       this.debit = 0;
       this.count = 0;
       this.$api.journal.portfolio.ledger(ledgerparams).then(response => {
-        this.ledgerContent = response.data.ledger;
+        const arr = response.data.ledger;
+        
+        this.ledgerContent = arr.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
         for (let i = 0; i < this.ledgerContent.length; i++) {
           this.ledgerContent[i].created_at = this.ledgerContent[
             i
@@ -418,10 +420,8 @@ export default {
               parseFloat(this.ledgerContent[i].credit.replace(/,/g, ""));
           }
         }
-        const arr = this.ledgerContent.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 
-        this.ledgerContent = arr;
-        this.ledgerContentBackup = arr;
+        this.ledgerContentBackup = this.ledgerContent;
 
         this.liveLedgerLoading = false;
       });
