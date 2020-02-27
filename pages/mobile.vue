@@ -138,13 +138,17 @@ export default {
             this.setAlertDialog(alert);
             this.showCaptcha = false;
             this.$refs.form.reset();
+            setTimeout(() => {
+              window.location.pathname = "/mobile";
+            }, 5000);
           }
         } catch (error) {
           const alert = {
             model: true,
             state: false,
             header: "Ooopps!",
-            body: error.response.data.message,
+            //body: error.response.data.message,
+            body: "Something went wrong. Please try again later.",
             subtext: this.email
           };
           this.setAlertDialog(alert);

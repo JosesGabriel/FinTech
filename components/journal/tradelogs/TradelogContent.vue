@@ -76,6 +76,7 @@
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
+        :disabled="toggleRecordButton"
         @click.stop="showRecordTrade=true"
         height="23"
       >
@@ -99,7 +100,6 @@
       loading-text="Loading..."
       class="data_table-container pl-10 secondary--text"
     >
-    
       <template v-slot:item.stock_symbol="{ item }">
         <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.stock_symbol }}</span>
       </template>
@@ -241,7 +241,12 @@ export default {
       itemsPerPage: 10,
       search: "",
       headers: [
-        { text: "Stocks", value: "stock_symbol", sortable: true, align: "left" },
+        {
+          text: "Stocks",
+          value: "stock_symbol",
+          sortable: true,
+          align: "left"
+        },
         { text: "Date", value: "date", align: "right" },
         { text: "Volume", value: "amount", align: "right" },
         { text: "Ave. Price", value: "average_price", align: "right" },
@@ -299,6 +304,14 @@ export default {
      */
     cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    },
+    /**
+     * toggle record button if portfolio active is real or virtual
+     *
+     * @return  {Boolean}  returns boolean
+     */
+    toggleRecordButton() {
+      return this.defaultPortfolioId === "real" || this.defaultPortfolioId === "virtual";
     }
   },
   watch: {
@@ -466,7 +479,12 @@ export default {
               parseFloat(this.tradeLogs[i].profit_loss_percentage);
           }
 
-          this.tradeLogsBackup = this.tradeLogs;
+          const arr = this.tradeLogs.sort(
+            (a, b) => new Date(b.meta.date) - new Date(a.meta.date)
+          );
+
+          this.tradeLogs = arr;
+          this.tradeLogsBackup = arr;
 
           this.liveTradelogsLoading = false;
         }.bind(this)

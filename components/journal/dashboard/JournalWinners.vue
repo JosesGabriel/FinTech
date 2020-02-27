@@ -234,12 +234,9 @@ export default {
             stock_sym: "",
             value: objLossers[key]
           });
-          winnersArray.sort(function(a, b) {
-            return a.value - b.value;
-          });
-          return winnersArray;
         });
-        this.winnersArray = winnersArray;
+        this.winnersArray = winnersArray.sort((b, a) => b.value - a.value);
+
         for (let i = 0; i < this.winnersArray.length; i++) {
           let toSeparate = this.winnersArray[i];
 

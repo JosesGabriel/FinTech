@@ -150,7 +150,15 @@ export default {
       currentTab: true,
       allStocks: [],
       latestDate: "",
-      symbolDesc: null
+      symbolDesc: null,
+      templateHeader: true,
+      sorted: false,
+      sortctr: 0,
+      sort: {
+        items: 0,
+        index: undefined,
+        desc: undefined
+      }
     };
   },
   computed: {
@@ -170,6 +178,23 @@ export default {
     }
   },
   watch: {
+    /**
+     * Temporary aid to add ctr, noticed that upon request data custom sort run twice
+     * by default on the 3rd count run request all stock
+     *
+     * @param   {Bolean}  value  true/false
+     *
+     * @return
+     */
+    sorted(value) {
+      if (
+        this.loading == false &&
+        this.sort.index != undefined &&
+        this.sortctr >= 3
+      ) {
+        this.initAllStock();
+      }
+    },
     /**
      * enable sse once loading is done
      *
@@ -224,6 +249,9 @@ export default {
      * @return
      */
     async initAllStock() {
+      this.sort.items = 0;
+      this.sortctr = 0;
+      this.sort.index = undefined;
       this.loading = true;
       this.allStocks = [];
       try {
@@ -300,9 +328,18 @@ export default {
      * @return  {Array}        new list of item
      */
     customSort(items, index, isDesc) {
+      this.sortctr += 1; // bandaid solution
+
       if (index[0] == "symbol") {
         // symbol was clicked
         this.symbolDesc = isDesc;
+      } else {
+        if (index[0] != undefined && this.sortctr >= 3) {
+          this.sorted = !this.sorted;
+          this.sort.items = items.length;
+          this.sort.index = index[0];
+          this.sort.desc = isDesc[0];
+        }
       }
 
       if (index[0] != "symbol" && index.length > 0) {

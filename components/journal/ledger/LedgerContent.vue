@@ -418,8 +418,11 @@ export default {
               parseFloat(this.ledgerContent[i].credit.replace(/,/g, ""));
           }
         }
+        const arr = this.ledgerContent.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 
-        this.ledgerContentBackup = this.ledgerContent;
+        this.ledgerContent = arr;
+        this.ledgerContentBackup = arr;
+
         this.liveLedgerLoading = false;
       });
     },
