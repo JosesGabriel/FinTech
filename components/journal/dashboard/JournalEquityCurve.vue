@@ -281,30 +281,32 @@ export default {
         this.$api.journal.portfolio
           .equitycurve(equitycurveparams)
           .then(response => {
-            for (let [key, value] of Object.entries(response.data.curve)) {
-              let arr = `${value}`;
-              let name = `${key}`;
+            if (typeof response.data != "undefined") {
+              for (let [key, value] of Object.entries(response.data.curve)) {
+                let arr = `${value}`;
+                let name = `${key}`;
 
-              const dataarr = new Date(name).getTime();
-              const valuearr = parseFloat(arr);
+                const dataarr = new Date(name).getTime();
+                const valuearr = parseFloat(arr);
 
-              this.equityCurveArr.push([dataarr, valuearr]);
-            }
-            this.$refs.equityCurveChart.updateSeries([
-              {
-                data: this.equityCurveArr
+                this.equityCurveArr.push([dataarr, valuearr]);
               }
-            ]);
-            this.chartOptions = {
-              ...this.chartOptions,
-              ...{
-                annotations: {
-                  yaxis: [
-                    { y: this.equityCurveArr[0][1], borderColor: "#03DAC5" }
-                  ]
+              this.$refs.equityCurveChart.updateSeries([
+                {
+                  data: this.equityCurveArr
                 }
-              }
-            };
+              ]);
+              this.chartOptions = {
+                ...this.chartOptions,
+                ...{
+                  annotations: {
+                    yaxis: [
+                      { y: this.equityCurveArr[0][1], borderColor: "#03DAC5" }
+                    ]
+                  }
+                }
+              };
+            }
           });
       }
       this.componentKeys++;

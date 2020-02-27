@@ -4,7 +4,7 @@
     <v-card-title class="text-left justify-left px-0 py-3 pt-5">
       <span
         class="font-weight-bold subtitle-2"
-        :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+        :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
       >
         OPEN POSITION/S (PHP)
       </span>
@@ -24,7 +24,7 @@
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
-        :disabled="ifVirtualShow"
+        :disabled="toggleButton"
         height="23"
         @click.stop="showTradeViewForm = true"
       >
@@ -272,6 +272,9 @@ export default {
      */
     cardbackground() {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
+    },
+    toggleButton() {
+      return this.defaultPortfolioId === "real" || this.defaultPortfolioId === "virtual" || this.selectedPortfolio.type === "virtual"
     }
   },
   data() {
@@ -291,7 +294,6 @@ export default {
       showDelete: false,
       itemDetails: null,
 
-      ifVirtualShow: false,
       fundsShow: false,
 
       snackbar: false,
@@ -330,19 +332,6 @@ export default {
   },
   watch: {
     /**
-     * Watching selectedPortfolio if portolio type selected is virtual
-     * fund or trade button will assign as disabled.
-     *
-     * @return  {array}  getting buy value data from journalCharts vuex
-     */
-    selectedPortfolio() {
-      if (this.selectedPortfolio.type === "virtual") {
-        this.ifVirtualShow = true;
-      } else {
-        this.ifVirtualShow = false;
-      }
-    },
-    /**
      * Watch defaultPortfolioId vuex if id changed perform function inside
      *
      * @return  {string}  getting the current portfolio id
@@ -374,18 +363,6 @@ export default {
      * @return  {[object]}  [return description]
      */
     if (this.defaultPortfolioId != null ? this.getOpenPositions() : "");
-    /**
-     * if portfolio type is virtual then the fund or trade button will assign as disabled
-     *
-     * @return  {[type]}  [return description]
-     */
-    if (!this.selectedPortfolio) {
-      if (this.selectedPortfolio.type === "virtual") {
-        this.ifVirtualShow = true;
-      } else {
-        this.ifVirtualShow = false;
-      }
-    }
     /**
      * function initSSE load on mounted
      */

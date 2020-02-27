@@ -209,12 +209,14 @@ export default {
           fund: this.defaultPortfolioId
         };
         this.$api.journal.portfolio.snapshot(snapshotparams).then(response => {
-          let snapshot = response.data.snapshot;
-          this.startingCapital = snapshot.capital;
-          this.yearTDPL = snapshot.PL;
-          this.portfolioTDPL = snapshot.PL_percentage;
-          this.Deposits = snapshot.deposits;
-          this.Withdrawals = snapshot.withdraw;
+          if (typeof response.data != "undefined") {
+            let snapshot = response.data.snapshot;
+            this.startingCapital = snapshot.capital;
+            this.yearTDPL = snapshot.PL;
+            this.portfolioTDPL = snapshot.PL_percentage;
+            this.Deposits = snapshot.deposits;
+            this.Withdrawals = snapshot.withdraw;
+          }
         });
       }
       this.componentKeys++;
