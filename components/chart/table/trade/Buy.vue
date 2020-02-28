@@ -672,7 +672,7 @@ export default {
      */
     stock_last() {
       this.getBoardLot(this.stock_last);
-      this.quantity = 0;
+      //this.quantity = 0;
     },
     selectedButton(value) {
       this.quickConfirmV2();
