@@ -24,7 +24,7 @@
         <v-row no-gutters class="px-0 py-0">
           <v-col sm="12" md="12" class="pa-0">
             <v-select
-              offset-y="true"
+              :menu-props="{offsetY: false, dark: lightSwitch == true}"
               :class="
                 this.simulatorConfirmedBuySell == 'sell' ? 'no_display' : ''
               "
