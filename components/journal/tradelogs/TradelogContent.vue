@@ -279,6 +279,7 @@ export default {
       defaultPortfolioId: "journal/getDefaultPortfolioId",
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       renderEditKey: "journal/getRenderEditKey",
+      selectedPortfolio: "journal/getSelectedPortfolio",
       lightSwitch: "global/getLightSwitch"
     }),
     /**
@@ -311,7 +312,7 @@ export default {
      * @return  {Boolean}  returns boolean
      */
     toggleRecordButton() {
-      return this.defaultPortfolioId === "real" || this.defaultPortfolioId === "virtual";
+      return this.defaultPortfolioId === "real" || this.defaultPortfolioId === "virtual" || this.selectedPortfolio.type === "virtual";
     }
   },
   watch: {

@@ -297,7 +297,8 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setPortfolioKey: "journal/setPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
-      setJournalCharts: "journal/setJournalCharts"
+      setJournalCharts: "journal/setJournalCharts",
+      setSelectedPortfolio: "journal/setSelectedPortfolio",
     }),
     /**
      * when tab dashboard clicked all components with in dashboard tab will be refreshed
@@ -331,6 +332,7 @@ export default {
           }
         }.bind(this)
       );
+      this.setSelectedPortfolio(obj);
     },
     /**
      * get all portfolio of a specific user

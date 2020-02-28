@@ -5,15 +5,14 @@
       <span
         class="font-weight-bold subtitle-2"
         :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
-      >
-        OPEN POSITION/S (PHP)
-      </span>
+      >OPEN POSITION/S (PHP)</span>
       <v-spacer></v-spacer>
       <v-btn
         text
         color="success"
         dark
         class="rtf_top-btn text-capitalize mr-2"
+        :disabled="toggleSumPortfolioButton"
         height="23"
         @click.stop="showResetForm = true"
       >
@@ -35,19 +34,14 @@
         color="success"
         dark
         class="rtf_top-btn text-capitalize"
-        :disabled="fundsShow"
+        :disabled="toggleButton"
         height="23"
         @click.stop="showFundsForm = true"
       >
         <span class="body-2 font-weight-bold">Fund</span>
       </v-btn>
 
-      <v-btn
-        icon
-        small
-        :dark="lightSwitch == 0 ? false : true"
-        @click="showShareModal()"
-      >
+      <v-btn icon small :dark="lightSwitch == 0 ? false : true" @click="showShareModal()">
         <v-icon small color="tertiary">mdi-share-variant</v-icon>
       </v-btn>
     </v-card-title>
@@ -64,29 +58,39 @@
       @page-count="pageCount = $event"
     >
       <template v-slot:item.stock_symbol="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+        <span class="pl-3" :style="{ color: fontcolor2 }">
+          {{
           item.stock_symbol
-        }}</span>
+          }}
+        </span>
       </template>
       <template v-slot:item.position="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+        <span class="pl-3" :style="{ color: fontcolor2 }">
+          {{
           item.position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        }}</span>
+          }}
+        </span>
       </template>
       <template v-slot:item.average_price="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+        <span class="pl-3" :style="{ color: fontcolor2 }">
+          {{
           item.average_price | numeral("0,0.000")
-        }}</span>
+          }}
+        </span>
       </template>
       <template v-slot:item.total_value="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+        <span class="pl-3" :style="{ color: fontcolor2 }">
+          {{
           item.total_value | numeral("0,0.00")
-        }}</span>
+          }}
+        </span>
       </template>
       <template v-slot:item.market_value="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">{{
+        <span class="pl-3" :style="{ color: fontcolor2 }">
+          {{
           item.market_value | numeral("0,0.00")
-        }}</span>
+          }}
+        </span>
       </template>
       <template v-slot:item.profit_loss="{ item }">
         <span
@@ -97,8 +101,7 @@
               ? 'negative'
               : 'neutral'
           "
-          >{{ item.profit_loss | numeral("0,0.00") }}</span
-        >
+        >{{ item.profit_loss | numeral("0,0.00") }}</span>
       </template>
       <template v-slot:item.pl_percentage="{ item }">
         <span
@@ -109,8 +112,7 @@
               ? 'negative'
               : 'neutral'
           "
-          >{{ item.pl_percentage | numeral("0,0.00") }}%</span
-        >
+        >{{ item.pl_percentage | numeral("0,0.00") }}%</span>
       </template>
       <template v-slot:item.action="{ item }">
         <div
@@ -128,52 +130,41 @@
             text
             @click.stop="showTradeDetails = true"
             @click="detailsLive(item)"
-            >Details</v-btn
-          >
+          >Details</v-btn>
           <v-btn
             small
             class="caption btn_sidemenu"
             text
             @click.stop="showEditDetails = true"
             @click="editLive(item)"
-            >Edit</v-btn
-          >
+          >Edit</v-btn>
           <v-btn
             small
             class="caption btn_sidemenu"
             text
             @click.stop="showDelete = true"
             @click="deleteLive(item)"
-            >Delete</v-btn
-          >
+          >Delete</v-btn>
         </div>
         <v-icon
           :class="lightSwitch == 1 ? 'white--text' : 'tertiary--text'"
           small
           class="mr-2"
           @mouseover="menuLogsShow(item)"
-          >mdi-dots-horizontal</v-icon
-        >
+        >mdi-dots-horizontal</v-icon>
       </template>
     </v-data-table>
     <v-row>
-      <v-col
-        class="text-right total_bottom"
-        :style="{ color: fontColor }"
-        width="100%"
-      >
+      <v-col class="text-right total_bottom" :style="{ color: fontColor }" width="100%">
         <span
           class="font-weight-bold"
           :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
-          >Total Profit/Loss as of {{ date }}:</span
-        >
-        <span
-          class="ml-3"
-          :class="totalProfitLoss < 0 ? 'negative' : 'positive'"
-          >{{
-            totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}</span
-        >
+        >Total Profit/Loss as of {{ date }}:</span>
+        <span class="ml-3" :class="totalProfitLoss < 0 ? 'negative' : 'positive'">
+          {{
+          totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }}
+        </span>
       </v-col>
     </v-row>
     <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
@@ -188,18 +179,10 @@
       </v-card>
     </v-card>
     <!-- Dialog boxes -->
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
+    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
     <reset-modal :visible="showResetForm" @close="showResetForm = false" />
     <funds-modal :visible="showFundsForm" @close="showFundsForm = false" />
-    <trade-view
-      :visible="showTradeViewForm"
-      class="asdasd"
-      @close="showTradeViewForm = false"
-    />
+    <trade-view :visible="showTradeViewForm" class="asdasd" @close="showTradeViewForm = false" />
     <trade-details
       :visible="showTradeDetails"
       :item-details="itemDetails"
@@ -210,11 +193,7 @@
       :item-details="itemDetails"
       @close="showEditDetails = false"
     />
-    <trade-delete
-      :visible="showDelete"
-      :item-details="itemDetails"
-      @close="showDelete = false"
-    />
+    <trade-delete :visible="showDelete" :item-details="itemDetails" @close="showDelete = false" />
     <!-- Dialog boxes -->
   </v-col>
 </template>
@@ -274,7 +253,17 @@ export default {
       return this.lightSwitch == 0 ? "#f2f2f2" : "#00121e";
     },
     toggleButton() {
-      return this.defaultPortfolioId === "real" || this.defaultPortfolioId === "virtual" || this.selectedPortfolio.type === "virtual"
+      return (
+        this.defaultPortfolioId === "real" ||
+        this.defaultPortfolioId === "virtual" ||
+        this.selectedPortfolio.type === "virtual"
+      );
+    },
+    toggleSumPortfolioButton() {
+      return (
+        this.defaultPortfolioId === "real" ||
+        this.defaultPortfolioId === "virtual"
+      );
     }
   },
   data() {
@@ -293,8 +282,6 @@ export default {
       showEditDetails: false,
       showDelete: false,
       itemDetails: null,
-
-      fundsShow: false,
 
       snackbar: false,
       timeoutNotification: 10000,
@@ -665,6 +652,6 @@ export default {
   padding-left: 8px !important;
 }
 .data_table-container.v-data-table td {
-    font-weight: normal;
+  font-weight: normal;
 }
 </style>
