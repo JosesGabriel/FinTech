@@ -49,29 +49,6 @@
           </template>
           <template v-slot:append-item>
             <v-list-item
-              @click="setPortfolioReal(item)"
-              class="sumportfolio_real"
-              ripple
-              :dark="lightSwitch == true"
-              :style="{ background: cardbackground }"
-              @click.stop="showCreatePortForm=true"
-            >
-              <v-list-item-content>
-                <v-list-item-title class="text-uppercase caption">Sum of Real Portfolio</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item
-              @click="setPortfolioVirtual()"
-              ripple
-              :dark="lightSwitch == true"
-              :style="{ background: cardbackground }"
-              @click.stop="showCreatePortForm=true"
-            >
-              <v-list-item-content>
-                <v-list-item-title class="text-uppercase caption">Sum of Virtual Portfolio</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item
               ripple
               @click.stop="showManagePortfolio=true"
               :dark="lightSwitch == true"
@@ -320,7 +297,8 @@ export default {
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setPortfolioKey: "journal/setPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
-      setJournalCharts: "journal/setJournalCharts"
+      setJournalCharts: "journal/setJournalCharts",
+      setSelectedPortfolio: "journal/setSelectedPortfolio",
     }),
     /**
      * when tab dashboard clicked all components with in dashboard tab will be refreshed
@@ -354,34 +332,7 @@ export default {
           }
         }.bind(this)
       );
-    },
-    /**
-     * assigning portfolio ID with sum of portfolio real
-     *
-     * @param   {object}  item  object of selected item
-     *
-     * @return  {object}        [return description]
-     */
-    setPortfolioReal(item) {
-      this.setDefaultPortfolioId("real");
-      this.keyCreateCounter = this.renderPortfolioKey;
-      this.keyCreateCounter++;
-      this.setRenderPortfolioKey(this.keyCreateCounter);
-    },
-    /**
-     * assigning portfolio ID with sum of portfolio virtual
-     *
-     * @param   {object}  item  object of selected item
-     *
-     * @return  {object}        [return description]
-     */
-    setPortfolioVirtual(item) {
-      this.setDefaultPortfolioId("virtual");
-      this.keyCreateCounter = this.renderPortfolioKey;
-      this.keyCreateCounter++;
-      this.setRenderPortfolioKey(this.keyCreateCounter);
-
-      this.portfolioDropdownModel = "Sum of Virtual Portfolio";
+      this.setSelectedPortfolio(obj);
     },
     /**
      * get all portfolio of a specific user
@@ -438,6 +389,14 @@ export default {
               }
             }
           }
+          this.portfolioListPush.push({ divider: true });
+          this.portfolioListPush.push({
+            id: "real",
+            name: "Sum of Real Portfolio"
+          }, {
+            id: "virtual",
+            name: "Sum of Virtual Portfolio"
+          });
         }.bind(this)
       );
       this.componentKeys++;

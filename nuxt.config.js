@@ -102,13 +102,21 @@ export default {
     "@nuxtjs/google-adsense",
     "@nuxtjs/google-gtag",
     "@nuxtjs/device",
-    "@nuxtjs/recaptcha"
+    "@nuxtjs/recaptcha",
+    "nuxt-facebook-pixel-module"
   ],
 
   recaptcha: {
     siteKey: "6LdqntoUAAAAALeybpc0UomTwklnJvS8d6q86dkO", // Site key for requests
     version: 2, // Version
     size: "normal" // Size: 'compact', 'normal', 'invisible' (v2)
+  },
+
+  facebook: {
+    /* module options */
+    track: "PageView",
+    pixelId: "594260294422186",
+    disabled: false
   },
 
   auth: {

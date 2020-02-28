@@ -235,8 +235,7 @@ export default {
             value: objLossers[key]
           });
         });
-        this.lossersArray = lossersArray;
-
+        this.lossersArray = lossersArray.sort((b, a) => a.value - b.value);
         for (let i = 0; i < this.lossersArray.length; i++) {
           let toSeparate = this.lossersArray[i];
 

@@ -107,46 +107,62 @@
               >
               <div v-if="postOptionsMode && currentPost == n - 1">
                 <div class="postOptions__container">
+                  <!-- Start Delete Dialog -->
                   <v-dialog v-model="deleteDialog" width="500">
                     <v-card
                       :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
                       :dark="lightSwitch == 0 ? false : true"
                     >
-                      <v-card-title
-                        class="headline success--text lighten-2"
-                        primary-title
-                        >Delete Post?</v-card-title
+                      <v-card-title class="py-2 pl-3"
+                        ><span class="body-1 font-weight-bold"
+                          >Delete Post?</span
+                        ></v-card-title
                       >
-
-                      <v-card-text>
-                        Are you sure you want to permanently remove this post
-                        from Lyduz?
-                      </v-card-text>
-
                       <v-divider></v-divider>
+                      <v-card-text>
+                        <v-content class="mx-4 mt-3">
+                          <span class="caption font-weight-bold">
+                            Are you sure you want to permanently remove this
+                            post from Lyduz?</span
+                          >
+                        </v-content>
+                      </v-card-text>
 
                       <v-card-actions>
                         <v-spacer></v-spacer>
 
-                        <!-- <v-btn color="secondary" text @click="deleteDialog = false">
-                      Cancel
-                        </v-btn>-->
                         <v-btn
-                          v-if="
-                            postsObject[n - 1].user.uuid ==
-                              $auth.user.data.user.uuid
-                          "
+                          class="font-weight-bold text-capitalize caption"
                           text
-                          color="error"
-                          @click="
-                            deletePost(postsObject[n - 1].id, n - 1),
-                              (deleteDialog = false)
-                          "
-                          >Delete</v-btn
+                          depressed
+                          :dark="lightSwitch == true"
+                          dense
+                          @click="deleteDialog = false"
                         >
+                          Cancel
+                        </v-btn>
+
+                        <v-hover v-slot:default="{ hover }">
+                          <v-btn
+                            v-if="
+                              postsObject[n - 1].user.uuid ==
+                                $auth.user.data.user.uuid
+                            "
+                            :dark="lightSwitch == 1"
+                            class="black--text font-weight-bold text-capitalize caption"
+                            :color="!hover ? 'success' : 'successhover'"
+                            elevation="1"
+                            @click="
+                              deletePost(postsObject[n - 1].id, n - 1),
+                                (deleteDialog = false)
+                            "
+                            >Delete</v-btn
+                          >
+                        </v-hover>
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
+                  <!-- End Delete Dialog -->
                   <v-list dense class="postOptions__list" elevation="8">
                     <v-list-item-group class="postOptions__itemgroup">
                       <v-list-item
@@ -424,6 +440,11 @@ export default {
     })
   },
   watch: {
+    deleteDialog(value) {
+      if (value == false && this.postOptionsMode == true) {
+        this.postOptionsMode = false;
+      }
+    },
     /**
      * Fires when user submits a new post.
      * Creates a new object based on submitted post and unshifts postsObject
