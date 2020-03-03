@@ -10,19 +10,16 @@
     </span>
     <!-- Written by Joses | December 2019 -->
     <!-- Docs: Posts object is retrieved on mount, then mag iterate thru the entire
-    object as can be seen sa v-card underneath. Then if post has comments, mag loop thru lang gihapon sa length.
+    object as can be seen sa v-card underneath. Then if post has comments, comments object is passed to List.vue
     
     So basically, puro checks lang sa current index if it has comments, or attachments etc., then display.
-    Only used 1 external component (PhotoCarousel.vue) for easier organizing of data flow.
 
     Image posts will be passed to PhotoCarousel.vue <- contains the grid layout arrangement para sa images.
     also contains the carousel modal that is triggered on click.
-
-    "[n-1]" is used extensively, current index lang meaning ana.
     -->
     <v-card
-      v-for="n in postsObject.length"
-      :key="n"
+      v-for="(post, index) in postsObject"
+      :key="index"
       class="centerPanel__card mb-3"
       :dark="lightSwitch == 0 ? false : true"
       outlined
@@ -30,15 +27,15 @@
       <!-- Start of Post Header -->
       <v-list-item class="pt-1">
         <router-link
-          :to="'/profile/' + postsObject[n - 1].user.username"
+          :to="'/profile/' + post.user.username"
           class="no-transform"
         >
           <v-list-item-avatar class="mr-2" size="42">
             <img
               class="avatar__border"
               :src="
-                postsObject[n - 1].user.profile_image
-                  ? postsObject[n - 1].user.profile_image
+                post.user.profile_image
+                  ? post.user.profile_image
                   : 'default.png'
               "
             />
@@ -48,31 +45,24 @@
           <v-row>
             <v-col>
               <router-link
-                :to="'/profile/' + postsObject[n - 1].user.username"
+                :to="'/profile/' + post.user.username"
                 class="no-transform"
               >
                 <v-list-item-title
                   class="subtitle-2"
                   :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
                 >
-                  <strong>{{ postsObject[n - 1].user.name }}</strong>
+                  <strong>{{ post.user.name }}</strong>
                 </v-list-item-title>
               </router-link>
               <v-list-item-subtitle class="overline no-transform">
-                {{ localFormat(postsObject[n - 1].created_at, "fn") }}
-                <!-- <v-icon class="body-2 mt-0">mdi-earth</v-icon> -->
+                {{ localFormat(post.created_at, "fn") }}
                 <span
-                  v-if="
-                    postsObject[n - 1].tagged_stocks &&
-                      postsObject[n - 1].tagged_stocks.length != 0
-                  "
+                  v-if="post.tagged_stocks && post.tagged_stocks.length != 0"
                   class="success--text overline post--sentiment pa-05"
                 >
                   <v-btn
-                    v-if="
-                      postsObject[n - 1].tagged_stocks[0].tag_meta.sentiment ==
-                        'bull'
-                    "
+                    v-if="post.tagged_stocks[0].tag_meta.sentiment == 'bull'"
                     icon
                     outlined
                     fab
@@ -101,11 +91,11 @@
                 color="secondary"
                 class="postOptions__btn"
                 @click="
-                  (postOptionsMode = !postOptionsMode), (currentPost = n - 1)
+                  (postOptionsMode = !postOptionsMode), (currentPost = index)
                 "
                 >mdi-dots-horizontal</v-icon
               >
-              <div v-if="postOptionsMode && currentPost == n - 1">
+              <div v-if="postOptionsMode && currentPost == index">
                 <div class="postOptions__container">
                   <!-- Start Delete Dialog -->
                   <v-dialog v-model="deleteDialog" width="500">
@@ -144,17 +134,13 @@
 
                         <v-hover v-slot:default="{ hover }">
                           <v-btn
-                            v-if="
-                              postsObject[n - 1].user.uuid ==
-                                $auth.user.data.user.uuid
-                            "
+                            v-if="post.user.uuid == $auth.user.data.user.uuid"
                             :dark="lightSwitch == 1"
                             class="black--text font-weight-bold text-capitalize caption"
                             :color="!hover ? 'success' : 'successhover'"
                             elevation="1"
                             @click="
-                              deletePost(postsObject[n - 1].id, n - 1),
-                                (deleteDialog = false)
+                              deletePost(post.id, index), (deleteDialog = false)
                             "
                             >Delete</v-btn
                           >
@@ -166,15 +152,12 @@
                   <v-list dense class="postOptions__list" elevation="8">
                     <v-list-item-group class="postOptions__itemgroup">
                       <v-list-item
-                        v-if="
-                          postsObject[n - 1].user.uuid ==
-                            $auth.user.data.user.uuid
-                        "
+                        v-if="post.user.uuid == $auth.user.data.user.uuid"
                         class="postOptions__listitem"
                         x-small
                         text
                         @click="
-                          (editPostMode = !editPostMode), (currentPost = n - 1)
+                          (editPostMode = !editPostMode), (currentPost = index)
                         "
                       >
                         <v-list-item-content>
@@ -185,10 +168,7 @@
                       </v-list-item>
                       <v-divider></v-divider>
                       <v-list-item
-                        v-if="
-                          postsObject[n - 1].user.uuid ==
-                            $auth.user.data.user.uuid
-                        "
+                        v-if="post.user.uuid == $auth.user.data.user.uuid"
                         class="postOptions__listitem"
                         x-small
                         text
@@ -201,13 +181,10 @@
                         </v-list-item-content></v-list-item
                       >
                       <v-list-item
-                        v-if="
-                          postsObject[n - 1].user.uuid !=
-                            $auth.user.data.user.uuid
-                        "
+                        v-if="post.user.uuid != $auth.user.data.user.uuid"
                         x-small
                         text
-                        @click="followAccount(postsObject[n - 1].user.uuid)"
+                        @click="followAccount(post.user.uuid)"
                       >
                         <v-list-item-content>
                           <v-list-item-title class="text-center caption">
@@ -230,14 +207,14 @@
           <div
             v-if="
               editPostMode &&
-                postsObject[n - 1].user.uuid == $auth.user.data.user.uuid &&
-                currentPost == n - 1
+                post.user.uuid == $auth.user.data.user.uuid &&
+                currentPost == index
             "
           >
             <v-textarea
-              v-model="editTextAreaModel[n - 1]"
+              v-model="editTextAreaModel[index]"
               outlined
-              :placeholder="postsObject[n - 1].content"
+              :placeholder="post.content"
               dense
               hide-details
             ></v-textarea>
@@ -246,21 +223,17 @@
               small
               outlined
               @click="
-                editPost(
-                  postsObject[n - 1].id,
-                  editTextAreaModel[n - 1],
-                  n - 1
-                ),
+                editPost(post.id, editTextAreaModel[index], index),
                   (editPostMode = false)
               "
               >Done Editing</v-btn
             >
           </div>
           <span v-else class="body-2 px-5 pb-3">
-            {{ postsObject[n - 1].content }}
+            {{ post.content }}
           </span>
 
-          <PhotoCarousel :images="postsObject[n - 1].attachments" />
+          <PhotoCarousel :images="post.attachments" />
         </v-list-item-content>
       </v-list-item>
       <!-- End of Post Body -->
@@ -275,17 +248,16 @@
           color="success"
           class="bull__btn"
           :class="
-            postsObject[n - 1].my_sentiment &&
-            postsObject[n - 1].my_sentiment.type == 'bull'
+            post.my_sentiment && post.my_sentiment.type == 'bull'
               ? 'bull__btn--active'
               : ''
           "
           :disabled="reactButtons"
-          @click="postReact(postsObject[n - 1].id, 'bull', n - 1)"
+          @click="postReact(post.id, 'bull', index)"
         >
           <img src="/icon/bullish.svg" width="12" />
         </v-btn>
-        <span class="px-2 caption">{{ postsObject[n - 1].bulls_count }}</span>
+        <span class="px-2 caption">{{ post.bulls_count }}</span>
         <v-btn
           icon
           outlined
@@ -295,21 +267,20 @@
           color="error"
           class="bear__btn"
           :class="
-            postsObject[n - 1].my_sentiment &&
-            postsObject[n - 1].my_sentiment.type == 'bear'
+            post.my_sentiment && post.my_sentiment.type == 'bear'
               ? 'bear__btn--active'
               : ''
           "
           :disabled="reactButtons"
-          @click="postReact(postsObject[n - 1].id, 'bear', n - 1)"
+          @click="postReact(post.id, 'bear', index)"
         >
           <img src="/icon/bearish.svg" width="12" />
         </v-btn>
-        <span class="px-2 caption">{{ postsObject[n - 1].bears_count }}</span>
+        <span class="px-2 caption">{{ post.bears_count }}</span>
         <v-spacer></v-spacer>
         <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
         <span class="caption">
-          {{ postsObject[n - 1].comment_descendants_count }}
+          {{ post.comment_descendants_count }}
         </span>
         <!-- TODO Share counter -->
         <!-- <v-btn
@@ -317,20 +288,16 @@
           fab
           x-small
           color="secondary"
-          @click="showShareModal(postsObject[n - 1].id)"
+          @click="showShareModal(post.id)"
         >
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
         <span class="caption">1000</span>-->
       </v-card-actions>
       <v-divider></v-divider>
-      <List
-        :comments="postsObject[n - 1].comments"
-        :postindex="n - 1"
-        :postid="postsObject[n - 1].id"
-      />
+      <List :comments="post.comments" :postindex="index" :postid="post.id" />
       <!-- Start of Comment -->
-      <v-divider v-if="postsObject[n - 1].comments.length > 0"></v-divider>
+      <v-divider v-if="post.comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
         <router-link
           :to="'/profile/' + $auth.user.data.user.username"
@@ -358,9 +325,7 @@
             :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
             :dark="lightSwitch == 0 ? false : true"
             :value="commentValue"
-            @keyup.enter="
-              postComment(postsObject[n - 1].id, $event.target.value, n - 1)
-            "
+            @keyup.enter="postComment(post.id, $event.target.value, index)"
           ></v-text-field>
         </v-list-item-content>
       </v-list-item>
