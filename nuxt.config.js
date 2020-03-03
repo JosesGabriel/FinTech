@@ -107,7 +107,8 @@ export default {
   ],
 
   axios: {
-    credentials: true
+    credentials: true,
+    debug: process.env.APP_DEBUG || false
   },
 
   recaptcha: {
