@@ -18,16 +18,19 @@
                   background-color="transparent"
                   :dark="lightSwitch == true"
                   grow
+                  v-model="toggleActiveTab"
                 >
                   <v-tab
                     :style="{ color: fontColor }"
                     class="tab_menu-top text-capitalize subtitle-1 px-0"
                     @click="toBuy"
+                    :key="0"
                   >Buy</v-tab>
                   <v-tab
                     :style="{ color: fontColor }"
                     class="tab_menu-top text-capitalize subtitle-1 px-0"
                     @click="toSell"
+                    :key="1"
                   >Sell</v-tab>
                 </v-tabs>
                 <v-col cols="12" sm="12" md="12" class="pt-3 mt-2">
@@ -592,7 +595,7 @@ export default {
       totalCostSellModel: 0,
       AvailableBoardLot: 0,
 
-      stockSymbolGet: '',
+      stockSymbolGet: "",
       strategySellModel: null,
       tradeplanSellModel: null,
       emotionsSellModel: null,
@@ -611,7 +614,9 @@ export default {
 
       stocklistBuy: [],
       quantityModel: null,
-      avepriceSell: null
+      avepriceSell: null,
+
+      toggleActiveTab: 0
     };
   },
   computed: {
@@ -768,7 +773,6 @@ export default {
      */
     quantityModel(value) {
       this.buyWatch();
-      this.quantityModel = parseFloat(value);
     },
     /**
      * function quantitySellModel watch to assign a field required only in sell quantity
@@ -779,7 +783,6 @@ export default {
      */
     quantitySellModel(value) {
       this.sellWatch();
-      this.quantitySellModel = parseFloat(value);
     },
     /**
      * date function watch if changes
@@ -897,6 +900,7 @@ export default {
      * @return  {object}  returns confirmation trade
      */
     sellListArray() {
+      this.toggleActiveTab = 0;
       let portfolio_id = this.defaultPortfolioId;
       let stock = this.GetSelectStock;
       let aveprice =
@@ -943,6 +947,8 @@ export default {
             this.wkhigh = 0;
             this.vole = 0;
             this.ave = 0;
+
+            this.toBuy();
           }
         });
     },
@@ -1119,10 +1125,10 @@ export default {
      * @return  returns property to button if true=disable or false=enable
      */
     selectWatch() {
-      if (this.typePortfolioModel != null) {
-        this.continueButtonDisable = true;
-      } else {
+      if (this.GetSelectStock != null) {
         this.continueButtonDisable = false;
+      } else {
+        this.continueButtonDisable = true;
       }
     },
     /**
@@ -1178,12 +1184,7 @@ export default {
         .toFixed(2)
         .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      if (
-        this.priceSellModel == "0.00" &&
-        this.priceSellModel <= 0 &&
-        this.quantitySellModel == "0.00" &&
-        this.quantitySellModel <= 0
-      ) {
+      if (this.priceSellModel <= 0 && this.quantitySellModel <= 0) {
         this.confirmSellButtonDisable = true;
       } else {
         if (
