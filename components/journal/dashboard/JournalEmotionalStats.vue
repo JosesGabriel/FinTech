@@ -1,59 +1,73 @@
 <template>
-  <v-row no-gutters ref="componentWrapper">
-    <!-- Don't remove ref value. Used for sharing -->
-    <v-col cols="12">
-      <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-        <span
-          class="font-weight-bold subtitle-2"
-          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
-        >EMOTIONAL STATISTICS</span>
-        <v-spacer></v-spacer>
-        <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-          <v-icon small color="tertiary">mdi-share-variant</v-icon>
-        </v-btn>
-      </v-card-title>
-    </v-col>
-    <v-col class="pa-0" cols="6" sm="6" md="6">
-      <div id="chart">
-        <client-only>
-          <apexcharts
-            ref="emotionalStatistics"
-            type="bar"
-            height="200"
-            :options="chartOptions"
-            :series="series"
-          />
-        </client-only>
-      </div>
-    </v-col>
-    <v-col class="pa-0 pt-3" cols="6" sm="6" md="6">
-      <v-simple-table :dense="true" :dark="lightSwitch == true" id="liveportfolio-table">
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="item_caption text-left px-1">Emotions</th>
-              <th class="item_caption text-right px-1">Trade</th>
-              <th class="item_caption text-right px-1">Wins</th>
-              <th class="item_caption text-right px-1">Losses</th>
-              <th class="item_caption text-right px-1">Win Rate</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in emotionalArray" :key="item.name" id="table_tr_port-cont">
-              <td class="caption px-1 py-2">{{ item.name }}</td>
-              <td class="caption text-right px-1 py-0">{{ item.win + item.loss }}</td>
-              <td class="caption text-right px-1 py-0">{{ item.win }}</td>
-              <td class="caption text-right px-1 py-0">{{ item.loss }}</td>
-              <td
-                class="caption text-right px-1 py-0"
-              >{{ ((item.win * 100) / (item.win + item.loss)).toFixed(2) }}%</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
-    </v-col>
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
-  </v-row>
+  <v-col cols="12" ref="componentWrapper">
+    <v-card
+      flat
+      tile
+      :dark="lightSwitch == 1"
+      :class="toggleSpace ? 'px-2' : ''"
+      :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'"
+    >
+      <v-row no-gutters>
+        <!-- Don't remove ref value. Used for sharing -->
+        <v-col cols="12">
+          <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+            <span
+              class="font-weight-bold subtitle-2"
+              :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+            >EMOTIONAL STATISTICS</span>
+            <v-spacer></v-spacer>
+            <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+              <v-icon small color="tertiary">mdi-share-variant</v-icon>
+            </v-btn>
+          </v-card-title>
+        </v-col>
+        <v-col class="pa-0" cols="6" sm="6" md="6">
+          <div id="chart">
+            <client-only>
+              <apexcharts
+                ref="emotionalStatistics"
+                type="bar"
+                height="200"
+                :options="chartOptions"
+                :series="series"
+              />
+            </client-only>
+          </div>
+        </v-col>
+        <v-col class="pa-0 pt-3" cols="6" sm="6" md="6">
+          <v-simple-table :dense="true" :dark="lightSwitch == true" id="liveportfolio-table">
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="item_caption text-left px-1">Emotions</th>
+                  <th class="item_caption text-right px-1">Trade</th>
+                  <th class="item_caption text-right px-1">Wins</th>
+                  <th class="item_caption text-right px-1">Losses</th>
+                  <th class="item_caption text-right px-1">Win Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in emotionalArray" :key="item.name" id="table_tr_port-cont">
+                  <td class="caption px-1 py-2">{{ item.name }}</td>
+                  <td class="caption text-right px-1 py-0">{{ item.win + item.loss }}</td>
+                  <td class="caption text-right px-1 py-0">{{ item.win }}</td>
+                  <td class="caption text-right px-1 py-0">{{ item.loss }}</td>
+                  <td
+                    class="caption text-right px-1 py-0"
+                  >{{ ((item.win * 100) / (item.win + item.loss)).toFixed(2) }}%</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+        <share-modal
+          v-if="showShareForm"
+          :imageid="shareLink"
+          @closeModal="showShareForm = false, toggleSpace = false"
+        />
+      </v-row>
+    </v-card>
+  </v-col>
 </template>
 <script>
 import shareModal from "~/components/modals/Share";
@@ -94,6 +108,7 @@ export default {
       shareLink: "",
       showShareForm: false,
       showScheduleForm: false,
+      toggleSpace: false,
       emotionalArray: [],
       series: [
         {
@@ -194,6 +209,9 @@ export default {
           },
           axisBorder: {
             show: false
+          },
+          crosshairs: {
+            show: false
           }
         },
         tooltip: {
@@ -246,6 +264,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"

@@ -129,7 +129,7 @@
             <v-col class="pa-0" cols="4" sm="4" md="4">
               <JournalPerformance />
             </v-col>
-            <v-col class="pa-0" cols="8" sm="8" md="8">
+            <v-col class="pa-0 pl-5" cols="8" sm="8" md="8">
               <JournalGrossPL />
             </v-col>
           </v-row>

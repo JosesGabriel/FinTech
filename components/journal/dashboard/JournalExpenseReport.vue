@@ -1,77 +1,92 @@
 <template>
-  <v-row ref="componentWrapper" no-gutters>
-    <!-- Don't remove ref value. Used for sharing -->
-    <v-col cols="12">
-      <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-        <span
-          class="font-weight-bold subtitle-2"
-          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
-        >EXPENSE REPORT</span>
-        <v-spacer></v-spacer>
-        <v-btn icon small @click="showShareModal()">
-          <v-icon small color="tertiary">mdi-share-variant</v-icon>
-        </v-btn>
-      </v-card-title>
-    </v-col>
-    <v-col class="pa-0 pt-3" cols="3" sm="3" md="3">
-      <v-card-title class="text-left justify-left pa-0">
-        <span
-          class="font-weight-regular caption text-capitalize"
-          :style="{ color: fontColor }"
-        >Trading Result (PHP)</span>
-      </v-card-title>
-      <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
-        <template v-slot:default>
-          <tbody>
-            <tr id="table_tr_snap-cont">
-              <td class="item_position-prop caption px-1 py-2">Commisions</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ comm | numeral("0,0.00") }}</td>
-            </tr>
-            <tr id="table_tr_snap-cont">
-              <td class="item_position-prop caption px-1 py-2">Value Added Tax</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ vadd | numeral("0,0.00") }}</td>
-            </tr>
-            <tr id="table_tr_snap-cont">
-              <td class="item_position-prop caption px-1 py-2">Transfer Fee</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ tfee | numeral("0,0.00") }}</td>
-            </tr>
-            <tr id="table_tr_snap-cont">
-              <td class="item_position-prop caption px-1 py-2">SCCP</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ sccp | numeral("0,0.00") }}</td>
-            </tr>
-            <tr id="table_tr_snap-cont">
-              <td class="item_position-prop caption px-1 py-2">Sales Tax</td>
-              <td
-                class="item_position-prop caption text-right px-1 py-1"
-              >{{ stax | numeral("0,0.00") }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
-    </v-col>
-    <v-col class="pa-0 pl-5" cols="9" sm="9" md="9">
-      <div id="chart">
-        <client-only>
-          <apexcharts
-            ref="ExpenseReportTrades"
-            height="230"
-            type="line"
-            :options="chartOptions"
-            :series="series"
-          />
-        </client-only>
-      </div>
-    </v-col>
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
-  </v-row>
+  <v-col cols="12" ref="componentWrapper">
+    <v-card
+      flat
+      tile
+      :dark="lightSwitch == 1"
+      :class="toggleSpace ? 'px-3' : ''"
+      :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'"
+    >
+      <v-row no-gutters>
+        <!-- Don't remove ref value. Used for sharing -->
+        <v-col cols="12">
+          <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+            <span
+              class="font-weight-bold subtitle-2"
+              :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+            >EXPENSE REPORT</span>
+            <v-spacer></v-spacer>
+            <v-btn icon small @click="showShareModal()">
+              <v-icon small color="tertiary">mdi-share-variant</v-icon>
+            </v-btn>
+          </v-card-title>
+        </v-col>
+        <v-col class="pa-0 pt-3" cols="3" sm="3" md="3">
+          <v-card-title class="text-left justify-left pa-0">
+            <span
+              class="font-weight-regular caption text-capitalize"
+              :style="{ color: fontColor }"
+            >Trading Result (PHP)</span>
+          </v-card-title>
+          <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
+            <template v-slot:default>
+              <tbody>
+                <tr id="table_tr_snap-cont">
+                  <td class="item_position-prop caption px-1 py-2">Commisions</td>
+                  <td
+                    class="item_position-prop caption text-right px-1 py-1"
+                  >{{ comm | numeral("0,0.00") }}</td>
+                </tr>
+                <tr id="table_tr_snap-cont">
+                  <td class="item_position-prop caption px-1 py-2">Value Added Tax</td>
+                  <td
+                    class="item_position-prop caption text-right px-1 py-1"
+                  >{{ vadd | numeral("0,0.00") }}</td>
+                </tr>
+                <tr id="table_tr_snap-cont">
+                  <td class="item_position-prop caption px-1 py-2">Transfer Fee</td>
+                  <td
+                    class="item_position-prop caption text-right px-1 py-1"
+                  >{{ tfee | numeral("0,0.00") }}</td>
+                </tr>
+                <tr id="table_tr_snap-cont">
+                  <td class="item_position-prop caption px-1 py-2">SCCP</td>
+                  <td
+                    class="item_position-prop caption text-right px-1 py-1"
+                  >{{ sccp | numeral("0,0.00") }}</td>
+                </tr>
+                <tr id="table_tr_snap-cont">
+                  <td class="item_position-prop caption px-1 py-2">Sales Tax</td>
+                  <td
+                    class="item_position-prop caption text-right px-1 py-1"
+                  >{{ stax | numeral("0,0.00") }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-col>
+        <v-col class="pa-0 pl-5" cols="9" sm="9" md="9">
+          <div id="chart">
+            <client-only>
+              <apexcharts
+                ref="ExpenseReportTrades"
+                height="230"
+                width="97%"
+                type="line"
+                :options="chartOptions"
+                :series="series"
+              />
+            </client-only>
+          </div>
+        </v-col>
+        <share-modal
+          v-if="showShareForm"
+          :imageid="shareLink"
+          @closeModal="showShareForm = false, toggleSpace = false"
+        />
+      </v-row>
+    </v-card>
+  </v-col>
 </template>
 
 <script>
@@ -115,6 +130,7 @@ export default {
       shareLink: "",
       showShareForm: false,
       showScheduleForm: false,
+      toggleSpace: false,
       expenseReportArray: [],
       objExpenseReportTrades: [],
       comm: "0.00",
@@ -186,6 +202,15 @@ export default {
               cssClass: "apexcharts-xaxis-label"
             }
           },
+          crosshairs: {
+            show: true,
+            position: "back",
+            stroke: {
+              color: "#002532",
+              width: 1,
+              dashArray: 0
+            }
+          },
           axisTicks: {
             show: false
           },
@@ -224,6 +249,9 @@ export default {
           axisBorder: {
             show: false,
             color: "#17314B"
+          },
+          crosshairs: {
+            show: false
           }
         },
         tooltip: {
@@ -288,6 +316,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"

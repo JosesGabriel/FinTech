@@ -10,7 +10,9 @@
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
-        <Newsfeed :new-post="newPost" />
+        <Newsfeed postcount="top" :new-post="newPost" />
+        <Ad class="mb-3" />
+        <Newsfeed postcount="bottom" />
       </v-col>
       <v-col
         class="px-3 hidden-sm-and-down pr-0 leftSidebar__container"
@@ -42,6 +44,7 @@ import WhoToMingle from "~/components/WhoToMingle";
 import MiniWatchlist from "~/components/MiniWatchlist";
 import FooterSidebar from "~/components/FooterSidebar";
 import PostField from "~/components/social/PostField";
+import Ad from "~/components/social/Ad";
 import Bulletin from "~/components/Bulletin";
 import PopUp from "~/components/modals/PopUp";
 
@@ -58,7 +61,8 @@ export default {
     Bulletin,
     FooterSidebar,
     PostField,
-    PopUp
+    PopUp,
+    Ad
   },
   computed: {
     ...mapGetters({

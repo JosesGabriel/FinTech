@@ -257,6 +257,7 @@ export default {
       try {
         const latestDate = await this.$api.chart.stocks.activeDate();
         this.latestDate = latestDate.data.date;
+        console.log("latestDate", this.latestDate);
         const response = await this.$api.chart.stocks.history({
           exchange: "PSE"
         });

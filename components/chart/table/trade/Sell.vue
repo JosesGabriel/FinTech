@@ -569,9 +569,18 @@ export default {
         this.SellDate +
         " " +
         [d.getHours(), d.getMinutes(), d.getSeconds()].join(":");
+
+      let stockprice = this.stock_last;
+      let n = stockprice;
+      if(typeof(stockprice) == 'string'){
+        if(n.indexOf(']') >= 0){
+          stockprice = stockprice.replace(/^\[|\]$/g, '');
+        }
+      }
+
       const sellparams = {
         position: this.quantity,
-        stock_price: this.stock_last,
+        stock_price: stockprice,
         transaction_meta: {
           strategy: "",
           average_price: this.avprice.toFixed(2),

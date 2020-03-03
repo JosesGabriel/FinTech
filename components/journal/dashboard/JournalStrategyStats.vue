@@ -1,40 +1,34 @@
 <template>
-  <v-row ref="componentWrapper" no-gutters>
-    <!-- Don't remove ref value. Used for sharing -->
-    <v-col class="pa-0" cols="12" sm="12" md="12">
-      <v-card-title
-        class="text-left justify-left px-0 pb-2 pt-5"
-        :style="borderColor"
-      >
-        <span
-          class="font-weight-bold subtitle-2"
-          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
-        >
-          STRATEGY STATISTICS
-        </span>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          small
-          :dark="lightSwitch == 0 ? false : true"
-          @click="showShareModal()"
-        >
-          <v-icon small color="tertiary">mdi-share-variant</v-icon>
-        </v-btn>
-      </v-card-title>
-    </v-col>
-    <v-col class="pa-0" cols="7" sm="7" md="7">
-      <JournalStrategyStatsLogs />
-    </v-col>
-    <v-col class="pa-0" cols="5" sm="5" md="5">
-      <JournalWinLoss />
-    </v-col>
-    <share-modal
-      v-if="showShareForm"
-      :imageid="shareLink"
-      @closeModal="showShareForm = false"
-    />
-  </v-row>
+  <div ref="componentWrapper">
+    <v-card flat :dark="lightSwitch == 1" :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'">
+      <v-row :class="toggleSpace ? 'px-2' : ''" no-gutters>
+        <!-- Don't remove ref value. Used for sharing -->
+        <v-col class="pa-0" cols="12" sm="12" md="12">
+          <v-card-title class="text-left justify-left px-0 pb-2 pt-5" :style="borderColor">
+            <span
+              class="font-weight-bold subtitle-2"
+              :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+            >STRATEGY STATISTICS</span>
+            <v-spacer></v-spacer>
+            <v-btn icon small :dark="lightSwitch == 0 ? false : true" @click="showShareModal()">
+              <v-icon small color="tertiary">mdi-share-variant</v-icon>
+            </v-btn>
+          </v-card-title>
+        </v-col>
+        <v-col class="pa-0" cols="7" sm="7" md="7">
+          <JournalStrategyStatsLogs />
+        </v-col>
+        <v-col class="pa-0" cols="5" sm="5" md="5">
+          <JournalWinLoss />
+        </v-col>
+        <share-modal
+          v-if="showShareForm"
+          :imageid="shareLink"
+          @closeModal="showShareForm = false, toggleSpace = false"
+        />
+      </v-row>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -76,7 +70,8 @@ export default {
     return {
       shareLink: "",
       showShareForm: false,
-      showScheduleForm: false
+      showScheduleForm: false,
+      toggleSpace: false
     };
   },
   methods: {
@@ -86,6 +81,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"

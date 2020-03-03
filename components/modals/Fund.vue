@@ -240,7 +240,7 @@ export default {
       this.$api.journal.portfolio.portfoliofunds(portfoliofundsparams).then(
         function(result) {
           if (result.success) {
-            this.availableFunds = parseFloat(result.data.funds.balance);
+            this.availableFunds = parseFloat(result.data.funds[0].balance);
           }
         }.bind(this)
       );
