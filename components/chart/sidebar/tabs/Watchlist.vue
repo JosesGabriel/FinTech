@@ -182,7 +182,7 @@ export default {
         const response = await this.$api.watchlist.watchlists.index();
         const data = response.data.watchlist;
         data.forEach(async data => {
-          const history = await await this.$api.chart.stocks.history({
+          const history = await this.$api.chart.stocks.history({
             "symbol-id": data.stock_id
           });
 
@@ -193,9 +193,9 @@ export default {
             symbol: symbol.pop(),
             description: data.description,
             market_code: data.market_code,
-            last: history.last,
-            changepercentage: history.changepercentage,
-            change: history.change,
+            last: history.data.last,
+            changepercentage: history.data.changepercentage,
+            change: history.data.change,
             color: false
           });
         });
