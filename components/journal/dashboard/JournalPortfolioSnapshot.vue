@@ -1,108 +1,114 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="4" sm="4" md="4">
     <!-- Don't remove ref value. Used for sharing -->
-    <v-card-title class="text-left justify-left px-0 pb-2 pt-5">
-      <span
-        class="font-weight-bold subtitle-2"
-        :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
-      >PORTFOLIO SNAPSHOT</span>
-      <v-spacer></v-spacer>
-      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon small color="tertiary">mdi-share-variant</v-icon>
-      </v-btn>
-    </v-card-title>
-    <v-col class="pa-0">
-      <v-card
-        :color="cardbackground"
-        elevation="0"
-        :dark="lightSwitch == true"
-        class="pb-2"
-        :style="{ border: borderColor }"
-      >
-        <v-card-title class="py-2 px-3">
-          <span class="font-weight-bold caption">Trading Result (PHP)</span>
-        </v-card-title>
-        <v-simple-table
-          id="liveportfolio-table"
-          :dense="true"
-          :style="{ color: fontColor }"
+    <v-card flat :class="toggleSpace ? 'pa-5' : ''" :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'">
+      <v-card-title class="text-left justify-left px-0 pb-2 pt-5">
+        <span
+          class="font-weight-bold subtitle-2"
+          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+        >PORTFOLIO SNAPSHOT</span>
+        <v-spacer></v-spacer>
+        <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+          <v-icon small color="tertiary">mdi-share-variant</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-col class="pa-0">
+        <v-card
+          :color="cardbackground"
+          elevation="0"
           :dark="lightSwitch == true"
+          class="pb-2"
+          :style="{ border: borderColor }"
         >
-          <template v-slot:default>
-            <tbody>
-              <tr
-                id="table_tr_snap-cont"
-                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
-              >
-                <td class="item_position-prop px-3 py-1 caption">Starting Capital</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ startingCapital | numeral("0,0.00") }}</td>
-              </tr>
-              <tr
-                id="table_tr_snap-cont"
-                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
-              >
-                <td class="item_position-prop px-3 py-1 caption">Running Profit & Loss</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ yearTDPL | numeral("0,0.00") }}</td>
-              </tr>
-              <tr
-                id="table_tr_snap-cont"
-                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
-              >
-                <td class="item_position-prop px-3 py-1 caption">Portfolio Performance</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ portfolioTDPL | numeral("0,0.00") }}</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-card>
-      <v-card
-        :color="cardbackground"
-        elevation="0"
-        :dark="lightSwitch == true"
-        class="mt-3 pb-2"
-        :style="{ border: borderColor }"
-      >
-        <v-card-title class="py-2 px-3">
-          <span class="font-weight-bold caption">Funds Transfers (PHP)</span>
-        </v-card-title>
-        <v-simple-table
-          id="liveportfolio-table"
-          :dense="true"
-          :style="{ color: fontColor }"
+          <v-card-title class="py-2 px-3">
+            <span class="font-weight-bold caption">Trading Result (PHP)</span>
+          </v-card-title>
+          <v-simple-table
+            id="liveportfolio-table"
+            :dense="true"
+            :style="{ color: fontColor }"
+            :dark="lightSwitch == true"
+          >
+            <template v-slot:default>
+              <tbody>
+                <tr
+                  id="table_tr_snap-cont"
+                  :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+                >
+                  <td class="item_position-prop px-3 py-1 caption">Starting Capital</td>
+                  <td
+                    class="item_position-prop text-right px-3 py-1 caption"
+                  >{{ startingCapital | numeral("0,0.00") }}</td>
+                </tr>
+                <tr
+                  id="table_tr_snap-cont"
+                  :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+                >
+                  <td class="item_position-prop px-3 py-1 caption">Running Profit & Loss</td>
+                  <td
+                    class="item_position-prop text-right px-3 py-1 caption"
+                  >{{ yearTDPL | numeral("0,0.00") }}</td>
+                </tr>
+                <tr
+                  id="table_tr_snap-cont"
+                  :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+                >
+                  <td class="item_position-prop px-3 py-1 caption">Portfolio Performance</td>
+                  <td
+                    class="item_position-prop text-right px-3 py-1 caption"
+                  >{{ portfolioTDPL | numeral("0,0.00") }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-card>
+        <v-card
+          :color="cardbackground"
+          elevation="0"
           :dark="lightSwitch == true"
+          class="mt-3 pb-2"
+          :style="{ border: borderColor }"
         >
-          <template v-slot:default>
-            <tbody>
-              <tr
-                id="table_tr_snap-cont"
-                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
-              >
-                <td class="item_position-prop px-3 py-1 caption">Deposits</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ Deposits | numeral("0,0.00") }}</td>
-              </tr>
-              <tr
-                id="table_tr_snap-cont"
-                :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
-              >
-                <td class="item_position-prop px-3 py-1 caption">Withdrawals</td>
-                <td
-                  class="item_position-prop text-right px-3 py-1 caption"
-                >{{ Withdrawals | numeral("0,0.00") }}</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-card>
-    </v-col>
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
+          <v-card-title class="py-2 px-3">
+            <span class="font-weight-bold caption">Funds Transfers (PHP)</span>
+          </v-card-title>
+          <v-simple-table
+            id="liveportfolio-table"
+            :dense="true"
+            :style="{ color: fontColor }"
+            :dark="lightSwitch == true"
+          >
+            <template v-slot:default>
+              <tbody>
+                <tr
+                  id="table_tr_snap-cont"
+                  :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+                >
+                  <td class="item_position-prop px-3 py-1 caption">Deposits</td>
+                  <td
+                    class="item_position-prop text-right px-3 py-1 caption"
+                  >{{ Deposits | numeral("0,0.00") }}</td>
+                </tr>
+                <tr
+                  id="table_tr_snap-cont"
+                  :class="lightSwitch == 1 ? 'tertiary--text' : 'black--text'"
+                >
+                  <td class="item_position-prop px-3 py-1 caption">Withdrawals</td>
+                  <td
+                    class="item_position-prop text-right px-3 py-1 caption"
+                  >{{ Withdrawals | numeral("0,0.00") }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </v-card>
+      </v-col>
+      <share-modal
+        v-if="showShareForm"
+        :imageid="shareLink"
+        @closeModal="showShareForm = false, toggleSpace = false"
+      />
+    </v-card>
   </v-col>
 </template>
 <script>
@@ -155,7 +161,8 @@ export default {
       portfolioTDPL: 0,
       Deposits: 0,
       Withdrawals: 0,
-      Equity: 0
+      Equity: 0,
+      toggleSpace: false
     };
   },
   watch: {
@@ -191,6 +198,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"

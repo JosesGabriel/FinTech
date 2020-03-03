@@ -1,199 +1,205 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0">
-    <!-- Don't remove ref value. Used for sharing -->
-    <v-card-title class="text-left justify-left px-0 py-3 pt-5">
-      <span
-        class="font-weight-bold subtitle-2"
-        :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
-      >OPEN POSITION/S (PHP)</span>
-      <v-spacer></v-spacer>
-      <v-btn
-        text
-        color="success"
-        dark
-        class="rtf_top-btn text-capitalize mr-2"
-        :disabled="toggleSumPortfolioButton"
-        height="23"
-        @click.stop="showResetForm = true"
-      >
-        <span class="body-2 font-weight-bold">Reset</span>
-      </v-btn>
-      <v-btn
-        text
-        color="success"
-        dark
-        class="rtf_top-btn text-capitalize mr-2"
-        :disabled="toggleButton"
-        height="23"
-        @click.stop="showTradeViewForm = true"
-      >
-        <span class="body-2 font-weight-bold">Trade</span>
-      </v-btn>
-      <v-btn
-        text
-        color="success"
-        dark
-        class="rtf_top-btn text-capitalize"
-        :disabled="toggleButton"
-        height="23"
-        @click.stop="showFundsForm = true"
-      >
-        <span class="body-2 font-weight-bold">Fund</span>
-      </v-btn>
-
-      <v-btn icon small :dark="lightSwitch == 0 ? false : true" @click="showShareModal()">
-        <v-icon small color="tertiary">mdi-share-variant</v-icon>
-      </v-btn>
-    </v-card-title>
-    <v-data-table
-      :headers="headers"
-      :items="portfolioLogs"
-      :page.sync="page"
-      :items-per-page="itemsPerPage"
-      :dark="lightSwitch == 1 ? true : false"
-      hide-default-footer
-      :loading="livePortfolioLoading"
-      loading-text="Loading..."
-      class="data_table-container pl-10 secondary--text"
-      @page-count="pageCount = $event"
-    >
-      <template v-slot:item.stock_symbol="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">
-          {{
-          item.stock_symbol
-          }}
-        </span>
-      </template>
-      <template v-slot:item.position="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">
-          {{
-          item.position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}
-        </span>
-      </template>
-      <template v-slot:item.average_price="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">
-          {{
-          item.average_price | numeral("0,0.000")
-          }}
-        </span>
-      </template>
-      <template v-slot:item.total_value="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">
-          {{
-          item.total_value | numeral("0,0.00")
-          }}
-        </span>
-      </template>
-      <template v-slot:item.market_value="{ item }">
-        <span class="pl-3" :style="{ color: fontcolor2 }">
-          {{
-          item.market_value | numeral("0,0.00")
-          }}
-        </span>
-      </template>
-      <template v-slot:item.profit_loss="{ item }">
+    <v-card flat tile :class="toggleSpace ? 'pa-5' : ''" :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'">
+      <!-- Don't remove ref value. Used for sharing -->
+      <v-card-title class="text-left justify-left px-0 py-3 pt-5">
         <span
-          :class="
+          class="font-weight-bold subtitle-2"
+          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+        >OPEN POSITION/S (PHP)</span>
+        <v-spacer></v-spacer>
+        <v-btn
+          text
+          color="success"
+          :dark="lightSwitch == 1"
+          class="rtf_top-btn text-capitalize mr-2"
+          :disabled="toggleSumPortfolioButton"
+          height="23"
+          @click.stop="showResetForm = true"
+        >
+          <span class="body-2 font-weight-bold">Reset</span>
+        </v-btn>
+        <v-btn
+          text
+          color="success"
+          :dark="lightSwitch == 1"
+          class="rtf_top-btn text-capitalize mr-2"
+          :disabled="toggleButton"
+          height="23"
+          @click.stop="showTradeViewForm = true"
+        >
+          <span class="body-2 font-weight-bold">Trade</span>
+        </v-btn>
+        <v-btn
+          text
+          color="success"
+          :dark="lightSwitch == 1"
+          class="rtf_top-btn text-capitalize"
+          :disabled="toggleButton"
+          height="23"
+          @click.stop="showFundsForm = true"
+        >
+          <span class="body-2 font-weight-bold">Fund</span>
+        </v-btn>
+
+        <v-btn icon small :dark="lightSwitch == 0 ? false : true" @click="showShareModal()">
+          <v-icon small color="tertiary">mdi-share-variant</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="portfolioLogs"
+        :page.sync="page"
+        :items-per-page="itemsPerPage"
+        :dark="lightSwitch == 1 ? true : false"
+        hide-default-footer
+        :loading="livePortfolioLoading"
+        loading-text="Loading..."
+        class="data_table-container pl-10 secondary--text"
+        @page-count="pageCount = $event"
+      >
+        <template v-slot:item.stock_symbol="{ item }">
+          <span class="pl-3" :style="{ color: fontcolor2 }">
+            {{
+            item.stock_symbol
+            }}
+          </span>
+        </template>
+        <template v-slot:item.position="{ item }">
+          <span class="pl-3" :style="{ color: fontcolor2 }">
+            {{
+            item.position.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }}
+          </span>
+        </template>
+        <template v-slot:item.average_price="{ item }">
+          <span class="pl-3" :style="{ color: fontcolor2 }">
+            {{
+            item.average_price | numeral("0,0.000")
+            }}
+          </span>
+        </template>
+        <template v-slot:item.total_value="{ item }">
+          <span class="pl-3" :style="{ color: fontcolor2 }">
+            {{
+            item.total_value | numeral("0,0.00")
+            }}
+          </span>
+        </template>
+        <template v-slot:item.market_value="{ item }">
+          <span class="pl-3" :style="{ color: fontcolor2 }">
+            {{
+            item.market_value | numeral("0,0.00")
+            }}
+          </span>
+        </template>
+        <template v-slot:item.profit_loss="{ item }">
+          <span
+            :class="
             item.profit_loss > 0
               ? 'positive'
               : item.profit_loss < 0
               ? 'negative'
               : 'neutral'
           "
-        >{{ item.profit_loss | numeral("0,0.00") }}</span>
-      </template>
-      <template v-slot:item.pl_percentage="{ item }">
-        <span
-          :class="
+          >{{ item.profit_loss | numeral("0,0.00") }}</span>
+        </template>
+        <template v-slot:item.pl_percentage="{ item }">
+          <span
+            :class="
             item.pl_percentage > 0
               ? 'positive'
               : item.pl_percentage < 0
               ? 'negative'
               : 'neutral'
           "
-        >{{ item.pl_percentage | numeral("0,0.00") }}%</span>
-      </template>
-      <template v-slot:item.action="{ item }">
-        <div
-          v-show="menuShow"
-          :id="`pl_${item.id}`"
-          :dark="lightSwitch == true"
-          :style="{ background: cardbackground }"
-          class="sidemenu_actions"
-          @mouseover="menuLogsShow(item)"
-          @mouseleave="menuLogsHide(item)"
-        >
-          <v-btn
+          >{{ item.pl_percentage | numeral("0,0.00") }}%</span>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <div
+            v-show="menuShow"
+            :id="`pl_${item.id}`"
+            :dark="lightSwitch == true"
+            :style="{ background: cardbackground }"
+            class="sidemenu_actions"
+            @mouseover="menuLogsShow(item)"
+            @mouseleave="menuLogsHide(item)"
+          >
+            <v-btn
+              small
+              class="caption btn_sidemenu"
+              text
+              @click.stop="showTradeDetails = true"
+              @click="detailsLive(item)"
+            >Details</v-btn>
+            <v-btn
+              small
+              class="caption btn_sidemenu"
+              text
+              @click.stop="showEditDetails = true"
+              @click="editLive(item)"
+            >Edit</v-btn>
+            <v-btn
+              small
+              class="caption btn_sidemenu"
+              text
+              @click.stop="showDelete = true"
+              @click="deleteLive(item)"
+            >Delete</v-btn>
+          </div>
+          <v-icon
+            :class="lightSwitch == 1 ? 'white--text' : 'tertiary--text'"
             small
-            class="caption btn_sidemenu"
-            text
-            @click.stop="showTradeDetails = true"
-            @click="detailsLive(item)"
-          >Details</v-btn>
-          <v-btn
-            small
-            class="caption btn_sidemenu"
-            text
-            @click.stop="showEditDetails = true"
-            @click="editLive(item)"
-          >Edit</v-btn>
-          <v-btn
-            small
-            class="caption btn_sidemenu"
-            text
-            @click.stop="showDelete = true"
-            @click="deleteLive(item)"
-          >Delete</v-btn>
-        </div>
-        <v-icon
-          :class="lightSwitch == 1 ? 'white--text' : 'tertiary--text'"
-          small
-          class="mr-2"
-          @mouseover="menuLogsShow(item)"
-        >mdi-dots-horizontal</v-icon>
-      </template>
-    </v-data-table>
-    <v-row>
-      <v-col class="text-right total_bottom" :style="{ color: fontColor }" width="100%">
-        <span
-          class="font-weight-bold"
-          :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
-        >Total Profit/Loss as of {{ date }}:</span>
-        <span class="ml-3" :class="totalProfitLoss < 0 ? 'negative' : 'positive'">
-          {{
-          totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }}
-        </span>
-      </v-col>
-    </v-row>
-    <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
-      <v-card color="transparent" elevation="0">
-        <v-pagination
-          v-model="page"
-          class="d-flex flex-end lp_data_table-pagination"
-          color="transparent"
-          :dark="lightSwitch == 1 ? true : false"
-          :length="pageCount"
-        ></v-pagination>
+            class="mr-2"
+            @mouseover="menuLogsShow(item)"
+          >mdi-dots-horizontal</v-icon>
+        </template>
+      </v-data-table>
+      <v-row>
+        <v-col class="text-right total_bottom" :style="{ color: fontColor }" width="100%">
+          <span
+            class="font-weight-bold"
+            :style="{ color: this.lightSwitch == 0 ? '#000000' : '#FFFFFF' }"
+          >Total Profit/Loss as of {{ date }}:</span>
+          <span class="ml-3" :class="totalProfitLoss < 0 ? 'negative' : 'positive'">
+            {{
+            totalProfitLoss.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }}
+          </span>
+        </v-col>
+      </v-row>
+      <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
+        <v-card color="transparent" elevation="0">
+          <v-pagination
+            v-model="page"
+            class="d-flex flex-end lp_data_table-pagination"
+            color="transparent"
+            :dark="lightSwitch == 1 ? true : false"
+            :length="pageCount"
+          ></v-pagination>
+        </v-card>
       </v-card>
+      <!-- Dialog boxes -->
+      <share-modal
+        v-if="showShareForm"
+        :imageid="shareLink"
+        @closeModal="showShareForm = false, toggleSpace = false"
+      />
+      <reset-modal :visible="showResetForm" @close="showResetForm = false" />
+      <funds-modal :visible="showFundsForm" @close="showFundsForm = false" />
+      <trade-view :visible="showTradeViewForm" @close="showTradeViewForm = false" />
+      <trade-details
+        :visible="showTradeDetails"
+        :item-details="itemDetails"
+        @close="showTradeDetails = false"
+      />
+      <trade-edits
+        :visible="showEditDetails"
+        :item-details="itemDetails"
+        @close="showEditDetails = false"
+      />
+      <trade-delete :visible="showDelete" :item-details="itemDetails" @close="showDelete = false" />
     </v-card>
-    <!-- Dialog boxes -->
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
-    <reset-modal :visible="showResetForm" @close="showResetForm = false" />
-    <funds-modal :visible="showFundsForm" @close="showFundsForm = false" />
-    <trade-view :visible="showTradeViewForm" class="asdasd" @close="showTradeViewForm = false" />
-    <trade-details
-      :visible="showTradeDetails"
-      :item-details="itemDetails"
-      @close="showTradeDetails = false"
-    />
-    <trade-edits
-      :visible="showEditDetails"
-      :item-details="itemDetails"
-      @close="showEditDetails = false"
-    />
-    <trade-delete :visible="showDelete" :item-details="itemDetails" @close="showDelete = false" />
     <!-- Dialog boxes -->
   </v-col>
 </template>
@@ -282,6 +288,7 @@ export default {
       showEditDetails: false,
       showDelete: false,
       itemDetails: null,
+      toggleSpace: false,
 
       snackbar: false,
       timeoutNotification: 10000,
@@ -368,6 +375,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"

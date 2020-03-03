@@ -1,36 +1,39 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="12" sm="12" md="12">
-    <v-card-title class="text-left justify-left px-0 pb-2 pt-5" :style="borderColor">
-      <span
-        class="font-weight-bold subtitle-2"
-        :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
-      >EQUITY CURVE</span>
-      <v-spacer></v-spacer>
-      <!-- hide for now -->
-      <!-- <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Day</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Week</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Month</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Year</v-btn>
-      <v-btn small dark text color="success" class="body-2 text-capitalize" elevation="0">Custom</v-btn>
-      <v-spacer></v-spacer>-->
-      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon small color="tertiary">mdi-share-variant</v-icon>
-      </v-btn>
-    </v-card-title>
-    <v-col class="pa-0 pt-5" cols="12" sm="12" md="12">
-      <div id="chart">
-        <client-only>
-          <apexcharts
-            ref="equityCurveChart"
-            type="line"
-            height="300"
-            :options="chartOptions"
-            :series="series"
-          />
-        </client-only>
-      </div>
-    </v-col>
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
+    <v-card flat tile class="pr-5" :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'">
+      <v-card-title
+        class="text-left justify-left px-0 pb-2 pt-5"
+        :class="toggleSpace ? 'pl-3' : ''"
+        :style="borderColor"
+      >
+        <span
+          class="font-weight-bold subtitle-2"
+          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+        >EQUITY CURVE</span>
+        <v-spacer></v-spacer>
+        <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+          <v-icon small color="tertiary">mdi-share-variant</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-col class="pa-0 pt-5" cols="12" sm="12" md="12">
+        <div id="chart">
+          <client-only>
+            <apexcharts
+              ref="equityCurveChart"
+              type="line"
+              height="300"
+              :options="chartOptions"
+              :series="series"
+            />
+          </client-only>
+        </div>
+      </v-col>
+      <share-modal
+        v-if="showShareForm"
+        :imageid="shareLink"
+        @closeModal="showShareForm = false, toggleSpace = false"
+      />
+    </v-card>
   </v-col>
 </template>
 
@@ -73,6 +76,7 @@ export default {
       shareLink: "",
       showShareForm: false,
       showScheduleForm: false,
+      toggleSpace: false,
       selection: "one_year",
       series: [
         {
@@ -158,6 +162,15 @@ export default {
               cssClass: "apexcharts-xaxis-label"
             }
           },
+          crosshairs: {
+            show: true,
+            position: "back",
+            stroke: {
+              color: "#002532",
+              width: 1,
+              dashArray: 0
+            }
+          },
           axisTicks: {
             show: false
           },
@@ -196,6 +209,9 @@ export default {
           axisBorder: {
             show: false,
             color: "#17314B"
+          },
+          crosshairs: {
+            show: false
           }
         },
         tooltip: {
@@ -260,6 +276,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"
@@ -341,10 +358,22 @@ export default {
 };
 </script>
 <style>
-.apexcharts-xcrosshairs {
-  stroke-dasharray: 0;
-  stroke: #002532;
+/* .apexcharts-xcrosshairs {
+  stroke-dasharray: 0 !important;
+  stroke: #002532 !important;
+  fill: unset !important;
 }
+.apexcharts-ycrosshairs {
+  stroke: unset !important;
+  fill: unset !important;
+}
+.apexcharts-ycrosshairs-hidden,
+.apexcharts-ycrosshairs,
+.apexcharts-grid,
+.apexcharts-xaxis-annotations,
+.apexcharts-point-annotations {
+  display: none !important;
+} */
 .apexcharts-reset-zoom-icon {
   margin: 0;
 }
