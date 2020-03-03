@@ -7,10 +7,7 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  */
 export default function({ $axios, redirect }) {
   // list of exempted urls
-  const urls = [
-    process.env.STREAM_API_URL,
-    process.env.VYNDUE_API_URL,
-  ];
+  const urls = [process.env.STREAM_API_URL, process.env.VYNDUE_API_URL];
 
   // region custom handlers
   /**
@@ -38,6 +35,7 @@ export default function({ $axios, redirect }) {
   $axios.setGlobalAuth = () => {
     $axios.defaults.headers.common["Authorization"] =
       localStorage["auth._token.local"];
+    $axios.defaults.withCredentials = true;
   };
   // endregion custom handlers
 
