@@ -371,7 +371,7 @@ export default {
               ...Depositdebit,
               ...this.ledgerContent[i]
             };
-            this.ledgerContent[i].action = "Deposit Income";
+            this.ledgerContent[i].action = "Fresh Funds";
           } else if (this.ledgerContent[i].action == "inital_balance") {
             let Depositdebit = {
               debit: "-",
@@ -410,7 +410,7 @@ export default {
               credit: "-"
             };
             this.ledgerContent[i] = { ...debit, ...this.ledgerContent[i] };
-            this.ledgerContent[i].action = "Withdraw";
+            this.ledgerContent[i].action = "Withdrawal";
           }
 
           this.ledgerContent[i].count = this.count =

@@ -537,6 +537,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { BuyFees, SellFees } from "~/assets/js/helpers/taxation";
+import { CalculateBoardLot } from "~/assets/js/helpers/orderbook";
 
 export default {
   props: ["visible"],
@@ -685,34 +686,7 @@ export default {
       set(value) {
         if (!value) {
           this.$emit("close");
-          this.priceModel = 0;
-          this.quantityModel = 0.0;
-          this.quantitySellModel = 0.0;
-          this.strategyModel = "";
-          this.tradeplanModel = "";
-          this.emotionsModel = "";
-          this.notesModel = "";
-          this.dateModel = new Date().toISOString().substr(0, 10);
-          this.e1 = 1;
-          this.GetSelectStock = null;
-          this.portfolioDropdownModel = null;
-          this.availableFundsModel = 0;
-
-          this.cprice = "0.00";
-          this.change = "0.00";
-          this.cpercentage = "0.00";
-          this.bidask = 0;
-          this.dboard = 0;
-          this.prev = 0;
-          this.low = 0;
-          this.wklow = 0;
-          this.volm = 0;
-          this.trades = 0;
-          this.open = 0;
-          this.high = 0;
-          this.wkhigh = 0;
-          this.vole = 0;
-          this.ave = 0;
+          this.clearInputs();
         }
       }
     }
@@ -732,7 +706,7 @@ export default {
      * @return  {[array]}  returns array of stocklist data
      */
     stockList() {
-      this.initPortfolio();
+      this.dateWatch();
 
       this.stocklist = this.stockList.data;
       this.stocklistBuy = this.stockList.data;
@@ -806,35 +780,14 @@ export default {
     this.stocklistBuy = this.stockList.data;
 
     this.getUserPortfolio();
-    this.initPortfolio();
+    this.dateWatch();
   },
   methods: {
     ...mapActions({
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId"
     }),
-    /**
-     * function initPortfolio on mount: date
-     *
-     * @return  {string}  returns formatted date
-     */
-    initPortfolio() {
-      let tim = new Date();
-      let time =
-        tim.getHours() + ":" + tim.getMinutes() + ":" + tim.getSeconds();
-
-      let today = new Date(this.date),
-        month = "" + (today.getMonth() + 1),
-        day = "" + today.getDate(),
-        year = today.getFullYear();
-
-      if (month.length < 2) month = "0" + month;
-      if (day.length < 2) day = "0" + day;
-
-      let dateTime = [day, month, year].join("-") + " " + time;
-      this.dateModel = dateTime;
-      this.YMDModel = [day, month, year].join("-");
-    },
+    calculateBoardLot: CalculateBoardLot,
     /**
      * function to buy trade
      *
@@ -845,52 +798,22 @@ export default {
       let stock = this.GetSelectStock;
       let totalCost =
         parseFloat(this.quantityModel) * parseFloat(this.priceModel);
-      let payload = {
-        position: parseFloat(this.quantityModel),
-        stock_price: parseFloat(this.priceModel),
-        transaction_meta: {
-          stock_name: this.stockSymbolGet.symbol,
-          strategy: this.strategyModel,
-          plan: this.tradeplanModel,
-          emotion: this.emotionsModel,
-          notes: this.notesModel,
-          date: this.dateModel
-        }
-      };
       this.$api.journal.portfolio
-        .tradebuy(portfolio_id, stock, payload)
+        .tradebuy(portfolio_id, stock, {
+          position: parseFloat(this.quantityModel),
+          stock_price: parseFloat(this.priceModel),
+          transaction_meta: {
+            stock_name: this.stockSymbolGet.symbol,
+            strategy: this.strategyModel,
+            plan: this.tradeplanModel,
+            emotion: this.emotionsModel,
+            notes: this.notesModel,
+            date: this.dateModel
+          }
+        })
         .then(response => {
           if (response.success) {
-            this.keyCreateCounter = this.renderPortfolioKey;
-            this.keyCreateCounter++;
-            this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.GetSelectStock = null;
-            this.priceModel = 0;
-            this.quantityModel = 0.0;
-            this.strategyModel = null;
-            this.tradeplanModel = null;
-            this.emotionsModel = null;
-            this.notesModel = null;
-            this.dateModel = new Date().toISOString().substr(0, 10);
-            this.e1 = 1;
-            this.portfolioDropdownModel = null;
-            this.availableFundsModel = 0;
-
-            this.cprice = "0.00";
-            this.change = "0.00";
-            this.cpercentage = "0.00";
-            this.bidask = 0;
-            this.dboard = 0;
-            this.prev = 0;
-            this.low = 0;
-            this.wklow = 0;
-            this.volm = 0;
-            this.trades = 0;
-            this.open = 0;
-            this.high = 0;
-            this.wkhigh = 0;
-            this.vole = 0;
-            this.ave = 0;
+            this.clearInputs();
           }
         });
     },
@@ -906,51 +829,65 @@ export default {
       let aveprice =
         parseFloat(this.quantitySellModel) /
         parseFloat(this.totalCostSellModel.replace(/,/g, ""));
-      let payload = {
-        position: parseFloat(this.quantitySellModel),
-        stock_price: parseFloat(this.priceSellModel),
-        transaction_meta: {
-          stock_name: this.stockSymbolGet.symbol,
-          strategy: this.strategySellModel,
-          average_price: this.avepriceSell,
-          plan: this.tradeplanSellModel,
-          emotion: this.emotionsSellModel,
-          notes: this.notesSellModel,
-          date: this.dateModel
-        }
-      };
       this.$api.journal.portfolio
-        .tradesell(portfolio_id, stock, payload)
+        .tradesell(portfolio_id, stock, {
+          position: parseFloat(this.quantitySellModel),
+          stock_price: parseFloat(this.priceSellModel),
+          transaction_meta: {
+            stock_name: this.stockSymbolGet.symbol,
+            strategy: this.strategySellModel,
+            average_price: this.avepriceSell,
+            plan: this.tradeplanSellModel,
+            emotion: this.emotionsSellModel,
+            notes: this.notesSellModel,
+            date: this.dateModel
+          }
+        })
         .then(response => {
           if (response.success) {
-            this.keyCreateCounter = this.renderPortfolioKey;
-            this.keyCreateCounter++;
-            this.setRenderPortfolioKey(this.keyCreateCounter);
-            this.GetSelectStock = null;
-            this.priceSellModel = 0;
-            this.quantitySellModel = 0.0;
-            this.dateModel = new Date().toISOString().substr(0, 10);
-            this.e1 = 1;
-
-            this.cprice = "0.00";
-            this.change = "0.00";
-            this.cpercentage = "0.00";
-            this.bidask = 0;
-            this.dboard = 0;
-            this.prev = 0;
-            this.low = 0;
-            this.wklow = 0;
-            this.volm = 0;
-            this.trades = 0;
-            this.open = 0;
-            this.high = 0;
-            this.wkhigh = 0;
-            this.vole = 0;
-            this.ave = 0;
-
+            this.clearInputs();
             this.toBuy();
           }
         });
+    },
+    /**
+     * Clear all inputs function
+     *
+     * @return  return null to inputs
+     */
+    clearInputs() {
+      this.keyCreateCounter = this.renderPortfolioKey;
+      this.keyCreateCounter++;
+      this.setRenderPortfolioKey(this.keyCreateCounter);
+      this.GetSelectStock = null;
+      this.priceSellModel = 0;
+      this.quantitySellModel = 0.0;
+      this.priceModel = 0;
+      this.quantityModel = 0.0;
+      this.strategyModel = null;
+      this.tradeplanModel = null;
+      this.emotionsModel = null;
+      this.notesModel = null;
+      this.dateModel = new Date().toISOString().substr(0, 10);
+      this.e1 = 1;
+      this.portfolioDropdownModel = null;
+      this.availableFundsModel = 0;
+
+      this.cprice = "0.00";
+      this.change = "0.00";
+      this.cpercentage = "0.00";
+      this.bidask = 0;
+      this.dboard = 0;
+      this.prev = 0;
+      this.low = 0;
+      this.wklow = 0;
+      this.volm = 0;
+      this.trades = 0;
+      this.open = 0;
+      this.high = 0;
+      this.wkhigh = 0;
+      this.vole = 0;
+      this.ave = 0;
     },
     /**
      * function buy tab switch to buy
@@ -1001,21 +938,8 @@ export default {
         function(result) {
           this.stockSymbolGet = result.data;
 
-          if (result.data.last >= 0.0001 && result.data.last <= 0.0099) {
-            this.boardLotModel = 1000000;
-          } else if (result.data.last >= 0.01 && result.data.last <= 0.049) {
-            this.boardLotModel = 100000;
-          } else if (result.data.last >= 0.05 && result.data.last <= 0.495) {
-            this.boardLotModel = 10000;
-          } else if (result.data.last >= 0.5 && result.data.last <= 4.99) {
-            this.boardLotModel = 1000;
-          } else if (result.data.last >= 5 && result.data.last <= 49.95) {
-            this.boardLotModel = 100;
-          } else if (result.data.last >= 50 && result.data.last <= 999.5) {
-            this.boardLotModel = 10;
-          } else if (result.data.last >= 1000) {
-            this.boardLotModel = 5;
-          }
+          this.boardLotModel = this.calculateBoardLot(result.data.last);
+
           this.cprice = result.data.last;
           this.cpercentage = result.data.changepercentage.toFixed(2);
           this.change = result.data.change.toFixed(2);
