@@ -364,6 +364,12 @@ export default {
         return [];
       }
     },
+    postcount: {
+      default() {
+        return "";
+      },
+      type: String
+    },
     postid: {
       default() {
         return "";
@@ -603,6 +609,15 @@ export default {
         .then(response => {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
+
+            // REMOVE THIS CANCER CODE AFTER PRESENTATION MARCH 4, 2020
+            if (this.postcount == "top") {
+              this.postsObject = this.postsObject.splice(0, 2);
+            } else {
+              this.postsObject = this.postsObject.splice(2);
+            }
+            // REMOVE THIS CANCER CODE AFTER PRESENTATION MARCH 4, 2020
+
             this.loader = false;
             console.log(response);
             /**
