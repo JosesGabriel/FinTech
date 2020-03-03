@@ -79,6 +79,20 @@
           Sign In
         </v-btn>
       </v-hover>
+
+      <v-hover v-slot:default="{ hover }">
+        <v-btn
+          v-show="false"
+          block
+          rounded
+          class="black--text font-weight-bold text-capitalize mb-2"
+          :color="!hover ? 'success' : 'successhover'"
+          elevation="1"
+          @click.prevent="refresh()"
+        >
+          Refresh
+        </v-btn>
+      </v-hover>
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
         <a
@@ -115,6 +129,18 @@ export default {
     })
   },
   methods: {
+    async refresh() {
+      try {
+        const response = await this.$axios.$post(
+          "https://dev-api.arbitrage.ph/api/auth/login/refresh",
+          {},
+          { credentials: true }
+        );
+        console.log("response", response);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     /**
      * fires when user logs in to the site
      *
@@ -122,33 +148,31 @@ export default {
      */
     async login() {
       this.isLoading = "success";
-      this.$auth
-        .loginWith("local", {
+
+      try {
+        const response = await this.$auth.loginWith("local", {
           data: {
             username: this.email,
             password: this.password
           }
-        })
-        .then(() => {
-          this.$emit("alert", {
-            state: "success",
-            message: "Successfully Logged In"
-          });
-
-          // reload for proper component mounting
-          setTimeout(() => {
-            window.open("/", "_self");
-          }, 800);
-        })
-        .catch(e => {
-          this.$emit("alert", {
-            state: "error",
-            message: e.response.data.message
-          });
-        })
-        .finally(() => {
-          this.isLoading = false;
         });
+
+        this.$emit("alert", {
+          state: "success",
+          message: "Successfully Logged In"
+        });
+
+        // reload for proper component mounting
+        setTimeout(() => {
+          window.open("/", "_self");
+        }, 800);
+      } catch (error) {
+        this.$emit("alert", {
+          state: "error",
+          message: error.response.data.message
+        });
+        this.isLoading = false;
+      }
     }
   }
 };
