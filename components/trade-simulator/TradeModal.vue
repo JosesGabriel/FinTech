@@ -277,7 +277,7 @@
                 <v-col sm="12" md="12">
                   <div>
                     <v-select
-                      offset-y="true"
+                      :menu-props="{offsetY: false, dark: lightSwitch == true}"
                       item-color="success"
                       append-icon="mdi-chevron-down"
                       class="mb-5 enter_strategy"
@@ -300,7 +300,7 @@
                   </div>
                   <div>
                     <v-select
-                      offset-y="true"
+                      :menu-props="{offsetY: false, dark: lightSwitch == true}"
                       item-color="success"
                       append-icon="mdi-chevron-down"
                       class="mb-5 enter_tplan"
@@ -323,7 +323,7 @@
                   </div>
                   <div>
                     <v-select
-                      offset-y="true"
+                      :menu-props="{offsetY: false, dark: lightSwitch == true}"
                       item-color="success"
                       append-icon="mdi-chevron-down"
                       class="mb-5 enter_emotion"
@@ -532,6 +532,22 @@ export default {
         this.totalposition = 0;
         this.dataVolume = 0;
         this.setSimulatorConfirmedBuySell("buy");
+        this.cprice = 0;
+        this.cpercentage = 0;
+        this.change = 0;
+        this.bidask = 50;
+        this.sentiment = 50;
+        this.dboard = 0;
+        this.prev = "0";
+        this.low = 0;
+        this.wklow = 0;
+        this.volm = "0";
+        this.trades = "0";
+        this.open = "0";
+        this.high = 0;
+        this.wkhigh = "0";
+        this.vole = "0";
+        this.ave = "0";
       }
     },
     marketStatus() {

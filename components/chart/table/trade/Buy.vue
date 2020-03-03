@@ -625,6 +625,7 @@ export default {
     selectedButton: 1,
     btnTriggered: false,
     errorShow: false,
+    stockprice: 0,
     items: [
       { id: 1, text: "10%" },
       { id: 2, text: "30%" },
@@ -671,8 +672,7 @@ export default {
      * get latest Board Lot
      */
     stock_last() {
-      this.getBoardLot(this.stock_last);
-      this.quantity = 0;
+      this.getBoardLot(this.stock_last);      
     },
     selectedButton(value) {
       this.quickConfirmV2();
@@ -716,6 +716,7 @@ export default {
      * @return  {array}  list of portfolios
      */
     getPorfolio() {
+
       this.portfolio = [];
       this.getBalance = [];
       this.$api.journal.portfolio.portfolio().then(
@@ -871,6 +872,14 @@ export default {
      *
      */
     confirmBuy() {
+
+      this.stockprice = this.stock_last;
+      let n = this.stockprice;
+      if(typeof(this.stockprice) == 'string'){
+        if(n.indexOf(']') >= 0){
+          this.stockprice = this.stockprice.replace(/^\[|\]$/g, '');
+        }
+      }
       const stock_id = this.symbolid;
       let fund_id = this.portvalue;
       let d = new Date();
@@ -880,7 +889,7 @@ export default {
         [d.getHours(), d.getMinutes(), d.getSeconds()].join(":");
       const buyparams = {
         position: this.quantity,
-        stock_price: this.stock_last,
+        stock_price: this.stockprice,
         transaction_meta: {
           strategy: this.strat,
           plan: this.tplan,
@@ -889,7 +898,7 @@ export default {
           date: bdate
         }
       };
-      this.$api.journal.portfolio
+     this.$api.journal.portfolio
         .tradebuy(fund_id, stock_id, buyparams)
         .then(response => {
           if (response.success) {
@@ -911,7 +920,7 @@ export default {
           //this.errmsg = 'Stock is currently closed';
           this.errmsgbuy = "Unable to buy";
           this.errorMsg = true;
-        });
+        }); 
     },
     /**
      * Get total cost if Up arrow Button is pressed
@@ -950,6 +959,7 @@ export default {
     },
 
     quickConfirmV2() {
+      this.stockprice = this.stock_last;
       if (this.selectedButton == null) return;
       this.setting = this.selectedButton == 3 ? "custom" : "";
       this.setting_val = 0;
@@ -987,19 +997,20 @@ export default {
       this.equity = this.unrealized + this.realized + this.capital;
       let totalperc = (this.equity / 100) * this.setting_val;
 
-      let bdlot = this.getBoardLot(this.stock_last);
+      let bdlot = this.getBoardLot(this.stockprice);
 
-      this.shares = totalperc / parseFloat(this.stock_last);
+      this.shares = totalperc / parseFloat(this.stockprice);
       let sbuy = this.shares % bdlot;
       this.stobuy = parseFloat(this.shares) - parseFloat(sbuy);
 
       this.quantity = this.stobuy;
-      this.totalcost = this.stobuy * parseFloat(this.stock_last);
+      this.totalcost = this.stobuy * parseFloat(this.stockprice);
       this.totalcost = this.fees(this.totalcost);
       this.showConfirm = true;
     },
     // old
     quickConfirm() {
+      this.stockprice = this.stock_last;
       this.setting_val = 0;
       if (this.setting == "custom") {
         this.setting_val = parseFloat(this.customVal);
@@ -1018,18 +1029,20 @@ export default {
       this.equity = this.unrealized + this.realized + this.capital;
       let totalperc = (this.equity / 100) * this.setting_val;
 
-      let bdlot = this.getBoardLot(this.stock_last);
+      let bdlot = this.getBoardLot(this.stockprice);
 
-      this.shares = totalperc / parseFloat(this.stock_last);
+      this.shares = totalperc / parseFloat(this.stockprice);
       let sbuy = this.shares % bdlot;
       this.stobuy = parseFloat(this.shares) - parseFloat(sbuy);
 
       this.quantity = this.stobuy;
-      this.totalcost = this.stobuy * parseFloat(this.stock_last);
+      this.totalcost = this.stobuy * parseFloat(this.stockprice);
       this.totalcost = this.fees(this.totalcost);
       this.showConfirm = true;
     },
     quickTrade() {
+     
+      this.stockprice = this.stock_last;
       this.quickTradeSelected = true;
       let getlocal = localStorage.getItem("QT_" + this.portvalue);
       getlocal = JSON.parse(getlocal);
@@ -1038,14 +1051,14 @@ export default {
         this.alloc = getlocal.perc;
         this.equity = this.unrealized + this.realized + this.capital;
         let totalperc = (this.equity / 100) * parseFloat(this.alloc);
-        let bdlot = this.getBoardLot(this.stock_last);
+        let bdlot = this.getBoardLot(this.stockprice);
 
-        this.shares = totalperc / parseFloat(this.stock_last);
+        this.shares = totalperc / parseFloat(this.stockprice);
         let sbuy = this.shares % bdlot;
         this.stobuy = parseFloat(this.shares) - parseFloat(sbuy);
 
         this.quantity = this.stobuy;
-        this.totalcost = this.stobuy * parseFloat(this.stock_last);
+        this.totalcost = this.stobuy * parseFloat(this.stockprice);
         this.totalcost = this.fees(this.totalcost);
         this.showConfirm = true;
         
@@ -1053,14 +1066,14 @@ export default {
         this.alloc = 10;
         this.equity = this.unrealized + this.realized + this.capital;
         let totalperc = (this.equity / 100) * 10;
-        let bdlot = this.getBoardLot(this.stock_last);
+        let bdlot = this.getBoardLot(this.stockprice);
 
-        this.shares = totalperc / parseFloat(this.stock_last);
+        this.shares = totalperc / parseFloat(this.stockprice);
         let sbuy = this.shares % bdlot;
         this.stobuy = parseFloat(this.shares) - parseFloat(sbuy);
 
         this.quantity = this.stobuy;
-        this.totalcost = this.stobuy * parseFloat(this.stock_last);
+        this.totalcost = this.stobuy * parseFloat(this.stockprice);
         this.totalcost = this.fees(this.totalcost);
         this.showConfirm = true;
       }
