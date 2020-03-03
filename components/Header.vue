@@ -162,7 +162,9 @@ export default {
       };
       this.$api.chart.stocks.list(params).then(
         function(result) {
-          this.setStockList(result);
+          if (result.success) {
+            this.setStockList(result);
+          }
         }.bind(this)
       );
     }
