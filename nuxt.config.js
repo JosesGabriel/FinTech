@@ -102,7 +102,8 @@ export default {
     "@nuxtjs/google-adsense",
     "@nuxtjs/google-gtag",
     "@nuxtjs/device",
-    "@nuxtjs/recaptcha"
+    "@nuxtjs/recaptcha",
+    "nuxt-facebook-pixel-module"
   ],
 
   axios: {
