@@ -111,6 +111,35 @@ export default {
           },
           axisBorder: {
             show: false
+          },
+          crosshairs: {
+            show: true,
+            width: 1,
+            position: "back",
+            opacity: 0.9,
+            stroke: {
+              color: "#b6b6b6",
+              width: 0,
+              dashArray: 0
+            },
+            fill: {
+              type: "solid",
+              color: "#B1B9C4",
+              gradient: {
+                colorFrom: "#D8E3F0",
+                colorTo: "#BED1E6",
+                stops: [0, 100],
+                opacityFrom: 0.4,
+                opacityTo: 0.5
+              }
+            },
+            dropShadow: {
+              enabled: false,
+              top: 0,
+              left: 0,
+              blur: 1,
+              opacity: 0.4
+            }
           }
         },
         yaxis: {
@@ -135,6 +164,9 @@ export default {
             show: false
           },
           axisBorder: {
+            show: false
+          },
+          crosshairs: {
             show: false
           }
         },

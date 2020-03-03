@@ -1,52 +1,65 @@
 <template>
-  <v-col ref="componentWrapper" class="pa-0 pl-10" cols="5" sm="5" md="5">
+  <v-col class="pa-0 pl-5" cols="5" sm="5" md="5">
     <!-- Don't remove ref value. Used for sharing -->
-    <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-      <span
-        class="font-weight-bold subtitle-2"
-        :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
-      >TRADE STATISTICS</span>
-      <v-spacer></v-spacer>
-      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon small color="tertiary">mdi-share-variant</v-icon>
-      </v-btn>
-    </v-card-title>
-    <v-row no-gutters>
-      <v-col class="pa-0 pt-5" cols="12">
-        <div class="small">
-          <client-only>
-            <apexcharts type="donut" height="245" :options="chartOptions" :series="series" />
-          </client-only>
-        </div>
-      </v-col>
-      <v-col class="pa-0" cols="12">
-        <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
-          <template v-slot:default>
-            <tbody>
-              <tr class="caption">
-                <td class="px-1 py-1">
-                  <v-icon class="pr-1 caption" color="success">mdi-circle</v-icon>Win
-                </td>
-                <td class="px-1 py-1 pr-8">{{ win }}</td>
+    <div ref="componentWrapper">
+      <v-card
+        flat
+        tile
+        :class="toggleSpace ? 'pa-2' : ''"
+        :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'"
+      >
+        <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+          <span
+            class="font-weight-bold subtitle-2"
+            :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+          >TRADE STATISTICS</span>
+          <v-spacer></v-spacer>
+          <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+            <v-icon small color="tertiary">mdi-share-variant</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-row no-gutters>
+          <v-col class="pa-0 pt-5" cols="12">
+            <div class="small tradestatsChart__container">
+              <client-only>
+                <apexcharts type="donut" width="90%" :options="chartOptions" :series="series" />
+              </client-only>
+            </div>
+          </v-col>
+          <v-col class="pa-0" cols="12">
+            <v-simple-table id="liveportfolio-table" :dense="true" :dark="lightSwitch == true">
+              <template v-slot:default>
+                <tbody>
+                  <tr class="caption">
+                    <td class="px-1 py-1">
+                      <v-icon class="pr-1 caption" color="success">mdi-circle</v-icon>Win
+                    </td>
+                    <td class="px-1 py-1 pr-8">{{ win }}</td>
 
-                <td class="px-1 py-1 pl-8">
-                  <v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Loss
-                </td>
-                <td class="px-1 py-1">{{ loss }}</td>
-              </tr>
-              <tr class="caption">
-                <td class="pa-1 font-weight-bold">Total Trades</td>
-                <td class="pa-1 pr-8">{{ winlossresult }}</td>
+                    <td class="px-1 py-1 pl-8">
+                      <v-icon class="pr-1 caption" color="#F44336">mdi-circle</v-icon>Loss
+                    </td>
+                    <td class="px-1 py-1">{{ loss }}</td>
+                  </tr>
+                  <tr class="caption">
+                    <td class="pa-1 font-weight-bold">Total Trades</td>
+                    <td class="pa-1 pr-8">{{ winlossresult }}</td>
 
-                <td class="pa-1 font-weight-bold pl-8">Win Rate</td>
-                <td class="pa-1">{{ winrateresult }}%</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-col>
-    </v-row>
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
+                    <td class="pa-1 font-weight-bold pl-8">Win Rate</td>
+                    <td class="pa-1">{{ winrateresult }}%</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-col>
+        </v-row>
+        <share-modal
+          v-if="showShareForm"
+          :imageid="shareLink"
+          @closeModal="showShareForm = false, toggleSpace = false"
+        />
+      </v-card>
+    </div>
   </v-col>
 </template>
 
@@ -111,6 +124,7 @@ export default {
       shareLink: "",
       showShareForm: false,
       showScheduleForm: false,
+      toggleSpace: false,
       tradeStaticsArr: null,
       journalchart: [],
       win: 0,
@@ -172,6 +186,11 @@ export default {
             donut: {
               size: "55%"
             }
+          }
+        },
+        yaxis: {
+          crosshairs: {
+            show: false
           }
         },
         tooltip: {
@@ -240,6 +259,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"
@@ -291,5 +311,10 @@ export default {
 }
 .item_position-prop {
   color: #b6b6b6;
+}
+</style>
+<style>
+.tradestatsChart__container .apexcharts-canvas {
+  margin: 0 auto;
 }
 </style>

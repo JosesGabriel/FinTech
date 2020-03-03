@@ -1,29 +1,43 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0" cols="7" sm="7" md="7">
     <!-- Don't remove ref value. Used for sharing -->
-    <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
-      <span class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }">MONTHLY PERFORMANCE</span>
-      <v-spacer></v-spacer>
-      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon small color="tertiary">mdi-share-variant</v-icon>
-      </v-btn>
-    </v-card-title>
-    <v-col class="pa-0" cols="12" sm="12" md="12">
-      <div id="chart">
-        <client-only>
-          <apexcharts
-            ref="monthlyPerformance"
-            type="bar"
-            class="monthlyperf_chart"
-            height="300"
-            width="90%"
-            :options="chartOptions"
-            :series="series"
-          />
-        </client-only>
-      </div>
-    </v-col>
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
+    <v-card
+      flat
+      tile
+      :class="toggleSpace ? 'pa-5' : ''"
+      :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'"
+    >
+      <v-card-title class="text-left justify-left px-0 pb-2 pt-0" :style="borderColor">
+        <span
+          class="font-weight-bold subtitle-2"
+          :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+        >MONTHLY PERFORMANCE</span>
+        <v-spacer></v-spacer>
+        <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+          <v-icon small color="tertiary">mdi-share-variant</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-col class="pa-0" cols="12" sm="12" md="12">
+        <div id="chart">
+          <client-only>
+            <apexcharts
+              ref="monthlyPerformance"
+              type="bar"
+              class="monthlyperf_chart"
+              height="300"
+              width="95%"
+              :options="chartOptions"
+              :series="series"
+            />
+          </client-only>
+        </div>
+      </v-col>
+      <share-modal
+        v-if="showShareForm"
+        :imageid="shareLink"
+        @closeModal="showShareForm = false, toggleSpace = false"
+      />
+    </v-card>
   </v-col>
 </template>
 <script>
@@ -67,6 +81,7 @@ export default {
       shareLink: "",
       showShareForm: false,
       showScheduleForm: false,
+      toggleSpace: false,
       monthlyPerformance: null,
       series: [
         {
@@ -192,11 +207,14 @@ export default {
               cssClass: "apexcharts-yaxis-label"
             },
             formatter: function(value) {
-              let val = numeral(value).format("0.00a")
+              let val = numeral(value).format("0.00a");
               return val;
             }
           },
           lines: {
+            show: false
+          },
+          crosshairs: {
             show: false
           }
         },
@@ -267,6 +285,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"
@@ -275,7 +294,7 @@ export default {
       this.showShareForm = true;
     },
     /**
-     * getMPerformance will work on ploting/updating chart series 
+     * getMPerformance will work on ploting/updating chart series
      *
      * @return  {array}  data to update chart
      */

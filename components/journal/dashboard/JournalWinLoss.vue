@@ -106,6 +106,11 @@ export default {
             }
           }
         },
+        yaxis: {
+          crosshairs: {
+            show: false
+          }
+        },
         tooltip: {
           enabled: true,
           enabledOnSeries: undefined,

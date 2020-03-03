@@ -61,7 +61,7 @@
           class="shareModal__button--close"
           icon
           color="success"
-          @click.stop="closeEmit, (show = false)"
+          @click.stop="closeEmit"
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
@@ -161,6 +161,7 @@ export default {
      */
     closeEmit() {
       this.$emit("closeModal");
+      this.show = false
     },
     /**
      * share to facebook
