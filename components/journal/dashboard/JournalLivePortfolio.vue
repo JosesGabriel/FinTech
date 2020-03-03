@@ -1,6 +1,11 @@
 <template>
   <v-col ref="componentWrapper" class="pa-0">
-    <v-card flat tile :class="toggleSpace ? 'pa-5' : ''" :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'">
+    <v-card
+      flat
+      tile
+      :class="toggleSpace ? 'pa-5' : ''"
+      :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'"
+    >
       <!-- Don't remove ref value. Used for sharing -->
       <v-card-title class="text-left justify-left px-0 py-3 pt-5">
         <span
@@ -443,8 +448,6 @@ export default {
      * @return  {[array]} returned array
      */
     getOpenPositions() {
-      this.totalProfitLoss = 0;
-      this.totalProfitLossPerf = 0;
       let filteredStocks = null;
       this.stockSym = [];
 
@@ -456,6 +459,8 @@ export default {
           this.portfolioLogs = result.data.open;
           this.setOpenPosition(this.portfolioLogs);
 
+          this.totalProfitLoss = 0;
+          this.totalProfitLossPerf = 0;
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].fund = this.defaultPortfolioId;
             this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
