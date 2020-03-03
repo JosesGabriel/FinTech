@@ -1,27 +1,43 @@
 <template>
   <v-container class="pa-0" ref="componentWrapper">
-    <!-- Don't remove ref value. Used for sharing -->
-    <v-col class="pa-0" cols="12">
-      <v-card-title class="text-left justify-left mr-3 px-0 pb-2 pt-0" :style="borderColor">
-        <span class="font-weight-bold subtitle-2" :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }">PERFORMANCE</span>
-        <v-spacer></v-spacer>
-        <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-          <v-icon small color="tertiary">mdi-share-variant</v-icon>
-        </v-btn>
-      </v-card-title>
-    </v-col>
-    <div id="chart" class="pt-3">
-      <client-only>
-        <apexcharts
-          ref="Performance"
-          type="bar"
-          height="300"
-          :options="chartOptions"
-          :series="series"
-        />
-      </client-only>
-    </div>
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
+    <v-card
+      flat
+      tile
+      :dark="lightSwitch == 1"
+      :class="toggleSpace ? 'px-3 pt-2' : ''"
+      :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'"
+    >
+      <!-- Don't remove ref value. Used for sharing -->
+      <v-col class="pa-0" cols="12">
+        <v-card-title class="text-left justify-left mr-3 px-0 pb-2 pt-0" :style="borderColor">
+          <span
+            class="font-weight-bold subtitle-2"
+            :style="{ color: this.lightSwitch == 0 ? 'black' : 'white' }"
+          >PERFORMANCE</span>
+          <v-spacer></v-spacer>
+          <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+            <v-icon small color="tertiary">mdi-share-variant</v-icon>
+          </v-btn>
+        </v-card-title>
+      </v-col>
+      <div id="chart" class="pt-3">
+        <client-only>
+          <apexcharts
+            ref="Performance"
+            type="bar"
+            height="300"
+            width="95%"
+            :options="chartOptions"
+            :series="series"
+          />
+        </client-only>
+      </div>
+      <share-modal
+        v-if="showShareForm"
+        :imageid="shareLink"
+        @closeModal="showShareForm = false, toggleSpace = false"
+      />
+    </v-card>
   </v-container>
 </template>
 
@@ -29,7 +45,7 @@
 import shareModal from "~/components/modals/Share";
 
 import { mapGetters } from "vuex";
-let numeral = require("numeral")
+let numeral = require("numeral");
 
 export default {
   components: {
@@ -58,6 +74,7 @@ export default {
       shareLink: "",
       showShareForm: false,
       showScheduleForm: false,
+      toggleSpace: false,
       performanceArray: [],
       series: [
         {
@@ -163,6 +180,9 @@ export default {
           },
           lines: {
             show: false
+          },
+          crosshairs: {
+            show: false
           }
         },
         legend: {
@@ -237,6 +257,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"
@@ -260,9 +281,8 @@ export default {
         });
 
         for (let i = 0; i < performanceArray.length; i++) {
-          if(performanceArray[i].value == 0) {
-
-            performanceArray[i].value = null
+          if (performanceArray[i].value == 0) {
+            performanceArray[i].value = null;
           }
           lastArray.unshift(performanceArray[i].value);
         }

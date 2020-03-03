@@ -154,6 +154,9 @@ export default {
           },
           axisBorder: {
             show: false
+          },
+          crosshairs: {
+            show: false
           }
         },
         tooltip: {

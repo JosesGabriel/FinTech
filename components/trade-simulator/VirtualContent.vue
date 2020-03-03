@@ -108,7 +108,7 @@
         :href="`#tab-1`"
         :dark="lightSwitch == true"
         :style="{ color: toggleFontColor }" 
-      >Live Portfolio</v-tab>
+      >Positions</v-tab>
       <v-tab
         class="tab_menu-top text-capitalize"
         :href="`#tab-2`"  

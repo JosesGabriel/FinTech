@@ -1,146 +1,157 @@
 <template>
   <v-col class="pa-0" ref="componentWrapper">
-    <!-- Don't remove ref value. Used for sharing -->
-    <v-card-title class="text-left justify-center align-center px-0 py-3 pt-5">
-      <v-col class="pa-0 pr-3 mr-n10" cols="12" sm="4" md="4">
-        <v-text-field
-          v-model="search"
-          prepend-inner-icon="mdi-magnify"
-          label="Search"
-          outlined
-          dense
-          hide-details
-          :dark="lightSwitch == true"
-          color="success"
-          class="tl_searchfields"
-        ></v-text-field>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        @click="filterDate('all')"
-        class="body-2 text-capitalize"
-        elevation="0"
-      >All</v-btn>
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        @click="filterDate('day')"
-        class="body-2 text-capitalize"
-        elevation="0"
-      >Day</v-btn>
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        @click="filterDate('week')"
-        class="body-2 text-capitalize"
-        elevation="0"
-      >Week</v-btn>
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        @click="filterDate('month')"
-        class="body-2 text-capitalize"
-        elevation="0"
-      >Month</v-btn>
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        @click="filterDate('year')"
-        class="body-2 text-capitalize"
-        elevation="0"
-      >Year</v-btn>
-      <v-btn
-        small
-        dark
-        text
-        color="success"
-        @click.stop="showCustomDate=true"
-        class="body-2 text-capitalize"
-        elevation="0"
-      >Custom</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
-        <v-icon small color="tertiary">mdi-share-variant</v-icon>
-      </v-btn>
-    </v-card-title>
-    <v-data-table
-      :headers="headers"
-      :search="search"
-      :items="ledgerContent"
-      :page.sync="page"
-      :items-per-page="itemsPerPage"
-      hide-default-footer
-      @page-count="pageCount = $event"
-      :dark="lightSwitch == true"
-      :loading="liveLedgerLoading"
-      loading-text="Loading..."
-      class="data_table-container pl-10 secondary--text"
+    <v-card
+      flat
+      tile
+      :class="toggleSpace ? 'pa-5' : ''"
+      :color="lightSwitch == 1 ? 'darkcard' : 'lightcard'"
     >
-      <template v-slot:item.count="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.count }}</span>
-      </template>
-      <template v-slot:item.created_at="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ localFormat(item.created_at, "fs") }}</span>
-      </template>
-      <template v-slot:item.action="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.action }}</span>
-      </template>
-      <template v-slot:item.debit="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.debit }}</span>
-      </template>
-      <template v-slot:item.credit="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.credit }}</span>
-      </template>
-      <template v-slot:item.balance="{ item }">
-        <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.balance | numeral("0,0.00") }}</span>
-      </template>
-      <template slot="footer">
-        <v-row no-gutters class="mt-3">
-          <v-spacer></v-spacer>
-          <span
-            style="width: 190px"
-            class="text-right subtitle-2"
-            :style="{ color: fontcolor2 }"
-          >Total Funds:</span>
-          <span
-            style="width: 190px"
-            class="text-right subtitle-2"
-            :class="(totalDebit < 0 ? 'negative' : 'positive')"
-          >{{ totalDebit | numeral("0,0.00") }}</span>
-          <span
-            style="width: 190px"
-            class="text-right subtitle-2"
-            :class="(totalCredit < 0 ? 'negative' : 'positive')"
-          >{{ totalCredit | numeral("0,0.00") }}</span>
-          <span style="width: 190px;" class="text-right subtitle-2"></span>
-        </v-row>
-      </template>
-    </v-data-table>
-    <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
-      <v-card color="transparent" elevation="0">
-        <v-pagination
-          class="d-flex flex-end lp_data_table-pagination"
-          color="transparent"
+      <!-- Don't remove ref value. Used for sharing -->
+      <v-card-title class="text-left justify-center align-center px-0 py-3 pt-5">
+        <v-col class="pa-0 pr-3 mr-n10" cols="12" sm="4" md="4">
+          <v-text-field
+            v-model="search"
+            prepend-inner-icon="mdi-magnify"
+            label="Search"
+            outlined
+            dense
+            hide-details
+            :dark="lightSwitch == true"
+            color="success"
+            class="tl_searchfields"
+          ></v-text-field>
+        </v-col>
+        <v-spacer></v-spacer>
+        <v-btn
+          small
           dark
-          v-model="page"
-          :length="pageCount"
-        ></v-pagination>
+          text
+          color="success"
+          @click="filterDate('all')"
+          class="body-2 text-capitalize"
+          elevation="0"
+        >All</v-btn>
+        <v-btn
+          small
+          dark
+          text
+          color="success"
+          @click="filterDate('day')"
+          class="body-2 text-capitalize"
+          elevation="0"
+        >Day</v-btn>
+        <v-btn
+          small
+          dark
+          text
+          color="success"
+          @click="filterDate('week')"
+          class="body-2 text-capitalize"
+          elevation="0"
+        >Week</v-btn>
+        <v-btn
+          small
+          dark
+          text
+          color="success"
+          @click="filterDate('month')"
+          class="body-2 text-capitalize"
+          elevation="0"
+        >Month</v-btn>
+        <v-btn
+          small
+          dark
+          text
+          color="success"
+          @click="filterDate('year')"
+          class="body-2 text-capitalize"
+          elevation="0"
+        >Year</v-btn>
+        <v-btn
+          small
+          dark
+          text
+          color="success"
+          @click.stop="showCustomDate=true"
+          class="body-2 text-capitalize"
+          elevation="0"
+        >Custom</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn icon small @click="showShareModal()" :dark="lightSwitch == 0 ? false : true">
+          <v-icon small color="tertiary">mdi-share-variant</v-icon>
+        </v-btn>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :search="search"
+        :items="ledgerContent"
+        :page.sync="page"
+        :items-per-page="itemsPerPage"
+        hide-default-footer
+        @page-count="pageCount = $event"
+        :dark="lightSwitch == true"
+        :loading="liveLedgerLoading"
+        loading-text="Loading..."
+        class="data_table-container pl-10 secondary--text"
+      >
+        <template v-slot:item.count="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.count }}</span>
+        </template>
+        <template v-slot:item.created_at="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ localFormat(item.created_at, "fs") }}</span>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.action }}</span>
+        </template>
+        <template v-slot:item.debit="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.debit }}</span>
+        </template>
+        <template v-slot:item.credit="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.credit }}</span>
+        </template>
+        <template v-slot:item.balance="{ item }">
+          <span class="pl-2" :style="{ color: fontcolor2 }">{{ item.balance | numeral("0,0.00") }}</span>
+        </template>
+        <template slot="footer">
+          <v-row no-gutters class="mt-3">
+            <v-spacer></v-spacer>
+            <span
+              style="width: 190px"
+              class="text-right caption"
+              :style="{ color: fontcolor2 }"
+            >Total Funds:</span>
+            <span
+              style="width: 190px"
+              class="text-right caption"
+              :class="(totalDebit < 0 ? 'negative' : 'positive')"
+            >{{ totalDebit | numeral("0,0.00") }}</span>
+            <span
+              style="width: 190px"
+              class="text-right caption"
+              :class="(totalCredit < 0 ? 'negative' : 'positive')"
+            >{{ totalCredit | numeral("0,0.00") }}</span>
+            <span style="width: 190px;" class="text-right subtitle-2"></span>
+          </v-row>
+        </template>
+      </v-data-table>
+      <v-card class="d-flex flex-row-reverse" color="transparent" elevation="0">
+        <v-card color="transparent" elevation="0">
+          <v-pagination
+            class="d-flex flex-end lp_data_table-pagination"
+            color="transparent"
+            dark
+            v-model="page"
+            :length="pageCount"
+          ></v-pagination>
+        </v-card>
       </v-card>
+      <share-modal
+        v-if="showShareForm"
+        :imageid="shareLink"
+        @closeModal="showShareForm = false, toggleSpace = false"
+      />
+      <custom-date :visible="showCustomDate" @clicked="filterDate" @close="showCustomDate=false" />
     </v-card>
-    <share-modal v-if="showShareForm" :imageid="shareLink" @closeModal="showShareForm = false" />
-    <custom-date :visible="showCustomDate" @clicked="filterDate" @close="showCustomDate=false" />
   </v-col>
 </template>
 <script>
@@ -162,6 +173,7 @@ export default {
       showCustomDate: false,
       liveLedgerLoading: "success",
       showScheduleForm: false,
+      toggleSpace: false,
       itemsPerPage: 10,
       search: "",
       headers: [
@@ -243,6 +255,7 @@ export default {
      * @return  {image}  get captured components as canvas
      */
     async showShareModal() {
+      this.toggleSpace = true;
       const el = this.$refs.componentWrapper;
       const options = {
         type: "dataURL"
@@ -328,7 +341,11 @@ export default {
       this.debit = 0;
       this.count = 0;
       this.$api.journal.portfolio.ledger(ledgerparams).then(response => {
-        this.ledgerContent = response.data.ledger;
+        const arr = response.data.ledger;
+
+        this.ledgerContent = arr.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
         for (let i = 0; i < this.ledgerContent.length; i++) {
           this.ledgerContent[i].created_at = this.ledgerContent[
             i
@@ -354,7 +371,7 @@ export default {
               ...Depositdebit,
               ...this.ledgerContent[i]
             };
-            this.ledgerContent[i].action = "Deposit Income";
+            this.ledgerContent[i].action = "Fresh Funds";
           } else if (this.ledgerContent[i].action == "inital_balance") {
             let Depositdebit = {
               debit: "-",
@@ -393,7 +410,7 @@ export default {
               credit: "-"
             };
             this.ledgerContent[i] = { ...debit, ...this.ledgerContent[i] };
-            this.ledgerContent[i].action = "Withdraw";
+            this.ledgerContent[i].action = "Withdrawal";
           }
 
           this.ledgerContent[i].count = this.count =
@@ -418,10 +435,8 @@ export default {
               parseFloat(this.ledgerContent[i].credit.replace(/,/g, ""));
           }
         }
-        const arr = this.ledgerContent.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 
-        this.ledgerContent = arr;
-        this.ledgerContentBackup = arr;
+        this.ledgerContentBackup = this.ledgerContent;
 
         this.liveLedgerLoading = false;
       });

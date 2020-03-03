@@ -18,7 +18,8 @@
         <span
           :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
           class="caption py-1 stockSymbol_text"
-          v-for="(item, index) in lastSymbolArray" :key="index"
+          v-for="(item, index) in lastSymbolArray"
+          :key="index"
         >{{ item }}</span>
       </v-col>
     </v-row>
@@ -135,6 +136,9 @@ export default {
             show: false
           },
           axisBorder: {
+            show: false
+          },
+          crosshairs: {
             show: false
           }
         },
