@@ -181,8 +181,11 @@ export default {
       try {
         const response = await this.$api.watchlist.watchlists.index();
         const data = response.data.watchlist;
-        data.forEach(data => {
-          //console.table(data);
+        data.forEach(async data => {
+          const history = await this.$api.chart.stocks.history({
+            "symbol-id": data.stock_id
+          });
+
           const symbol = data.market_code.split(":");
           this.items.push({
             id: data.id,
@@ -190,9 +193,9 @@ export default {
             symbol: symbol.pop(),
             description: data.description,
             market_code: data.market_code,
-            last: data.last,
-            changepercentage: data.change_percentage,
-            change: data.change,
+            last: history.data.last,
+            changepercentage: history.data.changepercentage,
+            change: history.data.change,
             color: false
           });
         });
