@@ -11,7 +11,6 @@
         <v-row no-gutters>
           <v-spacer></v-spacer>
           <v-btn
-            color="secondary"
             class="text-capitalize mt-2"
             depressed
             text
