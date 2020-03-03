@@ -325,7 +325,6 @@ export default {
       counter: 0,
 
       totalProfitLoss: 0,
-      totalProfitLossPerf: 0,
       date: new Date().toISOString().substr(0, 10)
     };
   },
@@ -454,22 +453,19 @@ export default {
       const openparams = {
         fund: this.defaultPortfolioId
       };
+      this.totalProfitCarrier = 0
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
           this.portfolioLogs = result.data.open;
           this.setOpenPosition(this.portfolioLogs);
 
           this.totalProfitLoss = 0;
-          this.totalProfitLossPerf = 0;
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].fund = this.defaultPortfolioId;
             this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
-            this.totalProfitLoss =
-              this.totalProfitLoss +
+            this.totalProfitLoss = this.totalProfitCarrier =
+              this.totalProfitCarrier +
               parseFloat(this.portfolioLogs[i].profit_loss);
-            this.totalProfitLossPerf =
-              this.totalProfitLossPerf +
-              parseFloat(this.portfolioLogs[i].pl_percentage);
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             this.portfolioLogs[i] = {
               ...this.portfolioLogs[i],
@@ -505,8 +501,6 @@ export default {
         `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${sseToken}`
       );
 
-      this.sse.onopen = function() {};
-      this.sse.onerror = function(err) {};
       this.sse.addEventListener("trade", function(e) {
         const data = JSON.parse(e.data);
         for (let i = 0; i < that.stockSym.length; i++) {

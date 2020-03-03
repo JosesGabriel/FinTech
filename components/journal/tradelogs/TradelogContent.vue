@@ -281,8 +281,7 @@ export default {
 
       selectedProfile: null,
       date: new Date().toISOString().substr(0, 10),
-      totalProfitLoss: 0,
-      totalProfitLossPerf: 0
+      totalProfitLoss: 0
     };
   },
   mounted() {
@@ -470,12 +469,12 @@ export default {
       const tradelogsparams = {
         fund: this.defaultPortfolioId
       };
+      this.totalProfitCarrier = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
           this.tradeLogs = result.data.logs;
 
           this.totalProfitLoss = 0;
-          this.totalProfitLossPerf = 0;
           for (let i = 0; i < this.tradeLogs.length; i++) {
             let buyvalueResult =
               this.tradeLogs[i].meta.average_price * this.tradeLogs[i].amount;
@@ -493,11 +492,9 @@ export default {
               (this.tradeLogs[i].profit_loss / this.tradeLogs[i].buy_value) *
               100;
 
-            this.totalProfitLoss =
-              this.totalProfitLoss + parseFloat(this.tradeLogs[i].profit_loss);
-            this.totalProfitLossPerf =
-              this.totalProfitLossPerf +
-              parseFloat(this.tradeLogs[i].profit_loss_percentage);
+            this.totalProfitLoss = this.totalProfitCarrier =
+              this.totalProfitCarrier +
+              parseFloat(this.tradeLogs[i].profit_loss);
           }
 
           const arr = this.tradeLogs.sort(
