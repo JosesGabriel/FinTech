@@ -358,22 +358,6 @@ export default {
 };
 </script>
 <style>
-/* .apexcharts-xcrosshairs {
-  stroke-dasharray: 0 !important;
-  stroke: #002532 !important;
-  fill: unset !important;
-}
-.apexcharts-ycrosshairs {
-  stroke: unset !important;
-  fill: unset !important;
-}
-.apexcharts-ycrosshairs-hidden,
-.apexcharts-ycrosshairs,
-.apexcharts-grid,
-.apexcharts-xaxis-annotations,
-.apexcharts-point-annotations {
-  display: none !important;
-} */
 .apexcharts-reset-zoom-icon {
   margin: 0;
 }
