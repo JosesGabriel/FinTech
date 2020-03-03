@@ -102,9 +102,12 @@ export default {
     "@nuxtjs/google-adsense",
     "@nuxtjs/google-gtag",
     "@nuxtjs/device",
-    "@nuxtjs/recaptcha",
-    "nuxt-facebook-pixel-module"
+    "@nuxtjs/recaptcha"
   ],
+
+  axios: {
+    credentials: true
+  },
 
   recaptcha: {
     siteKey: "6LdqntoUAAAAALeybpc0UomTwklnJvS8d6q86dkO", // Site key for requests

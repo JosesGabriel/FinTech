@@ -86,7 +86,7 @@ export default {
         "narrow_chart_enabled",
         "keep_left_toolbar_visible_on_small_screens",
         "side_toolbar_in_fullscreen_mode",
-        "study_templates",
+        "study_templates"
       ],
       type: Array
     },
