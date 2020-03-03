@@ -41,6 +41,7 @@ export default function({ $axios, $auth, redirect }) {
   $axios.setGlobalAuth = () => {
     $axios.defaults.headers.common["Authorization"] =
       localStorage["auth._token.local"];
+    $axios.defaults.withCredentials = true;
   };
 
   // $axios.defaults.withCredentials = true;
