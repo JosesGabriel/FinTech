@@ -208,7 +208,7 @@ export default {
           error: "#F44336",
           success: "#03DAC5",
           tertiary: "#B6B6B6",
-          darkcard: "#00121e",
+          darkcard: "#0c1a2b",
           lightcard: "#f2f2f2",
           darkchart: "#00121e",
           lightchart: "#f2f2f2",
@@ -230,7 +230,7 @@ export default {
               tertiary: "#B6B6B6",
               darkoutline: "#1f2f39",
               lightoutline: "#DADADA",
-              darkcard: "#00121e",
+              darkcard: "#0c1a2b",
               lightcard: "#f2f2f2",
               darkchart: "#00121e",
               lightchart: "#f2f2f2"
