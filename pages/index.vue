@@ -18,10 +18,10 @@
         sm="3"
         md="3"
       >
-        <TrendingStocks />
+        <!-- <TrendingStocks /> -->
         <WhoToMingle />
         <div class="stickySidebar">
-          <MiniWatoachlist />
+          <!-- <MiniWatchlist /> -->
           <FooterSidebar />
         </div>
         <!-- TODO put back when implementing -->

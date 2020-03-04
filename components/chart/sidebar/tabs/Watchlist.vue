@@ -68,7 +68,9 @@
             }}</span>
           </div>
           <div class="top__right pr-2">
-            <span class="">{{ item.last | numberDecimal }}</span>
+            <span class="">{{
+              item.last | stockDecimalPriceScale(item.pricescale)
+            }}</span>
           </div>
         </div>
         <div class="watchlist__bottom">
@@ -185,7 +187,6 @@ export default {
           const history = await this.$api.chart.stocks.history({
             "symbol-id": data.stock_id
           });
-
           const symbol = data.market_code.split(":");
           this.items.push({
             id: data.id,
@@ -196,6 +197,7 @@ export default {
             last: history.data.last,
             changepercentage: history.data.changepercentage,
             change: history.data.change,
+            pricescale: history.data.pricescale,
             color: false
           });
         });
@@ -223,9 +225,11 @@ export default {
           sym_id: stock.sym_id,
           symbol: stock.symbol,
           description: stock.description,
+          market_code: stock.market_code,
           last: data.c,
           changepercentage: data.chgpc,
           change: data.chg,
+          pricescale: stock.pricescale,
           color: true
         });
         this.updateEffect(stock.id);
