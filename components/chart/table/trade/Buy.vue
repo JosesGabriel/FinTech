@@ -672,7 +672,7 @@ export default {
      * get latest Board Lot
      */
     stock_last() {
-      this.getBoardLot(this.stock_last);      
+      this.getBoardLot(this.stock_last); 
     },
     selectedButton(value) {
       this.quickConfirmV2();
@@ -680,7 +680,9 @@ export default {
   },
   mounted() {
     this.getPorfolio();
+    this.stockprice = this.stock_last;
     this.getBoardLot(this.stock_last);
+
   },
   methods: {
     ...mapActions({
@@ -842,6 +844,7 @@ export default {
       };
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
+          //console.log('Realizzed ',result);
           for (let i = 0; i < result.data.open.length; i++) {
             this.unrealized =
               parseFloat(this.unrealized) +
@@ -872,14 +875,7 @@ export default {
      *
      */
     confirmBuy() {
-
-      this.stockprice = this.stock_last;
-      let n = this.stockprice;
-      if(typeof(this.stockprice) == 'string'){
-        if(n.indexOf(']') >= 0){
-          this.stockprice = this.stockprice.replace(/^\[|\]$/g, '');
-        }
-      }
+      
       const stock_id = this.symbolid;
       let fund_id = this.portvalue;
       let d = new Date();
@@ -887,6 +883,13 @@ export default {
         this.BuyDate +
         " " +
         [d.getHours(), d.getMinutes(), d.getSeconds()].join(":");
+
+      this.stockprice = this.stock_last;
+      let n = this.stockprice;
+      if(typeof(this.stock_last) == 'object'){
+        this.stockprice = this.stock_last[0];
+      }
+
       const buyparams = {
         position: this.quantity,
         stock_price: this.stockprice,
@@ -897,7 +900,7 @@ export default {
           notes: this.notes,
           date: bdate
         }
-      };
+      }; 
      this.$api.journal.portfolio
         .tradebuy(fund_id, stock_id, buyparams)
         .then(response => {
