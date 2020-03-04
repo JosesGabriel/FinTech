@@ -500,7 +500,6 @@ export default {
       this.sse = new EventSource(
         `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${sseToken}`
       );
-
       this.sse.addEventListener("trade", function(e) {
         const data = JSON.parse(e.data);
         for (let i = 0; i < that.stockSym.length; i++) {
