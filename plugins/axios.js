@@ -56,7 +56,6 @@ export default function({ $axios, $auth, redirect }) {
    * Set error callback
    */
   $axios.onError(error => {
-    // TODO handle global errors
     const code = parseInt(error.response && error.response.status);
     if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
       $auth.logout();
