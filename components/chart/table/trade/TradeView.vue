@@ -170,6 +170,39 @@ export default {
         const [year, month, day] = date.split('-')
         return `${month}/${day}/${year}`
       },
+    createDefault(){
+         this.$api.journal.portfolio.portfolio().then(
+          function(result) {
+                let defaultExist = false;
+              for (let i = 0; i < result.data.logs.length; i++) {
+                if (result.data.logs[i].name == "My Virtual Portfolio") {
+                  defaultExist = true;
+                }
+              }
+              if(!defaultExist){
+                  const createportfolioparams = {
+                        currency_code: "PHP",
+                        name: "My Virtual Portfolio",
+                        description: "My Virtual Portfolio",
+                        type: "virtual",
+                        balance: 100000
+                      };
+                  this.$api.journal.portfolio
+                  .createportfolio(createportfolioparams)
+                  .then(
+                    function(result) {
+                      if (result.success) {
+                      }
+                    }.bind(this)
+                  );
+              }
+           }.bind(this)
+        );
+    }
+
+  },
+  mounted() {
+      this.createDefault();
   },
    components: {
       BuyTab,
