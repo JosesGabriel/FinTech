@@ -20,7 +20,7 @@
         sm="3"
         md="3"
       >
-        <TrendingStocks />
+        <!-- <TrendingStocks /> -->
         <WhoToMingle />
         <div class="stickySidebar">
           <MiniWatchlist />
