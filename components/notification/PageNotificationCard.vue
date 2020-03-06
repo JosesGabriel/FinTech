@@ -131,6 +131,10 @@ export default {
 
           } else if(this.meta.user && this.meta.stock){
             window.location = "/watchlist";
+
+          } else if (this.meta.post && this.meta.user && this.meta.comment && this.meta.sentiment){
+            window.location = "/post/" + this.meta.post.id;
+            
           }
         }
       });
