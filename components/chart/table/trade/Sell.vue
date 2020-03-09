@@ -75,8 +75,9 @@
     <v-col class="col-3 pa-0 ma-0">
       <v-content class="pa-0 ma-0 pt-8 px-4">
         <v-text-field
+          v-model="stock_last"
           :dark="lightSwitch == true"
-          :value="this.stock_last"
+          :value="stock_last"
           readonly
           dense
           color="success"
@@ -160,7 +161,7 @@
               Sell Price
             </v-col>
             <v-col class="mr-12 font-weight-bold" style="text-align: right;">
-              {{ this.stock_last }}
+              {{ stock_last }}
             </v-col>
           </v-row>
           <v-row>
@@ -367,7 +368,7 @@ export default {
   watch: {
     symbolid() {
       this.getPorfolio();
-    }
+    },
   },
   methods: {
     ...mapActions({
@@ -513,6 +514,7 @@ export default {
     getPorfolio() {
       this.portfolio = [];
       this.getBalance = [];
+
       this.$api.journal.portfolio.portfolio().then(
         function(result) {
           let defaultPort = false;
@@ -544,6 +546,8 @@ export default {
                         avprice: response.data.open[index].average_price,
                         capital: result.data.logs[i].capital
                       };
+                      this.avprice = response.data.open[index].average_price;
+                      this.portvalue = result.data.logs[i].id;
                       this.getBalance.push(port);
                       this.quantity = response.data.open[index].position;
                       this.position = response.data.open[index].position;
@@ -569,15 +573,12 @@ export default {
         this.SellDate +
         " " +
         [d.getHours(), d.getMinutes(), d.getSeconds()].join(":");
-
+       
       let stockprice = this.stock_last;
-      let n = stockprice;
-      if(typeof(stockprice) == 'string'){
-        if(n.indexOf(']') >= 0){
-          stockprice = stockprice.replace(/^\[|\]$/g, '');
-        }
+     // let n = stockprice;
+      if(typeof(stockprice) == 'object'){
+        stockprice = stockprice[0];
       }
-
       const sellparams = {
         position: this.quantity,
         stock_price: stockprice,
@@ -589,8 +590,7 @@ export default {
           notes: "",
           date: sdate
         }
-      };
-
+      };    
       this.$api.journal.portfolio
         .tradesell(fund_id, stock_id, sellparams)
         .then(response => {

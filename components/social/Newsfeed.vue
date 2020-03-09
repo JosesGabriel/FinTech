@@ -103,18 +103,18 @@
                       :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
                       :dark="lightSwitch == 0 ? false : true"
                     >
-                      <v-card-title class="py-2 pl-3"
-                        ><span class="body-1 font-weight-bold"
+                      <v-card-title class="py-2 pl-3">
+                        <span class="body-1 font-weight-bold"
                           >Delete Post?</span
-                        ></v-card-title
-                      >
+                        >
+                      </v-card-title>
                       <v-divider></v-divider>
                       <v-card-text>
                         <v-content class="mx-4 mt-3">
                           <span class="caption font-weight-bold">
                             Are you sure you want to permanently remove this
-                            post from Lyduz?</span
-                          >
+                            post from Lyduz?
+                          </span>
                         </v-content>
                       </v-card-text>
 
@@ -128,9 +128,8 @@
                           :dark="lightSwitch == true"
                           dense
                           @click="deleteDialog = false"
+                          >Cancel</v-btn
                         >
-                          Cancel
-                        </v-btn>
 
                         <v-hover v-slot:default="{ hover }">
                           <v-btn
@@ -175,11 +174,11 @@
                         @click.stop="deleteDialog = true"
                       >
                         <v-list-item-content>
-                          <v-list-item-title class="text-center caption">
-                            Delete
-                          </v-list-item-title>
-                        </v-list-item-content></v-list-item
-                      >
+                          <v-list-item-title class="text-center caption"
+                            >Delete</v-list-item-title
+                          >
+                        </v-list-item-content>
+                      </v-list-item>
                       <v-list-item
                         v-if="post.user.uuid != $auth.user.data.user.uuid"
                         x-small
@@ -187,11 +186,11 @@
                         @click="followAccount(post.user.uuid)"
                       >
                         <v-list-item-content>
-                          <v-list-item-title class="text-center caption">
-                            Follow
-                          </v-list-item-title>
-                        </v-list-item-content></v-list-item
-                      >
+                          <v-list-item-title class="text-center caption"
+                            >Follow</v-list-item-title
+                          >
+                        </v-list-item-content>
+                      </v-list-item>
                     </v-list-item-group>
                   </v-list>
                 </div>
@@ -229,9 +228,7 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="body-2 px-5 pb-3">
-            {{ post.content }}
-          </span>
+          <span v-else class="body-2 px-5 pb-3">{{ post.content }}</span>
 
           <PhotoCarousel :images="post.attachments" />
         </v-list-item-content>
@@ -279,9 +276,7 @@
         <span class="px-2 caption">{{ post.bears_count }}</span>
         <v-spacer></v-spacer>
         <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
-        <span class="caption">
-          {{ post.comment_descendants_count }}
-        </span>
+        <span class="caption">{{ post.comment_descendants_count }}</span>
         <!-- TODO Share counter -->
         <!-- <v-btn
           icon
@@ -363,12 +358,6 @@ export default {
       default() {
         return [];
       }
-    },
-    postcount: {
-      default() {
-        return "";
-      },
-      type: String
     },
     postid: {
       default() {
@@ -453,10 +442,9 @@ export default {
         this.postCounter();
       } else if (this.newPosts.event_name === "social.post.comment") {
         this.putNumberComment();
+      } else if (this.newPosts.event_name === "social.post.sentiment") {
+        this.putNumberSentiments(this.newPosts.data.post.id);
       }
-      //  else if (this.newPosts.event_name === "social.post.sentiment") {
-      //     this.putNumberSentiments();
-      //   }
     },
     newComment() {
       this.postsObject[this.newComment.postIndex].comments[
@@ -535,15 +523,17 @@ export default {
         }
       }
     },
-    // putNumberSentiments() {
-    //   for (let i = 0; i < this.postsObject.length; i++) {
-    //     if (this.postsObject[i].id === this.newPosts.data.post.id) {
-    //       this.postsObject[i].bulls_count = this.newPosts.data.post.bulls;
-    //       this.postsObject[i].bears_count = this.newPosts.data.post.bears;
-    //       this.postsObject[i].my_sentiment = this.newPosts.data.sentiment.type;
-    //     }
-    //   }
-    // },
+    putNumberSentiments(post_id) {
+      const post = this.newPosts.data.post;
+
+      this.postsObject.forEach((e, i) => {
+        if (e.id === post_id) {
+          this.postsObject[i].bulls_count = post.bulls;
+          this.postsObject[i].bears_count = post.bears;
+          //  this.postsObject[i].my_sentiment = this.newPosts.data.sentiment.type;
+        }
+      });
+    },
     /**
      * fires when user clicks follow button
      *
@@ -609,17 +599,7 @@ export default {
         .then(response => {
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
-
-            // REMOVE THIS CANCER CODE AFTER PRESENTATION MARCH 4, 2020
-            if (this.postcount == "top") {
-              this.postsObject = this.postsObject.splice(0, 2);
-            } else {
-              this.postsObject = this.postsObject.splice(2);
-            }
-            // REMOVE THIS CANCER CODE AFTER PRESENTATION MARCH 4, 2020
-
             this.loader = false;
-            console.log(response);
             /**
              * set interval dinamic time changing on posts
              * 10000ms interval
@@ -858,6 +838,7 @@ export default {
               this.reactButtons = false;
             } else {
               this.triggerAlert(false, response.message);
+              this.reactButtons = false;
             }
           })
           .catch(e => {
@@ -882,6 +863,7 @@ export default {
               this.reactButtons = false;
             } else {
               this.triggerAlert(false, response.message);
+              this.reactButtons = false;
             }
           })
           .catch(e => {

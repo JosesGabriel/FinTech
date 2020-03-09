@@ -123,7 +123,7 @@ export default {
         if (response.success) {
           this.notification.status = "read";
 
-          if (this.meta.user && this.meta.post) {
+          if (this.meta.user && this.meta.post && typeof this.meta.sentiment == "undefined") {
             window.location = "/post/" + this.meta.post.id;
 
           } else if(typeof this.meta.post == "undefined" && typeof this.meta.stock == "undefined" && this.meta.user){
@@ -131,6 +131,10 @@ export default {
 
           } else if(this.meta.user && this.meta.stock){
             window.location = "/watchlist";
+          
+          } else if (this.meta.post && this.meta.user && this.meta.comment && this.meta.sentiment){
+            window.location = "/post/" + this.meta.post.id;
+            
           }
         }
       });

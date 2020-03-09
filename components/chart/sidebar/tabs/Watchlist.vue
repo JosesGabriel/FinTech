@@ -68,7 +68,9 @@
             }}</span>
           </div>
           <div class="top__right pr-2">
-            <span class="">{{ item.last | numberDecimal }}</span>
+            <span class="">{{
+              item.last | stockDecimalPriceScale(item.pricescale)
+            }}</span>
           </div>
         </div>
         <div class="watchlist__bottom">
@@ -82,7 +84,7 @@
               >{{ item.description | limitString(15, true) }}</span
             >
           </div>
-          <div class="bottom__right overline pr-2">
+          <div class="bottom__right pr-2">
             <span
               ><v-icon v-show="item.change > 0.0" class="increase"
                 >mdi-chevron-up</v-icon
@@ -185,7 +187,6 @@ export default {
           const history = await this.$api.chart.stocks.history({
             "symbol-id": data.stock_id
           });
-
           const symbol = data.market_code.split(":");
           this.items.push({
             id: data.id,
@@ -196,6 +197,7 @@ export default {
             last: history.data.last,
             changepercentage: history.data.changepercentage,
             change: history.data.change,
+            pricescale: history.data.pricescale,
             color: false
           });
         });
@@ -218,14 +220,18 @@ export default {
         const stock = this.items.find(resp => resp.sym_id == data.sym_id);
         if (stock == undefined) return;
         const key = this.items.indexOf(stock);
+        console.log("stock sse", stock);
+        console.log("data sse", data);
         this.items.splice(key, 1, {
           id: stock.id,
           sym_id: stock.sym_id,
           symbol: stock.symbol,
           description: stock.description,
+          market_code: stock.market_code,
           last: data.c,
           changepercentage: data.chgpc,
           change: data.chg,
+          pricescale: stock.pricescale,
           color: true
         });
         this.updateEffect(stock.id);
@@ -324,6 +330,7 @@ export default {
   flex: 0 0 136px;
   text-align: right;
   margin-top: -4px;
+  font-size: 11px;
 }
 .content__card-watchlist {
   height: calc(100vh - 335px);

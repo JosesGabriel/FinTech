@@ -10,9 +10,7 @@
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
-        <Newsfeed postcount="top" :new-post="newPost" />
-        <Ad class="mb-3" />
-        <Newsfeed postcount="bottom" />
+        <Newsfeed :new-post="newPost" />
       </v-col>
       <v-col
         class="px-3 hidden-sm-and-down pr-0 leftSidebar__container"
@@ -20,7 +18,7 @@
         sm="3"
         md="3"
       >
-        <TrendingStocks />
+        <!-- <TrendingStocks /> -->
         <WhoToMingle />
         <div class="stickySidebar">
           <MiniWatchlist />
