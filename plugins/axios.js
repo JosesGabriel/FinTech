@@ -18,8 +18,8 @@ export default function({ $axios, $auth, redirect, app }) {
    */
   $axios.interceptors.request.use(
     config => {
-      const token = localStorage["auth._token.local"];
-
+      //const token = localStorage["auth._token.local"];
+      const token = $auth.getToken("local");
       //  assign if token is not null and the request url is not found in urls and current route
       if (
         token != null &&
