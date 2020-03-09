@@ -5,7 +5,9 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  *
  * @param {*} {}
  */
-export default function({ $axios, $auth, redirect }) {
+export default function({ $axios, $auth, redirect, app }) {
+  console.log("here", app.$cookies.get("refresh_token", { fromRes: true }));
+
   // list of exempted urls
   const urls = [process.env.STREAM_API_URL, process.env.VYNDUE_API_URL];
 

@@ -21,7 +21,7 @@
         <!-- <TrendingStocks /> -->
         <WhoToMingle />
         <div class="stickySidebar">
-          <MiniWatchlist />
+          <!-- <MiniWatchlist /> -->
           <FooterSidebar />
         </div>
         <!-- TODO put back when implementing -->

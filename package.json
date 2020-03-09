@@ -20,6 +20,7 @@
     "@nuxtjs/moment": "^1.4.0",
     "@nuxtjs/recaptcha": "^0.6.2",
     "apexcharts": "^3.12.0",
+    "cookie-universal-nuxt": "^2.1.2",
     "cross-env": "^5.2.0",
     "emoji-mart-vue": "^2.6.6",
     "eventsource-polyfill": "^0.9.6",

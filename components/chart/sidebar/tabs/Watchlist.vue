@@ -220,8 +220,8 @@ export default {
         const stock = this.items.find(resp => resp.sym_id == data.sym_id);
         if (stock == undefined) return;
         const key = this.items.indexOf(stock);
-        console.log("stock sse", stock);
-        console.log("data sse", data);
+        //console.log("stock sse", stock);
+        //console.log("data sse", data);
         this.items.splice(key, 1, {
           id: stock.id,
           sym_id: stock.sym_id,
