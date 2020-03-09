@@ -67,7 +67,7 @@ export default function({ $axios, $auth, redirect, app }) {
           )
           .then(response => {
             console.log("refresh_token", response);
-            //$auth.setToken('local', '.....')
+            $auth.setToken("local", response.data.token.access_token);
           });
       }
     }

@@ -138,6 +138,7 @@ export default {
           { credentials: true }
         );
         console.log("response", response);
+        this.$auth.setToken("local", response.data.token.access_token);
       } catch (error) {
         console.log(error);
       }
