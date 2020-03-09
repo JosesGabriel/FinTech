@@ -16,17 +16,15 @@ export default function({ $axios, $auth, redirect, app }) {
   /**
    * Handles every axios request
    */
+
+  // && !IsInArray(routes, $auth.ctx.route.name)
   $axios.interceptors.request.use(
     config => {
       //const token = localStorage["auth._token.local"];
       const token = $auth.getToken("local");
       //  assign if token is not null and the request url is not found in urls and current route
       console.log("token", token);
-      if (
-        token != null &&
-        !IsInArray(urls, config.url) &&
-        !IsInArray(routes, $auth.ctx.route.name)
-      ) {
+      if (token != null && !IsInArray(urls, config.url)) {
         console.log("config header", token);
         config.headers.Authorization = token;
       }
