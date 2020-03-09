@@ -82,7 +82,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="false"
+          v-show="true"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
@@ -90,7 +90,21 @@
           elevation="1"
           @click.prevent="refresh()"
         >
-          Refresh
+          Refresh Arbi
+        </v-btn>
+      </v-hover>
+
+      <v-hover v-slot:default="{ hover }">
+        <v-btn
+          v-show="true"
+          block
+          rounded
+          class="black--text font-weight-bold text-capitalize mb-2"
+          :color="!hover ? 'success' : 'successhover'"
+          elevation="1"
+          @click.prevent="refresh2()"
+        >
+          Refresh Lyduz
         </v-btn>
       </v-hover>
       <span class="text-center d-block caption w-100"
@@ -131,12 +145,38 @@ export default {
   methods: {
     async refresh() {
       try {
+        console.log(this.$cookies.getAll({ fromRes: true }));
+        console.log(this.$cookies.getAll({ fromRes: true }));
+
         const response = await this.$axios.$post(
           "https://dev-api.arbitrage.ph/api/auth/login/refresh",
           {},
           { credentials: true }
         );
         console.log("response", response);
+
+        const response2 = await this.$axios.$post(
+          "https://dev-api.lyduz.com/api/auth/login/refresh",
+          {},
+          { credentials: true }
+        );
+        console.log("response2", response2);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async refresh2() {
+      try {
+        console.log(this.$cookies.getAll({ fromRes: true }));
+        console.log(this.$cookies.getAll({ fromRes: true }));
+
+        const response2 = await this.$axios.$post(
+          "https://dev-api.lyduz.com/api/auth/login/refresh",
+          {},
+          { credentials: true }
+        );
+        console.log("response2", response2);
       } catch (error) {
         console.log(error);
       }
@@ -164,7 +204,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          window.open("/", "_self");
+          //window.open("/", "_self");
         }, 800);
       } catch (error) {
         this.$emit("alert", {
