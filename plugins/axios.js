@@ -58,7 +58,7 @@ export default function({ $axios, $auth, redirect, app }) {
     const code = parseInt(error.response && error.response.status);
 
     if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
-      if (error.response.data.data.message == "Token has expired.") {
+      if (error.response.data.message == "Token has expired.") {
         $axios
           .$post(
             `${process.env.API_URL}/auth/login/refresh`,
