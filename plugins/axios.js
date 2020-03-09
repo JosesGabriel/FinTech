@@ -6,16 +6,13 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  * @param {*} {}
  */
 export default function({ $axios, $auth, redirect, app }) {
-  console.log(app.$cookies.getAll());
-  console.log("reponse", app.$cookies.get("refresh_token", { fromRes: true }));
-  console.log("request", app.$cookies.get("refresh_token"));
-
   // list of exempted urls
   const urls = [process.env.STREAM_API_URL, process.env.VYNDUE_API_URL];
 
   // list of exempted routes
   const routes = ["login"];
 
+  let isRefreshing = false;
   // region custom handlers
   /**
    * Handles every axios request
@@ -47,7 +44,6 @@ export default function({ $axios, $auth, redirect, app }) {
       localStorage["auth._token.local"];
   };
 
-  // $axios.defaults.withCredentials = true;
   // endregion custom handlers
 
   // region override
@@ -61,9 +57,21 @@ export default function({ $axios, $auth, redirect, app }) {
    */
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status);
+
     if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
-      console.log("error from axios", error, error.response);
-      //$auth.logout();
+      if (error.response.data.data.message == "Token has expired.") {
+        isRefreshing = true;
+        $axios
+          .$post(
+            `${process.env.API_URL}/auth/login/refresh`,
+            {},
+            { credentials: true }
+          )
+          .then(response => {
+            isRefreshing = false;
+            console.log(response);
+          });
+      }
     }
     return Promise.reject(error);
   });
