@@ -12,13 +12,13 @@
             cycle
             :show-arrows="false"
             >
-                <v-carousel-item
+            <v-carousel-item
                 class="adsCarousel"
                 v-for="(item,i) in items"
                 :key="i"
                 :src="item.src"
                 @click="redirect(i)"
-                ></v-carousel-item>
+            ></v-carousel-item>
         </v-carousel>
     </div>
 </template>
@@ -30,10 +30,8 @@
         items: [
           {
             src: 'tradersfair.jpg',
+            links: 'https://philippines.tradersfair.com/',
           },
-        ],
-        links: [
-            "https://philippines.tradersfair.com/",
         ],
       }
     },
@@ -49,7 +47,7 @@
     },
     methods: {
         redirect(i){
-            window.open(this.links[i], "_blank");
+            window.open(this.items[i].links, "_blank");
         }
     },
   }
