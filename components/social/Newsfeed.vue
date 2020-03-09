@@ -838,6 +838,7 @@ export default {
               this.reactButtons = false;
             } else {
               this.triggerAlert(false, response.message);
+              this.reactButtons = false;
             }
           })
           .catch(e => {
@@ -862,6 +863,7 @@ export default {
               this.reactButtons = false;
             } else {
               this.triggerAlert(false, response.message);
+              this.reactButtons = false;
             }
           })
           .catch(e => {
