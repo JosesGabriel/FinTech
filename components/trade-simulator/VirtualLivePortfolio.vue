@@ -58,12 +58,12 @@
             </template>
             <template v-slot:item.Profit="{ item }">
               <span
-                :class="(parseFloat(item.Profit) > 0 ? 'positive' : parseFloat(item.Profit) < 0 ? 'negative' : '')"
+                :class="(parseFloat(item.Profit) > 0 ? 'positive' : parseFloat(item.Profit) < 0 ? 'negative' : 'neutral')"
               >{{ item.Profit }}</span>
             </template>
             <template v-slot:item.Perf="{ item }">
               <span    
-                :class="(parseFloat(item.Perf) > 0 ? 'positive' : parseFloat(item.Perf) < 0 ? 'negative' : '')"
+                :class="(parseFloat(item.Perf) > 0 ? 'positive' : parseFloat(item.Perf) < 0 ? 'negative' : 'neutral')"
               >{{ item.Perf }}%</span>
             </template>
             <template v-slot:item.action="{ item }">
@@ -861,6 +861,9 @@ export default {
 }
 .negative {
   color: #fe4949;
+}
+.neutral {
+  color: #494949;
 }
 .nodisplay {
   display: none;
