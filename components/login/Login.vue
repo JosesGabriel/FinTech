@@ -179,7 +179,7 @@ export default {
 
         console.log("login", response);
 
-        console.log(this.refresh());
+        //console.log(this.refresh());
 
         this.$emit("alert", {
           state: "success",
@@ -188,7 +188,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          // window.open("/", "_self");
+          window.open("/", "_self");
         }, 800);
       } catch (error) {
         this.$emit("alert", {
