@@ -218,6 +218,7 @@ export default {
     sseAllInfo(data) {
       try {
         const stock = this.items.find(resp => resp.sym_id == data.sym_id);
+        console.log("stock sse", stock);
         if (stock == undefined) return;
         const key = this.items.indexOf(stock);
         this.items.splice(key, 1, {
