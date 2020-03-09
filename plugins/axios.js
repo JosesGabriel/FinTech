@@ -6,6 +6,7 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  * @param {*} {}
  */
 export default function({ $axios, $auth, redirect, app }) {
+  console.log(app.$cookies.getAll());
   console.log("here", app.$cookies.get("refresh_token", { fromRes: true }));
 
   // list of exempted urls

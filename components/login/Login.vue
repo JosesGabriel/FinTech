@@ -82,7 +82,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="false"
+          v-show="true"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
@@ -131,6 +131,8 @@ export default {
   methods: {
     async refresh() {
       try {
+        console.log(this.$cookies.getAll({ fromRes: true }));
+
         const response = await this.$axios.$post(
           "https://dev-api.arbitrage.ph/api/auth/login/refresh",
           {},
@@ -164,7 +166,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          window.open("/", "_self");
+          //window.open("/", "_self");
         }, 800);
       } catch (error) {
         this.$emit("alert", {
