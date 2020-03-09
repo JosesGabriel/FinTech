@@ -82,7 +82,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="true"
+          v-show="false"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
@@ -96,7 +96,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="true"
+          v-show="false"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
@@ -146,7 +146,7 @@ export default {
   methods: {
     async GetData() {
       const latestDate = await this.$api.chart.stocks.activeDate();
-      console.log(latestDate);
+      //console.log(latestDate);
     },
     async refresh() {
       try {
