@@ -5,7 +5,7 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  *
  * @param {*} {}
  */
-export default function({ $axios, $auth, redirect }) {
+export default function({ $axios, $auth, redirect, app }) {
   // list of exempted urls
   const urls = [process.env.STREAM_API_URL, process.env.VYNDUE_API_URL];
 
@@ -43,7 +43,6 @@ export default function({ $axios, $auth, redirect }) {
       localStorage["auth._token.local"];
   };
 
-  // $axios.defaults.withCredentials = true;
   // endregion custom handlers
 
   // region override
@@ -57,8 +56,20 @@ export default function({ $axios, $auth, redirect }) {
    */
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status);
+
     if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
-      $auth.logout();
+      if (error.response.data.message == "Token has expired.") {
+        $axios
+          .$post(
+            `${process.env.API_URL}/auth/login/refresh`,
+            {},
+            { credentials: true }
+          )
+          .then(response => {
+            console.log("refresh_token", response);
+            $auth.setToken("local", response.data.token.access_token);
+          });
+      }
     }
     return Promise.reject(error);
   });

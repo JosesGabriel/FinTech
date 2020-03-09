@@ -84,7 +84,7 @@
               >{{ item.description | limitString(15, true) }}</span
             >
           </div>
-          <div class="bottom__right overline pr-2">
+          <div class="bottom__right pr-2">
             <span
               ><v-icon v-show="item.change > 0.0" class="increase"
                 >mdi-chevron-up</v-icon
@@ -220,6 +220,8 @@ export default {
         const stock = this.items.find(resp => resp.sym_id == data.sym_id);
         if (stock == undefined) return;
         const key = this.items.indexOf(stock);
+        //console.log("stock sse", stock);
+        //console.log("data sse", data);
         this.items.splice(key, 1, {
           id: stock.id,
           sym_id: stock.sym_id,
@@ -328,6 +330,7 @@ export default {
   flex: 0 0 136px;
   text-align: right;
   margin-top: -4px;
+  font-size: 11px;
 }
 .content__card-watchlist {
   height: calc(100vh - 335px);
