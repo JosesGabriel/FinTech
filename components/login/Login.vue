@@ -94,6 +94,20 @@
         </v-btn>
       </v-hover>
 
+      <v-hover v-slot:default="{ hover }">
+        <v-btn
+          v-show="true"
+          block
+          rounded
+          class="black--text font-weight-bold text-capitalize mb-2"
+          :color="!hover ? 'success' : 'successhover'"
+          elevation="1"
+          @click.prevent="GetData()"
+        >
+          Fetch
+        </v-btn>
+      </v-hover>
+
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
         <a
@@ -130,6 +144,10 @@ export default {
     })
   },
   methods: {
+    async GetData() {
+      const latestDate = await this.$api.chart.stocks.activeDate();
+      console.log(latestDate);
+    },
     async refresh() {
       try {
         const response = await this.$axios.$post(
