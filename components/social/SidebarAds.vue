@@ -1,5 +1,5 @@
 <template>
-    <div class="pa-0 pl-2">
+    <div class="pa-0 pl-2 mb-3">
         <div 
             class="body-2 font-weight-black pl-2 pb-2"
             :style="{ color: toggleFontColor }"
