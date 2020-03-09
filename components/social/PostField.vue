@@ -47,13 +47,13 @@
             @select="addEmoji"
           />
         </client-only>
-        <v-progress-circular
+        <!-- <v-progress-circular
           class="characterLimit overline"
           :value="characterLimit"
           size="23"
           width="3"
           :color="200 - postField.length >= 0 ? 'success' : 'error'"
-        ></v-progress-circular>
+        ></v-progress-circular> -->
         <div class="postField__textareaContainer">
           <at
             :class="
@@ -534,7 +534,7 @@ export default {
       if (this.$refs.postField__inputRef.files) {
         //text + image
         const params = {
-          content: this.postField.substring(0, 200),
+          content: this.postField,
           attachments: this.cloudArray,
           visibility: "public",
           status: "active",
@@ -559,7 +559,7 @@ export default {
       } else {
         // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
         const params = {
-          content: this.postField.substring(0, 200),
+          content: this.postField,
           visibility: "public",
           status: "active",
           tags: postTags
