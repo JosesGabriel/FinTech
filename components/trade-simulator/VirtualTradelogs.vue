@@ -558,9 +558,8 @@ export default {
       this.totalProfitLoss = 0;
       this.totalProfitLossPerf = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
-
         function(result) {
-
+          // console.log('TloGS -', result);
           this.tradeLogs = result.data.logs;
           this.tradelogs2 = this.tradeLogs;
           let plossperc = [];
@@ -809,6 +808,9 @@ export default {
 }
 .negative {
   color: #fe4949;
+}
+.neutral {
+  color: #494949;
 }
 .btn_sidemenu:hover {
   color: #03dac5;

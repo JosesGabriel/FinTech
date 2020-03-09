@@ -546,6 +546,7 @@ export default {
                         avprice: response.data.open[index].average_price,
                         capital: result.data.logs[i].capital
                       };
+                      this.avprice = response.data.open[index].average_price;
                       this.portvalue = result.data.logs[i].id;
                       this.getBalance.push(port);
                       this.quantity = response.data.open[index].position;
@@ -589,8 +590,7 @@ export default {
           notes: "",
           date: sdate
         }
-      };
-  
+      };    
       this.$api.journal.portfolio
         .tradesell(fund_id, stock_id, sellparams)
         .then(response => {
