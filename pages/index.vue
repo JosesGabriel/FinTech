@@ -20,8 +20,9 @@
       >
         <TrendingStocks />
         <WhoToMingle />
+        <MiniWatchlist />
         <div class="stickySidebar">
-          <MiniWatchlist />
+          <SidebarAds />
           <FooterSidebar />
         </div>
         <!-- TODO put back when implementing -->
@@ -45,6 +46,7 @@ import PostField from "~/components/social/PostField";
 import Ad from "~/components/social/Ad";
 import Bulletin from "~/components/Bulletin";
 import PopUp from "~/components/modals/PopUp";
+import SidebarAds from "~/components/social/SidebarAds";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -60,7 +62,8 @@ export default {
     FooterSidebar,
     PostField,
     PopUp,
-    Ad
+    Ad,
+    SidebarAds
   },
   computed: {
     ...mapGetters({
