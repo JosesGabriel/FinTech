@@ -62,7 +62,7 @@ export default function({ $axios, $auth, redirect, app }) {
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status);
     if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
-      $auth.logout();
+      //$auth.logout();
     }
     return Promise.reject(error);
   });
