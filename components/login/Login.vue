@@ -177,6 +177,10 @@ export default {
           }
         });
 
+        console.log("login", response);
+
+        console.log(this.refresh());
+
         this.$emit("alert", {
           state: "success",
           message: "Successfully Logged In"
