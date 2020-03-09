@@ -132,6 +132,7 @@ export default {
     async refresh() {
       try {
         console.log(this.$cookies.getAll({ fromRes: true }));
+        console.log(this.$cookies.getAll());
 
         const response = await this.$axios.$post(
           "https://dev-api.arbitrage.ph/api/auth/login/refresh",
@@ -139,6 +140,13 @@ export default {
           { credentials: true }
         );
         console.log("response", response);
+
+        const response2 = await this.$axios.$post(
+          "https://dev-api.lyduz.com/api/auth/login/refresh",
+          {},
+          { credentials: true }
+        );
+        console.log("response2", response2);
       } catch (error) {
         console.log(error);
       }
