@@ -82,7 +82,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="true"
+          v-show="false"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"

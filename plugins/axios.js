@@ -12,7 +12,6 @@ export default function({ $axios, $auth, redirect, app }) {
   // list of exempted routes
   const routes = ["login"];
 
-  let isRefreshing = false;
   // region custom handlers
   /**
    * Handles every axios request
@@ -60,7 +59,6 @@ export default function({ $axios, $auth, redirect, app }) {
 
     if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
       if (error.response.data.data.message == "Token has expired.") {
-        isRefreshing = true;
         $axios
           .$post(
             `${process.env.API_URL}/auth/login/refresh`,
@@ -68,8 +66,8 @@ export default function({ $axios, $auth, redirect, app }) {
             { credentials: true }
           )
           .then(response => {
-            isRefreshing = false;
-            console.log(response);
+            console.log("refresh_token", response);
+            //$auth.setToken('local', '.....')
           });
       }
     }
