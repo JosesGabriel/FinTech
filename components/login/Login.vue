@@ -82,7 +82,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="false"
+          v-show="true"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
@@ -96,7 +96,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="false"
+          v-show="true"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
@@ -156,7 +156,10 @@ export default {
           { credentials: true }
         );
         //console.log("response", response);
-        return this.$auth.setToken("local", response.data.token.access_token);
+        return this.$auth.setToken(
+          "local",
+          `Bearer ${response.data.token.access_token}`
+        );
       } catch (error) {
         console.log(error);
       }
@@ -179,7 +182,7 @@ export default {
 
         console.log("login", response);
 
-        //console.log(this.refresh());
+        console.log(this.refresh());
 
         this.$emit("alert", {
           state: "success",
@@ -188,7 +191,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          window.open("/", "_self");
+          //window.open("/", "_self");
         }, 800);
       } catch (error) {
         this.$emit("alert", {
