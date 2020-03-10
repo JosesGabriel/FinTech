@@ -18,14 +18,13 @@ export default ({ $axios, $auth, $moment, redirect }, inject) => {
       const timestamp = $moment()
         .add(parseInt(expiresIn), "seconds")
         .format("x");
-      console.log("hello");
-      localStorage[("_expiresIn", timestamp)];
-      //$auth.$storage.setCookie("__expires_in", timestamp, false);
+      //localStorage[("_expiresIn", timestamp)];
+      $auth.$storage.setCookie("__expires_in", timestamp, false);
     },
 
     isTokenExpired: () => {
       // const expire_in = $auth.$storage.getCookie("__expires_in");
-      const expire_in = localStorage["_expiresIn"];
+      const expire_in = parseInt(localStorage["auth.__expires_in"]);
       const current_datetime = $moment().format("x");
       const minutes = Math.ceil((expire_in - current_datetime) / 60000);
       console.log("expire_in", expire_in);
