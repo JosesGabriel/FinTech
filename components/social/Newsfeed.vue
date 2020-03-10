@@ -228,7 +228,7 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="body-2 px-5 pb-3">{{ post.content }}</span>
+          <span v-else class="body-2 px-5 pb-3 post__Content">{{ post.content }}</span>
 
           <PhotoCarousel :images="post.attachments" />
         </v-list-item-content>
@@ -953,5 +953,8 @@ export default {
 }
 .postOptions__itemgroup {
   border: 1px solid rgba(0, 0, 0, 0.12);
+}
+.post__Content {
+  white-space: pre-wrap;
 }
 </style>
