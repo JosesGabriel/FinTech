@@ -453,7 +453,6 @@ export default {
       const openparams = {
         fund: this.defaultPortfolioId
       };
-      this.totalProfitCarrier = 0
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
           this.portfolioLogs = result.data.open;
@@ -463,15 +462,15 @@ export default {
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].fund = this.defaultPortfolioId;
             this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
-            this.totalProfitLoss = this.totalProfitCarrier =
-              this.totalProfitCarrier +
-              parseFloat(this.portfolioLogs[i].profit_loss);
+            this.totalProfitLoss += parseFloat(this.portfolioLogs[i].profit_loss)
+            
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             this.portfolioLogs[i] = {
               ...this.portfolioLogs[i],
               execute: false
             };
           }
+          console.log(this.totalProfitLoss)
           this.livePortfolioLoading = false;
         }.bind(this)
       );

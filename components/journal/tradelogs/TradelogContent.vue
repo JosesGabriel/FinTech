@@ -401,9 +401,13 @@ export default {
 
       this.tradeLogs = [];
 
+      this.totalProfitLoss = 0
       // Show all trades
       if (str == "all") {
         this.tradeLogs = this.tradeLogsBackup;
+        for(let i = 0; i < this.tradeLogsBackup.length; i++) {
+          this.totalProfitLoss += parseFloat(this.tradeLogsBackup[i].profit_loss)
+        }
       }
 
       this.filter = this.tradeLogsBackup;
@@ -420,6 +424,7 @@ export default {
 
         if (str == "day" && d.toString() == today && month == monthWeek) {
           this.tradeLogs.push(this.filter[i]);
+          this.totalProfitLoss += parseFloat(this.filter[i].profit_loss)
         } else if (
           str == "week" &&
           today >= dayWeek &&
@@ -427,16 +432,20 @@ export default {
           year == fyear
         ) {
           this.tradeLogs.push(this.filter[i]);
+          this.totalProfitLoss += parseFloat(this.filter[i].profit_loss)
         } else if (str == "month" && month == fmonth && year == fyear) {
           this.tradeLogs.push(this.filter[i]);
+          this.totalProfitLoss += parseFloat(this.filter[i].profit_loss)
         } else if (str == "year" && year == fyear) {
           this.tradeLogs.push(this.filter[i]);
+          this.totalProfitLoss += parseFloat(this.filter[i].profit_loss)
         } else if (
           str.state == "custom" &&
           this.localFormat(this.filter[i].meta.date, "unix") >= dateFrom &&
           this.localFormat(this.filter[i].meta.date, "unix") <= dateTo
         ) {
           this.tradeLogs.push(this.filter[i]);
+          this.totalProfitLoss += parseFloat(this.filter[i].profit_loss)
         }
       }
     },
@@ -469,7 +478,6 @@ export default {
       const tradelogsparams = {
         fund: this.defaultPortfolioId
       };
-      this.totalProfitCarrier = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
           this.tradeLogs = result.data.logs;
@@ -492,9 +500,7 @@ export default {
               (this.tradeLogs[i].profit_loss / this.tradeLogs[i].buy_value) *
               100;
 
-            this.totalProfitLoss = this.totalProfitCarrier =
-              this.totalProfitCarrier +
-              parseFloat(this.tradeLogs[i].profit_loss);
+            this.totalProfitLoss += parseFloat(this.tradeLogs[i].profit_loss);
           }
 
           const arr = this.tradeLogs.sort(
