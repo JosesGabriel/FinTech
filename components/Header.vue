@@ -147,13 +147,17 @@ export default {
   watch: {
     notification() {
       this.newNotication();
+      localStorage.notificationStatus = 1;
     },
     showNotification() {
       this.showBadge = 0;
+      localStorage.notificationStatus = 0;
     }
   },
   mounted() {
     if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
+    if (localStorage.notificationStatus) this.showBadge = parseFloat(localStorage.notificationStatus);
+
     if (this.stockList.length == 0) {
       const params = {
         exchange: "PSE",
@@ -207,6 +211,7 @@ export default {
     closeDropdown() {
       this.showNotification = false;
       this.showBadge = 0;
+      localStorage.notificationStatus = 0;
     },
     /**
      * Trigger when user has new notification user notification and watchlist
