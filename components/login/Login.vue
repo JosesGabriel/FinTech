@@ -156,7 +156,10 @@ export default {
           { credentials: true }
         );
         //console.log("response", response);
-        return this.$auth.setToken("local", response.data.token.access_token);
+        return this.$auth.setToken(
+          "local",
+          `Bearer ${response.data.token.access_token}`
+        );
       } catch (error) {
         console.log(error);
       }
