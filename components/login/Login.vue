@@ -132,22 +132,9 @@ export default {
           }
         });
 
-        const response = await this.$axios.$post(
-          `${process.env.API_URL}/auth/login/refresh`,
-          {},
-          { credentials: true }
-        );
+        const token = await this.$refreshToken.getRefreshToken();
 
-        this.$auth.setToken(
-          "local",
-          `${response.data.token.token_type} ${response.data.token.access_token}`
-        );
-
-        this.$auth.$storage.setCookie(
-          "__expires_in",
-          parseInt(response.data.token.expires_in),
-          false
-        );
+        this.$refreshToken.setExpiresIn(parseInt(token.expires_in));
 
         this.$emit("alert", {
           state: "success",
