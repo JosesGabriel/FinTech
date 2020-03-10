@@ -132,22 +132,8 @@ export default {
           }
         });
 
-        const response = await this.$axios.$post(
-          `${process.env.API_URL}/auth/login/refresh`,
-          {},
-          { credentials: true }
-        );
-
-        this.$auth.setToken(
-          "local",
-          `${response.data.token.token_type} ${response.data.token.access_token}`
-        );
-
-        this.$auth.$storage.setCookie(
-          "__expires_in",
-          parseInt(response.data.token.expires_in),
-          false
-        );
+        const response = await this.$refreshToken.getRefreshToken();
+        console.log("login part", response);
 
         this.$emit("alert", {
           state: "success",
@@ -156,7 +142,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          window.open("/", "_self");
+          //window.open("/", "_self");
         }, 800);
       } catch (error) {
         this.$emit("alert", {

@@ -5,53 +5,28 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  *
  * @param {*} {}
  */
-export default function({ $axios, $auth, $moment, redirect }) {
+export default function({ $axios, $auth, $moment, app, redirect }) {
   // list of exempted urls
   const urls = [process.env.STREAM_API_URL, process.env.VYNDUE_API_URL];
 
   // list of exempted routes
   const routes = ["login"];
 
-  const requestRefreshToken = () => {
-    const expire_in = $moment()
-      .add(parseInt($auth.$storage.getCookie("__expires_in")), "seconds")
-      .format("x");
-    const current_datetime = $moment().format("x");
-    const minutes = Math.ceil((expire_in - current_datetime) / 60000);
-    console.log("expire_in", expire_in);
-    console.log("current_datetime", current_datetime);
-    console.log("remaining", minutes);
-    return minutes <= 1 ? true : false;
-  };
-
   // region custom handlers
   /**
    * Handles every axios request
    */
-  //        !IsInArray(routes, $auth.ctx.route.name)
-
-  /*
-$axios
-          .$post(
-            `${process.env.API_URL}/auth/login/refresh`,
-            {},
-            { credentials: true }
-          )
-          .then(response => {
-            console.log("refresh_token", response);
-            $auth.setToken("local", response.data.token.access_token);
-          });
-  */
+  //!IsInArray(routes, $auth.ctx.route.name)
   $axios.interceptors.request.use(
     config => {
       //const token = localStorage["auth._token.local"];
       const token = $auth.getToken("local");
       //  assign if token is not null and the request url is not found in urls
-      console.log(config);
+      //console.log(config);
       if (token != null && !IsInArray(urls, config.url)) {
-        console.log("expires_in", $auth.$storage.getCookie("__expires_in"));
-        console.log("config header", token);
-        console.log(requestRefreshToken());
+        //console.log("config header", token);
+        //console.log("$auth", $auth.$storage.getCookie("__expires_in"));
+        //console.log(app.$refreshToken.isTokenExpired());
         config.headers.Authorization = token;
       }
       return config;
