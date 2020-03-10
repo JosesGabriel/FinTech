@@ -82,7 +82,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="true"
+          v-show="false"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
@@ -96,7 +96,7 @@
 
       <v-hover v-slot:default="{ hover }">
         <v-btn
-          v-show="true"
+          v-show="false"
           block
           rounded
           class="black--text font-weight-bold text-capitalize mb-2"
@@ -146,7 +146,7 @@ export default {
   methods: {
     async GetData() {
       const latestDate = await this.$api.chart.stocks.activeDate();
-      console.log(latestDate);
+      //console.log(latestDate);
     },
     async refresh() {
       try {
@@ -155,8 +155,8 @@ export default {
           {},
           { credentials: true }
         );
-        console.log("response", response);
-        this.$auth.setToken("local", response.data.token.access_token);
+        //console.log("response", response);
+        return this.$auth.setToken("local", response.data.token.access_token);
       } catch (error) {
         console.log(error);
       }
@@ -177,6 +177,10 @@ export default {
           }
         });
 
+        console.log("login", response);
+
+        //console.log(this.refresh());
+
         this.$emit("alert", {
           state: "success",
           message: "Successfully Logged In"
@@ -184,7 +188,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          // window.open("/", "_self");
+          window.open("/", "_self");
         }, 800);
       } catch (error) {
         this.$emit("alert", {
