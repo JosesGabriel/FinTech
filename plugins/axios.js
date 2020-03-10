@@ -16,16 +16,16 @@ export default function({ $axios, $auth, redirect, app }) {
   /**
    * Handles every axios request
    */
+  //        !IsInArray(routes, $auth.ctx.route.name)
   $axios.interceptors.request.use(
     config => {
-      const token = localStorage["auth._token.local"];
-
+      //const token = localStorage["auth._token.local"];
+      const token = $auth.getToken("local");
       //  assign if token is not null and the request url is not found in urls and current route
-      if (
-        token != null &&
-        !IsInArray(urls, config.url) &&
-        !IsInArray(routes, $auth.ctx.route.name)
-      ) {
+      //console.log("token", token);
+      console.log(config);
+      if (token != null && !IsInArray(urls, config.url)) {
+        console.log("config header", token);
         config.headers.Authorization = token;
       }
       return config;
@@ -58,7 +58,7 @@ export default function({ $axios, $auth, redirect, app }) {
     const code = parseInt(error.response && error.response.status);
 
     if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
-      if (error.response.data.data.message == "Token has expired.") {
+      if (error.response.data.message == "Token has expired.") {
         $axios
           .$post(
             `${process.env.API_URL}/auth/login/refresh`,
@@ -67,7 +67,7 @@ export default function({ $axios, $auth, redirect, app }) {
           )
           .then(response => {
             console.log("refresh_token", response);
-            //$auth.setToken('local', '.....')
+            $auth.setToken("local", response.data.token.access_token);
           });
       }
     }
