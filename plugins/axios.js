@@ -17,11 +17,11 @@ export default function({ $axios, $auth, $moment, redirect }) {
       .add(parseInt($auth.$storage.getCookie("__expires_in")), "seconds")
       .format("x");
     const current_datetime = $moment().format("x");
-    const minutes = Math.floor((expire_in - current_datetime) / 60000);
+    const minutes = Math.ceil((expire_in - current_datetime) / 60000);
     console.log("expire_in", expire_in);
     console.log("current_datetime", current_datetime);
     console.log("remaining", minutes);
-    return minutes <= 10 ? false : true;
+    return minutes <= 1 ? true : false;
   };
 
   // region custom handlers
