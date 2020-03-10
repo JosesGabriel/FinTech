@@ -1,7 +1,8 @@
 <template>
     <div class="pa-0 pl-2 mb-3">
         <div 
-            class="body-2 font-weight-black pl-2 pb-2"
+            class="body-2 pl-2 pb-2"
+            style="font-size:12px !important;"
             :style="{ color: toggleFontColor }"
             >
            Advertisement
@@ -10,7 +11,6 @@
         <v-carousel 
             hide-delimiters 
             cycle
-            :show-arrows="false"
             >
             <v-carousel-item
                 class="adsCarousel"
@@ -31,6 +31,10 @@
           {
             src: 'tradersfair.jpg',
             links: 'https://philippines.tradersfair.com/',
+          },
+          {
+            src: 'Traders Empire.png',
+            links: 'http://bit.ly/TradersEmpireBook1',
           },
         ],
       }
