@@ -8,12 +8,12 @@ export default ({ $axios, $moment, redirect, app }, inject) => {
         { credentials: true }
       );
       console.log("getRefreshToken", response);
+      refreshToken.setExpiresIn(response.data.token.expires_in);
       app.$auth.setToken(
         "local",
         `${response.data.token.token_type} ${response.data.token.access_token}`
       );
       console.log("lagpas");
-      this.setExpiresIn(response.data.token.expires_in);
     },
 
     setExpiresIn: (expiresIn = 0) => {
