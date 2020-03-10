@@ -30,11 +30,11 @@
         items: [
           {
             src: 'tradersfair.jpg',
-            links: 'https://philippines.tradersfair.com/',
+            link: 'https://philippines.tradersfair.com/',
           },
           {
             src: 'Traders Empire.png',
-            links: 'http://bit.ly/TradersEmpireBook1',
+            link: 'http://bit.ly/TradersEmpireBook1',
           },
         ],
       }
@@ -51,7 +51,7 @@
     },
     methods: {
         redirect(i){
-            window.open(this.items[i].links, "_blank");
+            window.open(this.items[i].link, "_blank");
         }
     },
   }
