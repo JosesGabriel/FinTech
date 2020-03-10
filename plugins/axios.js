@@ -16,6 +16,7 @@ export default function({ $axios, $auth, app }) {
   /**
    * Handles every axios request
    */
+  let isRefreshing = false;
   $axios.interceptors.request.use(
     config => {
       //const token = localStorage["auth._token.local"];
@@ -28,8 +29,19 @@ export default function({ $axios, $auth, app }) {
           app.$refreshToken.isTokenExpired() === true &&
           !routes.includes($auth.ctx.route.name)
         ) {
-          console.log("token refreshed");
-          app.$refreshToken.requestRefreshToken();
+          console.log("refreshing");
+          if (!isRefreshing) {
+            isRefreshing = true;
+            app.$refreshToken
+              .requestRefreshToken()
+              .then(() => {
+                console.log("token refreshed");
+                isRefreshing = false;
+              })
+              .catch(err => {
+                console.error("refresh token:", err);
+              });
+          }
         }
         config.headers.Authorization = token;
       }
