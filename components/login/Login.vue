@@ -80,34 +80,6 @@
         </v-btn>
       </v-hover>
 
-      <v-hover v-slot:default="{ hover }">
-        <v-btn
-          v-show="false"
-          block
-          rounded
-          class="black--text font-weight-bold text-capitalize mb-2"
-          :color="!hover ? 'success' : 'successhover'"
-          elevation="1"
-          @click.prevent="refresh()"
-        >
-          Refresh
-        </v-btn>
-      </v-hover>
-
-      <v-hover v-slot:default="{ hover }">
-        <v-btn
-          v-show="false"
-          block
-          rounded
-          class="black--text font-weight-bold text-capitalize mb-2"
-          :color="!hover ? 'success' : 'successhover'"
-          elevation="1"
-          @click.prevent="GetData()"
-        >
-          Fetch
-        </v-btn>
-      </v-hover>
-
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
         <a
@@ -144,23 +116,6 @@ export default {
     })
   },
   methods: {
-    async GetData() {
-      const latestDate = await this.$api.chart.stocks.activeDate();
-      //console.log(latestDate);
-    },
-    async refresh() {
-      try {
-        const response = await this.$axios.$post(
-          `${process.env.API_URL}/auth/login/refresh`,
-          {},
-          { credentials: true }
-        );
-        //console.log("response", response);
-        return this.$auth.setToken("local", response.data.token.access_token);
-      } catch (error) {
-        console.log(error);
-      }
-    },
     /**
      * fires when user logs in to the site
      *
@@ -170,16 +125,29 @@ export default {
       this.isLoading = "success";
 
       try {
-        const response = await this.$auth.loginWith("local", {
+        await this.$auth.loginWith("local", {
           data: {
             username: this.email,
             password: this.password
           }
         });
 
-        console.log("login", response);
+        const response = await this.$axios.$post(
+          `${process.env.API_URL}/auth/login/refresh`,
+          {},
+          { credentials: true }
+        );
 
-        //console.log(this.refresh());
+        this.$auth.setToken(
+          "local",
+          `${response.data.token.token_type} ${response.data.token.access_token}`
+        );
+
+        this.$auth.$storage.setCookie(
+          "__expires_in",
+          parseInt(response.data.token.expires_in),
+          false
+        );
 
         this.$emit("alert", {
           state: "success",

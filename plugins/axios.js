@@ -16,18 +16,29 @@ export default function({ $axios, $auth, redirect, app }) {
   /**
    * Handles every axios request
    */
+  //        !IsInArray(routes, $auth.ctx.route.name)
+
+  /*
+$axios
+          .$post(
+            `${process.env.API_URL}/auth/login/refresh`,
+            {},
+            { credentials: true }
+          )
+          .then(response => {
+            console.log("refresh_token", response);
+            $auth.setToken("local", response.data.token.access_token);
+          });
+  */
   $axios.interceptors.request.use(
     config => {
-      const token = localStorage["auth._token.local"];
-      //const token = $auth.getToken("local");
-      //  assign if token is not null and the request url is not found in urls and current route
-      //console.log("token", token);
-      if (
-        token != null &&
-        !IsInArray(urls, config.url) &&
-        !IsInArray(routes, $auth.ctx.route.name)
-      ) {
-        //console.log("config header", token);
+      //const token = localStorage["auth._token.local"];
+      const token = $auth.getToken("local");
+      //  assign if token is not null and the request url is not found in urls
+      console.log(config);
+      if (token != null && !IsInArray(urls, config.url)) {
+        console.log("expires_in", $auth.$storage.getCookie("__expires_in"));
+        console.log("config header", token);
         config.headers.Authorization = token;
       }
       return config;
@@ -41,8 +52,7 @@ export default function({ $axios, $auth, redirect, app }) {
    * Set global authorization token
    */
   $axios.setGlobalAuth = () => {
-    $axios.defaults.headers.common["Authorization"] =
-      localStorage["auth._token.local"];
+    $axios.defaults.headers.common["Authorization"] = $auth.getToken("local");
   };
 
   // endregion custom handlers
@@ -59,18 +69,9 @@ export default function({ $axios, $auth, redirect, app }) {
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status);
 
-    if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
+    if ([401, 403].includes(code) && !routes.includes($auth.ctx.route.name)) {
       if (error.response.data.message == "Token has expired.") {
-        $axios
-          .$post(
-            `${process.env.API_URL}/auth/login/refresh`,
-            {},
-            { credentials: true }
-          )
-          .then(response => {
-            console.log("refresh_token", response);
-            $auth.setToken("local", response.data.token.access_token);
-          });
+        $auth.logout();
       }
     }
     return Promise.reject(error);
