@@ -11,7 +11,7 @@ export default ({ $axios, $auth, $moment, redirect }, inject) => {
         "local",
         `${response.data.token.token_type} ${response.data.token.access_token}`
       );
-      return response.data.token;
+      return response;
     },
 
     setExpiresIn: (expiresIn = 0) => {

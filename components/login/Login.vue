@@ -132,9 +132,9 @@ export default {
           }
         });
 
-        const token = await this.$refreshToken.getRefreshToken();
-        console.log("login part", token);
-        this.$refreshToken.setExpiresIn(token.expires_in);
+        const response = await this.$refreshToken.getRefreshToken();
+        console.log("login part", response);
+        this.$refreshToken.setExpiresIn(response.data.token.expires_in);
 
         this.$emit("alert", {
           state: "success",
@@ -143,7 +143,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          window.open("/", "_self");
+          //window.open("/", "_self");
         }, 800);
       } catch (error) {
         this.$emit("alert", {
