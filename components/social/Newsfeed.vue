@@ -23,6 +23,7 @@
       class="centerPanel__card mb-3"
       :dark="lightSwitch == 0 ? false : true"
       outlined
+      :style="{ background: cardBackground }"
     >
       <!-- Start of Post Header -->
       <v-list-item class="pt-1">
@@ -397,7 +398,10 @@ export default {
       newComment: "social/getNewComment",
       deleteComment: "social/getDeleteComment",
       updateComment: "social/getUpdateComment"
-    })
+    }),
+    cardBackground() {
+      return this.lightSwitch == 0 ? "#ffffff" : "#142530";
+    },
   },
   watch: {
     deleteDialog(value) {

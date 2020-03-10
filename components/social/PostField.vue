@@ -5,6 +5,7 @@
       class="pa-4 pb-3"
       :dark="lightSwitch == 0 ? false : true"
       :loading="loader"
+      :style="{ background: cardBackground }"
       outlined
     >
       <v-form enctype="multipart/form-data">
@@ -266,10 +267,10 @@
     <div v-if="hasTaggedStock" class="postField__dropdown d-inline">
       <div class="postField__dropdown--caret"></div>
       <v-card
-        :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
         :dark="lightSwitch == 0 ? false : true"
         outlined
         max-width="250px"
+        :style="{ background: dropdownBackground }"
       >
         <v-card-actions class="d-block">
           <span class="caption">Register your sentiment for this stock.</span>
@@ -319,7 +320,13 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
-    })
+    }),
+    cardBackground() {
+      return this.lightSwitch == 0 ? "#ffffff" : "#142530";
+    },
+    dropdownBackground() {
+      return this.lightSwitch == 0 ? "#e3e9ed" : "#00121e";
+    },
   },
   watch: {
     postField() {
@@ -812,7 +819,7 @@ export default {
 }
 .postField__dropdown--caret {
   position: relative;
-  left: 100px;
+  left: 143px;
   width: 0;
   height: 0;
   border-left: 9px solid transparent;
