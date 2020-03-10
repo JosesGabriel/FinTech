@@ -1,14 +1,14 @@
-export default ({ $axios, $auth, $moment, redirect }, inject) => {
+export default ({ $axios, $moment, redirect, app }, inject) => {
   const refreshToken = {
     getRefreshToken: async () => {
+      console.log(app.$auth);
       const response = await $axios.$post(
         `${process.env.API_URL}/auth/login/refresh`,
         {},
         { credentials: true }
       );
       console.log("getRefreshToken", response);
-      console.log($auth);
-      $auth.setToken(
+      app.$auth.setToken(
         "local",
         `${response.data.token.token_type} ${response.data.token.access_token}`
       );
@@ -22,7 +22,7 @@ export default ({ $axios, $auth, $moment, redirect }, inject) => {
         .format("x");
       console.log("timestamp", timestamp);
       //localStorage[("_expiresIn", timestamp)];
-      $auth.$storage.setCookie("__expires_in", timestamp, false);
+      app.$auth.$storage.setCookie("__expires_in", timestamp, false);
     },
 
     isTokenExpired: () => {
