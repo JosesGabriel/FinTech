@@ -17,7 +17,9 @@ export default ({ $axios, $moment, redirect, app }, inject) => {
     },
 
     setExpiresIn: (expiresIn = 0) => {
-      const timestamp = $moment()
+      console.log("dito oh");
+      const timestamp = app
+        .$moment()
         .add(parseInt(expiresIn), "seconds")
         .format("x");
       console.log("timestamp", timestamp);
