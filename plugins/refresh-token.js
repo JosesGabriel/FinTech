@@ -6,7 +6,7 @@ export default ({ $axios, $auth, $moment, redirect }, inject) => {
         {},
         { credentials: true }
       );
-
+      console.log("getRefreshToken", response);
       $auth.setToken(
         "local",
         `${response.data.token.token_type} ${response.data.token.access_token}`
