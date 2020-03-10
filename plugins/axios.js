@@ -5,12 +5,24 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  *
  * @param {*} {}
  */
-export default function({ $axios, $auth, redirect, app }) {
+export default function({ $axios, $auth, $moment, redirect }) {
   // list of exempted urls
   const urls = [process.env.STREAM_API_URL, process.env.VYNDUE_API_URL];
 
   // list of exempted routes
   const routes = ["login"];
+
+  const requestRefreshToken = () => {
+    const expire_in = $moment()
+      .add(parseInt($auth.$storage.getCookie("__expires_in")), "seconds")
+      .format("x");
+    const current_datetime = $moment().format("x");
+    const minutes = Math.floor((expire_in - current_datetime) / 60000);
+    console.log("expire_in", expire_in);
+    console.log("current_datetime", current_datetime);
+    console.log("remaining", minutes);
+    return minutes <= 10 ? false : true;
+  };
 
   // region custom handlers
   /**
@@ -39,6 +51,7 @@ $axios
       if (token != null && !IsInArray(urls, config.url)) {
         console.log("expires_in", $auth.$storage.getCookie("__expires_in"));
         console.log("config header", token);
+        console.log(requestRefreshToken());
         config.headers.Authorization = token;
       }
       return config;
