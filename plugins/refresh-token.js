@@ -24,12 +24,14 @@ export default ({ $axios, $auth, $moment, redirect }, inject) => {
 
     isTokenExpired: () => {
       // const expire_in = $auth.$storage.getCookie("__expires_in");
-      const expire_in = parseInt(localStorage["auth.__expires_in"]);
+      const expire_in = isNaN(localStorage["auth.__expires_in"])
+        ? 0
+        : localStorage["auth.__expires_in"];
       const current_datetime = $moment().format("x");
       const minutes = Math.ceil((expire_in - current_datetime) / 60000);
-      console.log("expire_in", expire_in);
-      console.log("current_datetime", current_datetime);
-      console.log("remaining", minutes);
+      //   console.log("expire_in", expire_in);
+      //   console.log("current_datetime", current_datetime);
+      //   console.log("remaining", minutes);
       return minutes <= 0 ? true : false;
     }
   };

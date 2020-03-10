@@ -133,8 +133,8 @@ export default {
         });
 
         const token = await this.$refreshToken.getRefreshToken();
-
-        this.$refreshToken.setExpiresIn(parseInt(token.expires_in));
+        console.log("login part", token);
+        this.$refreshToken.setExpiresIn(token.expires_in);
 
         this.$emit("alert", {
           state: "success",
