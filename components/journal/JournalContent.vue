@@ -379,6 +379,7 @@ export default {
                 this.portfolioListPush.push(portfolioListPush2);
               }
             }
+            this.portfolioListPush.push({ divider: true });
           }
           this.portfolioListPush.push({ divider: true });
           this.portfolioListPush.push(
