@@ -89,7 +89,7 @@
             >
               <v-list-item-icon class="mr-4">
                 <v-icon :color="active == 'journal' ? 'success' : ''"
-                  >mdi-library-books</v-icon
+                  >mdi-text-box-multiple</v-icon
                 >
               </v-list-item-icon>
               <v-list-item-content>
