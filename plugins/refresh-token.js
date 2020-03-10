@@ -7,10 +7,12 @@ export default ({ $axios, $auth, $moment, redirect }, inject) => {
         { credentials: true }
       );
       console.log("getRefreshToken", response);
+      console.log($auth);
       $auth.setToken(
         "local",
         `${response.data.token.token_type} ${response.data.token.access_token}`
       );
+      console.log("lagpas");
       this.setExpiresIn(response.data.token.expires_in);
     },
 
@@ -18,6 +20,7 @@ export default ({ $axios, $auth, $moment, redirect }, inject) => {
       const timestamp = $moment()
         .add(parseInt(expiresIn), "seconds")
         .format("x");
+      console.log("timestamp", timestamp);
       //localStorage[("_expiresIn", timestamp)];
       $auth.$storage.setCookie("__expires_in", timestamp, false);
     },
