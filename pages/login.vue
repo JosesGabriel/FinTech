@@ -138,6 +138,7 @@ export default {
   },
   mounted() {
     this.retrieveParams();
+    localStorage.notificationStatus = 0;
   },
   created() {
     // since this page is allowed in middleware, temporarily, catch user if mobile
