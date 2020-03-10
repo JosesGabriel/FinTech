@@ -21,21 +21,22 @@ export default function({ $axios, $auth, app }) {
     config => {
       //const token = localStorage["auth._token.local"];
       const token = $auth.getToken("local");
-      //  assign if token is not null and the request url is not found in urls
+      //  assign if token is not null and the request url is not found in urls && url routes
 
-      if (token != null && !IsInArray(urls, config.url)) {
-        console.log("config header", token);
+      if (
+        token != null &&
+        !IsInArray(urls, config.url) &&
+        !routes.includes($auth.ctx.route.name)
+      ) {
         if (
           app.$refreshToken.isTokenExpired() === true &&
           !routes.includes($auth.ctx.route.name)
         ) {
-          console.log("refreshing");
           if (!isRefreshing) {
             isRefreshing = true;
             app.$refreshToken
               .requestRefreshToken()
               .then(() => {
-                console.log("token refreshed");
                 isRefreshing = false;
               })
               .catch(err => {
