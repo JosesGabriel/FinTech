@@ -74,7 +74,20 @@
           class="black--text font-weight-bold text-capitalize mb-2"
           :color="!hover ? 'success' : 'successhover'"
           elevation="1"
-          @click="login()"
+          @click.prevent="refresh()"
+        >
+          Refresh
+        </v-btn>
+      </v-hover>
+
+      <v-hover v-slot:default="{ hover }">
+        <v-btn
+          block
+          rounded
+          class="black--text font-weight-bold text-capitalize mb-2"
+          :color="!hover ? 'success' : 'successhover'"
+          elevation="1"
+          @click.prevent="login()"
         >
           Sign In
         </v-btn>
@@ -115,7 +128,14 @@ export default {
       loginModalState: "login/getLoginModalState"
     })
   },
+  mounted() {
+    //console.log(this.$refreshToken.setExpiresIn(120));
+  },
   methods: {
+    async refresh() {
+      const response = await this.$refreshToken.getRefreshToken();
+      console.log("login part refresh", response);
+    },
     /**
      * fires when user logs in to the site
      *
