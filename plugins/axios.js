@@ -24,9 +24,8 @@ export default function({ $axios, $auth, $moment, app, redirect }) {
       //  assign if token is not null and the request url is not found in urls
       //console.log(config);
       if (token != null && !IsInArray(urls, config.url)) {
-        //console.log("config header", token);
-        //console.log("$auth", $auth.$storage.getCookie("__expires_in"));
-        //console.log(app.$refreshToken.isTokenExpired());
+        console.log("config header", token);
+        console.log(app.$refreshToken.isTokenExpired());
         config.headers.Authorization = token;
       }
       return config;
