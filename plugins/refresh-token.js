@@ -43,8 +43,8 @@ export default ({ $axios, app }, inject) => {
     isTokenExpired: () => {
       const expire_in = app.$auth.$storage.getCookie("_expires_in");
       const current_datetime = app.$moment().format("x");
-      const minutes = Math.ceil((expire_in - current_datetime) / 60000);
-      return minutes <= 5 ? true : false; // 5 minutes or less
+      const minutes = Math.floor((expire_in - current_datetime) / 60000);
+      return minutes <= process.env.REFRESH_TIME_MINUTES ? true : false;
     }
   };
 
