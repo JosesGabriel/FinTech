@@ -19,8 +19,7 @@ deploy-dev-server:
     - native
     - ssh
   script:
-    - whoami
-    - pwd
+    - ls ~/.ssh/
   only:
     - develop
 
