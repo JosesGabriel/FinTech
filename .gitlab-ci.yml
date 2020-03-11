@@ -19,7 +19,7 @@ deploy-dev-server:
     - native
     - ssh
   script:
-    - ls ~/.ssh/
+    - echo $DEV_HOST
   only:
     - develop
 
