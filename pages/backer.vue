@@ -28,17 +28,23 @@
           </span>
 
           <span class="backer__subheadline--text d-block">
-            Creating the greatest community of self-directed
-            investors to share ideas, discover opportunities
-            and deploy quick executions.
+            Building the best community of investors from all over
+            the world housed under an
+            <strong class="success--text">end to end platform</strong> where
+            idea sharing is promoted, mutual respect is upheld
+            and above all, technology cuts above the rest.
           </span>
 
           <v-divider :dark="lightSwitch == 1" class="my-10" width="85%"></v-divider>
 
           <span class="backer__quoteheadline--text d-block text-justify">
-            We aim to create
-            <strong>the LinkedIn packed with institutional investing tools,</strong> research & analysis, market update notification as it happens
-            and many things in between for retail investors.
+            We aim to create the LinkedIn for retail traders and self-directed
+            investors, packed with
+            <strong class="success--text">institutional-grade</strong> features, insights, market
+            intelligence and everything that is in-between, all streamed into a
+            data superhighway that enables any user to
+            <strong class="success--text">early detect</strong> real-world
+            market opportunities.
           </span>
           <v-divider :dark="lightSwitch == 1" class="mt-10" width="85%"></v-divider>
         </v-card>
@@ -57,26 +63,26 @@
           <div class="body-2 plan__inclusion--icon">
             <span class="d-block">Other benefits are:</span>
             <span class="d-block">
-              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Early access to broker quality research
+              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Early access to new features & trading tools
             </span>
             <span class="d-block">
-              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Access to top analyst recommendation
+              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Full access to broker-quality research
             </span>
             <span class="d-block">
               <v-icon class="body-2" width="10%" color="success">mdi-check-bold</v-icon>
-              <span width="90%">Unlimited notifications for acquired market intelligence</span>
+              <span width="90%">Realtime notifications to acquired Market Intelligence</span>
             </span>
             <span class="d-block">
-              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Free VIP pass to all future events
+              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Priority & discounted pass to Lyduz events
             </span>
             <span class="d-block">
-              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Full access to tons of future trading tools
+              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Full & lifetime access to all of Lyduz’s feature
             </span>
             <span class="d-block">
-              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Ad Free
+              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Ad-free experience
             </span>
             <span class="d-block">
-              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Early backer badge
+              <v-icon class="body-2 mr-1" color="success">mdi-check-bold</v-icon>Early-backer badge
             </span>
             <span class="d-block overline font-italic mt-2 no-transform tertiary--text">
               Note: Contents provided by third parties are excluded.
@@ -129,16 +135,16 @@ export default {
 }
 #app .backer__subheadline--text {
   font-style: normal;
-  font-weight: 600;
-  font-size: 22px;
-  line-height: 30px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 26px;
   align-items: center;
   letter-spacing: 0.15px;
   width: 85%;
 }
 #app .backer__quoteheadline--text {
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
   font-size: 16px;
   line-height: 20px;
   width: 85%;
@@ -164,6 +170,7 @@ export default {
 }
 #app .plan__inclusion--icon {
   line-height: 25px;
+  font-weight: 400;
 }
 #app .plan__bg--carousel {
   height: 100% !important;
@@ -171,6 +178,9 @@ export default {
   left: 0;
   top: 0;
 }
+</style>
+
+<style>
 #app .plan__bg--carousel .v-image.v-carousel__item {
   height: 100% !important;
 }
