@@ -74,7 +74,7 @@
           class="black--text font-weight-bold text-capitalize mb-2"
           :color="!hover ? 'success' : 'successhover'"
           elevation="1"
-          @click="login()"
+          @click.prevent="login()"
         >
           Sign In
         </v-btn>
@@ -132,8 +132,8 @@ export default {
           }
         });
 
-        const response = await this.$refreshToken.getRefreshToken();
-        console.log("login part", response);
+        // temporary, request new token then store expiration cookie
+        //await this.$refreshToken.requestRefreshToken();
 
         this.$emit("alert", {
           state: "success",
@@ -142,7 +142,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          //window.open("/", "_self");
+          window.open("/", "_self");
         }, 800);
       } catch (error) {
         this.$emit("alert", {

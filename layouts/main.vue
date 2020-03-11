@@ -89,7 +89,7 @@ export default {
       lampBtn: false
     };
   },
-  middleware: "isMobileOrTablet",
+  middleware: ["isMobileOrTablet", "isTokenExpired"],
   head() {
     return {
       link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]

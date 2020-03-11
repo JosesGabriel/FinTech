@@ -5,7 +5,7 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  *
  * @param {*} {}
  */
-export default function({ $axios, $auth, $moment, app, redirect }) {
+export default function({ $axios, $auth, app }) {
   // list of exempted urls
   const urls = [process.env.STREAM_API_URL, process.env.VYNDUE_API_URL];
 
@@ -16,17 +16,34 @@ export default function({ $axios, $auth, $moment, app, redirect }) {
   /**
    * Handles every axios request
    */
-  //!IsInArray(routes, $auth.ctx.route.name)
+  let isRefreshing = false;
   $axios.interceptors.request.use(
     config => {
       //const token = localStorage["auth._token.local"];
       const token = $auth.getToken("local");
-      //  assign if token is not null and the request url is not found in urls
-      //console.log(config);
-      if (token != null && !IsInArray(urls, config.url)) {
-        //console.log("config header", token);
-        //console.log("$auth", $auth.$storage.getCookie("__expires_in"));
-        //console.log(app.$refreshToken.isTokenExpired());
+      //  assign if token is not null and the request url is not found in urls && url routes
+
+      if (
+        token != null &&
+        !IsInArray(urls, config.url) &&
+        !routes.includes($auth.ctx.route.name)
+      ) {
+        if (
+          app.$refreshToken.isTokenExpired() === true &&
+          !routes.includes($auth.ctx.route.name)
+        ) {
+          if (!isRefreshing) {
+            isRefreshing = true;
+            app.$refreshToken
+              .requestRefreshToken()
+              .then(() => {
+                isRefreshing = false;
+              })
+              .catch(err => {
+                console.error("refresh token:", err);
+              });
+          }
+        }
         config.headers.Authorization = token;
       }
       return config;
