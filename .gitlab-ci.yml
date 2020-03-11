@@ -56,7 +56,7 @@ run-unit-test:
     - docker
   script:
     - echo "running unit test"
-    
+
 #--------- staging stage ---------#    
 deploy-dev-server:
   stage: staging
@@ -87,9 +87,6 @@ deploy-production-server:
     - echo "deploy in production server"
   only:
     - master
-
-
-
 
 
 
