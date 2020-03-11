@@ -36,9 +36,6 @@ deploy-production-server:
   only:
     - master
 
-    
-
-
 
 
 
