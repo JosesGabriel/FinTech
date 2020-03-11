@@ -84,7 +84,11 @@ deploy-production-server:
     - native
     - ssh
   script:
-    - echo "deploy in production server"
+    - ssh -t $PROD_USER@$PROD_HOST "whoami &&
+      (echo $PROD_PASSWORD | sudo -S -su www-data bash -c 'binary-executor/binary-executor-linux-amd64 "--commands='whoami; 
+      cd /var/www/lyduz.com; 
+      pwd;
+      '"')"
   only:
     - master
 
