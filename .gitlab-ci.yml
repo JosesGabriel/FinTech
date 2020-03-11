@@ -20,6 +20,7 @@ deploy-dev-server:
     - ssh
   script:
     - echo $DEV_HOST
+    - echo $DEV_USER
   only:
     - develop
 
