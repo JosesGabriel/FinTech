@@ -133,7 +133,7 @@ export default {
         });
 
         // temporary, request new token then store expiration cookie
-        //await this.$refreshToken.requestRefreshToken();
+        await this.$refreshToken.requestRefreshToken();
 
         this.$emit("alert", {
           state: "success",
