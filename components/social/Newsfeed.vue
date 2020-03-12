@@ -236,6 +236,11 @@
           </div>
 
           <PhotoCarousel :images="post.attachments" />
+          <LinkPreview
+            v-if="hasMetaLink(post) && !post.attachments.images"
+            :meta="post.meta"
+            @visitLink="openConfirmDialog"
+          />
         </v-list-item-content>
       </v-list-item>
       <!-- End of Post Body -->
@@ -366,6 +371,7 @@ import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
 
 import List from "~/components/social/feed/comments/List";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
+import LinkPreview from "~/components/social/LinkPreview";
 import Share from "~/components/modals/Share";
 import ConfirmDialog from "~/components/modals/Confirm";
 export default {
@@ -373,6 +379,7 @@ export default {
   components: {
     List,
     PhotoCarousel,
+    LinkPreview,
     Share,
     ConfirmDialog
   },
@@ -638,6 +645,7 @@ export default {
       this.$api.social.posts
         .get(params)
         .then(response => {
+          console.log("social_posts", response);
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
