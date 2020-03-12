@@ -13,5 +13,8 @@ export default {
   },
   SET_UPDATECOMMENT(state, data) {
     state.updateComment = data;
+  },
+  SET_CONFIRMDIALOG(state, data) {
+    state.confirmDialog = data;
   }
 };

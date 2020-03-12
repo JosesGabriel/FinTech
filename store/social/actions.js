@@ -13,5 +13,8 @@ export default {
   },
   async setUpdateComment({ commit }, data) {
     await commit("SET_UPDATECOMMENT", data);
+  },
+  async setConfirmDialog({ commit }, data) {
+    await commit("SET_CONFIRMDIALOG", data);
   }
 };

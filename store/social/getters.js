@@ -13,5 +13,8 @@ export default {
   },
   getUpdateComment(state) {
     return state.updateComment;
+  },
+  confirmDialog(state) {
+    return state.confirmDialog;
   }
 };

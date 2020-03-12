@@ -229,7 +229,11 @@
               >Done Editing</v-btn
             >
           </div>
-          <span v-else class="body-2 px-5 pb-3 post__Content">{{ post.content }}</span>
+
+          <div v-else class="body-2 px-5 pb-3 post__Content">
+            <span v-if="hasMetaLink(post)" v-html="post.content"></span>
+            <span v-else>{{ post.content }}</span>
+          </div>
 
           <PhotoCarousel :images="post.attachments" />
         </v-list-item-content>
@@ -337,6 +341,22 @@
       :postid="sharePostID"
       @closeModal="showShare = false"
     />
+    <ConfirmDialog
+      text="You will open a link outside of Lyduz. Do you wish to continue?"
+    >
+      <template>
+        <v-hover v-slot:default="{ hover }">
+          <v-btn
+            :dark="lightSwitch == 1"
+            class="black--text font-weight-bold text-capitalize caption"
+            :color="!hover ? 'success' : 'successhover'"
+            elevation="1"
+            @click.prevent="onLinkClick(false)"
+            >Okay</v-btn
+          >
+        </v-hover>
+      </template>
+    </ConfirmDialog>
   </v-col>
 </template>
 
@@ -347,12 +367,14 @@ import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
 import List from "~/components/social/feed/comments/List";
 import PhotoCarousel from "~/components/social/PhotoCarousel";
 import Share from "~/components/modals/Share";
+import ConfirmDialog from "~/components/modals/Confirm";
 export default {
   name: "Newsfeed",
   components: {
     List,
     PhotoCarousel,
-    Share
+    Share,
+    ConfirmDialog
   },
   props: {
     newPost: {
@@ -388,7 +410,8 @@ export default {
       numberPost: 0,
       showBanner: false,
       reactButtons: false,
-      commentValue: ""
+      commentValue: "",
+      linkURL: ""
     };
   },
   computed: {
@@ -397,11 +420,12 @@ export default {
       newPosts: "global/getNewPosts",
       newComment: "social/getNewComment",
       deleteComment: "social/getDeleteComment",
-      updateComment: "social/getUpdateComment"
+      updateComment: "social/getUpdateComment",
+      confirmDialog: "social/confirmDialog"
     }),
     cardBackground() {
       return this.lightSwitch == 0 ? "#ffffff" : "#142530";
-    },
+    }
   },
   watch: {
     deleteDialog(value) {
@@ -437,7 +461,8 @@ export default {
         },
         tagged_stocks: this.newPost.tagged_stocks,
         comments: [],
-        comment_descendants_count: 0
+        comment_descendants_count: 0,
+        meta: this.newPost.meta
       });
     },
     newPosts() {
@@ -505,10 +530,22 @@ export default {
       this.loadPosts();
     }
     if (this.$route.name == "index") this.scroll();
+
+    // manage link click event
+    document.querySelector("body").addEventListener(
+      "click",
+      evt => {
+        if (evt.target.classList.contains("socialPostParsedLink")) {
+          this.openConfirmDialog(evt.target.dataset.url);
+        }
+      },
+      true
+    );
   },
   methods: {
     ...mapActions({
-      setAlert: "global/setAlert"
+      setAlert: "global/setAlert",
+      setConfirmDialog: "social/setConfirmDialog"
     }),
     addDynamicTime: AddDynamicTime,
     localFormat: LocalFormat,
@@ -916,6 +953,57 @@ export default {
         message: message
       };
       this.setAlert(alert);
+    },
+    /**
+     * check if meta link is available
+     *
+     * @param   {Object}  post  objet
+     *
+     * @return  {Boolean}        true/false
+     */
+    hasMetaLink(post) {
+      if (post.meta != null) {
+        return post.meta.links != undefined && post.meta.links.length > 0
+          ? true
+          : false;
+      }
+      return false;
+    },
+    /**
+     * manage event click add filters and conditions before open new tab
+     *
+     * @param   {String}  url  link
+     *
+     * @return
+     */
+    openConfirmDialog(url) {
+      const test = url.split("/");
+      this.linkURL = url;
+      if (!test[2].toLowerCase().includes("lyduz")) {
+        this.setConfirmDialog(true);
+      } else {
+        this.onLinkClick(true);
+      }
+    },
+    /**
+     * redirect user to new tab depend to same site boolena
+     *
+     * @param   {Boolean}  sameSite  true/false
+     *
+     * @return
+     */
+    onLinkClick(sameSite) {
+      this.setConfirmDialog(false);
+      if (sameSite === false) {
+        setTimeout(() => {
+          var win = window.open(this.linkURL, "_blank");
+          win.focus();
+        }, 300);
+      } else {
+        // supposed to be manage by vue router
+        var win = window.open(this.linkURL, "_blank");
+        win.focus();
+      }
     }
   }
 };

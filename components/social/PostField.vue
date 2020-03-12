@@ -104,6 +104,7 @@
               :loading="postFieldLoader"
               @keyup.@="userTagMode = true"
               @keyup="catcher"
+              @paste="onPaste"
               @keyup.$="(stockTagMode = true), search('stock')"
               @click="emojiToggle = false"
               >{{ postField }}</v-textarea
@@ -251,7 +252,7 @@
               absolute
               color="success"
               :disabled="postBtnDisable"
-              @click="
+              @click.prevent="
                 taggedStocks.length > 0
                   ? getTaggedStockValues()
                   : postFieldSubmit()
@@ -314,7 +315,9 @@ export default {
       selected: [],
       members: [],
       text: "",
-      characterLimit: 0
+      characterLimit: 0,
+      links: [],
+      postFieldSanitized: ""
     };
   },
   computed: {
@@ -326,7 +329,7 @@ export default {
     },
     dropdownBackground() {
       return this.lightSwitch == 0 ? "#e3e9ed" : "#00121e";
-    },
+    }
   },
   watch: {
     postField() {
@@ -504,7 +507,7 @@ export default {
      *
      * @return
      */
-    postFieldSubmit(stockValues) {
+    async postFieldSubmit(stockValues) {
       this.postFieldLoader = "success";
       this.stockTagMode = false;
       this.imagesArray = [];
@@ -538,54 +541,54 @@ export default {
         }
       }
 
-      if (this.$refs.postField__inputRef.files) {
-        //text + image
-        const params = {
-          content: this.postField,
-          attachments: this.cloudArray,
-          visibility: "public",
-          status: "active",
-          tags: postTags
-        };
-        this.$api.social.actions
-          .create(params)
-          .then(
-            function(response) {
-              let responsePost = response.data.post;
-              responsePost.attachments = this.cloudArray;
-              responsePost.user = {
-                uuid: this.$auth.user.data.user.uuid
-              };
-              this.$emit("authorNewPost", responsePost);
-              this.clearInputs(true, response.message);
-            }.bind(this)
-          )
-          .catch(error => {
-            this.clearInputs(false, error.response.data.message);
+      // process content's links
+      // and sanitize post fields
+      const links = this.hasLinks(this.postField);
+      if (links != false) {
+        // check if link array count is equal to content's actual link
+        if (links.length != this.links.length) {
+          const mapd = this.links.map(data => data.url);
+          mapd.forEach((value, key) => {
+            if (links.indexOf(value) == -1) {
+              this.links.splice(key, 1);
+            }
           });
+        }
+
+        // parse postfield content
+        this.postFieldSanitized = this.$sanitize(
+          this.parseContentLinks(this.postField)
+        );
       } else {
-        // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
-        const params = {
-          content: this.postField,
-          visibility: "public",
-          status: "active",
-          tags: postTags
+        this.links = [];
+        this.postFieldSanitized = this.$sanitize(this.postField);
+      }
+
+      const params = {
+        content: this.postFieldSanitized,
+        visibility: "public",
+        status: "active",
+        tags: postTags,
+        meta: { links: this.links }
+      };
+
+      if (this.$refs.postField__inputRef.files) {
+        params.attachments = this.cloudArray;
+      }
+
+      try {
+        const response = await this.$api.social.actions.create(params);
+        const responsePost = response.data.post;
+        if (this.$refs.postField__inputRef.files) {
+          responsePost.attachments = this.cloudArray;
+        }
+        responsePost.user = {
+          uuid: this.$auth.user.data.user.uuid
         };
-        this.$api.social.actions
-          .create(params)
-          .then(
-            function(response) {
-              let responsePost = response.data.post;
-              responsePost.user = {
-                uuid: this.$auth.user.data.user.uuid
-              };
-              this.$emit("authorNewPost", response.data.post);
-              this.clearInputs(true, response.message);
-            }.bind(this)
-          )
-          .catch(error => {
-            this.clearInputs(false, error.response.data.message);
-          });
+        this.$emit("authorNewPost", responsePost);
+        this.clearInputs(true, response.message);
+      } catch (error) {
+        this.clearInputs(false, error.response.data.message);
       }
 
       this.currentTaggedStock = "";
@@ -722,6 +725,66 @@ export default {
       this.setAlert(alert);
 
       this.removeImage();
+    },
+    /**
+     * request for meta info from open grapth endpoint, for each detected links
+     *
+     * @param   {Text}  content  postfield content
+     *
+     * @return
+     */
+    async processContentLinks(content) {
+      this.links = [];
+      // check if content has any links store as array
+      const links = this.hasLinks(content);
+      if (content.length > 0 && links != false) {
+        await links.forEach(async link => {
+          const graphURL = await this.$api.social.posts.opengraph({
+            url: link
+          });
+          this.links.push({
+            url: graphURL.data.url,
+            meta: graphURL.data.meta
+          });
+          this.postBtnDisable = false;
+        });
+      }
+    },
+    /**
+     * search for a link in postfield then parse all links to a allowable url format
+     *
+     * @param   {Text}  content  postfield content
+     *
+     * @return  {Text}           along with parse url tags
+     */
+    parseContentLinks(content) {
+      const exp = /(\b(https?):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+      return content.replace(
+        exp,
+        "<a class='socialPostParsedLink' data-url='$1' href='#'>$1</a>"
+      );
+    },
+    /**
+     * check if content has a possible url/link text
+     *
+     * @param   {Text}  content  postfield content
+     *
+     * @return  {Array}           list of list detected
+     */
+    hasLinks(content) {
+      const links = content.match(/(https?:\/\/[^\s]+)/g);
+      return links != null ? links : false;
+    },
+    /**
+     * onpaste event run the parseContentLink to scan if content has a link text
+     *
+     * @return
+     */
+    onPaste() {
+      setTimeout(() => {
+        this.postBtnDisable = true;
+        this.processContentLinks(this.postField);
+      }, 100);
     }
   }
 };
