@@ -15,7 +15,7 @@
                   v-show="hasDescription"
                   class="description__container"
                 >
-                  <v-card class="mx-auto" min-height="120px" tile outlined>
+                  <v-card class="mr-5" min-height="120px" tile outlined>
                     <v-list-item three-line>
                       <v-list-item-content>
                         <v-list-item-title class="title mb-1">{{
@@ -25,8 +25,8 @@
                           >{{ description }}
                         </v-list-item-subtitle>
 
-                        <v-list-item-action-text class="mt-6">
-                          <div class="overline">{{ url }}</div>
+                        <v-list-item-action-text class="mt-4 description__url">
+                          {{ url | limitString(100, true) }}
                         </v-list-item-action-text>
                       </v-list-item-content>
                     </v-list-item>
@@ -116,6 +116,9 @@ export default {
 </script>
 
 <style scoped>
+.description__url {
+  font-size: 10px;
+}
 .description__container {
   position: absolute;
   background: #ffffff;

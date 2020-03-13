@@ -251,7 +251,8 @@
               depressed
               absolute
               color="success"
-              :disabled="postBtnDisable"
+              :disabled="postBtnDisable || fetchingMeta"
+              :loading="fetchingMeta"
               @click.prevent="
                 taggedStocks.length > 0
                   ? getTaggedStockValues()
@@ -317,7 +318,8 @@ export default {
       text: "",
       characterLimit: 0,
       links: [],
-      postFieldSanitized: ""
+      postFieldSanitized: "",
+      fetchingMeta: false
     };
   },
   computed: {
@@ -507,7 +509,7 @@ export default {
      *
      * @return
      */
-    async postFieldSubmit(stockValues) {
+    postFieldSubmit(stockValues) {
       this.postFieldLoader = "success";
       this.stockTagMode = false;
       this.imagesArray = [];
@@ -564,31 +566,56 @@ export default {
         this.postFieldSanitized = this.$sanitize(this.postField);
       }
 
-      const params = {
-        content: this.postFieldSanitized,
-        visibility: "public",
-        status: "active",
-        tags: postTags,
-        meta: { links: this.links }
-      };
-
       if (this.$refs.postField__inputRef.files) {
-        params.attachments = this.cloudArray;
-      }
-
-      try {
-        const response = await this.$api.social.actions.create(params);
-        const responsePost = response.data.post;
-        if (this.$refs.postField__inputRef.files) {
-          responsePost.attachments = this.cloudArray;
-        }
-        responsePost.user = {
-          uuid: this.$auth.user.data.user.uuid
+        //text + image
+        const params = {
+          content: this.postFieldSanitized,
+          attachments: this.cloudArray,
+          visibility: "public",
+          status: "active",
+          tags: postTags,
+          meta: { links: this.links }
         };
-        this.$emit("authorNewPost", responsePost);
-        this.clearInputs(true, response.message);
-      } catch (error) {
-        this.clearInputs(false, error.response.data.message);
+        this.$api.social.actions
+          .create(params)
+          .then(
+            function(response) {
+              let responsePost = response.data.post;
+              responsePost.attachments = this.cloudArray;
+              responsePost.user = {
+                uuid: this.$auth.user.data.user.uuid
+              };
+              this.$emit("authorNewPost", responsePost);
+              this.clearInputs(true, response.message);
+            }.bind(this)
+          )
+          .catch(error => {
+            this.clearInputs(false, error.response.data.message);
+          });
+      } else {
+        // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
+        const params = {
+          content: this.postFieldSanitized,
+          visibility: "public",
+          status: "active",
+          tags: postTags,
+          meta: { links: this.links }
+        };
+        this.$api.social.actions
+          .create(params)
+          .then(
+            function(response) {
+              let responsePost = response.data.post;
+              responsePost.user = {
+                uuid: this.$auth.user.data.user.uuid
+              };
+              this.$emit("authorNewPost", response.data.post);
+              this.clearInputs(true, response.message);
+            }.bind(this)
+          )
+          .catch(error => {
+            this.clearInputs(false, error.response.data.message);
+          });
       }
 
       this.currentTaggedStock = "";
@@ -738,17 +765,28 @@ export default {
       // check if content has any links store as array
       const links = this.hasLinks(content);
       if (content.length > 0 && links != false) {
-        await links.forEach(async link => {
-          const graphURL = await this.$api.social.posts.opengraph({
-            url: link
+        try {
+          this.fetchingMeta = true;
+          await links.forEach(async link => {
+            const graphURL = await this.$api.social.posts.opengraph({
+              url: link
+            });
+            this.links.push({
+              url: graphURL.data.url,
+              meta: graphURL.data.meta,
+              data: graphURL.data
+            });
+            this.fetchingMeta = false;
           });
-          this.links.push({
-            url: graphURL.data.url,
-            meta: graphURL.data.meta,
-            data: graphURL.data
-          });
-          this.postBtnDisable = false;
-        });
+        } catch (error) {
+          let alert = {
+            model: true,
+            state: false,
+            message: error
+          };
+          this.setAlert(alert);
+          this.fetchingMeta = false;
+        }
       }
     },
     /**
@@ -783,7 +821,6 @@ export default {
      */
     onPaste() {
       setTimeout(() => {
-        this.postBtnDisable = true;
         this.processContentLinks(this.postField);
       }, 100);
     }
