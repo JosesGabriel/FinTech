@@ -99,7 +99,8 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      selectedPortfolio: "journal/getSelectedPortfolio"
+      selectedPortfolio: "journal/getSelectedPortfolio",
+      renderPortfolioKey: "journal/getRenderPortfolioKey"
     }),
     priceChange() {
       return this.change > 0 ? "increase" : this.change == 0 ? "" : "decrease";
@@ -260,7 +261,6 @@ export default {
         })
         .then(response => {
           if (response.success) {
-            console.log(response)
             this.clearInputs();
 
             let alert = {
@@ -273,9 +273,9 @@ export default {
         });
     },
     clearInputs() {
-      this.keyCounter = 0;
-      this.keyCreateCounter++;
-      this.setRenderPortfolioKey(this.keyCreateCounter);
+      this.keyCounter = this.renderPortfolioKey;
+      this.keyCounter++;
+      this.setRenderPortfolioKey(this.keyCounter);
       this.$emit("clicked");
 
       this.stockModel = null;
