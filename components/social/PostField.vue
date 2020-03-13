@@ -509,7 +509,7 @@ export default {
      *
      * @return
      */
-    postFieldSubmit(stockValues) {
+    async postFieldSubmit(stockValues) {
       this.postFieldLoader = "success";
       this.stockTagMode = false;
       this.imagesArray = [];
@@ -566,56 +566,31 @@ export default {
         this.postFieldSanitized = this.$sanitize(this.postField);
       }
 
+      const params = {
+        content: this.postFieldSanitized,
+        visibility: "public",
+        status: "active",
+        tags: postTags,
+        meta: { links: this.links }
+      };
+
       if (this.$refs.postField__inputRef.files) {
-        //text + image
-        const params = {
-          content: this.postFieldSanitized,
-          attachments: this.cloudArray,
-          visibility: "public",
-          status: "active",
-          tags: postTags,
-          meta: { links: this.links }
+        params.attachments = this.cloudArray;
+      }
+
+      try {
+        const response = await this.$api.social.actions.create(params);
+        const responsePost = response.data.post;
+        if (this.$refs.postField__inputRef.files) {
+          responsePost.attachments = this.cloudArray;
+        }
+        responsePost.user = {
+          uuid: this.$auth.user.data.user.uuid
         };
-        this.$api.social.actions
-          .create(params)
-          .then(
-            function(response) {
-              let responsePost = response.data.post;
-              responsePost.attachments = this.cloudArray;
-              responsePost.user = {
-                uuid: this.$auth.user.data.user.uuid
-              };
-              this.$emit("authorNewPost", responsePost);
-              this.clearInputs(true, response.message);
-            }.bind(this)
-          )
-          .catch(error => {
-            this.clearInputs(false, error.response.data.message);
-          });
-      } else {
-        // can't reuse $auth.user.data.user.profile_image code above bc its asynchronous. Suggestions on how to improve r welcome
-        const params = {
-          content: this.postFieldSanitized,
-          visibility: "public",
-          status: "active",
-          tags: postTags,
-          meta: { links: this.links }
-        };
-        this.$api.social.actions
-          .create(params)
-          .then(
-            function(response) {
-              let responsePost = response.data.post;
-              responsePost.user = {
-                uuid: this.$auth.user.data.user.uuid
-              };
-              this.$emit("authorNewPost", response.data.post);
-              this.clearInputs(true, response.message);
-            }.bind(this)
-          )
-          .catch(error => {
-            this.clearInputs(false, error.response.data.message);
-          });
+        this.$emit("authorNewPost", responsePost);
+        this.clearInputs(true, response.message);
+      } catch (error) {
+        this.clearInputs(false, error.response.data.message);
       }
 
       this.currentTaggedStock = "";

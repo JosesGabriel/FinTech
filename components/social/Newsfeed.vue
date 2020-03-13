@@ -239,7 +239,7 @@
 
           <PhotoCarousel :images="post.attachments" />
           <LinkPreview
-            v-if="hasMetaLink(post) && post.attachments_count == 0"
+            v-if="hasMetaLink(post)"
             :meta="post.meta"
             @visitLink="openConfirmDialog"
           />
@@ -986,7 +986,7 @@ export default {
      * @return  {Boolean}        true/false
      */
     showLinkImageOnly(post) {
-      if (post.meta != null && post.attachments_count == 0) {
+      if (post.meta != null) {
         if (post.meta.links != undefined && post.meta.links.length > 0) {
           if (post.meta.links[0].meta != undefined) {
             const hasImage =

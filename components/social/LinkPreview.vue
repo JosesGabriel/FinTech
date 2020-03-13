@@ -18,7 +18,7 @@
                   <v-card class="mr-5" min-height="120px" tile outlined>
                     <v-list-item three-line>
                       <v-list-item-content>
-                        <v-list-item-title class="title mb-1">{{
+                        <v-list-item-title class="description__title mb-1">{{
                           title
                         }}</v-list-item-title>
                         <v-list-item-subtitle
@@ -51,7 +51,6 @@
                     <v-hover v-slot:default="{ onHover }">
                       <v-btn
                         class="black--text font-weight-bold text-capitalize body-1"
-                        :outlined="!onHover"
                         color="success"
                         x-large
                         elevation="1"
@@ -116,6 +115,9 @@ export default {
 </script>
 
 <style scoped>
+.description__title {
+  font-size: 18px;
+}
 .description__url {
   font-size: 10px;
 }
