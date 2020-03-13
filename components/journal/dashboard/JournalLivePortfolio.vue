@@ -31,7 +31,7 @@
           class="rtf_top-btn text-capitalize mr-2"
           :disabled="toggleButton"
           height="23"
-          @click.stop="showTradeViewForm = true"
+          @click.stop="showTradeModalForm = true"
         >
           <span class="body-2 font-weight-bold">Trade</span>
         </v-btn>
@@ -192,7 +192,7 @@
       />
       <reset-modal :visible="showResetForm" @close="showResetForm = false" />
       <funds-modal :visible="showFundsForm" @close="showFundsForm = false" />
-      <trade-view :visible="showTradeViewForm" @close="showTradeViewForm = false" />
+      <trade-modal :visible="showTradeModalForm" @close="showTradeModalForm = false" />
       <trade-details
         :visible="showTradeDetails"
         :item-details="itemDetails"
@@ -212,7 +212,8 @@
 import resetModal from "~/components/modals/Reset";
 import shareModal from "~/components/modals/Share";
 import fundsModal from "~/components/modals/Fund";
-import tradeView from "~/components/modals/TradeView";
+// import tradeModal from "~/components/modals/TradeView";
+import tradeModal from "~/components/journal/trade/TradeModal";
 import tradeDetails from "~/components/modals/TradeDetails";
 import tradeEdits from "~/components/modals/TradeEdits";
 import tradeDelete from "~/components/modals/TradeDelete";
@@ -225,7 +226,7 @@ export default {
     shareModal,
     resetModal,
     fundsModal,
-    tradeView,
+    tradeModal,
     tradeDetails,
     tradeEdits,
     tradeDelete
@@ -288,7 +289,7 @@ export default {
       livePortfolioLoading: "success",
       showResetForm: false,
       showFundsForm: false,
-      showTradeViewForm: false,
+      showTradeModalForm: false,
       showTradeDetails: false,
       showEditDetails: false,
       showDelete: false,
@@ -470,7 +471,6 @@ export default {
               execute: false
             };
           }
-          console.log(this.totalProfitLoss)
           this.livePortfolioLoading = false;
         }.bind(this)
       );
