@@ -2,20 +2,41 @@
   <v-container class="px-0" dark>
     <v-row no-gutters>
       <v-col class="px-0" cols="12" sm="12" md="12" lg="12">
-        <v-tabs background-color="transparent" :dark="lightSwitch == 1 ? true : false">
+        <v-tabs
+          background-color="transparent"
+          :dark="lightSwitch == 1 ? true : false"
+        >
           <v-tabs-slider color="success"></v-tabs-slider>
 
-          <v-tab :class="fontColor" :href="`#tab-1`" class="text-capitalize subtitle-1">Profile</v-tab>
-          <v-tab :class="fontColor" class="text-capitalize subtitle-1" disabled>Activities</v-tab>
-          <v-tab :class="fontColor" class="text-capitalize subtitle-1" disabled>Services</v-tab>
+          <v-tab
+            :class="fontColor"
+            :href="`#tab-1`"
+            class="text-capitalize subtitle-1"
+            >Profile</v-tab
+          >
+          <v-tab :class="fontColor" class="text-capitalize subtitle-1" disabled
+            >Activities</v-tab
+          >
+          <v-tab :class="fontColor" class="text-capitalize subtitle-1" disabled
+            >Services</v-tab
+          >
 
           <!-- Profile tab -->
           <v-tab-item class="mt-5" :value="'tab-1'">
             <v-row no-gutters>
               <v-col cols="12" sm="12" md="8" lg="8">
-                <ProfileAbout v-if="user" :about="about" :user="user" class="my-2" />
+                <ProfileAbout
+                  v-if="user"
+                  :about="about"
+                  :user="user"
+                  class="my-2"
+                />
                 <PostField class="mb-3" @authorNewPost="authorNewPost" />
-                <Newsfeed v-if="getUserId" :author-id="user.uuid" :new-post="newPost" />
+                <Newsfeed
+                  v-if="getUserId"
+                  :author-id="user.uuid"
+                  :new-post="newPost"
+                />
                 <!-- <ProfileExperience class="my-2" />
                 <ProfileEducation class="my-2" />
                 <ProfileSkills class="my-2" />

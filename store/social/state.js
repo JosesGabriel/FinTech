@@ -3,5 +3,6 @@ export default () => ({
   sseInfo: null,
   newComment: {},
   deleteComment: {},
-  updateComment: {}
+  updateComment: {},
+  confirmDialog: false
 });
