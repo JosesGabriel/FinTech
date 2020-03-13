@@ -348,6 +348,7 @@ export default {
                 portfolioListPush1.type === "real"
               ) {
                 this.setDefaultPortfolioId(portfolioListPush1.id);
+                this.setSelectedPortfolio(portfolioListPush1);
                 this.portfolioDropdownModel = portfolioListPush1.id;
                 defaultPort = true;
               }
