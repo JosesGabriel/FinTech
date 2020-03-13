@@ -10,7 +10,11 @@
 
         <v-tabs-items v-model="tab">
           <v-tab-item>
-            <Buy :stocklist="stockList.data" :portfolioList="userPortfolioReal" @clicked="show = false" />
+            <Buy
+              :stocklist="stockList.data"
+              :portfolioList="userPortfolioReal"
+              @clicked="show = false"
+            />
           </v-tab-item>
           <v-tab-item>
             <Sell :stocklist="openPosition" @clicked="show = false" />

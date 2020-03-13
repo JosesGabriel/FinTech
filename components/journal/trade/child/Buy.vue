@@ -1,106 +1,179 @@
 <template>
   <v-card flat :dark="lightSwitch == 1" class="py-4 px-2">
-    <v-autocomplete
-      outlined
-      label="Select a Stock"
-      color="success"
-      item-text="symbol"
-      item-value="id_str"
-      item-color="success"
-      append-icon="mdi-chevron-down"
-      v-model="stockModel"
-      :dark="lightSwitch == 1"
-      :items="stocklist"
-      :menu-props="{offsetY: true, dark: lightSwitch == 1}"
-      @change="onChangeStock"
-    ></v-autocomplete>
+    <v-stepper v-model="stepper" class="bg-transparent">
+      <v-stepper-items>
+        <v-stepper-content step="1" class="px-0 py-1">
+          <v-autocomplete
+            outlined
+            label="Select a Stock"
+            color="success"
+            item-text="symbol"
+            item-value="id_str"
+            item-color="success"
+            append-icon="mdi-chevron-down"
+            v-model="stockModel"
+            :dark="lightSwitch == 1"
+            :items="stocklist"
+            :menu-props="{offsetY: true, dark: lightSwitch == 1}"
+            @change="onChangeStock"
+          ></v-autocomplete>
 
-    <v-row no-gutters class="body-2">
-      <span>Market Price</span>
-      <v-spacer></v-spacer>
-      <div>
-        <span>{{ last | numeral("0.00a") }}</span>
-        <span
-          :class="priceChange"
-        >{{ change | numeral("0.00a") }} ({{ changePercentage | numeral("0.00a")}}%)</span>
-      </div>
-    </v-row>
+          <v-row no-gutters class="body-2">
+            <span>Market Price</span>
+            <v-spacer></v-spacer>
+            <div>
+              <span>{{ last | numeral("0.00a") }}</span>
+              <span
+                :class="priceChange"
+              >{{ change | numeral("0.00a") }} ({{ changePercentage | numeral("0.00a")}}%)</span>
+            </div>
+          </v-row>
 
-    <span class="body-2">Best Price</span>
+          <span class="body-2">Best Price</span>
 
-    <v-card color="transparent" flat min-height="107px" class="pa-2 caption">
-      <v-row no-gutters class="mb-1">
-        <v-col cols="4" class="text-left">Price</v-col>
-        <v-col cols="4" class="text-center">Seller</v-col>
-        <v-col cols="4" class="text-right">Volume</v-col>
-      </v-row>
-      <v-progress-linear indeterminate :active="loading" color="success darken-2"></v-progress-linear>
-      <div class="caption text-center pa-3" v-if="noData">No Available Data</div>
-      <v-row no-gutters v-for="(item, index) in asks" :key="index">
-        <v-col cols="4" class="text-left">{{ item.price | numeral("0.00a") }}</v-col>
-        <v-col cols="4" class="text-center">{{ item.count }}</v-col>
-        <v-col cols="4" class="text-right">{{ item.volume | numeral("0.0a") }}</v-col>
-      </v-row>
-    </v-card>
+          <v-card color="transparent" flat min-height="107px" class="pa-2 caption">
+            <v-row no-gutters class="mb-1">
+              <v-col cols="4" class="text-left">Price</v-col>
+              <v-col cols="4" class="text-center">Seller</v-col>
+              <v-col cols="4" class="text-right">Volume</v-col>
+            </v-row>
+            <v-progress-linear indeterminate :active="loading" color="success darken-2"></v-progress-linear>
+            <div class="caption text-center pa-3" v-if="noData">No Available Data</div>
+            <v-row no-gutters v-for="(item, index) in asks" :key="index">
+              <v-col cols="4" class="text-left">{{ item.price | numeral("0.00a") }}</v-col>
+              <v-col cols="4" class="text-center">{{ item.count }}</v-col>
+              <v-col cols="4" class="text-right">{{ item.volume | numeral("0.0a") }}</v-col>
+            </v-row>
+          </v-card>
 
-    <v-select
-      outlined
-      item-text="name"
-      item-value="id"
-      item-color="success"
-      append-icon="mdi-chevron-down"
-      label="Select Portfolio"
-      color="success"
-      v-model="portfolioModel"
-      :items="portfolioList"
-      :dark="lightSwitch == 1"
-      :menu-props="{offsetY: true, dark: lightSwitch == 1}"
-      @change="onChangePortfolio"
-    ></v-select>
+          <v-select
+            outlined
+            item-text="name"
+            item-value="id"
+            item-color="success"
+            append-icon="mdi-chevron-down"
+            label="Select Portfolio"
+            color="success"
+            v-model="portfolioModel"
+            :items="portfolioList"
+            :dark="lightSwitch == 1"
+            :menu-props="{offsetY: true, dark: lightSwitch == 1}"
+            @change="onChangePortfolio"
+          ></v-select>
 
-    <v-col cols="12" class="d-flex align-center pa-0">
-      <v-text-field
-        type="number"
-        color="success"
-        label="Quantity"
-        v-model="quantityModel"
-        :dark="lightSwitch == 1"
-        :min="0"
-      ></v-text-field>
-      <v-btn @click="toggleOperation(boardlotModel, 'down')" icon small color="success">
-        <v-icon>mdi-chevron-down</v-icon>
-      </v-btn>
-      <v-btn @click="toggleOperation(boardlotModel, 'up')" icon small color="success">
-        <v-icon>mdi-chevron-up</v-icon>
-      </v-btn>
-    </v-col>
+          <v-col cols="12" class="d-flex align-center pa-0">
+            <v-text-field
+              type="number"
+              color="success"
+              label="Quantity"
+              v-model="quantityModel"
+              :dark="lightSwitch == 1"
+              :min="0"
+            ></v-text-field>
+            <v-btn @click="toggleOperation(boardlotModel, 'down')" icon small color="success">
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+            <v-btn @click="toggleOperation(boardlotModel, 'up')" icon small color="success">
+              <v-icon>mdi-chevron-up</v-icon>
+            </v-btn>
+          </v-col>
 
-    <v-text-field
-      label="Buy Price"
-      color="success"
-      class="py-3"
-      v-model="priceModel"
-      :dark="lightSwitch == 1"
-    ></v-text-field>
+          <v-text-field
+            label="Buy Price"
+            color="success"
+            class="py-3"
+            v-model="priceModel"
+            :dark="lightSwitch == 1"
+          ></v-text-field>
 
-    <v-row no-gutters class="body-2">
-      <span>Total Cost</span>
-      <v-spacer></v-spacer>
-      <span>{{ totalCost | numeral("0,000.00") }}</span>
-    </v-row>
+          <v-row no-gutters class="body-2">
+            <span>Total Cost</span>
+            <v-spacer></v-spacer>
+            <span>{{ totalCost | numeral("0,000.00") }}</span>
+          </v-row>
 
-    <span class="caption">(Available Funds {{ availableFundModel | numeral("0.00a") }})</span>
+          <span class="caption">(Available Funds {{ availableFundModel | numeral("0.00a") }})</span>
 
-    <v-row no-gutters>
-      <v-spacer></v-spacer>
-      <v-btn @click="clearInputs" text class="caption text-capitalize" color="gray">Close</v-btn>
-      <v-btn
-        class="caption text-capitalize black--text"
-        color="success"
-        :disabled="toggleContinueBtn"
-        @click="postBuy"
-      >Continue</v-btn>
-    </v-row>
+          <v-row no-gutters>
+            <v-spacer></v-spacer>
+            <v-btn @click="clearInputs" text class="caption text-capitalize" color="gray">Close</v-btn>
+            <v-btn
+              class="caption text-capitalize black--text"
+              color="success"
+              :disabled="toggleContinueBtn"
+              @click="stepper = 2"
+            >Continue</v-btn>
+          </v-row>
+        </v-stepper-content>
+
+        <v-stepper-content step="2" class="px-0 py-1">
+          <div>
+            <v-select
+              outlined
+              class="py-1"
+              color="success"
+              item-color="success"
+              label="Select Strategy"
+              append-icon="mdi-chevron-down"
+              v-model="strategyModel"
+              :items="strategy"
+              :dark="lightSwitch == 1"
+              :menu-props="{offsetY: true, dark: lightSwitch == 1}"
+            ></v-select>
+          </div>
+          <div>
+            <v-select
+              outlined
+              class="py-1"
+              color="success"
+              item-color="success"
+              append-icon="mdi-chevron-down"
+              label="Select Trade Plan"
+              v-model="tradeplanModel"
+              :dark="lightSwitch == 1"
+              :menu-props="{offsetY: true, dark: lightSwitch == 1}"
+              :items="tradeplan"
+            ></v-select>
+          </div>
+          <div>
+            <v-select
+              outlined
+              class="py-1"
+              color="success"
+              item-color="success"
+              label="Select Emotions"
+              append-icon="mdi-chevron-down"
+              v-model="emotionsModel"
+              :items="emotions"
+              :dark="lightSwitch == 1"
+              :menu-props="{offsetY: true, dark: lightSwitch == 1}"
+            ></v-select>
+          </div>
+          <div>
+            <v-textarea
+              outlined
+              color="success"
+              label="Enter Notes"
+              class="white--text trading_notes-textarea body-2"
+              v-model="notesModel"
+              :dark="lightSwitch == 1"
+              :menu-props="{offsetY: true, dark: lightSwitch == 1}"
+            ></v-textarea>
+          </div>
+
+          <v-row no-gutters>
+            <v-spacer></v-spacer>
+            <v-btn @click="stepper = 1" text class="caption text-capitalize" color="gray">Back</v-btn>
+            <v-btn
+              class="caption text-capitalize black--text"
+              color="success"
+              :disabled="toggleContinueBtn"
+              @click="postBuy"
+            >Confirm</v-btn>
+          </v-row>
+        </v-stepper-content>
+      </v-stepper-items>
+    </v-stepper>
   </v-card>
 </template>
 
@@ -117,7 +190,8 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      selectedPortfolio: "journal/getSelectedPortfolio"
+      selectedPortfolio: "journal/getSelectedPortfolio",
+      renderPortfolioKey: "journal/getRenderPortfolioKey"
     }),
     priceChange() {
       return this.change > 0 ? "increase" : this.change == 0 ? "" : "decrease";
@@ -159,7 +233,20 @@ export default {
       last: 0,
       change: 0,
       changePercentage: 0,
-      availableFundModel: 0
+      availableFundModel: 0,
+      stepper: 1,
+      strategy: [
+        "Bottom Picking",
+        "Breakout Play",
+        "Trend Following",
+        "1-2-3 Reversal"
+      ],
+      tradeplan: ["Day Trade", "Swing Trade", "Investments"],
+      emotions: ["Neutral", "Greedy", "Fearful"],
+      strategyModel: null,
+      tradeplanModel: null,
+      emotionsModel: null,
+      notesModel: ""
     };
   },
   watch: {
@@ -282,10 +369,10 @@ export default {
           stock_price: parseFloat(this.priceModel),
           transaction_meta: {
             stock_name: this.selectedStockData.symbol,
-            strategy: "",
-            plan: "",
-            emotion: "",
-            notes: "",
+            strategy: this.strategyModel,
+            plan: this.tradeplanModel,
+            emotion: this.emotionsModel,
+            notes: this.notesModel,
             date: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
           }
         })
@@ -306,9 +393,9 @@ export default {
         });
     },
     clearInputs() {
-      this.keyCounter = 0;
-      this.keyCreateCounter++;
-      this.setRenderPortfolioKey(this.keyCreateCounter);
+      this.keyCounter = this.renderPortfolioKey;
+      this.keyCounter++;
+      this.setRenderPortfolioKey(this.keyCounter);
       this.$emit("clicked");
 
       this.stockModel = null;
@@ -322,6 +409,11 @@ export default {
       this.last = 0;
       this.change = 0;
       this.changePercentage = 0;
+      this.strategyModel = null;
+      this.tradeplanModel = null;
+      this.emotionsModel = null;
+      this.notesModel = "";
+      this.stepper = 1;
     }
   }
 };
@@ -333,5 +425,9 @@ export default {
 }
 .decrease {
   color: #f44336;
+}
+.bg-transparent {
+  background: transparent;
+  box-shadow: unset;
 }
 </style>
