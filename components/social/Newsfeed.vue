@@ -231,8 +231,10 @@
           </div>
 
           <div v-else class="body-2 px-5 pb-3 post__Content">
-            <span v-if="hasMetaLink(post)" v-html="post.content"></span>
-            <span v-else>{{ post.content }}</span>
+            <span
+              v-show="!showLinkImageOnly(post)"
+              v-html="post.content"
+            ></span>
           </div>
 
           <PhotoCarousel :images="post.attachments" />
@@ -645,7 +647,6 @@ export default {
       this.$api.social.posts
         .get(params)
         .then(response => {
-          console.log("social_posts", response);
           if (response.success) {
             this.postsObject = this.postsObject.concat(response.data.posts);
             this.loader = false;
@@ -974,6 +975,34 @@ export default {
         return post.meta.links != undefined && post.meta.links.length > 0
           ? true
           : false;
+      }
+      return false;
+    },
+    /**
+     * show image only once post is url only without text
+     *
+     * @param   {Object}  post  post
+     *
+     * @return  {Boolean}        true/false
+     */
+    showLinkImageOnly(post) {
+      if (post.meta != null) {
+        if (post.meta.links != undefined && post.meta.links.length > 0) {
+          if (post.meta.links[0].meta != undefined) {
+            const hasImage =
+              post.meta.links[0].meta.image != undefined ? true : false;
+            let content = post.content.replace(
+              /<\/?("[^"]*"|'[^']*'|[^>])*(>|$)/g,
+              ""
+            );
+            content = content.replace(post.meta.links[0].url, "");
+            return hasImage == true && content.trim().length == 0
+              ? true
+              : false;
+          }
+          return false;
+        }
+        return false;
       }
       return false;
     },

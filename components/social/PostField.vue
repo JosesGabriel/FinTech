@@ -744,7 +744,8 @@ export default {
           });
           this.links.push({
             url: graphURL.data.url,
-            meta: graphURL.data.meta
+            meta: graphURL.data.meta,
+            data: graphURL.data
           });
           this.postBtnDisable = false;
         });
