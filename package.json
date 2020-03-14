@@ -39,6 +39,7 @@
     "vue-html2canvas": "0.0.4",
     "vue-native-websocket": "^2.0.13",
     "vue-numeral-filter": "^1.1.1",
+    "vue-sanitize": "^0.2.0",
     "vue-snotify": "^3.2.1",
     "vue-toasted": "^1.1.27"
   },

@@ -118,6 +118,10 @@ export default $axios => ({
         query.length > 0 ? "?" + query : ""
       }`
     );
+  },
+
+  async opengraph(params) {
+    return await $axios.$get(`${process.env.API_URL}/opengraph`, { params });
   }
 });
 

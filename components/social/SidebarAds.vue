@@ -7,10 +7,12 @@
             >
            Advertisement
         </div>
-      <v-divider></v-divider>
+      <v-divider :dark="lightSwitch == true"></v-divider>
         <v-carousel 
-            hide-delimiters 
             cycle
+            class="mt-2"
+            :show-arrows="false"
+            interval="3000"
             >
             <v-carousel-item
                 class="adsCarousel"
@@ -56,8 +58,11 @@
     },
   }
 </script>
-<style scoped>
+<style>
 .adsCarousel:hover{
     cursor: pointer;
+}
+.v-carousel__controls__item > .v-btn__content > .v-icon {
+    font-size: 14px !important;
 }
 </style>

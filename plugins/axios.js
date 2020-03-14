@@ -5,7 +5,7 @@ import { IsInArray } from "~/assets/js/helpers/arrays/urls";
  *
  * @param {*} {}
  */
-export default function({ $axios, $auth, redirect }) {
+export default function({ $axios, $auth, app }) {
   // list of exempted urls
   const urls = [process.env.STREAM_API_URL, process.env.VYNDUE_API_URL];
 
@@ -16,16 +16,34 @@ export default function({ $axios, $auth, redirect }) {
   /**
    * Handles every axios request
    */
+  let isRefreshing = false;
   $axios.interceptors.request.use(
     config => {
-      const token = localStorage["auth._token.local"];
+      //const token = localStorage["auth._token.local"];
+      const token = $auth.getToken("local");
+      //  assign if token is not null and the request url is not found in urls && url routes
 
-      //  assign if token is not null and the request url is not found in urls and current route
       if (
         token != null &&
         !IsInArray(urls, config.url) &&
-        !IsInArray(routes, $auth.ctx.route.name)
+        !routes.includes($auth.ctx.route.name)
       ) {
+        if (
+          app.$refreshToken.isTokenExpired() === true &&
+          !routes.includes($auth.ctx.route.name)
+        ) {
+          if (!isRefreshing) {
+            isRefreshing = true;
+            app.$refreshToken
+              .requestRefreshToken()
+              .then(() => {
+                isRefreshing = false;
+              })
+              .catch(err => {
+                console.error("refresh token:", err);
+              });
+          }
+        }
         config.headers.Authorization = token;
       }
       return config;
@@ -39,11 +57,9 @@ export default function({ $axios, $auth, redirect }) {
    * Set global authorization token
    */
   $axios.setGlobalAuth = () => {
-    $axios.defaults.headers.common["Authorization"] =
-      localStorage["auth._token.local"];
+    $axios.defaults.headers.common["Authorization"] = $auth.getToken("local");
   };
 
-  // $axios.defaults.withCredentials = true;
   // endregion custom handlers
 
   // region override
@@ -57,8 +73,11 @@ export default function({ $axios, $auth, redirect }) {
    */
   $axios.onError(error => {
     const code = parseInt(error.response && error.response.status);
-    if ([401, 403].includes(code) && !IsInArray(routes, $auth.ctx.route.name)) {
-      $auth.logout();
+
+    if ([401, 403].includes(code) && !routes.includes($auth.ctx.route.name)) {
+      if (error.response.data.message == "Token has expired.") {
+        $auth.logout();
+      }
     }
     return Promise.reject(error);
   });

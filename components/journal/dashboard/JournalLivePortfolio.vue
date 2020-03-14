@@ -31,7 +31,7 @@
           class="rtf_top-btn text-capitalize mr-2"
           :disabled="toggleButton"
           height="23"
-          @click.stop="showTradeViewForm = true"
+          @click.stop="showTradeModalForm = true"
         >
           <span class="body-2 font-weight-bold">Trade</span>
         </v-btn>
@@ -192,7 +192,7 @@
       />
       <reset-modal :visible="showResetForm" @close="showResetForm = false" />
       <funds-modal :visible="showFundsForm" @close="showFundsForm = false" />
-      <trade-view :visible="showTradeViewForm" @close="showTradeViewForm = false" />
+      <trade-modal :visible="showTradeModalForm" @close="showTradeModalForm = false" />
       <trade-details
         :visible="showTradeDetails"
         :item-details="itemDetails"
@@ -212,7 +212,8 @@
 import resetModal from "~/components/modals/Reset";
 import shareModal from "~/components/modals/Share";
 import fundsModal from "~/components/modals/Fund";
-import tradeView from "~/components/modals/TradeView";
+// import tradeModal from "~/components/modals/TradeView";
+import tradeModal from "~/components/journal/trade/TradeModal";
 import tradeDetails from "~/components/modals/TradeDetails";
 import tradeEdits from "~/components/modals/TradeEdits";
 import tradeDelete from "~/components/modals/TradeDelete";
@@ -225,7 +226,7 @@ export default {
     shareModal,
     resetModal,
     fundsModal,
-    tradeView,
+    tradeModal,
     tradeDetails,
     tradeEdits,
     tradeDelete
@@ -288,7 +289,7 @@ export default {
       livePortfolioLoading: "success",
       showResetForm: false,
       showFundsForm: false,
-      showTradeViewForm: false,
+      showTradeModalForm: false,
       showTradeDetails: false,
       showEditDetails: false,
       showDelete: false,
@@ -453,7 +454,6 @@ export default {
       const openparams = {
         fund: this.defaultPortfolioId
       };
-      this.totalProfitCarrier = 0
       this.$api.journal.portfolio.open(openparams).then(
         function(result) {
           this.portfolioLogs = result.data.open;
@@ -463,9 +463,8 @@ export default {
           for (let i = 0; i < this.portfolioLogs.length; i++) {
             this.portfolioLogs[i].fund = this.defaultPortfolioId;
             this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
-            this.totalProfitLoss = this.totalProfitCarrier =
-              this.totalProfitCarrier +
-              parseFloat(this.portfolioLogs[i].profit_loss);
+            this.totalProfitLoss += parseFloat(this.portfolioLogs[i].profit_loss)
+            
             this.portfolioLogs[i].action = this.portfolioLogs[i].stock_id;
             this.portfolioLogs[i] = {
               ...this.portfolioLogs[i],

@@ -74,25 +74,12 @@
           class="black--text font-weight-bold text-capitalize mb-2"
           :color="!hover ? 'success' : 'successhover'"
           elevation="1"
-          @click="login()"
+          @click.prevent="login()"
         >
           Sign In
         </v-btn>
       </v-hover>
 
-      <v-hover v-slot:default="{ hover }">
-        <v-btn
-          v-show="false"
-          block
-          rounded
-          class="black--text font-weight-bold text-capitalize mb-2"
-          :color="!hover ? 'success' : 'successhover'"
-          elevation="1"
-          @click.prevent="refresh()"
-        >
-          Refresh
-        </v-btn>
-      </v-hover>
       <span class="text-center d-block caption w-100"
         >New to Lyduz?
         <a
@@ -129,18 +116,6 @@ export default {
     })
   },
   methods: {
-    async refresh() {
-      try {
-        const response = await this.$axios.$post(
-          "https://dev-api.arbitrage.ph/api/auth/login/refresh",
-          {},
-          { credentials: true }
-        );
-        console.log("response", response);
-      } catch (error) {
-        console.log(error);
-      }
-    },
     /**
      * fires when user logs in to the site
      *
@@ -150,12 +125,15 @@ export default {
       this.isLoading = "success";
 
       try {
-        const response = await this.$auth.loginWith("local", {
+        await this.$auth.loginWith("local", {
           data: {
             username: this.email,
             password: this.password
           }
         });
+
+        // temporary, request new token then store expiration cookie
+        await this.$refreshToken.requestRefreshToken();
 
         this.$emit("alert", {
           state: "success",

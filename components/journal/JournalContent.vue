@@ -298,7 +298,7 @@ export default {
       setPortfolioKey: "journal/setPortfolioKey",
       setDefaultPortfolioId: "journal/setDefaultPortfolioId",
       setJournalCharts: "journal/setJournalCharts",
-      setSelectedPortfolio: "journal/setSelectedPortfolio",
+      setSelectedPortfolio: "journal/setSelectedPortfolio"
     }),
     /**
      * when tab dashboard clicked all components with in dashboard tab will be refreshed
@@ -320,18 +320,9 @@ export default {
 
     changePortfolio(obj) {
       this.setDefaultPortfolioId(this.portfolioDropdownModel.id);
-      const openparams = {
-        fund: this.portfolioDropdownModel.id
-      };
-      this.$api.journal.portfolio.open(openparams).then(
-        function(result) {
-          if (result.success) {
-            this.keyCreateCounter = this.renderPortfolioKey;
-            this.keyCreateCounter++;
-            this.setRenderPortfolioKey(this.keyCreateCounter);
-          }
-        }.bind(this)
-      );
+      this.keyCreateCounter = this.renderPortfolioKey;
+      this.keyCreateCounter++;
+      this.setRenderPortfolioKey(this.keyCreateCounter);
       this.setSelectedPortfolio(obj);
     },
     /**
@@ -357,6 +348,7 @@ export default {
                 portfolioListPush1.type === "real"
               ) {
                 this.setDefaultPortfolioId(portfolioListPush1.id);
+                this.setSelectedPortfolio(portfolioListPush1);
                 this.portfolioDropdownModel = portfolioListPush1.id;
                 defaultPort = true;
               }
@@ -388,15 +380,19 @@ export default {
                 this.portfolioListPush.push(portfolioListPush2);
               }
             }
+            this.portfolioListPush.push({ divider: true });
           }
           this.portfolioListPush.push({ divider: true });
-          this.portfolioListPush.push({
-            id: "real",
-            name: "Sum of Real Portfolio"
-          }, {
-            id: "virtual",
-            name: "Sum of Virtual Portfolio"
-          });
+          this.portfolioListPush.push(
+            {
+              id: "real",
+              name: "Sum of Real Portfolio"
+            },
+            {
+              id: "virtual",
+              name: "Sum of Virtual Portfolio"
+            }
+          );
         }.bind(this)
       );
       this.componentKeys++;
