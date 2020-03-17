@@ -152,8 +152,7 @@ export default {
         case true:
           this.$api.accounts.payment.payments().then(response => {
             if (response.success) {
-              const loc = response.meta.redirect.url;
-              window.open(loc, "_blank", "width=500,height=500");
+              window.location.href = response.meta.redirect.url;
 
               this.toggleElements = false;
             }
