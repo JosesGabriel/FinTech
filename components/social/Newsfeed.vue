@@ -32,13 +32,14 @@
           class="no-transform"
         >
           <v-list-item-avatar class="mr-2" size="42">
-            <img
+            <v-img
               class="avatar__border"
               :src="
                 post.user.profile_image
                   ? post.user.profile_image
                   : 'default.png'
               "
+              @error="post.user.profile_image = 'default.png'"
             />
           </v-list-item-avatar>
         </router-link>
@@ -239,7 +240,7 @@
 
           <PhotoCarousel :images="post.attachments" />
           <LinkPreview
-            v-if="hasMetaLink(post) && !post.attachments.images"
+            v-if="hasMetaLink(post)"
             :meta="post.meta"
             @visitLink="openConfirmDialog"
           />

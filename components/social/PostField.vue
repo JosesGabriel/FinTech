@@ -251,7 +251,8 @@
               depressed
               absolute
               color="success"
-              :disabled="postBtnDisable"
+              :disabled="postBtnDisable || fetchingMeta"
+              :loading="fetchingMeta"
               @click.prevent="
                 taggedStocks.length > 0
                   ? getTaggedStockValues()
@@ -317,7 +318,8 @@ export default {
       text: "",
       characterLimit: 0,
       links: [],
-      postFieldSanitized: ""
+      postFieldSanitized: "",
+      fetchingMeta: false
     };
   },
   computed: {
@@ -738,17 +740,28 @@ export default {
       // check if content has any links store as array
       const links = this.hasLinks(content);
       if (content.length > 0 && links != false) {
-        await links.forEach(async link => {
-          const graphURL = await this.$api.social.posts.opengraph({
-            url: link
+        try {
+          this.fetchingMeta = true;
+          await links.forEach(async link => {
+            const graphURL = await this.$api.social.posts.opengraph({
+              url: link
+            });
+            this.links.push({
+              url: graphURL.data.url,
+              meta: graphURL.data.meta,
+              data: graphURL.data
+            });
+            this.fetchingMeta = false;
           });
-          this.links.push({
-            url: graphURL.data.url,
-            meta: graphURL.data.meta,
-            data: graphURL.data
-          });
-          this.postBtnDisable = false;
-        });
+        } catch (error) {
+          let alert = {
+            model: true,
+            state: false,
+            message: error
+          };
+          this.setAlert(alert);
+          this.fetchingMeta = false;
+        }
       }
     },
     /**
@@ -783,7 +796,6 @@ export default {
      */
     onPaste() {
       setTimeout(() => {
-        this.postBtnDisable = true;
         this.processContentLinks(this.postField);
       }, 100);
     }
