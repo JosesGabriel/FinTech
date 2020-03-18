@@ -127,7 +127,6 @@ import { mapGetters } from "vuex";
 export default {
   auth: false,
   layout: "public",
-  middleware: ["paymentRoutes"],
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
