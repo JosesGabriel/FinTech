@@ -1,10 +1,6 @@
 <template>
   <v-col class="pa-0">
-    <span
-      v-show="showBanner"
-      class="newPosts_banner caption black--text"
-      @click="fetchNewPost()"
-    >
+    <span v-show="showBanner" class="newPosts_banner caption black--text" @click="fetchNewPost()">
       <v-icon small color="black">mdi-arrow-up</v-icon>
       <span class="font-weight-bold">New posts</span>
     </span>
@@ -27,10 +23,7 @@
     >
       <!-- Start of Post Header -->
       <v-list-item class="pt-1">
-        <router-link
-          :to="'/profile/' + post.user.username"
-          class="no-transform"
-        >
+        <router-link :to="'/profile/' + post.user.username" class="no-transform">
           <v-list-item-avatar class="mr-2" size="42">
             <v-img
               class="avatar__border"
@@ -46,15 +39,13 @@
         <v-list-item-content class="pa-0 ma-0">
           <v-row>
             <v-col>
-              <router-link
-                :to="'/profile/' + post.user.username"
-                class="no-transform"
-              >
+              <router-link :to="'/profile/' + post.user.username" class="no-transform">
                 <v-list-item-title
                   class="subtitle-2"
                   :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
                 >
                   <strong>{{ post.user.name }}</strong>
+                  <v-chip class="text-capitalize px-1 ml-1 mt-n1 alpha__badge-chip" x-small color="alpha">ALPHA</v-chip>
                 </v-list-item-title>
               </router-link>
               <v-list-item-subtitle class="overline no-transform">
@@ -74,15 +65,7 @@
                   >
                     <img src="/icon/bullish.svg" width="6" />
                   </v-btn>
-                  <v-btn
-                    v-else
-                    icon
-                    outlined
-                    fab
-                    width="14"
-                    height="14"
-                    color="error"
-                  >
+                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
                     <img src="/icon/bearish.svg" width="6" />
                   </v-btn>
                 </span>
@@ -95,8 +78,7 @@
                 @click="
                   (postOptionsMode = !postOptionsMode), (currentPost = index)
                 "
-                >mdi-dots-horizontal</v-icon
-              >
+              >mdi-dots-horizontal</v-icon>
               <div v-if="postOptionsMode && currentPost == index">
                 <div class="postOptions__container">
                   <!-- Start Delete Dialog -->
@@ -106,9 +88,7 @@
                       :dark="lightSwitch == 0 ? false : true"
                     >
                       <v-card-title class="py-2 pl-3">
-                        <span class="body-1 font-weight-bold"
-                          >Delete Post?</span
-                        >
+                        <span class="body-1 font-weight-bold">Delete Post?</span>
                       </v-card-title>
                       <v-divider></v-divider>
                       <v-card-text>
@@ -130,8 +110,7 @@
                           :dark="lightSwitch == true"
                           dense
                           @click="deleteDialog = false"
-                          >Cancel</v-btn
-                        >
+                        >Cancel</v-btn>
 
                         <v-hover v-slot:default="{ hover }">
                           <v-btn
@@ -143,8 +122,7 @@
                             @click="
                               deletePost(post.id, index), (deleteDialog = false)
                             "
-                            >Delete</v-btn
-                          >
+                          >Delete</v-btn>
                         </v-hover>
                       </v-card-actions>
                     </v-card>
@@ -162,9 +140,7 @@
                         "
                       >
                         <v-list-item-content>
-                          <v-list-item-title class="text-center caption"
-                            >Edit</v-list-item-title
-                          >
+                          <v-list-item-title class="text-center caption">Edit</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                       <v-divider></v-divider>
@@ -176,9 +152,7 @@
                         @click.stop="deleteDialog = true"
                       >
                         <v-list-item-content>
-                          <v-list-item-title class="text-center caption"
-                            >Delete</v-list-item-title
-                          >
+                          <v-list-item-title class="text-center caption">Delete</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                       <v-list-item
@@ -188,9 +162,7 @@
                         @click="followAccount(post.user.uuid)"
                       >
                         <v-list-item-content>
-                          <v-list-item-title class="text-center caption"
-                            >Follow</v-list-item-title
-                          >
+                          <v-list-item-title class="text-center caption">Follow</v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                     </v-list-item-group>
@@ -227,23 +199,15 @@
                 editPost(post.id, editTextAreaModel[index], index),
                   (editPostMode = false)
               "
-              >Done Editing</v-btn
-            >
+            >Done Editing</v-btn>
           </div>
 
           <div v-else class="body-2 px-5 pb-3 post__Content">
-            <span
-              v-show="!showLinkImageOnly(post)"
-              v-html="post.content"
-            ></span>
+            <span v-show="!showLinkImageOnly(post)" v-html="post.content"></span>
           </div>
 
           <PhotoCarousel :images="post.attachments" />
-          <LinkPreview
-            v-if="hasMetaLink(post)"
-            :meta="post.meta"
-            @visitLink="openConfirmDialog"
-          />
+          <LinkPreview v-if="hasMetaLink(post)" :meta="post.meta" @visitLink="openConfirmDialog" />
         </v-list-item-content>
       </v-list-item>
       <!-- End of Post Body -->
@@ -307,10 +271,7 @@
       <!-- Start of Comment -->
       <v-divider v-if="post.comments.length > 0"></v-divider>
       <v-list-item class="ma-0">
-        <router-link
-          :to="'/profile/' + $auth.user.data.user.username"
-          class="no-transform"
-        >
+        <router-link :to="'/profile/' + $auth.user.data.user.username" class="no-transform">
           <v-list-item-avatar size="28" class="mr-2">
             <img
               class="avatar__border"
@@ -344,14 +305,8 @@
 
       <!-- End of Subcomment -->
     </v-card>
-    <Share
-      v-if="showShare"
-      :postid="sharePostID"
-      @closeModal="showShare = false"
-    />
-    <ConfirmDialog
-      text="You will open a link outside of Lyduz. Do you wish to continue?"
-    >
+    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
+    <ConfirmDialog text="You will open a link outside of Lyduz. Do you wish to continue?">
       <template>
         <v-hover v-slot:default="{ hover }">
           <v-btn
@@ -360,8 +315,7 @@
             :color="!hover ? 'success' : 'successhover'"
             elevation="1"
             @click.prevent="onLinkClick(false)"
-            >Okay</v-btn
-          >
+          >Okay</v-btn>
         </v-hover>
       </template>
     </ConfirmDialog>

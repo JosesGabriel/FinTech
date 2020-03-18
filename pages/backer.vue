@@ -145,6 +145,11 @@ export default {
       ]
     };
   },
+  mounted() {
+    let paramsString = window.location.href;
+    let searchParams = new URLSearchParams(paramsString);
+    console.log(searchParams)
+  },
   methods: {
     checkUserLogin() {
       this.toggleElements = true;
