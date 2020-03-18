@@ -143,7 +143,8 @@
   </v-col>
 </template>
 <script>
-import TradeModal from "~/components/trade-simulator/TradeModal";
+//import TradeModal from "~/components/trade-simulator/TradeModal";
+import TradeModal from "~/components/trade-simulator/trade/TradeModal";
 import resetModal from "~/components/trade-simulator/reset";
 import shareModal from "~/components/modals/Share";
 import tradeDelete from "~/components/modals/TradeDelete";
