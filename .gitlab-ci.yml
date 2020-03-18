@@ -65,6 +65,7 @@ deploy-dev-server:
     - native
     - ssh
   script:
+    - echo $DEV_USER@$DEV_HOST
     - ssh -t $DEV_USER@$DEV_HOST "whoami &&
       cd /var/www/html/dev-v2.arbitrage.ph && 
       git pull && 
@@ -73,22 +74,3 @@ deploy-dev-server:
       pm2 restart 0"
   only:
     - develop
-
-#--------- production stage ---------#
-deploy-production-server:
-  stage: production
-  tags:
-    - cd
-    - native
-    - ssh
-  script:
-    - ssh -t $PROD_USER@$PROD_HOST "whoami &&
-      (echo $PROD_PASSWORD | sudo -S -su www-data bash -c 'binary-executor/binary-executor-linux-amd64 "--commands='whoami; 
-      cd /var/www/lyduz.com; 
-      pwd;
-      '"')"
-  only:
-    - master
-
-
-
