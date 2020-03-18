@@ -95,5 +95,8 @@ export default {
 
   SET_LAST_PRICE(state, data) {
     state.lastPrice = data;
+  },
+  SET_MARKET_OPEN(state, data) {
+    state.marketOpen = data;
   }
 };

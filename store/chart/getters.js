@@ -123,5 +123,8 @@ export default {
 
   lastPrice: state => {
     return state.lastPrice;
+  },
+  marketOpen: state => {
+    return state.marketOpen;
   }
 };

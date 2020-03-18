@@ -68,5 +68,8 @@ export default {
   },
   async setLastPrice({ commit }, data) {
     await commit("SET_LAST_PRICE", data);
+  },
+  async setMarketOpen({ commit }, data) {
+    await commit("SET_MARKET_OPEN", data);
   }
 };

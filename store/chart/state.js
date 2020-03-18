@@ -86,5 +86,6 @@ export default () => ({
 
   blink: 800,
 
-  lastPrice: 0
+  lastPrice: 0,
+  marketOpen: false
 });
