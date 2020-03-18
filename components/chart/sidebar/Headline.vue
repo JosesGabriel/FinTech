@@ -120,7 +120,8 @@ export default {
       headlineLoading: "chart/headlineLoading",
       favicon: "global/favicon",
       sse: "chart/sse",
-      blink: "chart/blink"
+      blink: "chart/blink",
+      lastPrice: "chart/lastPrice"
     }),
     /**
      * toggle type for up/down arrow
@@ -186,7 +187,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setSSEInfo: "chart/setSSEInfo"
+      setSSEInfo: "chart/setSSEInfo",
+      setLastPrice: "chart/setLastPrice"
     }),
     /**
      * add blink simple effect animation
@@ -257,6 +259,8 @@ export default {
         nativeBus.$emit("b-tv-sse-all", data);
 
         if (this.symbolid !== data.sym_id) return;
+
+        this.setLastPrice(data.l); // update vuex lastprice
 
         this.$store.commit("chart/SET_STOCK_OBJ", {
           trades: parseInt(data.tr)

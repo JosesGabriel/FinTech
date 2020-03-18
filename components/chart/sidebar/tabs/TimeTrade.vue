@@ -92,7 +92,6 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "TimeTrade",
-  props: ["activeTab"],
   data() {
     return {
       loading: true,

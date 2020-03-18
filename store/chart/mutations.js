@@ -91,5 +91,9 @@ export default {
   },
   SET_SSE_BIDASK(state, data) {
     state.sseBidask = data;
+  },
+
+  SET_LAST_PRICE(state, data) {
+    state.lastPrice = data;
   }
 };

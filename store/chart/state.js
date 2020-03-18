@@ -84,5 +84,7 @@ export default () => ({
   sseTrade: null,
   sseBidask: null,
 
-  blink: 800
+  blink: 800,
+
+  lastPrice: 0
 });

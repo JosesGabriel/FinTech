@@ -102,7 +102,7 @@
       </v-simple-table>
     </v-card>
     <!-- depthbar -->
-    <DepthBar :active-tab="activeTab" />
+    <DepthBar />
 
     <!-- time and trades -->
     <div
@@ -114,10 +114,10 @@
     >
       Time and Trade
     </div>
-    <TimeTrade :active-tab="activeTab" />
+    <TimeTrade />
 
     <!-- TransactionBar -->
-    <TransactionBar :active-tab="activeTab" />
+    <TransactionBar />
   </v-content>
 </template>
 
@@ -136,7 +136,12 @@ export default {
     TimeTrade,
     TransactionBar
   },
-  props: ["activeTab"],
+  props: {
+    activeTab: {
+      default: "",
+      type: String
+    }
+  },
   data() {
     return {
       currentTab: false,
@@ -149,7 +154,8 @@ export default {
       symbolid: "chart/symbolid",
       bidask: "chart/bidask",
       lightSwitch: "global/getLightSwitch",
-      sse: "chart/sse"
+      sse: "chart/sse",
+      lastPrice: "chart/lastPrice"
     }),
     /**
      * toggle card background light/dark mode
@@ -183,6 +189,9 @@ export default {
         this.sse.addEventListener("bidask", this.sseBidask);
       }
     }
+  },
+  mounted() {
+    this.initBidask(this.symbolid);
   },
   methods: {
     ...mapActions({
@@ -264,20 +273,23 @@ export default {
         const data = JSON.parse(e.data);
         this.setSSEBidask(data);
         if (this.symbolid !== data.sym_id) return;
-
         if (data.ov == "B") {
           // bid
           const bids = this.updateBidAndAsks(this.bidask.bids, data);
           this.$store.commit(
             "chart/SET_BIDS",
-            bids.sort((a, b) => b.price - a.price)
+            bids
+              .filter(data => data.price <= this.lastPrice)
+              .sort((a, b) => b.price - a.price)
           );
         } else if (data.ov == "S") {
           // ask
           const asks = this.updateBidAndAsks(this.bidask.asks, data);
           this.$store.commit(
             "chart/SET_ASKS",
-            asks.sort((a, b) => a.price - b.price)
+            asks
+              .filter(data => data.price >= this.lastPrice)
+              .sort((a, b) => a.price - b.price)
           );
         }
       }
@@ -386,9 +398,6 @@ export default {
         volume: data.vol
       };
     }
-  },
-  mounted() {
-    this.initBidask(this.symbolid);
   }
 };
 </script>

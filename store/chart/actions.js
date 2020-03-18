@@ -65,5 +65,8 @@ export default {
   },
   async setSSEBidask({ commit }, data) {
     await commit("SET_SSE_BIDASK", data);
+  },
+  async setLastPrice({ commit }, data) {
+    await commit("SET_LAST_PRICE", data);
   }
 };
