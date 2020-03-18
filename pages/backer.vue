@@ -127,6 +127,7 @@ import { mapGetters } from "vuex";
 export default {
   auth: false,
   layout: "public",
+  middleware: ["paymentRoutes"],
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
@@ -146,9 +147,7 @@ export default {
     };
   },
   mounted() {
-    let paramsString = window.location.href;
-    let searchParams = new URLSearchParams(paramsString);
-    console.log(searchParams)
+    this.catchUrlQuery();
   },
   methods: {
     checkUserLogin() {
@@ -170,6 +169,14 @@ export default {
         default:
           break;
       }
+    },
+    catchUrlQuery() {
+      
+        const params = this.$route.query.requestTo
+        this.$api.accounts.payment.capture(params).then(response => {
+            console.log(response)
+          });
+      // }
     }
   }
 };
