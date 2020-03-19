@@ -5,7 +5,6 @@
         <Header class="header__container" />
       </client-only>
       <v-container
-        v-show="!$device.isMobileOrTablet"
         :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
         class="componentContainer"
       >
@@ -89,7 +88,8 @@ export default {
       lampBtn: false
     };
   },
-  middleware: ["isMobileOrTablet", "isTokenExpired"],
+  // "isMobileOrTablet",
+  middleware: ["isTokenExpired"],
   head() {
     return {
       link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]

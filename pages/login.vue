@@ -37,8 +37,8 @@
           </div>
         </div>
       </v-col>
-      <v-col acols="12" sm="8" md="8" lg="8">
-        <img :src="landingImg" class="landingImage" alt width="100%" />
+      <v-col cols="12" sm="8" md="8" lg="8">
+        <img :src="landingImg" class="landingImage" alt width="90%" />
       </v-col>
     </v-row>
     <div class="d-block text-center caption pt-10">
@@ -142,12 +142,12 @@ export default {
   },
   created() {
     // since this page is allowed in middleware, temporarily, catch user if mobile
-    if (
-      this.$route.query.redirect == undefined &&
-      this.$device.isMobileOrTablet == true
-    ) {
-      this.$router.push("/mobile");
-    }
+    // if (
+    //   this.$route.query.redirect == undefined&&
+    //   this.$device.isMobileOrTablet == true
+    // ) {
+    //   this.$router.push("/mobile");
+    // }
   },
   methods: {
     ...mapActions({
@@ -201,10 +201,10 @@ export default {
 .leftPart_col {
   position: relative;
 }
-.leftPart_container {
+/* .leftPart_container {
   position: absolute;
   transform: translateY(25%);
-}
+} */
 #app .leftPart_container .headlineLanding_page {
   font-style: normal;
   font-weight: 600;
