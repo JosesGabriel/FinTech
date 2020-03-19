@@ -61,7 +61,9 @@ export default {
       setSymbolID: "chart/setSymbolID",
       setIndex: "chart/setIndex",
       setMarketCode: "chart/setMarketCode",
-      setHeadlineLoading: "chart/setHeadlineLoading"
+      setHeadlineLoading: "chart/setHeadlineLoading",
+      setLastPrice: "chart/setLastPrice",
+      setMarketOpen: "chart/setMarketOpen"
     }),
     /**
      * initialize and request stock info API on mount hook
@@ -80,7 +82,10 @@ export default {
         this.setIndex(parseInt(data.value) > 0 ? false : true);
         this.setStock(data);
         this.setMarketCode(data.market_code);
+        this.setLastPrice(data.last);
         this.setHeadlineLoading(false);
+
+        this.setMarketOpen(data.market_status != "close" ? true : false);
 
         if (data.change > 0) {
           this.$store.commit(

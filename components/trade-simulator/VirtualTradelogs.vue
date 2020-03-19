@@ -559,7 +559,7 @@ export default {
       this.totalProfitLossPerf = 0;
       this.$api.journal.portfolio.tradelogs(tradelogsparams).then(
         function(result) {
-          // console.log('TloGS -', result);
+          //console.log('TloGS -', result);
           this.tradeLogs = result.data.logs;
           this.tradelogs2 = this.tradeLogs;
           let plossperc = [];

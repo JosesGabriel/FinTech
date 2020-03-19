@@ -12,12 +12,13 @@
           <v-tab-item>
             <Buy
               :stocklist="stockList.data"
+              :openposition="openPositonList"
               :portfolioList="userPortfolioVirtual"
               @clicked="show = false"
             />
           </v-tab-item>
           <v-tab-item>
-            <Sell :stocklist="openPosition" @clicked="show = false" />
+            <Sell :stocklist="sellPosition" @clicked="show = false" />
           </v-tab-item>
         </v-tabs-items>
       </v-container>
@@ -35,7 +36,7 @@ export default {
     Buy,
     Sell
   },
-  props: ["visible"],
+  props: ["visible","OpenPosition","positionList"],
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
@@ -49,6 +50,9 @@ export default {
      * @return  {Array}  returns filtered array by type real
      */
     userPortfolioVirtual() {
+      console.log('Open Positon-', this.positionList);
+      this.openPositonList = this.OpenPosition;
+      this.sellPosition = this.positionList;
       let portfolio = this.userPortfolio.filter(x => {
         return x.type == "virtual";
       });
@@ -74,8 +78,11 @@ export default {
   data() {
     return {
       tab: null,
-      items: ["Buy", "Sell"]
+      items: ["Buy", "Sell"],
+      openPositonList: [],
+      sellPosition: [],
     };
-  }
+  },
+
 };
 </script>
