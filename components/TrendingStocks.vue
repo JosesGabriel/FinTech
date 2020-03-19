@@ -22,7 +22,7 @@
               <v-list-item-subtitle
                 class="overline d-flex justify-space-between"
                 ><span v-if="tStocksObject.data" class="tStocks--description">{{
-                  tStocksObject
+                  typeof tStocksObject.data.stocks.description != "undefined"
                     ? tStocksObject.data.stocks[n - 1].description
                     : ""
                 }}</span
