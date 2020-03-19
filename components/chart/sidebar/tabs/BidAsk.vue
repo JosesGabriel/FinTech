@@ -47,11 +47,11 @@
         fixed-header
         :style="{ background: cardBackground }"
         height="105px"
-        class="custom_table pl-5 pr-3"
+        class="custom_table pl-2 pr-1 mr-2"
       >
         <thead>
           <tr>
-            <th>
+            <th class="pl-2">
               #
             </th>
             <th>
@@ -60,7 +60,7 @@
             <th>
               BID
             </th>
-            <th>
+            <th class="pl-2">
               ASK
             </th>
             <th>
@@ -76,24 +76,30 @@
           <tr
             v-for="(item, key) in bidask.limit"
             :key="item.id"
-            class="tr_custom"
+            class="tr_custom_bidask"
           >
-            <td class="" style="width:15px;">
+            <td
+              class="pl-2"
+              :class="`bid__column_${formatItem(bidask.bids[key], 'id')}`"
+            >
               {{ formatItem(bidask.bids[key], "count") }}
             </td>
-            <td class="" style="width:10px;">
+            <td :class="`bid__column_${formatItem(bidask.bids[key], 'id')}`">
               {{ formatItem(bidask.bids[key], "volume") }}
             </td>
-            <td class="" style="width:10px;">
+            <td :class="`bid__column_${formatItem(bidask.bids[key], 'id')}`">
               {{ formatItem(bidask.bids[key], "price") }}
             </td>
-            <td class="" style="width:25px;">
+            <td
+              class="pl-2"
+              :class="`ask__column_${formatItem(bidask.asks[key], 'id')}`"
+            >
               {{ formatItem(bidask.asks[key], "price") }}
             </td>
-            <td class="" style="width:10px;">
+            <td :class="`ask__column_${formatItem(bidask.asks[key], 'id')}`">
               {{ formatItem(bidask.asks[key], "volume") }}
             </td>
-            <td class="" style="width:10px;">
+            <td :class="`ask__column_${formatItem(bidask.asks[key], 'id')}`">
               {{ formatItem(bidask.asks[key], "count") }}
             </td>
             <td style="width:5px;"></td>
@@ -155,7 +161,8 @@ export default {
       bidask: "chart/bidask",
       lightSwitch: "global/getLightSwitch",
       sse: "chart/sse",
-      lastPrice: "chart/lastPrice"
+      lastPrice: "chart/lastPrice",
+      blink: "chart/blink"
     }),
     /**
      * toggle card background light/dark mode
@@ -282,6 +289,8 @@ export default {
               .filter(data => data.price <= this.lastPrice)
               .sort((a, b) => b.price - a.price)
           );
+          // add effect
+          this.updateEffect(`bid__column_${data.id}`, "bid");
         } else if (data.ov == "S") {
           // ask
           const asks = this.updateBidAndAsks(this.bidask.asks, data);
@@ -291,6 +300,8 @@ export default {
               .filter(data => data.price >= this.lastPrice)
               .sort((a, b) => a.price - b.price)
           );
+          // add effect
+          this.updateEffect(`ask__column_${data.id}`, "ask");
         }
       }
     },
@@ -397,13 +408,39 @@ export default {
         price: data.p,
         volume: data.vol
       };
+    },
+    /**
+     * add simple blink animation
+     *
+     * @param   {String}  dom  id of element
+     *
+     * @return
+     */
+
+    updateEffect(dom, type) {
+      const backgroundColor = type == "bid" ? "#03dac5" : "#F44336";
+      const color = type == "bid" ? "#000" : "";
+      setTimeout(() => {
+        const row = document.getElementsByClassName(dom);
+        if (row.length == 0) return;
+        for (let i = 0; i <= row.length - 1; i++) {
+          row[i].style.backgroundColor = backgroundColor;
+          row[i].style.color = color;
+        }
+        setTimeout(() => {
+          for (let i = 0; i <= row.length - 1; i++) {
+            row[i].style.backgroundColor = "";
+            row[i].style.color = "";
+          }
+        }, this.blink);
+      }, 100);
     }
   }
 };
 </script>
 
 <style scoped>
-.tr_custom {
+.tr_custom_bidask {
   line-height: 0.1rem !important;
 }
 .custom_table tr {
