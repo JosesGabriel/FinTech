@@ -4,8 +4,8 @@
       outlined
       label="Select a Stock"
       color="success"
-      item-text="stock_symbol"
-      item-value="stock_id"
+      item-text="symbol"
+      item-value="id"
       item-color="success"
       append-icon="mdi-chevron-down"
       v-model="stockModel"
@@ -100,7 +100,8 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
       selectedPortfolio: "journal/getSelectedPortfolio",
-      renderPortfolioKey: "journal/getRenderPortfolioKey"
+      renderPortfolioKey: "journal/getRenderPortfolioKey",
+      simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
     }),
     priceChange() {
       return this.change > 0 ? "increase" : this.change == 0 ? "" : "decrease";
@@ -135,6 +136,7 @@ export default {
       priceModel: null,
       selectedStockData: null,
       asks: null,
+      avprice: 0,
       loading: false,
       noData: true,
       last: 0,
@@ -150,7 +152,8 @@ export default {
   methods: {
     ...mapActions({
       setAlert: "global/setAlert",
-      setRenderPortfolioKey: "journal/setRenderPortfolioKey"
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+      setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
     }),
     calculateBoardLot: CalculateBoardLot,
     onChangeStock(stock_id) {
@@ -194,23 +197,23 @@ export default {
         });
 
       let get = this.stocklist.filter(x => {
-        return x.stock_id == stock_id;
+        return x.id == stock_id;
       });
 
       this.quantityModel = get[0].position;
       this.stockPosition = get[0].position;
-
+      this.avprice = get[0].avprice;
       this.stockData = get[0];
       if (
-        get[0].metas.strategy ||
-        get[0].metas.plan ||
-        get[0].metas.emotion ||
-        get[0].metas.notes
+        get[0].strategy ||
+        get[0].plan ||
+        get[0].emotion ||
+        get[0].notes
       ) {
-        this.strategyModel = get[0].metas.strategy;
-        this.tradeplanModel = get[0].metas.plan;
-        this.emotionsModel = get[0].metas.emotion;
-        this.notesModel = get[0].metas.notes;
+        this.strategyModel = get[0].strategy;
+        this.tradeplanModel = get[0].plan;
+        this.emotionsModel = get[0].emotion;
+        this.notesModel = get[0].notes;
       }
     },
     toggleOperation(boardlot, operation) {
@@ -242,7 +245,7 @@ export default {
       }
     },
     postSell() {
-      const portfolio_id = this.selectedPortfolio.id;
+      const portfolio_id = this.simulatorPortfolioID;
       const stock_id = this.stockModel;
 
       this.$api.journal.portfolio
@@ -251,7 +254,7 @@ export default {
           stock_price: parseFloat(this.priceModel),
           transaction_meta: {
             stock_name: this.selectedStockData.symbol,
-            average_price: this.stockData.average_price,
+            average_price: this.avprice,
             strategy: this.strategyModel,
             plan: this.tradeplanModel,
             emotion: this.emotionsModel,
@@ -262,7 +265,7 @@ export default {
         .then(response => {
           if (response.success) {
             this.clearInputs();
-
+            this.setSimulatorOpenPosition(this.stocklist);
             let alert = {
               model: true,
               state: true,

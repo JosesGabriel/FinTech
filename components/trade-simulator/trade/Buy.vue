@@ -185,7 +185,8 @@ import { BuyFees, SellFees } from "~/assets/js/helpers/taxation";
 export default {
   props: {
     stocklist: Array,
-    portfolioList: Array
+    portfolioList: Array,
+    openposition: Array
   },
   computed: {
     ...mapGetters({
@@ -260,7 +261,9 @@ export default {
   methods: {
     ...mapActions({
       setAlert: "global/setAlert",
-      setRenderPortfolioKey: "journal/setRenderPortfolioKey"
+      setRenderPortfolioKey: "journal/setRenderPortfolioKey",
+      setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
+      setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
     }),
     calculateBoardLot: CalculateBoardLot,
     onChangeStock(stock_id) {
@@ -313,6 +316,7 @@ export default {
             this.availableFundModel = parseFloat(
               response.data.funds[0].balance
             );
+            this.setSimulatorPortfolioID(portfolio_id);
           }
         });
     },
@@ -360,9 +364,48 @@ export default {
         });
     },
     postBuy() {
-      const portfolio_id = this.selectedPortfolio.id;
+      const portfolio_id = this.portfolioModel;
       const stock_id = this.stockModel;
 
+        const buyparams = {
+          position: parseFloat(this.quantityModel),
+          stock_price: parseFloat(this.priceModel),
+          transaction_meta: {
+            stock_name: this.selectedStockData.symbol,
+            strategy: this.strategyModel,
+            plan: this.tradeplanModel,
+            emotion: this.emotionsModel,
+            notes: this.notesModel,
+            date: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+          }
+        };
+        console.log('Stock List -' , this.openposition);
+        this.$api.journal.portfolio
+          .tradebuy(portfolio_id, stock_id, buyparams)
+          .then(response => {
+            if (response.success) {
+              this.clearInputs();
+                    this.setSimulatorOpenPosition(this.openposition);
+                    this.availableFundModel =
+                    parseFloat(this.availableFundModel) -
+                    parseFloat(this.totalCostModel);
+
+                    let alert = {
+                    model: true,
+                    state: true,
+                    message: "Successfully buying the trade."
+                    };
+                    this.setAlert(alert);
+                    }
+          })
+          .catch(error => {
+            this.errmsg = error.response.data.message;
+            //this.errmsg = 'Stock is currently closed';
+            this.errmsgbuysell = "Unable to buy";
+            this.errorMsg = true;
+          });
+
+    /*
       this.$api.journal.portfolio
         .tradebuy(portfolio_id, stock_id, {
           position: parseFloat(this.quantityModel),
@@ -390,7 +433,7 @@ export default {
             };
             this.setAlert(alert);
           }
-        });
+        }); */
     },
     clearInputs() {
       this.keyCounter = this.renderPortfolioKey;
