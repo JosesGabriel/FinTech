@@ -119,6 +119,7 @@
     <TradeModal
       :visible="EnterTradeModal"
       :OpenPosition="openposition"
+      :positionList="positionlist"
       :Trade_Modal="trade_modal"
       @close="EnterTradeModal=false"
     />
@@ -177,6 +178,7 @@ export default {
       ],
       portfolioLogs: [],
       openposition: [],
+      positionlist: [],
       stockSym: [],
       itemDetails: null,
       portfolioLogsrealtime: [],
@@ -305,10 +307,21 @@ export default {
       this.totalmvalue = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
-         // console.log('Live pOrt ', result);
+           //console.log('pOrt '+this.simulatorPortfolioID);
+          //console.log('Live pOrt ', result);
           this.portfolioLogs = result.data.open;
           for (let i = 0; i < result.data.open.length; i++) {
               this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
+              this.positionlist[i] = {
+                'id':this.portfolioLogs[i].metas.stock_id,
+                'symbol':this.portfolioLogs[i].stock_symbol,
+                'avprice': this.portfolioLogs[i].average_price.toFixed(3),
+                'position': this.portfolioLogs[i].position,
+                'strategy': this.portfolioLogs[i].metas.strategy,
+                'plan': this.portfolioLogs[i].metas.plan,
+                'emotion': this.portfolioLogs[i].metas.emotion,
+                'notes': this.portfolioLogs[i].metas.notes
+              };
               this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
               this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol;
               this.portfolioLogs[i].Position = this.portfolioLogs[i].position;

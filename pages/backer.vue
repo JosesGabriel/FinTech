@@ -118,6 +118,16 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog v-model="dialog" width="320">
+      <v-card :dark="lightSwitch == 1">
+        <v-card-title class="body-2" primary-title>{{ paymentNotice }}</v-card-title>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="success" class="black--text text-capitalize" text @click="toggleDailog">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -135,6 +145,8 @@ export default {
   data() {
     return {
       toggleElements: false,
+      dialog: false,
+      paymentNotice: 'Processing your payment...',
       items: [
         {
           src: "/background-carousel/bg-id1.jpg"
@@ -170,12 +182,16 @@ export default {
       }
     },
     catchUrlQuery() {
-      
-        const params = this.$route.query.requestTo
+      const params = this.$route.query.id;
+      if (typeof this.$route.query.id != "undefined") {
+        this.dialog = true
         this.$api.accounts.payment.capture(params).then(response => {
-            console.log(response)
-          });
-      // }
+          this.paymentNotice = 'Successfully paid subscription.'
+        });
+      }
+    },
+    toggleDailog() {
+      window.location.href = "/";
     }
   }
 };

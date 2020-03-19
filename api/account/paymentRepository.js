@@ -5,7 +5,9 @@ export default $axios => ({
         return $axios.$get(`${baseURL}/donations/alpha`);
     },
     capture(params) {
-        return $axios.$get(params);
+        // let query = buildParams(params);
+
+        return $axios.$get(`${baseURL}/${params}/capture`);
     }
 })
 
