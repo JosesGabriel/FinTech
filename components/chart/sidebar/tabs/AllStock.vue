@@ -11,7 +11,7 @@
       <div class="title__right">
         <v-btn
           x-small
-          :disabled="loading"
+          :disabled="loading || marketOpen == false"
           class="ma-0 pa-0"
           text
           icon
@@ -120,7 +120,12 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "AllStock",
-  props: ["activeTab"],
+  props: {
+    activeTab: {
+      default: "",
+      type: String
+    }
+  },
   data() {
     return {
       headers: [
@@ -166,7 +171,8 @@ export default {
       lightSwitch: "global/getLightSwitch",
       responsiveHeight: "chart/responsiveHeight",
       sseInfo: "chart/sseInfo",
-      blink: "chart/blink"
+      blink: "chart/blink",
+      marketOpen: "chart/marketOpen"
     }),
     /**
      * toggle card background on light/dark mode

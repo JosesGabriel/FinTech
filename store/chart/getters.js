@@ -119,5 +119,12 @@ export default {
 
   blink: state => {
     return state.blink;
+  },
+
+  lastPrice: state => {
+    return state.lastPrice;
+  },
+  marketOpen: state => {
+    return state.marketOpen;
   }
 };

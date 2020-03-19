@@ -145,6 +145,9 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.catchUrlQuery();
+  },
   methods: {
     checkUserLogin() {
       this.toggleElements = true;
@@ -165,6 +168,14 @@ export default {
         default:
           break;
       }
+    },
+    catchUrlQuery() {
+      
+        const params = this.$route.query.requestTo
+        this.$api.accounts.payment.capture(params).then(response => {
+            console.log(response)
+          });
+      // }
     }
   }
 };
