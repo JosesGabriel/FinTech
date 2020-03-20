@@ -1,3 +1,14 @@
+#
+#--------------------------------------------------------------------------
+# YAML Configuration
+#--------------------------------------------------------------------------
+#
+# We are strictly implementing the Scaled Trunk-Based Development Branching Strategy in this project
+# Please read the guidelines first before proceeding.
+#
+# For changes, please contact Karl Anthony Baluyot (karl@arbitrage.ph).
+#
+
 image: node:12.14.1
 
 stages:
@@ -24,6 +35,12 @@ install-dependencies:
     - npm --version
   script:
     - npm install
+  only:
+    refs:
+      - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"
 
 #--------- build stage ---------#  
 build-app:
@@ -35,6 +52,12 @@ build-app:
     - docker
   script:
     - npm run build
+  only:
+    refs:
+      - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"
 
 #--------- test stage ---------#    
 run-lint:
@@ -46,6 +69,12 @@ run-lint:
     - docker
   script:
     - echo "running lint"
+  only:
+    refs:
+      - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"
 
 run-unit-test:
   stage: test
@@ -56,9 +85,15 @@ run-unit-test:
     - docker
   script:
     - echo "running unit test"
+  only:
+    refs:
+      - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"
 
 #--------- staging stage ---------#    
-deploy-dev-server:
+deploy-staging-server:
   stage: staging
   tags:
     - cd
@@ -67,12 +102,20 @@ deploy-dev-server:
   script:
     - ssh -t $DEV_USER@$DEV_HOST "whoami &&
       cd /var/www/html/dev-v2.arbitrage.ph && 
-      git pull && 
+      git checkout master &&
+      git pull origin master && 
+      git checkout $CI_COMMIT_SHA &&
       npm install && 
       npm run build &&
       pm2 restart 0"
+  environment:
+    name: staging
+    url: https://dev.lyduz.com
   only:
-    - develop
+    - master
+  except:
+    - merge_requests
+    - tags
 
 #--------- production stage ---------#
 deploy-production-server:
@@ -82,10 +125,12 @@ deploy-production-server:
     - native
     - ssh
   script:
-    - ssh -t $PROD_USER@$PROD_HOST "whoami &&
-      (echo $PROD_PASSWORD | sudo -S -su www-data bash -c 'binary-executor/binary-executor-linux-amd64 "--commands='whoami; 
-      cd /var/www/lyduz.com; 
-      pwd;
-      '"')"
+    - echo "hello production"
+  environment:
+    name: production
+    url: https://lyduz.com
   only:
-    - master
+    - /^release\/v[0-9]+(?:.[0-9]+)+$/
+  except:
+    - merge_requests
+    - tags
