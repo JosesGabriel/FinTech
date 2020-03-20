@@ -1,23 +1,24 @@
 <template>
-  <v-container
-    class="page__wrapper"
-    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-    dark
-  >
-    <v-row class="mb-5" no-gutters>
+  <div class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
+    <v-row
+      v-touch="{
+      left: () => swipe('Left'),
+      right: () => swipe('Right'),
+      up: () => swipe('Up'),
+      down: () => swipe('Down')
+    }"
+      class="mb-5"
+      no-gutters
+    >
+      <NavbarDrawer v-if="toggleNavbar" />
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
-        <Navbar active="social" />
+        <Navbar v-if="$vuetify.breakpoint.smAndUp " active="social" />
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
         <Newsfeed :new-post="newPost" />
       </v-col>
-      <v-col
-        class="px-3 hidden-sm-and-down pr-0 leftSidebar__container"
-        cols="3"
-        sm="3"
-        md="3"
-      >
+      <v-col class="px-3 hidden-sm-and-down pr-0 leftSidebar__container" cols="3" sm="3" md="3">
         <TrendingStocks />
         <WhoToMingle />
         <MiniWatchlist />
@@ -32,7 +33,7 @@
         </client-only>
       </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -47,6 +48,7 @@ import Ad from "~/components/social/Ad";
 import Bulletin from "~/components/Bulletin";
 import PopUp from "~/components/modals/PopUp";
 import SidebarAds from "~/components/social/SidebarAds";
+import NavbarDrawer from "~/components/social/drawers/NavbarDrawer";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -63,7 +65,8 @@ export default {
     PostField,
     PopUp,
     Ad,
-    SidebarAds
+    SidebarAds,
+    NavbarDrawer
   },
   computed: {
     ...mapGetters({
@@ -73,6 +76,7 @@ export default {
   data() {
     return {
       isOpen: true,
+      toggleNavbar: true,
       newPost: {}
     };
   },
@@ -98,7 +102,13 @@ export default {
     authorNewPost(value) {
       this.newPost = value;
     },
-
+    swipe(direction) {
+      if (direction === "Right") {
+        this.toggleNavbar = false;
+      } else if (direction === "Left") {
+        this.toggleNavbar = true;
+      }
+    },
     initSSE() {
       if (this.sse !== null) {
         this.sse.close();
