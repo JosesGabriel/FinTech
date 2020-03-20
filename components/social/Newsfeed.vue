@@ -45,7 +45,7 @@
                   :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
                 >
                   <strong>{{ post.user.name }}</strong>
-                  <v-chip class="text-capitalize px-1 ml-1 mt-n1 alpha__badge-chip" x-small color="alpha">ALPHA</v-chip>
+                  <v-chip v-if="$auth.user.data.user.is_backer" class="text-capitalize px-1 ml-1 mt-n1 alpha__badge-chip" x-small color="alpha">ALPHA</v-chip>
                 </v-list-item-title>
               </router-link>
               <v-list-item-subtitle class="overline no-transform">
