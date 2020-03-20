@@ -11,11 +11,11 @@
       no-gutters
     >
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
-        <Navbar v-if="toggleNavbar" active="social" />
+        <Navbar active="social" />
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
-        <Newsfeed :new-post="newPost" />
+        <Newsfeed v-if="toggleNavbar" :new-post="newPost" />
       </v-col>
       <v-col class="px-3 hidden-sm-and-down pr-0 leftSidebar__container" cols="3" sm="3" md="3">
         <TrendingStocks />
