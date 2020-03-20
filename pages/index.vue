@@ -1,16 +1,15 @@
 <template>
-  <v-container
-    class="page__wrapper"
-    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-    dark
-    v-touch="{
+  <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
+    <v-row
+      v-touch="{
       left: () => swipe('Left'),
       right: () => swipe('Right'),
       up: () => swipe('Up'),
       down: () => swipe('Down')
     }"
-  >
-    <v-row class="mb-5" no-gutters>
+      class="mb-5"
+      no-gutters
+    >
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar v-if="toggleNavbar" active="social" />
       </v-col>
@@ -101,9 +100,9 @@ export default {
       this.newPost = value;
     },
     swipe(direction) {
-      if (direction === "right") {
+      if (direction === "Right") {
         this.toggleNavbar = false;
-      } else if (direction === "right") {
+      } else if (direction === "Left") {
         this.toggleNavbar = true;
       }
     },
