@@ -101,9 +101,9 @@ export default {
       this.newPost = value;
     },
     swipe(direction) {
-      if (direction === "down") {
+      if (direction === "right") {
         this.toggleNavbar = false;
-      } else if (direction === "up") {
+      } else if (direction === "right") {
         this.toggleNavbar = true;
       }
     },
