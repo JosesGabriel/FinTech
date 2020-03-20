@@ -3,7 +3,7 @@ export default function(context) {
         // add here pages that will not block from mobile users
         // set page limit for mobile users
         const allowedPages = ["login", "verify", ""];
-        if (allowedPages.includes(context.route.name) === true) {
+        if (allowedPages.includes(context.route.name) === false) {
             return context.redirect("/mobile");
         }
     }
