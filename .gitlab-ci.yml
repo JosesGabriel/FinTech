@@ -125,7 +125,14 @@ deploy-production-server:
     - native
     - ssh
   script:
-    - echo "hello production"
+    - ssh -t $PROD_USER@$PROD_HOST "whoami &&
+      cd /var/www/lyduz.com && 
+      git checkout master &&
+      git pull origin master && 
+      git checkout $CI_COMMIT_SHA &&
+      npm install && 
+      npm run build &&
+      pm2 restart 0"
   environment:
     name: production
     url: https://lyduz.com
