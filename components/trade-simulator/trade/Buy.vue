@@ -379,7 +379,7 @@ export default {
             date: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
           }
         };
-        console.log('Stock List -' , this.openposition);
+        //console.log('Stock List -' , this.openposition);
         this.$api.journal.portfolio
           .tradebuy(portfolio_id, stock_id, buyparams)
           .then(response => {
@@ -405,35 +405,6 @@ export default {
             this.errorMsg = true;
           });
 
-    /*
-      this.$api.journal.portfolio
-        .tradebuy(portfolio_id, stock_id, {
-          position: parseFloat(this.quantityModel),
-          stock_price: parseFloat(this.priceModel),
-          transaction_meta: {
-            stock_name: this.selectedStockData.symbol,
-            strategy: this.strategyModel,
-            plan: this.tradeplanModel,
-            emotion: this.emotionsModel,
-            notes: this.notesModel,
-            date: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
-          }
-        })
-        .then(response => {
-          if (response.success) {
-            this.clearInputs();
-            this.availableFundModel =
-              parseFloat(this.availableFundModel) -
-              parseFloat(this.totalCostModel);
-
-            let alert = {
-              model: true,
-              state: true,
-              message: "Successfully buying the trade."
-            };
-            this.setAlert(alert);
-          }
-        }); */
     },
     clearInputs() {
       this.keyCounter = this.renderPortfolioKey;
