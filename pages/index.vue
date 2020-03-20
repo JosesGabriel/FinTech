@@ -3,21 +3,22 @@
     class="page__wrapper"
     :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
     dark
+    v-touch="{
+      left: () => swipe('Left'),
+      right: () => swipe('Right'),
+      up: () => swipe('Up'),
+      down: () => swipe('Down')
+    }"
   >
     <v-row class="mb-5" no-gutters>
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
-        <Navbar active="social" />
+        <Navbar v-if="toggleNavbar" active="social" />
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
         <Newsfeed :new-post="newPost" />
       </v-col>
-      <v-col
-        class="px-3 hidden-sm-and-down pr-0 leftSidebar__container"
-        cols="3"
-        sm="3"
-        md="3"
-      >
+      <v-col class="px-3 hidden-sm-and-down pr-0 leftSidebar__container" cols="3" sm="3" md="3">
         <TrendingStocks />
         <WhoToMingle />
         <MiniWatchlist />
@@ -73,6 +74,7 @@ export default {
   data() {
     return {
       isOpen: true,
+      toggleNavbar: true,
       newPost: {}
     };
   },
@@ -98,7 +100,13 @@ export default {
     authorNewPost(value) {
       this.newPost = value;
     },
-
+    swipe(direction) {
+      if (direction === "down") {
+        this.toggleNavbar = false;
+      } else if (direction === "up") {
+        this.toggleNavbar = true;
+      }
+    },
     initSSE() {
       if (this.sse !== null) {
         this.sse.close();

@@ -18,7 +18,7 @@
             class="no-transform"
           >
             <v-list-item class="tertiary--text">
-              <v-list-item-avatar class="mr-4" size="24">
+              <v-list-item-avatar :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]" size="24">
                 <v-img
                   class="avatar__border"
                   :src="
@@ -49,7 +49,7 @@
               :class="active == 'social' ? 'v-list-item--active' : ''"
               class="tertiary--text"
             >
-              <v-list-item-icon class="mr-4">
+              <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
                 <v-icon :color="active == 'social' ? 'success' : ''"
                   >mdi-account-supervisor-circle</v-icon
                 >
@@ -68,7 +68,7 @@
               :class="active == 'chart' ? 'v-list-item--active' : ''"
               class="tertiary--text"
             >
-              <v-list-item-icon class="mr-4">
+              <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
                 <v-icon :color="active == 'chart' ? 'success' : ''"
                   >mdi-chart-bar</v-icon
                 >
@@ -87,7 +87,7 @@
               :class="active == 'journal' ? 'v-list-item--active' : ''"
               class="tertiary--text"
             >
-              <v-list-item-icon class="mr-4">
+              <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
                 <v-icon :color="active == 'journal' ? 'success' : ''"
                   >mdi-text-box-multiple</v-icon
                 >
@@ -106,7 +106,7 @@
               :class="active == 'virtualtrade' ? 'v-list-item--active' : ''"
               class="tertiary--text"
             >
-              <v-list-item-icon class="mr-4">
+              <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
                 <v-icon :color="active == 'virtualtrade' ? 'success' : ''"
                   >mdi-cloud-print-outline</v-icon
                 >
@@ -142,7 +142,7 @@
               :class="active == 'watchlist' ? 'v-list-item--active' : ''"
               class="tertiary--text"
             >
-              <v-list-item-icon class="mr-4">
+              <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
                 <v-icon :color="active == 'watchlist' ? 'success' : ''"
                   >mdi-eye-plus-outline</v-icon
                 >

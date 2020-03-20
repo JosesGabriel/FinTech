@@ -4,6 +4,7 @@
       <client-only>
         <Header class="header__container" />
       </client-only>
+        <!-- v-show="!$device.isMobileOrTablet" -->
       <v-container
         :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
         class="componentContainer"
@@ -21,10 +22,7 @@
           <nuxt />
         </client-only>
       </v-container>
-      <v-snackbar
-        v-model="alert.model"
-        :color="alert.state ? 'success' : 'error'"
-      >
+      <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
         {{ alert.message }}
         <v-btn color="white" text @click="alert.model = false">Close</v-btn>
       </v-snackbar>
@@ -37,25 +35,23 @@
         :dark="lightSwitch == 0 ? false : true"
       >
         <div class="d-grid alertDialog__icon--wrapper">
-          <v-icon class="alertDialog__icon" x-large color="success"
-            >mdi-check</v-icon
-          >
+          <v-icon class="alertDialog__icon" x-large color="success">mdi-check</v-icon>
         </div>
         <v-card class="alertDialog__card">
           <v-card-title
             class="headline text-center d-block success--text alertDialog__title"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-            >{{ alertDialog.header }}</v-card-title
-          >
+          >{{ alertDialog.header }}</v-card-title>
 
           <v-card-text
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-            >{{ alertDialog.body }}</v-card-text
-          >
-          <v-card-text class="text-center">{{
+          >{{ alertDialog.body }}</v-card-text>
+          <v-card-text class="text-center">
+            {{
             alertDialog.subtext
-          }}</v-card-text>
+            }}
+          </v-card-text>
         </v-card>
       </v-dialog>
       <!-- dont remove -->
@@ -88,8 +84,7 @@ export default {
       lampBtn: false
     };
   },
-  // "isMobileOrTablet",
-  middleware: ["isTokenExpired"],
+  middleware: ["isMobileOrTablet", "isTokenExpired"],
   head() {
     return {
       link: [{ rel: "icon", type: "image/x-icon", href: this.favicon }]
