@@ -1,24 +1,14 @@
 <template>
   <v-container class="d-block">
-    <v-carousel class="plan__bg--carousel" cycle hide-delimiters :show-arrows="false">
-      <v-carousel-item
-        v-for="(item, i) in items"
-        :key="i"
-        :src="item.src"
-        height="100%"
-        :interval="6000"
-        reverse-transition="fade-transition"
-        transition="fade-transition"
-      ></v-carousel-item>
-    </v-carousel>
+    <div class="plan__bg--carousel"></div>
     <v-row no-gutters>
       <v-col cols="6">
-        <v-card flat :dark="lightSwitch == 1" color="transparent">
+        <v-card dark flat color="transparent">
           <v-img
             v-if="lightSwitch == 0"
             width="110"
             height="auto"
-            src="/lyduz-logo/Lyduz-Dark-Highres.svg"
+            src="/lyduz-logo/Lyduz-Light-Highres.svg"
           ></v-img>
           <v-img v-else width="125" height="auto" src="/lyduz-logo/Lyduz-Light-Highres.svg"></v-img>
 
@@ -124,7 +114,12 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" class="black--text text-capitalize" text @click="toggleDailog">Close</v-btn>
+          <v-btn
+            color="success"
+            class="black--text text-capitalize"
+            text
+            @click="toggleDailog"
+          >Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -146,15 +141,7 @@ export default {
     return {
       toggleElements: false,
       dialog: false,
-      paymentNotice: 'Processing your payment...',
-      items: [
-        {
-          src: "/background-carousel/bg-id1.jpg"
-        },
-        {
-          src: "/background-carousel/bg-id2.jpg"
-        }
-      ]
+      paymentNotice: "Processing your payment..."
     };
   },
   mounted() {
@@ -184,9 +171,9 @@ export default {
     catchUrlQuery() {
       const params = this.$route.query.id;
       if (typeof this.$route.query.id != "undefined") {
-        this.dialog = true
+        this.dialog = true;
         this.$api.accounts.payment.capture(params).then(response => {
-          this.paymentNotice = 'Successfully paid subscription.'
+          this.paymentNotice = "Successfully paid subscription.";
         });
       }
     },
@@ -245,15 +232,14 @@ export default {
   font-weight: 400;
 }
 #app .plan__bg--carousel {
-  height: 100% !important;
+  height: 100%;
+  width: 100%;
   position: absolute;
   left: 0;
   top: 0;
-}
-</style>
-
-<style>
-#app .plan__bg--carousel .v-image.v-carousel__item {
-  height: 100% !important;
+  background-image: url("/background-carousel/bg-id2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 }
 </style>
