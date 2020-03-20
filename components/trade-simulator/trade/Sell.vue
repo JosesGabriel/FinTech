@@ -265,7 +265,7 @@ export default {
         .then(response => {
           if (response.success) {
             this.clearInputs();
-            this.setSimulatorOpenPosition(this.stocklist);
+           this.setSimulatorOpenPosition(this.stocklist);
             let alert = {
               model: true,
               state: true,
