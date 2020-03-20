@@ -331,6 +331,7 @@ export default {
   methods: {
     ...mapActions({
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
+      setUserPortfolio: "journal/setUserPortfolio",
     }),
     /**
      * Get Data in Live Portfolio
@@ -547,6 +548,7 @@ export default {
             //console.log('Open pOrt ', result);
             let defaultPort = false;
             this.portfolio = [];
+            this.setUserPortfolio(result.data.logs);
             for (let i = 0; i < result.data.logs.length; i++) {
               if (
                 result.data.logs[i].type == "virtual"

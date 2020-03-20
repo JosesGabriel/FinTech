@@ -66,13 +66,11 @@ deploy-dev-server:
     - ssh
   script:
     - ssh -t $DEV_USER@$DEV_HOST "whoami &&
-      (echo $DEV_PASSWORD | sudo -S -su www-data bash -c 'binary-executor/binary-executor-linux-amd64 "--commands='whoami; 
-      cd /var/www/html/dev-v2.arbitrage.ph; 
-      git pull; 
-      npm install; 
-      npm run build;
-      pm2 restart 1;
-      '"')"
+      cd /var/www/html/dev-v2.arbitrage.ph && 
+      git pull && 
+      npm install && 
+      npm run build &&
+      pm2 restart 0"
   only:
     - develop
 
@@ -91,6 +89,3 @@ deploy-production-server:
       '"')"
   only:
     - master
-
-
-
