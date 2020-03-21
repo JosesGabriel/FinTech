@@ -45,11 +45,10 @@ export default {
           src: "Traders Empire.png",
           link: "http://bit.ly/TradersEmpireBook1"
         },
-        // TODO temporarily remove this in release
-        // {
-        //   src: "backer_ads.jpg",
-        //   link: "/backer"
-        // }
+        {
+          src: "backer_ads.jpg",
+          link: "/backer"
+        }
       ]
     };
   },
