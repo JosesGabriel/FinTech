@@ -101,7 +101,8 @@ deploy-staging-server:
     - ssh
   script:
     - ssh -t $DEV_USER@$DEV_HOST "whoami &&
-      cd /var/www/html/dev-v2.arbitrage.ph && 
+      cd /var/www/html/dev-v2.arbitrage.ph &&
+      git remote prune origin && 
       git checkout master &&
       git pull origin master && 
       git checkout $CI_COMMIT_SHA &&
@@ -127,8 +128,9 @@ deploy-production-server:
   script:
     - ssh -t $PROD_USER@$PROD_HOST "whoami &&
       cd /var/www/lyduz.com && 
+      git remote prune origin &&
       git checkout master &&
-      git pull origin master && 
+      git pull && 
       git checkout $CI_COMMIT_SHA &&
       npm install && 
       npm run build &&
