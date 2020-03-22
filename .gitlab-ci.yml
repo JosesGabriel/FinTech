@@ -100,7 +100,7 @@ deploy-staging-server:
     - native
     - ssh
   script:
-    - ssh -t $DEV_USER@$DEV_HOST "whoami &&
+    - ssh -t $USER@$HOST "whoami &&
       cd /var/www/html/dev-v2.arbitrage.ph &&
       git remote prune origin && 
       git checkout master &&
@@ -126,7 +126,7 @@ deploy-production-server:
     - native
     - ssh
   script:
-    - ssh -t $PROD_USER@$PROD_HOST "whoami &&
+    - ssh -t $USER@$HOST "whoami &&
       cd /var/www/lyduz.com && 
       git remote prune origin &&
       git checkout master &&
