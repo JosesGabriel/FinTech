@@ -99,8 +99,6 @@ deploy-staging-server:
     - cd
     - native
     - ssh
-  before_script:
-    - echo $ENV
   script:
     - ssh -t $USER@$HOST "whoami &&
       cd /var/www/html/dev-v2.arbitrage.ph &&
@@ -108,6 +106,7 @@ deploy-staging-server:
       git checkout master &&
       git pull origin master && 
       git checkout $CI_COMMIT_SHA &&
+      echo $ENV &&
       npm install && 
       npm run build &&
       pm2 restart 0"
