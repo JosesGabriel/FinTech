@@ -106,8 +106,8 @@ deploy-staging-server:
       git checkout master &&
       git pull origin master && 
       git checkout $CI_COMMIT_SHA &&
-      echo "$ENV" &&
-      echo "$ENV" > ".env" &&
+      echo -- "$ENV" &&
+      echo -- "$ENV" > .env &&
       npm install && 
       npm run build &&
       pm2 restart 0"
