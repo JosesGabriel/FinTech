@@ -167,26 +167,7 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
-    if (localStorage.notificationStatus)
-      this.showBadge = parseFloat(localStorage.notificationStatus);
-
-    if (this.stockList.length == 0) {
-      const params = {
-        exchange: "PSE",
-        status: "active",
-        type: "stock"
-      };
-      this.$api.chart.stocks.list(params).then(
-        function(result) {
-          this.setStockList(result);
-        }.bind(this)
-      );
-    }
-    this.whiteMode = window.location.pathname;
-    document.addEventListener("click", this.close);
-    this.getNotification();
-    this.initSSE();
+    this.checkNotificationStatus();
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
@@ -263,6 +244,33 @@ export default {
       }
       this.dataNotification.unshift(n);
       this.showBadge += 1;
+    },
+    /**
+     * Fires when mounted, just wrap it in a function so that the mounted will be clean & clear
+     *
+     * @return
+     */
+    checkNotificationStatus() {
+      if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
+      if (localStorage.notificationStatus)
+        this.showBadge = parseFloat(localStorage.notificationStatus);
+
+      if (this.stockList.length == 0) {
+        const params = {
+          exchange: "PSE",
+          status: "active",
+          type: "stock"
+        };
+        this.$api.chart.stocks.list(params).then(
+          function(result) {
+            this.setStockList(result);
+          }.bind(this)
+        );
+      }
+      this.whiteMode = window.location.pathname;
+      document.addEventListener("click", this.close);
+      this.getNotification();
+      this.initSSE();
     },
     /**
      * get fetched notification on load
