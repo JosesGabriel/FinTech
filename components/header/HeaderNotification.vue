@@ -13,10 +13,11 @@
         <v-list class="py-0 userMessage__dropdown-body scrollbar">
           <NotificationCard
             v-for="(item, index) in dataNotification"
-            v-if="index <= 2"
+            v-if="index <= 5"
             :key="index"
             :notification="item"
           />
+          <span v-if="dataNotification.length == 0" class="caption d-flex justify-center py-3">No notification yet.</span>
         </v-list>
         <v-row no-gutters class="userMessage__dropdown-footer">
           <router-link to="/notification" class="no-transform">
@@ -102,7 +103,7 @@ export default {
 }
 .userMessage__dropdown-body {
   overflow: auto;
-  max-height: 360px;
+  max-height: 400px;
   border-bottom-left-radius: unset;
   border-bottom-right-radius: unset;
 }
