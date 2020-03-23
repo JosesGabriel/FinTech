@@ -13,30 +13,25 @@
         <v-list-item class="px-0">
           <v-list-item-content class="pt-0">
             <div v-for="n in 5" :key="n" class="pb-3">
-              <v-list-item-title class="caption d-flex justify-space-between"
-                ><span>{{ stockCode[n - 1] }}</span
-                ><span v-if="trendingStocks" :id="stockCode[n - 1]"
-                  >₱{{ trendingStocks[n - 1].last }}</span
-                ></v-list-item-title
-              >
-              <v-list-item-subtitle
-                class="overline d-flex justify-space-between"
-                ><span v-if="tStocksObject.data" class="tStocks--description">{{
-                  typeof tStocksObject.data.stocks.description != "undefined"
-                    ? tStocksObject.data.stocks[n - 1].description
-                    : ""
+              <v-list-item-title class="caption d-flex justify-space-between">
+                <span>{{ stockCode[n - 1] }}</span>
+                <span v-if="trendingStocks[n - 1].last != ''" :id="stockCode[n - 1]">₱{{ trendingStocks[n - 1].last }}</span>
+              </v-list-item-title>
+              <v-list-item-subtitle class="overline d-flex justify-space-between">
+                <span v-if="typeof trendingStocks[n - 1].description != 'undefined'" class="tStocks--description">{{
+                  trendingStocks[n - 1].description
                 }}</span
-                ><span
-                  v-if="trendingStocks"
+                >
+                <span
+                  v-if="trendingStocks[n - 1].change != ''"
                   class="font-weight-black"
                   :class="
                     trendingStocks[n - 1].change > 0
                       ? 'success--text'
                       : 'error--text'
                   "
-                  >{{ trendingStocks[n - 1].change }}%</span
-                ></v-list-item-subtitle
-              >
+                >{{ trendingStocks[n - 1].change }}%</span>
+              </v-list-item-subtitle>
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -130,6 +125,10 @@ export default {
         };
         this.$api.chart.stocks.history(params).then(
           function(result) {
+            this.trendingStocks[i] = {
+              ...this.trendingStocks[i],
+              description: this.tStocksObject.data.stocks[i].description
+            };
             this.trendingStocks[i].last = result.data.last;
             this.trendingStocks[
               i
