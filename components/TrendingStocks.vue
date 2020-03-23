@@ -12,25 +12,25 @@
       <v-list v-if="hasValues" class="mt-1 transparent">
         <v-list-item class="px-0">
           <v-list-item-content class="pt-0">
-            <div v-for="n in 5" :key="n" class="pb-3">
+            <div v-for="(item, index) in trendingStocks" :key="index" class="pb-3">
               <v-list-item-title class="caption d-flex justify-space-between">
-                <span>{{ stockCode[n - 1] }}</span>
-                <span v-if="trendingStocks[n - 1].last != ''" :id="stockCode[n - 1]">₱{{ trendingStocks[n - 1].last }}</span>
+                <span>{{ stockCode[index] }}</span>
+                <span v-if="item.last != ''" :id="stockCode">₱{{ item.last }}</span>
               </v-list-item-title>
               <v-list-item-subtitle class="overline d-flex justify-space-between">
-                <span v-if="typeof trendingStocks[n - 1].description != 'undefined'" class="tStocks--description">{{
-                  trendingStocks[n - 1].description
+                <span v-if="typeof item.description != 'undefined'" class="tStocks--description">{{
+                  item.description
                 }}</span
                 >
                 <span
-                  v-if="trendingStocks[n - 1].change != ''"
+                  v-if="item.change != ''"
                   class="font-weight-black"
                   :class="
-                    trendingStocks[n - 1].change > 0
+                    item.change > 0
                       ? 'success--text'
                       : 'error--text'
                   "
-                >{{ trendingStocks[n - 1].change }}%</span>
+                >{{ item.change }}%</span>
               </v-list-item-subtitle>
             </div>
           </v-list-item-content>
