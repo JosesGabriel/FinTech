@@ -15,13 +15,14 @@
             <div v-for="(item, index) in trendingStocks" :key="index" class="pb-3">
               <v-list-item-title class="caption d-flex justify-space-between">
                 <span>{{ stockCode[index] }}</span>
-                <span v-if="item.last != ''" :id="stockCode">₱{{ item.last }}</span>
+                <span v-if="item.last != ''" :id="stockCode[index]">₱{{ item.last }}</span>
               </v-list-item-title>
               <v-list-item-subtitle class="overline d-flex justify-space-between">
-                <span v-if="typeof item.description != 'undefined'" class="tStocks--description">{{
+                <span v-if="typeof item.description != 'undefined'" class="tStocks--description">
+                  {{
                   item.description
-                }}</span
-                >
+                  }}
+                </span>
                 <span
                   v-if="item.change != ''"
                   class="font-weight-black"
@@ -46,11 +47,11 @@ export default {
     return {
       tStocksObject: "",
       trendingStocks: [
-        { last: "", change: "", stock_id: "" },
-        { last: "", change: "", stock_id: "" },
-        { last: "", change: "", stock_id: "" },
-        { last: "", change: "", stock_id: "" },
-        { last: "", change: "", stock_id: "" }
+        { last: "", change: "", stock_id: "", description: "" },
+        { last: "", change: "", stock_id: "", description: "" },
+        { last: "", change: "", stock_id: "", description: "" },
+        { last: "", change: "", stock_id: "", description: "" },
+        { last: "", change: "", stock_id: "", description: "" }
       ],
       stockCode: [],
       hasValues: false,
@@ -119,16 +120,15 @@ export default {
       for (let i = 0; i < this.tStocksObject.data.stocks.length; i++) {
         //removes index from string because it returns PSE:ABA
         let x = this.tStocksObject.data.stocks[i].market_code.split(":");
+        this.trendingStocks[i].description = this.tStocksObject.data.stocks[
+          i
+        ].description;
         this.stockCode[i] = x[1];
         const params = {
           "symbol-id": this.tStocksObject.data.stocks[i].stock_id
         };
         this.$api.chart.stocks.history(params).then(
           function(result) {
-            this.trendingStocks[i] = {
-              ...this.trendingStocks[i],
-              description: this.tStocksObject.data.stocks[i].description
-            };
             this.trendingStocks[i].last = result.data.last;
             this.trendingStocks[
               i
@@ -140,6 +140,7 @@ export default {
           }.bind(this)
         );
       }
+      this.trendingStocks = this.trendingStocks.slice(0, 5)
     }
   }
 };
