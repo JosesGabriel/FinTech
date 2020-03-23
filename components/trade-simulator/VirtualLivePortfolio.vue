@@ -251,23 +251,23 @@ export default {
   watch: {
     simulatorOpenPosition() {
       this.getOpenPositions();
-      this.marketStatus();
+      //this.marketStatus();
     },
     simulatorPortfolioID() {
       this.getOpenPositions();
-      this.marketStatus();
+      //this.marketStatus();
     },
     EnterTradeModal() {
       this.trade_modal = this.EnterTradeModal;
-      this.marketStatus();
+      //this.marketStatus();
     },
     confirmdelete(){
       this.execute(this.itemToDelete);
-      this.marketStatus();
+      //this.marketStatus();
     },
     confirmupdate(){
       this.getOpenPositions();
-      this.marketStatus();
+      //this.marketStatus();
     },
     
 
@@ -307,8 +307,7 @@ export default {
       this.totalmvalue = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
-           //console.log('pOrt '+this.simulatorPortfolioID);
-          //console.log('Live pOrt ', result);
+         
           this.portfolioLogs = result.data.open;
           for (let i = 0; i < result.data.open.length; i++) {
               this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
