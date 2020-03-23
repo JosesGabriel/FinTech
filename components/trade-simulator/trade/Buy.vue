@@ -191,7 +191,6 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      //selectedPortfolio: "journal/getSelectedPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey"
     }),
     priceChange() {
@@ -250,11 +249,7 @@ export default {
       notesModel: ""
     };
   },
-  watch: {
-    //selectedPortfolio() {
-      //this.getSelectedPortfolio();
-   // }
-  },
+  
   mounted() {
     //this.getSelectedPortfolio();
   },
@@ -348,21 +343,7 @@ export default {
         }
       }
     },
-    /*getSelectedPortfolio() {
-      this.portfolioModel = this.selectedPortfolio.id;
-
-      this.$api.journal.portfolio
-        .portfoliofunds({
-          fund: this.selectedPortfolio.id
-        })
-        .then(response => {
-          if (response.success) {
-            this.availableFundModel = parseFloat(
-              //response.data.funds[0].balance
-            );
-          }
-        });
-    },*/
+    
     postBuy() {
       const portfolio_id = this.portfolioModel;
       const stock_id = this.stockModel;
@@ -379,7 +360,7 @@ export default {
             date: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
           }
         };
-        //console.log('Stock List -' , this.openposition);
+       
         this.$api.journal.portfolio
           .tradebuy(portfolio_id, stock_id, buyparams)
           .then(response => {

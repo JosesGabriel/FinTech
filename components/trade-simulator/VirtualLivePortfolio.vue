@@ -215,8 +215,8 @@ export default {
       filtered: '',
       lastprice: 0,
       showDelete: false,
-      confirmdelete: false,
-      confirmupdate: false,
+      confirmDelete: false,
+      confirmUpdate: false,
       itemToDelete: '',
       monthNames: [
         "January", "February", "March",
@@ -249,26 +249,45 @@ export default {
     }
   },
   watch: {
+    /**
+     * Update live portfolio when open position is changed
+     *
+     */
     simulatorOpenPosition() {
-      this.getOpenPositions();
-      
+      this.getOpenPositions();   
     },
+    /**
+     * Update Open positions when portfolio is changed
+     *
+     */
     simulatorPortfolioID() {
-      this.getOpenPositions();
-      
+      this.getOpenPositions();    
     },
+    /**
+     *Initialized Trade Modal
+     *
+     */
     EnterTradeModal() {
-      this.trade_modal = this.EnterTradeModal;
-     
+      this.trade_modal = this.EnterTradeModal;  
     },
-    confirmdelete(){
-      this.execute(this.itemToDelete);
-     
+    /**
+     * Stock Delete confirmation in open positions
+     *
+     */
+    confirmDelete(){
+      this.execute(this.itemToDelete);  
     },
-    confirmupdate(){
-      this.getOpenPositions();
-      
+    /**
+     * Stock Update confirmation in open positions
+     *
+     */
+    confirmUpdate(){
+      this.getOpenPositions();     
     },
+     /**
+     * Update Open positions when you buy or sell stocks
+     *
+     */
     simulatorConfirmedBuySell(){
       this.getOpenPositions();
     },
@@ -351,7 +370,6 @@ export default {
               this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
           }
            this.setSimulatorOpenPosition(this.positionlist);
-          // this.marketStatus();
            this.getDayPrior();
            
         }.bind(this)
@@ -366,10 +384,10 @@ export default {
      *
      */
     deleteConfirm(value){
-      this.confirmdelete = value;
+      this.confirmDelete = value;
     },
     updateConfirm(value){
-      this.confirmupdate = value;
+      this.confirmUpdate = value;
     },
     /**
      * Execute Live Delete
@@ -378,7 +396,7 @@ export default {
      *
      */
     execute(item){
-      if(this.confirmdelete){
+      if(this.confirmDelete){
         let profit = 0;
         let perc = 0;
         for (let index = 0; index < this.portfolioLogs.length; index++) {
@@ -401,7 +419,7 @@ export default {
      *
      */
     deleteLive(item) {    
-      this.confirmdelete = false;
+      this.confirmDelete = false;
       this.itemDetails = item;
       this.itemToDelete = item.id;
     },
@@ -630,17 +648,17 @@ export default {
       );
       const that = this;
       this.sse.onopen = function() {
-        //that.setMarketStatus(true);
+      
         console.log("open sse"); //
       };
 
       this.sse.onerror = function(err) {
-        //that.setMarketStatus(false);
+     
         console.log("error");
-        //console.log(err);
+     
       };
       let len = this.stockSym.length;
-      //const that = this;
+    
       
       this.sse.addEventListener("trade",function(e) {
            const data = JSON.parse(e.data);  
@@ -664,7 +682,6 @@ export default {
         let perf = 0;
        for (let i = 0; i < this.portfolioLogs.length; i++) {
          if(this.portfolioLogs[i].metas.stock_id == symbol){
-          // this.marketStatus();
            let oldvalue = this.portfolioLogs[i].MarketValue;
            let convertedNumbers = this.portfolioLogs[i].Profit.replace(/,/g, "");
            let oldprofit = parseFloat(convertedNumbers);
