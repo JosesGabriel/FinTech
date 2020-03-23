@@ -5,12 +5,16 @@
     :dark="lightSwitch == 1 ? true : false"
     color="transparent"
   >
-    <v-container :dark="lightSwitch == 1 ? true : false" class="pr-md-0 pr-lg-0 pl-5">
+    <v-container
+      :dark="lightSwitch == 1 ? true : false"
+      class="pr-md-0 pr-lg-0 pl-5"
+    >
       <v-row no-gutters class="heading-underline">
         <span
           :class="lightSwitch == 1 ? true : false"
           class="pa-2 pb-1 d-block font-weight-bold subtitle-1"
-        >Vyndue Rooms</span>
+          >Vyndue Rooms</span
+        >
       </v-row>
       <v-divider></v-divider>
       <v-list :dark="lightSwitch == 1 ? true : false" color="transparent">
@@ -22,10 +26,13 @@
           <v-list-item-content class="py-2">
             <v-list-item-title
               class="caption ma-0"
-              v-text="item.title"
               :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+              v-text="item.title"
             ></v-list-item-title>
-            <v-list-item-subtitle class="caption" v-text="item.subtitle"></v-list-item-subtitle>
+            <v-list-item-subtitle
+              class="caption"
+              v-text="item.subtitle"
+            ></v-list-item-subtitle>
           </v-list-item-content>
 
           <v-list-item-action>
@@ -35,7 +42,8 @@
               x-small
               class="text-capitalize black--text font-weight-bold"
               rounded
-            >Join</v-btn>
+              >Join</v-btn
+            >
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -45,7 +53,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-// import { client } from "~/assets/client.js";
+// import { client } from "~/assets/js/vyndue/client.js";
 
 export default {
   computed: {

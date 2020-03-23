@@ -195,7 +195,7 @@
 }
 </style>
 <script>
-// import { client, myToken } from "~/assets/client.js";
+// import { client, myToken } from "~/assets/js/vyndue/client.js";
 const client = require("matrix-js-sdk").createClient("https://im.arbitrage.ph");
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
