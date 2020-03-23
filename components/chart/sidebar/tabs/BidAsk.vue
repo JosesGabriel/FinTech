@@ -76,30 +76,44 @@
           <tr
             v-for="(item, key) in bidask.limit"
             :key="item.id"
-            class="tr_custom_bidask"
+            class="tr_custom"
           >
             <td
               class="pl-2"
               :class="`bid__column_${formatItem(bidask.bids[key], 'id')}`"
+              style="width:25px;"
             >
               {{ formatItem(bidask.bids[key], "count") }}
             </td>
-            <td :class="`bid__column_${formatItem(bidask.bids[key], 'id')}`">
+            <td
+              :class="`bid__column_${formatItem(bidask.bids[key], 'id')}`"
+              style="width:10px;"
+            >
               {{ formatItem(bidask.bids[key], "volume") }}
             </td>
-            <td :class="`bid__column_${formatItem(bidask.bids[key], 'id')}`">
+            <td
+              :class="`bid__column_${formatItem(bidask.bids[key], 'id')}`"
+              style="width:10px;"
+            >
               {{ formatItem(bidask.bids[key], "price") }}
             </td>
             <td
               class="pl-2"
               :class="`ask__column_${formatItem(bidask.asks[key], 'id')}`"
+              style="width:25px;"
             >
               {{ formatItem(bidask.asks[key], "price") }}
             </td>
-            <td :class="`ask__column_${formatItem(bidask.asks[key], 'id')}`">
+            <td
+              :class="`ask__column_${formatItem(bidask.asks[key], 'id')}`"
+              style="width:10px;"
+            >
               {{ formatItem(bidask.asks[key], "volume") }}
             </td>
-            <td :class="`ask__column_${formatItem(bidask.asks[key], 'id')}`">
+            <td
+              :class="`ask__column_${formatItem(bidask.asks[key], 'id')}`"
+              style="width:10px;"
+            >
               {{ formatItem(bidask.asks[key], "count") }}
             </td>
             <td style="width:5px;"></td>
@@ -418,21 +432,19 @@ export default {
      */
 
     updateEffect(dom, type) {
-      const backgroundColor = type == "bid" ? "#03dac5" : "#F44336";
-      const color = type == "bid" ? "#000" : "";
+      const backgroundColor =
+        type == "bid" ? "rgba(3,218,197,0.3)" : "rgba(244,67,54,0.3)";
       setTimeout(() => {
-        const row = document.getElementsByClassName(dom);
-        if (row.length == 0) return;
+        const row = document.querySelectorAll(`.${dom}`);
+        if (row == undefined) return;
         for (let i = 0; i <= row.length - 1; i++) {
           row[i].style.backgroundColor = backgroundColor;
-          row[i].style.color = color;
         }
         setTimeout(() => {
           for (let i = 0; i <= row.length - 1; i++) {
             row[i].style.backgroundColor = "";
-            row[i].style.color = "";
           }
-        }, this.blink);
+        }, 3000);
       }, 100);
     }
   }
@@ -440,7 +452,7 @@ export default {
 </script>
 
 <style scoped>
-.tr_custom_bidask {
+.tr_custom {
   line-height: 0.1rem !important;
 }
 .custom_table tr {
