@@ -251,25 +251,27 @@ export default {
   watch: {
     simulatorOpenPosition() {
       this.getOpenPositions();
-      //this.marketStatus();
+      
     },
     simulatorPortfolioID() {
       this.getOpenPositions();
-      //this.marketStatus();
+      
     },
     EnterTradeModal() {
       this.trade_modal = this.EnterTradeModal;
-      //this.marketStatus();
+     
     },
     confirmdelete(){
       this.execute(this.itemToDelete);
-      //this.marketStatus();
+     
     },
     confirmupdate(){
       this.getOpenPositions();
-      //this.marketStatus();
+      
     },
-    
+    simulatorConfirmedBuySell(){
+      this.getOpenPositions();
+    },
 
   },
   methods: {
@@ -321,6 +323,7 @@ export default {
                 'emotion': this.portfolioLogs[i].metas.emotion,
                 'notes': this.portfolioLogs[i].metas.notes
               };
+              
               this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
               this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol;
               this.portfolioLogs[i].Position = this.portfolioLogs[i].position;
@@ -347,7 +350,8 @@ export default {
               this.$emit("totalUnrealized", this.totalProfitLoss);
               this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
           }
-           this.marketStatus();
+           this.setSimulatorOpenPosition(this.positionlist);
+          // this.marketStatus();
            this.getDayPrior();
            
         }.bind(this)

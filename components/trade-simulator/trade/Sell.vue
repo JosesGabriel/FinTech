@@ -10,7 +10,7 @@
       append-icon="mdi-chevron-down"
       v-model="stockModel"
       :dark="lightSwitch == 1"
-      :items="stocklist"
+      :items="this.simulatorOpenPosition"
       :menu-props="{offsetY: true, dark: lightSwitch == 1}"
       @change="onChangeStock"
     ></v-autocomplete>
@@ -94,7 +94,7 @@ import { BuyFees, SellFees } from "~/assets/js/helpers/taxation";
 
 export default {
   props: {
-    stocklist: Array
+    //stocklist: Array
   },
   computed: {
     ...mapGetters({
@@ -102,6 +102,8 @@ export default {
       selectedPortfolio: "journal/getSelectedPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+      simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
+      simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
     }),
     priceChange() {
       return this.change > 0 ? "increase" : this.change == 0 ? "" : "decrease";
@@ -127,6 +129,7 @@ export default {
       return state;
     }
   },
+ 
   data() {
     return {
       stockModel: null,
@@ -146,7 +149,7 @@ export default {
       strategyModel: "",
       tradeplanModel: "",
       emotionsModel: "",
-      notesModel: ""
+      notesModel: "",
     };
   },
   methods: {
@@ -154,6 +157,7 @@ export default {
       setAlert: "global/setAlert",
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
+      setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell"
     }),
     calculateBoardLot: CalculateBoardLot,
     onChangeStock(stock_id) {
@@ -196,7 +200,7 @@ export default {
           }
         });
 
-      let get = this.stocklist.filter(x => {
+      let get = this.simulatorOpenPosition.filter(x => {
         return x.id == stock_id;
       });
 
@@ -264,8 +268,14 @@ export default {
         })
         .then(response => {
           if (response.success) {
+            this.updateList(stock_id);
             this.clearInputs();
-           this.setSimulatorOpenPosition(this.stocklist);
+              if(this.simulatorConfirmedBuySell == 'buy'){
+                this.setSimulatorConfirmedBuySell('sell');
+              }else{
+                this.setSimulatorConfirmedBuySell('buy');
+              }
+            
             let alert = {
               model: true,
               state: true,
@@ -287,11 +297,21 @@ export default {
       this.priceModel = null;
       this.selectedStockData = null;
       this.asks = null;
+      //this.stocklist = null;
       this.loading = false;
       this.noData = true;
       this.last = 0;
       this.change = 0;
       this.changePercentage = 0;
+    },
+    updateList(id){
+      for (let index = 0; index < this.simulatorOpenPosition.length; index++) {
+            if(id == this.simulatorOpenPosition[index].id){
+                if(this.stockPosition == this.quantityModel){
+                  this.simulatorOpenPosition.splice(index, 1);
+                }       
+            }     
+      }
     }
   }
 };

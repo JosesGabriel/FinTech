@@ -191,7 +191,7 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      selectedPortfolio: "journal/getSelectedPortfolio",
+      //selectedPortfolio: "journal/getSelectedPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey"
     }),
     priceChange() {
@@ -251,12 +251,12 @@ export default {
     };
   },
   watch: {
-    selectedPortfolio() {
-      this.getSelectedPortfolio();
-    }
+    //selectedPortfolio() {
+      //this.getSelectedPortfolio();
+   // }
   },
   mounted() {
-    this.getSelectedPortfolio();
+    //this.getSelectedPortfolio();
   },
   methods: {
     ...mapActions({
@@ -348,7 +348,7 @@ export default {
         }
       }
     },
-    getSelectedPortfolio() {
+    /*getSelectedPortfolio() {
       this.portfolioModel = this.selectedPortfolio.id;
 
       this.$api.journal.portfolio
@@ -358,11 +358,11 @@ export default {
         .then(response => {
           if (response.success) {
             this.availableFundModel = parseFloat(
-              response.data.funds[0].balance
+              //response.data.funds[0].balance
             );
           }
         });
-    },
+    },*/
     postBuy() {
       const portfolio_id = this.portfolioModel;
       const stock_id = this.stockModel;
