@@ -140,7 +140,6 @@ export default {
           }.bind(this)
         );
       }
-      this.trendingStocks = this.trendingStocks.slice(0, 5)
     }
   }
 };
