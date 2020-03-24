@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0 ma-0">
+  <v-container class="pa-0 ma-0" @click="$emit('clicked')">
     <v-row>
       <v-col cols="1" class="pa-0 pl-7 pt-3">
         <v-avatar color="success" size="26">

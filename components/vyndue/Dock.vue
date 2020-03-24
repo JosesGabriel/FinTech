@@ -12,36 +12,49 @@
     >
       <v-icon>mdi-message-processing-outline</v-icon>
     </v-btn>
-    <v-card
-      v-show="dockToggle"
-      class="dock__card darkchart"
-      width="400px"
-      shaped
-      dark
-    >
-      <Header />
-      <MessageList />
-      <Composer />
-    </v-card>
+    <RoomsOverlay
+      class="roomOverlay"
+      :class="roomOverlayToggle ? 'roomOverlay--show' : 'roomOverlay--hidden'"
+      @close="roomOverlayToggle = false"
+    />
+    <v-scale-transition origin="bottom right 0">
+      <v-card
+        v-show="dockToggle"
+        class="dock__card"
+        :class="roomOverlayToggle ? 'dock__overlay' : 'darkchart'"
+        width="400px"
+        shaped
+        dark
+        flat
+      >
+        <Header
+          @showRooms="roomOverlayToggle = true"
+          @hideDock="dockToggle = false"
+        />
+        <MessageList @clicked="roomOverlayToggle = false" />
+        <Composer @clicked="roomOverlayToggle = false" />
+      </v-card>
+    </v-scale-transition>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { client } from "~/assets/js/vyndue/client.js";
+import { mapGetters } from "vuex";
 import Header from "~/components/vyndue/Header";
 import MessageList from "~/components/vyndue/MessageList";
 import Composer from "~/components/vyndue/Composer";
+import RoomsOverlay from "~/components/vyndue/RoomsOverlay";
 export default {
   components: {
     Header,
     MessageList,
-    Composer
+    Composer,
+    RoomsOverlay
   },
   data() {
     return {
       dockToggle: false,
-      test: ""
+      roomOverlayToggle: false
     };
   },
   computed: {
@@ -50,27 +63,34 @@ export default {
       vyndueUser: "vyndue/getVyndueUser"
     })
   },
-  watch: {
-    /**
-     * gets current users data and sets is to the 'user' vuex state
-     *
-     * @return
-     */
-    clientIsPrepared() {
-      this.testt();
-    }
-  },
-  mounted() {},
   methods: {
-    testt() {
-      //   console.log("HAHAHAH");
-      //   console.log(this.vyndueUser);
+    close(e) {
+      if (!this.$el.contains(e.target)) {
+        this.roomOverlayToggle = false;
+      }
     }
   }
 };
 </script>
 
 <style>
+.roomOverlay {
+  transition-property: all;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
+}
+.roomOverlay--show {
+  opacity: 1;
+  z-index: 1;
+}
+.roomOverlay--hidden {
+  opacity: 0;
+  z-index: 0;
+}
+.dock__overlay {
+  filter: brightness(50%);
+  transition: 0.3s;
+}
 .dock__container {
   position: fixed;
   bottom: 1vw;

@@ -1,6 +1,6 @@
 <template>
   <v-list-item>
-    <v-btn icon>
+    <v-btn icon @click="$emit('showRooms')">
       <v-icon>mdi-reorder-horizontal</v-icon>
     </v-btn>
     <v-list-item-avatar color="grey">
@@ -11,6 +11,9 @@
         currentRoom.displayName
       }}</v-list-item-title>
     </v-list-item-content>
+    <v-btn icon @click="$emit('hideDock')">
+      <v-icon>mdi-close</v-icon>
+    </v-btn>
   </v-list-item>
 </template>
 

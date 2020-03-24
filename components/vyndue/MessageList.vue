@@ -1,5 +1,10 @@
 <template>
-  <div v-if="roomIsVisible" class="message__wrap" @scroll="scroll">
+  <div
+    v-if="roomIsVisible"
+    class="message__wrap"
+    @scroll="scroll"
+    @click="$emit('clicked')"
+  >
     <div
       v-for="(message, index) in messagesObject"
       :key="index"
@@ -153,7 +158,7 @@ export default {
             }
           });
           if (
-            this.messagesObject.length < 10 &&
+            this.messagesObject.length < 20 &&
             this.lastFromToken != data.start
           ) {
             this.getHistoricalMessages({ start: this.lastFromToken });
@@ -213,7 +218,7 @@ export default {
 }
 .message__list {
   align-self: flex-start;
-  max-width: 70%;
+  max-width: 100%;
   display: inline-flex;
 }
 .message__sender {
