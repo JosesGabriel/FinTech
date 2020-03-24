@@ -59,7 +59,9 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-      <VyndueDock />
+      <client-only>
+        <VyndueDock v-if="$route.path != '/login/'" />
+      </client-only>
       <!-- dont remove -->
       <div v-show="false" id="tv_chart_container"></div>
     </v-content>
