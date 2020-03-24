@@ -444,7 +444,7 @@ export default {
   line-height: 0.1rem !important;
 }
 .custom_table tr td {
-  height: 21px !important;
+  height: 20px !important;
 }
 .lightmode__text {
   color: #494949;

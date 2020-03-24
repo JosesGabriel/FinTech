@@ -251,7 +251,7 @@ export default {
   line-height: 0.1rem !important;
 }
 tr.tr_custom td {
-  height: 21px !important;
+  height: 20px !important;
 }
 .lightmode__text {
   color: #494949;
