@@ -402,6 +402,9 @@ export default {
   line-height: 0.1rem !important;
   cursor: pointer;
 }
+tr.tr_custom td {
+  height: 20px !important;
+}
 .sub__title {
   display: flex;
 }

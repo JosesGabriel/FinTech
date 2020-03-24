@@ -76,7 +76,7 @@
           <tr
             v-for="(item, key) in bidask.limit"
             :key="item.id"
-            class="tr_custom_bidask"
+            class="tr_custom"
           >
             <td
               class="pl-2"
@@ -440,11 +440,11 @@ export default {
 </script>
 
 <style scoped>
-.tr_custom_bidask {
+.tr_custom {
   line-height: 0.1rem !important;
 }
-.custom_table tr {
-  height: 5px !important;
+.custom_table tr td {
+  height: 20px !important;
 }
 .lightmode__text {
   color: #494949;
