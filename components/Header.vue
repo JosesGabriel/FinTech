@@ -55,10 +55,10 @@
         >
           <v-badge
             :value="showBadge"
-            class="header__button font-weight-black no-transform body-2"
+            :content="showBadge"
+            class="header__button notif__counter-badge font-weight-black no-transform body-2"
             color="error"
             small
-            dot
           >Notification</v-badge>
         </v-btn>
       </a>
@@ -145,35 +145,29 @@ export default {
     })
   },
   watch: {
+    /**
+     * Increment value on notif status set to localstorage
+     *
+     * @return  {returns}  returns increment number 1 step per notification
+     */
     notification() {
       this.newNotication();
-      localStorage.notificationStatus = 1;
+      let notifCounter = parseFloat(localStorage.notificationStatus);
+      localStorage.notificationStatus = notifCounter += 1;
     },
+    /**
+     * Fires when shownotification or notif dropdown modals try to false
+     * Set showbadge to 0, hide
+     *
+     * @return  {number}  returns number of notification
+     */
     showNotification() {
       this.showBadge = 0;
       localStorage.notificationStatus = 0;
     }
   },
   mounted() {
-    if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
-    if (localStorage.notificationStatus) this.showBadge = parseFloat(localStorage.notificationStatus);
-
-    if (this.stockList.length == 0) {
-      const params = {
-        exchange: "PSE",
-        status: "active",
-        type: "stock"
-      };
-      this.$api.chart.stocks.list(params).then(
-        function(result) {
-          this.setStockList(result);
-        }.bind(this)
-      );
-    }
-    this.whiteMode = window.location.pathname;
-    document.addEventListener("click", this.close);
-    this.getNotification();
-    this.initSSE();
+    this.checkNotificationStatus();
   },
   beforeDestroy() {
     document.removeEventListener("click", this.close);
@@ -249,7 +243,34 @@ export default {
         n = this.notification;
       }
       this.dataNotification.unshift(n);
-      this.showBadge = 1;
+      this.showBadge += 1;
+    },
+    /**
+     * Fires when mounted, just wrap it in a function so that the mounted will be clean & clear
+     *
+     * @return
+     */
+    checkNotificationStatus() {
+      if (localStorage.currentMode) this.isLightMode = localStorage.currentMode;
+      if (localStorage.notificationStatus)
+        this.showBadge = parseFloat(localStorage.notificationStatus);
+
+      if (this.stockList.length == 0) {
+        const params = {
+          exchange: "PSE",
+          status: "active",
+          type: "stock"
+        };
+        this.$api.chart.stocks.list(params).then(
+          function(result) {
+            this.setStockList(result);
+          }.bind(this)
+        );
+      }
+      this.whiteMode = window.location.pathname;
+      document.addEventListener("click", this.close);
+      this.getNotification();
+      this.initSSE();
     },
     /**
      * get fetched notification on load
@@ -400,5 +421,11 @@ export default {
 .vyndue__badge .v-badge__wrapper .v-badge__badge {
   color: #f44336;
   font-size: 10px;
+}
+.notif__counter-badge span.v-badge__badge {
+  padding: 3px 0 !important;
+  height: 13px;
+  min-width: 13px;
+  font-size: 8px;
 }
 </style>

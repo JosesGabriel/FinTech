@@ -16,7 +16,7 @@
       <v-btn
         text
         color="success"
-        @click.stop="EnterTradeModal=true"
+        @click.stop="enterTradeModal=true"
         dark
         class="text-capitalize mr-2 resetbtn"
         height="23"
@@ -37,7 +37,7 @@
       @page-count="pageCount = $event"
       :dark="lightSwitch == true"
       :style="{ background: cardBackground }"
-      class="data_table-container pl-10 secondary--text"
+      class="data_table-container livePortfolio__data-table pl-10 secondary--text"
     >  
         
             <template v-slot:item.stock_id="{ item }" >
@@ -108,20 +108,20 @@
         <span
           class="ml-3 mr-4"
           :class="(this.totalProfitLoss < 0 ? 'negative' : 'positive')"
-        >{{ this.addcomma(this.totalProfitLoss) }}</span>
+        >{{ this.addComma(this.totalProfitLoss) }}</span>
         <span
           class="ml-12 mr-5 totalpercentage"
           :class="(this.totalPerf < 0 ? 'negative' : 'positive')"
-        >{{ this.addcomma(this.totalPerf) }}%</span>
+        >{{ this.addComma(this.totalPerf) }}%</span>
       </v-col>
     </v-row>
     
     <TradeModal
-      :visible="EnterTradeModal"
+      :visible="enterTradeModal"
       :OpenPosition="openposition"
       :positionList="positionlist"
       :Trade_Modal="trade_modal"
-      @close="EnterTradeModal=false"
+      @close="enterTradeModal=false"
     />
     <reset-modal :visible="showResetForm" @close="showResetForm=false" />
     <trade-delete :visible="showDelete" v-on:confirmedDelete="deleteConfirm" :itemDetails="itemDetails" @close="showDelete=false" />
@@ -144,7 +144,6 @@
   </v-col>
 </template>
 <script>
-//import TradeModal from "~/components/trade-simulator/TradeModal";
 import TradeModal from "~/components/trade-simulator/trade/TradeModal";
 import resetModal from "~/components/trade-simulator/reset";
 import shareModal from "~/components/modals/Share";
@@ -184,7 +183,7 @@ export default {
       portfolioLogsrealtime: [],
       realtime: false,
       items: [{ title: "Note" }, { title: "Delete" }],
-      EnterTradeModal: false,
+      enterTradeModal: false,
       trade_modal: false,
       showResetForm: false,
       showEditForm: false,
@@ -215,8 +214,8 @@ export default {
       filtered: '',
       lastprice: 0,
       showDelete: false,
-      confirmdelete: false,
-      confirmupdate: false,
+      confirmDelete: false,
+      confirmUpdate: false,
       itemToDelete: '',
       monthNames: [
         "January", "February", "March",
@@ -249,27 +248,48 @@ export default {
     }
   },
   watch: {
+    /**
+     * Update live portfolio when open position is changed
+     *
+     */
     simulatorOpenPosition() {
-      this.getOpenPositions();
-      this.marketStatus();
+      this.getOpenPositions();   
     },
+    /**
+     * Update Open positions when portfolio is changed
+     *
+     */
     simulatorPortfolioID() {
+      this.getOpenPositions();    
+    },
+    /**
+     *Initialized Trade Modal
+     *
+     */
+    enterTradeModal() {
+      this.trade_modal = this.enterTradeModal;  
+    },
+    /**
+     * Stock Delete confirmation in open positions
+     *
+     */
+    confirmDelete(){
+      this.execute(this.itemToDelete);  
+    },
+    /**
+     * Stock Update confirmation in open positions
+     *
+     */
+    confirmUpdate(){
+      this.getOpenPositions();     
+    },
+     /**
+     * Update Open positions when you buy or sell stocks
+     *
+     */
+    simulatorConfirmedBuySell(){
       this.getOpenPositions();
-      this.marketStatus();
     },
-    EnterTradeModal() {
-      this.trade_modal = this.EnterTradeModal;
-      this.marketStatus();
-    },
-    confirmdelete(){
-      this.execute(this.itemToDelete);
-      this.marketStatus();
-    },
-    confirmupdate(){
-      this.getOpenPositions();
-      this.marketStatus();
-    },
-    
 
   },
   methods: {
@@ -280,6 +300,12 @@ export default {
       setSimulatorConfirmedBuySell:
         "tradesimulator/setSimulatorConfirmedBuySell"
     }),
+
+    /**
+     * Trigger share modal
+     *
+     * @return  {[type]}  [return description]
+     */
     async showShareModal() {
       const el = this.$refs.componentWrapper;
       const options = {
@@ -290,7 +316,7 @@ export default {
     },
     
     /**
-     * Get Live Portfolio Data
+     * Get Live Portfolio Data/ Open Positions
      *
      */
     getOpenPositions() {
@@ -307,8 +333,7 @@ export default {
       this.totalmvalue = 0;
       this.$api.journal.portfolio.open(openparams2).then(
         function(result) {
-           //console.log('pOrt '+this.simulatorPortfolioID);
-          //console.log('Live pOrt ', result);
+         
           this.portfolioLogs = result.data.open;
           for (let i = 0; i < result.data.open.length; i++) {
               this.openposition[i] = this.portfolioLogs[i].metas.stock_id;
@@ -322,13 +347,14 @@ export default {
                 'emotion': this.portfolioLogs[i].metas.emotion,
                 'notes': this.portfolioLogs[i].metas.notes
               };
+              
               this.stockSym[i] = this.portfolioLogs[i].metas.stock_id;
               this.portfolioLogs[i].stock_id = this.portfolioLogs[i].stock_symbol;
               this.portfolioLogs[i].Position = this.portfolioLogs[i].position;
               this.portfolioLogs[i].AvgPrice = this.portfolioLogs[i].average_price.toFixed(3);
-              this.portfolioLogs[i].TotalCost = this.addcomma(this.portfolioLogs[i].total_value);
-              this.portfolioLogs[i].MarketValue = this.addcomma(this.portfolioLogs[i].market_value);
-              this.portfolioLogs[i].Profit = this.addcomma(this.portfolioLogs[i].profit_loss);
+              this.portfolioLogs[i].TotalCost = this.addComma(this.portfolioLogs[i].total_value);
+              this.portfolioLogs[i].MarketValue = this.addComma(this.portfolioLogs[i].market_value);
+              this.portfolioLogs[i].Profit = this.addComma(this.portfolioLogs[i].profit_loss);
               this.portfolioLogs[i].Perf = this.portfolioLogs[i].pl_percentage.toFixed(2);
               this.portfolioLogs[i].action = {
                   id: this.portfolioLogs[i].metas.stock_id,
@@ -348,7 +374,7 @@ export default {
               this.$emit("totalUnrealized", this.totalProfitLoss);
               this.$emit("totalMarketValue", this.totalmvalue.toFixed(2));
           }
-           this.marketStatus();
+           this.setSimulatorOpenPosition(this.positionlist);
            this.getDayPrior();
            
         }.bind(this)
@@ -363,10 +389,16 @@ export default {
      *
      */
     deleteConfirm(value){
-      this.confirmdelete = value;
+      this.confirmDelete = value;
     },
+    /**
+     * Update confirmation
+     *
+     * @param   {boolean}  value  true/false
+     *
+     */
     updateConfirm(value){
-      this.confirmupdate = value;
+      this.confirmUpdate = value;
     },
     /**
      * Execute Live Delete
@@ -375,7 +407,7 @@ export default {
      *
      */
     execute(item){
-      if(this.confirmdelete){
+      if(this.confirmDelete){
         let profit = 0;
         let perc = 0;
         for (let index = 0; index < this.portfolioLogs.length; index++) {
@@ -398,7 +430,7 @@ export default {
      *
      */
     deleteLive(item) {    
-      this.confirmdelete = false;
+      this.confirmDelete = false;
       this.itemDetails = item;
       this.itemToDelete = item.id;
     },
@@ -433,13 +465,24 @@ export default {
         item.style.background = "";
       }, 800);
     },
+    /**
+     * Hover show effect in Open Positions 
+     *
+     * @param   {[type]}  item  Stock id
+     *
+     */
     menuLogsShow(item) {
       let pl = document.getElementById(`pl_${item.id}`);
       pl.style.display = "block";
     },
+    /**
+     * Hover hide effect in Open Positions 
+     *
+     * @param   {[type]}  item  Stock id
+     *
+     */
     menuLogsHide(item) {
       let pl = document.getElementById(`pl_${item.id}`);
-
       pl.style.display = "none";
     },
 
@@ -451,7 +494,7 @@ export default {
      * @param   {int}  decimals     number of decimals
      *
      */
-    addcomma(n, sep, decimals) {
+    addComma(n, sep, decimals) {
       sep = sep || "."; // Default to period as decimal separator
       decimals = decimals || 2; // Default to 2 decimals
       return (
@@ -460,7 +503,7 @@ export default {
     },
 
     /**
-     * Calculate Day Change
+     * Calculate Day Prior for Day Change
      *
      */
     getDayPrior(){
@@ -571,25 +614,6 @@ export default {
               } 
     },
 
-    marketStatus(){
-      let currentDate = new Date();
-
-      let open_am = new Date();
-          open_am.setHours(9,30,0);
-      let close_am = new Date();
-          close_am.setHours(11,59,59);
-      let open_pm = new Date();
-          open_pm.setHours(13,30,0);
-      let close_pm = new Date();
-          close_pm.setHours(15,30,0);
-
-       if((Date.parse(currentDate) > Date.parse(open_am) && Date.parse(currentDate) < Date.parse(close_am)) || (Date.parse(currentDate) > Date.parse(open_pm) && Date.parse(currentDate) < Date.parse(close_pm))) {
-         this.setMarketStatus(true);    
-       }else{
-         this.setMarketStatus(false);
-       }
-    },
-
     /**
      * Calculate the fees based on Price
      *
@@ -622,22 +646,21 @@ export default {
       }
 
       this.sse = new EventSource(
-        //"http://localhost:8021/sse/market-data/pse/all"
         `${process.env.STREAM_API_URL}/sse/market-data/pse/all?token=${this.$auth.getToken('local').replace('Bearer ','')}`
       );
       const that = this;
       this.sse.onopen = function() {
-        //that.setMarketStatus(true);
+      
         console.log("open sse"); //
       };
 
       this.sse.onerror = function(err) {
-        //that.setMarketStatus(false);
+     
         console.log("error");
-        //console.log(err);
+     
       };
       let len = this.stockSym.length;
-      //const that = this;
+    
       
       this.sse.addEventListener("trade",function(e) {
            const data = JSON.parse(e.data);  
@@ -661,7 +684,6 @@ export default {
         let perf = 0;
        for (let i = 0; i < this.portfolioLogs.length; i++) {
          if(this.portfolioLogs[i].metas.stock_id == symbol){
-          // this.marketStatus();
            let oldvalue = this.portfolioLogs[i].MarketValue;
            let convertedNumbers = this.portfolioLogs[i].Profit.replace(/,/g, "");
            let oldprofit = parseFloat(convertedNumbers);
@@ -671,9 +693,9 @@ export default {
                             this.portfolioLogs[i].average_price;
            profit = parseFloat(mvalue) - parseFloat(tcost);
            perf = (profit / tcost) * 100;
-           this.portfolioLogs[i].MarketValue = this.addcomma(mvalue);
-           this.portfolioLogs[i].Profit = this.addcomma(profit);
-           this.portfolioLogs[i].Perf = this.addcomma(perf);
+           this.portfolioLogs[i].MarketValue = this.addComma(mvalue);
+           this.portfolioLogs[i].Profit = this.addComma(profit);
+           this.portfolioLogs[i].Perf = this.addComma(perf);
 
             if(oldvalue != this.portfolioLogs[i].MarketValue){
               let ploss = parseFloat(this.totalProfitLoss) - parseFloat(oldprofit);
@@ -823,8 +845,8 @@ export default {
 .v-data-table.data_table-container .v-data-footer {
   border: none;
 }
-.v-data-table.data_table-container td,
-.v-data-table.data_table-container th {
+.v-data-table.data_table-container.livePortfolio__data-table td,
+.v-data-table.data_table-container.livePortfolio__data-table th {
   height: 36px;
 }
 .v-data-table.data_table-container
@@ -904,7 +926,6 @@ export default {
   color: #494949;
 }
 .totalpercentage{
- /* visibility: hidden;*/
   display: none;
 }
 

@@ -18,7 +18,7 @@
             />
           </v-tab-item>
           <v-tab-item>
-            <Sell :stocklist="sellPosition" @clicked="show = false" />
+            <Sell @clicked="show = false" />
           </v-tab-item>
         </v-tabs-items>
       </v-container>
@@ -50,9 +50,8 @@ export default {
      * @return  {Array}  returns filtered array by type real
      */
     userPortfolioVirtual() {
-      console.log('Open Positon-', this.positionList);
       this.openPositonList = this.OpenPosition;
-      this.sellPosition = this.positionList;
+      //this.sellPosition = this.positionList;
       let portfolio = this.userPortfolio.filter(x => {
         return x.type == "virtual";
       });
@@ -80,7 +79,7 @@ export default {
       tab: null,
       items: ["Buy", "Sell"],
       openPositonList: [],
-      sellPosition: [],
+      sellPosition: this.positionList,
     };
   },
 

@@ -10,7 +10,7 @@
       append-icon="mdi-chevron-down"
       v-model="stockModel"
       :dark="lightSwitch == 1"
-      :items="stocklist"
+      :items="this.simulatorOpenPosition"
       :menu-props="{offsetY: true, dark: lightSwitch == 1}"
       @change="onChangeStock"
     ></v-autocomplete>
@@ -93,19 +93,26 @@ import { CalculateBoardLot } from "~/assets/js/helpers/orderbook";
 import { BuyFees, SellFees } from "~/assets/js/helpers/taxation";
 
 export default {
-  props: {
-    stocklist: Array
-  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
       selectedPortfolio: "journal/getSelectedPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey",
       simulatorPortfolioID: "tradesimulator/getSimulatorPortfolioID",
+      simulatorConfirmedBuySell: "tradesimulator/getSimulatorConfirmedBuySell",
+      simulatorOpenPosition: "tradesimulator/getSimulatorOpenPosition",
     }),
+    /**
+     * Determine if the price is increase or decrease
+     *
+     */
     priceChange() {
       return this.change > 0 ? "increase" : this.change == 0 ? "" : "decrease";
     },
+    /**
+     * Calculate the total market value
+     *
+     */
     totalCost() {
       let total = 0;
       if (this.quantityModel != null && this.priceModel != null) {
@@ -114,6 +121,10 @@ export default {
       }
       return total;
     },
+    /**
+     *Toggle continue button in the stepper
+     *
+     */
     toggleContinueBtn() {
       let state = true;
       if (
@@ -127,6 +138,7 @@ export default {
       return state;
     }
   },
+ 
   data() {
     return {
       stockModel: null,
@@ -146,7 +158,7 @@ export default {
       strategyModel: "",
       tradeplanModel: "",
       emotionsModel: "",
-      notesModel: ""
+      notesModel: "",
     };
   },
   methods: {
@@ -154,8 +166,15 @@ export default {
       setAlert: "global/setAlert",
       setRenderPortfolioKey: "journal/setRenderPortfolioKey",
       setSimulatorOpenPosition: "tradesimulator/setSimulatorOpenPosition",
+      setSimulatorConfirmedBuySell: "tradesimulator/setSimulatorConfirmedBuySell"
     }),
     calculateBoardLot: CalculateBoardLot,
+    /**
+     * Display details of the stock you sell
+     *
+     * @param   {[type]}  stock_id  [stock_id description]
+     *
+     */
     onChangeStock(stock_id) {
       this.loading = true;
       this.noData = true;
@@ -196,7 +215,7 @@ export default {
           }
         });
 
-      let get = this.stocklist.filter(x => {
+      let get = this.simulatorOpenPosition.filter(x => {
         return x.id == stock_id;
       });
 
@@ -216,6 +235,13 @@ export default {
         this.notesModel = get[0].notes;
       }
     },
+    /**
+     * Calculate boardlot in operation
+     *
+     * @param   {[type]}  boardlot   [boardlot description]
+     * @param   {[type]}  operation  [operation description]
+     *
+     */
     toggleOperation(boardlot, operation) {
       let number = parseFloat(this.quantityModel);
       if (operation === "up") {
@@ -244,6 +270,12 @@ export default {
         }
       }
     },
+
+    /**
+     * Execute Sell Confirmation
+     *
+     * @return  {[type]}  [return description]
+     */
     postSell() {
       const portfolio_id = this.simulatorPortfolioID;
       const stock_id = this.stockModel;
@@ -264,8 +296,14 @@ export default {
         })
         .then(response => {
           if (response.success) {
+            this.updateList(stock_id);
             this.clearInputs();
-           this.setSimulatorOpenPosition(this.stocklist);
+              if(this.simulatorConfirmedBuySell == 'buy'){
+                this.setSimulatorConfirmedBuySell('sell');
+              }else{
+                this.setSimulatorConfirmedBuySell('buy');
+              }
+            
             let alert = {
               model: true,
               state: true,
@@ -275,6 +313,10 @@ export default {
           }
         });
     },
+    /**
+     * Initialized Data if Sell is confirmed
+     *
+     */
     clearInputs() {
       this.keyCounter = this.renderPortfolioKey;
       this.keyCounter++;
@@ -292,6 +334,21 @@ export default {
       this.last = 0;
       this.change = 0;
       this.changePercentage = 0;
+    },
+    /**
+     * List of Stock updated if sell is executed
+     *
+     * @param   {[type]}  id  Stock id
+     *
+     */
+    updateList(id){
+      for (let index = 0; index < this.simulatorOpenPosition.length; index++) {
+            if(id == this.simulatorOpenPosition[index].id){
+                if(this.stockPosition == this.quantityModel){
+                  this.simulatorOpenPosition.splice(index, 1);
+                }       
+            }     
+      }
     }
   }
 };

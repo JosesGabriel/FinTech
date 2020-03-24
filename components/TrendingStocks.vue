@@ -12,31 +12,27 @@
       <v-list v-if="hasValues" class="mt-1 transparent">
         <v-list-item class="px-0">
           <v-list-item-content class="pt-0">
-            <div v-for="n in 5" :key="n" class="pb-3">
-              <v-list-item-title class="caption d-flex justify-space-between"
-                ><span>{{ stockCode[n - 1] }}</span
-                ><span v-if="trendingStocks" :id="stockCode[n - 1]"
-                  >₱{{ trendingStocks[n - 1].last }}</span
-                ></v-list-item-title
-              >
-              <v-list-item-subtitle
-                class="overline d-flex justify-space-between"
-                ><span v-if="tStocksObject.data" class="tStocks--description">{{
-                  typeof tStocksObject.data.stocks.description != "undefined"
-                    ? tStocksObject.data.stocks[n - 1].description
-                    : ""
-                }}</span
-                ><span
-                  v-if="trendingStocks"
+            <div v-for="(item, index) in trendingStocks" :key="index" class="pb-3">
+              <v-list-item-title class="caption d-flex justify-space-between">
+                <span>{{ stockCode[index] }}</span>
+                <span v-if="item.last != ''" :id="stockCode[index]">₱{{ item.last }}</span>
+              </v-list-item-title>
+              <v-list-item-subtitle class="overline d-flex justify-space-between">
+                <span v-if="typeof item.description != 'undefined'" class="tStocks--description">
+                  {{
+                  item.description
+                  }}
+                </span>
+                <span
+                  v-if="item.change != ''"
                   class="font-weight-black"
                   :class="
-                    trendingStocks[n - 1].change > 0
+                    item.change > 0
                       ? 'success--text'
                       : 'error--text'
                   "
-                  >{{ trendingStocks[n - 1].change }}%</span
-                ></v-list-item-subtitle
-              >
+                >{{ item.change }}%</span>
+              </v-list-item-subtitle>
             </div>
           </v-list-item-content>
         </v-list-item>
@@ -51,11 +47,11 @@ export default {
     return {
       tStocksObject: "",
       trendingStocks: [
-        { last: "", change: "", stock_id: "" },
-        { last: "", change: "", stock_id: "" },
-        { last: "", change: "", stock_id: "" },
-        { last: "", change: "", stock_id: "" },
-        { last: "", change: "", stock_id: "" }
+        { last: "", change: "", stock_id: "", description: "" },
+        { last: "", change: "", stock_id: "", description: "" },
+        { last: "", change: "", stock_id: "", description: "" },
+        { last: "", change: "", stock_id: "", description: "" },
+        { last: "", change: "", stock_id: "", description: "" }
       ],
       stockCode: [],
       hasValues: false,
@@ -69,7 +65,15 @@ export default {
     })
   },
   watch: {
-    sseInfo: function(data) {
+    /**
+     * Watching sseInfo, fires when there are new trades or social stock trend
+     * posted on the social wall
+     *
+     * @param   {object}  data  handles the new data incoming
+     *
+     * @return  {object}        returns new data object
+     */
+    sseInfo(data) {
       this.realTime(data);
     }
   },
@@ -87,16 +91,24 @@ export default {
       const params = {
         count: 5
       };
-      this.$api.social.trendingStocks.index(params).then(
-        function(result) {
-          if (result.success) {
-            this.tStocksObject = result;
-            this.hasValues = true;
-            this.getTrendingStocksValues();
-          }
-        }.bind(this)
-      );
+      this.$api.social.trendingStocks.index(params).then(response => {
+        if (response.success) {
+          this.tStocksObject = response;
+          this.hasValues = true;
+          this.getTrendingStocksValues();
+        }
+      });
     },
+    /**
+     * Execute function if there are sse data incoming from social stock trend or trades
+     * Find the particular stock if it is the same stock with the incoming data
+     * then update its values such as: current price & price percentage
+     * Add update effect together with the array index
+     *
+     * @param   {object}  data  handles new data object
+     *
+     * @return  {number}        returns number values and stock id
+     */
     realTime(data) {
       for (let index = 0; index < this.trendingStocks.length; index++) {
         if (this.trendingStocks[index].stock_id == data.sym_id) {
@@ -106,6 +118,11 @@ export default {
         }
       }
     },
+    /**
+     * Assigning background style to updated stock with duration of 800ms
+     *
+     * @return  {string}  returns background color code string
+     */
     updateEffect: dom => {
       const item = document.getElementById(dom);
       if (item == null) return;
@@ -124,22 +141,25 @@ export default {
       for (let i = 0; i < this.tStocksObject.data.stocks.length; i++) {
         //removes index from string because it returns PSE:ABA
         let x = this.tStocksObject.data.stocks[i].market_code.split(":");
+        this.trendingStocks[i].description = this.tStocksObject.data.stocks[
+          i
+        ].description;
         this.stockCode[i] = x[1];
         const params = {
           "symbol-id": this.tStocksObject.data.stocks[i].stock_id
         };
-        this.$api.chart.stocks.history(params).then(
-          function(result) {
-            this.trendingStocks[i].last = result.data.last;
+        this.$api.chart.stocks.history(params).then(response => {
+          if (response.success) {
+            this.trendingStocks[i].last = response.data.last;
             this.trendingStocks[
               i
-            ].change = result.data.changepercentage.toFixed(2);
+            ].change = response.data.changepercentage.toFixed(2);
             this.trendingStocks[i].stock_id = this.tStocksObject.data.stocks[
               i
             ].stock_id;
             this.loader = false;
-          }.bind(this)
-        );
+          }
+        });
       }
     }
   }
