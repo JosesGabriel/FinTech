@@ -403,7 +403,7 @@ export default {
   cursor: pointer;
 }
 tr.tr_custom td {
-  height: 20px !important;
+  height: 21px !important;
 }
 .sub__title {
   display: flex;
