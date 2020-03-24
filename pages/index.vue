@@ -1,24 +1,33 @@
 <template>
-  <div class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
+  <div
+    class="page__wrapper"
+    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+    dark
+  >
     <v-row
       v-touch="{
-      left: () => swipe('Left'),
-      right: () => swipe('Right'),
-      up: () => swipe('Up'),
-      down: () => swipe('Down')
-    }"
+        left: () => swipe('Left'),
+        right: () => swipe('Right'),
+        up: () => swipe('Up'),
+        down: () => swipe('Down')
+      }"
       class="mb-5"
       no-gutters
     >
       <NavbarDrawer v-if="toggleNavbar" />
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
-        <Navbar v-if="$vuetify.breakpoint.smAndUp " active="social" />
+        <Navbar v-if="$vuetify.breakpoint.smAndUp" active="social" />
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
         <Newsfeed :new-post="newPost" />
       </v-col>
-      <v-col class="px-3 hidden-sm-and-down pr-0 leftSidebar__container" cols="3" sm="3" md="3">
+      <v-col
+        class="px-3 hidden-sm-and-down pr-0 leftSidebar__container"
+        cols="3"
+        sm="3"
+        md="3"
+      >
         <TrendingStocks />
         <WhoToMingle />
         <MiniWatchlist />

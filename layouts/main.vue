@@ -4,7 +4,7 @@
       <client-only>
         <Header class="header__container" />
       </client-only>
-        <!-- v-show="!$device.isMobileOrTablet" -->
+      <!-- v-show="!$device.isMobileOrTablet" -->
       <v-container
         :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
         class="componentContainer"
@@ -22,7 +22,10 @@
           <nuxt />
         </client-only>
       </v-container>
-      <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
+      <v-snackbar
+        v-model="alert.model"
+        :color="alert.state ? 'success' : 'error'"
+      >
         {{ alert.message }}
         <v-btn color="white" text @click="alert.model = false">Close</v-btn>
       </v-snackbar>
@@ -35,25 +38,28 @@
         :dark="lightSwitch == 0 ? false : true"
       >
         <div class="d-grid alertDialog__icon--wrapper">
-          <v-icon class="alertDialog__icon" x-large color="success">mdi-check</v-icon>
+          <v-icon class="alertDialog__icon" x-large color="success"
+            >mdi-check</v-icon
+          >
         </div>
         <v-card class="alertDialog__card">
           <v-card-title
             class="headline text-center d-block success--text alertDialog__title"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-          >{{ alertDialog.header }}</v-card-title>
+            >{{ alertDialog.header }}</v-card-title
+          >
 
           <v-card-text
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-          >{{ alertDialog.body }}</v-card-text>
+            >{{ alertDialog.body }}</v-card-text
+          >
           <v-card-text class="text-center">
-            {{
-            alertDialog.subtext
-            }}
+            {{ alertDialog.subtext }}
           </v-card-text>
         </v-card>
       </v-dialog>
+      <VyndueDock />
       <!-- dont remove -->
       <div v-show="false" id="tv_chart_container"></div>
     </v-content>
@@ -62,6 +68,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { client } from "~/assets/js/vyndue/client.js";
 import {
   UserNotificationAlertLayout,
   AllNotificationAlertLayout
@@ -69,10 +76,11 @@ import {
 import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
 import Header from "~/components/Header";
-
+import VyndueDock from "~/components/vyndue/Dock";
 export default {
   components: {
-    Header
+    Header,
+    VyndueDock
   },
   data() {
     return {
@@ -96,7 +104,9 @@ export default {
       alert: "global/getAlert",
       favicon: "global/favicon",
       alertDialog: "global/getAlertDialog",
-      notification: "global/getNotification"
+      notification: "global/getNotification",
+      user: "vyndue/getUser",
+      clientIsPrepared: "vyndue/getClientIsPrepared"
     }),
     lampMode() {
       return this.lightSwitch == 1
@@ -114,6 +124,22 @@ export default {
     }
   },
   watch: {
+    /**
+     * gets current users data and sets is to the 'user' vuex state
+     *
+     * @return
+     */
+    clientIsPrepared() {
+      const user = client.getUser(client.getUserId());
+      user.avatarUrl = client.mxcUrlToHttp(user.avatarUrl, 40, 40, "crop");
+      this.setVyndueUser({
+        userId: user.userId,
+        displayName: user.rawDisplayName,
+        avatarUrl: user.avatarUrl
+      });
+
+      this.getInitialRoom();
+    },
     /**
      * This function it'll only show if user received notifications
      * Also used helpers this.userNotificationAlertLayout it'll return html code
@@ -139,6 +165,9 @@ export default {
       }
     }
   },
+  beforeMount() {
+    this.prepareClient();
+  },
   mounted() {
     if (localStorage.currentMode) {
       this.setLightSwitch(localStorage.currentMode);
@@ -149,7 +178,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      setLightSwitch: "global/setLightSwitch"
+      setLightSwitch: "global/setLightSwitch",
+      setClientIsPrepared: "vyndue/setClientIsPrepared",
+      setVyndueUser: "vyndue/setVyndueUser",
+      setCurrentRoom: "vyndue/setCurrentRoom"
     }),
     userNotificationAlertLayout: UserNotificationAlertLayout,
     allNotificationAlertLayout: AllNotificationAlertLayout,
@@ -158,6 +190,31 @@ export default {
 
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
+    },
+    prepareClient() {
+      client.once("sync", state => {
+        if (state === "PREPARED") {
+          this.overlay = false;
+          this.setClientIsPrepared(true);
+        } else {
+          console.log(state);
+          process.exit(1);
+        }
+      });
+    },
+    async getInitialRoom() {
+      const currentRoom = client.getRoom(process.env.DEFAULT_CHAT_ROOM_ID);
+      currentRoom.avatarUrl = currentRoom.getAvatarUrl(
+        client.getHomeserverUrl(),
+        40,
+        40,
+        "crop"
+      );
+      this.setCurrentRoom({
+        roomId: currentRoom.roomId,
+        displayName: currentRoom.name,
+        avatarUrl: currentRoom.avatarUrl
+      });
     }
   }
 };
