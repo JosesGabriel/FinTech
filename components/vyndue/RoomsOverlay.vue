@@ -60,12 +60,10 @@
     >
       <v-list-item-group v-model="communitiesModel" color="success">
         <v-list-item
-          v-for="(community, index) in communitiesList"
+          v-for="community in communitiesList"
           :key="community.roomId"
           :ripple="false"
           class="roomList__list-item"
-          @mouseenter="(hoverMode = true), (currentRoomHovered = index)"
-          @mouseleave="hoverMode = false"
           @click="
             selectRoom({
               roomId: community.roomId,
@@ -97,7 +95,6 @@ import { client } from "~/assets/js/vyndue/client.js";
 export default {
   data() {
     return {
-      invitesToggle: true,
       soloChatsToggle: true,
       communitiesListToggle: true,
       invitesList: [],
@@ -106,13 +103,7 @@ export default {
       allRooms: [],
       invitesModel: [],
       soloChatsModel: [],
-      communitiesModel: [],
-      exploreRoomsModal: false,
-      startChatModal: false,
-      createChatroomModal: false,
-      roomOptionsMode: false,
-      hoverMode: false,
-      currentRoomHovered: false
+      communitiesModel: []
     };
   },
   computed: {
@@ -135,9 +126,7 @@ export default {
     }
   },
   mounted() {
-    if (this.clientIsPrepared) {
-      this.getRoomList();
-    }
+    this.getRoomList();
   },
   methods: {
     ...mapActions({
@@ -173,11 +162,9 @@ export default {
         allRoomsById.push(room.roomId);
       });
       let invitedRooms = allRoomsById.filter(x => !joinedRooms.includes(x));
-      // console.log("List of rooms invited to [ " + invitedRooms + " ]");
-      // console.log("List of all rooms [ " + allRoomsById + " ]");
+
       //Filter out invites from Rooms list
       joinedRooms = joinedRooms.filter(x => allRoomsById.includes(x));
-
       invitedRooms.forEach(room => {
         const invitedRoom = client.getRoom(room);
         invitedRoom.avatar_url = invitedRoom.getAvatarUrl(
@@ -262,6 +249,7 @@ export default {
 </script>
 
 <style>
+/* Background-color hex code is temporary only, waiting until design team decides  */
 .roomsOverlay {
   background-color: #222225 !important;
   position: absolute;

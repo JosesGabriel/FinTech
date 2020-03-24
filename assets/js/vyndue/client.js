@@ -2,6 +2,8 @@ export const client = require("matrix-js-sdk").createClient({
   baseUrl: "https://im.lyduz.com",
   timelineSupport: true
 });
+//Temporary only, waiting until backend integration with actual Lyduz user is finished.
+//TODO remove manual login
 export const access_token = client
   .login("m.login.password", {
     user: "sess",

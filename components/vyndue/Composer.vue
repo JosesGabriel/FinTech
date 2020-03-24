@@ -41,6 +41,11 @@ export default {
     })
   },
   methods: {
+    /**
+     * Fires when user clicks 'enter' button, sends event to matrix client
+     *
+     * @return
+     */
     sendMessage() {
       if (this.message.trim()) {
         const content = {

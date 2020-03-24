@@ -62,13 +62,6 @@ export default {
       clientIsPrepared: "vyndue/getClientIsPrepared",
       vyndueUser: "vyndue/getVyndueUser"
     })
-  },
-  methods: {
-    close(e) {
-      if (!this.$el.contains(e.target)) {
-        this.roomOverlayToggle = false;
-      }
-    }
   }
 };
 </script>

@@ -53,7 +53,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-// import { client } from "~/assets/js/vyndue/client.js";
 
 export default {
   computed: {

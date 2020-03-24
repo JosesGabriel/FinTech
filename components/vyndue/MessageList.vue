@@ -46,6 +46,12 @@ export default {
     })
   },
   watch: {
+    /**
+     * currentRooms is a vuex variable that changes when a user selects a different room
+     * Run switchRoom function when it changes
+     *
+     * @return
+     */
     currentRoom() {
       this.switchRoom();
     }
@@ -53,17 +59,13 @@ export default {
   mounted() {
     this.getMessages();
   },
-  created() {
-    // document.body.addEventListener("scroll", this.scroll);
-  },
-  destroyed() {
-    // document.body.removeEventListener("scroll", this.scroll);
-  },
   methods: {
     /**
-     * Start listening to room events, run on mount
+     * Start listening to room events and if specific conditions are met,
+     * push it to the messagesObject variable to display it to user.
+     * Triggers on mount
      *
-     * @return  {[type]}
+     * @return
      */
     getMessages() {
       client.on(
@@ -101,9 +103,12 @@ export default {
      * This function fires when Vuex state 'currentRoom' changes
      * 'currentRoom' state changes based on user clicks on a new room on roomList.vue
      *
-     * Only gets last 5 events or so.
+     * To get historical messages, an initial endpoint must be called where it will return
+     * a pagination token.
      *
-     * @return  {[type]}
+     * Use that pagination token and do the request again with the pagination token as a query parameter.
+     *
+     * @return
      */
     switchRoom() {
       this.messagesObject = [];
@@ -124,6 +129,23 @@ export default {
           }
         });
     },
+    /**
+     * gets historical messages of currently selected room
+     *
+     * this is a recursive function
+     *
+     * First, must call endpoint that returns ALL events from a specific room.
+     * Then, I iterate through the whole response and only accept events that are messages
+     *
+     * Since I can never know how much message events have occured in a room, I add a condition where
+     * it checks my message-only array. If it is less than the specified amount, the function will call itself again.
+     *
+     * This will repeat until messages reach my specified amount.
+     *
+     * @param   {object}  data
+     *
+     * @return
+     */
     getHistoricalMessages(data) {
       const params = {
         limit: 30,
@@ -166,12 +188,14 @@ export default {
         }.bind(this)
       );
     },
-    acceptRoomInvite() {
-      client.joinRoom(this.currentRoom.roomId).then(e => {
-        // console.log(e);
-        console.log("Successfully joined room!");
-      });
-    },
+    /**
+     * Fires anytime a user scrolls through this component.
+     * Checks whether current scroll position is at top, if true, load more messages.
+     *
+     * @param   {object}  event
+     *
+     * @return
+     */
     scroll(event) {
       if (event.target.scrollTop == 0) {
         const params = {

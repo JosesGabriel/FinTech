@@ -127,7 +127,8 @@ export default {
   },
   watch: {
     /**
-     * gets current users data and sets is to the 'user' vuex state
+     * gets current logged in vyndue user data and sets is to the 'user' vuex state
+     * then calls function to get initial room
      *
      * @return
      */
@@ -139,7 +140,6 @@ export default {
         displayName: user.rawDisplayName,
         avatarUrl: user.avatarUrl
       });
-
       this.getInitialRoom();
     },
     /**
@@ -193,18 +193,28 @@ export default {
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
     },
+    /**
+     * fires on beforeMount hook
+     * Waits until Matrix client emits 'sync' event.
+     * If it is prepared, set vuex variable clientIsPrepared to true
+     *
+     * @return
+     */
     prepareClient() {
       client.once("sync", state => {
         if (state === "PREPARED") {
-          this.overlay = false;
           this.setClientIsPrepared(true);
         } else {
-          console.log(state);
           process.exit(1);
         }
       });
     },
-    async getInitialRoom() {
+    /**
+     * gets initial chat room to be loaded, currently set to 'Lyduz Public Community'
+     *
+     * @return
+     */
+    getInitialRoom() {
       const currentRoom = client.getRoom(process.env.DEFAULT_CHAT_ROOM_ID);
       currentRoom.avatarUrl = currentRoom.getAvatarUrl(
         client.getHomeserverUrl(),

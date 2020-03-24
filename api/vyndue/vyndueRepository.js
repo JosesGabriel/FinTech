@@ -1,5 +1,6 @@
 const baseURL = process.env.VYNDUE_CLIENT_API_URL + "/rooms";
 //TODO Figure out why lyduz token is being appended to request even after exemption
+//TODO Change method of setting bearer token to something else, not supposed to be set here.
 const token = localStorage["vyndue.auth._token.local"];
 export default $axios => ({
   messages(params, payload) {
