@@ -14,9 +14,10 @@
     </v-btn>
     <v-card
       v-show="dockToggle"
-      class="dock__card secondary"
+      class="dock__card darkchart"
       width="400px"
       shaped
+      dark
     >
       <Header />
       <MessageList />
@@ -81,5 +82,19 @@ export default {
 }
 .dock__card {
   right: 1vw;
+}
+.dock__container ::-webkit-scrollbar {
+  width: 5px;
+}
+.dock__container ::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+.dock__container ::-webkit-scrollbar-thumb {
+  background: #e5e5e5;
+  border-radius: 20px;
+}
+.dock__container ::-webkit-scrollbar-thumb:hover {
+  background: #e5e5e5;
 }
 </style>

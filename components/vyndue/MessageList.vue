@@ -209,7 +209,7 @@ export default {
   flex-direction: column-reverse;
   padding: 0 15px;
   overflow: auto;
-  height: calc(100vh - 166px);
+  height: calc(100vh - 270px);
 }
 .message__list {
   align-self: flex-start;
