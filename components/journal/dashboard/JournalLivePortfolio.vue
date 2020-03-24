@@ -60,7 +60,7 @@
         hide-default-footer
         :loading="livePortfolioLoading"
         loading-text="Loading..."
-        class="data_table-container pl-10 secondary--text"
+        class="data_table-container livePortfolio__data-table pl-10 secondary--text"
         @page-count="pageCount = $event"
       >
         <template v-slot:item.stock_symbol="{ item }">
@@ -621,8 +621,8 @@ export default {
 .v-data-table.data_table-container .v-data-footer {
   border: none;
 }
-.v-data-table.data_table-container td,
-.v-data-table.data_table-container th {
+.v-data-table.data_table-container.livePortfolio__data-table td,
+.v-data-table.data_table-container.livePortfolio__data-table th {
   height: 36px;
 }
 .v-data-table.data_table-container
