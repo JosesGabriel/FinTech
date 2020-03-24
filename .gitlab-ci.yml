@@ -41,7 +41,6 @@ install-dependencies:
   except:
     variables:
       - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"
-      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^hotfix\/.*$/
 
 #--------- build stage ---------#  
 build-app:
@@ -59,7 +58,6 @@ build-app:
   except:
     variables:
       - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"
-      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^hotfix\/.*$/
 
 #--------- test stage ---------#    
 run-lint:
@@ -77,7 +75,6 @@ run-lint:
   except:
     variables:
       - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"
-      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^hotfix\/.*$/
 
 run-unit-test:
   stage: test
@@ -94,7 +91,6 @@ run-unit-test:
   except:
     variables:
       - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "master"
-      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^hotfix\/.*$/
 
 #--------- staging stage ---------#    
 deploy-staging-server:
