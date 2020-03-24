@@ -18,6 +18,13 @@ export default $axios => ({
   }
 });
 
+/**
+ * Used for concatenating specified parameters to the URL of the request
+ *
+ * @param   {object}  args
+ *
+ * @return  {string}
+ */
 function buildParams(args) {
   let bld = [];
   let params = "";
