@@ -176,7 +176,6 @@ export default {
   computed: {
     ...mapGetters({
       symbolid: "chart/symbolid",
-      //   bidask: "chart/bidask",
       lightSwitch: "global/getLightSwitch",
       sse: "chart/sse",
       lastPrice: "chart/lastPrice",
@@ -306,7 +305,6 @@ export default {
             .sort((a, b) => b.price - a.price);
           // add effect
           this.updateEffect(`bid__column_${data.id}`, "bid");
-          console.log("bids", bids);
         } else if (data.ov == "S") {
           // ask
           const asks = this.updateBidAndAsks(this.bidask.asks, data);
@@ -315,7 +313,6 @@ export default {
             .sort((a, b) => a.price - b.price);
           // add effect
           this.updateEffect(`ask__column_${data.id}`, "ask");
-          console.log("asks", asks);
         }
       }
     },
@@ -454,9 +451,6 @@ export default {
 <style scoped>
 .tr_custom {
   line-height: 0.1rem !important;
-}
-.custom_table tr {
-  height: 5px !important;
 }
 .lightmode__text {
   color: #494949;
