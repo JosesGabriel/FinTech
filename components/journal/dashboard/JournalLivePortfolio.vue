@@ -212,7 +212,6 @@
 import resetModal from "~/components/modals/Reset";
 import shareModal from "~/components/modals/Share";
 import fundsModal from "~/components/modals/Fund";
-// import tradeModal from "~/components/modals/TradeView";
 import tradeModal from "~/components/journal/trade/TradeModal";
 import tradeDetails from "~/components/modals/TradeDetails";
 import tradeEdits from "~/components/modals/TradeEdits";
