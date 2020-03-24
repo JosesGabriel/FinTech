@@ -166,13 +166,16 @@ export default {
     return {
       currentTab: false,
       loading: true,
-      noItems: false
+      noItems: false,
+      bidask: {
+        bids: [],
+        asks: []
+      }
     };
   },
   computed: {
     ...mapGetters({
       symbolid: "chart/symbolid",
-      bidask: "chart/bidask",
       lightSwitch: "global/getLightSwitch",
       sse: "chart/sse",
       lastPrice: "chart/lastPrice",
@@ -273,7 +276,7 @@ export default {
           bids,
           limit
         };
-        this.setBidask(bidask);
+        this.bidask = bidask;
         this.loading = false;
         this.noItems = false;
       } catch (error) {
@@ -297,23 +300,17 @@ export default {
         if (data.ov == "B") {
           // bid
           const bids = this.updateBidAndAsks(this.bidask.bids, data);
-          this.$store.commit(
-            "chart/SET_BIDS",
-            bids
-              .filter(data => data.price <= this.lastPrice)
-              .sort((a, b) => b.price - a.price)
-          );
+          this.bidask.bids = bids
+            .filter(data => data.price <= this.lastPrice)
+            .sort((a, b) => b.price - a.price);
           // add effect
           this.updateEffect(`bid__column_${data.id}`, "bid");
         } else if (data.ov == "S") {
           // ask
           const asks = this.updateBidAndAsks(this.bidask.asks, data);
-          this.$store.commit(
-            "chart/SET_ASKS",
-            asks
-              .filter(data => data.price >= this.lastPrice)
-              .sort((a, b) => a.price - b.price)
-          );
+          this.bidask.asks = asks
+            .filter(data => data.price >= this.lastPrice)
+            .sort((a, b) => a.price - b.price);
           // add effect
           this.updateEffect(`ask__column_${data.id}`, "ask");
         }
@@ -433,7 +430,7 @@ export default {
 
     updateEffect(dom, type) {
       const backgroundColor =
-        type == "bid" ? "rgba(3,218,197,0.3)" : "rgba(244,67,54,0.3)";
+        type == "ask" ? "rgba(3,218,197,0.3)" : "rgba(244,67,54,0.3)";
       setTimeout(() => {
         const row = document.querySelectorAll(`.${dom}`);
         if (row == undefined) return;
@@ -454,9 +451,6 @@ export default {
 <style scoped>
 .tr_custom {
   line-height: 0.1rem !important;
-}
-.custom_table tr {
-  height: 5px !important;
 }
 .lightmode__text {
   color: #494949;
