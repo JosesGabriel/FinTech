@@ -17,13 +17,24 @@
               !playerInGame ? 'message__wrap--full' : 'message__wrap--mini'
             "
           >
-            <div v-for="n in messagesObject.length" :key="n" class="message__list">
+            <div
+              v-for="n in messagesObject.length"
+              :key="n"
+              class="message__list"
+            >
               <v-avatar size="30">
                 <v-img :src="messagesObject[n - 1].AvatarUrl"></v-img>
               </v-avatar>
-              <div class="message text" :class="lightSwitch == 0 ? 'text__secondary--light' : ''">
-                <div class="px-2 success--text overline">{{ messagesObject[n - 1].displayName }}</div>
-                <p class="px-2 caption">{{ messagesObject[n - 1].messagesObject }}</p>
+              <div
+                class="message text"
+                :class="lightSwitch == 0 ? 'text__secondary--light' : ''"
+              >
+                <div class="px-2 success--text overline">
+                  {{ messagesObject[n - 1].displayName }}
+                </div>
+                <p class="px-2 caption">
+                  {{ messagesObject[n - 1].messagesObject }}
+                </p>
               </div>
             </div>
           </div>
@@ -46,7 +57,12 @@
           @keyup.enter="sendMessage()"
         ></v-textarea>
         <v-divider vertical class="success" inset></v-divider>
-        <v-btn icon color="success" class="mt-2 send__btn" @click="sendMessage()">
+        <v-btn
+          icon
+          color="success"
+          class="mt-2 send__btn"
+          @click="sendMessage()"
+        >
           <v-icon>mdi-send</v-icon>
         </v-btn>
       </div>
@@ -93,7 +109,7 @@
 }
 </style>
 <script>
-import { client } from "~/assets/client.js";
+import { client } from "~/assets/js/vyndue/client.js";
 import { mapActions, mapGetters } from "vuex";
 export default {
   layout: "main",
