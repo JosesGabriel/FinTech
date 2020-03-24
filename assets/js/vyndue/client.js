@@ -12,7 +12,7 @@ export const access_token = client
       accessToken: response.access_token
     });
     localStorage.setItem(
-      "auth._token.local",
+      "vyndue.auth._token.local",
       "Bearer " + response.access_token
     );
   })
