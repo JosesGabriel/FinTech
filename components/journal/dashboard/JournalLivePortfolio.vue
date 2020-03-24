@@ -60,7 +60,7 @@
         hide-default-footer
         :loading="livePortfolioLoading"
         loading-text="Loading..."
-        class="data_table-container pl-10 secondary--text"
+        class="data_table-container livePortfolio__data-table pl-10 secondary--text"
         @page-count="pageCount = $event"
       >
         <template v-slot:item.stock_symbol="{ item }">
@@ -212,7 +212,6 @@
 import resetModal from "~/components/modals/Reset";
 import shareModal from "~/components/modals/Share";
 import fundsModal from "~/components/modals/Fund";
-// import tradeModal from "~/components/modals/TradeView";
 import tradeModal from "~/components/journal/trade/TradeModal";
 import tradeDetails from "~/components/modals/TradeDetails";
 import tradeEdits from "~/components/modals/TradeEdits";
@@ -621,8 +620,8 @@ export default {
 .v-data-table.data_table-container .v-data-footer {
   border: none;
 }
-.v-data-table.data_table-container td,
-.v-data-table.data_table-container th {
+.v-data-table.data_table-container.livePortfolio__data-table td,
+.v-data-table.data_table-container.livePortfolio__data-table th {
   height: 36px;
 }
 .v-data-table.data_table-container
