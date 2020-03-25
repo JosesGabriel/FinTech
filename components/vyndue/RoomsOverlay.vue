@@ -29,7 +29,12 @@
           </v-dialog>
         </v-col> </v-row
     ></v-container>
-    <v-list v-show="soloChatsToggle" class="pa-0" dense color="transparent">
+    <v-list
+      v-show="soloChatsToggle"
+      class="pa-0"
+      dense
+      color="transparent soloChats__list"
+    >
       <v-list-item-group v-model="soloChatsModel" color="success">
         <v-list-item
           v-for="room in soloChatsList"
@@ -82,7 +87,7 @@
     >
     <v-list
       v-show="communitiesListToggle"
-      class="pa-0"
+      class="pa-0 communities__list"
       dense
       color="transparent"
     >
@@ -116,7 +121,7 @@
 
     <v-list
       v-show="!communitiesListToggle"
-      class="pa-0"
+      class="pa-0 communities__list"
       dense
       color="transparent"
     >
@@ -398,9 +403,9 @@ export default {
   position: absolute;
   height: 100%;
   top: 0;
-  left: -13px;
-  border-top-left-radius: 20px !important;
-  border-bottom-left-radius: 3px;
+  left: -12px;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
   transition: 3s;
 }
 .roomOverlay__button {
@@ -411,5 +416,13 @@ export default {
   font-size: 12px !important;
   height: 20px !important;
   width: 20px !important;
+}
+.communities__list {
+  height: 170px;
+  overflow: auto;
+}
+.soloChats__list {
+  height: 120px;
+  overflow: auto;
 }
 </style>

@@ -21,11 +21,10 @@
       <v-card
         v-show="dockToggle"
         class="dock__card"
-        :class="roomOverlayToggle ? 'dock__overlay' : 'darkchart'"
+        :class="roomOverlayToggle ? 'dock__overlay' : ''"
         width="400px"
-        shaped
         dark
-        flat
+        outlined
       >
         <Header
           @showRooms="roomOverlayToggle = true"
@@ -95,6 +94,7 @@ export default {
 }
 .dock__card {
   right: 1vw;
+  border-radius: 30px !important;
 }
 .dock__container ::-webkit-scrollbar {
   width: 5px;
