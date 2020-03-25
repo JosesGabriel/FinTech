@@ -1,16 +1,20 @@
 <template>
   <v-card class="roomsOverlay" dark flat tile>
+    <div class="pa-4">
+      <v-icon color="success" small>mdi-message-text</v-icon>
+      <span class="font-weight-black pl-2">Vyndue</span>
+    </div>
+    <v-divider></v-divider>
     <v-container class="pa-0 pl-4">
       <v-row>
-        <v-col cols="12" class="pl-0">
-          <v-icon>{{
-            soloChatsToggle ? "mdi-chevron-down" : "mdi-chevron-right"
-          }}</v-icon>
-          <span class="font-weight-black body-2">Traders</span>
+        <v-col cols="12" class="pl-0 d-flex justify-space-between">
+          <span class="font-weight-black body-2 pl-2">Private Messages</span>
+          <v-btn class="roomOverlay__button mr-4" outlined fab color="success">
+            <v-icon>mdi-message-plus-outline</v-icon>
+          </v-btn>
         </v-col>
       </v-row></v-container
     >
-    <v-divider />
     <v-list v-show="soloChatsToggle" class="pa-0" dense color="transparent">
       <v-list-item-group v-model="soloChatsModel" color="success">
         <v-list-item
@@ -40,18 +44,18 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <v-divider class="mt-2" />
     <v-container class="pa-0 pl-4">
       <v-row>
-        <v-col cols="12" class="pl-0">
-          <v-icon>{{
-            communitiesListToggle ? "mdi-chevron-down" : "mdi-chevron-right"
-          }}</v-icon>
-          <span class="font-weight-black body-2">Communities</span>
+        <v-col cols="12" class="pl-0 d-flex justify-space-between">
+          <span class="font-weight-black body-2 pl-2">Chat Rooms</span>
+          <v-btn class="roomOverlay__button mr-4" outlined fab color="success">
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
         </v-col>
       </v-row></v-container
     >
 
-    <v-divider />
     <v-list
       v-show="communitiesListToggle"
       class="pa-0"
@@ -86,6 +90,18 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+
+    <div class="d-flex justify-center mr-2">
+      <v-btn
+        bottom
+        absolute
+        text
+        small
+        color="success"
+        @click="redirectToVyndue()"
+        >Open Vyndue</v-btn
+      >
+    </div>
   </v-card>
 </template>
 
@@ -132,6 +148,14 @@ export default {
     ...mapActions({
       setCurrentRoom: "vyndue/setCurrentRoom"
     }),
+    /**
+     * fires when user clicks 'Open Vyndue' button
+     *
+     * @return
+     */
+    redirectToVyndue() {
+      window.location.href = process.env.VYNDUE_URL;
+    },
     /**
      * SDK implementation works by getting ALL joined rooms, whether it's a 'community' room or
      * a chatroom with only 2 users.
@@ -259,5 +283,14 @@ export default {
   border-top-left-radius: 20px !important;
   border-bottom-left-radius: 3px;
   transition: 3s;
+}
+.roomOverlay__button {
+  height: 20px !important;
+  width: 20px !important;
+}
+.roomOverlay__button span i {
+  font-size: 12px !important;
+  height: 20px !important;
+  width: 20px !important;
 }
 </style>
