@@ -1,15 +1,15 @@
 <template>
-  <v-card color="darkcard" dark min-height="250">
-    <v-card-title class="title justify-space-between">
+  <v-card :dark="lightSwitch == 0 ? false : true" min-height="250">
+    <v-card-title class="title justify-space-between pl-4 pb-2">
       <span class="font-weight-black">Start a chat</span>
       <v-btn icon small @click="$emit('close')">
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-card-title>
-    <v-container class="modalContent__container">
+    <v-container class="modalContent__container pt-0">
       <v-row>
         <v-col cols="12">
-          <div>
+          <div :class="lightSwitch == 0 ? 'black--text' : 'white--text'">
             Who would you like to communicate with?
           </div>
         </v-col>
@@ -26,7 +26,7 @@
             chips
             outlined
             dense
-            dark
+            :dark="lightSwitch == 0 ? false : true"
           ></v-autocomplete>
         </v-col>
       </v-row>
@@ -69,7 +69,8 @@ export default {
   computed: {
     ...mapGetters({
       clientIsPrepared: "vyndue/getClientIsPrepared",
-      currentRoom: "vyndue/getCurrentRoom"
+      currentRoom: "vyndue/getCurrentRoom",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {

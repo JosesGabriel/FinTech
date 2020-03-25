@@ -196,7 +196,8 @@ export default {
     ...mapGetters({
       clientIsPrepared: "vyndue/getClientIsPrepared",
       currentRoom: "vyndue/getCurrentRoom",
-      user: "vyndue/getUser"
+      user: "vyndue/getUser",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {

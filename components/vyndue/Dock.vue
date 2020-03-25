@@ -23,7 +23,7 @@
         class="dock__card"
         :class="roomOverlayToggle ? 'dock__overlay' : ''"
         width="400px"
-        dark
+        :dark="lightSwitch == 0 ? false : true"
         outlined
       >
         <Header
@@ -59,7 +59,8 @@ export default {
   computed: {
     ...mapGetters({
       clientIsPrepared: "vyndue/getClientIsPrepared",
-      vyndueUser: "vyndue/getVyndueUser"
+      vyndueUser: "vyndue/getVyndueUser",
+      lightSwitch: "global/getLightSwitch"
     })
   }
 };
