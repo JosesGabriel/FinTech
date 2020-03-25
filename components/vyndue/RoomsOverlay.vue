@@ -20,7 +20,6 @@
         <v-list-item
           v-for="room in soloChatsList"
           :key="room.roomId"
-          class="roomList__list-item"
           :ripple="false"
           @click="
             selectRoom({
@@ -30,7 +29,7 @@
             })
           "
         >
-          <v-list-item-icon class="roomList__item-icon">
+          <v-list-item-icon class="mr-2">
             <v-avatar size="30">
               <v-img :src="room.avatar_url"></v-img>
             </v-avatar>
@@ -48,14 +47,25 @@
     <v-container class="pa-0 pl-4">
       <v-row>
         <v-col cols="12" class="pl-0 d-flex justify-space-between">
-          <span class="font-weight-black body-2 pl-2">Chat Rooms</span>
-          <v-btn class="roomOverlay__button mr-4" outlined fab color="success">
-            <v-icon>mdi-magnify</v-icon>
+          <span class="font-weight-black body-2 pl-2">{{
+            communitiesListToggle ? "Chat Rooms" : "Public Rooms"
+          }}</span>
+          <v-btn
+            class="roomOverlay__button mr-4"
+            outlined
+            fab
+            color="success"
+            @click="
+              (communitiesListToggle = !communitiesListToggle), getPublicRooms()
+            "
+          >
+            <v-icon>{{
+              communitiesListToggle ? "mdi-magnify" : "mdi-close"
+            }}</v-icon>
           </v-btn>
         </v-col>
       </v-row></v-container
     >
-
     <v-list
       v-show="communitiesListToggle"
       class="pa-0"
@@ -67,7 +77,6 @@
           v-for="community in communitiesList"
           :key="community.roomId"
           :ripple="false"
-          class="roomList__list-item"
           @click="
             selectRoom({
               roomId: community.roomId,
@@ -76,7 +85,7 @@
             })
           "
         >
-          <v-list-item-icon class="roomList__item-icon">
+          <v-list-item-icon class="mr-2">
             <v-avatar size="30">
               <v-img :src="community.avatar_url"></v-img>
             </v-avatar>
@@ -87,6 +96,42 @@
               v-text="community.name"
             ></v-list-item-title>
           </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
+
+    <v-list
+      v-show="!communitiesListToggle"
+      class="pa-0"
+      dense
+      color="transparent"
+    >
+      <v-list-item-group v-model="communitiesModel" color="success">
+        <v-list-item
+          v-for="room in publicRooms"
+          :key="room.room_id"
+          :ripple="false"
+        >
+          <v-list-item-icon class="mr-2">
+            <v-avatar size="30">
+              <v-img :src="room.avatar_url"></v-img>
+            </v-avatar>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title
+              class="body-2"
+              v-text="room.name"
+            ></v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action class="my-0">
+            <v-btn
+              depressed
+              x-small
+              color="success black--text"
+              @click="accessRoom(room)"
+              >{{ room.joined ? "View" : "Join" }}</v-btn
+            >
+          </v-list-item-action>
         </v-list-item>
       </v-list-item-group>
     </v-list>
@@ -113,6 +158,7 @@ export default {
     return {
       soloChatsToggle: true,
       communitiesListToggle: true,
+      publicRooms: [],
       invitesList: [],
       soloChatsList: [],
       communitiesList: [],
@@ -266,7 +312,61 @@ export default {
         avatarUrl: room.avatarUrl
       });
       this.$emit("close");
-      localStorage.setItem("last_room_id", room.roomId);
+    },
+    /**
+     * Retrieve list of public rooms, fires when user clicks button besides 'Chat Room'
+     *
+     * @return
+     */
+    async getPublicRooms() {
+      let joinedRooms = await client.getJoinedRooms();
+      joinedRooms = joinedRooms.joined_rooms;
+      client.publicRooms(
+        function(err, data) {
+          this.publicRooms = data.chunk;
+          this.publicRooms.forEach((community, i) => {
+            community.joined = false;
+            joinedRooms.forEach(joinedRoom => {
+              if (community.room_id === joinedRoom) {
+                community.joined = true;
+              }
+            });
+
+            const room = client.getRoom(community.room_id);
+            if (room) {
+              const avatarUrl = room.getAvatarUrl(
+                client.getHomeserverUrl(),
+                40,
+                40,
+                "crop"
+              );
+              community.avatar_url = avatarUrl.includes("unstable/identicon")
+                ? "/default.png"
+                : avatarUrl;
+            } else {
+              community.avatar_url = "/default.png";
+            }
+          });
+        }.bind(this)
+      );
+    },
+    /**
+     * Fires when user clicks either 'View' or 'Join' button on Public rooms list
+     *
+     * @param   {object}  room
+     *
+     * @return
+     */
+    accessRoom(room) {
+      if (!room.joined) {
+        client.joinRoom(room.room_id);
+      }
+      this.setCurrentRoom({
+        roomId: room.room_id,
+        displayName: room.name,
+        avatarUrl: room.avatar_url
+      });
+      this.$emit("close");
     }
   }
 };
