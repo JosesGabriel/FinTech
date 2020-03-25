@@ -20,7 +20,7 @@
       </v-col>
       <v-col xs="12" sm="10" md="6" lg="6">
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
-        <!-- <Newsfeed :new-post="newPost" /> -->
+        <Newsfeed :new-post="newPost" />
       </v-col>
       <v-col
         class="px-3 hidden-sm-and-down pr-0 leftSidebar__container"
@@ -28,12 +28,12 @@
         sm="3"
         md="3"
       >
-        <!-- <TrendingStocks />
+        <TrendingStocks />
         <WhoToMingle />
-        <MiniWatchlist /> -->
+        <MiniWatchlist />
         <div class="stickySidebar">
-          <!-- <SidebarAds />
-          <FooterSidebar /> -->
+          <SidebarAds />
+          <FooterSidebar />
         </div>
         <!-- TODO put back when implementing -->
         <!-- <Bulletin /> -->
