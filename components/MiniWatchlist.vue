@@ -9,39 +9,32 @@
     <div class="pa-0 pl-2">
       <div class="body-2 font-weight-black pb-2 pl-2">Watchlist</div>
       <v-divider></v-divider>
-      <v-list class="transparent pt-0">
-        <v-container class="pa-0">
-          <v-list-item
-            v-for="(n, index) in watchListObject.length"
-            :key="n"
-            class="px-0"
-          >
-            <v-row>
-              <v-col cols="1" class="pr-6"
-                ><span class="stockSymbol__span ">{{
-                  stockData[index] ? stockData[index].stockSym : ""
-                }}</span></v-col
+      <v-list class="transparent mt-1">
+        <v-list-item v-for="(n, index) in watchListObject.length" :key="n" class="px-0">
+          <v-list-item-content class="pt-0">
+            <v-list-item-title class="caption d-flex justify-space-between">
+              <span>{{ stockData[index] ? stockData[index].stockSym : "" }}</span>
+              <span>₱{{ stockData[index] ? stockData[index].currentPrice : "" }}</span>
+            </v-list-item-title>
+            <v-list-item-subtitle class="overline d-flex justify-space-between">
+              <span
+                :id="stockData[index].stockSym"
+                class="caption stockSymbol__span tStocks--description"
               >
-              <v-col cols="8" class="no-wrap pa-0">
-                <apexcharts
-                  ref="closePriceChart"
-                  type="line"
-                  height="100"
-                  width="160"
-                  :options="chartOptions"
-                  :series="series"
-                />
-              </v-col>
-              <v-col cols="1" class="pa-0 stockPrices"
-                ><span
-                  :id="stockData[index].stockSym"
-                  class="caption stockSymbol__span"
-                  >₱{{
-                    stockData[index] ? stockData[index].currentPrice : ""
-                  }}</span
-                >
+                {{
+                watchListObject[index] ? watchListObject[index].description : ""
+                }}
+              </span>
+              <span>
                 <span
-                  class="stockSymbol__span overline no-transform"
+              ><v-icon v-show="stockData[index].change > 0.0" class="increase caption"
+                >mdi-chevron-up</v-icon
+              ><v-icon v-show="stockData[index].change < 0.0" class="decrease caption"
+                >mdi-chevron-down</v-icon
+              >
+            </span>
+                <span
+                  class="font-weight-black"
                   :class="
                     stockData[index].change > 0
                       ? 'success--text'
@@ -49,56 +42,22 @@
                       ? 'error--text'
                       : 'watchlistCard__text--gray'
                   "
-                  >{{ stockData[index] ? stockData[index].change : "" }}%</span
-                ></v-col
-              >
-            </v-row>
-            <!-- <div>
-            <span>{{ stockData[index] ? stockData[index].stockSym : "" }}</span>
-          </div>
-          <div class="no-wrap">
-            <apexcharts
-              ref="closePriceChart"
-              type="line"
-              height="100"
-              width="170"
-              :options="chartOptions"
-              :series="series"
-            />
-          </div>
-          <div>
-            <span :id="stockData[index].stockSym"
-              >₱{{
-                stockData[index] ? stockData[index].currentPrice : ""
-              }}</span
-            >
-            <span
-              :class="
-                stockData[index].change > 0
-                  ? 'success--text'
-                  : stockData[index].change < 0
-                  ? 'error--text'
-                  : 'watchlistCard__text--gray'
-              "
-              >{{ stockData[index] ? stockData[index].change : "" }}%</span
-            >
-          </div> -->
-          </v-list-item>
-        </v-container>
+                >{{ stockData[index] ? stockData[index].percentage : "" }} ({{ stockData[index] ? stockData[index].change : "" }}%)</span>
+              </span>
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
         <router-link
           v-if="watchListObject.length == 0"
           class="d-block mWatchlist__text--noData px-5 success--text overline no-transform"
           to="/watchlist"
-          >Add symbols to your watchlist.</router-link
-        >
+        >Add symbols to your watchlist.</router-link>
         <router-link
           v-if="watchListObject.length != 0"
           to="/watchlist"
           class="caption no-transform"
           style="color: #546E74"
-        >
-          Show more
-        </router-link>
+        >Show more</router-link>
       </v-list>
     </div>
   </v-card>
@@ -107,160 +66,13 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  props: ["data"],
   data() {
     return {
       stockData: [],
       watchCardLoading: "success",
       watchListObject: "",
       isLightMode: 0,
-      dataSeries: [],
-      series: [
-        {
-          name: "series1",
-          data: []
-        }
-      ],
-      chartOptions: {
-        chart: {
-          height: 100,
-          width: 160,
-          zoom: {
-            enabled: false
-          },
-          toolbar: {
-            show: false
-          },
-          dropShadow: {
-            enabled: false,
-            opacity: 0.3,
-            blur: 2,
-            left: 3,
-            top: 4
-          }
-        },
-        colors: ["#FFF"],
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          width: 2,
-          curve: "smooth",
-          shadow: {
-            enabled: false,
-            color: "#bbb",
-            top: 3,
-            left: 2,
-            blur: 5,
-            opacity: 1
-          }
-        },
-        grid: {
-          show: false,
-          borderColor: "#17314B",
-          xaxis: {
-            lines: {
-              show: true
-            }
-          },
-          yaxis: {
-            lines: {
-              show: false
-            }
-          }
-        },
-        xaxis: {
-          categories: ["1"],
-          labels: {
-            show: false,
-            style: {
-              colors: "#ffffff",
-              fontSize: "12px",
-              fontFamily: "Karla",
-              cssClass: "apexcharts-xaxis-label"
-            }
-          },
-          axisBorder: {
-            show: false
-          },
-          tooltip: {
-            enabled: false,
-            formatter: undefined,
-            offsetX: 0,
-            style: {
-              fontSize: 10,
-              fontFamily: "Karla"
-            },
-            theme: false
-          },
-          axisTicks: {
-            show: false
-          },
-          crosshairs: {
-            show: true,
-            width: 1,
-            position: "back",
-            opacity: 0.9,
-            stroke: {
-              color: "#152d4a",
-              width: 2,
-              dashArray: 0
-            }
-          }
-        },
-        yaxis: {
-          labels: {
-            show: false,
-            align: "right",
-            style: {
-              color: "#fff",
-              fontSize: "12px",
-              fontFamily: "Karla",
-              cssClass: "apexcharts-yaxis-label"
-            }
-          },
-          axisTicks: {
-            show: false
-          },
-          axisBorder: {
-            show: false,
-            color: "#17314B"
-          }
-        },
-        tooltip: {
-          followCursor: false,
-          y: {
-            show: false,
-            formatter: function(val) {
-              return val;
-            }
-          },
-          x: {
-            show: false
-          },
-          marker: {
-            show: false
-          },
-          onDatasetHover: {
-            highlightDataSeries: false
-          },
-          theme: false,
-          style: {
-            fontFamily: "Karla"
-          },
-          items: {
-            display: "flex"
-          },
-          fixed: {
-            position: "topRight",
-            offsetX: 20,
-            offsetY: -10
-          }
-        },
-        legend: {
-          show: false
-        }
-      }
+      dataSeries: []
     };
   },
   computed: {
@@ -312,7 +124,8 @@ export default {
               stockSym: "",
               data: [],
               currentPrice: "",
-              change: ""
+              change: "",
+              percentage: ""
             });
             // GET Closing Price from Stock History API
             const params = {
@@ -323,11 +136,6 @@ export default {
             this.$api.chart.charts.latest(params).then(
               function(result) {
                 this.dataSeries[i] = result.data.c.reverse();
-                this.$refs.closePriceChart[i].updateSeries([
-                  {
-                    data: result.data.c
-                  }
-                ]);
               }.bind(this)
             );
 
@@ -338,11 +146,6 @@ export default {
             this.$api.chart.stocks.list(params2).then(
               function(result) {
                 this.stockData[i].stockSym = result.data.symbol;
-                this.$refs.closePriceChart[i].updateSeries([
-                  {
-                    name: result.data.symbol
-                  }
-                ]);
               }.bind(this)
             );
 
@@ -356,19 +159,7 @@ export default {
                 this.stockData[i].change = result.data.changepercentage.toFixed(
                   2
                 );
-                if (this.stockData[i].change > 0) {
-                  this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#03DAC5"]
-                  });
-                } else if (this.stockData[i].change < 0) {
-                  this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#F44336"]
-                  });
-                } else {
-                  this.$refs.closePriceChart[i].updateOptions({
-                    colors: ["#808080"]
-                  });
-                }
+                this.stockData[i].percentage = result.data.change.toFixed(2);
               }.bind(this)
             );
             this.watchCardLoading = false;
@@ -390,13 +181,8 @@ export default {
           if (oldprice != this.stockData[index].currentPrice) {
             this.updateEffect(this.stockData[index].stockSym);
           }
-          
+
           this.dataSeries[index][4] = this.stockData[index].currentPrice;
-          this.$refs.closePriceChart[index].updateSeries([
-            {
-              data: this.dataSeries[index]
-            }
-          ]);
         }
       }
     },
@@ -424,5 +210,11 @@ export default {
 .stockPrices {
   position: relative;
   right: 20px;
+}
+.increase {
+  color: #03dac5 !important;
+}
+.decrease {
+  color: #f44336 !important;
 }
 </style>
