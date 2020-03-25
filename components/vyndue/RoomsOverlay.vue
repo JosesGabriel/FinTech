@@ -9,12 +9,26 @@
       <v-row>
         <v-col cols="12" class="pl-0 d-flex justify-space-between">
           <span class="font-weight-black body-2 pl-2">Private Messages</span>
-          <v-btn class="roomOverlay__button mr-4" outlined fab color="success">
-            <v-icon>mdi-message-plus-outline</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row></v-container
-    >
+
+          <v-dialog v-model="startChatDialog" persistent max-width="400">
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="roomOverlay__button mr-4"
+                outlined
+                fab
+                color="success"
+                v-on="on"
+              >
+                <v-icon>mdi-message-plus-outline</v-icon>
+              </v-btn>
+            </template>
+            <StartChat
+              @close="startChatDialog = false"
+              @getRooms="getRoomList(), (startChatDialog = false)"
+            />
+          </v-dialog>
+        </v-col> </v-row
+    ></v-container>
     <v-list v-show="soloChatsToggle" class="pa-0" dense color="transparent">
       <v-list-item-group v-model="soloChatsModel" color="success">
         <v-list-item
@@ -153,7 +167,11 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { client } from "~/assets/js/vyndue/client.js";
+import StartChat from "~/components/vyndue/StartChat";
 export default {
+  components: {
+    StartChat
+  },
   data() {
     return {
       soloChatsToggle: true,
@@ -165,7 +183,8 @@ export default {
       allRooms: [],
       invitesModel: [],
       soloChatsModel: [],
-      communitiesModel: []
+      communitiesModel: [],
+      startChatDialog: false
     };
   },
   computed: {

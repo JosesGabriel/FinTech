@@ -53,7 +53,7 @@ export default (ctx, inject) => {
       payment: paymentRepository(ctx.$axios)
     },
     rooms: vyndueRepository(ctx.$axios),
-    search: initApiRepository("/user_directory/search")
+    search: vyndueRepository(ctx.$axios)
   };
 
   inject("api", api);
