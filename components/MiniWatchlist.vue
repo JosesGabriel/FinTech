@@ -26,13 +26,16 @@
                 }}
               </span>
               <span>
-                <span
-              ><v-icon v-show="stockData[index].change > 0.0" class="increase caption"
-                >mdi-chevron-up</v-icon
-              ><v-icon v-show="stockData[index].change < 0.0" class="decrease caption"
-                >mdi-chevron-down</v-icon
-              >
-            </span>
+                <span>
+                  <v-icon
+                    v-show="stockData[index].change > 0.0"
+                    class="increase caption"
+                  >mdi-chevron-up</v-icon>
+                  <v-icon
+                    v-show="stockData[index].change < 0.0"
+                    class="decrease caption"
+                  >mdi-chevron-down</v-icon>
+                </span>
                 <span
                   class="font-weight-black"
                   :class="
@@ -171,7 +174,16 @@ export default {
           }
         });
     },
-
+    /**
+     * Execute function if there are sse data incoming from social stock trend or trades
+     * Find the particular stock if it is the same stock with the incoming data
+     * then update its values such as: current price & price percentage
+     * Add update effect together with the array index
+     *
+     * @param   {object}  data  handles new data object
+     *
+     * @return  {number}        returns number values and stock id
+     */
     realTime(data) {
       for (let index = 0; index < this.stockData.length; index++) {
         if (this.watchListObject[index].stock_id == data.sym_id) {
@@ -187,6 +199,11 @@ export default {
       }
     },
 
+    /**
+     * Assigning background style to updated stock with duration of 800ms
+     *
+     * @return  {string}  returns background color code string
+     */
     updateEffect: dom => {
       const item = document.getElementById(dom);
       if (item == null) return;
