@@ -95,7 +95,15 @@ export default {
     renderChartKey() {
       this.watchCardMount();
     },
-    sseInfo: function(data) {
+    /**
+     * Watching sseInfo, fires when there are new trades or social stock trend
+     * posted on the social wall
+     *
+     * @param   {object}  data  handles the new data incoming
+     *
+     * @return  {object}        returns new data object
+     */
+    sseInfo(data) {
       this.realTime(data);
     }
   },
