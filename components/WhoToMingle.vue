@@ -29,6 +29,7 @@
                       ? suggestedUsersObject[n - 1].profile_image
                       : 'default.png'
                   "
+                  @error="suggestedUsersObject[n - 1].profile_image = 'default.png'"
                 ></v-img>
               </v-avatar>
             </router-link>
