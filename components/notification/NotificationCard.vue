@@ -139,3 +139,23 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.userMessage__dropdown-title {
+  font-weight: 700;
+  white-space: normal;
+  white-space: inherit;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+}
+.listItem__content {
+  align-items: unset !important;
+}
+.userMessage__message {
+  line-height: 15px !important;
+  display: block;
+  width: 100%;
+}
+</style>

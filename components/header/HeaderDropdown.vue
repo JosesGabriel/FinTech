@@ -1,11 +1,12 @@
 <template>
   <div>
     <v-card
-      :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
-      :dark="lightSwitch == 0 ? false : true"
       outlined
       max-width="150px"
       class="userSettings__dropdown"
+      :dark="lightSwitch == 0 ? false : true"
+      :background-color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+      :class="{'userSettings__dropdown-xsOnly': $vuetify.breakpoint.xsOnly}"
     >
       <v-card-actions class="d-block">
         <v-row
@@ -13,22 +14,13 @@
           :class="lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
         >
           <v-col class="pt-0 pb-2 userSettings__dropdown--border">
-            <router-link
-              to="/settings"
-              class="no-transform"
-              :style="{ color: toggleFontColor }"
-            >
-              <span class="userSettings__dropdown--settings"> Settings</span>
+            <router-link to="/settings" class="no-transform" :style="{ color: toggleFontColor }">
+              <span class="userSettings__dropdown--settings">Settings</span>
             </router-link>
           </v-col>
         </v-row>
         <v-row>
-          <v-col
-            style="padding-top: 9px;"
-            class="ml-1 pb-0 userSettings__dropdown--border"
-          >
-            Lights
-          </v-col>
+          <v-col style="padding-top: 9px;" class="ml-1 pb-0 userSettings__dropdown--border">Lights</v-col>
           <v-col
             style="padding-top: 9px;"
             class="mr-1 pb-0 pl-6 pr-0 userSettings__dropdown--border"
@@ -40,13 +32,7 @@
           class="userSettings__logout"
           :class="lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
         >
-          <v-col
-            style="font-size:14px;"
-            class="text-left pl-3 pb-0 pt-2"
-            @click="logout()"
-          >
-            Logout
-          </v-col>
+          <v-col style="font-size:14px;" class="text-left pl-3 pb-0 pt-2" @click="logout()">Logout</v-col>
         </v-row>
       </v-card-actions>
     </v-card>
@@ -54,7 +40,9 @@
 </template>
 
 <script>
+
 import { mapActions, mapGetters } from "vuex";
+
 export default {
   data() {
     return {
@@ -68,10 +56,15 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * Toggle font color base on current theme mode
+     *
+     * @return  {string}  returns color string
+     */
     toggleFontColor() {
       return this.lightSwitch == 0
-        ? "#000000 !important"
-        : "#ffffff !important";
+        ? "black !important"
+        : "white !important";
     }
   },
   watch: {
@@ -111,6 +104,10 @@ export default {
   right: 20px;
   margin-right: 10px;
   box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
+}
+.userSettings__dropdown.userSettings__dropdown-xsOnly {
+  top: 52px;
+  right: 4px;
 }
 .userSettings__dropdown--border {
   border-bottom: 1px solid rgb(182, 182, 182, 0.2);

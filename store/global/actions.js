@@ -27,5 +27,8 @@ export default {
     },
     async setMarkAll({ commit }, data) {
         await commit("SET_MARKALL", data);
+    },
+    async setSwipe({ commit }, data) {
+        await commit("SET_SWIPE", data);
     }
 };

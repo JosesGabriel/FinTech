@@ -13,8 +13,8 @@
       >
         <Navbar :data="navbarMiniVariantSetter" active="watchlist" />
       </v-col>
-      <v-col xs="11" sm="11" md="11" lg="11" class="pl-8">
-        <v-container>
+      <v-col xs="11" sm="11" md="11" lg="11" class="pt-5" :class="{'pl-8' : $vuetify.breakpoint.mdAndUp}">
+        <v-container v-if="$vuetify.breakpoint.mdAndUp">
           <v-row>
             <v-col cols="3">
               <PSEICard :data="pseData" />
@@ -30,7 +30,7 @@
             </v-col>
           </v-row>
         </v-container>
-        <v-container class="pt-0" fluid>
+        <v-container class="pt-0" :class="{'px-5': $vuetify.breakpoint.smAndDown}" fluid>
           <span
             class="body-2 font-weight-black pl-1"
             :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
@@ -59,7 +59,10 @@
             <v-col
               v-for="(n, index) in watchListObject.length"
               :key="n"
-              cols="3"
+              lg="3"
+              md="4"
+              sm="6"
+              xs="12"
               class="pt-0"
             >
               <WatchCard :data="index" />
@@ -72,6 +75,7 @@
 </template>
 
 <script>
+
 import Navbar from "~/components/Navbar";
 import WatchCard from "~/components/watchers/WatchCard.vue";
 import AddWatcherModal from "~/components/watchers/AddWatcherModal.vue";

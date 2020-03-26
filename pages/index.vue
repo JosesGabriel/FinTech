@@ -1,33 +1,14 @@
 <template>
-  <div
-    class="page__wrapper"
-    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-    dark
-  >
-    <v-row
-      v-touch="{
-        left: () => swipe('Left'),
-        right: () => swipe('Right'),
-        up: () => swipe('Up'),
-        down: () => swipe('Down')
-      }"
-      class="mb-5"
-      no-gutters
-    >
-      <NavbarDrawer v-if="toggleNavbar" />
+  <div class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
+    <v-row class="mb-5" no-gutters>
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar v-if="$vuetify.breakpoint.smAndUp" active="social" />
       </v-col>
-      <v-col xs="12" sm="10" md="6" lg="6">
+      <v-col xs="12" sm="10" md="6" lg="6" :class="{'mt-5 px-2': $vuetify.breakpoint.xsOnly}">
         <PostField class="mb-3" @authorNewPost="authorNewPost" />
         <Newsfeed :new-post="newPost" />
       </v-col>
-      <v-col
-        class="px-3 hidden-sm-and-down pr-0 leftSidebar__container"
-        cols="3"
-        sm="3"
-        md="3"
-      >
+      <v-col class="px-3 hidden-sm-and-down pr-0 leftSidebar__container" cols="3" sm="3" md="3">
         <TrendingStocks />
         <WhoToMingle />
         <MiniWatchlist />
@@ -46,6 +27,7 @@
 </template>
 
 <script>
+
 import Navbar from "~/components/Navbar";
 import Newsfeed from "~/components/social/Newsfeed";
 import TrendingStocks from "~/components/TrendingStocks";
@@ -57,7 +39,6 @@ import Ad from "~/components/social/Ad";
 import Bulletin from "~/components/Bulletin";
 import PopUp from "~/components/modals/PopUp";
 import SidebarAds from "~/components/social/SidebarAds";
-import NavbarDrawer from "~/components/social/drawers/NavbarDrawer";
 
 import { mapActions, mapGetters } from "vuex";
 
@@ -74,12 +55,12 @@ export default {
     PostField,
     PopUp,
     Ad,
-    SidebarAds,
-    NavbarDrawer
+    SidebarAds
   },
   computed: {
     ...mapGetters({
-      sse: "social/sse"
+      sse: "social/sse",
+      swipe: "global/getSwipe"
     })
   },
   data() {
@@ -111,13 +92,11 @@ export default {
     authorNewPost(value) {
       this.newPost = value;
     },
-    swipe(direction) {
-      if (direction === "Right") {
-        this.toggleNavbar = false;
-      } else if (direction === "Left") {
-        this.toggleNavbar = true;
-      }
-    },
+    /**
+     * Event stream for data globally
+     *
+     * @return  {object}  returns data object
+     */
     initSSE() {
       if (this.sse !== null) {
         this.sse.close();
@@ -140,6 +119,13 @@ export default {
 
       this.sse.addEventListener("info", this.sseInfo);
     },
+    /**
+     * Set data object to state for global consumption
+     *
+     * @param   {object}  e  Handle each stream of data
+     *
+     * @return  {object}     pass new data object
+     */
     sseInfo(e) {
       const data = JSON.parse(e.data);
 
@@ -149,7 +135,8 @@ export default {
   }
 };
 </script>
-<style>
+
+<style scoped>
 .stickySidebar {
   position: sticky;
   top: 55px;

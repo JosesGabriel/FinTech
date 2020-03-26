@@ -219,8 +219,11 @@
 </template>
 
 <script>
+
 import { mapGetters } from "vuex";
+
 let numeral = require("numeral");
+
 export default {
   data() {
     return {
@@ -243,6 +246,11 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * Toggle font secondary color base on current theme mode
+     *
+     * @return  {string}  returns color hex code
+     */
     toggleFontColor() {
       return this.lightSwitch == 0 ? "#535358" : "#b6b6b6";
     }
@@ -372,15 +380,28 @@ export default {
       this.totalPosition = 0;
       this.averagePrice = 0;
     },
+    /**
+     * Enable textfields on row entries
+     *
+     * @param   {number}  num  carry the index number of a particular row item
+     *
+     * @return  {number}       assign number index to a particular item
+     */
     toEdit(num){
       this.toedit[num] = 1;
     },
+    /**
+     * Emit close back to parent component when outside document is clicked
+     *
+     * @return  {boolean}  returns false boolean
+     */
     closeDialog(){
     this.$emit("showDialog", false);
     }
   }
 };
 </script>
+
 <style scoped>
 .title--avprice {
   font-size: 16px !important;
@@ -391,8 +412,8 @@ export default {
 .edit:hover {
   cursor: pointer;
 }
-
 </style>
+
 <style>
 .input--field > .v-input__control > .v-input__slot {
   padding: 0px !important;

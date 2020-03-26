@@ -34,5 +34,9 @@ export default {
 
     getMarkAll(state) {
         return state.markAll;
-    }
+    },
+
+    getSwipe(state) {
+        return state.swipe;
+    },
 };

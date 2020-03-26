@@ -4,6 +4,7 @@
       :headers="headers"
       :items="userStockData"
       style="background-color: transparent"
+      class="data__content--table"
       :loading="tableLoading"
     >
       <template v-slot:top>
@@ -353,10 +354,15 @@ export default {
 </script>
 
 <style>
-header {
+.data__content--table header {
   height: 0px !important; /* if present, naay empty header element na 64px */
 }
 .v-data-footer__select {
   display: none;
+}
+@media screen and (max-width: 768px) {
+  .data__content--table thead{
+    display: none;
+  }
 }
 </style>
