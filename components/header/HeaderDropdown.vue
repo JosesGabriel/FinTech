@@ -14,7 +14,7 @@
           :class="lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
         >
           <v-col class="pt-0 pb-2 userSettings__dropdown--border">
-            <router-link to="/settings" class="no-transform" :style="{ color: toggleFontColor }">
+            <router-link :to="$vuetify.breakpoint.mdAndUp ? '/settings' : ''" class="no-transform" :style="{ color: toggleFontColor }">
               <span class="userSettings__dropdown--settings">Settings</span>
             </router-link>
           </v-col>
