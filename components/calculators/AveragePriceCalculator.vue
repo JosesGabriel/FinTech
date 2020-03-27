@@ -6,7 +6,7 @@
   >
     <v-card-title class="title--avprice">Average Price Calculator</v-card-title>
     <v-container class="pt-0 ma-0">
-      <v-container :class="positionKey >=1 ? 'display':'nodisplay'" class="ma-0 pa-0">
+      <v-container :class="positionKey >=1 ? 'd-block':'d-none'" class="ma-0 pa-0">
         <v-row style="font-size: 12px;padding-left: 12px;">
           <v-col cols="3">
             <span style="padding-left: 3px;">Tranche</span>
@@ -68,18 +68,18 @@
       <v-row>
         <v-col class="pb-1 mb-2">
           <span
-            :class="calcu ? 'calc_nodisplay': 'calc_display'"
+            :class="calcu ? 'd-none': 'd-block'"
             style="font-size: 16px;padding-left: 12px;"
           >{{ stringifyNumber(positionKey + 1) }} Tranche</span>
           <span
-            :class="calcu ? 'calc_display': 'calc_nodisplay'"
+            :class="calcu ? 'd-block': 'd-none'"
             style="font-size: 16px;padding-left: 12px;"
             class="pb-3"
           >Your results</span>
         </v-col>
       </v-row>
 
-      <div :class="calcu ? 'calc_nodisplay': 'calc_display'">
+      <div :class="calcu ? 'd-none': 'd-block'">
         <v-row>
           <v-col class="mx-3 py-0 my-0">
             <v-text-field
@@ -156,7 +156,7 @@
           </v-col>
         </v-row>
       </div>
-      <div :class="calcu ? 'calc_display': 'calc_nodisplay'">
+      <div :class="calcu ? 'd-block': 'd-none'">
         <v-row class="pl-3 pr-6" style="font-size: 14px;">
           <v-col cols="6" class="mb-2 py-0">
             <span>Total Cost</span>
@@ -417,15 +417,6 @@ export default {
   margin-top: 0px !important;
   text-align: center;
 }
-.display,
-.calc_display {
-  display: block;
-}
-.nodisplay,
-.calc_nodisplay {
-  display: none;
-}
-
 .avprice > .v-input__control > .v-text-field__details {
   display: none;
 }
