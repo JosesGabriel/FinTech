@@ -10,42 +10,42 @@
       <div class="body-2 font-weight-black pb-2 pl-2">Watchlist</div>
       <v-divider></v-divider>
       <v-list class="transparent mt-1">
-        <v-list-item v-for="(n, index) in watchListObject.length" :key="n" class="px-0">
+        <v-list-item v-for="(item, index) in stockData" :key="index" class="px-0">
           <v-list-item-content class="pt-0">
             <v-list-item-title class="caption d-flex justify-space-between">
-              <span>{{ stockData[index] ? stockData[index].stockSym : "" }}</span>
-              <span>₱{{ stockData[index] ? stockData[index].currentPrice : "" }}</span>
+              <span>{{ item ? item.stockSym : "" }}</span>
+              <span>₱{{ item ? item.currentPrice : "" }}</span>
             </v-list-item-title>
             <v-list-item-subtitle class="overline d-flex justify-space-between">
               <span
-                :id="stockData[index].stockSym"
-                class="caption stockSymbol__span tStocks--description"
+                :id="item.stockSym"
+                class="stockSymbol__span tStocks--description"
               >
                 {{
-                watchListObject[index] ? watchListObject[index].description : ""
+                item ? item.description : ""
                 }}
               </span>
               <span>
                 <span>
                   <v-icon
-                    v-show="stockData[index].change > 0.0"
-                    class="increase caption"
+                    v-show="item.change > 0.0"
+                    class="increase__value--number caption"
                   >mdi-chevron-up</v-icon>
                   <v-icon
-                    v-show="stockData[index].change < 0.0"
-                    class="decrease caption"
+                    v-show="item.change < 0.0"
+                    class="decrease__value--number caption"
                   >mdi-chevron-down</v-icon>
                 </span>
                 <span
                   class="font-weight-black"
                   :class="
-                    stockData[index].change > 0
+                    item.change > 0
                       ? 'success--text'
-                      : stockData[index].change < 0
+                      : item.change < 0
                       ? 'error--text'
                       : 'watchlistCard__text--gray'
                   "
-                >{{ stockData[index] ? stockData[index].percentage : "" }} ({{ stockData[index] ? stockData[index].change : "" }}%)</span>
+                >{{ item ? item.percentage : "" }} ({{ item ? item.change : "" }}%)</span>
               </span>
             </v-list-item-subtitle>
           </v-list-item-content>
@@ -136,8 +136,10 @@ export default {
               data: [],
               currentPrice: "",
               change: "",
-              percentage: ""
+              percentage: "",
+              description: ""
             });
+            this.stockData[i].description = this.watchListObject[i].description
             // GET Closing Price from Stock History API
             const params = {
               "symbol-id": this.watchListObject[i].stock_id,
@@ -224,7 +226,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .mWatchlist__text--noData {
   padding-top: 45px;
   padding-bottom: 45px;
@@ -232,14 +234,10 @@ export default {
 .stockSymbol__span {
   white-space: nowrap;
 }
-.stockPrices {
-  position: relative;
-  right: 20px;
-}
-.increase {
+.increase__value--number {
   color: #03dac5 !important;
 }
-.decrease {
+.decrease__value--number {
   color: #f44336 !important;
 }
 </style>
