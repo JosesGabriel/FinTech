@@ -216,9 +216,6 @@ export default {
 .roomView--height {
   height: calc(100vh - 162px);
 }
-.container {
-  color: white;
-}
 .chatClient__wrapper {
   border: 2px solid #03dac5;
 }

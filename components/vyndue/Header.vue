@@ -1,6 +1,6 @@
 <template>
   <v-list-item>
-    <v-btn icon @click="$emit('showRooms')">
+    <v-btn icon color="success" @click="$emit('showRooms')">
       <v-icon>mdi-reorder-horizontal</v-icon>
     </v-btn>
     <v-list-item-avatar color="grey">

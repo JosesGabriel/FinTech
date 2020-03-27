@@ -10,7 +10,7 @@
       right
       @click="dockToggle = true"
     >
-      <v-icon>mdi-message-processing-outline</v-icon>
+      <img src="/icon/new-vyndue.svg" width="40" />
     </v-btn>
     <RoomsOverlay
       class="roomOverlay"

@@ -1,25 +1,26 @@
 <template>
-  <v-card class="roomsOverlay" dark flat tile>
+  <v-card class="roomsOverlay" :dark="lightSwitch == 1" flat tile>
     <div class="pa-4">
-      <v-icon color="success" small>mdi-message-text</v-icon>
-      <span class="font-weight-black pl-2">Vyndue</span>
+      <v-btn icon color="success" small @click="$emit('close')">
+        <v-icon>
+          mdi-arrow-left
+        </v-icon>
+      </v-btn>
+      <v-avatar size="30">
+        <img :src="vyndueUser.avatarUrl" />
+      </v-avatar>
+      <span class="font-weight-black pl-2">{{ vyndueUser.displayName }}</span>
     </div>
     <v-divider></v-divider>
     <v-container class="pa-0 pl-4">
       <v-row>
-        <v-col cols="12" class="pl-0 d-flex justify-space-between">
+        <v-col cols="12" class="pl-0 d-flex justify-space-between pb-0">
           <span class="font-weight-black body-2 pl-2">Private Messages</span>
 
           <v-dialog v-model="startChatDialog" persistent max-width="400">
             <template v-slot:activator="{ on }">
-              <v-btn
-                class="roomOverlay__button mr-4"
-                outlined
-                fab
-                color="success"
-                v-on="on"
-              >
-                <v-icon>mdi-message-plus-outline</v-icon>
+              <v-btn class=" mr-4" small icon color="success" v-on="on">
+                <v-icon>mdi-message-draw</v-icon>
               </v-btn>
             </template>
             <StartChat
@@ -65,14 +66,14 @@
     <v-divider class="mt-2" />
     <v-container class="pa-0 pl-4">
       <v-row>
-        <v-col cols="12" class="pl-0 d-flex justify-space-between">
+        <v-col cols="12" class="pl-0 d-flex justify-space-between pb-0">
           <span class="font-weight-black body-2 pl-2">{{
             communitiesListToggle ? "Chat Rooms" : "Public Rooms"
           }}</span>
           <v-btn
-            class="roomOverlay__button mr-4"
-            outlined
-            fab
+            class=" mr-4"
+            icon
+            small
             color="success"
             @click="
               (communitiesListToggle = !communitiesListToggle), getPublicRooms()
@@ -196,7 +197,7 @@ export default {
     ...mapGetters({
       clientIsPrepared: "vyndue/getClientIsPrepared",
       currentRoom: "vyndue/getCurrentRoom",
-      user: "vyndue/getUser",
+      vyndueUser: "vyndue/getVyndueUser",
       lightSwitch: "global/getLightSwitch"
     })
   },
@@ -400,30 +401,20 @@ export default {
 <style>
 /* Background-color hex code is temporary only, waiting until design team decides  */
 .roomsOverlay {
-  background-color: #222225 !important;
   position: absolute;
   height: 100%;
   top: 0;
-  left: -12px;
+  left: -1vw;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   transition: 3s;
 }
-.roomOverlay__button {
-  height: 20px !important;
-  width: 20px !important;
-}
-.roomOverlay__button span i {
-  font-size: 12px !important;
-  height: 20px !important;
-  width: 20px !important;
-}
 .communities__list {
-  height: 170px;
+  height: 20vh;
   overflow: auto;
 }
 .soloChats__list {
-  height: 120px;
+  height: 18vh;
   overflow: auto;
 }
 </style>
