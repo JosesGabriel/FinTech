@@ -1,6 +1,6 @@
 <template>
     <v-content>      
-            <v-row no-gutters >                 
+            <v-row no-gutters class="mb-12">                 
                     <v-img
                         src="mytrade_image1.webp"
                         width="100%"
@@ -12,7 +12,10 @@
                         width="23%"
                     >
                     </v-img>
-                    <v-row class="mytrade_headertext">
+                    <v-row 
+                        class="mytrade_headertext"
+                        style="color:#000000;"
+                    >
                         <v-row class="mytrade_headertext_title">
                             <v-col cols="12" class="ma-0 pa-0">
                             <p class="ma-0 pa-0" style="letter-spacing: 0.05em;">Trade with</p>
@@ -79,20 +82,110 @@
                         </v-row>
                     </v-row>         
             </v-row> 
-            <v-row>
-                <v-col>
-                    <v-row>
-                        <v-col>
-                            <span>01</span>
-                        </v-col>
-                        <v-col>
-                            <span>Strong Market</span>
-                            <span>Research Report</span>
-                        </v-col>
-                    </v-row>
-                </v-col>
-                <v-col>
-                </v-col>
+            <v-row 
+                class="mytrade__container mt-12"
+            >
+                <v-row class="px-12 my-12">
+                    <v-col>
+                        <v-row>
+                            <v-col cols="4">
+                                <span class="mytrade__numtitle ma-0 pa-0">01</span>
+                            </v-col>
+                            <v-col cols="8" class="mytrade__numtext">
+                                <p class="ma-0 pa-0">Valuable Research</p>
+                                <p class="ma-0 pa-0">Based Recommendations</p>
+                            </v-col>
+                        </v-row>
+                        <v-divider class="mytrade_divider"></v-divider>
+                        <v-row>
+                            <v-col cols="12">
+                                <p class="mytrade__indent">
+                                    Value-added & relevant research done by the country's 
+                                    top market analyst spearheaded by Forbe's Top 5 stock 
+                                    picker in Asia, Mr. Raymond Niel Franco. 
+                                </p>
+                                <ul class="mytrade__indent">
+                                    <li>Better investment insights</li>
+                                    <li>See investments in innovative angles</li>
+                                    <li>Stop investing blindly - see the entire landscape</li>
+                                    <li>Access high-value recommendations</li>
+                                    <li>Smart & easy to follow market reports</li>
+                                </ul>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="mytrade__indent">
+                                 <v-btn 
+                                        rounded 
+                                        class="text-capitalize"
+                                        width="150"
+                                        color="#0f911e"
+                                    >
+                                    <span style="color:#ffffff;">Subscribe now</span>
+                                    </v-btn>
+                            </v-col>
+                        </v-row>
+
+                    </v-col>
+
+                    <v-col>
+                        <v-img
+                            class="mytrade_image2"
+                            src="13715.webp"
+                        >
+                        </v-img>
+                    </v-col>
+                </v-row>
+
+                <v-row class="px-12 mt-12">
+                    <v-col>
+                        <v-img
+                            class="mytrade_image3"
+                            src="50301.jpg"
+                            width="500"
+                        >
+                        </v-img>
+                    </v-col>
+                    <v-col>
+                        <v-row>
+                            <v-col cols="4">
+                                <span class="mytrade__numtitle ma-0 pa-0">02</span>
+                            </v-col>
+                            <v-col cols="8" class="mytrade__numtext">
+                                <p class="ma-0 pa-0">Manage Multiple</p>
+                                <p class="ma-0 pa-0">Portfolios</p>
+                            </v-col>
+                        </v-row>
+                        <v-divider class="mytrade_divider"></v-divider>
+                        <v-row>
+                            <v-col cols="12">
+                                <p class="mytrade__indent">
+                                    Create & manage multiple portfolios 
+                                    in a single account. Now you have the power 
+                                    to separate portfolios accordingly.  
+                                </p>
+                                <ul class="mytrade__indent">
+                                    <li>Separate your investing & trading portfolio</li>
+                                    <li>Manage multiple portfolios with ease</li>
+                                    <li>Everything in a single platform</li>
+                                </ul>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="mytrade__indent">
+                                 <v-btn 
+                                        rounded 
+                                        class="text-capitalize"
+                                        width="150"
+                                        color="#0f911e"
+                                    >
+                                    <span style="color:#ffffff;">Try it now</span>
+                                    </v-btn>
+                            </v-col>
+                        </v-row>
+
+                    </v-col>
+                </v-row>
             </v-row>
     </v-content>
 </template>
@@ -123,6 +216,36 @@ export default {
 .google_play,
 .app_store {
     cursor: pointer;
+}
+.mytrade__container {
+    max-width: 1050px;
+    margin: 0 auto;
+    color:#000000;
+}
+.mytrade__numtitle{
+    font-size:87px;
+    text-align: center;
+    padding-left: 34px !important;
+}
+.mytrade__numtext{
+    font-size:25px;
+    font-weight: bold;
+    padding-top: 40px;
+}
+.mytrade_divider{
+    border-color: rgb(53, 212, 65);
+    border-width: 2px;
+    width: 380px;
+    margin-left: 40px;
+    position: relative;
+    top: -18px;
+}
+.mytrade__indent{
+    margin-left: 40px; 
+}
+.mytrade_image2 {
+    position: absolute;
+    transform: rotate(5deg);
 }
 </style>
 <style>
