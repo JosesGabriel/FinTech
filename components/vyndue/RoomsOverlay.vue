@@ -1,22 +1,45 @@
 <template>
-  <v-card class="roomsOverlay" dark flat tile>
+  <v-card class="roomsOverlay" :dark="lightSwitch == 1" flat tile>
+    <div class="pa-4">
+      <v-btn icon color="success" small @click="$emit('close')">
+        <v-icon>
+          mdi-arrow-left
+        </v-icon>
+      </v-btn>
+      <v-avatar size="30">
+        <img :src="vyndueUser.avatarUrl" />
+      </v-avatar>
+      <span class="font-weight-black pl-2">{{ vyndueUser.displayName }}</span>
+    </div>
+    <v-divider></v-divider>
     <v-container class="pa-0 pl-4">
       <v-row>
-        <v-col cols="12" class="pl-0">
-          <v-icon>{{
-            soloChatsToggle ? "mdi-chevron-down" : "mdi-chevron-right"
-          }}</v-icon>
-          <span class="font-weight-black body-2">Traders</span>
-        </v-col>
-      </v-row></v-container
+        <v-col cols="12" class="pl-0 d-flex justify-space-between pb-0">
+          <span class="font-weight-black body-2 pl-2">Private Messages</span>
+
+          <v-dialog v-model="startChatDialog" persistent max-width="400">
+            <template v-slot:activator="{ on }">
+              <v-btn class=" mr-4" small icon color="success" v-on="on">
+                <v-icon>mdi-message-draw</v-icon>
+              </v-btn>
+            </template>
+            <StartChat
+              @close="startChatDialog = false"
+              @getRooms="getRoomList(), (startChatDialog = false)"
+            />
+          </v-dialog>
+        </v-col> </v-row
+    ></v-container>
+    <v-list
+      v-show="soloChatsToggle"
+      class="pa-0"
+      dense
+      color="transparent soloChats__list"
     >
-    <v-divider />
-    <v-list v-show="soloChatsToggle" class="pa-0" dense color="transparent">
       <v-list-item-group v-model="soloChatsModel" color="success">
         <v-list-item
           v-for="room in soloChatsList"
           :key="room.roomId"
-          class="roomList__list-item"
           :ripple="false"
           @click="
             selectRoom({
@@ -26,7 +49,7 @@
             })
           "
         >
-          <v-list-item-icon class="roomList__item-icon">
+          <v-list-item-icon class="mr-2">
             <v-avatar size="30">
               <v-img :src="room.avatar_url"></v-img>
             </v-avatar>
@@ -40,21 +63,32 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <v-divider class="mt-2" />
     <v-container class="pa-0 pl-4">
       <v-row>
-        <v-col cols="12" class="pl-0">
-          <v-icon>{{
-            communitiesListToggle ? "mdi-chevron-down" : "mdi-chevron-right"
-          }}</v-icon>
-          <span class="font-weight-black body-2">Communities</span>
+        <v-col cols="12" class="pl-0 d-flex justify-space-between pb-0">
+          <span class="font-weight-black body-2 pl-2">{{
+            communitiesListToggle ? "Chat Rooms" : "Public Rooms"
+          }}</span>
+          <v-btn
+            class=" mr-4"
+            icon
+            small
+            color="success"
+            @click="
+              (communitiesListToggle = !communitiesListToggle), getPublicRooms()
+            "
+          >
+            <v-icon>{{
+              communitiesListToggle ? "mdi-magnify" : "mdi-close"
+            }}</v-icon>
+          </v-btn>
         </v-col>
       </v-row></v-container
     >
-
-    <v-divider />
     <v-list
       v-show="communitiesListToggle"
-      class="pa-0"
+      class="pa-0 communities__list"
       dense
       color="transparent"
     >
@@ -63,7 +97,6 @@
           v-for="community in communitiesList"
           :key="community.roomId"
           :ripple="false"
-          class="roomList__list-item"
           @click="
             selectRoom({
               roomId: community.roomId,
@@ -72,7 +105,7 @@
             })
           "
         >
-          <v-list-item-icon class="roomList__item-icon">
+          <v-list-item-icon class="mr-2">
             <v-avatar size="30">
               <v-img :src="community.avatar_url"></v-img>
             </v-avatar>
@@ -86,31 +119,86 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+
+    <v-list
+      v-show="!communitiesListToggle"
+      class="pa-0 communities__list"
+      dense
+      color="transparent"
+    >
+      <v-list-item-group v-model="communitiesModel" color="success">
+        <v-list-item
+          v-for="room in publicRooms"
+          :key="room.room_id"
+          :ripple="false"
+        >
+          <v-list-item-icon class="mr-2">
+            <v-avatar size="30">
+              <v-img :src="room.avatar_url"></v-img>
+            </v-avatar>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title
+              class="body-2"
+              v-text="room.name"
+            ></v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action class="my-0">
+            <v-btn
+              depressed
+              x-small
+              color="success black--text"
+              @click="accessRoom(room)"
+              >{{ room.joined ? "View" : "Join" }}</v-btn
+            >
+          </v-list-item-action>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
+
+    <div class="d-flex justify-center mr-2">
+      <v-btn
+        bottom
+        absolute
+        text
+        small
+        color="success"
+        @click="redirectToVyndue()"
+        >Open Vyndue</v-btn
+      >
+    </div>
   </v-card>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { client } from "~/assets/js/vyndue/client.js";
+import StartChat from "~/components/vyndue/StartChat";
 export default {
+  components: {
+    StartChat
+  },
   data() {
     return {
       soloChatsToggle: true,
       communitiesListToggle: true,
+      publicRooms: [],
       invitesList: [],
       soloChatsList: [],
       communitiesList: [],
       allRooms: [],
       invitesModel: [],
       soloChatsModel: [],
-      communitiesModel: []
+      communitiesModel: [],
+      startChatDialog: false
     };
   },
   computed: {
     ...mapGetters({
       clientIsPrepared: "vyndue/getClientIsPrepared",
       currentRoom: "vyndue/getCurrentRoom",
-      user: "vyndue/getUser"
+      vyndueUser: "vyndue/getVyndueUser",
+      lightSwitch: "global/getLightSwitch"
     })
   },
   watch: {
@@ -132,6 +220,14 @@ export default {
     ...mapActions({
       setCurrentRoom: "vyndue/setCurrentRoom"
     }),
+    /**
+     * fires when user clicks 'Open Vyndue' button
+     *
+     * @return
+     */
+    redirectToVyndue() {
+      window.location.href = process.env.VYNDUE_URL;
+    },
     /**
      * SDK implementation works by getting ALL joined rooms, whether it's a 'community' room or
      * a chatroom with only 2 users.
@@ -242,7 +338,61 @@ export default {
         avatarUrl: room.avatarUrl
       });
       this.$emit("close");
-      localStorage.setItem("last_room_id", room.roomId);
+    },
+    /**
+     * Retrieve list of public rooms, fires when user clicks button besides 'Chat Room'
+     *
+     * @return
+     */
+    async getPublicRooms() {
+      let joinedRooms = await client.getJoinedRooms();
+      joinedRooms = joinedRooms.joined_rooms;
+      client.publicRooms(
+        function(err, data) {
+          this.publicRooms = data.chunk;
+          this.publicRooms.forEach((community, i) => {
+            community.joined = false;
+            joinedRooms.forEach(joinedRoom => {
+              if (community.room_id === joinedRoom) {
+                community.joined = true;
+              }
+            });
+
+            const room = client.getRoom(community.room_id);
+            if (room) {
+              const avatarUrl = room.getAvatarUrl(
+                client.getHomeserverUrl(),
+                40,
+                40,
+                "crop"
+              );
+              community.avatar_url = avatarUrl.includes("unstable/identicon")
+                ? "/default.png"
+                : avatarUrl;
+            } else {
+              community.avatar_url = "/default.png";
+            }
+          });
+        }.bind(this)
+      );
+    },
+    /**
+     * Fires when user clicks either 'View' or 'Join' button on Public rooms list
+     *
+     * @param   {object}  room
+     *
+     * @return
+     */
+    accessRoom(room) {
+      if (!room.joined) {
+        client.joinRoom(room.room_id);
+      }
+      this.setCurrentRoom({
+        roomId: room.room_id,
+        displayName: room.name,
+        avatarUrl: room.avatar_url
+      });
+      this.$emit("close");
     }
   }
 };
@@ -251,13 +401,20 @@ export default {
 <style>
 /* Background-color hex code is temporary only, waiting until design team decides  */
 .roomsOverlay {
-  background-color: #222225 !important;
   position: absolute;
   height: 100%;
   top: 0;
-  left: -13px;
-  border-top-left-radius: 20px !important;
-  border-bottom-left-radius: 3px;
+  left: -1vw;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
   transition: 3s;
+}
+.communities__list {
+  height: 20vh;
+  overflow: auto;
+}
+.soloChats__list {
+  height: 18vh;
+  overflow: auto;
 }
 </style>

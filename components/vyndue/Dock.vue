@@ -10,7 +10,7 @@
       right
       @click="dockToggle = true"
     >
-      <v-icon>mdi-message-processing-outline</v-icon>
+      <img src="/icon/new-vyndue.svg" width="40" />
     </v-btn>
     <RoomsOverlay
       class="roomOverlay"
@@ -21,11 +21,10 @@
       <v-card
         v-show="dockToggle"
         class="dock__card"
-        :class="roomOverlayToggle ? 'dock__overlay' : 'darkchart'"
+        :class="roomOverlayToggle ? 'dock__overlay' : ''"
         width="400px"
-        shaped
-        dark
-        flat
+        :dark="lightSwitch == 0 ? false : true"
+        outlined
       >
         <Header
           @showRooms="roomOverlayToggle = true"
@@ -60,7 +59,8 @@ export default {
   computed: {
     ...mapGetters({
       clientIsPrepared: "vyndue/getClientIsPrepared",
-      vyndueUser: "vyndue/getVyndueUser"
+      vyndueUser: "vyndue/getVyndueUser",
+      lightSwitch: "global/getLightSwitch"
     })
   }
 };
@@ -95,6 +95,7 @@ export default {
 }
 .dock__card {
   right: 1vw;
+  border-radius: 30px !important;
 }
 .dock__container ::-webkit-scrollbar {
   width: 5px;

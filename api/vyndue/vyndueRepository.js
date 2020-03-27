@@ -1,20 +1,23 @@
-const baseURL = process.env.VYNDUE_CLIENT_API_URL + "/rooms";
+const BASE_URL = process.env.VYNDUE_CLIENT_API_URL;
 //TODO Figure out why lyduz token is being appended to request even after exemption
 //TODO Change method of setting bearer token to something else, not supposed to be set here.
-const token = localStorage["vyndue.auth._token.local"];
+const TOKEN = localStorage["vyndue.auth._token.local"];
 export default $axios => ({
   messages(params, payload) {
-    $axios.defaults.headers.common["Authorization"] = token;
-    return $axios.$get(`${baseURL}/` + params.roomId + `/messages`);
+    $axios.defaults.headers.common["Authorization"] = TOKEN;
+    return $axios.$get(`${BASEURL}/rooms/` + params.roomId + `/messages`);
   },
   history(roomId, params) {
     let query = buildParams(params);
     return $axios.$get(
-      `${baseURL}/` +
+      `${BASEURL}/rooms/` +
         roomId +
         `/messages` +
         `${query.length > 0 ? "?" + query : ""}`
     );
+  },
+  search(payload) {
+    return $axios.$post(`${BASEURL}/` + `user_directory/search`, payload);
   }
 });
 
