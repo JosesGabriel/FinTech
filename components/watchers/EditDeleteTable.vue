@@ -4,15 +4,13 @@
       :headers="headers"
       :items="userStockData"
       style="background-color: transparent"
+      class="data__content--table"
       :loading="tableLoading"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
           <v-dialog v-model="dialog" max-width="320px">
-            <v-card
-              :dark="lightSwitch == 0 ? false : true"
-              :loading="watchCardModalLoading"
-            >
+            <v-card :dark="lightSwitch == 0 ? false : true" :loading="watchCardModalLoading">
               <v-card-title>
                 <span class="body-1 font-weight-black">Edit Watched Stock</span>
               </v-card-title>
@@ -62,57 +60,44 @@
                   class="no-transform"
                   text
                   @click="close"
-                  >Close</v-btn
-                >
+                >Close</v-btn>
                 <v-btn
                   :dark="lightSwitch == 0 ? false : true"
                   class="no-transform black--text px-6"
                   color="success"
                   @click="save"
-                  >Save</v-btn
-                >
+                >Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.action="{ item }">
-        <v-btn class="no-transform" small text @click="editItem(item)"
-          >Edit</v-btn
-        >
+        <v-btn class="no-transform" small text @click="editItem(item)">Edit</v-btn>
         <v-btn
           class="no-transform"
           small
           text
           @click.stop="(deleteDialog = true), (itemToDelete = item)"
-          >Delete</v-btn
-        >
+        >Delete</v-btn>
       </template>
     </v-data-table>
 
     <v-dialog v-model="deleteDialog" width="500">
       <v-card :dark="lightSwitch == 0 ? false : true">
-        <v-card-title class="body-2 font-weight-black" primary-title>
-          Delete Confirmation
-        </v-card-title>
+        <v-card-title class="body-2 font-weight-black" primary-title>Delete Confirmation</v-card-title>
 
         <v-divider class="pb-2"></v-divider>
-        <v-card-text>
-          Are you sure you want to delete this watched stock?
-        </v-card-text>
+        <v-card-text>Are you sure you want to delete this watched stock?</v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="no-transform px-5" text @click="deleteDialog = false">
-            Cancel
-          </v-btn>
+          <v-btn class="no-transform px-5" text @click="deleteDialog = false">Cancel</v-btn>
           <v-btn
             class="black--text no-transform px-5"
             color="success"
             @click="deleteItem(itemToDelete)"
-          >
-            Delete
-          </v-btn>
+          >Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -121,6 +106,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+
 export default {
   data: () => ({
     dialog: false,
@@ -353,10 +339,15 @@ export default {
 </script>
 
 <style>
-header {
+.data__content--table header {
   height: 0px !important; /* if present, naay empty header element na 64px */
 }
 .v-data-footer__select {
   display: none;
+}
+@media screen and (max-width: 768px) {
+  .data__content--table thead {
+    display: none;
+  }
 }
 </style>

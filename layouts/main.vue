@@ -1,16 +1,20 @@
 <template>
-  <v-app>
+  <v-app
+    v-touch="{
+        left: () => putSwipe('Left'),
+        right: () => putSwipe('Right'),
+        up: () => putSwipe('Up'),
+        down: () => putSwipe('Down')
+      }"
+  >
+    <NavbarDrawer />
+    <NavbarDrawerRight />
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <client-only>
         <Header class="header__container" />
       </client-only>
-      <!-- v-show="!$device.isMobileOrTablet" -->
-      <v-container
-        :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-        class="componentContainer"
-      >
+      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
         <div v-show="showLamp" class="lampBtn">
-          <!-- :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'" -->
           <img :src="lampMode" @click="lampSwitch" />
           <img
             :class="lightSwitch == 1 ? 'd-none' : ''"
@@ -22,10 +26,7 @@
           <nuxt />
         </client-only>
       </v-container>
-      <v-snackbar
-        v-model="alert.model"
-        :color="alert.state ? 'success' : 'error'"
-      >
+      <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
         {{ alert.message }}
         <v-btn color="white" text @click="alert.model = false">Close</v-btn>
       </v-snackbar>
@@ -38,25 +39,19 @@
         :dark="lightSwitch == 0 ? false : true"
       >
         <div class="d-grid alertDialog__icon--wrapper">
-          <v-icon class="alertDialog__icon" x-large color="success"
-            >mdi-check</v-icon
-          >
+          <v-icon class="alertDialog__icon" x-large color="success">mdi-check</v-icon>
         </div>
         <v-card class="alertDialog__card">
           <v-card-title
             class="headline text-center d-block success--text alertDialog__title"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-            >{{ alertDialog.header }}</v-card-title
-          >
+          >{{ alertDialog.header }}</v-card-title>
 
           <v-card-text
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
-            >{{ alertDialog.body }}</v-card-text
-          >
-          <v-card-text class="text-center">
-            {{ alertDialog.subtext }}
-          </v-card-text>
+          >{{ alertDialog.body }}</v-card-text>
+          <v-card-text class="text-center">{{ alertDialog.subtext }}</v-card-text>
         </v-card>
       </v-dialog>
       <client-only>
@@ -71,18 +66,23 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { client } from "~/assets/js/vyndue/client.js";
+import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 import {
   UserNotificationAlertLayout,
   AllNotificationAlertLayout
 } from "~/assets/js/helpers/notification";
-import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
 import Header from "~/components/Header";
 import VyndueDock from "~/components/vyndue/Dock";
+import NavbarDrawer from "~/components/social/drawers/NavbarDrawer";
+import NavbarDrawerRight from "~/components/social/drawers/NavbarDrawerRight";
+
 export default {
   components: {
     Header,
-    VyndueDock
+    VyndueDock,
+    NavbarDrawer,
+    NavbarDrawerRight
   },
   data() {
     return {
@@ -108,13 +108,24 @@ export default {
       alertDialog: "global/getAlertDialog",
       notification: "global/getNotification",
       user: "vyndue/getUser",
-      clientIsPrepared: "vyndue/getClientIsPrepared"
+      clientIsPrepared: "vyndue/getClientIsPrepared",
+      swipe: "global/getSwipe"
     }),
+    /**
+     * Switch lamp image button base on current theme mode
+     *
+     * @return  {string}  returns image url string
+     */
     lampMode() {
       return this.lightSwitch == 1
         ? "/Lamp-Darkmode.svg"
         : "/Lamp-Lightmode.svg";
     },
+    /**
+     * Show this lamp image only on following route
+     *
+     * @return  {boolean}  returns boolean
+     */
     showLamp() {
       let lampBtn;
       if (this.$route.path == "/login/" || this.$route.path == "/login") {
@@ -176,17 +187,22 @@ export default {
     }
 
     this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
-    // this.showAnnouncements();
   },
   methods: {
     ...mapActions({
       setLightSwitch: "global/setLightSwitch",
       setClientIsPrepared: "vyndue/setClientIsPrepared",
       setVyndueUser: "vyndue/setVyndueUser",
-      setCurrentRoom: "vyndue/setCurrentRoom"
+      setCurrentRoom: "vyndue/setCurrentRoom",
+      setSwipe: "global/setSwipe"
     }),
     userNotificationAlertLayout: UserNotificationAlertLayout,
     allNotificationAlertLayout: AllNotificationAlertLayout,
+    /**
+     * Toggle lamp base on current on theme mode
+     *
+     * @return  {boolean}  returns boolean
+     */
     lampSwitch() {
       let lampMode = localStorage.currentMode;
 
@@ -227,6 +243,16 @@ export default {
         displayName: currentRoom.name,
         avatarUrl: currentRoom.avatarUrl
       });
+    },
+    /**
+     * Set directives to state globally
+     *
+     * @param   {string}  direction  returns string directive
+     *
+     * @return  {string}             returns string
+     */
+    putSwipe(direction) {
+      this.setSwipe(direction);
     }
   }
 };

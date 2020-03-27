@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
 import { mapGetters } from "vuex";
+import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
 
 export default {
   props: {
@@ -125,13 +125,14 @@ export default {
 
           if (this.meta.user && this.meta.post) {
             window.location = "/post/" + this.meta.post.id;
-
-          } else if(typeof this.meta.post == "undefined" && typeof this.meta.stock == "undefined" && this.meta.user){
+          } else if (
+            typeof this.meta.post == "undefined" &&
+            typeof this.meta.stock == "undefined" &&
+            this.meta.user
+          ) {
             window.location = "/profile/" + this.meta.user.username;
-
-          } else if(this.meta.user && this.meta.stock){
+          } else if (this.meta.user && this.meta.stock) {
             window.location = "/watchlist";
-          
           }
         }
       });
@@ -139,3 +140,23 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.userMessage__dropdown-title {
+  font-weight: 700;
+  white-space: normal;
+  white-space: inherit;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+}
+.listItem__content {
+  align-items: unset !important;
+}
+.userMessage__message {
+  line-height: 15px !important;
+  display: block;
+  width: 100%;
+}
+</style>
