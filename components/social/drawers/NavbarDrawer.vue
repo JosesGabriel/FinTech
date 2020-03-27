@@ -117,6 +117,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   layout: "main",
   props: {

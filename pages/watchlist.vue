@@ -1,19 +1,17 @@
 <template>
-  <v-container
-    class="page__wrapper"
-    :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
-  >
+  <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
     <v-row class="mb-5" no-gutters>
-      <v-col
-        class="navbar__container hidden-xs-only px-3"
-        cols="1"
-        sm="1"
-        md="1"
-        lg="1"
-      >
+      <v-col class="navbar__container hidden-xs-only px-3" cols="1" sm="1" md="1" lg="1">
         <Navbar :data="navbarMiniVariantSetter" active="watchlist" />
       </v-col>
-      <v-col xs="11" sm="11" md="11" lg="11" class="pt-5" :class="{'pl-8' : $vuetify.breakpoint.mdAndUp}">
+      <v-col
+        xs="11"
+        sm="11"
+        md="11"
+        lg="11"
+        class="pt-5"
+        :class="{'pl-8' : $vuetify.breakpoint.mdAndUp}"
+      >
         <v-container v-if="$vuetify.breakpoint.mdAndUp">
           <v-row>
             <v-col cols="3">
@@ -23,10 +21,7 @@
               <SectorIndexList @pseiData="getPSEIData" />
             </v-col>
             <v-col cols="4">
-              <MostWatchedStocks
-                :key="addMostWatched"
-                @add-watchlist-data="getEmitID"
-              />
+              <MostWatchedStocks :key="addMostWatched" @add-watchlist-data="getEmitID" />
             </v-col>
           </v-row>
         </v-container>
@@ -34,16 +29,11 @@
           <span
             class="body-2 font-weight-black pl-1"
             :class="lightSwitch == 0 ? 'black--text' : 'white--text'"
-            >Watchlist</span
-          >
-          <v-divider class="" :dark="lightSwitch == 0 ? false : true" />
+          >Watchlist</span>
+          <v-divider class :dark="lightSwitch == 0 ? false : true" />
           <v-divider class="mb-4" :dark="lightSwitch == 0 ? false : true" />
           <div v-if="loadingBar" class="text-center">
-            <v-progress-circular
-              :size="50"
-              color="success"
-              indeterminate
-            ></v-progress-circular>
+            <v-progress-circular :size="50" color="success" indeterminate></v-progress-circular>
           </div>
           <div class="mb-4 d-flex justify-end">
             <div class="d-flex">
@@ -75,6 +65,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 
 import Navbar from "~/components/Navbar";
 import WatchCard from "~/components/watchers/WatchCard.vue";
@@ -83,7 +74,6 @@ import EditDeleteWatcherModal from "~/components/watchers/EditDeleteWatcherModal
 import PSEICard from "~/components/watchers/PSEICard.vue";
 import SectorIndexList from "~/components/watchers/SectorIndexList.vue";
 import MostWatchedStocks from "~/components/watchers/MostWatchedStocks.vue";
-import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "main",
@@ -137,7 +127,6 @@ export default {
     }
   },
   mounted() {
-    // GET Data from User Watchlist
     this.getUserWatchList();
   },
   methods: {
@@ -145,6 +134,13 @@ export default {
       setUserWatchedStocks: "watchers/setUserWatchedStocks",
       setRenderChartKey: "watchers/setRenderChartKey"
     }),
+    /**
+     * Fires when user click the add watch button, carry the stock id and emit
+     *
+     * @param   {string}  val  carry the most watched stock ID
+     *
+     * @return  {string}       returns ID string
+     */
     getEmitID(val) {
       this.emitID = val;
     },

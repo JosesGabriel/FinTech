@@ -14,7 +14,11 @@
           :class="lightSwitch == 0 ? 'lightModeHover' : 'darkModeHover'"
         >
           <v-col class="pt-0 pb-2 userSettings__dropdown--border">
-            <router-link :to="$vuetify.breakpoint.mdAndUp ? '/settings' : ''" class="no-transform" :style="{ color: toggleFontColor }">
+            <router-link
+              :to="$vuetify.breakpoint.mdAndUp ? '/settings' : ''"
+              class="no-transform"
+              :style="{ color: toggleFontColor }"
+            >
               <span class="userSettings__dropdown--settings">Settings</span>
             </router-link>
           </v-col>
@@ -40,7 +44,6 @@
 </template>
 
 <script>
-
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -62,9 +65,7 @@ export default {
      * @return  {string}  returns color string
      */
     toggleFontColor() {
-      return this.lightSwitch == 0
-        ? "black !important"
-        : "white !important";
+      return this.lightSwitch == 0 ? "black !important" : "white !important";
     }
   },
   watch: {

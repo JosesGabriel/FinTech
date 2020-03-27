@@ -104,24 +104,6 @@
               </v-list-item-content>
             </v-list-item>
           </router-link>
-          <!-- TODO put back after launch -->
-          <!-- <router-link to="/game" class="no-transform">
-            <v-list-item
-              :class="active == 'game' ? 'v-list-item--active' : ''"
-              :color="active == 'game' ? 'success' : ''"
-            >
-              <v-list-item-icon class="mr-4"
-                ><v-icon :color="active == 'game' ? 'success' : ''"
-                  >mdi-gamepad</v-icon
-                ></v-list-item-icon
-              >
-              <v-list-item-content
-                ><v-list-item-title class="font-weight-medium"
-                  >Games</v-list-item-title
-                ></v-list-item-content
-              >
-            </v-list-item>
-          </router-link>-->
           <router-link to="/watchlist" class="no-transform">
             <v-list-item
               :class="active == 'watchlist' ? 'v-list-item--active' : ''"
@@ -140,8 +122,11 @@
     </v-navigation-drawer>
   </v-card>
 </template>
+
 <script>
+
 import { mapGetters } from "vuex";
+
 export default {
   layout: "main",
   props: {
@@ -180,6 +165,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .navbar__card {
   position: fixed;

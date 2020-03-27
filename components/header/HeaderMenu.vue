@@ -44,11 +44,11 @@
 
 <script>
 
+import { mapGetters } from "vuex";
+
 import BuySellCalculator from "~/components/calculators/BuySellCalculator";
 import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
 import VARCalculator from "~/components/calculators/VARCalculator";
-
-import { mapGetters } from "vuex";
 
 export default {
   components: {

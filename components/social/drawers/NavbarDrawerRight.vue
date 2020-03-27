@@ -19,13 +19,12 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 
 import TrendingStocks from "~/components/TrendingStocks";
 import WhoToMingle from "~/components/WhoToMingle";
 import MiniWatchlist from "~/components/MiniWatchlist";
 import FooterSidebar from "~/components/FooterSidebar";
-
-import { mapGetters } from "vuex";
 
 export default {
   layout: "main",

@@ -148,11 +148,12 @@
 
 <script>
 
+import { mapActions, mapGetters } from "vuex";
 import {
   UserNotificationEventsList,
   AllNotificationEventsList
 } from "~/assets/js/config/notification";
-import { mapActions, mapGetters } from "vuex";
+
 import LoginRegister from "~/components/LoginRegister";
 import HeaderDropdown from "~/components/header/HeaderDropdown";
 import HeaderMenu from "~/components/header/HeaderMenu";

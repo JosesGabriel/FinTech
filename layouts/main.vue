@@ -13,10 +13,8 @@
       <client-only>
         <Header class="header__container" />
       </client-only>
-      <!-- v-show="!$device.isMobileOrTablet" -->
       <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
         <div v-show="showLamp" class="lampBtn">
-          <!-- :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'" -->
           <img :src="lampMode" @click="lampSwitch" />
           <img
             :class="lightSwitch == 1 ? 'd-none' : ''"
@@ -66,14 +64,13 @@
 </template>
 
 <script>
-
 import { mapActions, mapGetters } from "vuex";
 import { client } from "~/assets/js/vyndue/client.js";
+import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 import {
   UserNotificationAlertLayout,
   AllNotificationAlertLayout
 } from "~/assets/js/helpers/notification";
-import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
 import Header from "~/components/Header";
 import VyndueDock from "~/components/vyndue/Dock";
@@ -190,7 +187,6 @@ export default {
     }
 
     this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
-    // this.showAnnouncements();
   },
   methods: {
     ...mapActions({
@@ -202,6 +198,11 @@ export default {
     }),
     userNotificationAlertLayout: UserNotificationAlertLayout,
     allNotificationAlertLayout: AllNotificationAlertLayout,
+    /**
+     * Toggle lamp base on current on theme mode
+     *
+     * @return  {boolean}  returns boolean
+     */
     lampSwitch() {
       let lampMode = localStorage.currentMode;
 
@@ -231,18 +232,25 @@ export default {
      */
     getInitialRoom() {
       const currentRoom = client.getRoom(process.env.DEFAULT_CHAT_ROOM_ID);
-      // currentRoom.avatarUrl = currentRoom.getAvatarUrl(
-      //   client.getHomeserverUrl(),
-      //   40,
-      //   40,
-      //   "crop"
-      // );
-      // this.setCurrentRoom({
-      //   roomId: currentRoom.roomId,
-      //   displayName: currentRoom.name,
-      //   avatarUrl: currentRoom.avatarUrl
-      // });
+      currentRoom.avatarUrl = currentRoom.getAvatarUrl(
+        client.getHomeserverUrl(),
+        40,
+        40,
+        "crop"
+      );
+      this.setCurrentRoom({
+        roomId: currentRoom.roomId,
+        displayName: currentRoom.name,
+        avatarUrl: currentRoom.avatarUrl
+      });
     },
+    /**
+     * Set directives to state globally
+     *
+     * @param   {string}  direction  returns string directive
+     *
+     * @return  {string}             returns string
+     */
     putSwipe(direction) {
       this.setSwipe(direction);
     }

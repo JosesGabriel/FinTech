@@ -16,8 +16,6 @@
           <SidebarAds />
           <FooterSidebar />
         </div>
-        <!-- TODO put back when implementing -->
-        <!-- <Bulletin /> -->
         <client-only>
           <PopUp />
         </client-only>
@@ -27,6 +25,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 
 import Navbar from "~/components/Navbar";
 import Newsfeed from "~/components/social/Newsfeed";
@@ -39,8 +38,6 @@ import Ad from "~/components/social/Ad";
 import Bulletin from "~/components/Bulletin";
 import PopUp from "~/components/modals/PopUp";
 import SidebarAds from "~/components/social/SidebarAds";
-
-import { mapActions, mapGetters } from "vuex";
 
 export default {
   layout: "main",
