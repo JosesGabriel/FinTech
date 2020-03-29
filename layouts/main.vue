@@ -7,17 +7,15 @@
         down: () => putSwipe('Down')
       }"
   >
-    <NavbarDrawer />
-    <NavbarDrawerRight />
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <client-only>
         <Header class="header__container" />
       </client-only>
-      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" class="componentContainer">
-        <div v-show="showLamp" class="lampBtn">
+      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly}" :fluid="$route.path == '/login/'" class="componentContainer">
+        <div v-if="showLamp" class="lampBtn" :class="{'d-none': $vuetify.breakpoint.smAndDown}">
           <img :src="lampMode" @click="lampSwitch" />
           <img
-            :class="lightSwitch == 1 ? 'd-none' : ''"
+            :class="[lightSwitch == 1 ? 'd-none' : '', {'pr-5':  $vuetify.breakpoint.mdOnly}]"
             class="lightRays_img"
             src="/Lamp-LightRays.svg"
           />
@@ -74,15 +72,11 @@ import {
 
 import Header from "~/components/Header";
 import VyndueDock from "~/components/vyndue/Dock";
-import NavbarDrawer from "~/components/social/drawers/NavbarDrawer";
-import NavbarDrawerRight from "~/components/social/drawers/NavbarDrawerRight";
 
 export default {
   components: {
     Header,
-    VyndueDock,
-    NavbarDrawer,
-    NavbarDrawerRight
+    VyndueDock
   },
   data() {
     return {

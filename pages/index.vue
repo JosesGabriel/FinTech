@@ -1,5 +1,7 @@
 <template>
   <div class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }" dark>
+    <NavbarDrawer />
+    <NavbarDrawerRight />
     <v-row class="mb-5" no-gutters>
       <v-col class="navbar__container hidden-xs-only px-3" sm="2" md="2" lg="3">
         <Navbar v-if="$vuetify.breakpoint.smAndUp" active="social" />
@@ -39,6 +41,9 @@ import Bulletin from "~/components/Bulletin";
 import PopUp from "~/components/modals/PopUp";
 import SidebarAds from "~/components/social/SidebarAds";
 
+import NavbarDrawer from "~/components/social/drawers/NavbarDrawer";
+import NavbarDrawerRight from "~/components/social/drawers/NavbarDrawerRight";
+
 export default {
   layout: "main",
   components: {
@@ -52,7 +57,9 @@ export default {
     PostField,
     PopUp,
     Ad,
-    SidebarAds
+    SidebarAds,
+    NavbarDrawer,
+    NavbarDrawerRight
   },
   computed: {
     ...mapGetters({
