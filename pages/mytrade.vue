@@ -305,8 +305,8 @@
                             <v-col>
                                 <v-img
                                     class="mytrade_image6"
-                                    src="devices.gif"
-                                    width="671"
+                                    src="my_trade_5.gif"
+                                    width="500"
                                 >
                                 </v-img>
                             </v-col>
@@ -653,7 +653,7 @@ export default {
     position: absolute;
 }
 .mytrade_image6 {
-    left: 80px;
+    /*left: 90px;*/
     z-index: 0;
 }
 .google_play2,
