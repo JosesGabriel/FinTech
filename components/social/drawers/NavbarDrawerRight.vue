@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     v-model="drawer"
-    v-if="$vuetify.breakpoint.xsOnly && $route.path != '/watchlist'"
+    v-if="$vuetify.breakpoint.smAndDown && $route.path != '/watchlist'"
     :dark="lightSwitch == 1"
     class="mt-10"
     :class="lightSwitch == 1 ? 'darkmode':'lightmode'"
