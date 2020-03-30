@@ -748,7 +748,7 @@ export default {
             });
             this.links.push({
               url: graphURL.data.url,
-              meta: graphURL.data.meta,
+              meta: graphURL.data.opengraph,
               data: graphURL.data
             });
             this.fetchingMeta = false;

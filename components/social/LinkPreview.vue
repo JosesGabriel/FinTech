@@ -80,7 +80,10 @@ export default {
   computed: {
     hasImage() {
       if (this.meta != null && this.meta.links[0].meta != undefined) {
-        return this.meta.links[0].meta.image != undefined ? true : false;
+        return this.meta.links[0].meta.image != undefined ||
+          this.meta.links[0].meta.images != undefined
+          ? true
+          : false;
       }
       return false;
     },
@@ -100,6 +103,9 @@ export default {
       return this.meta.links[0].meta.description;
     },
     image() {
+      if (this.meta.links[0].meta.images != undefined) {
+        return this.meta.links[0].meta.images[0];
+      }
       return this.meta.links[0].meta.image;
     },
     url() {
