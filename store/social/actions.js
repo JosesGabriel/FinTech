@@ -16,5 +16,8 @@ export default {
   },
   async setConfirmDialog({ commit }, data) {
     await commit("SET_CONFIRMDIALOG", data);
+  },
+  async setDeleteDialog({ commit }, data) {
+    await commit("SET_DELETEDIALOG", data);
   }
 };

@@ -4,5 +4,6 @@ export default () => ({
   newComment: {},
   deleteComment: {},
   updateComment: {},
-  confirmDialog: false
+  confirmDialog: false,
+  deleteDialog: false
 });

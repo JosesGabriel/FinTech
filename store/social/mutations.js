@@ -16,5 +16,8 @@ export default {
   },
   SET_CONFIRMDIALOG(state, data) {
     state.confirmDialog = data;
+  },
+  SET_DELETEDIALOG(state, data) {
+    state.deleteDialog = data;
   }
 };

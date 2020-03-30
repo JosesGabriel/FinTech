@@ -16,5 +16,8 @@ export default {
   },
   confirmDialog(state) {
     return state.confirmDialog;
+  },
+  deleteDialog(state) {
+    return state.deleteDialog;
   }
 };

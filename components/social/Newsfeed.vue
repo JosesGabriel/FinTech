@@ -1,6 +1,10 @@
 <template>
   <v-col class="pa-0">
-    <span v-show="showBanner" class="newPosts_banner caption black--text" @click="fetchNewPost()">
+    <span
+      v-show="showBanner"
+      class="newPosts_banner caption black--text"
+      @click="fetchNewPost()"
+    >
       <v-icon small color="black">mdi-arrow-up</v-icon>
       <span class="font-weight-bold">New posts</span>
     </span>
@@ -13,249 +17,246 @@
     Image posts will be passed to PhotoCarousel.vue <- contains the grid layout arrangement para sa images.
     also contains the carousel modal that is triggered on click.
     -->
-    <v-card
-      v-for="(post, index) in postsObject"
-      :key="index"
-      class="centerPanel__card mb-3"
-      :dark="lightSwitch == 0 ? false : true"
-      outlined
-      :style="{ background: cardBackground }"
-    >
-      <!-- Start of Post Header -->
-      <v-list-item class="pt-1">
-        <router-link :to="'/profile/' + post.user.username" class="no-transform">
-          <v-list-item-avatar class="mr-2" size="42">
-            <v-img
-              class="avatar__border"
-              :src="
-                post.user.profile_image
-                  ? post.user.profile_image
-                  : 'default.png'
-              "
-              @error="post.user.profile_image = 'default.png'"
-            />
-          </v-list-item-avatar>
-        </router-link>
-        <v-list-item-content class="pa-0 ma-0">
-          <v-row>
-            <v-col>
-              <router-link :to="'/profile/' + post.user.username" class="no-transform">
-                <v-list-item-title
-                  class="subtitle-2"
-                  :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
-                >
-                  <strong>{{ post.user.name }}</strong>
-                  <v-chip v-if="$auth.user.data.user.is_backer" class="text-capitalize px-1 ml-1 mt-n1 alpha__badge-chip" x-small color="alpha">ALPHA</v-chip>
-                </v-list-item-title>
-              </router-link>
-              <v-list-item-subtitle class="overline no-transform">
-                {{ localFormat(post.created_at, "fn") }}
-                <span
-                  v-if="post.tagged_stocks && post.tagged_stocks.length != 0"
-                  class="success--text overline post--sentiment pa-05"
-                >
-                  <v-btn
-                    v-if="post.tagged_stocks[0].tag_meta.sentiment == 'bull'"
-                    icon
-                    outlined
-                    fab
-                    width="14"
-                    height="14"
-                    color="success"
-                  >
-                    <img src="/icon/bullish.svg" width="6" />
-                  </v-btn>
-                  <v-btn v-else icon outlined fab width="14" height="14" color="error">
-                    <img src="/icon/bearish.svg" width="6" />
-                  </v-btn>
-                </span>
-              </v-list-item-subtitle>
-            </v-col>
-            <v-col class="text-right">
-              <v-icon
-                color="secondary"
-                class="postOptions__btn"
-                @click="
-                  (postOptionsMode = !postOptionsMode), (currentPost = index)
-                "
-              >mdi-dots-horizontal</v-icon>
-              <div v-if="postOptionsMode && currentPost == index">
-                <div class="postOptions__container">
-                  <!-- Start Delete Dialog -->
-                  <v-dialog v-model="deleteDialog" width="500">
-                    <v-card
-                      :color="lightSwitch == 0 ? 'lightcard' : '#00121e'"
-                      :dark="lightSwitch == 0 ? false : true"
-                    >
-                      <v-card-title class="py-2 pl-3">
-                        <span class="body-1 font-weight-bold">Delete Post?</span>
-                      </v-card-title>
-                      <v-divider></v-divider>
-                      <v-card-text>
-                        <v-content class="mx-4 mt-3">
-                          <span class="caption font-weight-bold">
-                            Are you sure you want to permanently remove this
-                            post from Lyduz?
-                          </span>
-                        </v-content>
-                      </v-card-text>
-
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-
-                        <v-btn
-                          class="font-weight-bold text-capitalize caption"
-                          text
-                          depressed
-                          :dark="lightSwitch == true"
-                          dense
-                          @click="deleteDialog = false"
-                        >Cancel</v-btn>
-
-                        <v-hover v-slot:default="{ hover }">
-                          <v-btn
-                            v-if="post.user.uuid == $auth.user.data.user.uuid"
-                            :dark="lightSwitch == 1"
-                            class="black--text font-weight-bold text-capitalize caption"
-                            :color="!hover ? 'success' : 'successhover'"
-                            elevation="1"
-                            @click="
-                              deletePost(post.id, index), (deleteDialog = false)
-                            "
-                          >Delete</v-btn>
-                        </v-hover>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                  <!-- End Delete Dialog -->
-                  <v-list dense class="postOptions__list" elevation="8">
-                    <v-list-item-group class="postOptions__itemgroup">
-                      <v-list-item
-                        v-if="post.user.uuid == $auth.user.data.user.uuid"
-                        class="postOptions__listitem"
-                        x-small
-                        text
-                        @click="
-                          (editPostMode = !editPostMode), (currentPost = index)
-                        "
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title class="text-center caption">Edit</v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                      <v-list-item
-                        v-if="post.user.uuid == $auth.user.data.user.uuid"
-                        class="postOptions__listitem"
-                        x-small
-                        text
-                        @click.stop="deleteDialog = true"
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title class="text-center caption">Delete</v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                      <v-list-item
-                        v-if="post.user.uuid != $auth.user.data.user.uuid"
-                        x-small
-                        text
-                        @click="followAccount(post.user.uuid)"
-                      >
-                        <v-list-item-content>
-                          <v-list-item-title class="text-center caption">Follow</v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </v-list-item-group>
-                  </v-list>
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-        </v-list-item-content>
-      </v-list-item>
-      <!-- End of Post Header -->
-      <!-- Start of Post Body -->
-      <v-list-item class="pa-0 ma-0">
-        <v-list-item-content class="ma-0 pa-0">
-          <div
-            v-if="
-              editPostMode &&
-                post.user.uuid == $auth.user.data.user.uuid &&
-                currentPost == index
-            "
+    <transition-group name="list" tag="div">
+      <v-card
+        v-for="(post, index) in postsObject"
+        :key="post.id"
+        class="centerPanel__card mb-3 list-item"
+        :dark="lightSwitch == 0 ? false : true"
+        outlined
+        :style="{ background: cardBackground }"
+      >
+        <!-- Start of Post Header -->
+        <v-list-item class="pt-1">
+          <router-link
+            :to="'/profile/' + post.user.username"
+            class="no-transform"
           >
-            <v-textarea
-              v-model="editTextAreaModel[index]"
-              outlined
-              :placeholder="post.content"
-              dense
-              hide-details
-            ></v-textarea>
-            <v-btn small outlined @click="editPostMode = false">Cancel</v-btn>
-            <v-btn
-              small
-              outlined
-              @click="
-                editPost(post.id, editTextAreaModel[index], index),
-                  (editPostMode = false)
+            <v-list-item-avatar class="mr-2" size="42">
+              <v-img
+                class="avatar__border"
+                :src="
+                  post.user.profile_image
+                    ? post.user.profile_image
+                    : 'default.png'
+                "
+                @error="post.user.profile_image = 'default.png'"
+              />
+            </v-list-item-avatar>
+          </router-link>
+          <v-list-item-content class="pa-0 ma-0">
+            <v-row>
+              <v-col>
+                <router-link
+                  :to="'/profile/' + post.user.username"
+                  class="no-transform"
+                >
+                  <v-list-item-title
+                    class="subtitle-2"
+                    :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
+                  >
+                    <strong>{{ post.user.name }}</strong>
+                    <v-chip
+                      v-if="$auth.user.data.user.is_backer"
+                      class="text-capitalize px-1 ml-1 mt-n1 alpha__badge-chip"
+                      x-small
+                      color="alpha"
+                      >ALPHA</v-chip
+                    >
+                  </v-list-item-title>
+                </router-link>
+                <v-list-item-subtitle class="overline no-transform">
+                  {{ localFormat(post.created_at, "fn") }}
+                  <span
+                    v-if="post.tagged_stocks && post.tagged_stocks.length != 0"
+                    class="success--text overline post--sentiment pa-05"
+                  >
+                    <v-btn
+                      v-if="post.tagged_stocks[0].tag_meta.sentiment == 'bull'"
+                      icon
+                      outlined
+                      fab
+                      width="14"
+                      height="14"
+                      color="success"
+                    >
+                      <img src="/icon/bullish.svg" width="6" />
+                    </v-btn>
+                    <v-btn
+                      v-else
+                      icon
+                      outlined
+                      fab
+                      width="14"
+                      height="14"
+                      color="error"
+                    >
+                      <img src="/icon/bearish.svg" width="6" />
+                    </v-btn>
+                  </span>
+                </v-list-item-subtitle>
+              </v-col>
+              <v-col class="text-right">
+                <v-icon
+                  color="secondary"
+                  class="postOptions__btn"
+                  @click="
+                    (postOptionsMode = !postOptionsMode), (currentPost = index)
+                  "
+                  >mdi-dots-horizontal</v-icon
+                >
+                <div v-if="postOptionsMode && currentPost == index">
+                  <div class="postOptions__container">
+                    <!-- Start Delete Dialog -->
+                    <DeletePostDialog
+                      :index="index"
+                      :post="post"
+                      @deletePost="deletePost(post.id, index)"
+                    />
+                    <!-- End Delete Dialog -->
+                    <v-list dense class="postOptions__list" elevation="8">
+                      <v-list-item-group class="postOptions__itemgroup">
+                        <v-list-item
+                          v-if="post.user.uuid == $auth.user.data.user.uuid"
+                          class="postOptions__listitem"
+                          x-small
+                          text
+                          @click="
+                            (editPostMode = !editPostMode),
+                              (currentPost = index)
+                          "
+                        >
+                          <v-list-item-content>
+                            <v-list-item-title class="text-center caption"
+                              >Edit</v-list-item-title
+                            >
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-divider></v-divider>
+                        <v-list-item
+                          v-if="post.user.uuid == $auth.user.data.user.uuid"
+                          class="postOptions__listitem"
+                          x-small
+                          text
+                          @click.prevent="setDeleteDialog(true)"
+                        >
+                          <v-list-item-content>
+                            <v-list-item-title class="text-center caption"
+                              >Delete</v-list-item-title
+                            >
+                          </v-list-item-content>
+                        </v-list-item>
+                        <v-list-item
+                          v-if="post.user.uuid != $auth.user.data.user.uuid"
+                          x-small
+                          text
+                          @click="followAccount(post.user.uuid)"
+                        >
+                          <v-list-item-content>
+                            <v-list-item-title class="text-center caption"
+                              >Follow</v-list-item-title
+                            >
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list-item-group>
+                    </v-list>
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+          </v-list-item-content>
+        </v-list-item>
+        <!-- End of Post Header -->
+        <!-- Start of Post Body -->
+        <v-list-item class="pa-0 ma-0">
+          <v-list-item-content class="ma-0 pa-0">
+            <div
+              v-if="
+                editPostMode &&
+                  post.user.uuid == $auth.user.data.user.uuid &&
+                  currentPost == index
               "
-            >Done Editing</v-btn>
-          </div>
+            >
+              <v-textarea
+                v-model="editTextAreaModel[index]"
+                outlined
+                :placeholder="post.content"
+                dense
+                hide-details
+              ></v-textarea>
+              <v-btn small outlined @click="editPostMode = false">Cancel</v-btn>
+              <v-btn
+                small
+                outlined
+                @click="
+                  editPost(post.id, editTextAreaModel[index], index),
+                    (editPostMode = false)
+                "
+                >Done Editing</v-btn
+              >
+            </div>
 
-          <div v-else class="body-2 px-5 pb-3 post__Content">
-            <span v-show="!showLinkImageOnly(post)" v-html="post.content"></span>
-          </div>
+            <div v-else class="body-2 px-5 pb-3 post__Content">
+              <span
+                v-show="!showLinkImageOnly(post)"
+                v-html="post.content"
+              ></span>
+            </div>
 
-          <PhotoCarousel :images="post.attachments" />
-          <LinkPreview v-if="hasMetaLink(post)" :meta="post.meta" @visitLink="openConfirmDialog" />
-        </v-list-item-content>
-      </v-list-item>
-      <!-- End of Post Body -->
-      <v-divider></v-divider>
-      <v-card-actions class="pl-4 py-2">
-        <v-btn
-          icon
-          outlined
-          fab
-          width="24"
-          height="24"
-          color="success"
-          class="bull__btn"
-          :class="
-            post.my_sentiment && post.my_sentiment.type == 'bull'
-              ? 'bull__btn--active'
-              : ''
-          "
-          :disabled="reactButtons"
-          @click="postReact(post.id, 'bull', index)"
-        >
-          <img src="/icon/bullish.svg" width="12" />
-        </v-btn>
-        <span class="px-2 caption">{{ post.bulls_count }}</span>
-        <v-btn
-          icon
-          outlined
-          fab
-          width="24"
-          height="24"
-          color="error"
-          class="bear__btn"
-          :class="
-            post.my_sentiment && post.my_sentiment.type == 'bear'
-              ? 'bear__btn--active'
-              : ''
-          "
-          :disabled="reactButtons"
-          @click="postReact(post.id, 'bear', index)"
-        >
-          <img src="/icon/bearish.svg" width="12" />
-        </v-btn>
-        <span class="px-2 caption">{{ post.bears_count }}</span>
-        <v-spacer></v-spacer>
-        <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
-        <span class="caption">{{ post.comment_descendants_count }}</span>
-        <!-- TODO Share counter -->
-        <!-- <v-btn
+            <PhotoCarousel :images="post.attachments" />
+            <LinkPreview
+              v-if="hasMetaLink(post)"
+              :meta="post.meta"
+              @visitLink="openConfirmDialog"
+            />
+          </v-list-item-content>
+        </v-list-item>
+        <!-- End of Post Body -->
+        <v-divider></v-divider>
+        <v-card-actions class="pl-4 py-2">
+          <v-btn
+            icon
+            outlined
+            fab
+            width="24"
+            height="24"
+            color="success"
+            class="bull__btn"
+            :class="
+              post.my_sentiment && post.my_sentiment.type == 'bull'
+                ? 'bull__btn--active'
+                : ''
+            "
+            :disabled="reactButtons"
+            @click="postReact(post.id, 'bull', index)"
+          >
+            <img src="/icon/bullish.svg" width="12" />
+          </v-btn>
+          <span class="px-2 caption">{{ post.bulls_count }}</span>
+          <v-btn
+            icon
+            outlined
+            fab
+            width="24"
+            height="24"
+            color="error"
+            class="bear__btn"
+            :class="
+              post.my_sentiment && post.my_sentiment.type == 'bear'
+                ? 'bear__btn--active'
+                : ''
+            "
+            :disabled="reactButtons"
+            @click="postReact(post.id, 'bear', index)"
+          >
+            <img src="/icon/bearish.svg" width="12" />
+          </v-btn>
+          <span class="px-2 caption">{{ post.bears_count }}</span>
+          <v-spacer></v-spacer>
+          <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
+          <span class="caption">{{ post.comment_descendants_count }}</span>
+          <!-- TODO Share counter -->
+          <!-- <v-btn
           icon
           fab
           x-small
@@ -265,48 +266,58 @@
           <v-icon>mdi-share-variant</v-icon>
         </v-btn>
         <span class="caption">1000</span>-->
-      </v-card-actions>
-      <v-divider></v-divider>
-      <List :comments="post.comments" :postindex="index" :postid="post.id" />
-      <!-- Start of Comment -->
-      <v-divider v-if="post.comments.length > 0"></v-divider>
-      <v-list-item class="ma-0">
-        <router-link :to="'/profile/' + $auth.user.data.user.username" class="no-transform">
-          <v-list-item-avatar size="28" class="mr-2">
-            <img
-              class="avatar__border"
-              :src="
-                $auth.user.data.user.profile_image
-                  ? $auth.user.data.user.profile_image
-                  : 'default.png'
-              "
-            />
-          </v-list-item-avatar>
-        </router-link>
-        <v-list-item-content class="pt-2 mb-0">
-          <v-text-field
-            dense
-            rounded
-            hide-details
-            placeholder="Write a comment..."
-            class="caption"
-            color="primary"
-            :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
-            :dark="lightSwitch == 0 ? false : true"
-            :value="commentValue"
-            @keyup.enter="postComment(post.id, $event.target.value, index)"
-          ></v-text-field>
-        </v-list-item-content>
-      </v-list-item>
-      <!-- End of Comment -->
-      <!-- <v-divider></v-divider> -->
+        </v-card-actions>
+        <v-divider></v-divider>
+        <List :comments="post.comments" :postindex="index" :postid="post.id" />
+        <!-- Start of Comment -->
+        <v-divider v-if="post.comments.length > 0"></v-divider>
+        <v-list-item class="ma-0">
+          <router-link
+            :to="'/profile/' + $auth.user.data.user.username"
+            class="no-transform"
+          >
+            <v-list-item-avatar size="28" class="mr-2">
+              <img
+                class="avatar__border"
+                :src="
+                  $auth.user.data.user.profile_image
+                    ? $auth.user.data.user.profile_image
+                    : 'default.png'
+                "
+              />
+            </v-list-item-avatar>
+          </router-link>
+          <v-list-item-content class="pt-2 mb-0">
+            <v-text-field
+              dense
+              rounded
+              hide-details
+              placeholder="Write a comment..."
+              class="caption"
+              color="primary"
+              :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
+              :dark="lightSwitch == 0 ? false : true"
+              :value="commentValue"
+              @keyup.enter="postComment(post.id, $event.target.value, index)"
+            ></v-text-field>
+          </v-list-item-content>
+        </v-list-item>
+        <!-- End of Comment -->
+        <!-- <v-divider></v-divider> -->
 
-      <!-- Start of Subcomment -->
+        <!-- Start of Subcomment -->
 
-      <!-- End of Subcomment -->
-    </v-card>
-    <Share v-if="showShare" :postid="sharePostID" @closeModal="showShare = false" />
-    <ConfirmDialog text="You will open a link outside of Lyduz. Do you wish to continue?">
+        <!-- End of Subcomment -->
+      </v-card>
+    </transition-group>
+    <Share
+      v-if="showShare"
+      :postid="sharePostID"
+      @closeModal="showShare = false"
+    />
+    <ConfirmDialog
+      text="You will open a link outside of Lyduz. Do you wish to continue?"
+    >
       <template>
         <v-hover v-slot:default="{ hover }">
           <v-btn
@@ -315,7 +326,8 @@
             :color="!hover ? 'success' : 'successhover'"
             elevation="1"
             @click.prevent="onLinkClick(false)"
-          >Okay</v-btn>
+            >Okay</v-btn
+          >
         </v-hover>
       </template>
     </ConfirmDialog>
@@ -331,6 +343,9 @@ import PhotoCarousel from "~/components/social/PhotoCarousel";
 import LinkPreview from "~/components/social/LinkPreview";
 import Share from "~/components/modals/Share";
 import ConfirmDialog from "~/components/modals/Confirm";
+
+import DeletePostDialog from "~/components/social/card/DeletePostDialog";
+
 export default {
   name: "Newsfeed",
   components: {
@@ -338,7 +353,8 @@ export default {
     PhotoCarousel,
     LinkPreview,
     Share,
-    ConfirmDialog
+    ConfirmDialog,
+    DeletePostDialog
   },
   props: {
     newPost: {
@@ -366,9 +382,8 @@ export default {
       pageCount: 1,
       editTextAreaModel: [],
       currentPost: "",
-      deleteDialog: false,
       editPostMode: false,
-      postOptionsMode: false,
+      postOptionsMode: false, // tiny menu on the right
       showShare: false,
       sharePostID: "",
       numberPost: 0,
@@ -392,11 +407,6 @@ export default {
     }
   },
   watch: {
-    deleteDialog(value) {
-      if (value == false && this.postOptionsMode == true) {
-        this.postOptionsMode = false;
-      }
-    },
     /**
      * Fires when user submits a new post.
      * Creates a new object based on submitted post and unshifts postsObject
@@ -509,7 +519,8 @@ export default {
   methods: {
     ...mapActions({
       setAlert: "global/setAlert",
-      setConfirmDialog: "social/setConfirmDialog"
+      setConfirmDialog: "social/setConfirmDialog",
+      setDeleteDialog: "social/setDeleteDialog"
     }),
     addDynamicTime: AddDynamicTime,
     localFormat: LocalFormat,
@@ -688,9 +699,10 @@ export default {
       this.$api.social.actions
         .delete(id)
         .then(response => {
-          this.triggerAlert(true, response.message);
-          this.postsObject.splice(index, 1);
           this.postOptionsMode = false;
+          this.setDeleteDialog(false);
+          this.postsObject.splice(index, 1);
+          this.triggerAlert(true, response.message);
         })
         .catch(e => {
           this.triggerAlert(true, e.message);
@@ -945,7 +957,10 @@ export default {
         if (post.meta.links != undefined && post.meta.links.length > 0) {
           if (post.meta.links[0].meta != undefined) {
             const hasImage =
-              post.meta.links[0].meta.image != undefined ? true : false;
+              post.meta.links[0].meta.image != undefined ||
+              post.meta.links[0].meta.images != undefined
+                ? true
+                : false;
             let content = post.content.replace(
               /<\/?("[^"]*"|'[^']*'|[^>])*(>|$)/g,
               ""
@@ -1040,5 +1055,24 @@ export default {
 }
 .post__Content {
   white-space: pre-wrap;
+}
+
+.list-item {
+  display: block;
+}
+.list-enter-active {
+  transition: all 1s;
+}
+.list-enter {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-leave-to {
+  transition: all 0.5s;
+}
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(-50px);
 }
 </style>
