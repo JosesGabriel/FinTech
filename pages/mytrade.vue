@@ -46,13 +46,13 @@
                                     </v-btn>
                                 </div>
                             </v-col>
-                            <v-col class="ml-0 pl-0">
+                            <v-col class="ml-0 pl-1">
                                 <div class="text-center">
                                     <v-btn 
                                         rounded 
                                         outlined
                                         class="text-capitalize"
-                                        width="180"
+                                        width="170"
                                         color="#0f911e"
                                     >Learn more</v-btn>
                                 </div>
@@ -132,6 +132,7 @@
                         <v-img
                             class="mytrade_image2"
                             src="13715.webp"
+                            width="455"
                         >
                         </v-img>
                     </v-col>
@@ -573,12 +574,12 @@ export default {
 <style scoped>
 .mytrade_logo {
     position: absolute;
-    top: 60px;
+    top: 30px;
     right: 15%;
 }
 .mytrade_headertext {
     position: absolute;
-    top: 270px;
+    top: 230px;
     right: 10%;
     background: transparent;
     width: 30%;
@@ -586,7 +587,7 @@ export default {
 .mytrade_headertext_title {
     font-size: 45px;
     font-weight: bolder;
-    font-family:montserrat,sans-serif;
+    font-family:montserrat,sans-serif !important;
     line-height: 1.1em;
 }
 .mytrade__people{
@@ -625,6 +626,7 @@ export default {
 }
 .mytrade_divider{
     border-color: rgb(53, 212, 65);
+    background: rgb(53, 212, 65);
     border-width: 2px;
     width: 380px;
     margin-left: 40px;
