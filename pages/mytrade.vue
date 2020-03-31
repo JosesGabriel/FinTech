@@ -2,7 +2,7 @@
     <v-content>      
             <v-row no-gutters class="mb-12">                 
                     <v-img
-                        src="mytrade_image1.webp"
+                        src="mytrade_image01.png"
                         width="100%"
                     >
                     </v-img>
@@ -86,7 +86,8 @@
                 class="mytrade__container mt-12"
             >
                 <v-row class="px-12 my-12">
-                    <v-col>
+                    <v-col class="mytrade__valuable">
+
                         <v-row>
                             <v-col cols="4">
                                 <span class="mytrade__numtitle ma-0 pa-0">01</span>
@@ -97,6 +98,14 @@
                             </v-col>
                         </v-row>
                         <v-divider class="mytrade_divider"></v-divider>
+
+                                <!--<v-img
+                                    src="image8.png"
+                                    width="230px"
+                                    class="mytrade_image8"
+                                >
+                                </v-img>-->
+
                         <v-row>
                             <v-col cols="12">
                                 <p class="mytrade__indent">
@@ -125,6 +134,7 @@
                                     </v-btn>
                             </v-col>
                         </v-row>
+                                
 
                     </v-col>
 
@@ -649,12 +659,19 @@ export default {
 }
 .mytrade_image4,
 .mytrade_image5,
-.mytrade_image6 {
+.mytrade_image6,
+.mytrade_image7 {
     position: absolute;
 }
 .mytrade_image6 {
     /*left: 90px;*/
     z-index: 0;
+}
+.mytrade_image8{
+    position: absolute;
+    transform: rotate(10deg);
+    left: 300px;
+    top: 1050px;
 }
 .google_play2,
 .app_store2{
