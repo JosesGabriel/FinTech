@@ -29,10 +29,14 @@
       @keydown.enter="editComment(comment.id, $event.target.value)"
     ></v-text-field>
     <v-list-item-content v-else class="pa-0 ma-0">
-      <v-container class="pa-0 body-2">
-        <span class="text--darken-2 caption font-weight-black">{{
-          comment.user.name
-        }}</span>
+      <v-container
+        class="pa-0 body-2"
+        :class="[
+          { 'black--text': lightSwitch == 0 },
+          { 'white--text': lightSwitch == 1 }
+        ]"
+      >
+        <span class="caption font-weight-black">{{ comment.user.name }}</span>
 
         <span v-if="comment.user.uuid == $auth.user.data.user.uuid">
           <v-btn
