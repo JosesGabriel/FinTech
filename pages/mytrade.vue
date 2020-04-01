@@ -1,5 +1,7 @@
 <template>
-    <v-content>      
+    <v-content >     
+        <v-row>
+
             <v-row no-gutters class="mb-12">                 
                     <v-img
                         src="mytrade_image01.png"
@@ -97,7 +99,7 @@
                                 <p class="ma-0 pa-0">Based Recommendations</p>
                             </v-col>
                         </v-row>
-                        <v-divider class="mytrade_divider"></v-divider>
+                        <v-divider id="mytrade_divider_01"></v-divider>
 
                         <v-row>
                             <v-col cols="12">
@@ -160,7 +162,7 @@
                                 <p class="ma-0 pa-0">Portfolios</p>
                             </v-col>
                         </v-row>
-                        <v-divider class="mytrade_divider"></v-divider>
+                        <v-divider id="mytrade_divider_02"></v-divider>
                         <v-row>
                             <v-col cols="12">
                                 <p class="mytrade__indent">
@@ -202,7 +204,7 @@
                                 <p class="ma-0 pa-0">Order routes</p>
                             </v-col>
                         </v-row>
-                        <v-divider class="mytrade_divider"></v-divider>
+                        <v-divider id="mytrade_divider_03"></v-divider>
                         <v-row>
                             <v-col cols="12">
                                 <p class="mytrade__indent">
@@ -259,7 +261,7 @@
                                 <p class="ma-0 pa-0">Performance</p>
                             </v-col>
                         </v-row>
-                        <v-divider class="mytrade_divider"></v-divider>
+                        <v-divider id="mytrade_divider_04"></v-divider>
                         <v-row>
                             <v-col cols="12">
                                 <p class="mytrade__indent">
@@ -343,7 +345,7 @@
                                 <p class="pl-12">Available on all devices</p>
                             </v-col>
                         </v-row>
-                        <v-divider class="mytrade_divider"></v-divider>
+                        <v-divider id="mytrade_divider_05"></v-divider>
                         <v-row>
                             <v-col cols="12">
                                 <p class="mytrade__indent" style="font-size: 20px;">
@@ -451,7 +453,7 @@
                             <v-row class="mb-12 pl-3">
                                 <h3>Reach out to us</h3>
                             </v-row>
-                            <v-divider class="divider__footer"></v-divider>
+                            <v-divider id="divider__footer01"></v-divider>
                             <v-row>
                                 <v-col cols="12 py-0 pr-12">
                                     <v-text-field
@@ -513,7 +515,7 @@
                             <v-row class="mb-12 pl-3">
                                 <h3>Download MyTrade</h3>
                             </v-row>
-                            <v-divider class="divider__footer"></v-divider>
+                            <v-divider id="divider__footer02"></v-divider>
                             <v-row>
                                 <v-col>
                                     <v-img
@@ -550,7 +552,7 @@
                             <v-row class="mb-12 pl-12">
                                 <h3>Contact</h3>
                             </v-row>
-                            <v-divider class="divider__footer ml-10"></v-divider>
+                            <v-divider class="ml-10" id="divider__footer03"></v-divider>
                             <v-row style="font-size: 12px;" class="pl-12">
                                 <p>2904-A East Tower, <br />
                                 Philippine Stock Exchange Center, <br />
@@ -567,11 +569,96 @@
                     </v-row>
             </v-row>
 
+        </v-row>
+
     </v-content>
 </template>
 <script>
 export default {
-    
+  data() {
+    return {
+        divscrolltop: 0,
+        animate: 0,
+        isScrolled01: false,
+        isScrolled02: false,
+        isScrolled03: false,
+        isScrolled04: false,
+        isScrolled05: false,
+        isScrolled06: false,
+    };
+  },
+  mounted () {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  methods: {
+    handleScroll (event) {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if(scrollTop >= 1000 && scrollTop <= 1180){
+            const item = document.getElementById('mytrade_divider_01');
+           if(!this.isScrolled01){ 
+                this.lineAnimation(item);
+                this.isScrolled01 = true;  
+           }
+         }else if(scrollTop >= 1320 && scrollTop <= 1700){
+            const item = document.getElementById('mytrade_divider_02');
+            if(!this.isScrolled02){ 
+                this.lineAnimation(item);
+                this.isScrolled02 = true;  
+           }     
+         }else if(scrollTop >= 1980 && scrollTop <= 2300){
+            const item = document.getElementById('mytrade_divider_03');
+            if(!this.isScrolled03){ 
+                this.lineAnimation(item);
+                this.isScrolled03 = true;  
+           }     
+         }else if(scrollTop >= 2400 && scrollTop <= 2700){
+            const item = document.getElementById('mytrade_divider_04');
+            if(!this.isScrolled04){ 
+                this.lineAnimation(item);
+                this.isScrolled04 = true;  
+           }     
+         }else if(scrollTop >= 3500 && scrollTop <= 3800){
+            const item = document.getElementById('mytrade_divider_05');
+            if(!this.isScrolled05){ 
+                this.lineAnimation(item);
+                this.isScrolled05 = true;  
+           }     
+         }else if(scrollTop >= 4450 && scrollTop <= 4700){
+            const item1 = document.getElementById('divider__footer01');
+            const item2 = document.getElementById('divider__footer02');
+            const item3 = document.getElementById('divider__footer03');
+            let div = 'footer';
+            if(!this.isScrolled06){        
+                   this.lineAnimation(item1, div);      
+                   this.lineAnimation(item2, div);
+                   this.lineAnimation(item3, div);
+                this.isScrolled06 = true;  
+           }     
+         }
+        
+        
+    },
+    lineAnimation(item, div){
+            let max = 0;
+            if(div != null){
+                max = 170;
+            }else{
+                max = 380;
+            }
+            let width = 0;             
+                setInterval(function() {
+                        if (width >= max) {
+                                clearInterval();              
+                            } else {
+                                width = width + 10;
+                                item.style.width = width + 'px';
+                            }
+                    }, 10);    
+    },
+  }
 }
 </script>
 <style scoped>
@@ -636,11 +723,26 @@ export default {
     position: relative;
     top: -18px;
 }
+#mytrade_divider_01,
+#mytrade_divider_02,
+#mytrade_divider_03,
+#mytrade_divider_04,
+#mytrade_divider_05 {
+    border-color: rgb(53, 212, 65);
+    background: rgb(53, 212, 65);
+    border-width: 2px;
+    width: 0%;
+    margin-left: 40px;
+    position: relative;
+    top: -18px;
+}
 
-.divider__footer {
+#divider__footer01,
+#divider__footer02,
+#divider__footer03 {
     border: 1px solid rgba(212, 210, 0, 1);
     background: rgba(212, 210, 0, 1);
-    width: 170px;
+    width: 0px;
     margin-bottom: 20px;
 }
 .mytrade__indent{
