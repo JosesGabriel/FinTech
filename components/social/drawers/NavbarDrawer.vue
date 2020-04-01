@@ -4,6 +4,7 @@
     v-if="$vuetify.breakpoint.xsOnly"
     :dark="lightSwitch == 1"
     class="mt-10 pt-3"
+    :class="lightSwitch == 1 ? 'darkmode':'lightmode'"
     fixed
     app
   >
@@ -11,7 +12,7 @@
       <v-list-item-group>
         <router-link
           :to="
-              $auth.loggedIn ? '/profile/' + $auth.user.data.user.username : ''
+              $auth.loggedIn && $vuetify.breakpoint.mdAndUp ? '/profile/' + $auth.user.data.user.username : ''
             "
           class="no-transform"
         >
@@ -56,7 +57,7 @@
             </v-list-item-content>
           </v-list-item>
         </router-link>
-        <router-link to="/chart" class="no-transform">
+        <router-link :to="$vuetify.breakpoint.mdAndUp ? '/chart' : ''" class="no-transform">
           <v-list-item
             :class="active == 'chart' ? 'v-list-item--active' : ''"
             class="tertiary--text"
@@ -70,7 +71,7 @@
           </v-list-item>
         </router-link>
 
-        <router-link to="/journal" class="no-transform">
+        <router-link :to="$vuetify.breakpoint.mdAndUp ? '/journal' : ''" class="no-transform">
           <v-list-item
             :class="active == 'journal' ? 'v-list-item--active' : ''"
             class="tertiary--text"
@@ -84,7 +85,7 @@
           </v-list-item>
         </router-link>
 
-        <router-link to="/trade-simulator" class="no-transform">
+        <router-link :to="$vuetify.breakpoint.mdAndUp ? '/trade-simulator' : ''" class="no-transform">
           <v-list-item
             :class="active == 'virtualtrade' ? 'v-list-item--active' : ''"
             class="tertiary--text"

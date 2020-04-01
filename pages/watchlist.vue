@@ -1,5 +1,8 @@
 <template>
   <v-container class="page__wrapper" :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }">
+    
+    <NavbarDrawer />
+    <NavbarDrawerRight />
     <v-row class="mb-5" no-gutters>
       <v-col class="navbar__container hidden-xs-only px-3" cols="1" sm="1" md="1" lg="1">
         <Navbar :data="navbarMiniVariantSetter" active="watchlist" />
@@ -47,12 +50,13 @@
           </div>
           <v-row>
             <v-col
-              v-for="(n, index) in watchListObject.length"
+              v-for="(n, index) in watchListObject"
               :key="n"
               lg="3"
               md="4"
               sm="6"
               xs="12"
+              cols="12"
               class="pt-0"
             >
               <WatchCard :data="index" />
@@ -75,6 +79,9 @@ import PSEICard from "~/components/watchers/PSEICard.vue";
 import SectorIndexList from "~/components/watchers/SectorIndexList.vue";
 import MostWatchedStocks from "~/components/watchers/MostWatchedStocks.vue";
 
+import NavbarDrawer from "~/components/social/drawers/NavbarDrawer";
+import NavbarDrawerRight from "~/components/social/drawers/NavbarDrawerRight";
+
 export default {
   layout: "main",
   components: {
@@ -84,7 +91,9 @@ export default {
     EditDeleteWatcherModal,
     PSEICard,
     SectorIndexList,
-    MostWatchedStocks
+    MostWatchedStocks,
+    NavbarDrawer,
+    NavbarDrawerRight
   },
   head() {
     return {
