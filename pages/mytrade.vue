@@ -99,13 +99,6 @@
                         </v-row>
                         <v-divider class="mytrade_divider"></v-divider>
 
-                                <!--<v-img
-                                    src="image8.png"
-                                    width="230px"
-                                    class="mytrade_image8"
-                                >
-                                </v-img>-->
-
                         <v-row>
                             <v-col cols="12">
                                 <p class="mytrade__indent">
