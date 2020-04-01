@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
 
 export default {
@@ -86,6 +86,9 @@ export default {
     this.getSymbol();
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
     localFormat: LocalFormat,
     addDynamicTime: AddDynamicTime,
 
@@ -123,16 +126,22 @@ export default {
         if (response.success) {
           this.notification.status = "read";
 
-          if (this.meta.user && this.meta.post) {
+          if (this.meta.user && this.meta.post && this.$vuetify.breakpoint.mdAndUp) {
             window.location = "/post/" + this.meta.post.id;
           } else if (
             typeof this.meta.post == "undefined" &&
             typeof this.meta.stock == "undefined" &&
-            this.meta.user
+            this.meta.user && this.$vuetify.breakpoint.mdAndUp
           ) {
             window.location = "/profile/" + this.meta.user.username;
           } else if (this.meta.user && this.meta.stock) {
             window.location = "/watchlist";
+          } else if(typeof this.meta.stock == 'undefined' && this.$vuetify.breakpoint.smAndDown) {
+            this.setAlert({
+            model: true,
+            state: "error",
+            message: "Temporarily not available on mobile."
+          });
           }
         }
       });
