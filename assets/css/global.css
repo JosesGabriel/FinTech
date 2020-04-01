@@ -39,6 +39,7 @@
 .page__wrapper {
     max-width: 1080px !important;
     margin-top: 40px !important;
+    margin: auto;
 }
 
 .page__wrapper.profile-page__wrapper {
