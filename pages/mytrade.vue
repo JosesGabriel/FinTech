@@ -1,10 +1,10 @@
 <template>
-    <v-content >     
+   <v-content > 
         <v-row>
 
             <v-row no-gutters class="mb-12">                 
                     <v-img
-                        src="mytrade_image01.png"
+                        src="mytrade_image010.png"
                         width="100%"
                     >
                     </v-img>
@@ -20,18 +20,17 @@
                     >
                         <v-row class="mytrade_headertext_title">
                             <v-col cols="12" class="ma-0 pa-0">
-                            <p class="ma-0 pa-0" style="letter-spacing: 0.05em;">Trade with</p>
-                            <p style="letter-spacing: 0.05em;">Confidence</p>
+                            <p class="ma-0 pa-0" style="letter-spacing: 0.05em; font-family:montserrat,sans-serif !important;">Trade with</p>
+                            <p style="letter-spacing: 0.05em;font-family:montserrat,sans-serif !important;">Confidence</p>
                             </v-col>
                         </v-row>
                         <v-row>  
                             <v-col cols="12" class="ma-0 pa-0">                 
-                                <p>
-                                    Lorem Ipsum is simply dummy text of the printing and 
-                                    typesetting industry. Lorem Ipsum has been the 
-                                    industry's standard dummy text ever since the 1500s, 
-                                    when an unknown printer took a galley of type and 
-                                    scrambled it to make a type specimen book.
+                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
+                                    Guaranteed 99% uptime so you don't miss out on 
+                                    important market opportunities and react in realtime 
+                                    when the things diverge against your investment 
+                                    forecast. MyTrade™ platform in simple words; reliable.
                                 </p> 
                             </v-col>
                         </v-row>
@@ -90,25 +89,25 @@
                 <v-row class="px-12 my-12">
                     <v-col class="mytrade__valuable">
 
-                        <v-row>
-                            <v-col cols="4">
-                                <span class="mytrade__numtitle ma-0 pa-0">01</span>
+                        <v-row style="color:#0B1C4D;">
+                            <v-col cols="3" >
+                                <span class="mytrade__numtitle ma-0 pa-0" style="font-family:spinnaker,sans-serif !important; font-weight: bold;">01</span>
                             </v-col>
-                            <v-col cols="8" class="mytrade__numtext">
+                            <v-col cols="9" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
                                 <p class="ma-0 pa-0">Valuable Research</p>
                                 <p class="ma-0 pa-0">Based Recommendations</p>
                             </v-col>
                         </v-row>
                         <v-divider id="mytrade_divider_01"></v-divider>
 
-                        <v-row>
+                        <v-row >
                             <v-col cols="12">
-                                <p class="mytrade__indent">
+                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                     Value-added & relevant research done by the country's 
                                     top market analyst spearheaded by Forbe's Top 5 stock 
                                     picker in Asia, Mr. Raymond Niel Franco. 
                                 </p>
-                                <ul class="mytrade__indent">
+                                <ul style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                     <li>Better investment insights</li>
                                     <li>See investments in innovative angles</li>
                                     <li>Stop investing blindly - see the entire landscape</li>
@@ -137,7 +136,7 @@
                         <v-img
                             class="mytrade_image2"
                             src="13715.webp"
-                            width="455"
+                            width="435"
                         >
                         </v-img>
                     </v-col>
@@ -153,11 +152,11 @@
                         </v-img>
                     </v-col>
                     <v-col>
-                        <v-row>
+                        <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
-                                <span class="mytrade__numtitle ma-0 pa-0">02</span>
+                                <span class="mytrade__numtitle ma-0 pa-0" style="font-family:spinnaker,sans-serif !important; font-weight: bold; ">02</span>
                             </v-col>
-                            <v-col cols="8" class="mytrade__numtext">
+                            <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
                                 <p class="ma-0 pa-0">Manage Multiple</p>
                                 <p class="ma-0 pa-0">Portfolios</p>
                             </v-col>
@@ -165,12 +164,12 @@
                         <v-divider id="mytrade_divider_02"></v-divider>
                         <v-row>
                             <v-col cols="12">
-                                <p class="mytrade__indent">
+                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                     Create & manage multiple portfolios 
                                     in a single account. Now you have the power 
                                     to separate portfolios accordingly.  
                                 </p>
-                                <ul class="mytrade__indent">
+                                <ul style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                     <li>Separate your investing & trading portfolio</li>
                                     <li>Manage multiple portfolios with ease</li>
                                     <li>Everything in a single platform</li>
@@ -195,11 +194,11 @@
                 
                 <v-row class="px-12 my-12">
                     <v-col>
-                        <v-row>
+                        <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
-                                <span class="mytrade__numtitle ma-0 pa-0">03</span>
+                                <span class="mytrade__numtitle ma-0 pa-0" style="font-family:spinnaker,sans-serif !important; font-weight: bold;">03</span>
                             </v-col>
-                            <v-col cols="8" class="mytrade__numtext">
+                            <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
                                 <p class="ma-0 pa-0">High-speed</p>
                                 <p class="ma-0 pa-0">Order routes</p>
                             </v-col>
@@ -207,7 +206,7 @@
                         <v-divider id="mytrade_divider_03"></v-divider>
                         <v-row>
                             <v-col cols="12">
-                                <p class="mytrade__indent">
+                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                    We have a skyway of orders that lets you stay
                                    ahead of the rest so you buy & sell based on the 
                                    best price available. We recognize that every 
@@ -247,16 +246,16 @@
                         <v-img
                             class="mytrade_image5"
                             src="MyTrade Performance.webp"
-                            width="525"
+                            width="450"
                         >
                         </v-img>
                     </v-col>
                     <v-col>
-                        <v-row>
+                        <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
-                                <span class="mytrade__numtitle ma-0 pa-0">04</span>
+                                <span class="mytrade__numtitle ma-0 pa-0" style="font-family:spinnaker,sans-serif !important; font-weight: bold;">04</span>
                             </v-col>
-                            <v-col cols="8" class="mytrade__numtext">
+                            <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
                                 <p class="ma-0 pa-0">Proven decades-long</p>
                                 <p class="ma-0 pa-0">Performance</p>
                             </v-col>
@@ -264,7 +263,7 @@
                         <v-divider id="mytrade_divider_04"></v-divider>
                         <v-row>
                             <v-col cols="12">
-                                <p class="mytrade__indent">
+                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                     We are considered to be one of the larger, if not 
                                     the largest, local brokerage firms in terms of 
                                     volume from our institutional business activities. 
@@ -291,7 +290,7 @@
                     </v-col>
                 </v-row>
                 <v-row class="px-12 mt-12">
-                    <v-col cols="12" style="text-align:center;">
+                    <v-col cols="12" style="text-align:center; font-family:montserrat,sans-serif !important;" >
                         <h2>
                             We are bringing the benefits enjoyed by our institutional 
                             clients to retailers. Learn why our clients love us.
@@ -342,19 +341,19 @@
                     <v-col style="z-index: 2;">
                         <v-row>
                             <v-col cols="12" class="mytrade__numtext">
-                                <p class="pl-12">Available on all devices</p>
+                                <p class="pl-12" style="font-family:montserrat,sans-serif !important;">Available on all devices</p>
                             </v-col>
                         </v-row>
                         <v-divider id="mytrade_divider_05"></v-divider>
                         <v-row>
                             <v-col cols="12">
-                                <p class="mytrade__indent" style="font-size: 20px;">
+                                <p class="mytrade__indent" style="font-size: 20px;font-family:spinnaker,sans-serif !important; font-weight: bold;">
                                     Your accounts will always 
                                     be safe and secure with our 
                                     bank-grade security and 
                                     encryption systems   
                                 </p>
-                                <p class="mytrade__indent">
+                                <p class="mytrade__indent" style="font-family:spinnaker,sans-serif !important;">
                                     I'm a paragraph. Click here to add your own 
                                     text and edit me. It’s easy. Just click “Edit 
                                     Text” or double click me to add your own 
@@ -653,7 +652,7 @@ export default {
                         if (width >= max) {
                                 clearInterval();              
                             } else {
-                                width = width + 10;
+                                width = width + 1;
                                 item.style.width = width + 'px';
                             }
                     }, 10);    
@@ -675,9 +674,8 @@ export default {
     width: 30%;
 }
 .mytrade_headertext_title {
-    font-size: 45px;
+    font-size: 40px;
     font-weight: bolder;
-    font-family:montserrat,sans-serif !important;
     line-height: 1.1em;
 }
 .mytrade__people{
@@ -707,7 +705,7 @@ export default {
 .mytrade__numtitle{
     font-size:87px;
     text-align: center;
-    padding-left: 34px !important;
+    /*padding-left: 0px !important;*/
 }
 .mytrade__numtext{
     font-size:25px;
@@ -732,7 +730,7 @@ export default {
     background: rgb(53, 212, 65);
     border-width: 2px;
     width: 0%;
-    margin-left: 40px;
+    margin-left: 0px;
     position: relative;
     top: -18px;
 }
@@ -750,7 +748,7 @@ export default {
 }
 .mytrade_image2 {
     position: absolute;
-    transform: rotate(5deg);
+    transform: rotate(3deg);
 }
 .mytrade_image4,
 .mytrade_image5,
@@ -788,4 +786,5 @@ export default {
 .mytrade_input > .v-input__control > .v-text-field__details {
     display: none;
 }
+
 </style>
