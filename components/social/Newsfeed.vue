@@ -18,303 +18,27 @@
     also contains the carousel modal that is triggered on click.
     -->
     <transition-group name="list" tag="div">
-      <v-card
-        v-for="(post, index) in postsObject"
-        :key="post.id"
-        class="centerPanel__card mb-3 list-item"
-        :dark="lightSwitch == 0 ? false : true"
-        outlined
-        :style="{ background: cardBackground }"
-      >
-        <!-- Start of Post Header -->
-        <v-list-item class="pt-1">
-          <router-link
-            :to="'/profile/' + post.user.username"
-            class="no-transform"
-          >
-            <v-list-item-avatar class="mr-2" size="42">
-              <v-img
-                class="avatar__border"
-                :src="
-                  post.user.profile_image
-                    ? post.user.profile_image
-                    : 'default.png'
-                "
-                @error="post.user.profile_image = 'default.png'"
-              />
-            </v-list-item-avatar>
-          </router-link>
-          <v-list-item-content class="pa-0 ma-0">
-            <v-row>
-              <v-col>
-                <router-link
-                  :to="'/profile/' + post.user.username"
-                  class="no-transform"
-                >
-                  <v-list-item-title
-                    class="subtitle-2"
-                    :class="lightSwitch == 1 ? 'white--text' : 'black--text'"
-                  >
-                    <strong>{{ post.user.name }}</strong>
-                    <v-chip
-                      v-if="$auth.user.data.user.is_backer"
-                      class="text-capitalize px-1 ml-1 mt-n1 alpha__badge-chip"
-                      x-small
-                      color="alpha"
-                      >ALPHA</v-chip
-                    >
-                  </v-list-item-title>
-                </router-link>
-                <v-list-item-subtitle class="overline no-transform">
-                  {{ localFormat(post.created_at, "fn") }}
-                  <span
-                    v-if="post.tagged_stocks && post.tagged_stocks.length != 0"
-                    class="success--text overline post--sentiment pa-05"
-                  >
-                    <v-btn
-                      v-if="post.tagged_stocks[0].tag_meta.sentiment == 'bull'"
-                      icon
-                      outlined
-                      fab
-                      width="14"
-                      height="14"
-                      color="success"
-                    >
-                      <img src="/icon/bullish.svg" width="6" />
-                    </v-btn>
-                    <v-btn
-                      v-else
-                      icon
-                      outlined
-                      fab
-                      width="14"
-                      height="14"
-                      color="error"
-                    >
-                      <img src="/icon/bearish.svg" width="6" />
-                    </v-btn>
-                  </span>
-                </v-list-item-subtitle>
-              </v-col>
-              <v-col class="text-right">
-                <v-icon
-                  color="secondary"
-                  class="postOptions__btn"
-                  @click="
-                    (postOptionsMode = !postOptionsMode), (currentPost = index)
-                  "
-                  >mdi-dots-horizontal</v-icon
-                >
-                <div v-if="postOptionsMode && currentPost == index">
-                  <div class="postOptions__container">
-                    <!-- Start Delete Dialog -->
-                    <DeletePostDialog
-                      :index="index"
-                      :post="post"
-                      @deletePost="deletePost(post.id, index)"
-                    />
-                    <!-- End Delete Dialog -->
-                    <v-list dense class="postOptions__list" elevation="8">
-                      <v-list-item-group class="postOptions__itemgroup">
-                        <v-list-item
-                          v-if="post.user.uuid == $auth.user.data.user.uuid"
-                          class="postOptions__listitem"
-                          x-small
-                          text
-                          @click="
-                            (editPostMode = !editPostMode),
-                              (currentPost = index)
-                          "
-                        >
-                          <v-list-item-content>
-                            <v-list-item-title class="text-center caption"
-                              >Edit</v-list-item-title
-                            >
-                          </v-list-item-content>
-                        </v-list-item>
-                        <v-divider></v-divider>
-                        <v-list-item
-                          v-if="post.user.uuid == $auth.user.data.user.uuid"
-                          class="postOptions__listitem"
-                          x-small
-                          text
-                          @click.prevent="setDeleteDialog(true)"
-                        >
-                          <v-list-item-content>
-                            <v-list-item-title class="text-center caption"
-                              >Delete</v-list-item-title
-                            >
-                          </v-list-item-content>
-                        </v-list-item>
-                        <v-list-item
-                          v-if="post.user.uuid != $auth.user.data.user.uuid"
-                          x-small
-                          text
-                          @click="followAccount(post.user.uuid)"
-                        >
-                          <v-list-item-content>
-                            <v-list-item-title class="text-center caption"
-                              >Follow</v-list-item-title
-                            >
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list-item-group>
-                    </v-list>
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
-          </v-list-item-content>
-        </v-list-item>
-        <!-- End of Post Header -->
-        <!-- Start of Post Body -->
-        <v-list-item class="pa-0 ma-0">
-          <v-list-item-content class="ma-0 pa-0">
-            <div
-              v-if="
-                editPostMode &&
-                  post.user.uuid == $auth.user.data.user.uuid &&
-                  currentPost == index
-              "
-            >
-              <v-textarea
-                v-model="editTextAreaModel[index]"
-                outlined
-                :placeholder="post.content"
-                dense
-                hide-details
-              ></v-textarea>
-              <v-btn small outlined @click="editPostMode = false">Cancel</v-btn>
-              <v-btn
-                small
-                outlined
-                @click="
-                  editPost(post.id, editTextAreaModel[index], index),
-                    (editPostMode = false)
-                "
-                >Done Editing</v-btn
-              >
-            </div>
-
-            <div v-else class="body-2 px-5 pb-3 post__Content">
-              <span
-                v-show="!showLinkImageOnly(post)"
-                v-html="post.content"
-              ></span>
-            </div>
-
-            <PhotoCarousel :images="post.attachments" />
-            <LinkPreview
-              v-if="hasMetaLink(post)"
-              :meta="post.meta"
-              @visitLink="openConfirmDialog"
-            />
-          </v-list-item-content>
-        </v-list-item>
-        <!-- End of Post Body -->
-        <v-divider></v-divider>
-        <v-card-actions class="pl-4 py-2">
-          <v-btn
-            icon
-            outlined
-            fab
-            width="24"
-            height="24"
-            color="success"
-            class="bull__btn"
-            :class="
-              post.my_sentiment && post.my_sentiment.type == 'bull'
-                ? 'bull__btn--active'
-                : ''
-            "
-            :disabled="reactButtons"
-            @click="postReact(post.id, 'bull', index)"
-          >
-            <img src="/icon/bullish.svg" width="12" />
-          </v-btn>
-          <span class="px-2 caption">{{ post.bulls_count }}</span>
-          <v-btn
-            icon
-            outlined
-            fab
-            width="24"
-            height="24"
-            color="error"
-            class="bear__btn"
-            :class="
-              post.my_sentiment && post.my_sentiment.type == 'bear'
-                ? 'bear__btn--active'
-                : ''
-            "
-            :disabled="reactButtons"
-            @click="postReact(post.id, 'bear', index)"
-          >
-            <img src="/icon/bearish.svg" width="12" />
-          </v-btn>
-          <span class="px-2 caption">{{ post.bears_count }}</span>
-          <v-spacer></v-spacer>
-          <v-icon class="pr-2" icon fab small>mdi-comment-text-outline</v-icon>
-          <span class="caption">{{ post.comment_descendants_count }}</span>
-          <!-- TODO Share counter -->
-          <!-- <v-btn
-          icon
-          fab
-          x-small
-          color="secondary"
-          @click="showShareModal(post.id)"
-        >
-          <v-icon>mdi-share-variant</v-icon>
-        </v-btn>
-        <span class="caption">1000</span>-->
-        </v-card-actions>
-        <v-divider></v-divider>
-        <List :comments="post.comments" :postindex="index" :postid="post.id" />
-        <!-- Start of Comment -->
-        <v-divider v-if="post.comments.length > 0"></v-divider>
-        <v-list-item class="ma-0">
-          <router-link
-            :to="'/profile/' + $auth.user.data.user.username"
-            class="no-transform"
-          >
-            <v-list-item-avatar size="28" class="mr-2">
-              <img
-                class="avatar__border"
-                :src="
-                  $auth.user.data.user.profile_image
-                    ? $auth.user.data.user.profile_image
-                    : 'default.png'
-                "
-              />
-            </v-list-item-avatar>
-          </router-link>
-          <v-list-item-content class="pt-2 mb-0">
-            <v-text-field
-              dense
-              rounded
-              hide-details
-              placeholder="Write a comment..."
-              class="caption"
-              color="primary"
-              :background-color="lightSwitch == 0 ? '#e3e9ed' : 'darkcard'"
-              :dark="lightSwitch == 0 ? false : true"
-              :value="commentValue"
-              @keyup.enter="postComment(post.id, $event.target.value, index)"
-            ></v-text-field>
-          </v-list-item-content>
-        </v-list-item>
-        <!-- End of Comment -->
-        <!-- <v-divider></v-divider> -->
-
-        <!-- Start of Subcomment -->
-
-        <!-- End of Subcomment -->
-      </v-card>
+      <v-content v-for="(post, index) in postsObject" :key="post.id">
+        <Post
+          v-if="!post.ads"
+          :post="post"
+          :index="index"
+          @followAccount="followAccount"
+          @postReact="postReact"
+          @postComment="postComment"
+          @editPost="editPost"
+          @showShareModal="showShareModal"
+        />
+        <Ads v-else :image="post.image" :link="post.link" />
+      </v-content>
     </transition-group>
+
     <Share
       v-if="showShare"
       :postid="sharePostID"
       @closeModal="showShare = false"
     />
+    <DeletePostDialog @deletePost="deletePost" />
     <ConfirmDialog
       text="You will open a link outside of Lyduz. Do you wish to continue?"
     >
@@ -325,7 +49,7 @@
             class="black--text font-weight-bold text-capitalize caption"
             :color="!hover ? 'success' : 'successhover'"
             elevation="1"
-            @click.prevent="onLinkClick(false)"
+            @click.prevent="$bus.$emit('onLinkClick', false)"
             >Okay</v-btn
           >
         </v-hover>
@@ -336,24 +60,21 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
+import { AddDynamicTime } from "~/assets/js/helpers/datetime";
 
-import List from "~/components/social/feed/comments/List";
-import PhotoCarousel from "~/components/social/PhotoCarousel";
-import LinkPreview from "~/components/social/LinkPreview";
+import Ads from "~/components/social/feed/Ads";
+import Post from "~/components/social/feed/Post";
 import Share from "~/components/modals/Share";
 import ConfirmDialog from "~/components/modals/Confirm";
-
-import DeletePostDialog from "~/components/social/card/DeletePostDialog";
+import DeletePostDialog from "~/components/social/DeletePostDialog";
 
 export default {
   name: "Newsfeed",
   components: {
-    List,
-    PhotoCarousel,
-    LinkPreview,
     Share,
     ConfirmDialog,
+    Ads,
+    Post,
     DeletePostDialog
   },
   props: {
@@ -380,31 +101,11 @@ export default {
       postsObject: [],
       loader: true,
       pageCount: 1,
-      editTextAreaModel: [],
-      currentPost: "",
-      editPostMode: false,
-      postOptionsMode: false, // tiny menu on the right
       showShare: false,
       sharePostID: "",
       numberPost: 0,
-      showBanner: false,
-      reactButtons: false,
-      commentValue: "",
-      linkURL: ""
+      showBanner: false
     };
-  },
-  computed: {
-    ...mapGetters({
-      lightSwitch: "global/getLightSwitch",
-      newPosts: "global/getNewPosts",
-      newComment: "social/getNewComment",
-      deleteComment: "social/getDeleteComment",
-      updateComment: "social/getUpdateComment",
-      confirmDialog: "social/confirmDialog"
-    }),
-    cardBackground() {
-      return this.lightSwitch == 0 ? "#ffffff" : "#142530";
-    }
   },
   watch: {
     /**
@@ -495,6 +196,20 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch",
+      newPosts: "global/getNewPosts",
+      newComment: "social/getNewComment",
+      deleteComment: "social/getDeleteComment",
+      updateComment: "social/getUpdateComment",
+      confirmDialog: "social/confirmDialog",
+      selectedPost: "social/selectedPost"
+    }),
+    cardBackground() {
+      return this.lightSwitch == 0 ? "#ffffff" : "#142530";
+    }
+  },
   mounted() {
     if (this.postid) {
       this.searchPost();
@@ -518,57 +233,25 @@ export default {
   },
   methods: {
     ...mapActions({
-      setAlert: "global/setAlert",
       setConfirmDialog: "social/setConfirmDialog",
-      setDeleteDialog: "social/setDeleteDialog"
+      setDeleteDialog: "social/setDeleteDialog",
+      setReactButtons: "social/setReactButtons",
+      setAlert: "global/setAlert"
     }),
     addDynamicTime: AddDynamicTime,
-    localFormat: LocalFormat,
-
+    /**
+     * add ads for every 10 posts randomly
+     *
+     * @param   {Array}  posts post objects
+     *
+     * @return  {Array}  post parsed
+     */
     postCounter() {
       if (this.numberPost >= 5 && this.$route.path === "/") {
         this.showBanner = true;
       } else {
         this.showBanner = false;
       }
-    },
-    putNumberComment() {
-      for (let i = 0; i < this.postsObject.length; i++) {
-        if (this.postsObject[i].id === this.newPosts.data.post.id) {
-          this.postsObject[i].comment_descendants_count++;
-        }
-      }
-    },
-    putNumberSentiments(post_id) {
-      const post = this.newPosts.data.post;
-
-      this.postsObject.forEach((e, i) => {
-        if (e.id === post_id) {
-          this.postsObject[i].bulls_count = post.bulls;
-          this.postsObject[i].bears_count = post.bears;
-          //  this.postsObject[i].my_sentiment = this.newPosts.data.sentiment.type;
-        }
-      });
-    },
-    /**
-     * fires when user clicks follow button
-     *
-     * @param   {string}  user_id
-     *
-     * @return
-     */
-    followAccount(user_id) {
-      const params = user_id;
-      this.$api.social.follow
-        .followAccount(params)
-        .then(response => {
-          if (response.success) {
-            this.triggerAlert(true, "Successfully followed!");
-          }
-        })
-        .catch(e => {
-          this.triggerAlert(false, "You are already following this user.");
-        });
     },
     /**
      * changes sharePostID value that is being used as a key in the share component.
@@ -581,6 +264,62 @@ export default {
     showShareModal(postid) {
       this.sharePostID = postid;
       this.showShare = true;
+    },
+    // temporary hard code
+    pushAds(posts) {
+      posts.splice(Math.floor(Math.random() * 10) + 1, 0, {
+        id: Math.floor(Math.random() * 999) + 99,
+        ads: true,
+        image: "https://www.digital-shadow.com/images/2019/11/Facebook-Ads.jpg",
+        link: "https://www.facebook.com/"
+      });
+      return posts;
+    },
+    async loadPosts() {
+      const params = {
+        page: this.pageCount
+      };
+      try {
+        const response = await this.$api.social.posts.get(params);
+        const posts = this.pushAds(response.data.posts);
+        this.postsObject = this.postsObject.concat(posts);
+        this.loader = false;
+        /**
+         * set interval dinamic time changing on posts
+         * 10000ms interval
+         */
+        setInterval(() => {
+          this.postsObject.map(
+            x => (x.created_at = this.addDynamicTime(x.created_at))
+          );
+        }, 10000);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    /**
+     * triggered if user fetched new posts to latest posts
+     *
+     * @return
+     */
+    fetchNewPost() {
+      const params = {
+        page: 1
+      };
+      this.postsObject = [];
+      this.$api.social.posts
+        .get(params)
+        .then(response => {
+          if (response.success) {
+            this.postsObject = this.postsObject.concat(response.data.posts);
+            this.loader = false;
+            this.showBanner = false;
+            this.numberPost = 0;
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
     },
     /**
      * triggers when this component is loaded with an ID parameter in the URL.
@@ -595,37 +334,6 @@ export default {
         .then(response => {
           this.postsObject = this.postsObject.concat(response.data.post);
           this.$emit("postData", this.postsObject);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
-    /**
-     * triggers when component loads or user hits bottom of page.
-     * Concatenates to postsObject
-     *
-     * @return
-     */
-    loadPosts() {
-      const params = {
-        page: this.pageCount
-      };
-      this.$api.social.posts
-        .get(params)
-        .then(response => {
-          if (response.success) {
-            this.postsObject = this.postsObject.concat(response.data.posts);
-            this.loader = false;
-            /**
-             * set interval dinamic time changing on posts
-             * 10000ms interval
-             */
-            setInterval(() => {
-              this.postsObject.map(
-                x => (x.created_at = this.addDynamicTime(x.created_at))
-              );
-            }, 10000);
-          }
         })
         .catch(e => {
           console.log(e);
@@ -663,50 +371,59 @@ export default {
         });
     },
     /**
-     * triggered if user fetched new posts to latest posts
+     * Triggers snackbar alerts
+     *
+     * @param   {boolean}  type
+     * @param   {string}  message
      *
      * @return
      */
-    fetchNewPost() {
-      const params = {
-        page: 1
+    triggerAlert(type, message) {
+      let alert = {
+        model: true,
+        state: type,
+        message: message
       };
-      this.postsObject = [];
-      this.$api.social.posts
-        .get(params)
-        .then(response => {
-          if (response.success) {
-            this.postsObject = this.postsObject.concat(response.data.posts);
-            this.loader = false;
-            this.showBanner = false;
-            this.numberPost = 0;
-          }
-        })
-        .catch(e => {
-          console.log(e);
-        });
+      this.setAlert(alert);
     },
     /**
-     * deletes user post from database; also removes from postsObject
-     * which will remove the post from the page
-     *
-     * @param   {string}  id
-     * @param   {integer}  index
+     * delete post function using selectedPost vuex
      *
      * @return
      */
-    deletePost(id, index) {
+    deletePost() {
       this.$api.social.actions
-        .delete(id)
+        .delete(this.selectedPost.postid)
         .then(response => {
           this.postOptionsMode = false;
           this.setDeleteDialog(false);
-          this.postsObject.splice(index, 1);
-          this.triggerAlert(true, response.message);
+          setTimeout(() => {
+            this.postsObject.splice(this.selectedPost.index, 1);
+            //this.$bus.$emit("deletePost", index);
+            this.triggerAlert(true, response.message);
+          }, 200);
         })
         .catch(e => {
           this.triggerAlert(true, e.message);
         });
+    },
+    putNumberComment() {
+      for (let i = 0; i < this.postsObject.length; i++) {
+        if (this.postsObject[i].id === this.newPosts.data.post.id) {
+          this.postsObject[i].comment_descendants_count++;
+        }
+      }
+    },
+    putNumberSentiments(post_id) {
+      const post = this.newPosts.data.post;
+
+      this.postsObject.forEach((e, i) => {
+        if (e.id === post_id) {
+          this.postsObject[i].bulls_count = post.bulls;
+          this.postsObject[i].bears_count = post.bears;
+          //  this.postsObject[i].my_sentiment = this.newPosts.data.sentiment.type;
+        }
+      });
     },
     /**
      * edits user post from database; also removes from postObject
@@ -718,7 +435,11 @@ export default {
      *
      * @return
      */
-    editPost(id, content, index) {
+    editPost({ id, content, index }) {
+      if (content == undefined) {
+        this.triggerAlert(false, "Unable to save empty message");
+        return;
+      }
       let payload = {
         content: content.substring(0, 200)
       };
@@ -742,7 +463,7 @@ export default {
      *`
      * @return`
      */
-    postComment(id, content, index) {
+    postComment({ id, content, index }) {
       let payload = {
         parent_id: 0,
         user_id: this.$auth.user.data.user.uuid,
@@ -789,8 +510,8 @@ export default {
      *
      * @return
      */
-    postReact(post_id, type, index) {
-      this.reactButtons = true;
+    postReact({ post_id, type, index }) {
+      this.setReactButtons(true);
       const params = post_id;
       if (
         type == "bull" &&
@@ -803,14 +524,14 @@ export default {
             if (response.success) {
               this.postsObject[index].bulls_count--;
               this.postsObject[index].my_sentiment = null;
-              this.reactButtons = false;
+              this.setReactButtons(false);
             } else {
               this.triggerAlert(false, response.message);
-              this.reactButtons = false;
+              this.setReactButtons(false);
             }
           })
           .catch(e => {
-            this.reactButtons = false;
+            this.setReactButtons(false);
             this.triggerAlert(false, e.message);
           });
       } else if (type == "bull") {
@@ -829,14 +550,14 @@ export default {
               this.postsObject[index].my_sentiment = {
                 type: "bull"
               };
-              this.reactButtons = false;
+              this.setReactButtons(false);
             } else {
               this.triggerAlert(false, response.message);
-              this.reactButtons = false;
+              this.setReactButtons(false);
             }
           })
           .catch(e => {
-            this.reactButtons = false;
+            this.setReactButtons(false);
             this.triggerAlert(false, e.message);
           });
       }
@@ -852,14 +573,14 @@ export default {
             if (response.success) {
               this.postsObject[index].bears_count--;
               this.postsObject[index].my_sentiment = null;
-              this.reactButtons = false;
+              this.setReactButtons(false);
             } else {
               this.triggerAlert(false, response.message);
-              this.reactButtons = false;
+              this.setReactButtons(false);
             }
           })
           .catch(e => {
-            this.reactButtons = false;
+            this.setReactButtons(false);
             this.triggerAlert(false, e.message);
           });
       } else if (type == "bear") {
@@ -877,22 +598,43 @@ export default {
               this.postsObject[index].my_sentiment = {
                 type: "bear"
               };
-              this.reactButtons = false;
+              this.setReactButtons(false);
             } else {
               this.triggerAlert(false, response.message);
-              this.reactButtons = false;
+              this.setReactButtons(false);
             }
           })
           .catch(e => {
-            this.reactButtons = false;
+            this.setReactButtons(false);
             this.triggerAlert(false, e.message);
           });
       }
     },
     /**
-     * Watches when user scrolls down to the bottom of the page.
-     * When that condition is satisfied, GET more posts from endpoint
-     * and concatenate it to postsObject
+     * fires when user clicks follow button
+     *
+     * @param   {string}  user_id
+     *
+     * @return
+     */
+    followAccount(user_id) {
+      const params = user_id;
+      this.$api.social.follow
+        .followAccount(params)
+        .then(response => {
+          if (response.success) {
+            this.triggerAlert(true, "Successfully followed!");
+          }
+        })
+        .catch(e => {
+          this.triggerAlert(false, "You are already following this user.");
+        });
+    },
+    /**
+     * Triggers snackbar alerts
+     *
+     * @param   {boolean}  type
+     * @param   {string}  message
      *
      * @return
      */
@@ -913,166 +655,7 @@ export default {
           this.getAuthorPost();
         }
       };
-    },
-    /**
-     * Triggers snackbar alerts
-     *
-     * @param   {boolean}  type
-     * @param   {string}  message
-     *
-     * @return
-     */
-    triggerAlert(type, message) {
-      let alert = {
-        model: true,
-        state: type,
-        message: message
-      };
-      this.setAlert(alert);
-    },
-    /**
-     * check if meta link is available
-     *
-     * @param   {Object}  post  objet
-     *
-     * @return  {Boolean}        true/false
-     */
-    hasMetaLink(post) {
-      if (post.meta != null) {
-        return post.meta.links != undefined && post.meta.links.length > 0
-          ? true
-          : false;
-      }
-      return false;
-    },
-    /**
-     * show image only once post is url only without text
-     *
-     * @param   {Object}  post  post
-     *
-     * @return  {Boolean}        true/false
-     */
-    showLinkImageOnly(post) {
-      if (post.meta != null) {
-        if (post.meta.links != undefined && post.meta.links.length > 0) {
-          if (post.meta.links[0].meta != undefined) {
-            const hasImage =
-              post.meta.links[0].meta.image != undefined ||
-              post.meta.links[0].meta.images != undefined
-                ? true
-                : false;
-            let content = post.content.replace(
-              /<\/?("[^"]*"|'[^']*'|[^>])*(>|$)/g,
-              ""
-            );
-            content = content.replace(post.meta.links[0].url, "");
-            return hasImage == true && content.trim().length == 0
-              ? true
-              : false;
-          }
-          return false;
-        }
-        return false;
-      }
-      return false;
-    },
-    /**
-     * manage event click add filters and conditions before open new tab
-     *
-     * @param   {String}  url  link
-     *
-     * @return
-     */
-    openConfirmDialog(url) {
-      const test = url.split("/");
-      this.linkURL = url;
-      if (!test[2].toLowerCase().includes("lyduz")) {
-        this.setConfirmDialog(true);
-      } else {
-        this.onLinkClick(true);
-      }
-    },
-    /**
-     * redirect user to new tab depend to same site boolena
-     *
-     * @param   {Boolean}  sameSite  true/false
-     *
-     * @return
-     */
-    onLinkClick(sameSite) {
-      this.setConfirmDialog(false);
-      if (sameSite === false) {
-        setTimeout(() => {
-          var win = window.open(this.linkURL, "_blank");
-          win.focus();
-        }, 300);
-      } else {
-        // supposed to be manage by vue router
-        var win = window.open(this.linkURL, "_blank");
-        win.focus();
-      }
     }
   }
 };
 </script>
-
-<style>
-.bull__btn {
-  border: 2px solid #03dac5;
-}
-.bear__btn {
-  border: 2px solid #f44336;
-}
-.bull__btn--active {
-  background-color: #03dac599;
-}
-.bear__btn--active {
-  background-color: #f4433699;
-}
-.postOptions__btn {
-  position: relative;
-  bottom: 8px;
-  left: 4px;
-}
-.postOptions__btn:focus {
-  background-color: transparent;
-}
-.postOptions__list {
-  position: absolute;
-  top: 28px;
-  right: 10px;
-  z-index: 1;
-  padding: 0;
-}
-.postOptions__listitem {
-  height: 20px;
-}
-.postOptions__list .v-list-item {
-  min-height: 0px;
-}
-.postOptions__itemgroup {
-  border: 1px solid rgba(0, 0, 0, 0.12);
-}
-.post__Content {
-  white-space: pre-wrap;
-}
-
-.list-item {
-  display: block;
-}
-.list-enter-active {
-  transition: all 1s;
-}
-.list-enter {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.list-leave-to {
-  transition: all 0.5s;
-}
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-</style>

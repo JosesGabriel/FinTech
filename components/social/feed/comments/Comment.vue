@@ -22,6 +22,7 @@
       outlined
       dense
       rounded
+      color="success"
       :value="comment.content"
       hint="Press Esc to Cancel"
       persistent-hint
@@ -75,7 +76,14 @@
         >
           <img src="/icon/bullish_secondary.svg" height="13" width="10" />
         </v-btn>
-        <span class="px-1 caption">{{ comment.bulls_count }}</span>
+        <span
+          class="px-1 caption"
+          :class="[
+            { 'black--text': lightSwitch == 0 },
+            { 'white--text': lightSwitch == 1 }
+          ]"
+          >{{ comment.bulls_count }}</span
+        >
         <v-btn
           class="bear__btn--comment"
           :class="
@@ -94,7 +102,14 @@
         >
           <img src="/icon/bearish_secondary.svg" height="13" width="10" />
         </v-btn>
-        <span class="px-1 caption">{{ comment.bears_count }}</span>
+        <span
+          class="px-1 caption"
+          :class="[
+            { 'black--text': lightSwitch == 0 },
+            { 'white--text': lightSwitch == 1 }
+          ]"
+          >{{ comment.bears_count }}</span
+        >
         <v-btn
           icon
           small

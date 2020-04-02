@@ -1,9 +1,15 @@
 export default {
+  async setSelectedPost({ commit }, data) {
+    await commit("SET_SELECTEDPOST", data);
+  },
   async setSSE({ commit }, data) {
     await commit("SET_SSE", data);
   },
   async setSSEInfo({ commit }, data) {
     await commit("SET_SSE_INFO", data);
+  },
+  async setReactButtons({ commit }, data) {
+    await commit("SET_REACTBUTTONS", data);
   },
   async setNewComment({ commit }, data) {
     await commit("SET_NEWCOMMENT", data);

@@ -31,7 +31,6 @@
 
         <v-hover v-slot:default="{ hover }">
           <v-btn
-            v-if="post.user.uuid == $auth.user.data.user.uuid"
             :dark="lightSwitch == 1"
             class="black--text font-weight-bold text-capitalize caption"
             :color="!hover ? 'success' : 'successhover'"
@@ -52,16 +51,6 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "DeletePostDialog",
-  props: {
-    post: {
-      type: Object,
-      default: undefined
-    },
-    index: {
-      type: Number,
-      default: 0
-    }
-  },
   data: () => ({
     loading: false
   }),

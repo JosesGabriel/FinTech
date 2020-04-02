@@ -1,5 +1,5 @@
 <template>
-  <v-list dense class="py-0" :style="{ background: cardBackground }" >
+  <v-list dense class="py-0" :style="{ background: cardBackground }">
     <template v-for="(comment, index) in comments">
       <Comment
         :key="index"
@@ -62,10 +62,10 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
-      }),
-      cardBackground() {
-        return this.lightSwitch == 0 ? "#ffffff" : "#142530";
-      },
+    }),
+    cardBackground() {
+      return this.lightSwitch == 0 ? "#ffffff" : "#142530";
+    }
   },
   mounted() {
     /**
