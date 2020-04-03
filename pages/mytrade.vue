@@ -651,6 +651,10 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+      /**
+       * Trigger line animation on scroll event
+       *
+       */
     handleScroll (event) {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         if(scrollTop >= 1000 && scrollTop <= 1180){
@@ -698,6 +702,13 @@ export default {
         
         
     },
+    /**
+     * set line animation effect
+     *
+     * @param   {[type]}  item  name of a line (class)
+     * @param   {[type]}  div   footer lines division
+     *
+     */
     lineAnimation(item, div){
             let max = 0;
             if(div != null){
@@ -763,7 +774,6 @@ export default {
 .mytrade__numtitle{
     font-size:87px;
     text-align: center;
-    /*padding-left: 0px !important;*/
 }
 .mytrade__numtext{
     font-size:25px;
