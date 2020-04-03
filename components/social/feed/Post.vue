@@ -326,6 +326,11 @@ export default {
       confirmDialog: "social/confirmDialog",
       reactButtons: "social/reactButtons"
     }),
+    /**
+     * toggle card background color
+     *
+     * @return  {String}  dark/light mode
+     */
     cardBackground() {
       return this.lightSwitch == 0 ? "#ffffff" : "#142530";
     }
@@ -413,7 +418,6 @@ export default {
      * @return
      */
     onLinkClick(sameSite) {
-      console.log(this.linkURL);
       this.setConfirmDialog(false);
       if (sameSite === false) {
         setTimeout(() => {
@@ -424,6 +428,15 @@ export default {
         window.open(this.linkURL, "_blank");
       }
     },
+    /**
+     * handles click event of option menu on card posts
+     *
+     * @param   {Object}  item   menu info
+     * @param   {Object}  post   post object
+     * @param   {Number}  index  card index number
+     *
+     * @return
+     */
     doOptionEvent(item, { post, index }) {
       this.postOptionsMode = false;
       switch (item.text.toLowerCase()) {

@@ -37,6 +37,11 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * toggle card background color
+     *
+     * @return  {String}  dark/light mode
+     */
     cardBackground() {
       return this.lightSwitch == 0 ? "#ffffff" : "#142530";
     }

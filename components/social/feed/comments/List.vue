@@ -17,7 +17,7 @@
 
 <script>
 import { AddDynamicTime } from "~/assets/js/helpers/datetime";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "List",
@@ -63,6 +63,11 @@ export default {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * toggle card background color
+     *
+     * @return  {String}  dark/light mode
+     */
     cardBackground() {
       return this.lightSwitch == 0 ? "#ffffff" : "#142530";
     }

@@ -78,6 +78,11 @@ export default {
     }
   },
   computed: {
+    /**
+     * check if post has meta image
+     *
+     * @return  {Boolean}  true/false
+     */
     hasImage() {
       if (this.meta != null && this.meta.links[0].meta != undefined) {
         return this.meta.links[0].meta.image != undefined ||
@@ -87,32 +92,62 @@ export default {
       }
       return false;
     },
+    /**
+     * check if post has meta description
+     *
+     * @return  {Boolean}  true/false
+     */
     hasDescription() {
       if (this.meta != null && this.meta.links[0].meta != undefined) {
         return this.meta.links[0].meta.description != undefined ? true : false;
       }
       return false;
     },
+    /**
+     * return post meta title
+     *
+     * @return  {String}  meta title
+     */
     title() {
       if (this.meta.links[0].meta.title != undefined) {
         return this.meta.links[0].meta.title;
       }
       return "";
     },
+    /**
+     * return post meta description
+     *
+     * @return  {String}  description
+     */
     description() {
       return this.meta.links[0].meta.description;
     },
+    /**
+     * return post image url from meta
+     *
+     * @return
+     */
     image() {
       if (this.meta.links[0].meta.images != undefined) {
         return this.meta.links[0].meta.images[0];
       }
       return this.meta.links[0].meta.image;
     },
+    /**
+     * return post meta link url
+     *
+     * @return  {Sttring}  meta link url
+     */
     url() {
       return this.meta.links[0].url;
     }
   },
   methods: {
+    /**
+     * send an emit URL to Post.vue parent component
+     *
+     * @return
+     */
     visitLink() {
       this.$emit("visitLink", this.meta.links[0].url);
     }

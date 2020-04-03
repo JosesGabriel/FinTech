@@ -206,6 +206,11 @@ export default {
       confirmDialog: "social/confirmDialog",
       selectedPost: "social/selectedPost"
     }),
+    /**
+     * toggle card background color
+     *
+     * @return  {String}  dark/light mode
+     */
     cardBackground() {
       return this.lightSwitch == 0 ? "#ffffff" : "#142530";
     }
@@ -266,6 +271,13 @@ export default {
       this.showShare = true;
     },
     // temporary hard code
+    /**
+     * push ads randomly for every 10 posts 1 ad
+     *
+     * @param   {Array}  posts  post objects
+     *
+     * @return  {Array}         post with pushed ad
+     */
     pushAds(posts) {
       posts.splice(Math.floor(Math.random() * 10) + 1, 0, {
         id: Math.floor(Math.random() * 999) + 99,
@@ -275,6 +287,11 @@ export default {
       });
       return posts;
     },
+    /**
+     * initialize all post and request from post endpoint
+     *
+     * @return  {Array}    post objects
+     */
     async loadPosts() {
       const params = {
         page: this.pageCount
@@ -407,6 +424,11 @@ export default {
           this.triggerAlert(true, e.message);
         });
     },
+    /**
+     * counts number of comment per post
+     *
+     * @return
+     */
     putNumberComment() {
       for (let i = 0; i < this.postsObject.length; i++) {
         if (this.postsObject[i].id === this.newPosts.data.post.id) {
@@ -414,6 +436,13 @@ export default {
         }
       }
     },
+    /**
+     * counts number of sentiments per post
+     *
+     * @param   {String}  post_id  post id
+     *
+     * @return
+     */
     putNumberSentiments(post_id) {
       const post = this.newPosts.data.post;
 

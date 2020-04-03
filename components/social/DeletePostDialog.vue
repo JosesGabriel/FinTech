@@ -66,6 +66,11 @@ export default {
       deleteDialog: "social/deleteDialog",
       lightSwitch: "global/getLightSwitch"
     }),
+    /**
+     * use computed variable since unable to set vuex state as v-model
+     *
+     * @return
+     */
     inputValue: {
       get() {
         return this.deleteDialog;
