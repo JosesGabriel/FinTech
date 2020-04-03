@@ -87,11 +87,19 @@
                 class="mytrade__container mt-12"
             >
                 <v-row class="px-12 my-12">
-                    <v-col class="mytrade__valuable">
+                    <v-col class="mytrade__valuable" style="position:relative; z-index:1;">
 
                         <v-row style="color:#0B1C4D;">
                             <v-col cols="3" >
-                                <span class="mytrade__numtitle ma-0 pa-0" style="font-family:spinnaker,sans-serif !important; font-weight: bold;">01</span>
+                                <span class="mytrade__numtitle ma-0 pa-0">
+                                    <v-img
+                                        src="01.png"
+                                        width="130"
+                                        class="mytrade__01"
+                                        
+                                    >
+                                    </v-img>
+                                </span>
                             </v-col>
                             <v-col cols="9" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
                                 <p class="ma-0 pa-0">Valuable Research</p>
@@ -99,9 +107,15 @@
                             </v-col>
                         </v-row>
                         <v-divider id="mytrade_divider_01"></v-divider>
-
+                                    <v-img
+                                        src="image8.png"
+                                        width="270"
+                                        class="mytrade_image8"
+                                        
+                                    >
+                                    </v-img>
                         <v-row >
-                            <v-col cols="12">
+                            <v-col cols="12" class="pt-8">
                                 <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                     Value-added & relevant research done by the country's 
                                     top market analyst spearheaded by Forbe's Top 5 stock 
@@ -151,10 +165,18 @@
                         >
                         </v-img>
                     </v-col>
-                    <v-col>
+                    <v-col style="position:relative; z-index:1;">
                         <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
-                                <span class="mytrade__numtitle ma-0 pa-0" style="font-family:spinnaker,sans-serif !important; font-weight: bold; ">02</span>
+                                <span class="mytrade__numtitle ma-0 pa-0">
+                                    <v-img
+                                        src="02.png"
+                                        width="130"
+                                        class="mytrade__02"
+                                        
+                                    >
+                                    </v-img>
+                                </span>
                             </v-col>
                             <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
                                 <p class="ma-0 pa-0">Manage Multiple</p>
@@ -162,8 +184,15 @@
                             </v-col>
                         </v-row>
                         <v-divider id="mytrade_divider_02"></v-divider>
+                                    <v-img
+                                        src="image7_flip.png"
+                                        width="230"
+                                        class="mytrade_image7"       
+                                    >
+                                    </v-img>
+
                         <v-row>
-                            <v-col cols="12">
+                            <v-col cols="12" class="pt-8">
                                 <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                     Create & manage multiple portfolios 
                                     in a single account. Now you have the power 
@@ -193,10 +222,18 @@
                 </v-row>
                 
                 <v-row class="px-12 my-12">
-                    <v-col>
+                    <v-col style="position:relative; z-index:1;">
                         <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
-                                <span class="mytrade__numtitle ma-0 pa-0" style="font-family:spinnaker,sans-serif !important; font-weight: bold;">03</span>
+                                <span class="mytrade__numtitle ma-0 pa-0">
+                                    <v-img
+                                        src="03.png"
+                                        width="130"
+                                        class="mytrade__03"
+                                        
+                                    >
+                                    </v-img>
+                                </span>
                             </v-col>
                             <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
                                 <p class="ma-0 pa-0">High-speed</p>
@@ -204,8 +241,15 @@
                             </v-col>
                         </v-row>
                         <v-divider id="mytrade_divider_03"></v-divider>
+                                <v-img
+                                        src="image9.png"
+                                        width="430"
+                                        class="mytrade_image9"       
+                                    >
+                                    </v-img>
+
                         <v-row>
-                            <v-col cols="12">
+                            <v-col cols="12" class="pt-8">
                                 <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                    We have a skyway of orders that lets you stay
                                    ahead of the rest so you buy & sell based on the 
@@ -250,10 +294,18 @@
                         >
                         </v-img>
                     </v-col>
-                    <v-col>
+                    <v-col style="position:relative; z-index:1;">
                         <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
-                                <span class="mytrade__numtitle ma-0 pa-0" style="font-family:spinnaker,sans-serif !important; font-weight: bold;">04</span>
+                                <span class="mytrade__numtitle ma-0 pa-0">
+                                    <v-img
+                                        src="04.png"
+                                        width="130"
+                                        class="mytrade__04"
+                                        
+                                    >
+                                    </v-img>
+                                </span>
                             </v-col>
                             <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
                                 <p class="ma-0 pa-0">Proven decades-long</p>
@@ -261,8 +313,14 @@
                             </v-col>
                         </v-row>
                         <v-divider id="mytrade_divider_04"></v-divider>
+                                    <v-img
+                                        src="image10.png"
+                                        width="350"
+                                        class="mytrade_image10"       
+                                    >
+                                    </v-img>
                         <v-row>
-                            <v-col cols="12">
+                            <v-col cols="12" class="pt-8">
                                 <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
                                     We are considered to be one of the larger, if not 
                                     the largest, local brokerage firms in terms of 
@@ -341,13 +399,13 @@
                     <v-col style="z-index: 2;">
                         <v-row>
                             <v-col cols="12" class="mytrade__numtext">
-                                <p class="pl-12" style="font-family:montserrat,sans-serif !important;">Available on all devices</p>
+                                <p class="pl-12" style="font-family:montserrat,sans-serif !important; color:#0B1C4D;">Available on all devices</p>
                             </v-col>
                         </v-row>
-                        <v-divider id="mytrade_divider_05"></v-divider>
+                        <v-divider id="mytrade_divider_05" style="margin-left:40px;"></v-divider>
                         <v-row>
                             <v-col cols="12">
-                                <p class="mytrade__indent" style="font-size: 20px;font-family:spinnaker,sans-serif !important; font-weight: bold;">
+                                <p class="mytrade__indent" style="font-size: 20px;font-family:spinnaker,sans-serif !important; font-weight: bold;color:#0B1C4D;">
                                     Your accounts will always 
                                     be safe and secure with our 
                                     bank-grade security and 
@@ -668,7 +726,7 @@ export default {
 }
 .mytrade_headertext {
     position: absolute;
-    top: 230px;
+    top: 260px;
     right: 10%;
     background: transparent;
     width: 30%;
@@ -710,7 +768,7 @@ export default {
 .mytrade__numtext{
     font-size:25px;
     font-weight: bold;
-    padding-top: 40px;
+    padding-top: 20px;
 }
 .mytrade_divider{
     border-color: rgb(53, 212, 65);
@@ -732,7 +790,7 @@ export default {
     width: 0%;
     margin-left: 0px;
     position: relative;
-    top: -18px;
+    top: 5px;
 }
 
 #divider__footer01,
@@ -753,8 +811,15 @@ export default {
 .mytrade_image4,
 .mytrade_image5,
 .mytrade_image6,
-.mytrade_image7 {
+.mytrade_image7,
+.mytrade__01,
+.mytrade__02,
+.mytrade__03,
+.mytrade__04 {
     position: absolute;
+}
+.mytrade__01 {
+    left: -5px;
 }
 .mytrade_image6 {
     /*left: 90px;*/
@@ -763,8 +828,28 @@ export default {
 .mytrade_image8{
     position: absolute;
     transform: rotate(10deg);
-    left: 300px;
-    top: 1050px;
+    left: 105px;
+    z-index: -1;
+    top: 20px;
+}
+.mytrade_image7 {
+    position: absolute;
+    z-index: -1;
+    left: 220px;
+    top: 35px;
+}
+.mytrade_image9 {
+    position: absolute;
+    z-index: -1;
+    transform: rotate(-9deg);
+    top: 10px;
+    left: 39px;
+}
+.mytrade_image10 {
+    position: absolute;
+    z-index: -1;
+    top: 10px;
+    left: 75px;
 }
 .google_play2,
 .app_store2{
