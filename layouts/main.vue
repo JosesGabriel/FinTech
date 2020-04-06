@@ -53,7 +53,7 @@
         </v-card>
       </v-dialog>
       <client-only>
-        <VyndueDock v-if="$route.path != '/login/'" />
+        <VyndueDock v-if="$route.name != 'login' && $route.name != 'sso'" />
       </client-only>
       <!-- dont remove -->
       <div v-show="false" id="tv_chart_container"></div>
