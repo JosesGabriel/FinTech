@@ -639,7 +639,6 @@
 export default {
   data() {
     return {
-        // *TODO // for discussion.. to be deleted soon
         divscrolltop: 0,
         animate: 0,
         isScrolled01: false,
