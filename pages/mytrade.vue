@@ -42,6 +42,7 @@
                                         class="text-capitalize"
                                         width="180"
                                         color="#0f911e"
+                                        @click="openAccount"
                                     >
                                     <span style="color:#ffffff;">Open new account</span>
                                     </v-btn>
@@ -55,6 +56,7 @@
                                         class="text-capitalize"
                                         width="170"
                                         color="#0f911e"
+                                         @click="openAccount"
                                     >Learn more</v-btn>
                                 </div>
                             </v-col>
@@ -138,6 +140,7 @@
                                         class="text-capitalize"
                                         width="150"
                                         color="#0f911e"
+                                         @click="openAccount"
                                     >
                                     <span style="color:#ffffff;">Subscribe now</span>
                                     </v-btn>
@@ -214,6 +217,7 @@
                                         class="text-capitalize"
                                         width="150"
                                         color="#0f911e"
+                                        @click="openAccount"
                                     >
                                     <span style="color:#ffffff;">Try it now</span>
                                     </v-btn>
@@ -270,6 +274,7 @@
                                         class="text-capitalize"
                                         width="180"
                                         color="#0f911e"
+                                        @click="openAccount"
                                     >
                                     <span style="color:#ffffff;">Open new account</span>
                                     </v-btn>
@@ -343,6 +348,7 @@
                                         class="text-capitalize"
                                         width="150"
                                         color="#0f911e"
+                                        @click="openAccount"
                                     >
                                     <span style="color:#ffffff;">Try it now</span>
                                     </v-btn>
@@ -658,6 +664,14 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+      /**
+       * trigger button to open account page in myTrade
+       *
+       */
+    openAccount(){
+        window.open("https://bit.ly/3bq3Qvp", "_blank");
+      },
+      
       /**TODO // for discussion.. to be deleted soon
        * Trigger line animation on scroll event
        * 
