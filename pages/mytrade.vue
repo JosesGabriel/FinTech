@@ -20,13 +20,13 @@
                     >
                         <v-row class="mytrade_headertext_title">
                             <v-col cols="12" class="ma-0 pa-0">
-                            <p class="ma-0 pa-0" style="letter-spacing: 0.05em; font-family:montserrat,sans-serif !important;">Trade with</p>
-                            <p style="letter-spacing: 0.05em;font-family:montserrat,sans-serif !important;">Confidence</p>
+                            <p class="ma-0 pa-0 mytrade_headertext_subtitle">Trade with</p>
+                            <p class="mytrade_headertext_subtitle">Confidence</p>
                             </v-col>
                         </v-row>
                         <v-row>  
                             <v-col cols="12" class="ma-0 pa-0">                 
-                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
+                                <p class="mytrade__text">
                                     Guaranteed 99% uptime so you don't miss out on 
                                     important market opportunities and react in realtime 
                                     when the things diverge against your investment 
@@ -87,7 +87,7 @@
                 class="mytrade__container mt-12"
             >
                 <v-row class="px-12 my-12">
-                    <v-col class="mytrade__valuable" style="position:relative; z-index:1;">
+                    <v-col class="mytrade__valuable">
 
                         <v-row style="color:#0B1C4D;">
                             <v-col cols="3" >
@@ -95,33 +95,34 @@
                                     <v-img
                                         src="01.png"
                                         width="130"
-                                        class="mytrade__01"
+                                        class="mytrade__image"
+                                        id="mytrade__01"
                                         
                                     >
                                     </v-img>
                                 </span>
                             </v-col>
-                            <v-col cols="9" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
-                                <p class="ma-0 pa-0">Valuable Research</p>
-                                <p class="ma-0 pa-0">Based Recommendations</p>
+                            <v-col cols="9" class="mytrade__numtext">
+                                <p class="ma-0 pa-0 mytrade__textTitle">Valuable Research</p>
+                                <p class="ma-0 pa-0 mytrade__textTitle">Based Recommendations</p>
                             </v-col>
                         </v-row>
-                        <v-divider id="mytrade_divider_01"></v-divider>
+                        <v-divider class="mytrade_divider" id="mytrade_divider_1"></v-divider>
                                     <v-img
                                         src="image8.png"
                                         width="270"
-                                        class="mytrade_image8"
-                                        
+                                        class="mytrade__image"
+                                        id="mytrade_image8"
                                     >
                                     </v-img>
                         <v-row >
                             <v-col cols="12" class="pt-8">
-                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
+                                <p class="mytrade__text">
                                     Value-added & relevant research done by the country's 
                                     top market analyst spearheaded by Forbe's Top 5 stock 
                                     picker in Asia, Mr. Raymond Niel Franco. 
                                 </p>
-                                <ul style="font-family: poppins-extralight,poppins,sans-serif !important;">
+                                <ul class="mytrade__text">
                                     <li>Better investment insights</li>
                                     <li>See investments in innovative angles</li>
                                     <li>Stop investing blindly - see the entire landscape</li>
@@ -148,7 +149,7 @@
 
                     <v-col>
                         <v-img
-                            class="mytrade_image2"
+                            id="mytrade_image2"
                             src="13715.webp"
                             width="435"
                         >
@@ -165,40 +166,41 @@
                         >
                         </v-img>
                     </v-col>
-                    <v-col style="position:relative; z-index:1;">
+                    <v-col class="mytrade__valuable">
                         <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
                                 <span class="mytrade__numtitle ma-0 pa-0">
                                     <v-img
                                         src="02.png"
                                         width="130"
-                                        class="mytrade__02"
+                                        class="mytrade__image"
                                         
                                     >
                                     </v-img>
                                 </span>
                             </v-col>
-                            <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
-                                <p class="ma-0 pa-0">Manage Multiple</p>
-                                <p class="ma-0 pa-0">Portfolios</p>
+                            <v-col cols="8" class="mytrade__numtext">
+                                <p class="ma-0 pa-0 mytrade__textTitle">Manage Multiple</p>
+                                <p class="ma-0 pa-0 mytrade__textTitle">Portfolios</p>
                             </v-col>
                         </v-row>
-                        <v-divider id="mytrade_divider_02"></v-divider>
+                        <v-divider  class="mytrade_divider" id="mytrade_divider_2"></v-divider>
                                     <v-img
                                         src="image7_flip.png"
                                         width="230"
-                                        class="mytrade_image7"       
+                                        class="mytrade__image" 
+                                        id="mytrade_image7"      
                                     >
                                     </v-img>
 
                         <v-row>
                             <v-col cols="12" class="pt-8">
-                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
+                                <p class="mytrade__text">
                                     Create & manage multiple portfolios 
                                     in a single account. Now you have the power 
                                     to separate portfolios accordingly.  
                                 </p>
-                                <ul style="font-family: poppins-extralight,poppins,sans-serif !important;">
+                                <ul class="mytrade__text">
                                     <li>Separate your investing & trading portfolio</li>
                                     <li>Manage multiple portfolios with ease</li>
                                     <li>Everything in a single platform</li>
@@ -222,35 +224,36 @@
                 </v-row>
                 
                 <v-row class="px-12 my-12">
-                    <v-col style="position:relative; z-index:1;">
+                    <v-col class="mytrade__valuable">
                         <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
                                 <span class="mytrade__numtitle ma-0 pa-0">
                                     <v-img
                                         src="03.png"
                                         width="130"
-                                        class="mytrade__03"
+                                        class="mytrade__image"
                                         
                                     >
                                     </v-img>
                                 </span>
                             </v-col>
-                            <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
-                                <p class="ma-0 pa-0">High-speed</p>
-                                <p class="ma-0 pa-0">Order routes</p>
+                            <v-col cols="8" class="mytrade__numtext">
+                                <p class="ma-0 pa-0 mytrade__textTitle">High-speed</p>
+                                <p class="ma-0 pa-0 mytrade__textTitle">Order routes</p>
                             </v-col>
                         </v-row>
-                        <v-divider id="mytrade_divider_03"></v-divider>
+                        <v-divider  class="mytrade_divider" id="mytrade_divider_3"></v-divider>
                                 <v-img
                                         src="image9.png"
                                         width="430"
-                                        class="mytrade_image9"       
+                                        class="mytrade__image" 
+                                        id="mytrade_image9"      
                                     >
                                     </v-img>
 
                         <v-row>
                             <v-col cols="12" class="pt-8">
-                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
+                                <p class="mytrade__text">
                                    We have a skyway of orders that lets you stay
                                    ahead of the rest so you buy & sell based on the 
                                    best price available. We recognize that every 
@@ -277,7 +280,7 @@
 
                     <v-col>
                         <v-img
-                            class="mytrade_image4"
+                            class="mytrade__image"
                             src="green.webp"
                             width="560"
                         >
@@ -288,40 +291,41 @@
                 <v-row class="px-12 mt-12">
                     <v-col>
                         <v-img
-                            class="mytrade_image5"
+                            class="mytrade__image"
                             src="MyTrade Performance.webp"
                             width="450"
                         >
                         </v-img>
                     </v-col>
-                    <v-col style="position:relative; z-index:1;">
+                    <v-col class="mytrade__valuable">
                         <v-row style="color:#0B1C4D;">
                             <v-col cols="4">
                                 <span class="mytrade__numtitle ma-0 pa-0">
                                     <v-img
                                         src="04.png"
                                         width="130"
-                                        class="mytrade__04"
+                                        class="mytrade__image"
                                         
                                     >
                                     </v-img>
                                 </span>
                             </v-col>
-                            <v-col cols="8" class="mytrade__numtext" style="font-family:montserrat,sans-serif !important;">
-                                <p class="ma-0 pa-0">Proven decades-long</p>
-                                <p class="ma-0 pa-0">Performance</p>
+                            <v-col cols="8" class="mytrade__numtext">
+                                <p class="ma-0 pa-0 mytrade__textTitle">Proven decades-long</p>
+                                <p class="ma-0 pa-0 mytrade__textTitle">Performance</p>
                             </v-col>
                         </v-row>
-                        <v-divider id="mytrade_divider_04"></v-divider>
+                        <v-divider  class="mytrade_divider" id="mytrade_divider_4"></v-divider>
                                     <v-img
                                         src="image10.png"
                                         width="350"
-                                        class="mytrade_image10"       
+                                        class="mytrade__image"
+                                        id="mytrade_image10"       
                                     >
                                     </v-img>
                         <v-row>
                             <v-col cols="12" class="pt-8">
-                                <p style="font-family: poppins-extralight,poppins,sans-serif !important;">
+                                <p class="mytrade__text">
                                     We are considered to be one of the larger, if not 
                                     the largest, local brokerage firms in terms of 
                                     volume from our institutional business activities. 
@@ -348,8 +352,8 @@
                     </v-col>
                 </v-row>
                 <v-row class="px-12 mt-12">
-                    <v-col cols="12" style="text-align:center; font-family:montserrat,sans-serif !important;" >
-                        <h2>
+                    <v-col cols="12">
+                        <h2 class="mytrade__learn">
                             We are bringing the benefits enjoyed by our institutional 
                             clients to retailers. Learn why our clients love us.
                         </h2>
@@ -366,7 +370,8 @@
                         <v-row>
                             <v-col>
                                 <v-img
-                                    class="mytrade_image6"
+                                    class="mytrade__image"
+                                    id="mytrade_image6"
                                     src="my_trade_5.gif"
                                     width="500"
                                 >
@@ -399,19 +404,19 @@
                     <v-col style="z-index: 2;">
                         <v-row>
                             <v-col cols="12" class="mytrade__numtext">
-                                <p class="pl-12" style="font-family:montserrat,sans-serif !important; color:#0B1C4D;">Available on all devices</p>
+                                <p class="pl-12 mytrade__available">Available on all devices</p>
                             </v-col>
                         </v-row>
-                        <v-divider id="mytrade_divider_05" style="margin-left:40px;"></v-divider>
+                        <v-divider  class="mytrade_divider" id="mytrade_divider_5" style="margin-left:40px;"></v-divider>
                         <v-row>
                             <v-col cols="12">
-                                <p class="mytrade__indent" style="font-size: 20px;font-family:spinnaker,sans-serif !important; font-weight: bold;color:#0B1C4D;">
+                                <p class="mytrade__indent mytrade__availableText">
                                     Your accounts will always 
                                     be safe and secure with our 
                                     bank-grade security and 
                                     encryption systems   
                                 </p>
-                                <p class="mytrade__indent" style="font-family:spinnaker,sans-serif !important;">
+                                <p class="mytrade__indent mytrade__text">
                                     I'm a paragraph. Click here to add your own 
                                     text and edit me. It’s easy. Just click “Edit 
                                     Text” or double click me to add your own 
@@ -424,7 +429,7 @@
 
                 <!---------------------------------->
             </v-row>
-            <v-row class="mytrade_container2">
+            <v-row class="mytrade_subcontainer">
                     <v-col cols="4" class="mt-12" style="text-align:center;">
                         <v-row>
                             <v-col class="mytrade__people">
@@ -510,7 +515,7 @@
                             <v-row class="mb-12 pl-3">
                                 <h3>Reach out to us</h3>
                             </v-row>
-                            <v-divider id="divider__footer01"></v-divider>
+                            <v-divider class="divider__footer" id="divider__footer1"></v-divider>
                             <v-row>
                                 <v-col cols="12 py-0 pr-12">
                                     <v-text-field
@@ -572,7 +577,7 @@
                             <v-row class="mb-12 pl-3">
                                 <h3>Download MyTrade</h3>
                             </v-row>
-                            <v-divider id="divider__footer02"></v-divider>
+                            <v-divider class="divider__footer" id="divider__footer2"></v-divider>
                             <v-row>
                                 <v-col>
                                     <v-img
@@ -609,7 +614,7 @@
                             <v-row class="mb-12 pl-12">
                                 <h3>Contact</h3>
                             </v-row>
-                            <v-divider class="ml-10" id="divider__footer03"></v-divider>
+                            <v-divider class="ml-10 divider__footer" id="divider__footer3"></v-divider>
                             <v-row style="font-size: 12px;" class="pl-12">
                                 <p>2904-A East Tower, <br />
                                 Philippine Stock Exchange Center, <br />
@@ -653,44 +658,44 @@ export default {
   methods: {
       /**
        * Trigger line animation on scroll event
-       *
+       * 
        */
-    handleScroll (event) {
+    handleScroll () {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         if(scrollTop >= 1000 && scrollTop <= 1180){
-            const item = document.getElementById('mytrade_divider_01');
+            const item = document.getElementById('mytrade_divider_1');
            if(!this.isScrolled01){ 
                 this.lineAnimation(item);
                 this.isScrolled01 = true;  
            }
          }else if(scrollTop >= 1320 && scrollTop <= 1700){
-            const item = document.getElementById('mytrade_divider_02');
+            const item = document.getElementById('mytrade_divider_2');
             if(!this.isScrolled02){ 
                 this.lineAnimation(item);
                 this.isScrolled02 = true;  
            }     
          }else if(scrollTop >= 1980 && scrollTop <= 2300){
-            const item = document.getElementById('mytrade_divider_03');
+            const item = document.getElementById('mytrade_divider_3');
             if(!this.isScrolled03){ 
                 this.lineAnimation(item);
                 this.isScrolled03 = true;  
            }     
          }else if(scrollTop >= 2400 && scrollTop <= 2700){
-            const item = document.getElementById('mytrade_divider_04');
+            const item = document.getElementById('mytrade_divider_4');
             if(!this.isScrolled04){ 
                 this.lineAnimation(item);
                 this.isScrolled04 = true;  
            }     
          }else if(scrollTop >= 3500 && scrollTop <= 3800){
-            const item = document.getElementById('mytrade_divider_05');
+            const item = document.getElementById('mytrade_divider_5');
             if(!this.isScrolled05){ 
                 this.lineAnimation(item);
                 this.isScrolled05 = true;  
            }     
          }else if(scrollTop >= 4450 && scrollTop <= 4700){
-            const item1 = document.getElementById('divider__footer01');
-            const item2 = document.getElementById('divider__footer02');
-            const item3 = document.getElementById('divider__footer03');
+            const item1 = document.getElementById('divider__footer1');
+            const item2 = document.getElementById('divider__footer2');
+            const item3 = document.getElementById('divider__footer3');
             let div = 'footer';
             if(!this.isScrolled06){        
                    this.lineAnimation(item1, div);      
@@ -705,8 +710,8 @@ export default {
     /**
      * set line animation effect
      *
-     * @param   {[type]}  item  name of a line (class)
-     * @param   {[type]}  div   footer lines division
+     * @param   {string}  item  name of a line (class)
+     * @param   {string}  div   footer lines division
      *
      */
     lineAnimation(item, div){
@@ -721,7 +726,7 @@ export default {
                         if (width >= max) {
                                 clearInterval();              
                             } else {
-                                width = width + 1;
+                                width = width + 4;
                                 item.style.width = width + 'px';
                             }
                     }, 10);    
@@ -747,6 +752,27 @@ export default {
     font-weight: bolder;
     line-height: 1.1em;
 }
+
+.mytrade_headertext_subtitle {
+    letter-spacing: 0.05em; 
+    font-family:montserrat,sans-serif !important;
+}
+
+.mytrade__available {
+    font-family:montserrat,sans-serif !important; 
+    color:#0B1C4D;
+}
+
+.mytrade__availableText{
+    font-size: 20px;
+    font-family:spinnaker,sans-serif !important; 
+    font-weight: bold;
+    color:#0B1C4D;
+}
+
+.mytrade__text {
+    font-family: poppins-extralight,poppins,sans-serif !important;
+}
 .mytrade__people{
     padding: 10px 80px;
 }
@@ -761,7 +787,7 @@ export default {
     margin: 0 auto;
     color:#000000;
 }
-.mytrade_container2 {
+.mytrade_subcontainer {
     max-width: 1100px;
     margin: 0 auto;
     color:#000000;
@@ -780,21 +806,15 @@ export default {
     font-weight: bold;
     padding-top: 20px;
 }
-.mytrade_divider{
-    border-color: rgb(53, 212, 65);
-    background: rgb(53, 212, 65);
-    border-width: 2px;
-    width: 380px;
-    margin-left: 40px;
-    position: relative;
-    top: -18px;
+.mytrade__textTitle {
+    font-family:montserrat,sans-serif !important;
 }
-#mytrade_divider_01,
-#mytrade_divider_02,
-#mytrade_divider_03,
-#mytrade_divider_04,
-#mytrade_divider_05 {
-    border-color: rgb(53, 212, 65);
+.mytrade__learn {
+    text-align:center; 
+    font-family:montserrat,sans-serif !important;
+}
+.mytrade_divider{
+   border-color: rgb(53, 212, 65);
     background: rgb(53, 212, 65);
     border-width: 2px;
     width: 0%;
@@ -803,9 +823,7 @@ export default {
     top: 5px;
 }
 
-#divider__footer01,
-#divider__footer02,
-#divider__footer03 {
+.divider__footer {
     border: 1px solid rgba(212, 210, 0, 1);
     background: rgba(212, 210, 0, 1);
     width: 0px;
@@ -814,49 +832,42 @@ export default {
 .mytrade__indent{
     margin-left: 40px; 
 }
-.mytrade_image2 {
+#mytrade_image2 {
     position: absolute;
     transform: rotate(3deg);
 }
-.mytrade_image4,
-.mytrade_image5,
-.mytrade_image6,
-.mytrade_image7,
-.mytrade__01,
-.mytrade__02,
-.mytrade__03,
-.mytrade__04 {
+.mytrade__image {
     position: absolute;
 }
-.mytrade__01 {
+#mytrade__01 {
     left: -5px;
 }
-.mytrade_image6 {
+#mytrade_image6 {
     /*left: 90px;*/
     z-index: 0;
 }
-.mytrade_image8{
-    position: absolute;
+#mytrade_image8{  
     transform: rotate(10deg);
     left: 105px;
     z-index: -1;
     top: 20px;
 }
-.mytrade_image7 {
-    position: absolute;
+#mytrade_image7 {
     z-index: -1;
     left: 220px;
     top: 35px;
 }
-.mytrade_image9 {
-    position: absolute;
+.mytrade__valuable {
+    position:relative; 
+    z-index:1;
+}
+#mytrade_image9 {
     z-index: -1;
     transform: rotate(-9deg);
     top: 10px;
     left: 39px;
 }
-.mytrade_image10 {
-    position: absolute;
+#mytrade_image10 {
     z-index: -1;
     top: 10px;
     left: 75px;
