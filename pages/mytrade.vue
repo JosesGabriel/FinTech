@@ -639,6 +639,7 @@
 export default {
   data() {
     return {
+        // *TODO // for discussion.. to be deleted soon
         divscrolltop: 0,
         animate: 0,
         isScrolled01: false,
@@ -650,13 +651,15 @@ export default {
     };
   },
   mounted () {
+      //*TODO // for discussion.. to be deleted soon
     window.addEventListener('scroll', this.handleScroll);
   },
   destroyed () {
+      //*TODO // for discussion.. to be deleted soon
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
-      /**
+      /**TODO // for discussion.. to be deleted soon
        * Trigger line animation on scroll event
        * 
        */
@@ -707,7 +710,7 @@ export default {
         
         
     },
-    /**
+    /**TODO // for discussion.. to be deleted soon
      * set line animation effect
      *
      * @param   {string}  item  name of a line (class)
