@@ -80,6 +80,7 @@ import { mapGetters, mapActions } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
 
 export default {
+  auth: false,
   head() {
     return {
       meta: [
@@ -117,7 +118,6 @@ export default {
     LoginRegister
   },
   layout: "main",
-  middleware: ["auth"],
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
