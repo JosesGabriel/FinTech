@@ -127,6 +127,7 @@ export default {
   },
 
   auth: {
+    fullPathRedirect: true,
     strategies: {
       local: {
         endpoints: {
