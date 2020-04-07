@@ -142,7 +142,7 @@ export default {
 
         // reload for proper component mounting
         setTimeout(() => {
-          window.open("/", "_self");
+          this.redirect();
         }, 800);
       } catch (error) {
         this.$emit("alert", {
@@ -150,6 +150,12 @@ export default {
           message: error.response.data.message
         });
         this.isLoading = false;
+      }
+    },
+    redirect() {
+      const query = this.$route.query;
+      if (query.redirectTo) {
+        this.$router.push(query.redirectTo);
       }
     }
   }
