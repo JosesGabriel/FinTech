@@ -118,6 +118,14 @@ export default {
     LoginRegister
   },
   layout: "main",
+  data() {
+    return {
+      isOpen: true,
+      postImage: "https://lyduz.com/png_logo.png",
+      registerDialogModel: false,
+      state: ""
+    };
+  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
@@ -130,14 +138,6 @@ export default {
     fontColor() {
       return this.lightSwitch == 1 ? "white--text" : "headlinedark--text";
     }
-  },
-  data() {
-    return {
-      isOpen: true,
-      postImage: "https://lyduz.com/png_logo.png",
-      registerDialogModel: false,
-      state: ""
-    };
   },
   mounted() {
     this.retrieveParams();
