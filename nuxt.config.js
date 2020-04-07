@@ -182,7 +182,7 @@ export default {
     ]
   },
   router: {
-    middleware: ["auth", "protectedRoutes"]
+    middleware: ["protectedRoutes", "auth"]
   },
   /*
    ** vuetify module configuration
