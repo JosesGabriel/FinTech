@@ -3,7 +3,9 @@
  *
  * @return
  */
-export default ({ redirect, route, app: { $auth } }) => {
+export default ({ redirect, route, app }) => {
+  const { $auth } = app;
+
   /**
    *  List of protected routes
    */
@@ -21,6 +23,22 @@ export default ({ redirect, route, app: { $auth } }) => {
   // Skip middleware if route is not found to allow 404
   if (!getMatchedComponents(route, []).length) {
     return;
+  }
+
+  const { login, callback } = $auth.options.redirect;
+
+  if ($auth.$state.loggedIn) {
+    // Redirect to home page if inside login page (or login page disabled)
+    if (!login || route.path === login.split("?")[0]) {
+      return redirect("/");
+    }
+  } else {
+    // Redirect to login page if not authorized and not inside callback page
+    // (Those passing `callback` at runtime need to mark their callback component
+    // with `auth: false` to avoid an unnecessary redirect from callback to login)
+    if (!callback || route.path !== callback.split("?")[0]) {
+      redirect(`/login?${encodeQuery({ redirectTo: route.fullPath })}`);
+    }
   }
 };
 
