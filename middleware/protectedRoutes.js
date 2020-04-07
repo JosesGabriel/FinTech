@@ -3,7 +3,7 @@
  *
  * @return
  */
-export default function({ redirect, route, app: { $auth } }) {
+export default ({ redirect, route, app: { $auth } }) => {
   /**
    *  List of protected routes
    */
@@ -12,4 +12,4 @@ export default function({ redirect, route, app: { $auth } }) {
   if ($auth.loggedIn && protectedRoutes.includes(route.name)) {
     return redirect("/");
   }
-}
+};
