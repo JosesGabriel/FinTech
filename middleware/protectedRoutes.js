@@ -12,6 +12,16 @@ export default ({ redirect, route, app: { $auth } }) => {
   if ($auth.loggedIn && protectedRoutes.includes(route.name)) {
     return redirect("/");
   }
+
+  // Skip middleware if route is not guarded
+  if (routeOption(route, "auth", false)) {
+    return;
+  }
+
+  // Skip middleware if route is not found to allow 404
+  if (!getMatchedComponents(route, []).length) {
+    return;
+  }
 };
 
 /**
