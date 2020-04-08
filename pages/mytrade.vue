@@ -1,10 +1,12 @@
 <template>
-   <v-content > 
+   <v-content  
+    class="content"
+   > 
         <v-row>
 
             <v-row no-gutters class="mb-12">                 
                     <v-img
-                        src="mytrade_image010.png"
+                        src="mytrade_image01.png"
                         width="100%"
                     >
                     </v-img>
@@ -671,7 +673,7 @@ export default {
     openAccount(){
         window.open("https://bit.ly/3bq3Qvp", "_blank");
       },
-      
+
       /**TODO // for discussion.. to be deleted soon
        * Trigger line animation on scroll event
        * 
@@ -751,6 +753,9 @@ export default {
 }
 </script>
 <style scoped>
+.content {
+    background: #ffffff !important;
+}
 .header__content--logo {
     position: absolute;
     top: 30px;
@@ -911,6 +916,7 @@ export default {
 .container {
     max-width: unset;
     padding: unset;
+    background: #ffffff;
 }
 .mytrade_input > .v-input__control > .v-text-field__details {
     display: none;
