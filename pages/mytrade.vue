@@ -437,39 +437,15 @@
 
                 <!---------------------------------->
             </v-row>
-            <v-row class="mytrade__subcontainer">
-                    <v-col cols="4" class="mt-12" style="text-align:center;">
+
+            <v-row class="mytrade__subcontainer--testimonial pb-10" >
+                <v-row class="mytrade__subcontainer">
+                    <v-col cols="4" style="text-align:center;">
                         <v-row>
                             <v-col class="mytrade__people">
                                 <v-img
                                     class="people_img"
-                                    src="https://static.wixstatic.com/media/0d1ae4_4534577830f348feaef92cd8cc797336~mv2.png/v1/crop/x_39,y_118,w_759,h_758/fill/w_200,h_200,al_c,q_85,usm_0.66_1.00_0.01/Screen%20Shot%202020-03-25%20at%209_12_09%20PM.webp"
-                                
-                                >
-                                </v-img>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col class="mytrade__people">
-                                <h3>Derek Chua</h3>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col style="font-size:12px;" class="mytrade__people">
-                                <p>
-                                    Share the amazing things customers 
-                                    are saying about your business. 
-                                    Double click, or click Edit Text to make it yours.
-                                </p>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col cols="4" class="mt-12" style="text-align:center">
-                        <v-row>
-                            <v-col style="text-align:center" class="mytrade__people">
-                                <v-img
-                                    class="people_img"
-                                    src="https://static.wixstatic.com/media/035244_49fa1767a96f459f8a97bf165f96784b~mv2_d_4676_4871_s_4_2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01/035244_49fa1767a96f459f8a97bf165f96784b~mv2_d_4676_4871_s_4_2.webp"
+                                    src="derekchua.png"
                                     width="200"
                                 >
                                 </v-img>
@@ -477,25 +453,37 @@
                         </v-row>
                         <v-row>
                             <v-col class="mytrade__people">
-                                <h3>Name, title</h3>
+                                <h3 class="mytrade__people--name">Derrick Chua</h3>
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col style="font-size:12px;" class="mytrade__people">
-                                <p>
-                                    Share the amazing things customers 
-                                    are saying about your business. 
-                                    Double click, or click Edit Text to make it yours.
+                            <v-col class="mytrade__people">
+                                <p class="mytrade__people--text">
+                                   One of the reasons why I opened an account 
+                                   in MyTrade is because of Sir Nicky. I really 
+                                   really like his market reports. I also see the 
+                                   increased price of his recommendations. 
+                                   After that, I always follow his recos. Because of that, 
+                                   my account stayed positive.
                                 </p>
                             </v-col>
                         </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-img
+                                    class="qoute"
+                                    src="quote.png"
+                                    width="50"
+                                ></v-img>
+                            </v-col>
+                        </v-row>
                     </v-col>
-                    <v-col cols="4" class="mt-12" style="text-align:center">
+                    <v-col cols="4" style="text-align:center">
                         <v-row>
                             <v-col style="text-align:center" class="mytrade__people">
                                 <v-img
                                     class="people_img"
-                                    src="https://static.wixstatic.com/media/035244_8ea2789a36434fa5abddc1502b977886~mv2_d_4676_4871_s_4_2.jpg/v1/fill/w_200,h_200,al_c,q_80,usm_0.66_1.00_0.01/035244_8ea2789a36434fa5abddc1502b977886~mv2_d_4676_4871_s_4_2.webp"
+                                    src="marafrancisco.png"
                                     width="200"
                                 >
                                 </v-img>
@@ -503,25 +491,77 @@
                         </v-row>
                         <v-row>
                             <v-col class="mytrade__people">
-                                <h3>Name, title</h3>
+                                <h3 class="mytrade__people--name">Mara Francisco</h3>
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col style="font-size:12px;" class="mytrade__people">
-                                <p>
-                                    Share the amazing things customers 
-                                    are saying about your business. 
-                                    Double click, or click Edit Text to make it yours.
+                            <v-col class="mytrade__people">
+                                <p class="mytrade__people--text">
+                                    My money is either in the bank 
+                                    or insurance companies. Being a mother 
+                                    of two, I wanted my money to be more 
+                                    secured and I wanted faster returns. 
+                                    I would encourage others to try MyTrade
+                                    because it’s an easier way of investing, 
+                                    your money’s secure and it’s convenient.
                                 </p>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-img
+                                    class="qoute"
+                                    src="quote.png"
+                                    width="50"
+                                ></v-img>
+                            </v-col>
+                        </v-row>
+                    </v-col>
+                    <v-col cols="4" style="text-align:center">
+                        <v-row>
+                            <v-col style="text-align:center" class="mytrade__people">
+                                <v-img
+                                    class="people_img"
+                                    src="kassyparajillo.png"
+                                    width="200"
+                                >
+                                </v-img>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="mytrade__people">
+                                <h3 class="mytrade__people--name">Kassy Pajarillo</h3>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col class="mytrade__people">
+                                <p class="mytrade__people--text">
+                                    I choose MyTrade because 
+                                    they have an app. I find it 
+                                    convenient. It’s just within my 
+                                    pocket and I can just check 
+                                    how my stocks are.
+                                </p>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>
+                                <v-img
+                                    class="qoute"
+                                    src="quote.png"
+                                    width="50"
+                                ></v-img>
                             </v-col>
                         </v-row>
                     </v-col>     
+                </v-row>
             </v-row>
-            <v-row class="footer mt-12">
+
+            <v-row class="footer pt-10">
                     <v-row class="footer__content mt-12">
                         <v-col cols="4">
                             <v-row class="mb-12 pl-3">
-                                <h3>Reach out to us</h3>
+                                <h3 class="container--subtitle footer__title">Reach out to us</h3>
                             </v-row>
                             <v-divider class="divider__footer" id="divider__footer1"></v-divider>
                             <v-row>
@@ -583,7 +623,7 @@
                         </v-col>
                         <v-col cols="4">
                             <v-row class="mb-12 pl-3">
-                                <h3>Download MyTrade</h3>
+                                <h3 class="container--subtitle footer__title">Download MyTrade</h3>
                             </v-row>
                             <v-divider class="divider__footer" id="divider__footer2"></v-divider>
                             <v-row>
@@ -620,16 +660,16 @@
                         </v-col>
                         <v-col cols="4">
                             <v-row class="mb-12 pl-12">
-                                <h3>Contact</h3>
+                                <h3 class="container--subtitle footer__title">Contact</h3>
                             </v-row>
                             <v-divider class="ml-10 divider__footer" id="divider__footer3"></v-divider>
                             <v-row style="font-size: 12px;" class="pl-12">
-                                <p>2904-A East Tower, <br />
+                                <p class="content--text footer__text">2904-A East Tower, <br />
                                 Philippine Stock Exchange Center, <br />
                                 Exchange Road, Ortigas Center, <br />
                                 Pasig City, 1600</p>
 
-                                <p>Call us: +63 (8) 667-8918<br />
+                                <p class="content--text footer__text">Call us: +63 (8) 667-8918<br />
                                     +63 (8) 667-8900<br />
                                     Mobile: +63 928-503-7112<br />
                                     Email:  marketing@mytrade.com.ph
@@ -797,6 +837,15 @@ export default {
 .mytrade__people{
     padding: 10px 80px;
 }
+.mytrade__people--name {
+    font-family: futura-lt-w01-light,sans-serif !important;
+    font-size: 26px;
+    color:#0f911e;
+}
+.mytrade__people--text {
+    font-size: 15px;
+    font-family: futura-lt-w01-light,sans-serif !important;
+}
 .google_play,
 .app_store,
 .google_play2,
@@ -808,15 +857,25 @@ export default {
     margin: 0 auto;
     color:#000000;
 }
+.mytrade__subcontainer--testimonial {
+    background: #f0f0f0;
+    margin-top: 150px;
+}
 .mytrade__subcontainer {
     max-width: 1100px;
     margin: 0 auto;
     color:#000000;
-    margin-top: 100px;
+    margin-top: 50px;
 }
 .footer__content {
     max-width: 900px;
     margin: 0 auto;
+}
+.footer__title {
+    font-size: 22px;
+}
+.footer__text {
+    font-size: 13px;
 }
 .container--numlogo{
     font-size:87px;
@@ -839,8 +898,8 @@ export default {
     font-family:montserrat,sans-serif !important;
 }
 .mytrade_divider{
-   border-color: rgb(53, 212, 65);
-    background: rgb(53, 212, 65);
+    border-color: #0f911e;
+    background: #0f911e;
     border-width: 2px;
     width: 0%;
     margin-left: 0px;
@@ -907,9 +966,14 @@ export default {
 }
 .people_img {
     border-radius: 50%;
+    background-color: #e5e5e5;
+}
+.qoute {
+    margin: 0 auto;
 }
 .footer {
     background: #0F911E;
+    color: #ffffff !important;
 }
 </style>
 <style>
