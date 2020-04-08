@@ -6,7 +6,7 @@
 
             <v-row no-gutters class="mb-12">                 
                     <v-img
-                        src="mytrade_image01.png"
+                        src="4168.png"
                         width="100%"
                     >
                     </v-img>
@@ -32,7 +32,7 @@
                                     Guaranteed 99% uptime so you don't miss out on 
                                     important market opportunities and react in realtime 
                                     when the things diverge against your investment 
-                                    forecast. MyTrade™ platform in simple words; reliable.
+                                    forecast. MyTrade™ platform in simple words; <span style="color:#0f911e"> reliable.</span>
                                 </p> 
                             </v-col>
                         </v-row>
@@ -136,7 +136,7 @@
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col class="mytrade__indent">
+                            <v-col>
                                  <v-btn 
                                         rounded 
                                         class="text-capitalize"
@@ -213,7 +213,7 @@
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col class="mytrade__indent">
+                            <v-col>
                                  <v-btn 
                                         rounded 
                                         class="text-capitalize"
@@ -270,7 +270,7 @@
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col class="mytrade__indent">
+                            <v-col>
                                  <v-btn 
                                         rounded 
                                         class="text-capitalize"
@@ -344,7 +344,7 @@
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col class="mytrade__indent">
+                            <v-col>
                                  <v-btn 
                                         rounded 
                                         class="text-capitalize"
@@ -419,16 +419,14 @@
                         <v-row>
                             <v-col cols="12">
                                 <p class="mytrade__indent mytrade__availableText">
-                                    Your accounts will always 
-                                    be safe and secure with our 
-                                    bank-grade security and 
-                                    encryption systems   
+                                    Trading is a lifestyle. Trade anywhere 
+                                    with MyTrade Mobile Apps. Now everything 
+                                    thing you need to trades is in your pocket.   
                                 </p>
                                 <p class="mytrade__indent content--text">
-                                    I'm a paragraph. Click here to add your own 
-                                    text and edit me. It’s easy. Just click “Edit 
-                                    Text” or double click me to add your own 
-                                    content and make changes to the font.
+                                   Your accounts will always be safe and 
+                                   secure with our bank-grade security 
+                                   and encryption systems
                                 </p>
                             </v-col>
                         </v-row>
@@ -439,7 +437,8 @@
             </v-row>
 
             <v-row class="mytrade__subcontainer--testimonial pb-10" >
-                <v-row class="mytrade__subcontainer">
+                <v-col>
+                <v-row class="mytrade__subcontainer pb-0 mb-0">
                     <v-col cols="4" style="text-align:center;">
                         <v-row>
                             <v-col class="mytrade__people">
@@ -466,15 +465,6 @@
                                    After that, I always follow his recos. Because of that, 
                                    my account stayed positive.
                                 </p>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col>
-                                <v-img
-                                    class="qoute"
-                                    src="quote.png"
-                                    width="50"
-                                ></v-img>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -507,15 +497,6 @@
                                 </p>
                             </v-col>
                         </v-row>
-                        <v-row>
-                            <v-col>
-                                <v-img
-                                    class="qoute"
-                                    src="quote.png"
-                                    width="50"
-                                ></v-img>
-                            </v-col>
-                        </v-row>
                     </v-col>
                     <v-col cols="4" style="text-align:center">
                         <v-row>
@@ -544,19 +525,34 @@
                                 </p>
                             </v-col>
                         </v-row>
-                        <v-row>
-                            <v-col>
-                                <v-img
-                                    class="qoute"
-                                    src="quote.png"
-                                    width="50"
-                                ></v-img>
-                            </v-col>
-                        </v-row>
                     </v-col>     
                 </v-row>
+                <v-row class="mytrade__subcontainer--quotes mt-0 pt-0">
+                    <v-col cols="4">
+                        <v-img
+                            class="qoute"
+                            src="quote.png"
+                            width="50"
+                        ></v-img>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-img
+                            class="qoute"
+                            src="quote.png"
+                            width="50"
+                        ></v-img>
+                    </v-col>
+                    <v-col cols="4">
+                        <v-img
+                            class="qoute"
+                            src="quote.png"
+                            width="50"
+                        ></v-img>
+                    </v-col>
+                </v-row>
+                </v-col>
             </v-row>
-
+                
             <v-row class="footer pt-10">
                     <v-row class="footer__content mt-12">
                         <v-col cols="4">
@@ -647,14 +643,14 @@
                             </v-row>
                             <v-row>
                                 <v-col>
-                                   <v-icon dark>mdi-facebook</v-icon>
-                                   <v-icon dark class="pl-2">mdi-twitter</v-icon>
-                                   <v-icon dark class="pl-2">mdi-linkedin</v-icon>                             
+                                   <v-icon dark class="footer__icon" @click="iconClick('https://www.facebook.com/MyTradePH')">mdi-facebook</v-icon>
+                                   <v-icon dark class="pl-2 footer__icon" @click="iconClick('https://twitter.com/MyTradePH')">mdi-twitter</v-icon>
+                                   <v-icon dark class="pl-2 footer__icon" @click="iconClick('https://www.youtube.com/channel/UCiMf3n7NBlNehq0EokACbJw')">mdi-youtube</v-icon>                             
                                 </v-col>
                             </v-row>
                             <v-row>
                                 <v-col style="font-size:12px;" class="my-0 py-0">
-                                   <span>&copy; 2020 by MyTrade </span>
+                                   <span>&copy; 2020 by MyTrade. All Rights Reserved. </span>
                                 </v-col>
                             </v-row>
                         </v-col>
@@ -695,7 +691,41 @@ export default {
         isScrolled04: false,
         isScrolled05: false,
         isScrolled06: false,
+
     };
+  },
+  head: {
+      meta: [
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        hid: "description",
+        name: "description",
+        content: 'MyTrade is one of the most competitive online brokerage houses in the Philippines. Open an account and start trading today!' || ""
+      },
+      {
+        hid: "og:image",
+        property: "og:image",
+        content: process.env.APP_URL + "/og/mytrade_og-image.png"
+      }
+    ],
+  },
+  metaInfo() {
+    return {
+      meta: [
+          // Twitter Card
+          {name: 'twitter:card', content: 'summary'},
+          {name: 'twitter:title', content: 'MyTrade | Online Broker in the Philippines'},
+          {name: 'twitter:description', content: 'MyTrade is one of the most competitive online brokerage houses in the Philippines. Open an account and start trading today!'},
+          // image must be an absolute path
+          {name: 'twitter:image', content: ''},
+          // Facebook OpenGraph
+          {property: 'og:title', content: 'MyTrade | Online Broker in the Philippines'},
+          {property: 'og:type', content: 'website'},
+          {property: 'og:image', content:  ''},
+          {property: 'og:description', content: 'MyTrade is one of the most competitive online brokerage houses in the Philippines. Open an account and start trading today!'}
+      ]
+    }
   },
   mounted () {
       //*TODO // for discussion.. to be deleted soon
@@ -713,6 +743,15 @@ export default {
     openAccount(){
         window.open("https://bit.ly/3bq3Qvp", "_blank");
       },
+      /**
+       * trigger when mdi icon is clicked
+       *
+       * @param   {string}  icon  name of icons
+       *
+       */
+    iconClick(icon){
+        window.open(icon, "_blank");
+    },
 
       /**TODO // for discussion.. to be deleted soon
        * Trigger line animation on scroll event
@@ -826,25 +865,25 @@ export default {
 
 .mytrade__availableText{
     font-size: 20px;
-    font-family:spinnaker,sans-serif !important; 
+    font-family: poppins,sans-serif !important;
     font-weight: bold;
     color:#0B1C4D;
 }
 
 .content--text {
-    font-family: poppins-extralight,poppins,sans-serif !important;
+    font-family: poppins,sans-serif !important;
 }
 .mytrade__people{
     padding: 10px 80px;
 }
 .mytrade__people--name {
-    font-family: futura-lt-w01-light,sans-serif !important;
+    font-family: poppins,sans-serif !important;
     font-size: 26px;
     color:#0f911e;
 }
 .mytrade__people--text {
     font-size: 15px;
-    font-family: futura-lt-w01-light,sans-serif !important;
+    font-family: poppins,sans-serif !important;
 }
 .google_play,
 .app_store,
@@ -867,12 +906,20 @@ export default {
     color:#000000;
     margin-top: 50px;
 }
+.mytrade__subcontainer--quotes{
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
 .footer__content {
     max-width: 900px;
     margin: 0 auto;
 }
 .footer__title {
     font-size: 22px;
+}
+.footer__icon {
+    cursor: pointer;
 }
 .footer__text {
     font-size: 13px;
