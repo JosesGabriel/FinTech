@@ -25,23 +25,20 @@ export default {
   data() {
     return {
       state: "Loading...",
-      checkingUser: "Checking user authentication...",
       gettingTicket: "Obtaining ticket...",
       redirecting: "Redirecting..."
     };
   },
   mounted() {
-    this.checkUserAuth();
+    this.getTicket();
   },
   methods: {
-    checkUserAuth() {
-      this.state = this.checkingUser;
-      if (this.$auth.loggedIn) {
-        this.getTicket();
-      } else {
-        window.location.href = "/login";
-      }
-    },
+    /**
+     * fires on mounted if user is authenticated, then get the ticket from the response and redirect
+     * it back to vyndue
+     *
+     * @return  {object}  returns response object
+     */
     getTicket() {
       this.state = this.gettingTicket;
       this.$axios
