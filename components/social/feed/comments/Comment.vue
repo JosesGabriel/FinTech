@@ -22,6 +22,7 @@
       outlined
       dense
       rounded
+      color="success"
       :value="comment.content"
       hint="Press Esc to Cancel"
       persistent-hint
@@ -29,10 +30,14 @@
       @keydown.enter="editComment(comment.id, $event.target.value)"
     ></v-text-field>
     <v-list-item-content v-else class="pa-0 ma-0">
-      <v-container class="pa-0 body-2">
-        <span class="text--darken-2 caption font-weight-black">{{
-          comment.user.name
-        }}</span>
+      <v-container
+        class="pa-0 body-2"
+        :class="[
+          { 'black--text': lightSwitch == 0 },
+          { 'white--text': lightSwitch == 1 }
+        ]"
+      >
+        <span class="caption font-weight-black">{{ comment.user.name }}</span>
 
         <span v-if="comment.user.uuid == $auth.user.data.user.uuid">
           <v-btn
@@ -71,7 +76,14 @@
         >
           <img src="/icon/bullish_secondary.svg" height="13" width="10" />
         </v-btn>
-        <span class="px-1 caption">{{ comment.bulls_count }}</span>
+        <span
+          class="px-1 caption"
+          :class="[
+            { 'black--text': lightSwitch == 0 },
+            { 'white--text': lightSwitch == 1 }
+          ]"
+          >{{ comment.bulls_count }}</span
+        >
         <v-btn
           class="bear__btn--comment"
           :class="
@@ -90,7 +102,14 @@
         >
           <img src="/icon/bearish_secondary.svg" height="13" width="10" />
         </v-btn>
-        <span class="px-1 caption">{{ comment.bears_count }}</span>
+        <span
+          class="px-1 caption"
+          :class="[
+            { 'black--text': lightSwitch == 0 },
+            { 'white--text': lightSwitch == 1 }
+          ]"
+          >{{ comment.bears_count }}</span
+        >
         <v-btn
           icon
           small

@@ -5,19 +5,16 @@ const TOKEN = localStorage["vyndue.auth._token.local"];
 export default $axios => ({
     messages(params, payload) {
         $axios.defaults.headers.common["Authorization"] = TOKEN;
-        return $axios.$get(`${BASE_URL}/rooms/` + params.roomId + `/messages`);
+        return $axios.$get(`${BASE_URL}/rooms/${params.roomId}/messages`);
     },
     history(roomId, params) {
         let query = buildParams(params);
         return $axios.$get(
-            `${BASE_URL}/rooms/` +
-            roomId +
-            `/messages` +
-            `${query.length > 0 ? "?" + query : ""}`
+            `${BASE_URL}/rooms/${roomId}/messages${query.length > 0 ? "?" + query : ""}`
         );
     },
     search(payload) {
-        return $axios.$post(`${BASE_URL}/` + `user_directory/search`, payload);
+        return $axios.$post(`${BASE_URL}/user_directory/search`, payload);
     }
 });
 
