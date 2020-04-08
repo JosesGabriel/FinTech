@@ -39,11 +39,19 @@ export default {
       if (this.$auth.loggedIn) {
         this.getTicket();
       } else {
-        window.location.href = '/login'
+        window.location.href = "/login";
       }
     },
     getTicket() {
       this.state = this.gettingTicket;
+      this.$axios
+        .get(process.env.APP_URL + this.$route.fullpath)
+        .then(response => {
+          if (response.success) {
+            this.state = this.redirecting;
+            window.location.href = `${process.env.VYNDUE_CLIENT_API_URL}/login/sso/ticket?ticket=${response.data.ticket}`;
+          }
+        });
     }
   }
 };
