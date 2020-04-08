@@ -9,11 +9,17 @@
           class="leftPart_container d-flex align-center"
         >
           <v-card flat color="transparent">
-            <span class="headlineLanding_page text-md-left text-sm-center d-block" :class="[{'pt-10': $vuetify.breakpoint.xsOnly}, fontColor]">
+            <span
+              class="headlineLanding_page text-md-left text-sm-center d-block"
+              :class="[{ 'pt-10': $vuetify.breakpoint.xsOnly }, fontColor]"
+            >
               Looping
               <br />Investors
             </span>
-            <span class="bodyLanding_page text-md-left text-sm-center d-block pt-3" :class="[{'pt-5': $vuetify.breakpoint.smAndDown}, fontColor]">
+            <span
+              class="bodyLanding_page text-md-left text-sm-center d-block pt-3"
+              :class="[{ 'pt-5': $vuetify.breakpoint.smAndDown }, fontColor]"
+            >
               Leap along with the fastest growing community of self-directed
               investors and discover how the Stock Market can improve your
               financial prospects.
@@ -25,14 +31,16 @@
                 medium
                 class="font-weight-bold caption success--text px-8 mr-7"
                 @click="(registerDialogModel = true), (state = 'login')"
-              >LOG IN</v-btn>
+                >LOG IN</v-btn
+              >
               <v-btn
                 color="success"
                 tile
                 medium
                 class="font-weight-bold caption px-8 black--text"
                 @click="(registerDialogModel = true), (state = 'register')"
-              >SIGN UP</v-btn>
+                >SIGN UP</v-btn
+              >
             </div>
           </v-card>
         </v-card>
@@ -43,12 +51,22 @@
     </v-row>
     <div class="d-block text-center caption pt-10">
       <client-only>
-        <router-link to="/privacy-policy" class="no-transform tertiary--text">Privacy Policy</router-link>•
-        <router-link to="/terms-of-use" class="no-transform tertiary--text">Terms of Use</router-link>•
-        <router-link to="/about-us" class="no-transform tertiary--text">About Us</router-link>•
-        <router-link to="/help-desk" class="no-transform tertiary--text">Help Desk</router-link>•
+        <router-link to="/privacy-policy" class="no-transform tertiary--text"
+          >Privacy Policy</router-link
+        >•
+        <router-link to="/terms-of-use" class="no-transform tertiary--text"
+          >Terms of Use</router-link
+        >•
+        <router-link to="/about-us" class="no-transform tertiary--text"
+          >About Us</router-link
+        >•
+        <router-link to="/help-desk" class="no-transform tertiary--text"
+          >Help Desk</router-link
+        >•
         <!-- <router-link to="/affiliate" class="no-transform tertiary--text">Affliate</router-link>· -->
-        <router-link to="/contact-us" class="no-transform tertiary--text">Contact Us</router-link>•
+        <router-link to="/contact-us" class="no-transform tertiary--text"
+          >Contact Us</router-link
+        >•
         <span class="success--text">Lyduz © 2020</span>
       </client-only>
     </div>
@@ -62,6 +80,7 @@ import { mapGetters, mapActions } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
 
 export default {
+  auth: false,
   head() {
     return {
       meta: [
@@ -99,7 +118,14 @@ export default {
     LoginRegister
   },
   layout: "main",
-  middleware: ["auth"],
+  data() {
+    return {
+      isOpen: true,
+      postImage: "https://lyduz.com/png_logo.png",
+      registerDialogModel: false,
+      state: ""
+    };
+  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
@@ -112,14 +138,6 @@ export default {
     fontColor() {
       return this.lightSwitch == 1 ? "white--text" : "headlinedark--text";
     }
-  },
-  data() {
-    return {
-      isOpen: true,
-      postImage: "https://lyduz.com/png_logo.png",
-      registerDialogModel: false,
-      state: ""
-    };
   },
   mounted() {
     this.retrieveParams();
