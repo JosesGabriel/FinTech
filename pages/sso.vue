@@ -5,7 +5,6 @@
 <script>
 export default {
   layout: "main",
-<<<<<<< HEAD
   mounted() {
     this.checkUserAuth()    
   },
@@ -14,8 +13,5 @@ export default {
 
     }
   }
-=======
-  mounted() {}
->>>>>>> 42b5da0a89c2577e489f03c83c2eed11a9516f43
 };
 </script>
