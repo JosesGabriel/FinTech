@@ -311,5 +311,6 @@ export default {
 .componentContainer {
   position: relative;
   margin-bottom: 38px;
+  height: 100%;
 }
 </style>
