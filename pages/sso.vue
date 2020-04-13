@@ -45,9 +45,21 @@ export default {
      * @return  {object}  returns response object
      */
     getTicket() {
+      const query = this.$route.query;
+
+      // TODO: Set error message or redirect
+      // check if route has query strings
+      if (!query || !Object.keys(query).length) {
+        return;
+      }
+
+      const queryString = Object.keys(query)
+        .map(key => key + "=" + query[key])
+        .join("&");
+
       this.state = this.gettingTicket;
       this.$axios
-        .get(process.env.APP_URL + this.$route.fullpath)
+        .get(`${process.env.APP_URL}/sso?${queryString}`)
         .then(response => {
           if (response.success) {
             this.state = this.redirecting;
