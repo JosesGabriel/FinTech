@@ -7,7 +7,12 @@
       class="text-center pa-5"
       elevation="1"
     >
-      <v-progress-circular indeterminate color="success" size="25" width="3"></v-progress-circular>
+      <v-progress-circular
+        indeterminate
+        color="success"
+        size="25"
+        width="3"
+      ></v-progress-circular>
       <div class="body-2 pt-5">{{ state }}</div>
     </v-card>
   </v-container>
@@ -17,17 +22,17 @@ import { mapGetters } from "vuex";
 
 export default {
   layout: "main",
-  computed: {
-    ...mapGetters({
-      lightSwitch: "global/getLightSwitch"
-    })
-  },
   data() {
     return {
       state: "Loading...",
       gettingTicket: "Obtaining ticket...",
       redirecting: "Redirecting..."
     };
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   mounted() {
     this.getTicket();
