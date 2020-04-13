@@ -65,6 +65,9 @@ export default {
             this.state = this.redirecting;
             window.location.href = `${process.env.VYNDUE_CLIENT_API_URL}/login/sso/ticket?ticket=${response.data.ticket}`;
           }
+        })
+        .catch(err => {
+          // TODO: Add error catching logic
         });
     }
   }
