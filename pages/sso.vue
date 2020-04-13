@@ -47,15 +47,15 @@ export default {
 
       // check if route has query strings
       if (!query || !Object.keys(query).length) {
-        return;
-      } else {
         let alert = {
           model: true,
           state: false,
-          message: 'No query string found.'
+          message: "Authentication failed.",
+          redirect: `${process.env.VYNDUE_APP_URL}/login`
         };
         this.setAlert(alert);
-        window.location.href = `${process.env.VYNDUE_APP_URL}/login`
+
+        return;
       }
 
       const queryString = Object.keys(query)
