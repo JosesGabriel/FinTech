@@ -7,18 +7,13 @@
       class="text-center pa-5"
       elevation="1"
     >
-      <v-progress-circular
-        indeterminate
-        color="success"
-        size="25"
-        width="3"
-      ></v-progress-circular>
+      <v-progress-circular indeterminate color="success" size="25" width="3"></v-progress-circular>
       <div class="body-2 pt-5">{{ state }}</div>
     </v-card>
   </v-container>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   layout: "main",
@@ -38,6 +33,9 @@ export default {
     this.getTicket();
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
     /**
      * fires on mounted if user is authenticated, then get the ticket from the response and redirect
      * it back to vyndue
@@ -47,10 +45,17 @@ export default {
     getTicket() {
       const query = this.$route.query;
 
-      // TODO: Set error message or redirect
       // check if route has query strings
       if (!query || !Object.keys(query).length) {
         return;
+      } else {
+        let alert = {
+          model: true,
+          state: false,
+          message: 'No query string found.'
+        };
+        this.setAlert(alert);
+        window.location.href = `${process.env.VYNDUE_APP_URL}/login`
       }
 
       const queryString = Object.keys(query)
@@ -67,7 +72,12 @@ export default {
           }
         })
         .catch(err => {
-          // TODO: Add error catching logic
+          let alert = {
+            model: true,
+            state: false,
+            message: err.message
+          };
+          this.setAlert(alert);
         });
     }
   }
