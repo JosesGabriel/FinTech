@@ -64,7 +64,7 @@ export default {
 
       this.state = this.gettingTicket;
       this.$axios
-        .get(`${process.env.APP_URL}/sso?${queryString}`)
+        .get(`${process.env.API_GEN_URL}/sso?${queryString}`)
         .then(response => {
           if (response.success) {
             this.state = this.redirecting;
