@@ -14,7 +14,8 @@ export default () => ({
     alert: {
         model: false,
         state: "",
-        message: ""
+        message: "",
+        redirect: ""
     },
     //end global snackbar
 

@@ -11,7 +11,11 @@
       <client-only>
         <Header class="header__container" />
       </client-only>
-      <v-container :class="{ 'pa-0': $vuetify.breakpoint.xsOnly}" :fluid="$route.path == '/login/'" class="componentContainer">
+      <v-container
+        :class="{ 'pa-0': $vuetify.breakpoint.xsOnly}"
+        :fluid="$route.path == '/login/'"
+        class="componentContainer"
+      >
         <div v-if="showLamp" class="lampBtn" :class="{'d-none': $vuetify.breakpoint.smAndDown}">
           <img :src="lampMode" @click="lampSwitch" />
           <img
@@ -26,6 +30,12 @@
       </v-container>
       <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
         {{ alert.message }}
+        <span v-if="alert.redirect" class="d-block pl-1">
+          <a
+            :href="alert.redirect"
+            class="no-transform font-weight-bold white--text pr-1"
+          >Click here</a>to redirect to login page.
+        </span>
         <v-btn color="white" text @click="alert.model = false">Close</v-btn>
       </v-snackbar>
       <vue-snotify></vue-snotify>
