@@ -44,7 +44,7 @@ export default (ctx, inject) => {
     authentication: {
       register: initApiRepository("/register"),
       providers: providerRepository(ctx.$axios),
-      sso: ssoRepository(ctx),
+      sso: ssoRepository(ctx.$axios),
       verify: initApiRepository("/verify"),
       forgotPassword: initApiRepository("/auth/password/reset"),
       resendVerification: initApiRepository("/auth/verification/resend")
