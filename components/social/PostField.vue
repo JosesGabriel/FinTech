@@ -646,6 +646,7 @@ export default {
             }.bind(this)
           )
           .catch(error => {
+            this.loader = false;
             this.clearInputs(false, error.response.data.message);
           });
       }

@@ -74,8 +74,7 @@ export default {
       stockData: [],
       watchCardLoading: "success",
       watchListObject: "",
-      isLightMode: 0,
-      dataSeries: []
+      isLightMode: 0
     };
   },
   computed: {
@@ -94,17 +93,6 @@ export default {
      */
     renderChartKey() {
       this.watchCardMount();
-    },
-    /**
-     * Watching sseInfo, fires when there are new trades or social stock trend
-     * posted on the social wall
-     *
-     * @param   {object}  data  handles the new data incoming
-     *
-     * @return  {object}        returns new data object
-     */
-    sseInfo(data) {
-      this.realTime(data);
     }
   },
   mounted() {
@@ -140,27 +128,7 @@ export default {
               description: ""
             });
             this.stockData[i].description = this.watchListObject[i].description
-            // GET Closing Price from Stock History API
-            const params = {
-              "symbol-id": this.watchListObject[i].stock_id,
-              resolution: "1D",
-              limit: "5"
-            };
-            this.$api.chart.charts.latest(params).then(
-              function(result) {
-                this.dataSeries[i] = result.data.c.reverse();
-              }.bind(this)
-            );
-
-            // GET Stock Symbol + Stock Exchange from Stock Info API
-            const params2 = {
-              "symbol-id": this.watchListObject[i].stock_id
-            };
-            this.$api.chart.stocks.list(params2).then(
-              function(result) {
-                this.stockData[i].stockSym = result.data.symbol;
-              }.bind(this)
-            );
+            this.stockData[i].stockSym = this.watchListObject[i].symbol
 
             // GET Current Price + Current Change from Stock History API
             const params3 = {
@@ -184,31 +152,6 @@ export default {
           }
         });
     },
-    /**
-     * Execute function if there are sse data incoming from social stock trend or trades
-     * Find the particular stock if it is the same stock with the incoming data
-     * then update its values such as: current price & price percentage
-     * Add update effect together with the array index
-     *
-     * @param   {object}  data  handles new data object
-     *
-     * @return  {number}        returns number values and stock id
-     */
-    realTime(data) {
-      for (let index = 0; index < this.stockData.length; index++) {
-        if (this.watchListObject[index].stock_id == data.sym_id) {
-          let oldprice = this.stockData[index].currentPrice;
-          this.stockData[index].currentPrice = data.c;
-          this.stockData[index].change = data.chgpc.toFixed(2);
-          if (oldprice != this.stockData[index].currentPrice) {
-            this.updateEffect(this.stockData[index].stockSym);
-          }
-
-          this.dataSeries[index][4] = this.stockData[index].currentPrice;
-        }
-      }
-    },
-
     /**
      * Assigning background style to updated stock with duration of 800ms
      *
