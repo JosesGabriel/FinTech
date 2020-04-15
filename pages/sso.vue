@@ -68,8 +68,8 @@ export default {
         .join("&");
 
       this.state = this.gettingTicket;
-      this.$axios
-        .get(`${process.env.API_GEN_URL}/sso?${queryString}`)
+      this.$api.authentication.sso
+        .getRedirectUrl(queryString)
         .then(response => {
           this.state = this.redirecting;
           window.location.href = `${response.data.redirect_url}`;
