@@ -71,10 +71,8 @@ export default {
       this.$axios
         .get(`${process.env.API_GEN_URL}/sso?${queryString}`)
         .then(response => {
-          if (response.success) {
-            this.state = this.redirecting;
-            window.location.href = `${response.data.redirect_url}`;
-          }
+          this.state = this.redirecting;
+          window.location.href = `${response.data.redirect_url}`;
         })
         .catch(err => {
           let alert = {
