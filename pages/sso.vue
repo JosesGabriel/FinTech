@@ -7,7 +7,12 @@
       class="text-center pa-5"
       elevation="1"
     >
-      <v-progress-circular indeterminate color="success" size="25" width="3"></v-progress-circular>
+      <v-progress-circular
+        indeterminate
+        color="success"
+        size="25"
+        width="3"
+      ></v-progress-circular>
       <div class="body-2 pt-5">{{ state }}</div>
     </v-card>
   </v-container>
@@ -66,10 +71,8 @@ export default {
       this.$axios
         .get(`${process.env.API_GEN_URL}/sso?${queryString}`)
         .then(response => {
-          if (response.success) {
-            this.state = this.redirecting;
-            window.location.href = `${process.env.VYNDUE_CLIENT_API_URL}/login/sso/ticket?ticket=${response.data.ticket}`;
-          }
+          this.state = this.redirecting;
+          window.location.href = `${response.data.redirect_url}`;
         })
         .catch(err => {
           let alert = {
