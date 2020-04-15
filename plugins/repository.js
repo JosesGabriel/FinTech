@@ -5,6 +5,7 @@ import socialRepository from "~/api/social/socialRepository";
 import journalRepository from "~/api/journal/journalRepository";
 import providerRepository from "~/api/authentication/providerRepository";
 import paymentRepository from "~/api/account/paymentRepository";
+import ssoRepository from "~/api/authentication/ssoRepository";
 import vyndueRepository from "~/api/vyndue/vyndueRepository";
 // import repository for case to case end point
 
@@ -43,6 +44,7 @@ export default (ctx, inject) => {
     authentication: {
       register: initApiRepository("/register"),
       providers: providerRepository(ctx.$axios),
+      sso: ssoRepository(ctx),
       verify: initApiRepository("/verify"),
       forgotPassword: initApiRepository("/auth/password/reset"),
       resendVerification: initApiRepository("/auth/verification/resend")
