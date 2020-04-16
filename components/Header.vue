@@ -107,7 +107,7 @@
           ref="accountBtn"
           class="header__button no-transform font-weight-black body-2"
           text
-          v-if="$vuetify.breakpoint.smAndUp"
+          v-show="$vuetify.breakpoint.smAndUp"
           @click="
             $auth.loggedIn
               ? (showDropdown = !showDropdown)
@@ -117,7 +117,7 @@
           "
         >{{ $auth.loggedIn ? $auth.user.data.user.first_name : "Account" }}</v-btn>
         <v-avatar
-          v-else-if="$vuetify.breakpoint.xsOnly"
+          v-show="$vuetify.breakpoint.xsOnly"
           :class="{'ma-2 mt-3': $vuetify.breakpoint.xsOnly}"
           icon
           size="24"
