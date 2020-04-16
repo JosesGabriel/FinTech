@@ -14,7 +14,7 @@
         :src="item.src"
         @click="redirect(i)"
       >
-        <v-card
+        <!-- <v-card
           v-if="i == 2"
           flat
           class="d-flex pb-8 justify-center align-end"
@@ -26,7 +26,7 @@
             rounded
             class="px-10 caption font-weight-medium black--text text-capitalize"
           >Support Us</v-btn>
-        </v-card>
+        </v-card> -->
       </v-carousel-item>
     </v-carousel>
   </div>
@@ -44,8 +44,7 @@ export default {
         {
           src: "Traders Empire.png",
           link: "http://bit.ly/TradersEmpireBook1"
-        },
-        // TODO temporarily remove this in release
+        }
         // {
         //   src: "backer_ads.jpg",
         //   link: "/backer"

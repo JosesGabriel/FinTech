@@ -27,5 +27,8 @@ export default {
     },
     SET_MARKALL(state, data) {
         state.markAll = data;
+    },
+    SET_SWIPE(state, data) {
+        state.swipe = data;
     }
 };

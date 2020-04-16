@@ -14,7 +14,7 @@
   </v-container>
 </template>
 <script>
-import { myToken } from "~/assets/client.js";
+// import { myToken } from "~/assets/js/vyndue/client.js";
 import GameLobby from "~/components/game/GameLobby";
 import GameView from "~/components/game/GameView";
 import LogoLoader from "~/components/LogoLoader";

@@ -41,8 +41,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 import { AddDynamicTime, LocalFormat } from "~/assets/js/helpers/datetime";
-import { mapGetters } from "vuex";
 
 export default {
   props: {
@@ -86,6 +86,9 @@ export default {
     this.getSymbol();
   },
   methods: {
+    ...mapActions({
+      setAlert: "global/setAlert"
+    }),
     localFormat: LocalFormat,
     addDynamicTime: AddDynamicTime,
 
@@ -123,15 +126,22 @@ export default {
         if (response.success) {
           this.notification.status = "read";
 
-          if (this.meta.user && this.meta.post) {
+          if (this.meta.user && this.meta.post && this.$vuetify.breakpoint.mdAndUp) {
             window.location = "/post/" + this.meta.post.id;
-
-          } else if(typeof this.meta.post == "undefined" && typeof this.meta.stock == "undefined" && this.meta.user){
+          } else if (
+            typeof this.meta.post == "undefined" &&
+            typeof this.meta.stock == "undefined" &&
+            this.meta.user && this.$vuetify.breakpoint.mdAndUp
+          ) {
             window.location = "/profile/" + this.meta.user.username;
-
-          } else if(this.meta.user && this.meta.stock){
+          } else if (this.meta.user && this.meta.stock) {
             window.location = "/watchlist";
-          
+          } else if(typeof this.meta.stock == 'undefined' && this.$vuetify.breakpoint.smAndDown) {
+            this.setAlert({
+            model: true,
+            state: "error",
+            message: "Temporarily not available on mobile."
+          });
           }
         }
       });
@@ -139,3 +149,23 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.userMessage__dropdown-title {
+  font-weight: 700;
+  white-space: normal;
+  white-space: inherit;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+}
+.listItem__content {
+  align-items: unset !important;
+}
+.userMessage__message {
+  line-height: 15px !important;
+  display: block;
+  width: 100%;
+}
+</style>

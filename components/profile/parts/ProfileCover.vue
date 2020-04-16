@@ -27,6 +27,7 @@
             :src="user.cover_image == null ? '/cover-default.jpg' : user.cover_image "
             aspect-ratio="3"
             class="white--text align-end"
+            @error="user.cover_image = '/cover-default.jpg'"
           ></v-img>
         </v-card>
       </v-col>
@@ -41,6 +42,7 @@
                 @mouseleave="overlay = !overlay"
                 :src="user.profile_image == null ? 'default.png' : user.profile_image"
                 :lazy-src="user.profile_image == null ? 'default.png' : user.profile_image"
+                @error="user.profile_image = 'default.png'"
               >
                 <v-overlay
                   class="overlayProfile__photo"

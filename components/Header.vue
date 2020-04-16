@@ -21,31 +21,40 @@
     <v-spacer></v-spacer>
 
     <v-toolbar-items class="mt-3" dark>
-      <HeaderMenu v-if="showHeaderMenu" class="headerMenu" />
+      <HeaderMenu
+        v-if="showHeaderMenu"
+        class="headerMenu"
+        :class="$vuetify.breakpoint.smAndUp ? 'userMenu__dropdown-smAndUp' : 'userMenu__dropdown-smAndDown'"
+      />
       <HeaderNotification
         v-if="showNotification && $auth.loggedIn"
         :data-notification="dataNotification"
         @clicked="closeDropdown"
       />
-      <a
-        v-if="$auth.loggedIn ? true : false"
-        small
-        :dark="lightSwitch == 0 ? false : true"
-        icon
-        class="social__router pt-4"
-        @click="
+      <a class="social__router">
+        <v-btn
+          v-if="$auth.loggedIn ? true : false"
+          :dark="lightSwitch == 0 ? false : true"
+          class="social__router"
+          :class="{'pa-2': $vuetify.breakpoint.xsOnly}"
+          :icon="$vuetify.breakpoint.xsOnly"
+          :text="$vuetify.breakpoint.smAndUp"
+          @click="
           (showHeaderMenu = !showHeaderMenu),
             (showNotification = false),
             (showDropdown = false)
         "
-      >
-        <v-icon>mdi-menu</v-icon>
+        >
+          <v-icon>mdi-menu</v-icon>
+        </v-btn>
       </a>
       <a v-show="$auth.loggedIn ? true : false" class="social__router">
         <v-btn
           ref="accountBtn"
           class="header__button"
-          text
+          :class="{'pa-2': $vuetify.breakpoint.xsOnly}"
+          :icon="$vuetify.breakpoint.xsOnly"
+          :text="$vuetify.breakpoint.smAndUp"
           @click="
             (showNotification = !showNotification),
               (showHeaderMenu = false),
@@ -59,7 +68,10 @@
             class="header__button notif__counter-badge font-weight-black no-transform body-2"
             color="error"
             small
-          >Notification</v-badge>
+          >
+            <span v-if="$vuetify.breakpoint.smAndUp">Notification</span>
+            <v-icon v-else-if="$vuetify.breakpoint.xsOnly">mdi-chat-processing</v-icon>
+          </v-badge>
         </v-btn>
       </a>
 
@@ -69,17 +81,25 @@
         target="_blank"
         class="social__router"
       >
-        <v-btn class="header__button no-transform font-weight-black body-2" text>
+        <v-btn
+          class="header__button no-transform font-weight-black body-2"
+          :class="{'pa-2': $vuetify.breakpoint.xsOnly}"
+          :icon="$vuetify.breakpoint.xsOnly"
+          :text="$vuetify.breakpoint.smAndUp"
+        >
           <v-badge
             content="TRY"
             offset-x="23"
             offset-y="-1"
+            v-if="$vuetify.breakpoint.smAndUp"
             dark
             left
             class="header__button font-weight-black no-transform vyndue__badge"
             color="transparent"
             small
-          ></v-badge>Vyndue
+          ></v-badge>
+          <span v-if="$vuetify.breakpoint.smAndUp">Vyndue</span>
+          <v-icon v-else-if="$vuetify.breakpoint.xsOnly">mdi-message-text</v-icon>
         </v-btn>
       </a>
       <a v-show="$auth.loggedIn ? true : false" class="social__router">
@@ -87,6 +107,7 @@
           ref="accountBtn"
           class="header__button no-transform font-weight-black body-2"
           text
+          v-show="$vuetify.breakpoint.smAndUp"
           @click="
             $auth.loggedIn
               ? (showDropdown = !showDropdown)
@@ -95,6 +116,28 @@
               (showNotification = false)
           "
         >{{ $auth.loggedIn ? $auth.user.data.user.first_name : "Account" }}</v-btn>
+        <v-avatar
+          v-show="$vuetify.breakpoint.xsOnly"
+          :class="{'ma-2 mt-3': $vuetify.breakpoint.xsOnly}"
+          icon
+          size="24"
+          @click="
+            $auth.loggedIn
+              ? (showDropdown = !showDropdown)
+              : (registerDialogModel = true),
+              (showHeaderMenu = false),
+              (showNotification = false)
+          "
+        >
+          <img
+            :src="$auth.loggedIn
+                      ? $auth.user.data.user.profile_image
+                        ? $auth.user.data.user.profile_image
+                        : 'default.png'
+                      : ''"
+            alt="user"
+          />
+        </v-avatar>
       </a>
     </v-toolbar-items>
 
@@ -102,12 +145,15 @@
     <LoginRegister v-model="registerDialogModel" />
   </v-toolbar>
 </template>
+
 <script>
+
+import { mapActions, mapGetters } from "vuex";
 import {
   UserNotificationEventsList,
   AllNotificationEventsList
 } from "~/assets/js/config/notification";
-import { mapActions, mapGetters } from "vuex";
+
 import LoginRegister from "~/components/LoginRegister";
 import HeaderDropdown from "~/components/header/HeaderDropdown";
 import HeaderMenu from "~/components/header/HeaderMenu";
@@ -413,9 +459,6 @@ export default {
   border-bottom: 1px white;
 }
 .headerMenu {
-  position: relative;
-  top: 40px;
-  left: 35px;
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 .vyndue__badge .v-badge__wrapper .v-badge__badge {
@@ -428,4 +471,21 @@ export default {
   min-width: 13px;
   font-size: 8px;
 }
+
+/* menu dropdown */
+.userMenu__dropdown-smAndUp {
+  position: absolute;
+  top: 45px;
+  right: 271px;
+  margin-right: 10px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
+}
+.userMenu__dropdown-smAndDown {
+  position: absolute;
+  top: 50px;
+  right: 144px;
+  margin-right: 10px;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.47);
+}
+/* end */
 </style>

@@ -14,7 +14,8 @@ export default () => ({
     alert: {
         model: false,
         state: "",
-        message: ""
+        message: "",
+        redirect: ""
     },
     //end global snackbar
 
@@ -44,5 +45,6 @@ export default () => ({
     //Global Updated Settings 
     settings: null,
     //end global update settings
-    markAll: 0
+    markAll: 0,
+    swipe: ''
 });

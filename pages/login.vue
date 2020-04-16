@@ -1,47 +1,72 @@
 <template>
-  <v-card class="login__card text-center" color="transparent" dark flat>
+  <v-card class="login__card text-center mx-5" color="transparent" dark flat>
     <v-row no-gutters>
-      <v-col class="leftPart_col" cols="12" sm="4" md="4" lg="4">
-        <div class="leftPart_container">
-          <span class="headlineLanding_page text-left d-block" :class="fontColor">
-            Looping
-            <br />Investors
-          </span>
-          <span class="bodyLanding_page text-left d-block pt-3" :class="fontColor">
-            Leap along with the fastest growing community of self-directed
-            investors and discover how the Stock Market can improve your
-            financial prospects.
-          </span>
-          <div class="pa-10">
-            <v-btn
-              text
-              tile
-              medium
-              class="font-weight-bold caption success--text px-8 mr-7"
-              @click="(registerDialogModel = true), (state = 'login')"
-            >LOG IN</v-btn>
-            <v-btn
-              color="success"
-              tile
-              medium
-              class="font-weight-bold caption px-8 black--text"
-              @click="(registerDialogModel = true), (state = 'register')"
-            >SIGN UP</v-btn>
-          </div>
-        </div>
+      <v-col class="leftPart_col" cols="12" sm="12" md="5" lg="4">
+        <v-card
+          flat
+          height="100%"
+          color="transparent"
+          class="leftPart_container d-flex align-center"
+        >
+          <v-card flat color="transparent">
+            <span
+              class="headlineLanding_page text-md-left text-sm-center d-block"
+              :class="[{ 'pt-10': $vuetify.breakpoint.xsOnly }, fontColor]"
+            >
+              Looping
+              <br />Investors
+            </span>
+            <span
+              class="bodyLanding_page text-md-left text-sm-center d-block pt-3"
+              :class="[{ 'pt-5': $vuetify.breakpoint.smAndDown }, fontColor]"
+            >
+              Leap along with the fastest growing community of self-directed
+              investors and discover how the Stock Market can improve your
+              financial prospects.
+            </span>
+            <div class="pa-10">
+              <v-btn
+                text
+                tile
+                medium
+                class="font-weight-bold caption success--text px-8 mr-7"
+                @click="(registerDialogModel = true), (state = 'login')"
+                >LOG IN</v-btn
+              >
+              <v-btn
+                color="success"
+                tile
+                medium
+                class="font-weight-bold caption px-8 black--text"
+                @click="(registerDialogModel = true), (state = 'register')"
+                >SIGN UP</v-btn
+              >
+            </div>
+          </v-card>
+        </v-card>
       </v-col>
-      <v-col acols="12" sm="8" md="8" lg="8">
+      <v-col cols="12" sm="12" md="7" lg="8">
         <img :src="landingImg" class="landingImage" alt width="100%" />
       </v-col>
     </v-row>
     <div class="d-block text-center caption pt-10">
       <client-only>
-        <router-link to="/privacy-policy" class="no-transform tertiary--text">Privacy Policy</router-link>•
-        <router-link to="/terms-of-use" class="no-transform tertiary--text">Terms of Use</router-link>•
-        <router-link to="/about-us" class="no-transform tertiary--text">About Us</router-link>•
-        <router-link to="/help-desk" class="no-transform tertiary--text">Help Desk</router-link>•
+        <router-link to="/privacy-policy" class="no-transform tertiary--text"
+          >Privacy Policy</router-link
+        >•
+        <router-link to="/terms-of-use" class="no-transform tertiary--text"
+          >Terms of Use</router-link
+        >•
+        <router-link to="/about-us" class="no-transform tertiary--text"
+          >About Us</router-link
+        >•
+        <router-link to="/help-desk" class="no-transform tertiary--text"
+          >Help Desk</router-link
+        >•
         <!-- <router-link to="/affiliate" class="no-transform tertiary--text">Affliate</router-link>· -->
-        <router-link to="/contact-us" class="no-transform tertiary--text">Contact Us</router-link>•
+        <router-link to="/contact-us" class="no-transform tertiary--text"
+          >Contact Us</router-link
+        >•
         <span class="success--text">Lyduz © 2020</span>
       </client-only>
     </div>
@@ -55,6 +80,7 @@ import { mapGetters, mapActions } from "vuex";
 import LoginRegister from "~/components/LoginRegister";
 
 export default {
+  auth: false,
   head() {
     return {
       meta: [
@@ -92,7 +118,14 @@ export default {
     LoginRegister
   },
   layout: "main",
-  middleware: ["auth"],
+  data() {
+    return {
+      isOpen: true,
+      postImage: "https://lyduz.com/png_logo.png",
+      registerDialogModel: false,
+      state: ""
+    };
+  },
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch"
@@ -105,14 +138,6 @@ export default {
     fontColor() {
       return this.lightSwitch == 1 ? "white--text" : "headlinedark--text";
     }
-  },
-  data() {
-    return {
-      isOpen: true,
-      postImage: "https://lyduz.com/png_logo.png",
-      registerDialogModel: false,
-      state: ""
-    };
   },
   mounted() {
     this.retrieveParams();
@@ -176,13 +201,6 @@ export default {
 </script>
 
 <style scoped>
-.leftPart_col {
-  position: relative;
-}
-.leftPart_container {
-  position: absolute;
-  transform: translateY(25%);
-}
 #app .leftPart_container .headlineLanding_page {
   font-style: normal;
   font-weight: 600;
@@ -203,8 +221,6 @@ export default {
   position: absolute;
   width: 8%;
   right: 337px;
-}
-.landingImage {
 }
 .footer__links:hover {
   color: #03dac5;

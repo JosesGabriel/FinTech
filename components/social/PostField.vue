@@ -646,6 +646,7 @@ export default {
             }.bind(this)
           )
           .catch(error => {
+            this.loader = false;
             this.clearInputs(false, error.response.data.message);
           });
       }
@@ -748,7 +749,7 @@ export default {
             });
             this.links.push({
               url: graphURL.data.url,
-              meta: graphURL.data.meta,
+              meta: graphURL.data.opengraph,
               data: graphURL.data
             });
             this.fetchingMeta = false;

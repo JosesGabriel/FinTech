@@ -1,16 +1,23 @@
 <template>
-<v-card class="navbar__card" flat color="transparent"></v-card>
-  <v-navigation-drawer floating :dark="lightSwitch == 1" class="mt-10 pt-3" v-model="drawer" absolute temporary>
+  <v-navigation-drawer
+    v-model="drawer"
+    v-if="$vuetify.breakpoint.xsOnly"
+    :dark="lightSwitch == 1"
+    class="mt-10 pt-3"
+    :class="lightSwitch == 1 ? 'darkmode':'lightmode'"
+    fixed
+    app
+  >
     <v-list height="100%" nav dense rounded class="py-0 pt-5">
       <v-list-item-group>
         <router-link
           :to="
-              $auth.loggedIn ? '/profile/' + $auth.user.data.user.username : ''
+              $auth.loggedIn && $vuetify.breakpoint.mdAndUp ? '/profile/' + $auth.user.data.user.username : ''
             "
           class="no-transform"
         >
           <v-list-item class="tertiary--text">
-            <v-list-item-avatar :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]" size="24">
+            <v-list-item-avatar :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4']" size="24">
               <v-img
                 class="avatar__border"
                 :src="
@@ -23,11 +30,9 @@
               ></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title class="navbar__name body-2">
-                {{
-                $auth.loggedIn ? $auth.user.data.user.name : "Guest"
-                }}
-              </v-list-item-title>
+              <v-list-item-title
+                class="navbar__name body-2"
+              >{{ $auth.loggedIn ? $auth.user.data.user.name : "Guest" }}</v-list-item-title>
               <span class="overline no-transform">@{{ $auth.user.data.user.username }}</span>
             </v-list-item-content>
           </v-list-item>
@@ -41,7 +46,7 @@
             :class="active == 'social' ? 'v-list-item--active' : ''"
             class="tertiary--text"
           >
-            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
+            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4']">
               <v-icon :color="active == 'social' ? 'success' : ''">mdi-account-supervisor-circle</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
@@ -52,12 +57,12 @@
             </v-list-item-content>
           </v-list-item>
         </router-link>
-        <router-link to="/chart" class="no-transform">
+        <router-link :to="$vuetify.breakpoint.mdAndUp ? '/chart' : ''" class="no-transform">
           <v-list-item
             :class="active == 'chart' ? 'v-list-item--active' : ''"
             class="tertiary--text"
           >
-            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
+            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4']">
               <v-icon :color="active == 'chart' ? 'success' : ''">mdi-chart-bar</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
@@ -66,12 +71,12 @@
           </v-list-item>
         </router-link>
 
-        <router-link to="/journal" class="no-transform">
+        <router-link :to="$vuetify.breakpoint.mdAndUp ? '/journal' : ''" class="no-transform">
           <v-list-item
             :class="active == 'journal' ? 'v-list-item--active' : ''"
             class="tertiary--text"
           >
-            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
+            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4']">
               <v-icon :color="active == 'journal' ? 'success' : ''">mdi-text-box-multiple</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
@@ -80,12 +85,12 @@
           </v-list-item>
         </router-link>
 
-        <router-link to="/trade-simulator" class="no-transform">
+        <router-link :to="$vuetify.breakpoint.mdAndUp ? '/trade-simulator' : ''" class="no-transform">
           <v-list-item
             :class="active == 'virtualtrade' ? 'v-list-item--active' : ''"
             class="tertiary--text"
           >
-            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
+            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4']">
               <v-icon :color="active == 'virtualtrade' ? 'success' : ''">mdi-cloud-print-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
@@ -98,7 +103,7 @@
             :class="active == 'watchlist' ? 'v-list-item--active' : ''"
             class="tertiary--text"
           >
-            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4' ]">
+            <v-list-item-icon :class="[$vuetify.breakpoint.mdAndDown ? '' : 'mr-4']">
               <v-icon :color="active == 'watchlist' ? 'success' : ''">mdi-eye-plus-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
@@ -113,6 +118,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 export default {
   layout: "main",
   props: {
@@ -132,7 +138,7 @@ export default {
       isLightMode: 0,
       darkText: false,
       navbarDrawerModel: true,
-      drawer: true
+      drawer: false
     };
   },
   computed: {

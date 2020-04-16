@@ -1,22 +1,20 @@
 <template>
   <div>
-    <v-card elevation="4">
+    <v-card
+      elevation="4"
+      :dark="lightSwitch == 1"
+      :color="lightSwitch == 0 ? 'lightcard' : 'darkcard'"
+    >
       <v-list class="pa-0 header__menu" dense>
         <v-list-item-group>
-          <v-list-item
-            @click.stop="showBuySellCalculator = !showBuySellCalculator"
-          >
+          <v-list-item @click.stop="showBuySellCalculator = !showBuySellCalculator">
             <v-list-item-content>
-              <v-list-item-title class="body-2"
-                >Buy/Sell Calculator</v-list-item-title
-              >
+              <v-list-item-title class="body-2">Buy/Sell Calculator</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item @click.stop="showVARCalculator = !showVARCalculator">
             <v-list-item-content>
-              <v-list-item-title class="body-2"
-                >VAR Calculator</v-list-item-title
-              >
+              <v-list-item-title class="body-2">VAR Calculator</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -25,9 +23,7 @@
             "
           >
             <v-list-item-content>
-              <v-list-item-title class="body-2"
-                >Average Price Calculator</v-list-item-title
-              >
+              <v-list-item-title class="body-2">Average Price Calculator</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -35,26 +31,35 @@
     </v-card>
 
     <v-dialog v-model="showBuySellCalculator" width="500">
-      <BuySellCalculator
-    /></v-dialog>
+      <BuySellCalculator />
+    </v-dialog>
     <v-dialog v-model="showAveragePriceCalculator" width="320">
-      <AveragePriceCalculator
-        v-on:showDialog="showDialog"
-    /></v-dialog>
+      <AveragePriceCalculator />
+    </v-dialog>
     <v-dialog v-model="showVARCalculator" width="320">
-      <VARCalculator
-    /></v-dialog>
+      <VARCalculator />
+    </v-dialog>
   </div>
 </template>
+
 <script>
+
+import { mapGetters } from "vuex";
+
 import BuySellCalculator from "~/components/calculators/BuySellCalculator";
 import AveragePriceCalculator from "~/components/calculators/AveragePriceCalculator";
 import VARCalculator from "~/components/calculators/VARCalculator";
+
 export default {
   components: {
     BuySellCalculator,
     AveragePriceCalculator,
     VARCalculator
+  },
+  computed: {
+    ...mapGetters({
+      lightSwitch: "global/getLightSwitch"
+    })
   },
   data() {
     return {
@@ -62,14 +67,10 @@ export default {
       showAveragePriceCalculator: false,
       showVARCalculator: false
     };
-  },
-  methods: {
-    showDialog(value){
-      this.showAveragePriceCalculator = value;
-    }
   }
 };
 </script>
+
 <style>
 .header__menu.theme--dark:before {
   content: "";

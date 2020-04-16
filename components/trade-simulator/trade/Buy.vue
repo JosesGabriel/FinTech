@@ -191,12 +191,19 @@ export default {
   computed: {
     ...mapGetters({
       lightSwitch: "global/getLightSwitch",
-      selectedPortfolio: "journal/getSelectedPortfolio",
       renderPortfolioKey: "journal/getRenderPortfolioKey"
     }),
+    /**
+     * Determine if the price is increase or decrease
+     *
+     */
     priceChange() {
       return this.change > 0 ? "increase" : this.change == 0 ? "" : "decrease";
     },
+    /**
+     * Calculate the total cost
+     *
+     */
     totalCost() {
       let total = 0;
       if (this.quantityModel != null && this.priceModel != null) {
@@ -205,6 +212,10 @@ export default {
       }
       return total;
     },
+    /**
+     *Toggle continue button in the stepper
+     *
+     */
     toggleContinueBtn() {
       let state = true;
       if (
@@ -250,14 +261,7 @@ export default {
       notesModel: ""
     };
   },
-  watch: {
-    selectedPortfolio() {
-      this.getSelectedPortfolio();
-    }
-  },
-  mounted() {
-    this.getSelectedPortfolio();
-  },
+  
   methods: {
     ...mapActions({
       setAlert: "global/setAlert",
@@ -266,6 +270,12 @@ export default {
       setSimulatorPortfolioID: "tradesimulator/setSimulatorPortfolioID",
     }),
     calculateBoardLot: CalculateBoardLot,
+    /**
+     * Display details of the stock
+     *
+     * @param   {[type]}  stock_id  [stock_id description]
+     *
+     */
     onChangeStock(stock_id) {
       this.loading = true;
       this.noData = true;
@@ -306,6 +316,12 @@ export default {
           }
         });
     },
+    /**
+     * Change portfolio id in Select Portfolio dropdown
+     *
+     * @param   {[type]}  portfolio_id  [portfolio_id description]
+     *
+     */
     onChangePortfolio(portfolio_id) {
       this.$api.journal.portfolio
         .portfoliofunds({
@@ -320,6 +336,13 @@ export default {
           }
         });
     },
+    /**
+     * Calculate boardlot in operation
+     *
+     * @param   {[type]}  boardlot   [boardlot description]
+     * @param   {[type]}  operation  [operation description]
+     *
+     */
     toggleOperation(boardlot, operation) {
       let number = parseFloat(this.quantityModel);
       if (operation === "up") {
@@ -348,21 +371,11 @@ export default {
         }
       }
     },
-    getSelectedPortfolio() {
-      this.portfolioModel = this.selectedPortfolio.id;
-
-      this.$api.journal.portfolio
-        .portfoliofunds({
-          fund: this.selectedPortfolio.id
-        })
-        .then(response => {
-          if (response.success) {
-            this.availableFundModel = parseFloat(
-              response.data.funds[0].balance
-            );
-          }
-        });
-    },
+    /**
+     * Execute Buy Confirmation
+     *
+     * @return  {[type]}  [return description]
+     */
     postBuy() {
       const portfolio_id = this.portfolioModel;
       const stock_id = this.stockModel;
@@ -379,7 +392,7 @@ export default {
             date: this.$moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
           }
         };
-        //console.log('Stock List -' , this.openposition);
+       
         this.$api.journal.portfolio
           .tradebuy(portfolio_id, stock_id, buyparams)
           .then(response => {
@@ -400,12 +413,15 @@ export default {
           })
           .catch(error => {
             this.errmsg = error.response.data.message;
-            //this.errmsg = 'Stock is currently closed';
             this.errmsgbuysell = "Unable to buy";
             this.errorMsg = true;
           });
 
     },
+    /**
+     * Initialized Data if buy is confirmed
+     *
+     */
     clearInputs() {
       this.keyCounter = this.renderPortfolioKey;
       this.keyCounter++;

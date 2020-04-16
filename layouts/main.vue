@@ -1,19 +1,25 @@
 <template>
-  <v-app>
+  <v-app
+    v-touch="{
+        left: () => putSwipe('Left'),
+        right: () => putSwipe('Right'),
+        up: () => putSwipe('Up'),
+        down: () => putSwipe('Down')
+      }"
+  >
     <v-content :class="lightSwitch == 0 ? 'lightMode' : 'darkMode'">
       <client-only>
         <Header class="header__container" />
       </client-only>
-        <!-- v-show="!$device.isMobileOrTablet" -->
       <v-container
-        :class="{ 'pa-0': $vuetify.breakpoint.xsOnly }"
+        :class="{ 'pa-0': $vuetify.breakpoint.xsOnly}"
+        :fluid="$route.path == '/login/'"
         class="componentContainer"
       >
-        <div v-show="showLamp" class="lampBtn">
-          <!-- :class="lightSwitch == 1 ? 'lampDark__btn' : 'lampLight__btn'" -->
+        <div v-if="showLamp" class="lampBtn" :class="{'d-none': $vuetify.breakpoint.smAndDown}">
           <img :src="lampMode" @click="lampSwitch" />
           <img
-            :class="lightSwitch == 1 ? 'd-none' : ''"
+            :class="[lightSwitch == 1 ? 'd-none' : '', {'pr-5':  $vuetify.breakpoint.mdOnly}]"
             class="lightRays_img"
             src="/Lamp-LightRays.svg"
           />
@@ -24,6 +30,12 @@
       </v-container>
       <v-snackbar v-model="alert.model" :color="alert.state ? 'success' : 'error'">
         {{ alert.message }}
+        <span v-if="alert.redirect" class="d-block pl-1">
+          <a
+            :href="alert.redirect"
+            class="no-transform font-weight-bold white--text pr-1"
+          >Click here</a>to redirect to login page.
+        </span>
         <v-btn color="white" text @click="alert.model = false">Close</v-btn>
       </v-snackbar>
       <vue-snotify></vue-snotify>
@@ -47,13 +59,12 @@
             class="text-center"
             :class="alertDialog.state ? 'success--text' : 'error--text'"
           >{{ alertDialog.body }}</v-card-text>
-          <v-card-text class="text-center">
-            {{
-            alertDialog.subtext
-            }}
-          </v-card-text>
+          <v-card-text class="text-center">{{ alertDialog.subtext }}</v-card-text>
         </v-card>
       </v-dialog>
+      <!-- <client-only>
+        <VyndueDock v-if="$route.name != 'login' && $route.name != 'sso'" />
+      </client-only> -->
       <!-- dont remove -->
       <div v-show="false" id="tv_chart_container"></div>
     </v-content>
@@ -62,17 +73,20 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { client } from "~/assets/js/vyndue/client.js";
+import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 import {
   UserNotificationAlertLayout,
   AllNotificationAlertLayout
 } from "~/assets/js/helpers/notification";
-import { SnotifyPosition, SnotifyStyle } from "vue-snotify";
 
 import Header from "~/components/Header";
+// import VyndueDock from "~/components/vyndue/Dock";
 
 export default {
   components: {
-    Header
+    Header,
+    // VyndueDock
   },
   data() {
     return {
@@ -96,13 +110,26 @@ export default {
       alert: "global/getAlert",
       favicon: "global/favicon",
       alertDialog: "global/getAlertDialog",
-      notification: "global/getNotification"
+      notification: "global/getNotification",
+      user: "vyndue/getUser",
+      clientIsPrepared: "vyndue/getClientIsPrepared",
+      swipe: "global/getSwipe"
     }),
+    /**
+     * Switch lamp image button base on current theme mode
+     *
+     * @return  {string}  returns image url string
+     */
     lampMode() {
       return this.lightSwitch == 1
         ? "/Lamp-Darkmode.svg"
         : "/Lamp-Lightmode.svg";
     },
+    /**
+     * Show this lamp image only on following route
+     *
+     * @return  {boolean}  returns boolean
+     */
     showLamp() {
       let lampBtn;
       if (this.$route.path == "/login/" || this.$route.path == "/login") {
@@ -114,6 +141,22 @@ export default {
     }
   },
   watch: {
+    /**
+     * gets current logged in vyndue user data and sets is to the 'user' vuex state
+     * then calls function to get initial room
+     *
+     * @return
+     */
+    clientIsPrepared() {
+      const user = client.getUser(client.getUserId());
+      user.avatarUrl = client.mxcUrlToHttp(user.avatarUrl, 40, 40, "crop");
+      this.setVyndueUser({
+        userId: user.userId,
+        displayName: user.rawDisplayName,
+        avatarUrl: user.avatarUrl
+      });
+      this.getInitialRoom();
+    },
     /**
      * This function it'll only show if user received notifications
      * Also used helpers this.userNotificationAlertLayout it'll return html code
@@ -139,25 +182,81 @@ export default {
       }
     }
   },
+  beforeMount() {
+    this.prepareClient();
+  },
   mounted() {
     if (localStorage.currentMode) {
       this.setLightSwitch(localStorage.currentMode);
     }
 
     this.lightSwitch_m = this.lightSwitch == 0 ? true : false;
-    // this.showAnnouncements();
   },
   methods: {
     ...mapActions({
-      setLightSwitch: "global/setLightSwitch"
+      setLightSwitch: "global/setLightSwitch",
+      setClientIsPrepared: "vyndue/setClientIsPrepared",
+      setVyndueUser: "vyndue/setVyndueUser",
+      setCurrentRoom: "vyndue/setCurrentRoom",
+      setSwipe: "global/setSwipe"
     }),
     userNotificationAlertLayout: UserNotificationAlertLayout,
     allNotificationAlertLayout: AllNotificationAlertLayout,
+    /**
+     * Toggle lamp base on current on theme mode
+     *
+     * @return  {boolean}  returns boolean
+     */
     lampSwitch() {
       let lampMode = localStorage.currentMode;
 
       this.setLightSwitch(lampMode == 1 ? 0 : 1);
       localStorage.currentMode = this.lightSwitch;
+    },
+    /**
+     * fires on beforeMount hook
+     * Waits until Matrix client emits 'sync' event.
+     * If it is prepared, set vuex variable clientIsPrepared to true
+     *
+     * @return
+     */
+    prepareClient() {
+      client.once("sync", state => {
+        if (state === "PREPARED") {
+          this.setClientIsPrepared(true);
+        } else {
+          process.exit(1);
+        }
+      });
+    },
+    /**
+     * gets initial chat room to be loaded, currently set to 'Lyduz Public Community'
+     *
+     * @return
+     */
+    getInitialRoom() {
+      const currentRoom = client.getRoom(process.env.DEFAULT_CHAT_ROOM_ID);
+      currentRoom.avatarUrl = currentRoom.getAvatarUrl(
+        client.getHomeserverUrl(),
+        40,
+        40,
+        "crop"
+      );
+      this.setCurrentRoom({
+        roomId: currentRoom.roomId,
+        displayName: currentRoom.name,
+        avatarUrl: currentRoom.avatarUrl
+      });
+    },
+    /**
+     * Set directives to state globally
+     *
+     * @param   {string}  direction  returns string directive
+     *
+     * @return  {string}             returns string
+     */
+    putSwipe(direction) {
+      this.setSwipe(direction);
     }
   }
 };
@@ -222,5 +321,6 @@ export default {
 .componentContainer {
   position: relative;
   margin-bottom: 38px;
+  height: 100%;
 }
 </style>

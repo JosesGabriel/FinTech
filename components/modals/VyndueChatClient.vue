@@ -1,21 +1,23 @@
 <template>
   <div class="container py-0 chatClient__wrapper">
-
     <div class="row">
       <div class="col-5 py-2" style="font-weight: 100;">Traders</div>
-      <div class="col-7 py-2 pr-3" style="color: #03dac5; background:#24323c;">Lyduz Community
-      <v-icon class="hide__icon" @click="hideChat" style="color: #03dac5;">mdi-chevron-down</v-icon>
+      <div class="col-7 py-2 pr-3" style="color: #03dac5; background:#24323c;">
+        Lyduz Community
+        <v-icon class="hide__icon" style="color: #03dac5;" @click="hideChat"
+          >mdi-chevron-down</v-icon
+        >
       </div>
     </div>
     <div class="row">
-       <div class="col-5 pr-0">
-          <div class="row">
-
+      <div class="col-5 pr-0">
+        <div class="row"></div>
+        <div class="row">
+          <div class="col-12 py-2" style="font-weight: 100;">
+            Trading Communities
           </div>
-          <div class="row">
-            <div class="col-12 py-2" style="font-weight: 100;">Trading Communities</div>
-          </div>
-       </div>
+        </div>
+      </div>
       <div class="col-7 pr-0 message__box">
         <v-card
           class=""
@@ -54,8 +56,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-5 pr-0">
-      </div>
+      <div class="col-5 pr-0"></div>
       <div class="col-7 pa-0 d-flex chat__box">
         <v-textarea
           v-model="textarea"
@@ -85,7 +86,7 @@
 </template>
 
 <script>
-import { client } from "~/assets/client.js";
+import { client } from "~/assets/js/vyndue/client.js";
 import { mapActions, mapGetters } from "vuex";
 export default {
   layout: "main",
@@ -106,7 +107,7 @@ export default {
   },
   props: {
     showChat: {
-       default() {
+      default() {
         return "";
       }
     }
@@ -179,7 +180,7 @@ export default {
       }
       this.textarea = "";
     },
-    hideChat(){
+    hideChat() {
       this.$emit("showChat", false);
     }
   }
@@ -224,7 +225,7 @@ export default {
 .message__sender {
   color: orange;
 }
-.hide__icon{
+.hide__icon {
   float: right;
 }
 .chat__box {
