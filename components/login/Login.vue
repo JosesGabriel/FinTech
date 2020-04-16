@@ -131,7 +131,7 @@ export default {
             password: this.password
           }
         });
-        // temporary, request new token then store expiration cookie
+        // FIXME: temporary, request new token then store expiration cookie
         await this.$refreshToken.requestRefreshToken();
 
         this.$emit("alert", {
