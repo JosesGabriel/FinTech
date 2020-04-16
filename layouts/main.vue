@@ -62,9 +62,9 @@
           <v-card-text class="text-center">{{ alertDialog.subtext }}</v-card-text>
         </v-card>
       </v-dialog>
-      <client-only>
+      <!-- <client-only>
         <VyndueDock v-if="$route.name != 'login' && $route.name != 'sso'" />
-      </client-only>
+      </client-only> -->
       <!-- dont remove -->
       <div v-show="false" id="tv_chart_container"></div>
     </v-content>
@@ -81,12 +81,12 @@ import {
 } from "~/assets/js/helpers/notification";
 
 import Header from "~/components/Header";
-import VyndueDock from "~/components/vyndue/Dock";
+// import VyndueDock from "~/components/vyndue/Dock";
 
 export default {
   components: {
     Header,
-    VyndueDock
+    // VyndueDock
   },
   data() {
     return {

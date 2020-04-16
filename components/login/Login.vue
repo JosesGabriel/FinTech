@@ -131,7 +131,6 @@ export default {
             password: this.password
           }
         });
-
         // temporary, request new token then store expiration cookie
         await this.$refreshToken.requestRefreshToken();
 
@@ -156,6 +155,8 @@ export default {
       const query = this.$route.query;
       if (query.redirectTo) {
         this.$router.push(query.redirectTo);
+      } else {
+        this.$router.push("/")
       }
     }
   }
