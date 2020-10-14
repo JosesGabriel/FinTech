@@ -1,1 +1,1 @@
-# Stock Trading Platform written in NuxtJS
+## Stock Trading Platform written in NuxtJS
